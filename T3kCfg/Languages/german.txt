@@ -1,0 +1,330 @@
+﻿
+[MAIN]
+APP_ERROR_MSG1 = Es kann an einem abnehmbaren Gerät nicht ausgeführt werden!
+TITLE_GENERAL_ERROR = Fehler
+
+BTN_CAPTION_EXIT = Ende
+BTN_CAPTION_CLOSE = Schließen
+BTN_CAPTION_DEFAULT = Voreinstellung
+BTN_CAPTION_REFRESH = Aktualisierung
+MENU_TOOLTIP_START_PAGE = Startseite
+MENU_TOOLTIP_MOUSE = Geste
+MENU_TOOLTIP_CALIBRATION = Kalibrierung
+MENU_TOOLTIP_SENSOR_SETTING = Sensor einstellen
+MENU_TOOLTIP_GENERAL_SETTING = Allgemeine Einstellung
+MENU_TOOLTIP_SOFTKEY_SETTING = Softkey einstellen
+MSGBOX_TITLE_DEFAULT = Wechseln zur anfänglichen Einstellungen
+MSGBOX_TEXT_DEFAULT = Möchten Sie die anfängliche Einstellung wiederherstellen?
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = Dieses Programm unterstüzt keine Firmware v%1.\nAktuelle Firmware-Version: %1,\nUnterstützende Firmware-Version: %2 ~ %3
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = Fehler überprüfen
+TITLE_CAPTION_INFORMATION = Information zum Programm
+TITLE_CAPTION_FIRMWARE = Information zur Firmware
+TEXT_DEVICE_NOT_CONNECTED = Das Gerät ist nicht angeschlossen.
+TEXT_FIRMWARE_DOWNLOAD = Firmware wird herunterladen.
+
+TITLE_CAPTION_LICENSE = 
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Gerät auswählen
+TITLE_CAPTION_DEVICE_LIST = Gerätlist
+TEXT_DEV_PATH = Laufwerkspfad
+TEXT_MODEL = Modell
+TEXT_NUMBER = Nummer
+BTN_CAPTION_PLAY_BUZZER = Wiedergabe des Signaltons
+BTN_CAPTION_SELECT = Gerät auswählen
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = OK
+BTN_CAPTION_CANCEL = Abbrechen
+BTN_CAPTION_YES = Ja
+BTN_CAPTION_NO = Nein
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Geste
+BTN_CAPTION_MOUSE_SUB1 = Berührungsgeste einstellen
+BTN_CAPTION_MOUSE_SUB2 = Gestenprofile einstellen
+BTN_CAPTION_CALIBRATION = Kalibrierung
+BTN_CAPTION_CALIBRATION_SUB1 = Kalibrierungsgerät
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Sensor einstellen
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Aktivierung/Deaktievirung der Berührungsfunktion
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Einstellung des Signaltons und der Shortcut-Taste
+BTN_CAPTION_GENERAL_SETTING = Allgemeine Einstellung
+BTN_CAPTION_GENERAL_SETTING_SUB1 = Sprache, Eingabemodus
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Bildschirm drehen
+BTN_CAPTION_REMOTE_ASSISTANCE = Fernwartung
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Softkey
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Berührungsgeste
+BTN_CAPTION_TOUCH_SETTING = Berührungsfunktion einstellen...
+
+;TEXT_SINGLE = Ein Finger
+;TEXT_FINGERS = Mehrere Finger
+;TEXT_PALM = Handteller
+;TEXT_PUTNTAP = Put & Tap
+;TEXT_DRAG = Ziehen
+;TEXT_TAP = Tippen
+;TEXT_DOUBLE_TAP = Doppeltippen
+;TEXT_LONG_TAP = Lange tippen
+;TEXT_ROTATE = Drehen
+;TEXT_ZOOM = Vergrößern/Verkleinern
+TEXT_MOVE_WITH_ZOOM = Vergrößern oder Verkleinern beim Ziehen
+TEXT_INERTIAL_WHEEL = Anwendung der Trägheit des Mausrads
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Einzelne Bewegung von Put & Tap und Put & Double Tap
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Verwendung der Geste bei dem Multitouch-Eingabe-Modus
+TEXT_MAC_OS_MARGIN = Mac OS X Margen des Bildschirms
+TEXT_INVERT_WHEEL = Mausrad invertieren
+
+TEXT_LEFT = Links
+TEXT_RIGHT = Rechts
+TEXT_MIDDLE = Mitte
+TEXT_DOUBLE_CLICK = Doppelklick
+TEXT_CLICK = Klick
+
+TEXT_PROFILE_LEGEND_MODE1 = Mouse
+TEXT_PROFILE_LEGEND_MODE2 = Windows 7
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Artikeln bearbeiten
+TEXT_PROFILE_ITEM = Artikel
+TEXT_ACTION = Bewegungen
+TEXT_USER_DEFINE_KEY = Benutzerdefinierte Taste
+TEXT_KEY = Taste
+TEXT_FUNCTION_KEY = Funktionstaste(Function Key)
+TEXT_NONE = Keine
+TEXT_NOT_DEFINED = Nicht definiert
+BTN_CAPTION_APPLY = Anwendung
+BTN_CAPTION_CANCEL = Abbrechen
+
+TEXT_PROFILE_ITEM_DISABLED = (Deaktivierung)
+TEXT_PROFILE_ITEM_USER_DEFINED = (Benutzerdefiniert)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Funktionstaste)
+TEXT_PROFILE_ITEM_MOUSE = (Maus)
+TEXT_PROFILE_ITEM_ESCAPE = Abbrechen(Esc)
+TEXT_PROFILE_ITEM_FORWARD = Vorwärts
+TEXT_PROFILE_ITEM_BACK = Rückwärts
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Programmumschaltung
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Programmumschaltung(Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Taskmanager
+TEXT_PROFILE_ITEM_EXPLORER = Explorer durchführen
+TEXT_PROFILE_ITEM_DESKTOP = Desktop anzeigen
+TEXT_PROFILE_ITEM_VKBOARD = Virtuelle Tastatur
+TEXT_PROFILE_ITEM_T3KCFG = Konfigurationsprogramm der T3k Serie
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Left Click
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Right Click
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Middle Click
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Linke Taste
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Rechte Taste
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Mittlere Taste
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Kalibrierung
+TEXT_SCREEN_MARGIN = Margen des Bildschirms
+TEXT_SCREEN_PERCENT_OF_SCREEN = %
+TEXT_CALIBRATE = Kalibrierung
+BTN_CAPTION_CALIBRATE = Kalibrierung...
+
+TITLE_AREA_SETTING = Bereich einstellen(%)
+TEXT_SINGLE_CLICK = Klick
+TEXT_DOUBLE_CLICK = Doppelklick
+;TEXT_TWO_TOUCH = Put & Tap
+TEXT_PALM = Handteller
+
+TEXT_CALIBRATION_WARNING = "Mac OS X Margen des Bildschirms" ist in der "Geste" Menü nicht eingestellt worden. Da kann es eventuell nicht richtig kalibriert werden.
+TEXT_CALIBRATION_WARNING2 = 
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Aktivierung/Deaktievirung der Berührungsfunktion
+TEXT_TOUCH_ENABLE = Touch verwenden
+TEXT_RADIO_TOUCH_ENABLE = Aktivierung
+TEXT_RADIO_TOUCH_DISABLE = Deaktivierung
+
+TITLE_CAPTION_BUZZER = Signalton
+TEXT_CLICK = Klick
+TEXT_CALIBRATION = Kalibrierung
+TEXT_ERROR = Fehler
+TEXT_KEYTONE = Tastenton
+TEXT_SENSOR_ATTACH = Sensor-Anschluß anzeigen
+TEXT_PEN_PAIRING = Pen pairing
+TEXT_USB_ATTACH = USB-Anschluß anzeigen
+
+TITLE_SHORTCUT_KEY = Shortcut-Taste
+TEXT_CALIBRATION_KEY = Kalibrierungstaste
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Anzahl des Tastendrückens
+TEXT_TOUCH_ENABLE_KEY = Berührentaste
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Anzahl des Tastendrückens
+TEXT_NOT_USED = Nicht Verwenden
+TEXT_ON = Ein
+TEXT_OFF = Aus
+
+TITLE_TRAY_ICON = Taskleistensymbol
+TEXT_CHECK_TRAYICON = Verwendung des Taskleistensymbols
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Berührungseingabemodus
+TEXT_INPUT_MODE = Eingabemodus
+TEXT_INPUT_MODE_MOUSE = Maus
+TEXT_INPUT_MODE_SINGLE_TOUCH = Eingabe durch Einzelberührung (Tablet Pen)
+TEXT_INPUT_MODE_MULTI_TOUCH = Eingabe durch Multiberührung
+TEXT_INPUT_MODE_AUTO_SELECT = Automatische Auswahl
+TEXT_INPUT_MODE_WARNING_MSG = In anderen Betriebssystemen kann die Berührungsfunktion eventuell nicht richtig durchgeführt werden. Möchten Sie den Vorgang fortsetzen lassen?
+
+TITLE_MULTI_MONITOR = Multimonitor-Anzeige einstellen
+TEXT_MULTI_MONITOR = Monitor einstellen
+TEXT_MULTI_MONITOR_SETTING = Anzeigemonitor auswählen...
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Anwendung
+TEXT_BTN_MULTI_MONITOR_CANCEL = Abbrechen
+TEXT_BTN_MULTI_MONITOR_CLOSE = Schließen
+TEXT_PRIMARY_MONITOR = Hauptmonitor : %1
+TEXT_NON_MULTI_MONITOR = Multimonitor wird nicht unterstüzt.
+
+BTN_TOOLTIP_PLAY = Wiedergabe
+
+BTN_CAMERA_DIAGNOSTICS = Sensor kontrollieren...
+
+TITLE_LANGUAGE = Sprachen einstellen(Language)
+TEXT_LANGUAGE = Sprache auswählen
+TEXT_LANGUAGE_NOT_FOUND = Sprachdatei existiert nicht.
+
+TITLE_DISPLAY_ORIENTATION = Orientierung des Bildschirms
+TEXT_DISPLAY_ORIENTATION = Orientierung
+TEXT_DISPLAY_ORIENTATION_1 = 0' - Querformat
+TEXT_DISPLAY_ORIENTATION_2 = 90' - Hochformat
+TEXT_DISPLAY_ORIENTATION_3 = 180' - Querformat (gespigelt)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - Hochformat (gespiegelt)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - Normal
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Links
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Rechts
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Auf den Kopf umdrehen
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 
+
+TITLE_DISPLAY_WARNING = Achtung
+TEXT_DISPLAY_WARNING = Aktuelle Monitororientierung entspricht nicht mit der kalibrierte Angabe.
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Berührung einstellen
+TITLE_TIME_SETTING = Uhrzeit einstellen(ms)
+TEXT_TAP = Drücken
+TEXT_LONG_TAP = Lange drücken
+TEXT_SLOW = langsamer
+TEXT_FAST = Schneller
+TITLE_WHEEL_SENSITIVITY_SETTING = Empfindlichkeitseinstellung des Mausrads und der Vergrößerung/Verkleinerung
+TEXT_WHEEL = Mausrad
+TEXT_ZOOM = Vergrößerung/Verkleinerung
+
+BTN_CAPTION_DEFAULT = Voreinstellung
+BTN_CAPTION_REFRESH = Aktualisierung
+BTN_CAPTION_CLOSE = Schließen
+MSGBOX_TEXT_DEFAULT = Möchten Sie die anfängliche Einstellung wiederherstellen?
+MSGBOX_TITLE_DEFAULT = Überprüfen der Wiederherstellung der anfänglichen Einstellung
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Überprüfen der Deaktivierung mit der Berührung
+TEXT_MESSAGE = Es braucht Maus, um die Berührungsfunktion zu deaktivieren. Klicken Sie die untere Taste mit der Maus.
+BTN_TIMER_TEXT = %1 Sekunde
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Achtung
+TEXT_MESSAGE = Achtung! Die folgende Seite enthält die Einstellungswerte, die für die Kontrolle des Sensorzustandes nötig ist. Wenn diese Einstellungswerte geändert wird, kann die Sensor eventuell nicht richtig funktionieren.
+BTN_CAPTION_CONTINUE = Fortsetzen
+BTN_CAPTION_CLOSE = Schließen
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = Zustimmen
+TEXT_MESSAGE = Auf der nächsten Seite werden Informationen zur Sensor und der Benutzerumgebung (Version des Betriebssystems, Tablet-Eingabe-Service(Windows) und Auflösung) gesammelt.
+BTN_CAPTION_CONTINUE = Zustimmen
+BTN_CAPTION_CLOSE = Ablehnen
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Sensordiagnostik
+BTN_CAPTION_DEFAULT = Voreinstellung
+BTN_CAPTION_REFRESH = Aktualisierung
+BTN_CAPTION_CLOSE = Schließen
+BTN_CAPTION_SAVELOG = Sensorzustand speichern
+BTN_CAPTION_MAIN = 
+BTN_CAPTION_SUB = 
+TAB_CAPTION_SIDEVIEW = Sideview
+TAB_CAPTION_DETECTION = Diagramm der Erkennung
+
+LOG_CAPTION_ERROR = Fehler beim Speichern
+LOG_SIDEVIEW = Sideview
+LOG_DETECTION = Erkennung
+LOG_DATA = Einstelldaten
+LOG_SAVING = Es wird gespeichert.
+LOG_LOADING = Es wird geladen.
+LOG_COMPLETE = Fertig
+LOG_OK = OK
+LOG_FAIL = Fehler
+LOG_PROGRESS = Fortsetzen
+LOG_START = Starten
+LOG_CAMERA = Kamera
+
+TITLE_SENSOR1 = Sensor 1
+TITLE_SENSOR2 = Sensor 2
+TITLE_SENSOR1_1 = Sensor 1-1
+TITLE_SENSOR2_1 = Sensor 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Vergrößerung
+BTN_TOOLTIP_ZOOM_OUT = Verkleinerung
+BTN_TOOLTIP_RESET_ZOOM = Anpassen der Bildschirmgröße
+TEXT_SENSOR1_GRAPH_LEFT = Links unten
+TEXT_SENSOR1_GRAPH_RIGHT = Rechts oben
+TEXT_SENSOR2_GRAPH_LEFT = Links oben
+TEXT_SENSOR2_GRAPH_RIGHT = Rechts unten
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = kein Bild
+BTN_CAPTION_SNAPSHOT = Schnappschuss(Snapshot)
+
+[SOFTKEY SETTING]
+TEXT_TITLE = Softkey einstellen
+TEXT_HEADER_NUMBER = Nummer
+TEXT_HEADER_TYPE = Klassifikation
+TEXT_HEADER_ACTION = Bewegungen
+TEXT_ITEM_KEY = Taste
+TEXT_ITEM_STATE = Zustand
+TEXT_ITEM_NOT_USED = (Nicht Verwenden)
+TEXT_ITEM_CALIBRATION = Aufrufen/Verlassen der Sensorkalibrierung
+TEXT_ITEM_TOUCH = Aktivierung/Deaktivierung mit der Berührungsfunktion
+
+[TRAYICON]
+TEXT_MENU_OPEN = Öffnen...
+TEXT_MENU_EXIT = Enden
+TEXT_BALLOONTIP_TITLE = T3k Configurator
+TEXT_BALLOONTIP_MSG = Das Programm T3k Configurator Factory Edition("T3kCfgFE.exe") wird noch durchgeführt.
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = 
+TITLE_REMOTE = 
+TEXT_SELECT_SERVER = 
+TEXT_PORT = 
+TEXT_USERNAME = 
+BTN_REQUEST = 
+TEXT_RECONNECTING = 
+BTN_CANCEL = 
+TEXT_CONNECTING = 
+TEXT_REMOTE_CONTROL = 
+BTN_DISCONNECT = 
+TEXT_WAIT_MSG = 
+TEXT_REPAIRCONNECTION = 
+TEXT_ID = 
+TEXT_SERV_NOT_RES = 
+TITLE_CHAT = 
+BTN_SEND = 
+MSG_CHAT_DISCONNECTED = 
+TITLE_REMOTE_MSG = 
+MSG_REMOTE_DISCONNECT = 
+TEXT_HELP_MSG = 
+TEXT_HELP_ARROW = 

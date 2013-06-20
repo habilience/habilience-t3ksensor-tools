@@ -1,0 +1,431 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="No-Cache">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="description" content="Habilience T3k series - State Report View-page ver 2.6">
+<link rel="stylesheet" type="text/css" href=".common.css">
+<script type="text/javascript"> function t3k_start() {} </script>
+<script type="text/javascript" src="data/T3k.dat"></script>
+</head>
+
+<style type="text/css">
+<!--
+.graph_line1 {
+	position:absolute;
+	bottom:0;
+	background:#aaaaaa;
+}
+.graph_line2 {
+	position:absolute;
+	bottom:0;
+	background:#dddddd;
+}
+.graph_range {
+	position:absolute;
+	width:1px;
+	top:0;
+	bottom:0;
+	border-left:1px dotted #aa0000;
+}
+.gauge_lamp0, .gauge_lampG, .gauge_lampS, .gauge_lampN, .gauge_lampB {
+	position:absolute;
+	left:1px; right:1px;
+	height:5%;
+	background:#ff0000;
+	border:1px solid #bbbbbb;
+	-webkit-border-radius:3px;
+	-moz-bordert-radius:3px;
+}
+.gauge_lamp0 {
+	background-color:#eeeeee;
+}
+.gauge_lampG {
+	background-color:#63ea63;
+	background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0)), to(rgba(10,220,10,1)));
+}
+.gauge_lampS {
+	background-color:#a2ea63;
+	background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0)), to(rgba(100,220,10,1)));
+}
+.gauge_lampN {
+	background-color:#eaa263;
+	background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0)), to(rgba(220,100,10,1)));
+}
+.gauge_lampB {
+	background-color:#ea6363;
+	background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0)), to(rgba(220,10,10,1)));
+}
+
+.g_bound {
+	position:relative;
+	width:100%;
+	height:200px;
+}
+.g_gauge {
+	position:absolute;
+	left:0; width:30px;
+	top:5px; bottom:0;
+	border:2px solid #aaaaaa;
+}
+.g_graph {
+	position:absolute;
+	left:40px; right:0px;
+	top:5px; bottom:0;
+	border:2px solid #aaaaaa;
+	overflow:hidden;
+}
+.g_dline {
+	position:absolute;
+	left:0; width:100%;
+	height:10%;
+	border-top:1px dashed #dddddd;
+	border-bottom:1px dashed #dddddd;
+}
+.g_data {
+	position:relative;
+	height:16px;
+	padding:5px 0 0 40px;
+	font-size:13px;
+}
+.g_di_bound {
+	position:absolute;
+	width:50%;
+	top:0; height:15px;
+}
+
+.g_dataext {
+	position:relative;
+	height:12px;
+	padding:5px 0 0 0px;
+	font-size:12px;
+}
+-->
+</style>
+
+<script type="text/javascript">
+var $ = function ( id ) { return document.getElementById(id); };
+
+var s_aryCam1;
+var s_aryCam1Thr;
+var s_aryCam2;
+var s_aryCam2Thr;
+var s_aryCam11;
+var s_aryCam11Thr;
+var s_aryCam21;
+var s_aryCam21Thr;
+
+function initBody()
+{
+	var str, nTmp;
+	
+	if ( (t3kdata["auto_tuning"] * 1) != 0 )
+	{
+		$("ac").checked = true;
+	}
+	if ( (t3kdata["simple_detection"] * 1) != 0 )
+	{
+		$("sd").checked = true;
+	}
+	if ( (t3kdata["invert_detection"] * 1) != 0 )
+	{
+		$("id").checked = true;
+	}
+
+	var cm = t3kdata["cm1"];
+	if ( cm == null ) cm = t3kdata["cam1"];
+	if ( t3kdata && cm )
+	{
+		s_aryCam1 = new Array();
+		str = cm["detection"];
+		while ( str.length >= 2 )
+		{
+			nTmp = ("0x" + str.substring(0, 2)) * 1;
+			str = str.substring(2)
+			s_aryCam1.push(nTmp);
+		}
+		
+		var dt = cm["detection_threshold"] * 1. / 255;
+		s_aryCam1Thr = new Array();
+		str = cm["threshold"];
+		while ( str.length >= 2 )
+		{
+			nTmp = ("0x" + str.substring(0, 2)) * 1;
+			str = str.substring(2)
+			nTmp *= dt;
+			s_aryCam1Thr.push(nTmp);
+		}
+	}
+	cm = t3kdata["cm2"];
+	if ( cm == null ) cm = t3kdata["cam2"];
+	if ( t3kdata && cm )
+	{
+		s_aryCam2 = new Array();
+		str = cm["detection"];
+		while ( str.length >= 2 )
+		{
+			nTmp = ("0x" + str.substring(0, 2)) * 1;
+			str = str.substring(2)
+			s_aryCam2.push(nTmp);
+		}
+		
+		var dt = cm["detection_threshold"] * 1. / 255;
+		s_aryCam2Thr = new Array();
+		str = cm["threshold"];
+		while ( str.length >= 2 )
+		{
+			nTmp = ("0x" + str.substring(0, 2)) * 1;
+			str = str.substring(2)
+			nTmp *= dt;
+			s_aryCam2Thr.push(nTmp);
+		}
+	}
+	cm = t3kdata["cm1-1"];
+	if ( cm == null ) cm = t3kdata["cam3"];
+	if ( t3kdata && cm )
+	{
+		s_aryCam11 = new Array();
+		str = cm["detection"];
+		while ( str.length >= 2 )
+		{
+			nTmp = ("0x" + str.substring(0, 2)) * 1;
+			str = str.substring(2)
+			s_aryCam11.push(nTmp);
+		}
+		
+		var dt = cm["detection_threshold"] * 1. / 255;
+		s_aryCam11Thr = new Array();
+		str = cm["threshold"];
+		while ( str.length >= 2 )
+		{
+			nTmp = ("0x" + str.substring(0, 2)) * 1;
+			str = str.substring(2)
+			nTmp *= dt;
+			s_aryCam11Thr.push(nTmp);
+		}
+	}
+	cm = t3kdata["cm2-1"];
+	if ( cm == null ) cm = t3kdata["cam4"];
+	if ( t3kdata && cm )
+	{
+		s_aryCam21 = new Array();
+		str = cm["detection"];
+		while ( str.length >= 2 )
+		{
+			nTmp = ("0x" + str.substring(0, 2)) * 1;
+			str = str.substring(2)
+			s_aryCam21.push(nTmp);
+		}
+		
+		var dt = cm["detection_threshold"] * 1. / 255;
+		s_aryCam21Thr = new Array();
+		str = cm["threshold"];
+		while ( str.length >= 2 )
+		{
+			nTmp = ("0x" + str.substring(0, 2)) * 1;
+			str = str.substring(2)
+			nTmp *= dt;
+			s_aryCam21Thr.push(nTmp);
+		}
+	}
+	
+	layoutBody();
+}
+
+function layoutBody()
+{
+	var str, nD;
+	var strHTML = "";
+	if ( s_aryCam1 != null )
+		strHTML += makeHTML_GraphContent("1");
+	if ( s_aryCam2 != null )
+		strHTML += makeHTML_GraphContent("2");
+	if ( s_aryCam11 != null )
+		strHTML += makeHTML_GraphContent("1-1");
+	if ( s_aryCam21 != null )
+		strHTML += makeHTML_GraphContent("2-1");
+	$("graph").innerHTML = strHTML;
+	
+	if ( s_aryCam1 != null )
+	{
+		var cm = t3kdata["cm1"];
+		if ( cm == null ) cm = t3kdata["cam1"];
+		str = cm["detection_range"];
+		nD = str.indexOf(',');
+		displayDetectionGraph($("gauge1"), $("detection1"), s_aryCam1, s_aryCam1Thr, str.substring(0, nD), str.substring(nD + 1));
+	}
+	if ( s_aryCam2 != null )
+	{
+		var cm = t3kdata["cm2"];
+		if ( cm == null ) cm = t3kdata["cam2"];
+		str = cm["detection_range"];
+		nD = str.indexOf(',');
+		displayDetectionGraph($("gauge2"), $("detection2"), s_aryCam2, s_aryCam2Thr, str.substring(0, nD), str.substring(nD + 1));
+	}
+	if ( s_aryCam11 != null )
+	{
+		var cm = t3kdata["cm1-1"];
+		if ( cm == null ) cm = t3kdata["cam3"];
+		str = cm["detection_range"];
+		nD = str.indexOf(',');
+		displayDetectionGraph($("gauge1-1"), $("detection1-1"), s_aryCam11, s_aryCam11Thr, str.substring(0, nD), str.substring(nD + 1));
+	}
+	if ( s_aryCam21 != null )
+	{
+		var cm = t3kdata["cm2-1"];
+		if ( cm == null ) cm = t3kdata["cam4"];
+		str = cm["detection_range"];
+		nD = str.indexOf(',');
+		displayDetectionGraph($("gauge2-1"), $("detection2-1"), s_aryCam21, s_aryCam21Thr, str.substring(0, nD), str.substring(nD + 1));
+	}
+}
+
+function makeHTML_GraphContent( strCam )
+{
+	var cm = t3kdata["cm" + strCam];
+	if ( cm == null )
+	{
+		if ( strCam == "1-1" )
+			cm = t3kdata["cam3"];
+		else if ( strCam == "2-1" )
+			cm = t3kdata["cam4"];
+		else
+			cm = t3kdata["cam" + strCam];
+	}
+	
+	var strHTML = "";
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;CM" + strCam + "</div>";
+	strHTML += "<div class='g_bound'>";
+	strHTML += "	<div id='gauge" + strCam + "' class='g_gauge'></div>";
+	strHTML += "	<div class='g_graph'>";
+	strHTML += "		<div class='g_dline' style='top:10%;'></div>";
+	strHTML += "		<div class='g_dline' style='top:30%;'></div>";
+	strHTML += "		<div class='g_dline' style='top:50%;'></div>";
+	strHTML += "		<div class='g_dline' style='top:70%;'></div>";
+	strHTML += "		<div class='g_dline' style='top:90%;'></div>";
+	strHTML += "	</div>";
+	strHTML += "	<div id='detection" + strCam + "' class='g_graph'></div>";
+	strHTML += "</div>";
+	strHTML += "<div class='g_data'><div style='position:relative;'>";
+	str = cm["detection_range"];
+	nD = str.indexOf(',');
+	var nLR = str.substring(0, nD);
+	var nRR = str.substring(nD + 1);
+	str = cm["factory"]["detection_range"];
+	nD = str.indexOf(',');
+	var nLRf = str.substring(0, nD);
+	var nRRf = str.substring(nD + 1);
+	strHTML += "	<div class='g_di_bound' style='left:0%; width:60%;'>Left: " + nLR + " [" + nLRf + "]</div>";
+	strHTML += "	<div class='g_di_bound' style='left:40%; width:60%; text-align:right;'>Right: " + nRR + " [" + nRRf + "]</div>";
+	strHTML += "</div></div>";
+	var nI = cm["detection_threshold"];
+	var nIf = cm["factory"]["detection_threshold"];
+	strHTML += "<div class='g_data'><div style=position:relative;>";
+	strHTML += "	<div class='g_di_bound' style='left:0%;'>Threshold: " + nI + " [" + nIf + "]</div>";
+	nI = cm["sensor_gain"];
+	nIf = cm["factory"]["sensor_gain"];
+	strHTML += "	<div class='g_di_bound' style='left:50%;'>Gain: " + nI + " [" + nIf + "]</div>";
+	strHTML += "</div></div>";
+	strHTML += "<div class='g_data'><div style='position:relative;'>";
+	str = cm["detection_line"];
+	nD = str.indexOf(',');
+	nI = str.substring(nD + 1);
+	strHTML += "	<div class='g_di_bound' style='left:0;'>AutoOffset: " + nI + "</div>";
+	strHTML += "</div></div>";
+	strHTML += "<br>";
+	return strHTML;
+}
+
+function displayDetectionGraph( objGauge, objGraph, data, dataThr, nLRange, nRRange )
+{
+	var cw = objGraph.clientWidth;
+	var ch = objGraph.clientHeight;
+	var strHTML = "";
+	
+	var wtag = "px; width:" + Math.ceil((cw * 1. + 0.1) / data.length) + "px;";
+	var nSkip = Math.floor( data.length / (cw * 1.) )
+	var nPixCnt;
+	
+	var nLR = Math.floor(nLRange * data.length / 0xffff);
+	var nRR = Math.floor(nRRange * data.length / 0xffff);
+	
+	var nAvr = 0;
+	var nMin = 0xff;
+	var nDataCnt = 0;
+	
+	nPixCnt = 1;
+	for ( idx in data )
+	{
+		if ( nPixCnt == 1 )
+			strHTML += "<div class='graph_line1' style='left:" + (idx * cw / data.length)  + wtag + " height:" + (data[idx] * ch / 255) + "px;'></div>";
+		if ( ++nPixCnt > nSkip )
+			nPixCnt = 1;
+		
+		if ( idx >= nLR && idx < nRR )
+		{
+			if ( data[idx] == 0 ) continue;
+			nAvr += data[idx];
+			nDataCnt++;
+			
+			if ( nMin > data[idx] )
+				nMin = data[idx];
+		}
+	}
+	nAvr /= nDataCnt;
+	nAvr = Math.floor((nAvr * 20 / 255) + 0.5);
+	
+	for ( idx in dataThr )
+	{
+		if ( nPixCnt == 1 )
+			strHTML += "<div class='graph_line2' style='left:" + (idx * cw / dataThr.length)  + wtag + " height:" + (dataThr[idx] * ch / 255) + "px;'></div>";
+		if ( ++nPixCnt > nSkip )
+			nPixCnt = 1;
+	}
+	
+	strHTML += "<div class='graph_range' style='left:" + Math.floor(cw * nLRange / 0xffff) + "px;'></div>";
+	strHTML += "<div class='graph_range' style='left:" + Math.floor(cw * nRRange / 0xffff) + "px;'></div>";
+	
+	objGraph.innerHTML = strHTML;
+
+	var strClass = "gauge_lampG";
+	if ( nMin <= 255*0.15 )
+		strClass = "gauge_lampB";
+	else if ( nMin <= 255*0.20 )
+		strClass = "gauge_lampN";
+	else if ( nMin <= 255*0.30 )
+		strClass = "gauge_lampS";
+		
+	strHTML = "";
+	var ni;
+	nPixCnt = 0;
+	for ( ni = 0; ni < nAvr; ni++ )
+	{
+		strHTML += "<div class='" + strClass + "' style='top:" + ((19 - ni) * 5) + "%;'></div>";
+	}
+	for ( ; ni < 20; ni++ )
+	{
+		strHTML += "<div class='gauge_lamp0' style='top:" + ((19 - ni) * 5) + "%;'></div>";
+	}
+	objGauge.innerHTML = strHTML;
+}
+</script>
+
+<body onload="initBody();" onresize="layoutBody();">
+
+<div id="main">
+
+<div id="graph"></div>
+
+<div class='g_dataext'><input type='checkbox' id='ac' disabled>Auto Correction: Detection Line</input></div>
+<div class='g_dataext'><input type='checkbox' id='sd' disabled>Simple Detection</input></div>
+<div class='g_dataext'><input type='checkbox' id='id' disabled>Invert Detection</input></div>
+
+</div>
+
+</body>
+
+</html>

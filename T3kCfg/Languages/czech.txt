@@ -1,0 +1,330 @@
+﻿
+[MAIN]
+APP_ERROR_MSG1 = Nelze spustit na výměnných zařízeních
+TITLE_GENERAL_ERROR = Chyba
+
+BTN_CAPTION_EXIT = Ukončit
+BTN_CAPTION_CLOSE = Zavřít
+BTN_CAPTION_DEFAULT = Výchozí
+BTN_CAPTION_REFRESH = Obnovit
+MENU_TOOLTIP_START_PAGE = Úvodní stránka
+MENU_TOOLTIP_MOUSE = Gesta
+MENU_TOOLTIP_CALIBRATION = Kalibrace
+MENU_TOOLTIP_SENSOR_SETTING = Nastavení senzorů
+MENU_TOOLTIP_GENERAL_SETTING = Základní nastavení
+MENU_TOOLTIP_SOFTKEY_SETTING = Nastavení SW tlačítek
+MSGBOX_TITLE_DEFAULT = Zpět na výchozí
+MSGBOX_TEXT_DEFAULT = Obnovit všechna původní nastavení?
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = Tato aplikace nepodporuje v%1 firmware.\nAktuální: %1\nPodporuje %2 ~ %3
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = [Error] Chybný firmware
+TITLE_CAPTION_INFORMATION = Informace o aplikaci
+TITLE_CAPTION_FIRMWARE = Informace o firmware
+TEXT_DEVICE_NOT_CONNECTED = Zařízení není připojeno.
+TEXT_FIRMWARE_DOWNLOAD = Firmware se právě stahuje.
+
+TITLE_CAPTION_LICENSE = O aplikaci
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Vyberte zařízení
+TITLE_CAPTION_DEVICE_LIST = Seznam zařízení
+TEXT_DEV_PATH = Cesta k zařízení
+TEXT_MODEL = Model
+TEXT_NUMBER = č.
+BTN_CAPTION_PLAY_BUZZER = Přehrát zvuk
+BTN_CAPTION_SELECT = Výběr
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = OK
+BTN_CAPTION_CANCEL = Zrušit
+BTN_CAPTION_YES = Ano
+BTN_CAPTION_NO = Ne
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Gesta
+BTN_CAPTION_MOUSE_SUB1 = Nastavení dotykových gest
+BTN_CAPTION_MOUSE_SUB2 = Profily gest
+BTN_CAPTION_CALIBRATION = Kalibrace
+BTN_CAPTION_CALIBRATION_SUB1 = Kalibrace dotykové plochy
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Nastavení senzorů
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Aktivace/deaktivace dotykového ovládání
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Zvuk, Klávesové zkratky
+BTN_CAPTION_GENERAL_SETTING = Základní nastavení
+BTN_CAPTION_GENERAL_SETTING_SUB1 = Jazyk, nastavení režimu
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Orientace obrazu
+BTN_CAPTION_REMOTE_ASSISTANCE = Vzdálená pomoc
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = SW tlačítka
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Dotyková gesta
+BTN_CAPTION_TOUCH_SETTING = Nastavení dotyku …
+
+;TEXT_SINGLE = Jeden prst
+;TEXT_FINGERS = Prsty
+;TEXT_PALM = Dlaň
+;TEXT_PUTNTAP = Dotyk & Klepnutí
+;TEXT_DRAG = Tažení
+;TEXT_TAP = Klepnutí
+;TEXT_DOUBLE_TAP = Dvojí klepnutí
+;TEXT_LONG_TAP = Klepnutí a podržení
+;TEXT_ROTATE = Otočení
+;TEXT_ZOOM = Zvětšení
+TEXT_MOVE_WITH_ZOOM = Posun se zvětšením
+TEXT_INERTIAL_WHEEL = Setrvačnost kolečka
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Individuální Dotyk & Klepnutí, Dotyk & Dvojí klepnutí
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Hybridní Multi-Touch
+TEXT_MAC_OS_MARGIN = Mac OS X Margin
+TEXT_INVERT_WHEEL = Invertování kolečka
+
+TEXT_LEFT = Levé
+TEXT_RIGHT = Pravé
+TEXT_MIDDLE = Prostřední
+TEXT_DOUBLE_CLICK = Dvojklik
+TEXT_CLICK = Klik
+
+TEXT_PROFILE_LEGEND_MODE1 = Myš
+TEXT_PROFILE_LEGEND_MODE2 = Windows 7
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Nastavení akce
+TEXT_PROFILE_ITEM = Typ akce
+TEXT_ACTION = Akce
+TEXT_USER_DEFINE_KEY = Uživatelem definovaná klávesa
+TEXT_KEY = Klávesa (kombinace)
+TEXT_FUNCTION_KEY = Funkční klávesa
+TEXT_NONE = Žádná
+TEXT_NOT_DEFINED = Nedefinováno
+BTN_CAPTION_APPLY = Použít
+BTN_CAPTION_CANCEL = Zrušit
+
+TEXT_PROFILE_ITEM_DISABLED = (Zakázáno)
+TEXT_PROFILE_ITEM_USER_DEFINED = (Definováno uživatelem)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Funkční klávesa)
+TEXT_PROFILE_ITEM_MOUSE = (Myš)
+TEXT_PROFILE_ITEM_ESCAPE = Escape (Esc)
+TEXT_PROFILE_ITEM_FORWARD = Vpřed
+TEXT_PROFILE_ITEM_BACK = Zpět
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Přepínač úloh
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Přepínač úloh (Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Správce úloh
+TEXT_PROFILE_ITEM_EXPLORER = Explorer
+TEXT_PROFILE_ITEM_DESKTOP = Plocha
+TEXT_PROFILE_ITEM_VKBOARD = Virtuální klávesnice
+TEXT_PROFILE_ITEM_T3KCFG = T3k Konfigurační program
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Levý klik
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Pravý klik
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Střední klik
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Levé tlačítko
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Pravé tlačítko
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Střední tlačítko
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Kalibrace
+TEXT_SCREEN_MARGIN = Okraje obrazu
+TEXT_SCREEN_PERCENT_OF_SCREEN = % obrazu
+TEXT_CALIBRATE = Kalibrovat
+BTN_CAPTION_CALIBRATE = Kalibrace...
+
+TITLE_AREA_SETTING = Nastavení velikostí reakčních ploch (% z plochy)
+TEXT_SINGLE_CLICK = Prst
+TEXT_DOUBLE_CLICK = Přesnost dvojkliku
+;TEXT_TWO_TOUCH = Dotyk & Klepnutí
+TEXT_PALM = Dlaň
+
+TEXT_CALIBRATION_WARNING = Nazaškrtávejte 'Mac OS X Margin' v menu 'Gesta'. Kalibrace nemusí fungovat správně.
+TEXT_CALIBRATION_WARNING2 = 
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Zapnout / vypnout dotykové ovládání
+TEXT_TOUCH_ENABLE = Dotykové ovládání
+TEXT_RADIO_TOUCH_ENABLE = Povoleno
+TEXT_RADIO_TOUCH_DISABLE = Zakázáno
+
+TITLE_CAPTION_BUZZER = Zvuk
+TEXT_CLICK = Kliknutí
+TEXT_CALIBRATION = Kalibrace
+TEXT_ERROR = Chyby
+TEXT_KEYTONE = Zvuk
+TEXT_SENSOR_ATTACH = Sensor Attach
+TEXT_PEN_PAIRING = Párování pera
+TEXT_USB_ATTACH = USB Attach
+
+TITLE_SHORTCUT_KEY = Klávesové zkratky
+TEXT_CALIBRATION_KEY = Kalibrační klávesa
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Počet stisků
+TEXT_TOUCH_ENABLE_KEY = Klávesa pro aktivaci dotyku
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Počet stisků
+TEXT_NOT_USED = Nepoužito
+TEXT_ON = ZAP.
+TEXT_OFF = VYP.
+
+TITLE_TRAY_ICON = Ikona v systémovém poli
+TEXT_CHECK_TRAYICON = Zobrazit ikonu
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Režim dotykového ovládání
+TEXT_INPUT_MODE = Režim
+TEXT_INPUT_MODE_MOUSE = Myš
+TEXT_INPUT_MODE_SINGLE_TOUCH = Jeden dotyk (pero tabletu)
+TEXT_INPUT_MODE_MULTI_TOUCH = Multi-dotyk
+TEXT_INPUT_MODE_AUTO_SELECT = Automatická volba
+TEXT_INPUT_MODE_WARNING_MSG = Dotyk nemusí pracovat správně v jiných OS. Pokračovat?
+
+TITLE_MULTI_MONITOR = Nastavení pro více zobr. Jednotek
+TEXT_MULTI_MONITOR = Nastavení monitoru
+TEXT_MULTI_MONITOR_SETTING = Výběr monitoru...
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Použít
+TEXT_BTN_MULTI_MONITOR_CANCEL = Zrušit
+TEXT_BTN_MULTI_MONITOR_CLOSE = Zavřít
+TEXT_PRIMARY_MONITOR = Primární zobrazení : %d
+TEXT_NON_MULTI_MONITOR = Bez podpory více monitorů
+
+BTN_TOOLTIP_PLAY = Přehrát
+
+BTN_CAMERA_DIAGNOSTICS = Diagnostika senzorů...
+
+TITLE_LANGUAGE = Jazyk
+TEXT_LANGUAGE = Výběr jazyka
+TEXT_LANGUAGE_NOT_FOUND = Soubor s jazykovou verzí neexistuje
+
+TITLE_DISPLAY_ORIENTATION = Orientace obrazu
+TEXT_DISPLAY_ORIENTATION = Orientace
+TEXT_DISPLAY_ORIENTATION_1 = 0' - Na šířku
+TEXT_DISPLAY_ORIENTATION_2 = 90' - Na výšku
+TEXT_DISPLAY_ORIENTATION_3 = 180' - Na šířku (převrácený)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - Na výšku (převrácený)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - Normální
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Vlevo
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Vpravo
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Vzhůru nohama
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
+
+TITLE_DISPLAY_WARNING = Upozornění
+TEXT_DISPLAY_WARNING = Aktuální orientace displeje a kalibrační hodnoty nesouhlasí.
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Nastavení dotyku
+TITLE_TIME_SETTING = Nastavení rychlosti (ms)
+TEXT_TAP = Klepnutí
+TEXT_LONG_TAP = Klepnutí a podržení
+TEXT_SLOW = Pomalu
+TEXT_FAST = Rychle
+TITLE_WHEEL_SENSITIVITY_SETTING = Nastavení citlivosti kolečka a zvětšení
+TEXT_WHEEL = Kolečko
+TEXT_ZOOM = Zvětšení
+
+BTN_CAPTION_DEFAULT = Výchozí
+BTN_CAPTION_REFRESH = Obnovit
+BTN_CAPTION_CLOSE = Zavřít
+MSGBOX_TEXT_DEFAULT = Obnovit výchozí nastavení?
+MSGBOX_TITLE_DEFAULT = Výchozí
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Select "Vypnutí dotykového ovládání"
+TEXT_MESSAGE = Prosím, klikněte na tlačítko časovače\npro vypnutí dotykového ovládání.
+BTN_TIMER_TEXT = %1 sek.
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Upozornění
+TEXT_MESSAGE = Upozornění! Následující obrazovka obsahuje nastavení údajů nezbytných pro fungování dotykových senzorů. \n\nZměna těchto údajů může způsobit, že systém nebude správně pracovat.
+BTN_CAPTION_CONTINUE = Pokračovat
+BTN_CAPTION_CLOSE = Zavřít
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = Souhlas
+TEXT_MESSAGE = Budou zaznamenány informace o senzorech a uživatelském prostředí (verze OS, input Service na MS Windows, rozlišení obrazu) na dalším obrazu.
+BTN_CAPTION_CONTINUE = Souhlasím
+BTN_CAPTION_CLOSE = Nesouhlasím
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Diagnostika senzorů
+BTN_CAPTION_DEFAULT = Výchozí
+BTN_CAPTION_REFRESH = Obnovit
+BTN_CAPTION_CLOSE = Zavřít
+BTN_CAPTION_SAVELOG = Uložit stav senzorů
+BTN_CAPTION_MAIN = Hlavní
+BTN_CAPTION_SUB = Podružné
+TAB_CAPTION_SIDEVIEW = Obraz ze senzorů
+TAB_CAPTION_DETECTION = Detekční křivka
+
+LOG_CAPTION_ERROR = Chyba! Nelze uložit stav.
+LOG_SIDEVIEW = Boční pohled
+LOG_DETECTION = Detekce
+LOG_DATA = Data nastavení
+LOG_SAVING = Ukládání
+LOG_LOADING = Načítání
+LOG_COMPLETE = Hotovo
+LOG_OK = OK
+LOG_FAIL = CHYBA
+LOG_PROGRESS = PRG
+LOG_START = Start
+LOG_CAMERA = Kamera
+
+TITLE_SENSOR1 = Senzor 1
+TITLE_SENSOR2 = Senzor 2
+TITLE_SENSOR1_1 = Senzor 1-1
+TITLE_SENSOR2_1 = Senzor 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Zvětšení
+BTN_TOOLTIP_ZOOM_OUT = Zmenšení
+BTN_TOOLTIP_RESET_ZOOM = Přizpůsobit
+TEXT_SENSOR1_GRAPH_LEFT = Dolní levý
+TEXT_SENSOR1_GRAPH_RIGHT = Horní pravý
+TEXT_SENSOR2_GRAPH_LEFT = Horní levý
+TEXT_SENSOR2_GRAPH_RIGHT = Dolní pravý
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = Není obraz
+BTN_CAPTION_SNAPSHOT = Uložit snímek
+
+[SOFTKEY SETTING]
+TEXT_TITLE = Nastavení SW tlačítek
+TEXT_HEADER_NUMBER = č.
+TEXT_HEADER_TYPE = Typ
+TEXT_HEADER_ACTION = Akce
+TEXT_ITEM_KEY = Klávesa
+TEXT_ITEM_STATE = Stav
+TEXT_ITEM_NOT_USED = (Nepoužito)
+TEXT_ITEM_CALIBRATION = Začátek / konec kalibrace senzorů
+TEXT_ITEM_TOUCH = Zapnout / vypnout dotykové ovládání
+
+[TRAYICON]
+TEXT_MENU_OPEN = Otevřít...
+TEXT_MENU_EXIT = Ukončit
+TEXT_BALLOONTIP_TITLE = T3k Konfigurace
+TEXT_BALLOONTIP_MSG = T3k Configuration Factory Edition ("T3kCfgFE.exe") je spuštěna.
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = 
+TITLE_REMOTE = 
+TEXT_SELECT_SERVER = 
+TEXT_PORT = 
+TEXT_USERNAME = 
+BTN_REQUEST = 
+TEXT_RECONNECTING = 
+BTN_CANCEL = 
+TEXT_CONNECTING = 
+TEXT_REMOTE_CONTROL = 
+BTN_DISCONNECT = 
+TEXT_WAIT_MSG = 
+TEXT_REPAIRCONNECTION = 
+TEXT_ID = 
+TEXT_SERV_NOT_RES = 
+TITLE_CHAT = 
+BTN_SEND = 
+MSG_CHAT_DISCONNECTED = 
+TITLE_REMOTE_MSG = 
+MSG_REMOTE_DISCONNECT = 
+TEXT_HELP_MSG = 
+TEXT_HELP_ARROW = 

@@ -1,0 +1,330 @@
+﻿
+[MAIN]
+APP_ERROR_MSG1 = Değşebilen cihazlar üzerinde kullanılamaz.
+TITLE_GENERAL_ERROR = Hata
+
+BTN_CAPTION_EXIT = Çıkış
+BTN_CAPTION_CLOSE = Kapat
+BTN_CAPTION_DEFAULT = Varsayılan
+BTN_CAPTION_REFRESH = Yenile
+MENU_TOOLTIP_START_PAGE = Başlanıç sayfası
+MENU_TOOLTIP_MOUSE = İşaret
+MENU_TOOLTIP_CALIBRATION = Kalibrasyon
+MENU_TOOLTIP_SENSOR_SETTING = Sensör Ayarları
+MENU_TOOLTIP_GENERAL_SETTING = Genel Ayarlar
+MENU_TOOLTIP_SOFTKEY_SETTING = Softkey Ayarları
+MSGBOX_TITLE_DEFAULT = Varsayılanı yükle
+MSGBOX_TEXT_DEFAULT = Tüm ayarları orijinal haline geri çevir?
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = Bu yazılım v%1 firmware'ri desteklemiyor.\nMevcut: %1\nDestekliyor %2 ~ %3
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = [Hata] Yanlış Firmware
+TITLE_CAPTION_INFORMATION = Yazılım bilgisi
+TITLE_CAPTION_FIRMWARE = Firmware bilgisi
+TEXT_DEVICE_NOT_CONNECTED = Cihaz Bağlı değil.
+TEXT_FIRMWARE_DOWNLOAD = Firmware yükleniyor.
+
+TITLE_CAPTION_LICENSE = Hakkında
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Cihazı seç
+TITLE_CAPTION_DEVICE_LIST = Cihaz listesi
+TEXT_DEV_PATH = Cihaz kısayolu
+TEXT_MODEL = Model
+TEXT_NUMBER = No.
+BTN_CAPTION_PLAY_BUZZER = Buzzeri oynat
+BTN_CAPTION_SELECT = Seç
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = Tamam
+BTN_CAPTION_CANCEL = İptal
+BTN_CAPTION_YES = Evet
+BTN_CAPTION_NO = Hayır
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Hareket
+BTN_CAPTION_MOUSE_SUB1 = Dokunmatik İşaret Ayarları
+BTN_CAPTION_MOUSE_SUB2 = İşaret profileri
+BTN_CAPTION_CALIBRATION = Kalibrasyon
+BTN_CAPTION_CALIBRATION_SUB1 = Dokunmatik Ekran Kalibrasyonu
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Sensör Ayarları
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Dokunmatik Aç/Kapa
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Buzzer, Kısayol tuşu
+BTN_CAPTION_GENERAL_SETTING = Genel ayarlar
+BTN_CAPTION_GENERAL_SETTING_SUB1 = Dil, Giriş Modu
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Ekrab yönlendirmesi
+BTN_CAPTION_REMOTE_ASSISTANCE = Uzaktan yardım
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Softkey
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Dokunmatik işaretleri
+BTN_CAPTION_TOUCH_SETTING = Dokunmatik ayarları…
+
+;TEXT_SINGLE = Tek
+;TEXT_FINGERS = Parmaklar
+;TEXT_PALM = Avuç içi
+;TEXT_PUTNTAP = Yerleştir & Klik
+;TEXT_DRAG = Çek
+;TEXT_TAP = Klick
+;TEXT_DOUBLE_TAP = Çift klik
+;TEXT_LONG_TAP = Uzun klik
+;TEXT_ROTATE = Rotasyon
+;TEXT_ZOOM = Zoom
+TEXT_MOVE_WITH_ZOOM = Hareketli zoom
+TEXT_INERTIAL_WHEEL = Inertial Wheel
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Kişisel  Bırak & klik, Bırak ve çift klik
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Hibrid Çok nokta Dokunmatik
+TEXT_MAC_OS_MARGIN = Mac OS X marjı
+TEXT_INVERT_WHEEL = Tekerlek ters çalışsın.
+
+TEXT_LEFT = Sol
+TEXT_RIGHT = Sağ
+TEXT_MIDDLE = Orta
+TEXT_DOUBLE_CLICK = Çift Klik
+TEXT_CLICK = Klik
+
+TEXT_PROFILE_LEGEND_MODE1 = Fare
+TEXT_PROFILE_LEGEND_MODE2 = Windows 7
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Aksiyon ekle
+TEXT_PROFILE_ITEM = Profil nesnesi
+TEXT_ACTION = Aksiyon
+TEXT_USER_DEFINE_KEY = Kullanıcı Tanımlı Tuş
+TEXT_KEY = Tuş
+TEXT_FUNCTION_KEY = Fonksiyon tuşu
+TEXT_NONE = Hiçbiri
+TEXT_NOT_DEFINED = Tanımlanmamış
+BTN_CAPTION_APPLY = Uygula
+BTN_CAPTION_CANCEL = İptal
+
+TEXT_PROFILE_ITEM_DISABLED = (Devre dışı)
+TEXT_PROFILE_ITEM_USER_DEFINED = (Kullanıcı Tanımlı)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Fonksiyon Tuşu)
+TEXT_PROFILE_ITEM_MOUSE = (Fare)
+TEXT_PROFILE_ITEM_ESCAPE = Escape (Esc)
+TEXT_PROFILE_ITEM_FORWARD = İleri
+TEXT_PROFILE_ITEM_BACK = Geri
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Görev değiştir
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Görev değiştir (Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Görev Yöneticisi
+TEXT_PROFILE_ITEM_EXPLORER = Explorer
+TEXT_PROFILE_ITEM_DESKTOP = Masaüstü
+TEXT_PROFILE_ITEM_VKBOARD = Sanal Klavye
+TEXT_PROFILE_ITEM_T3KCFG = T3k Serisi Konfigürasyon Yazılımı
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Sol klik
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Sağ klik
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Orta Klik
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Sol tuş
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Sağ tuş
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Orta Tuş
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Kalibrasyon
+TEXT_SCREEN_MARGIN = Ekran marjları
+TEXT_SCREEN_PERCENT_OF_SCREEN = Erkanın  %
+TEXT_CALIBRATE = Kalibre et
+BTN_CAPTION_CALIBRATE = Kalibrasyon…
+
+TITLE_AREA_SETTING = Bölge Ayarları (Ekranın %)
+TEXT_SINGLE_CLICK = Tek klik
+TEXT_DOUBLE_CLICK = Çift klik
+;TEXT_TWO_TOUCH = Yerleştir & klik
+TEXT_PALM = Avuç
+
+TEXT_CALIBRATION_WARNING = Mac OS X marjalrını işaret menüsünde kontrol etmediniz. Bu Sebeple kalibrasyon düzgün çalışmaya bilir.
+TEXT_CALIBRATION_WARNING2 = 
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Dokunmatik Ekran Aç/Kapa
+TEXT_TOUCH_ENABLE = Dokunmatik Ekran
+TEXT_RADIO_TOUCH_ENABLE = Aç
+TEXT_RADIO_TOUCH_DISABLE = Kapa
+
+TITLE_CAPTION_BUZZER = Buzzer
+TEXT_CLICK = Klik
+TEXT_CALIBRATION = Kalibrasyon
+TEXT_ERROR = Hata
+TEXT_KEYTONE = Temel
+TEXT_SENSOR_ATTACH = Senör eki
+TEXT_PEN_PAIRING = Kalem Eşleştirilmesi
+TEXT_USB_ATTACH = USB eki
+
+TITLE_SHORTCUT_KEY = Kısayol tuşu
+TEXT_CALIBRATION_KEY = Kalibrasyon tuşu
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Tüş kaç kere basıldı
+TEXT_TOUCH_ENABLE_KEY = Dokunmatik açma tuşu
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Bir tuşa kaç kere basılmış.
+TEXT_NOT_USED = Kullanılmıyor
+TEXT_ON = açık
+TEXT_OFF = Kapalı
+
+TITLE_TRAY_ICON = Tray ikonu
+TEXT_CHECK_TRAYICON = Tray ikonunu kullan
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Dokumatik giriş modu
+TEXT_INPUT_MODE = Giriş Modu
+TEXT_INPUT_MODE_MOUSE = Fare
+TEXT_INPUT_MODE_SINGLE_TOUCH = Tek dokunuşlu (Tablet Kalem)
+TEXT_INPUT_MODE_MULTI_TOUCH = Çok Dokunuşlu (Sadece Win 7)
+TEXT_INPUT_MODE_AUTO_SELECT = Otomatik seç
+TEXT_INPUT_MODE_WARNING_MSG = Dokunmatik bu işletim sistemi altında düzügün çalışmayabilir. Devam emek istiyormusun?
+
+TITLE_MULTI_MONITOR = Çoklu Monitör Ekran ayarları
+TEXT_MULTI_MONITOR = Monitör Ayarları
+TEXT_MULTI_MONITOR_SETTING = Gösterilecek monitörü seçin.
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Uygula
+TEXT_BTN_MULTI_MONITOR_CANCEL = İptal
+TEXT_BTN_MULTI_MONITOR_CLOSE = Kapat
+TEXT_PRIMARY_MONITOR = Ana Monitör: %d
+TEXT_NON_MULTI_MONITOR = Çoklu monitör desteği yok.
+
+BTN_TOOLTIP_PLAY = Oynat
+
+BTN_CAMERA_DIAGNOSTICS = Sensör Diagnosu...
+
+TITLE_LANGUAGE = Dil(Language)
+TEXT_LANGUAGE = Dil seçimi
+TEXT_LANGUAGE_NOT_FOUND = Dil dosyası bulunamıyor.
+
+TITLE_DISPLAY_ORIENTATION = Ekran Yönlendirilmesi
+TEXT_DISPLAY_ORIENTATION = Yönlendirme
+TEXT_DISPLAY_ORIENTATION_1 = 0' - Yatay
+TEXT_DISPLAY_ORIENTATION_2 = 90' - Dikey
+TEXT_DISPLAY_ORIENTATION_3 = 180' - Yatay (ters)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - Dikey (ters)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - Normal
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Sol
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Sağ
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Ters
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
+
+TITLE_DISPLAY_WARNING = Uyarı
+TEXT_DISPLAY_WARNING = Mevcut ekran yönlendirilmesi ve kalbirasyon ayarları uyumsuz.
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Dokunmatik ayarları
+TITLE_TIME_SETTING = Zaman Ayarları (ms)
+TEXT_TAP = Klik
+TEXT_LONG_TAP = Uzun Klik
+TEXT_SLOW = Yavaş
+TEXT_FAST = Hızlı
+TITLE_WHEEL_SENSITIVITY_SETTING = Tekerlek/Zoom Hasasiyet ayarları
+TEXT_WHEEL = Tekerlek
+TEXT_ZOOM = Zoom
+
+BTN_CAPTION_DEFAULT = Varsayılan
+BTN_CAPTION_REFRESH = Yenile
+BTN_CAPTION_CLOSE = Kapat
+MSGBOX_TEXT_DEFAULT = Tüm ayarları orijinal haline geri çevir?
+MSGBOX_TITLE_DEFAULT = Varsayılan
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Seç "Dokunamtiği Kapat"
+TEXT_MESSAGE = Lütfen, Zaman tuşuna basarak dokunmatiği kapatın.
+BTN_TIMER_TEXT = %1 saniye
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Dikkat
+TEXT_MESSAGE = Dikkat! Bu ayarları dokunmatik sensörlerin düzgün çalışması için hasas bilgleri içeriyor. Bu bilgilerin değişimi sonunca dokunmatik ekran düzgün çalışmaya bilir.
+BTN_CAPTION_CONTINUE = Devam
+BTN_CAPTION_CLOSE = Kapat
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = Anlaşma
+TEXT_MESSAGE = Bir sonra ki ekranda sensör ve kullanıcı çervre (OS verisyonu, MS Windows Tablet giriş servisi, ekran çöznürlüğü) bilgileri toplanıcaktır.
+BTN_CAPTION_CONTINUE = Kabul
+BTN_CAPTION_CLOSE = Kabul etme
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Sensör Diagnosu
+BTN_CAPTION_DEFAULT = Varsayılan
+BTN_CAPTION_REFRESH = Yenile
+BTN_CAPTION_CLOSE = Kapat
+BTN_CAPTION_SAVELOG = Sensör Durumunu kaydet
+BTN_CAPTION_MAIN = 
+BTN_CAPTION_SUB = 
+TAB_CAPTION_SIDEVIEW = Yan Bakış
+TAB_CAPTION_DETECTION = Hasasiyet diagramı
+
+LOG_CAPTION_ERROR = Error! failed to save the state.
+LOG_SIDEVIEW = Hata! Bilgiler kayıt edilmedi
+LOG_DETECTION = Hasasiyet
+LOG_DATA = Ayar Bilgisi
+LOG_SAVING = Kayıt
+LOG_LOADING = Yükleme
+LOG_COMPLETE = Tamamlandı
+LOG_OK = OK
+LOG_FAIL = BAŞARISIZ
+LOG_PROGRESS = İlerleme
+LOG_START = Başla
+LOG_CAMERA = Kamera
+
+TITLE_SENSOR1 = Sensör 1
+TITLE_SENSOR2 = Sensör 2
+TITLE_SENSOR1_1 = Sensör 1-1
+TITLE_SENSOR2_1 = Sensör 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Yakınlaştır
+BTN_TOOLTIP_ZOOM_OUT = Uzaklaştır
+BTN_TOOLTIP_RESET_ZOOM = Ekrana sığdır
+TEXT_SENSOR1_GRAPH_LEFT = Alt sol
+TEXT_SENSOR1_GRAPH_RIGHT = Yukarı Sağ
+TEXT_SENSOR2_GRAPH_LEFT = Yukarı Sol
+TEXT_SENSOR2_GRAPH_RIGHT = Alt Sağ
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = Resim Yok
+BTN_CAPTION_SNAPSHOT = Enstantane resmi
+
+[SOFTKEY SETTING]
+TEXT_TITLE = Softkey ayarı.
+TEXT_HEADER_NUMBER = No.
+TEXT_HEADER_TYPE = Tür
+TEXT_HEADER_ACTION = Aksiyon
+TEXT_ITEM_KEY = Tuş
+TEXT_ITEM_STATE = Durum
+TEXT_ITEM_NOT_USED = (Kullanılmıyor)
+TEXT_ITEM_CALIBRATION = Sensör kalibrasyonu Giriş/Çıkış
+TEXT_ITEM_TOUCH = Aç/Kapa Dokunmatik Ekran
+
+[TRAYICON]
+TEXT_MENU_OPEN = Aç…
+TEXT_MENU_EXIT = Çıkış
+TEXT_BALLOONTIP_TITLE = T3k Konfigürasyonu
+TEXT_BALLOONTIP_MSG = T3k Konfigürasyonu Fabrika Yayını çalışıyor.
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = 
+TITLE_REMOTE = 
+TEXT_SELECT_SERVER = 
+TEXT_PORT = 
+TEXT_USERNAME = 
+BTN_REQUEST = 
+TEXT_RECONNECTING = 
+BTN_CANCEL = 
+TEXT_CONNECTING = 
+TEXT_REMOTE_CONTROL = 
+BTN_DISCONNECT = 
+TEXT_WAIT_MSG = 
+TEXT_REPAIRCONNECTION = 
+TEXT_ID = 
+TEXT_SERV_NOT_RES = 
+TITLE_CHAT = 
+BTN_SEND = 
+MSG_CHAT_DISCONNECTED = 
+TITLE_REMOTE_MSG = 
+MSG_REMOTE_DISCONNECT = 
+TEXT_HELP_MSG = 
+TEXT_HELP_ARROW = 

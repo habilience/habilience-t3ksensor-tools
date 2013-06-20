@@ -1,0 +1,330 @@
+﻿
+[MAIN]
+APP_ERROR_MSG1 = No se puede ejecutar en el dispositivo desmontable
+TITLE_GENERAL_ERROR = Error
+
+BTN_CAPTION_EXIT = Salida
+BTN_CAPTION_CLOSE = Cerrar
+BTN_CAPTION_DEFAULT = Valor por omisión
+BTN_CAPTION_REFRESH = Renovar
+MENU_TOOLTIP_START_PAGE = Página de inicio
+MENU_TOOLTIP_MOUSE = Gesto
+MENU_TOOLTIP_CALIBRATION = Calibración
+MENU_TOOLTIP_SENSOR_SETTING = Ajuste del sensor
+MENU_TOOLTIP_GENERAL_SETTING = Ajuste general
+MENU_TOOLTIP_SOFTKEY_SETTING = 
+MSGBOX_TITLE_DEFAULT = Modificar el valor por omisión
+MSGBOX_TEXT_DEFAULT = ¿Quiere volver al ajuste inicial?
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = 
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = Verificación de error
+TITLE_CAPTION_INFORMATION = Información del programa
+TITLE_CAPTION_FIRMWARE = Información del firmware
+TEXT_DEVICE_NOT_CONNECTED = El dispositivo no está conectado
+TEXT_FIRMWARE_DOWNLOAD = Bajar el firmware
+
+TITLE_CAPTION_LICENSE = 
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Seleccionar el dispositivo
+TITLE_CAPTION_DEVICE_LIST = Lista de dispositivos
+TEXT_DEV_PATH = Ruta
+TEXT_MODEL = 
+TEXT_NUMBER = 
+BTN_CAPTION_PLAY_BUZZER = Hacer sonar el timbre
+BTN_CAPTION_SELECT = Seleccionar
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = Confirmar
+BTN_CAPTION_CANCEL = Cancelar
+BTN_CAPTION_YES = Sí
+BTN_CAPTION_NO = No
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Gesto
+BTN_CAPTION_MOUSE_SUB1 = Configuración de gestos
+BTN_CAPTION_MOUSE_SUB2 = Perfiles de gestos
+BTN_CAPTION_CALIBRATION = Calibración de la pantalla táctil
+BTN_CAPTION_CALIBRATION_SUB1 = Herramientas para la calibración
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Ajuste del sensor
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Táctil o no táctil
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Ajuste de la tecla de acceso rápido y el sonido
+BTN_CAPTION_GENERAL_SETTING = Ajuste general
+BTN_CAPTION_GENERAL_SETTING_SUB1 = Idioma, Modo de ingreso
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Orientación de la pantalla
+BTN_CAPTION_REMOTE_ASSISTANCE = Control remoto asistido
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Softkey
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Gesto táctil
+BTN_CAPTION_TOUCH_SETTING = Ajuste del tacto…
+
+;TEXT_SINGLE = Un dedo
+;TEXT_FINGERS = Varios dedos
+;TEXT_PALM = La palma de la mano
+;TEXT_PUTNTAP = Put & Tap (Conversión de imagen)
+;TEXT_DRAG = Arrastrar
+;TEXT_TAP = Dar un golpecito
+;TEXT_DOUBLE_TAP = Dar un golpecito doble
+;TEXT_LONG_TAP = Pulsar prolongadamente
+;TEXT_ROTATE = Rotar
+;TEXT_ZOOM = Ampliar/Reducir
+TEXT_MOVE_WITH_ZOOM = Ampliar/Reducir al arrastrar
+TEXT_INERTIAL_WHEEL = Rueda de inercia
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Put & Tap y Put & Double-Tap (Conversión de imagen)
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = 
+TEXT_MAC_OS_MARGIN = 
+TEXT_INVERT_WHEEL = Invertir rueda
+
+TEXT_LEFT = Izquierda
+TEXT_RIGHT = Derecha
+TEXT_MIDDLE = Medio
+TEXT_DOUBLE_CLICK = Clic doble
+TEXT_CLICK = Clic
+
+TEXT_PROFILE_LEGEND_MODE1 = 
+TEXT_PROFILE_LEGEND_MODE2 = 
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Redacción del ítem
+TEXT_PROFILE_ITEM = Ítem
+TEXT_ACTION = Activación
+TEXT_USER_DEFINE_KEY = Teclas definidas por el usuario
+TEXT_KEY = Teclas
+TEXT_FUNCTION_KEY = Teclas de función
+TEXT_NONE = No hay
+TEXT_NOT_DEFINED = No definido
+BTN_CAPTION_APPLY = Aplicar
+BTN_CAPTION_CANCEL = Cancelar
+
+TEXT_PROFILE_ITEM_DISABLED = (Sin uso)
+TEXT_PROFILE_ITEM_USER_DEFINED = (Definido por el usuario)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Teclas de función)
+TEXT_PROFILE_ITEM_MOUSE = 
+TEXT_PROFILE_ITEM_ESCAPE = 
+TEXT_PROFILE_ITEM_FORWARD = Hacia adelante
+TEXT_PROFILE_ITEM_BACK = Hacia atrás
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Cambio de la ventana de tareas 1
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Cambio de la ventana de tareas 2
+TEXT_PROFILE_ITEM_TASK_MANAGER = Administrador de tareas
+TEXT_PROFILE_ITEM_EXPLORER = Explorador
+TEXT_PROFILE_ITEM_DESKTOP = Ver el escritorio
+TEXT_PROFILE_ITEM_VKBOARD = 
+TEXT_PROFILE_ITEM_T3KCFG = 
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = 
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = 
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = 
+TEXT_PROFILE_ITEM_MLEFT_DOWN = 
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = 
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = 
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Calibración
+TEXT_SCREEN_MARGIN = Espacio blanco de la pantalla
+TEXT_SCREEN_PERCENT_OF_SCREEN = Porcentaje de la pantalla
+TEXT_CALIBRATE = Calibrar
+BTN_CAPTION_CALIBRATE = Calibrar…
+
+TITLE_AREA_SETTING = Configuración del área(%)
+TEXT_SINGLE_CLICK = Clic simple
+TEXT_DOUBLE_CLICK = Clic doble
+;TEXT_TWO_TOUCH = Put & &Tap (Conversión de imagen)
+TEXT_PALM = Palma de la mano
+
+TEXT_CALIBRATION_WARNING = 
+TEXT_CALIBRATION_WARNING2 = 
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Táctil o no táctil
+TEXT_TOUCH_ENABLE = Pantalla táctil
+TEXT_RADIO_TOUCH_ENABLE = Activación
+TEXT_RADIO_TOUCH_DISABLE = Desactivación
+
+TITLE_CAPTION_BUZZER = Sonido del timbre
+TEXT_CLICK = Clic
+TEXT_CALIBRATION = Calibración
+TEXT_ERROR = Error
+TEXT_KEYTONE = Tono de tecla
+TEXT_SENSOR_ATTACH = Aviso de la conexión de un sensor
+TEXT_PEN_PAIRING = Pen pairing
+TEXT_USB_ATTACH = Aviso de la conexión de un USB
+
+TITLE_SHORTCUT_KEY = Tecla de acceso rápido
+TEXT_CALIBRATION_KEY = Tecla de calibración
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Número de veces que se repite una tecla
+TEXT_TOUCH_ENABLE_KEY = Tecla de uso táctil
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Número de veces que se repite una tecla
+TEXT_NOT_USED = No se usa
+TEXT_ON = Encendido
+TEXT_OFF = Apagado
+
+TITLE_TRAY_ICON = Icono de bandeja
+TEXT_CHECK_TRAYICON = Uso del icono de bandeja
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Modo de ingreso Tacto
+TEXT_INPUT_MODE = Modo de ingreso
+TEXT_INPUT_MODE_MOUSE = Ratón
+TEXT_INPUT_MODE_SINGLE_TOUCH = Tacto simple (Tablet Pen)
+TEXT_INPUT_MODE_MULTI_TOUCH = Tacto múltiple (Win 7 Only)
+TEXT_INPUT_MODE_AUTO_SELECT = Selección automática
+TEXT_INPUT_MODE_WARNING_MSG = Táctil puede no funcionar correctamente en otros sistemas operativos. ¿Continuar?
+
+TITLE_MULTI_MONITOR = Ajuste del Multi-Monitor Display
+TEXT_MULTI_MONITOR = Ajuste del Monitor
+TEXT_MULTI_MONITOR_SETTING = Selección del Display Monitor…
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Aplicar
+TEXT_BTN_MULTI_MONITOR_CANCEL = Cancelar
+TEXT_BTN_MULTI_MONITOR_CLOSE = Cerrar
+TEXT_PRIMARY_MONITOR = Monitor principal: %1
+TEXT_NON_MULTI_MONITOR = Multi-Monitor no admitido
+
+BTN_TOOLTIP_PLAY = Poner
+
+BTN_CAMERA_DIAGNOSTICS = Diagnóstico del sensor…
+
+TITLE_LANGUAGE = Idioma(Language)
+TEXT_LANGUAGE = Selección del idioma
+TEXT_LANGUAGE_NOT_FOUND = 
+
+TITLE_DISPLAY_ORIENTATION = Orientación de la pantalla
+TEXT_DISPLAY_ORIENTATION = orientación
+TEXT_DISPLAY_ORIENTATION_1 = 0' - paisaje
+TEXT_DISPLAY_ORIENTATION_2 = 90' - retrato
+TEXT_DISPLAY_ORIENTATION_3 = 180' - paisaje (volcó)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - retrato (volcó)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 
+TEXT_DISPLAY_X11_ORIENTATION_2 = 
+TEXT_DISPLAY_X11_ORIENTATION_3 = 
+TEXT_DISPLAY_X11_ORIENTATION_4 = 
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 
+
+TITLE_DISPLAY_WARNING = advertencia
+TEXT_DISPLAY_WARNING = Orientación de la pantalla actual y el valor de calibración no se corresponde
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Ajuste del Tacto
+TITLE_TIME_SETTING = Ajuste de la hora(ms)
+TEXT_TAP = Pulsar
+TEXT_LONG_TAP = Pulsar prolongadamente
+TEXT_SLOW = Despacio
+TEXT_FAST = Rápido
+TITLE_WHEEL_SENSITIVITY_SETTING = Ajuste de la sensibilidad de Ampliar/Reducir, Rueda del ratón
+TEXT_WHEEL = Rueda del ratón
+TEXT_ZOOM = Ampliar/Reducir
+
+BTN_CAPTION_DEFAULT = Valor por omisión
+BTN_CAPTION_REFRESH = Renovar
+BTN_CAPTION_CLOSE = Cerrar
+MSGBOX_TEXT_DEFAULT = ¿Quiere volver al ajuste inicial?
+MSGBOX_TITLE_DEFAULT = Modificar el valor por omisión
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Confirmar la desactivación del tacto
+TEXT_MESSAGE = Se necesita el ratón para la desactivación del tacto. Haga clic sobre el botón de abajo
+BTN_TIMER_TEXT = %1 segundos
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Advertencia
+TEXT_MESSAGE = Advertencia! En la pantalla siguiente contiene el valor configurado para el chequeo del sensor. Si se modifica el valor configurado, el sensor no puede funcionar normalmente.
+BTN_CAPTION_CONTINUE = Continuar
+BTN_CAPTION_CLOSE = Cerrar
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = 
+TEXT_MESSAGE = 
+BTN_CAPTION_CONTINUE = 
+BTN_CAPTION_CLOSE = 
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Herramienta para diagnosticar el sensor
+BTN_CAPTION_DEFAULT = Valor por omisión
+BTN_CAPTION_REFRESH = Renovar
+BTN_CAPTION_CLOSE = Cerrar
+BTN_CAPTION_SAVELOG = 
+BTN_CAPTION_MAIN = 
+BTN_CAPTION_SUB = 
+TAB_CAPTION_SIDEVIEW = Perfil
+TAB_CAPTION_DETECTION = Gráfico de detección
+
+LOG_CAPTION_ERROR = 
+LOG_SIDEVIEW = 
+LOG_DETECTION = 
+LOG_DATA = 
+LOG_SAVING = 
+LOG_LOADING = 
+LOG_COMPLETE = 
+LOG_OK = 
+LOG_FAIL = 
+LOG_PROGRESS = 
+LOG_START = 
+LOG_CAMERA = 
+
+TITLE_SENSOR1 = Sensor 1
+TITLE_SENSOR2 = Sensor 2
+TITLE_SENSOR1_1 = Sensor 1-1
+TITLE_SENSOR2_1 = Sensor 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Ampliar
+BTN_TOOLTIP_ZOOM_OUT = Reducir
+BTN_TOOLTIP_RESET_ZOOM = Ajustar
+TEXT_SENSOR1_GRAPH_LEFT = Izquierda inferior
+TEXT_SENSOR1_GRAPH_RIGHT = Derecha superior
+TEXT_SENSOR2_GRAPH_LEFT = Izquierda superior
+TEXT_SENSOR2_GRAPH_RIGHT = Derecha inferior
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = Sin imagen
+BTN_CAPTION_SNAPSHOT = Vistazo
+
+[SOFTKEY SETTING]
+TEXT_TITLE = 
+TEXT_HEADER_NUMBER = 
+TEXT_HEADER_TYPE = 
+TEXT_HEADER_ACTION = 
+TEXT_ITEM_KEY = 
+TEXT_ITEM_STATE = 
+TEXT_ITEM_NOT_USED = 
+TEXT_ITEM_CALIBRATION = 
+TEXT_ITEM_TOUCH = 
+
+[TRAYICON]
+TEXT_MENU_OPEN = Abrir…
+TEXT_MENU_EXIT = Salida
+TEXT_BALLOONTIP_TITLE = 
+TEXT_BALLOONTIP_MSG = 
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = 
+TITLE_REMOTE = 
+TEXT_SELECT_SERVER = 
+TEXT_PORT = 
+TEXT_USERNAME = 
+BTN_REQUEST = 
+TEXT_RECONNECTING = 
+BTN_CANCEL = 
+TEXT_CONNECTING = 
+TEXT_REMOTE_CONTROL = 
+BTN_DISCONNECT = 
+TEXT_WAIT_MSG = 
+TEXT_REPAIRCONNECTION = 
+TEXT_ID = 
+TEXT_SERV_NOT_RES = 
+TITLE_CHAT = 
+BTN_SEND = 
+MSG_CHAT_DISCONNECTED = 
+TITLE_REMOTE_MSG = 
+MSG_REMOTE_DISCONNECT = 
+TEXT_HELP_MSG = 
+TEXT_HELP_ARROW = 

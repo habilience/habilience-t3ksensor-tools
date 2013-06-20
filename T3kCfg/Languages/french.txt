@@ -1,0 +1,330 @@
+﻿
+[MAIN]
+APP_ERROR_MSG1 = Impossible d'exécuter (le programme) sur les dispositifs amovibles.
+TITLE_GENERAL_ERROR = Erreur
+
+BTN_CAPTION_EXIT = Sortir
+BTN_CAPTION_CLOSE = Fermer
+BTN_CAPTION_DEFAULT = Par défaut
+BTN_CAPTION_REFRESH = Rafraîchir
+MENU_TOOLTIP_START_PAGE = Page de démarrage
+MENU_TOOLTIP_MOUSE = Geste
+MENU_TOOLTIP_CALIBRATION = Calibration
+MENU_TOOLTIP_SENSOR_SETTING = Paramètre du capteur
+MENU_TOOLTIP_GENERAL_SETTING = Configuration générale
+MENU_TOOLTIP_SOFTKEY_SETTING = Configuration des softkey
+MSGBOX_TITLE_DEFAULT = Restaurer le paramètres par défauts
+MSGBOX_TEXT_DEFAULT = Restaurer la configuration initiale?
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = Ce programme ne supporte pas le firmware v%1. \n Version courante : %1,\n Version supportée : %2 ~ %3
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = [Erreur] Version de firmware non valide
+TITLE_CAPTION_INFORMATION = Information sur le programme
+TITLE_CAPTION_FIRMWARE = Information sur le firmware
+TEXT_DEVICE_NOT_CONNECTED = Le périphérique n'est pas connecté.
+TEXT_FIRMWARE_DOWNLOAD = Le firmware est en train de télécharger.
+
+TITLE_CAPTION_LICENSE = Sur
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Sélectionner un périphérique
+TITLE_CAPTION_DEVICE_LIST = Liste des périphériques
+TEXT_DEV_PATH = Chemin du périphérique
+TEXT_MODEL = Modèle
+TEXT_NUMBER = Numéro
+BTN_CAPTION_PLAY_BUZZER = Faire sonner l'alarme
+BTN_CAPTION_SELECT = Sélectionner
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = OK
+BTN_CAPTION_CANCEL = Annuler
+BTN_CAPTION_YES = Oui
+BTN_CAPTION_NO = Non
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Geste
+BTN_CAPTION_MOUSE_SUB1 = Configuration du geste tactile
+BTN_CAPTION_MOUSE_SUB2 = Configuration des profils de la geste
+BTN_CAPTION_CALIBRATION = Calibration
+BTN_CAPTION_CALIBRATION_SUB1 = Outils de calibration
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Configuration du capteur
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Activer/Désactiver le tactile
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Alarme, raccourci clavier
+BTN_CAPTION_GENERAL_SETTING = Configuration générale
+BTN_CAPTION_GENERAL_SETTING_SUB1 = Langue, mode de saisie
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Rotation de l'écran
+BTN_CAPTION_REMOTE_ASSISTANCE = Assistance à distance
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Softkey
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Geste tactile
+BTN_CAPTION_TOUCH_SETTING = Configuration du tactile...
+
+;TEXT_SINGLE = Simple
+;TEXT_FINGERS = Doigts
+;TEXT_PALM = Paume
+;TEXT_PUTNTAP = Cliquer
+;TEXT_DRAG = Glisser
+;TEXT_TAP = Taper
+;TEXT_DOUBLE_TAP = Double clic
+;TEXT_LONG_TAP = Clic long
+;TEXT_ROTATE = Pivoter
+;TEXT_ZOOM = Zoom
+TEXT_MOVE_WITH_ZOOM = Déplacer avec zoom
+TEXT_INERTIAL_WHEEL = Molette inertielle
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Mis et clic individuelle, Mis et double clic
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Utilisation du souris multi-touche hybride
+TEXT_MAC_OS_MARGIN = Bordure d'écran Mac OS X
+TEXT_INVERT_WHEEL = Inverser roue
+
+TEXT_LEFT = Gauche
+TEXT_RIGHT = Droit
+TEXT_MIDDLE = Milieu
+TEXT_DOUBLE_CLICK = Double-clic
+TEXT_CLICK = Clic
+
+TEXT_PROFILE_LEGEND_MODE1 = 
+TEXT_PROFILE_LEGEND_MODE2 = 
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Éditer l'action
+TEXT_PROFILE_ITEM = Élément du profil
+TEXT_ACTION = Action
+TEXT_USER_DEFINE_KEY = Touche définit par l'utilisateur
+TEXT_KEY = Touche
+TEXT_FUNCTION_KEY = Touche de fonction
+TEXT_NONE = Aucun
+TEXT_NOT_DEFINED = Non défini
+BTN_CAPTION_APPLY = Appliquer
+BTN_CAPTION_CANCEL = Annuler
+
+TEXT_PROFILE_ITEM_DISABLED = (Désactivé)
+TEXT_PROFILE_ITEM_USER_DEFINED = (Définir par l'utilisateur)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Touche de fonction)
+TEXT_PROFILE_ITEM_MOUSE = (Souris)
+TEXT_PROFILE_ITEM_ESCAPE = Annuler(Esc)
+TEXT_PROFILE_ITEM_FORWARD = Suivant
+TEXT_PROFILE_ITEM_BACK = Précédent
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Commutation de tâches 1
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Commutation de tâches 2 (Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Gestionnaire de tâches
+TEXT_PROFILE_ITEM_EXPLORER = Explorateur
+TEXT_PROFILE_ITEM_DESKTOP = Bureau
+TEXT_PROFILE_ITEM_VKBOARD = Clavier virtuel
+TEXT_PROFILE_ITEM_T3KCFG = Configuration du programme des séries T3K
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Clic gauche
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Clic droit
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Clic milieu
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Bouton gauche
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Bouton droit
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Bouton milieu
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Calibration
+TEXT_SCREEN_MARGIN = Bordure d'écran
+TEXT_SCREEN_PERCENT_OF_SCREEN = % de l'écran
+TEXT_CALIBRATE = Calibrer
+BTN_CAPTION_CALIBRATE = Calibrer...
+
+TITLE_AREA_SETTING = Surface de configuration (% de l'écran)
+TEXT_SINGLE_CLICK = Simple clic
+TEXT_DOUBLE_CLICK = Double clic
+;TEXT_TWO_TOUCH = Cliquer
+TEXT_PALM = Paume
+
+TEXT_CALIBRATION_WARNING = La bordure d'écran Mac OS X n'a pas été configurée dans le menu "Souris". La calibration ne peut pas fonctionner correctement.
+TEXT_CALIBRATION_WARNING2 = 
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Activer/Désactiver l'écran tactile
+TEXT_TOUCH_ENABLE = Écran tactile
+TEXT_RADIO_TOUCH_ENABLE = Activer
+TEXT_RADIO_TOUCH_DISABLE = Désactiver
+
+TITLE_CAPTION_BUZZER = Alarme
+TEXT_CLICK = Clic
+TEXT_CALIBRATION = Calibration
+TEXT_ERROR = Erreur
+TEXT_KEYTONE = Bip touches
+TEXT_SENSOR_ATTACH = Connexion sur capteur
+TEXT_PEN_PAIRING = Pen pairing
+TEXT_USB_ATTACH = Connexion USB
+
+TITLE_SHORTCUT_KEY = Raccourci clavier
+TEXT_CALIBRATION_KEY = Touche de calibration
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Nombre d'appuis sur la touche
+TEXT_TOUCH_ENABLE_KEY = Touche d'activation du tactile
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Nombre d'appuis sur la touche
+TEXT_NOT_USED = Non utilisé
+TEXT_ON = ON
+TEXT_OFF = OFF
+
+TITLE_TRAY_ICON = Icône de notification
+TEXT_CHECK_TRAYICON = Afficher l'icône de notification
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Mode de saisie de tactile
+TEXT_INPUT_MODE = Mode de saisie
+TEXT_INPUT_MODE_MOUSE = Souris
+TEXT_INPUT_MODE_SINGLE_TOUCH = Simple clic avec le stylet
+TEXT_INPUT_MODE_MULTI_TOUCH = multi-contact
+TEXT_INPUT_MODE_AUTO_SELECT = Sélection automatique
+TEXT_INPUT_MODE_WARNING_MSG = Tactile peut ne pas fonctionner correctement sous d'autres OS. Voulez-vous continuer?
+
+TITLE_MULTI_MONITOR = Configuration d'affichage du mutli-moniteur
+TEXT_MULTI_MONITOR = Configuration du moniteur
+TEXT_MULTI_MONITOR_SETTING = Sélectionner le moniteur d'affichage...
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Appliquer
+TEXT_BTN_MULTI_MONITOR_CANCEL = Annuler
+TEXT_BTN_MULTI_MONITOR_CLOSE = Fermer
+TEXT_PRIMARY_MONITOR = Moniteur principal: %1
+TEXT_NON_MULTI_MONITOR = Moniteurs multiples non supportés
+
+BTN_TOOLTIP_PLAY = Lire
+
+BTN_CAMERA_DIAGNOSTICS = Diagnostiques du capteur...
+
+TITLE_LANGUAGE = Langue(Language)
+TEXT_LANGUAGE = Sélection de la langue
+TEXT_LANGUAGE_NOT_FOUND = Les fichiers de langue n'existent pas.
+
+TITLE_DISPLAY_ORIENTATION = Direction du moniteur
+TEXT_DISPLAY_ORIENTATION = Direction
+TEXT_DISPLAY_ORIENTATION_1 = 0' - largeur
+TEXT_DISPLAY_ORIENTATION_2 = 90' - longeur
+TEXT_DISPLAY_ORIENTATION_3 = 180' - largeur( déplacement symétrique)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - longeur( déplacement symétrique)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - normale
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - gauche
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - droite
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - à l'envers
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 
+
+TITLE_DISPLAY_WARNING = Attention
+TEXT_DISPLAY_WARNING = La direction d'affichage courant et la valeur de calibration ne correspondent pas.
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Configuration du tactile
+TITLE_TIME_SETTING = Configuration du temps (de latence) (ms)
+TEXT_TAP = Appui court (clic)
+TEXT_LONG_TAP = Clic long
+TEXT_SLOW = Lent
+TEXT_FAST = Rapide
+TITLE_WHEEL_SENSITIVITY_SETTING = Configuration de la molette/ sensibilité du zoom
+TEXT_WHEEL = Molette
+TEXT_ZOOM = Zoom
+
+BTN_CAPTION_DEFAULT = Par défaut
+BTN_CAPTION_REFRESH = Rafraîchir
+BTN_CAPTION_CLOSE = Fermer
+MSGBOX_TEXT_DEFAULT = Restaurer la configuration initiale ?
+MSGBOX_TITLE_DEFAULT = Restaurer le paramètres par défauts
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Sélectionner (tactile désactivé)
+TEXT_MESSAGE = Veuillez cliquer sur le bouton pour désactiver le tactile.
+BTN_TIMER_TEXT = %1 sec
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Attention
+TEXT_MESSAGE = Attention ! L'écran suivant contient des données capitales pour le fonctionnement des capteurs tactiles. Modifier ces paramètres peut altérer le fonctionnement de votre écran tactile.
+BTN_CAPTION_CONTINUE = Continuer
+BTN_CAPTION_CLOSE = Fermer
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = Acceptation
+TEXT_MESSAGE = Les informations du capteur et l'environnement utilisateur (version OS, service de saisie Tablet sous MS Windows, et résolution d'écran) sont ramassés sur l'écran suivant.
+BTN_CAPTION_CONTINUE = Acceptation
+BTN_CAPTION_CLOSE = Refuse
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Outils de diagnostique du capteur
+BTN_CAPTION_DEFAULT = Par défaut
+BTN_CAPTION_REFRESH = Rafraîchir
+BTN_CAPTION_CLOSE = Fermer
+BTN_CAPTION_SAVELOG = Capturer l'état du capteur
+BTN_CAPTION_MAIN = 
+BTN_CAPTION_SUB = 
+TAB_CAPTION_SIDEVIEW = Vue de coté
+TAB_CAPTION_DETECTION = Détection graphique
+
+LOG_CAPTION_ERROR = Erreur! La sauvegarde a échouée.
+LOG_SIDEVIEW = Vue de coté
+LOG_DETECTION = Détection
+LOG_DATA = Données de configuration
+LOG_SAVING = 
+LOG_LOADING = 
+LOG_COMPLETE = Achever
+LOG_OK = OK
+LOG_FAIL = Erreur
+LOG_PROGRESS = Progrès
+LOG_START = Démarrage
+LOG_CAMERA = Caméra
+
+TITLE_SENSOR1 = Capteur 1
+TITLE_SENSOR2 = Capteur 2
+TITLE_SENSOR1_1 = Capteur 1-1
+TITLE_SENSOR2_1 = Capteur 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Zoomer
+BTN_TOOLTIP_ZOOM_OUT = Dézoomer
+BTN_TOOLTIP_RESET_ZOOM = Ajuster la taille de l'écran
+TEXT_SENSOR1_GRAPH_LEFT = Inférieur gauche
+TEXT_SENSOR1_GRAPH_RIGHT = Supérieur droit
+TEXT_SENSOR2_GRAPH_LEFT = Supérieur gauche
+TEXT_SENSOR2_GRAPH_RIGHT = Inférieur droit
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = Aucune image
+BTN_CAPTION_SNAPSHOT = Photo
+
+[SOFTKEY SETTING]
+TEXT_TITLE = Configuration des softkey
+TEXT_HEADER_NUMBER = No.
+TEXT_HEADER_TYPE = Type
+TEXT_HEADER_ACTION = Action
+TEXT_ITEM_KEY = 
+TEXT_ITEM_STATE = État
+TEXT_ITEM_NOT_USED = (Non utilisé)
+TEXT_ITEM_CALIBRATION = Entrée / Sortie de la calibration du capteur
+TEXT_ITEM_TOUCH = Activé/Désactivé l'Écran Tactile
+
+[TRAYICON]
+TEXT_MENU_OPEN = Ouvrir...
+TEXT_MENU_EXIT = Sortir
+TEXT_BALLOONTIP_TITLE = Configurateur T3k
+TEXT_BALLOONTIP_MSG = Le programme ("T3kCfgFE.exe") édité par configurateur T3K est en cours d'exécution.
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = 
+TITLE_REMOTE = 
+TEXT_SELECT_SERVER = 
+TEXT_PORT = 
+TEXT_USERNAME = 
+BTN_REQUEST = 
+TEXT_RECONNECTING = 
+BTN_CANCEL = 
+TEXT_CONNECTING = 
+TEXT_REMOTE_CONTROL = 
+BTN_DISCONNECT = 
+TEXT_WAIT_MSG = 
+TEXT_REPAIRCONNECTION = 
+TEXT_ID = 
+TEXT_SERV_NOT_RES = 
+TITLE_CHAT = 
+BTN_SEND = 
+MSG_CHAT_DISCONNECTED = 
+TITLE_REMOTE_MSG = 
+MSG_REMOTE_DISCONNECT = 
+TEXT_HELP_MSG = 
+TEXT_HELP_ARROW = 

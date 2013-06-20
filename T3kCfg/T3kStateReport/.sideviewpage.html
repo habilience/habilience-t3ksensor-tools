@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="No-Cache">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="description" content="Habilience T3k series - State Report View-page ver 2.6">
+<link rel="stylesheet" type="text/css" href=".common.css">
+<script type="text/javascript"> function t3k_start() {} </script>
+<script type="text/javascript" src="data/T3k.dat"></script>
+</head>
+
+<style type="text/css">
+<!--
+.g_view_wrapper {
+	position:relative;
+	padding:10px 0 0 0;
+}
+.g_view {
+	position:relative;
+	width:100%;
+	height:200px;
+}
+.g_img {
+	position:absolute;
+	left:0; width:100%;
+	top:0; height:100%;
+}
+.g_view_l {
+	position:absolute;
+	left:0; width:100%;
+	height:3px;
+	border-top:1px solid #000000;
+	border-bottom:1px solid #000000;
+}
+.g_view_r {
+	position:absolute;
+	left:0; width:100%;
+	border-top:1px solid #ff0000;
+	border-bottom:1px solid #ff0000;
+}
+.g_view_a {
+	position:absolute;
+	left:0; width:100%;
+	border-top:1px solid #00ffff;
+	border-bottom:1px solid #00ffff;
+}
+.g_data {
+	position:relative;
+	height:16px;
+	padding:5px 0 0 40px;
+	font-size:13px;
+}
+.g_di_bound {
+	position:absolute;
+	width:50%;
+	top:5px; height:15px;
+}
+-->
+</style>
+
+<script type="text/javascript">
+function initBody()
+{
+	var cm = t3kdata["cm1"];
+	if ( cm == null ) cm = t3kdata["cam1"];
+	var str = cm["ambient_light"];
+	var nD = str.indexOf(',');
+	var nAl = str.substring(0, nD);
+	str = cm["factory"]["ambient_light"];
+	nD = str.indexOf(',');
+	var nAlf = str.substring(0, nD);
+	
+	var strHTML = "";
+	strHTML += "<div class='g_data'>";
+	strHTML += "	<div class='g_di_bound' style='left:0%; width:60%;'>IR Bar : " + nAl + " [" + nAlf + "]</div>";
+	strHTML += "</div>";
+	strHTML += "<br>";
+	cm = t3kdata["cm1"];
+	if ( cm == null ) cm = t3kdata["cam1"];
+	if ( t3kdata && cm )
+		strHTML += makeHTML_SideviewContent("1");
+	cm = t3kdata["cm2"];
+	if ( cm == null ) cm = t3kdata["cam2"];
+	if ( t3kdata && cm )
+		strHTML += makeHTML_SideviewContent("2");
+	cm = t3kdata["cm1-1"];
+	if ( cm == null ) cm = t3kdata["cam3"];
+	if ( t3kdata && cm )
+		strHTML += makeHTML_SideviewContent("1-1");
+	cm = t3kdata["cm2-1"];
+	if ( cm == null ) cm = t3kdata["cam4"];
+	if ( t3kdata && cm )
+		strHTML += makeHTML_SideviewContent("2-1");
+	document.getElementById("main").innerHTML = strHTML;
+
+	layoutBody();
+}
+
+function layoutBody()
+{
+}
+
+function makeHTML_SideviewContent( strCam )
+{
+	var nD;
+	var b2Line = false;
+	
+	var str = t3kdata["firmware_version"];
+	if ( str == null )
+	{
+		var ver_info = t3kdata["version_info"];
+		b2Line = (ver_info["model"] == "3000");
+	}
+	else
+	{
+		nD = str.indexOf('T3000');
+		b2Line = (nD >= 0);
+	}
+	
+	var cm = t3kdata["cm" + strCam];
+	if ( cm == null )
+	{
+		if ( strCam == "1-1" )
+			cm = t3kdata["cam3"];
+		else if ( strCam == "2-1" )
+			cm = t3kdata["cam4"];
+		else
+			cm = t3kdata["cam" + strCam];
+	}
+
+	str = cm["detection_line"];
+	nD = str.indexOf(',');
+	var nDl = str.substring(0, nD);
+	var nDla = str.substring(nD + 1);
+	str = cm["factory"]["detection_line"];
+	nD = str.indexOf(',');
+	var nDlf = str.substring(0, nD);
+	
+	var strHTML = "";
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;CM";
+	strHTML += strCam;
+	strHTML += "</div>";
+	strHTML += "<div class='g_view_wrapper'>";
+	strHTML += "	<div class='g_view'>";
+	strHTML += "		<img src='" + "data/cam" + strCam + ".png' class='g_img'>";
+	for ( var ni = 1; ni < 50; ni += 2 )
+		strHTML += "		<div class='g_view_l' style='top:" + (ni * 4) + "px;'></div>";
+	if ( b2Line )
+	{
+		strHTML += "		<div class='g_view_a' style='top:" + (92 + nDla * 4) + "px; height:7px;'></div>";
+		strHTML += "		<div class='g_view_r' style='top:92px; height:7px;'></div>";
+	}
+	else
+	{
+		strHTML += "		<div class='g_view_a' style='top:" + (92 + nDla * 4) + "px; height:11px;'></div>";
+		strHTML += "		<div class='g_view_r' style='top:92px; height:11px;'></div>";
+	}
+	strHTML += "	</div>";
+	strHTML += "</div>";
+	strHTML += "<div class='g_data'>";
+	strHTML += "	<div class='g_di_bound' style='left:0%; width:60%;'>Detection Line : " + nDl + " [" + nDlf + "]</div>";
+	strHTML += "	<div class='g_di_bound' style='left:50%;'>AutoOffset: " + nDla + "</div>";
+	strHTML += "</div>";
+	strHTML += "<br>";
+	return strHTML;
+}
+</script>
+
+<body onload="initBody();" onresize="layoutBody();">
+
+<div id="main"></div>
+
+</body>
+
+</html>

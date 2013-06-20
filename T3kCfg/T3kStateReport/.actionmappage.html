@@ -1,0 +1,413 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="No-Cache">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="description" content="Habilience T3k series - State Report View-page ver 2.6">
+<link rel="stylesheet" type="text/css" href=".common.css">
+<script type="text/javascript"> function t3k_start() {} </script>
+<script type="text/javascript" src="data/T3k.dat"></script>
+</head>
+
+<style type="text/css">
+<!--
+.g_data {
+	position:relative;
+	height:16px;
+	padding:5px 0 0 0px;
+	font-size:13px;
+}
+.g_di_bound {
+	position:absolute;
+	width:50%;
+	top:5px; height:15px;
+}
+
+.g_table_wrapper {
+	position:relative;
+	padding:10px 0 0 0;
+	width:100%;
+}
+.g_zoomtable_wrapper {
+	position:absolute;
+	top:100%; height:100%;
+	left:50%; width:50%;
+	padding:5px 0 0 0;
+}
+.g_table {
+	position:relative;
+	width:100%;
+	border:2px solid #666666;
+	font-size:10px;
+}
+.g_t_ut {
+	position:relative;
+	width:100%;
+	height:15px;
+	background:#ddeeff;
+}
+.g_t_l0 {
+	position:absolute;
+	left:0; width:55px;
+	top:0; height:100%;
+	border-right:1px solid #666666;
+	background:#ddeeff;
+	text-align:center;
+	line-height:40px;
+}
+.g_t_lc {
+	position:absolute;
+	left:56px; right:0;
+	top:0; height:100%;
+	text-align:center;
+}
+.g_t_lc1, .g_t_lc2, .g_t_lc3, .g_t_lc4 {
+	position:absolute;
+	width:25%;
+	top:0; height:100%;
+}
+.g_t_lc2, .g_t_lc3, .g_t_lc4 {
+	border-left:1px solid #666666;
+}
+.g_t_lc1 {
+	left:0%;
+}
+.g_t_lc2 {
+	left:25%;
+}
+.g_t_lc3 {
+	left:50%;
+}
+.g_t_lc4 {
+	left:75%;
+	border-right:2px solid #666666;
+}
+.g_t_uc {
+	position:relative;
+	width:100%;
+	height:45px;
+	border-top:1px solid #666666;
+}
+.g_dataext {
+	position:relative;
+	height:12px;
+	padding:5px 0 0 0px;
+	font-size:11px;
+}
+.g_t_zl, .g_t_zc {
+	position:absolute;
+	width:50%;
+	top:0; height:100%;
+}
+.g_t_zl {
+	left:0%;
+	background:#ddeeff;
+	line-height:40px;
+	text-align:center;
+}
+.g_t_zc {
+	left:50%;
+	border-left:1px solid #666666;
+}
+-->
+</style>
+
+<script type="text/javascript">
+function initBody()
+{
+	var str = t3kdata["input_mode"];
+	var d = str.split(',');
+	var strIM = "";
+	switch ( d[0] * 1 )
+	{
+	case 0xff:
+		strIM += "Auto Selection - ";
+		break;
+	case 0:
+		strIM += "Mouse - ";
+		break;
+	case 2:
+		strIM += "Multi-touch - ";
+		break;
+	}
+	switch ( d[1] * 1 )
+	{
+	case 0:
+		strIM += "Mouse";
+		break;
+	case 2:
+		strIM += "MultiTouch";
+		break;
+	}
+	
+	str = t3kdata["mouse_profile"];
+	var nD = str.indexOf(',');
+	var selMouse = str.substring(0, nD) * 1;
+	var selMultiTouch = str.substring(nD + 1) * 1;
+	
+	var strHTML = "";
+	strHTML += "<div class='g_data'>";
+	strHTML += "	<div class='g_di_bound' style='left:0%; width:60%;'>InputMode : " + strIM + "</div>";
+	strHTML += "</div>";
+	strHTML += "<br>";
+	if ( t3kdata && t3kdata["mouse_profile_1"] )
+		strHTML += makeHTML_ActionMapContent(1, selMouse, selMultiTouch);
+	if ( t3kdata && t3kdata["mouse_profile_2"] )
+		strHTML += makeHTML_ActionMapContent(2, selMouse, selMultiTouch);
+	if ( t3kdata && t3kdata["mouse_profile_3"] )
+		strHTML += makeHTML_ActionMapContent(3, selMouse, selMultiTouch);
+	if ( t3kdata && t3kdata["mouse_profile_4"] )
+		strHTML += makeHTML_ActionMapContent(4, selMouse, selMultiTouch);
+	if ( t3kdata && t3kdata["mouse_profile_5"] )
+		strHTML += makeHTML_ActionMapContent(5, selMouse, selMultiTouch);
+	document.getElementById("main").innerHTML = strHTML;
+
+	layoutBody();
+}
+
+function layoutBody()
+{
+}
+
+function getMouseOpString( opCode )
+{
+	var strRet = "";
+	
+	if ( opCode & 0x0800 )
+		strRet += "Win+ ";
+	if ( opCode & 0x0400 )
+		strRet += "Alt+ ";
+	if ( opCode & 0x0200 )
+		strRet += "Shift+ ";
+	if ( opCode & 0x0100 )
+		strRet += "Ctrl+ ";
+
+	if ( opCode & 0x8000 )
+	{
+		opCode &= 0xff;
+		switch ( opCode )
+		{
+		case 0x01: strRet += "Left Move"; break;
+		case 0x02: strRet += "Left Click"; break;
+		case 0x03: strRet += "Left Double-Click"; break;
+		case 0x04: strRet += "Right Move"; break;
+		case 0x05: strRet += "Right Click"; break;
+		case 0x06: strRet += "Right Double-Click"; break;
+		case 0x07: strRet += "Middle Move"; break;
+		case 0x08: strRet += "Middle Click"; break;
+		case 0x09: strRet += "Middle Double-Click"; break;
+		case 0xfe: strRet += "Wheel"; break;
+		}
+	}
+	else
+	{
+		opCode &= 0xff;
+		if ( opCode != 0 )
+		{
+			switch ( opCode )
+			{
+			case 0x29: strRet += "[ESC]"; break;
+			case 0x2B: strRet += "[Tab]"; break;
+			case 0x2F: strRet += "[[]"; break;
+			case 0x30: strRet += "[]]"; break;
+			case 0x3A: strRet += "[F1]"; break;
+			case 0x3B: strRet += "[F2]"; break;
+			case 0x3C: strRet += "[F3]"; break;
+			case 0x3D: strRet += "[F4]"; break;
+			case 0x3E: strRet += "[F5]"; break;
+			case 0x3F: strRet += "[F6]"; break;
+			case 0x40: strRet += "[F7]"; break;
+			case 0x41: strRet += "[F8]"; break;
+			case 0x42: strRet += "[F9]"; break;
+			case 0x43: strRet += "[F10]"; break;
+			case 0x44: strRet += "[F11]"; break;
+			case 0x45: strRet += "[F12]"; break;
+			case 0x4F: strRet += "[Right]"; break;
+			case 0x50: strRet += "[Left]"; break;
+			case 0x51: strRet += "[Down]"; break;
+			case 0x52: strRet += "[Up]"; break;
+			default: strRet += opCode; break;
+			}
+		}
+	}
+	
+	if ( strRet == "" )
+		strRet = "-";
+	
+	return strRet;
+}
+
+function getMouseSOpString( opCode )
+{
+	return "<br>" + getMouseOpString(("0x" + opCode) * 1);
+}
+
+function getMouseMOpString( opCodes )
+{
+	var opCodeL = opCodes.substring(0, 4);
+	var opCodeR = opCodes.substring(4, 8);
+	var opCodeU = opCodes.substring(8, 12);
+	var opCodeD = opCodes.substring(12, 16);
+	return getMouseOpString(("0x" + opCodeU) * 1) + "<br>" +
+		getMouseOpString(("0x" + opCodeL) * 1) + " " + getMouseOpString(("0x" + opCodeR) * 1) + "<br>" +
+		getMouseOpString(("0x" + opCodeD) * 1);
+}
+
+function getMouseZOpString( opCodes )
+{
+	var opCodeL = opCodes.substring(0, 4);
+	var opCodeR = opCodes.substring(4, 8);
+	return "<br>" + getMouseOpString(("0x" + opCodeL) * 1) + " " + getMouseOpString(("0x" + opCodeR) * 1) + "<br>";
+}
+
+function makeHTML_ActionMapContent( nProfile, selMouse, selMultiTouch )
+{
+	var nFuncFlags = 0;
+	var strSLT = "";
+	var strFM = "";
+	var strFT = "";
+	var strFDT = "";
+	var strFLT = "";
+	var strPM = "";
+	var strPT = "";
+	var strPDT = "";
+	var strPLT = "";
+	var strTT = "";
+	var strTDT = "";
+	var strTLT = "";
+	var strZoom = "";
+	
+	var str = t3kdata["mouse_profile_" + nProfile];
+	var aryProfile = str.split(' ');
+	for ( var idx in aryProfile )
+	{
+		var opCodes = aryProfile[idx].substring(2);
+		var nfunc;
+		switch ( ("0x" + aryProfile[idx].substring(0, 2)) * 1 )
+		{
+		case 0x00:
+			nFuncFlags = ("0x" + opCodes) * 1;
+			break;
+		case 0x04:
+			strSLT = getMouseSOpString(opCodes);
+			break;
+		case 0x11:
+			strFM = getMouseMOpString(opCodes);
+			break;
+		case 0x12:
+			strFT = getMouseSOpString(opCodes);
+			break;
+		case 0x13:
+			strFDT = getMouseSOpString(opCodes);
+			break;
+		case 0x14:
+			strFLT = getMouseSOpString(opCodes);
+			break;
+		case 0x21:
+			strPM = getMouseMOpString(opCodes);
+			break;
+		case 0x22:
+			strPT = getMouseSOpString(opCodes);
+			break;
+		case 0x23:
+			strPDT = getMouseSOpString(opCodes);
+			break;
+		case 0x24:
+			strPLT = getMouseSOpString(opCodes);
+			break;
+		case 0x32:
+			strTT = getMouseSOpString(opCodes);
+			break;
+		case 0x33:
+			strTDT = getMouseSOpString(opCodes);
+			break;
+		case 0x34:
+			strTLT = getMouseSOpString(opCodes);
+			break;
+		case 0x80:
+			strZoom = getMouseZOpString(opCodes);
+			break;
+		}
+	}
+	
+	var tagHybridMT = (nFuncFlags & 0x0400) ? " style='background:#cccccc;'" : "";
+	
+	var strProfile = nProfile + "";
+	if ( nProfile == selMouse )
+		strProfile += " <span style='color:#ff8899;'>[MouseMode]</span>";
+	if ( nProfile == selMultiTouch )
+		strProfile += " <span style='color:#ff8899'>[MultiTouchMode]</span>";
+	
+	var strHTML = "";
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;ActionMap" + strProfile + "</div>";
+	strHTML += "<div class='g_table_wrapper'>";
+	strHTML += "	<div class='g_table'>";
+	strHTML += "		<div class='g_t_ut'>";
+	strHTML += "			<div class='g_t_l0'></div><div class='g_t_lc'>";
+	strHTML += "				<div class='g_t_lc1'>Drag</div>";
+	strHTML += "				<div class='g_t_lc2'>Tap</div>";
+	strHTML += "				<div class='g_t_lc3'>Double Tap</div>";
+	strHTML += "				<div class='g_t_lc4'>Long Tap</div>";
+	strHTML += "			</div>";
+	strHTML += "		</div>";
+	strHTML += "		<div class='g_t_uc'>";
+	strHTML += "			<div class='g_t_l0'>Single</div><div class='g_t_lc'>";
+	strHTML += "				<div class='g_t_lc1'" + tagHybridMT + "><br>" + ((nFuncFlags & 0x0001) ? "Left Drag" : "") + "</div>";
+	strHTML += "				<div class='g_t_lc2'" + tagHybridMT + "><br>" + ((nFuncFlags & 0x0002) ? "Left Click" : "") + "</div>";
+	strHTML += "				<div class='g_t_lc3'" + tagHybridMT + "><br>" + ((nFuncFlags & 0x0004) ? "Left Double Click" : "") + "</div>";
+	strHTML += "				<div class='g_t_lc4'" + tagHybridMT + ">" + strSLT + "</div>";
+	strHTML += "			</div>";
+	strHTML += "		</div>";
+	strHTML += "		<div class='g_t_uc'>";
+	strHTML += "			<div class='g_t_l0'>Fingers</div><div class='g_t_lc'>";
+	strHTML += "				<div class='g_t_lc1'" + tagHybridMT + ">" + strFM + "</div>";
+	strHTML += "				<div class='g_t_lc2'" + tagHybridMT + ">" + strFT + "</div>";
+	strHTML += "				<div class='g_t_lc3'" + tagHybridMT + ">" + strFDT + "</div>";
+	strHTML += "				<div class='g_t_lc4'" + tagHybridMT + ">" + strFLT + "</div>";
+	strHTML += "			</div>";
+	strHTML += "		</div>";
+	strHTML += "		<div class='g_t_uc'>";
+	strHTML += "			<div class='g_t_l0'>Palm</div><div class='g_t_lc'>";
+	strHTML += "				<div class='g_t_lc1'>" + strPM + "</div>";
+	strHTML += "				<div class='g_t_lc2'>" + strPT + "</div>";
+	strHTML += "				<div class='g_t_lc3'>" + strPDT + "</div>";
+	strHTML += "				<div class='g_t_lc4'>" + strPLT + "</div>";
+	strHTML += "			</div>";
+	strHTML += "		</div>";
+	strHTML += "		<div class='g_t_uc'>";
+	strHTML += "			<div class='g_t_l0'>Put&Tap</div><div class='g_t_lc'>";
+	strHTML += "				<div class='g_t_lc1' style='background:#cccccc;'></div>";
+	strHTML += "				<div class='g_t_lc2'>" + strTT + "</div>";
+	strHTML += "				<div class='g_t_lc3'>" + strTDT + "</div>";
+	strHTML += "				<div class='g_t_lc4'>" + strTLT + "</div>";
+	strHTML += "				<div class='g_zoomtable_wrapper'>";
+	strHTML += "					<div class='g_table' style='height:100%;'>";
+	strHTML += "				<div class='g_t_zl'>Zoom</div>";
+	strHTML += "				<div class='g_t_zc'>" + strZoom + "</div>";
+	strHTML += "					</div>";
+	strHTML += "				</div>";
+	strHTML += "			</div>";
+	strHTML += "		</div>";
+	strHTML += "	</div>";
+	strHTML += "</div>";
+	strHTML += "<div class='g_dataext'><input type='checkbox'" + ((nFuncFlags & 0x1000) ? " checked" : "") + " disabled>Inertial Wheel</input></div>";
+	strHTML += "<div class='g_dataext'><input type='checkbox'" + ((nFuncFlags & 0x0200) ? " checked" : "") + " disabled>Individual Put&Tap, Put&DoubleTap</input></div>";
+	strHTML += "<div class='g_dataext'><input type='checkbox'" + ((nFuncFlags & 0x0400) ? " checked" : "") + " disabled>Hybrid Multi-Touch</input></div>";
+	strHTML += "<div class='g_dataext'><input type='checkbox'" + ((nFuncFlags & 0x4000) ? " checked" : "") + " disabled>MAC OS X Margin</input></div>";
+	strHTML += "<div class='g_dataext'><input type='checkbox'" + ((nFuncFlags & 0x2000) ? " checked" : "") + " disabled>Invert Wheel</input></div>";
+	strHTML += "<br><br>";
+	return strHTML;
+}
+</script>
+
+<body id="body" onload="initBody();" onresize="layoutBody();">
+
+<div id="main"></div>
+
+</body>
+
+</html>

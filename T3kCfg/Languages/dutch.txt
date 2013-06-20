@@ -1,0 +1,330 @@
+﻿
+[MAIN]
+APP_ERROR_MSG1 = Kan niet worden uitgevoerd op verwisselbare apparaten
+TITLE_GENERAL_ERROR = Fout
+
+BTN_CAPTION_EXIT = Verlaten
+BTN_CAPTION_CLOSE = Sluiten
+BTN_CAPTION_DEFAULT = Standaard
+BTN_CAPTION_REFRESH = Vernieuwen
+MENU_TOOLTIP_START_PAGE = Start pagina
+MENU_TOOLTIP_MOUSE = Gebaren
+MENU_TOOLTIP_CALIBRATION = Kalibratie
+MENU_TOOLTIP_SENSOR_SETTING = Sensor instellingen
+MENU_TOOLTIP_GENERAL_SETTING = Algemene instellingen
+MENU_TOOLTIP_SOFTKEY_SETTING = Sotfkey-instellingen
+MSGBOX_TITLE_DEFAULT = Wijzig naar standaardinstellingen
+MSGBOX_TEXT_DEFAULT = Alles terugzetten naar oorspronkelijke instellingen?
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = Dit programma ondersteunt geen v%1 firmware.\nHuidig: %1\nOndersteunt %2 ~ %3
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = Ongeldige firmware
+TITLE_CAPTION_INFORMATION = Programma-informatie
+TITLE_CAPTION_FIRMWARE = Firmware-informatie
+TEXT_DEVICE_NOT_CONNECTED = Apparaat is niet aangesloten.
+TEXT_FIRMWARE_DOWNLOAD = Firmware wordt gedownload.
+
+TITLE_CAPTION_LICENSE = Over
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Selecteer apparaat
+TITLE_CAPTION_DEVICE_LIST = Lijst met apparaten
+TEXT_DEV_PATH = Pad van apparaat
+TEXT_MODEL = Model
+TEXT_NUMBER = Nr.
+BTN_CAPTION_PLAY_BUZZER = Buzzer afspelen
+BTN_CAPTION_SELECT = Selecteer
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = OK
+BTN_CAPTION_CANCEL = Annuleren
+BTN_CAPTION_YES = Ja
+BTN_CAPTION_NO = Nee
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Gebaren
+BTN_CAPTION_MOUSE_SUB1 = Instellingen touch-gebaren
+BTN_CAPTION_MOUSE_SUB2 = Gebaarprofielen
+BTN_CAPTION_CALIBRATION = Kalibratie
+BTN_CAPTION_CALIBRATION_SUB1 = Kalibratie touch scherm
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Sensor instellingen
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Enable/Disable TouchTouch inschakelen/uitschakelen
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Sneltoets Buzzer
+BTN_CAPTION_GENERAL_SETTING = Algemene instellingen
+BTN_CAPTION_GENERAL_SETTING_SUB1 = Taal, invoermodus
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Oriëntatie display
+BTN_CAPTION_REMOTE_ASSISTANCE = Hulp op afstand
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Softkey
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Touch-gebaren
+BTN_CAPTION_TOUCH_SETTING = Touch-instellingen
+
+;TEXT_SINGLE = Eén vinger
+;TEXT_FINGERS = Vingers
+;TEXT_PALM = Palm
+;TEXT_PUTNTAP = Put & Tap
+;TEXT_DRAG = Slepen
+;TEXT_TAP = Tikken
+;TEXT_DOUBLE_TAP = Dubbel tikken
+;TEXT_LONG_TAP = Lang tikken
+;TEXT_ROTATE = Roteren
+;TEXT_ZOOM = Zoomen
+TEXT_MOVE_WITH_ZOOM = Met zoom meebewegen
+TEXT_INERTIAL_WHEEL = Traagheidswiel
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Afzonderlijk Put & Tap, Put & Double Tap
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Hybride multi-touch
+TEXT_MAC_OS_MARGIN = Mac OS X Marge
+TEXT_INVERT_WHEEL = Keer wiel functionaliteit om
+
+TEXT_LEFT = Links
+TEXT_RIGHT = Rechts
+TEXT_MIDDLE = Midden
+TEXT_DOUBLE_CLICK = Dubbelklikken
+TEXT_CLICK = Klikken
+
+TEXT_PROFILE_LEGEND_MODE1 = Muis
+TEXT_PROFILE_LEGEND_MODE2 = Windows 7
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Actie bewerken
+TEXT_PROFILE_ITEM = Profiel item
+TEXT_ACTION = Actie
+TEXT_USER_DEFINE_KEY = Door gebruiker geselecteerde toets
+TEXT_KEY = Toets
+TEXT_FUNCTION_KEY = Functietoets
+TEXT_NONE = Geen
+TEXT_NOT_DEFINED = Niet gedefinieerd
+BTN_CAPTION_APPLY = Toepassen
+BTN_CAPTION_CANCEL = Annuleren
+
+TEXT_PROFILE_ITEM_DISABLED = (Uitgeschakeld)
+TEXT_PROFILE_ITEM_USER_DEFINED = (Door gebruiker gedefinieerd)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Functietoets)
+TEXT_PROFILE_ITEM_MOUSE = (Muis)
+TEXT_PROFILE_ITEM_ESCAPE = Escape (Esc)
+TEXT_PROFILE_ITEM_FORWARD = Vooruit
+TEXT_PROFILE_ITEM_BACK = Terug
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Taakbeheer
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Taakbeheer (Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Taakmanager
+TEXT_PROFILE_ITEM_EXPLORER = Verkenner
+TEXT_PROFILE_ITEM_DESKTOP = Bureaublad
+TEXT_PROFILE_ITEM_VKBOARD = Virtueel toetsenbord
+TEXT_PROFILE_ITEM_T3KCFG = T3k serie configuratie programma
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Links klikken
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Rechts klikken
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Midden klikken
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Linker knop
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Rechter knop
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Middelste knop
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Kalibratie
+TEXT_SCREEN_MARGIN = Schermmarges
+TEXT_SCREEN_PERCENT_OF_SCREEN = % van het scherm
+TEXT_CALIBRATE = Kalibreren
+BTN_CAPTION_CALIBRATE = Kalibratie…
+
+TITLE_AREA_SETTING = Gebiedsinstellingen (% van het scherm)
+TEXT_SINGLE_CLICK = Eén keer klikken
+TEXT_DOUBLE_CLICK = Dubbelklikken
+;TEXT_TWO_TOUCH = Put & Tap
+TEXT_PALM = Palm
+
+TEXT_CALIBRATION_WARNING = 'Mac OS X Marge' niet aangevinkt in menu 'Gebaren'. Kalibratie werkt mogelijk niet naar behoren.
+TEXT_CALIBRATION_WARNING2 = 
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Touch aan/uit
+TEXT_TOUCH_ENABLE = Touch
+TEXT_RADIO_TOUCH_ENABLE = Inschakelen
+TEXT_RADIO_TOUCH_DISABLE = Uitschakelen
+
+TITLE_CAPTION_BUZZER = Buzzer
+TEXT_CLICK = Klik
+TEXT_CALIBRATION = Kalibratie
+TEXT_ERROR = Fout
+TEXT_KEYTONE = Toets geluid
+TEXT_SENSOR_ATTACH = Sensorverbinding
+TEXT_PEN_PAIRING = Pen koppelen
+TEXT_USB_ATTACH = USB-aansluiting
+
+TITLE_SHORTCUT_KEY = Sneltoets
+TEXT_CALIBRATION_KEY = Toets voor kalibratie
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Aantal toetsindrukken
+TEXT_TOUCH_ENABLE_KEY = Toets voor in-/uitschakelen touch-functie
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Aantal toetsindrukken
+TEXT_NOT_USED = Niet in gebruik
+TEXT_ON = Aan
+TEXT_OFF = Uit
+
+TITLE_TRAY_ICON = Taakbalk icoon
+TEXT_CHECK_TRAYICON = Gebruik Taakbalk icoon
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Invoermodus touch-functie
+TEXT_INPUT_MODE = Invoermodus
+TEXT_INPUT_MODE_MOUSE = Muis
+TEXT_INPUT_MODE_SINGLE_TOUCH = Eén-punts touch (Tablet Pen)
+TEXT_INPUT_MODE_MULTI_TOUCH = Multi touch
+TEXT_INPUT_MODE_AUTO_SELECT = Automatisch selecteren
+TEXT_INPUT_MODE_WARNING_MSG = Touch-functie werkt mogelijk niet naar behoren onder ander besturingssysteem. Doorgaan?
+
+TITLE_MULTI_MONITOR = Multi-monitor instellingen
+TEXT_MULTI_MONITOR = Monitor instellingen
+TEXT_MULTI_MONITOR_SETTING = Selecteer display monitor…
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Toepassen
+TEXT_BTN_MULTI_MONITOR_CANCEL = Annuleren
+TEXT_BTN_MULTI_MONITOR_CLOSE = Sluiten
+TEXT_PRIMARY_MONITOR = Eerste monitor : %d
+TEXT_NON_MULTI_MONITOR = Ondersteun multi-monitor niet
+
+BTN_TOOLTIP_PLAY = Spelen
+
+BTN_CAMERA_DIAGNOSTICS = Diagnostische gegevens sensor…
+
+TITLE_LANGUAGE = Taal(Language)
+TEXT_LANGUAGE = Taal selecteren
+TEXT_LANGUAGE_NOT_FOUND = Gekozen taal bestaat niet
+
+TITLE_DISPLAY_ORIENTATION = Oriëntatie display
+TEXT_DISPLAY_ORIENTATION = Oriëntatie
+TEXT_DISPLAY_ORIENTATION_1 = 0' - Landschap
+TEXT_DISPLAY_ORIENTATION_2 = 90' - Portret
+TEXT_DISPLAY_ORIENTATION_3 = 180' - Landschap (flipped)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - Portret (flipped)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - Normaal
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Links
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Rechts
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Ondersteboven
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
+
+TITLE_DISPLAY_WARNING = Waarschuwing
+TEXT_DISPLAY_WARNING = Huidge waarden voor display-oriëntatie en kalibratie komen niet overeen
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Instellingen touch-functie
+TITLE_TIME_SETTING = Tijdinstellingen (ms)
+TEXT_TAP = Tikken
+TEXT_LONG_TAP = Lang tikken
+TEXT_SLOW = Langzaam
+TEXT_FAST = Snel
+TITLE_WHEEL_SENSITIVITY_SETTING = Instellingen gevoeligheid wiel-/zoomfunctie
+TEXT_WHEEL = Wiel
+TEXT_ZOOM = Zoom
+
+BTN_CAPTION_DEFAULT = Standaard
+BTN_CAPTION_REFRESH = Vernieuwen
+BTN_CAPTION_CLOSE = Sluiten
+MSGBOX_TEXT_DEFAULT = Terugzetten naar oorspronkelijke instellingen?
+MSGBOX_TITLE_DEFAULT = Standaard
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Selecteer "Uitschakelen touch-functie"
+TEXT_MESSAGE = Klik op de timertoets\nom de sensor uit te schakelen
+BTN_TIMER_TEXT = %1 sec
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Waarschuwing
+TEXT_MESSAGE = Waarschuwing, het volgende scherm bevat instellingen die cruciaal zijn voor een correcte werking van het touchsysteem.\n\nHet aanpassen van de instellingen kan resulteren in instabiliteit en niet correct werken van het touchsysteem.
+BTN_CAPTION_CONTINUE = Doorgaan
+BTN_CAPTION_CLOSE = Sluiten
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = Overeenkomst
+TEXT_MESSAGE = gedurende de volgende stap wordt sensor informatie en informatie over de gebruiksomgeving opgeslagen (versie besturingssysteem, tablet PC instellingen bij MS Windows, resolutie-instellingen)
+BTN_CAPTION_CONTINUE = Akkoord
+BTN_CAPTION_CLOSE = Niet akkoord
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Diagnostische gegevens sensor
+BTN_CAPTION_DEFAULT = Standaard
+BTN_CAPTION_REFRESH = Vernieuwen
+BTN_CAPTION_CLOSE = Sluiten
+BTN_CAPTION_SAVELOG = Sensorstatus opslaan
+BTN_CAPTION_MAIN = Hoek
+BTN_CAPTION_SUB = Sub
+TAB_CAPTION_SIDEVIEW = Zijaanzicht
+TAB_CAPTION_DETECTION = Detectiegrafiek
+
+LOG_CAPTION_ERROR = Fout! Status niet opgeslagen.
+LOG_SIDEVIEW = Zijaanzicht
+LOG_DETECTION = Detectie
+LOG_DATA = Instelling data
+LOG_SAVING = Opslaan
+LOG_LOADING = Laden
+LOG_COMPLETE = Voltooid
+LOG_OK = OK
+LOG_FAIL = MISLUKT
+LOG_PROGRESS = PRG
+LOG_START = Start
+LOG_CAMERA = Camera
+
+TITLE_SENSOR1 = Sensor 1
+TITLE_SENSOR2 = Sensor 2
+TITLE_SENSOR1_1 = Sensor 1-1
+TITLE_SENSOR2_1 = Sensor 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Inzoomen
+BTN_TOOLTIP_ZOOM_OUT = Uitzoomen
+BTN_TOOLTIP_RESET_ZOOM = Passend in scherm
+TEXT_SENSOR1_GRAPH_LEFT = Links onderaan
+TEXT_SENSOR1_GRAPH_RIGHT = Rechts bovenaan
+TEXT_SENSOR2_GRAPH_LEFT = Links bovenaan
+TEXT_SENSOR2_GRAPH_RIGHT = Rechts onderaan
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = Geen afbeelding
+BTN_CAPTION_SNAPSHOT = Snapshot
+
+[SOFTKEY SETTING]
+TEXT_TITLE = Instellingen softkey
+TEXT_HEADER_NUMBER = Nr.
+TEXT_HEADER_TYPE = Type
+TEXT_HEADER_ACTION = Actie
+TEXT_ITEM_KEY = Toets
+TEXT_ITEM_STATE = Staat
+TEXT_ITEM_NOT_USED = (Niet in gebruik)
+TEXT_ITEM_CALIBRATION = Toegang tot/Verlaten van sensorkalibratie
+TEXT_ITEM_TOUCH = Inschakelen/Uitschakelen touch scherm
+
+[TRAYICON]
+TEXT_MENU_OPEN = Open…
+TEXT_MENU_EXIT = Exit
+TEXT_BALLOONTIP_TITLE = T3k configuratie
+TEXT_BALLOONTIP_MSG = T3k configuratie bedrijfseditie ("T3kCfgFE.exe") in werking
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = 
+TITLE_REMOTE = 
+TEXT_SELECT_SERVER = 
+TEXT_PORT = 
+TEXT_USERNAME = 
+BTN_REQUEST = 
+TEXT_RECONNECTING = 
+BTN_CANCEL = 
+TEXT_CONNECTING = 
+TEXT_REMOTE_CONTROL = 
+BTN_DISCONNECT = 
+TEXT_WAIT_MSG = 
+TEXT_REPAIRCONNECTION = 
+TEXT_ID = 
+TEXT_SERV_NOT_RES = 
+TITLE_CHAT = 
+BTN_SEND = 
+MSG_CHAT_DISCONNECTED = 
+TITLE_REMOTE_MSG = 
+MSG_REMOTE_DISCONNECT = 
+TEXT_HELP_MSG = 
+TEXT_HELP_ARROW = 

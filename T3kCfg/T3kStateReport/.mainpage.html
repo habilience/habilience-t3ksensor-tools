@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="No-Cache">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="description" content="Habilience T3k series - State Report View-page ver 2.6">
+<link rel="stylesheet" type="text/css" href=".common.css">
+<script type="text/javascript"> function t3k_start() {} </script>
+<script type="text/javascript" src="data/T3k.dat"></script>
+</head>
+
+<style type="text/css">
+<!--
+.g_d_line {
+	position:relative;
+	height:12px;
+	padding:5px 0 0 0px;
+	font-size:12px;
+}
+.g_d_t {
+	font-weight:bold;
+}
+-->
+</style>
+
+<script type="text/javascript">
+function initBody()
+{
+	var objMain = document.getElementById("main");
+	var ver_info;
+	var strName;
+	var strHTML = "";
+
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>T3k Series State Report ver 2.8a</span></div>";
+	strHTML += "<br>";
+
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Program Information</div>";
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>T3kCfg " + t3kdata["host"]["program_version"] + "</span></div>";
+	strHTML += "<br>";
+
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Firmware Information</div>";
+	ver_info = t3kdata["firmware_version"];
+	if ( ver_info == null )
+	{
+		ver_info = t3kdata["version_info"];
+		if ( ver_info.model == '3500' )
+			strName = "T3k A";
+		else
+			strName = "T" + ver_info.model;
+		strHTML += "<div class='g_d_line'><span class='g_d_t'>Main module :</span><br>&nbsp;- " + strName + " ver " + ver_info.version + " nv:" + ver_info.nv + " " + ver_info.datetime + "</div><br>";
+	}
+	else
+		strHTML += "<div class='g_d_line'><span class='g_d_t'>Main module :</span><br>&nbsp;- MM Ver " + ver_info + "</div><br>";
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Camera module :</span></div>";
+	var cm = t3kdata["cm1"];
+	if ( cm == null )
+		cm = t3kdata["cam1"];
+	if ( cm != null )
+	{
+		ver_info = cm["version_info"];
+		if ( ver_info == null )
+		{
+			ver_info = cm["firmware_version"];
+			strHTML += "<div class='g_d_line'>&nbsp;- CM1 Ver " + ver_info + "&nbsp;&nbsp;sn:" + cm["factory"]["admin_serial"] + "</div>";
+		}
+		else
+			strHTML += "<div class='g_d_line'>&nbsp;<b>CM1</b>: C" + ver_info.model + " ver " + ver_info.version + " nv:" + ver_info.nv + " " + ver_info.datetime + "&nbsp;&nbsp;sn:" + cm["factory"]["admin_serial"] + "</div>";
+		strHTML += "<div class='g_d_line'>&nbsp;&nbsp;&nbsp;line:" + cm["factory"]["admin_detection_line"];
+		if ( cm["factory"]["admin_detection_center"] == null )
+		{
+			cali = cm["factory"]["admin_cam_calibration2"].split(' ');
+			if ( cali.length == 4 )
+			{
+				strHTML += ",&nbsp;center:" + cali[0];
+				strHTML += ",&nbsp;barrel:" + cali[1] + ", " + cali[2] + ", " + cali[3];
+			}
+		}
+		else
+		{
+			strHTML += ",&nbsp;center:" + cm["factory"]["admin_detection_center"];
+			strHTML += ",&nbsp;barrel:" + cm["factory"]["admin_detection_barrel"];
+		}
+		strHTML += "</div><div class='g_d_line'>&nbsp;&nbsp;&nbsp;setting date:" + (new Date(cm["factory"]["admin_setting_time"] * 1000)) + "</div>";
+	}
+	cm = t3kdata["cm2"];
+	if ( cm == null )
+		cm = t3kdata["cam2"];
+	if ( cm != null )
+	{
+		ver_info = cm["version_info"];
+		if ( ver_info == null )
+		{
+			ver_info = cm["firmware_version"];
+			strHTML += "<div class='g_d_line'>&nbsp;- CM2 Ver " + ver_info + "&nbsp;&nbsp;sn:" + cm["factory"]["admin_serial"] + "</div>";
+		}
+		else
+			strHTML += "<div class='g_d_line'>&nbsp;<b>CM2</b>: C" + ver_info.model + " ver " + ver_info.version + " nv:" + ver_info.nv + " " + ver_info.datetime + "&nbsp;&nbsp;sn:" + cm["factory"]["admin_serial"] + "</div>";
+		strHTML += "<div class='g_d_line'>&nbsp;&nbsp;&nbsp;line:" + cm["factory"]["admin_detection_line"];
+		if ( cm["factory"]["admin_detection_center"] == null )
+		{
+			cali = cm["factory"]["admin_cam_calibration2"].split(' ');
+			if ( cali.length == 4 )
+			{
+				strHTML += ",&nbsp;center:" + cali[0];
+				strHTML += ",&nbsp;barrel:" + cali[1] + ", " + cali[2] + ", " + cali[3];
+			}
+		}
+		else
+		{
+			strHTML += ",&nbsp;center:" + cm["factory"]["admin_detection_center"];
+			strHTML += ",&nbsp;barrel:" + cm["factory"]["admin_detection_barrel"];
+		}
+		strHTML += "</div><div class='g_d_line'>&nbsp;&nbsp;&nbsp;setting date:" + (new Date(cm["factory"]["admin_setting_time"] * 1000)) + "</div>";
+	}
+	cm = t3kdata["cm1-1"];
+	if ( cm == null )
+		cm = t3kdata["cam3"];
+	if ( cm != null )
+	{
+		ver_info = cm["version_info"];
+		if ( ver_info == null )
+		{
+			ver_info = cm["firmware_version"];
+			strHTML += "<div class='g_d_line'>&nbsp;- CM1-1 Ver " + ver_info + "&nbsp;&nbsp;sn:" + cm["factory"]["admin_serial"] + "</div>";
+		}
+		else
+			strHTML += "<div class='g_d_line'>&nbsp;<b>CM1-1</b>: C" + ver_info.model + " ver " + ver_info.version + " nv:" + ver_info.nv + " " + ver_info.datetime + "&nbsp;&nbsp;sn:" + cm["factory"]["admin_serial"] + "</div>";
+		strHTML += "<div class='g_d_line'>&nbsp;&nbsp;&nbsp;line:" + cm["factory"]["admin_detection_line"];
+		if ( cm["factory"]["admin_detection_center"] == null )
+		{
+			cali = cm["factory"]["admin_cam_calibration2"].split(' ');
+			if ( cali.length == 4 )
+			{
+				strHTML += ",&nbsp;center:" + cali[0];
+				strHTML += ",&nbsp;barrel:" + cali[1] + ", " + cali[2] + ", " + cali[3];
+			}
+		}
+		else
+		{
+			strHTML += ",&nbsp;center:" + cm["factory"]["admin_detection_center"];
+			strHTML += ",&nbsp;barrel:" + cm["factory"]["admin_detection_barrel"];
+		}
+		strHTML += "</div><div class='g_d_line'>&nbsp;&nbsp;&nbsp;setting date:" + (new Date(cm["factory"]["admin_setting_time"] * 1000)) + "</div>";
+	}
+	cm = t3kdata["cm2-1"];
+	if ( cm == null )
+		cm = t3kdata["cam4"];
+	if ( cm != null )
+	{
+		ver_info = cm["version_info"];
+		if ( ver_info == null )
+		{
+			ver_info = cm["firmware_version"];
+			strHTML += "<div class='g_d_line'>&nbsp;- CM2-1 Ver " + ver_info + "&nbsp;&nbsp;sn:" + cm["factory"]["admin_serial"] + "</div>";
+		}
+		else
+			strHTML += "<div class='g_d_line'>&nbsp;<b>CM2-1</b>: C" + ver_info.model + " ver " + ver_info.version + " nv:" + ver_info.nv + " " + ver_info.datetime + "&nbsp;&nbsp;sn:" + cm["factory"]["admin_serial"] + "</div>";
+		strHTML += "<div class='g_d_line'>&nbsp;&nbsp;&nbsp;line:" + cm["factory"]["admin_detection_line"];
+		if ( cm["factory"]["admin_detection_center"] == null )
+		{
+			cali = cm["factory"]["admin_cam_calibration2"].split(' ');
+			if ( cali.length == 4 )
+			{
+				strHTML += ",&nbsp;center:" + cali[0];
+				strHTML += ",&nbsp;barrel:" + cali[1] + ", " + cali[2] + ", " + cali[3];
+			}
+		}
+		else
+		{
+			strHTML += ",&nbsp;center:" + cm["factory"]["admin_detection_center"];
+			strHTML += ",&nbsp;barrel:" + cm["factory"]["admin_detection_barrel"];
+		}
+		strHTML += "</div><div class='g_d_line'>&nbsp;&nbsp;&nbsp;setting date:" + (new Date(cm["factory"]["admin_setting_time"] * 1000)) + "</div>";
+	}
+
+	strHTML += "<br>";
+
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Host Information</div>";
+	if ( t3kdata["host"]["operating_system"] != null )
+	{
+		strHTML += "<div class='g_d_line'><span class='g_d_t'>OS :</span><br>&nbsp;- " + t3kdata["host"]["operating_system"] + "</div><br>";
+	}
+	if ( t3kdata["host"]["HID VendorDefined"] != null )
+	{
+		strHTML += "<div class='g_d_line'><span class='g_d_t'>HID :</span></div>";
+			strHTML += "<div class='g_d_line'>&nbsp;- HID VendorDefined : " + t3kdata["host"]["HID VendorDefined"] + "</div>";
+			strHTML += "<div class='g_d_line'>&nbsp;- HID Mouse : " + t3kdata["host"]["HID Mouse"] + "</div>";
+			strHTML += "<div class='g_d_line'>&nbsp;- HID Keyboard : " + t3kdata["host"]["HID Keyboard"] + "</div>";
+			strHTML += "<div class='g_d_line'>&nbsp;- HID ConsumerControl : " + t3kdata["host"]["HID ConsumerControl"] + "</div>";
+			strHTML += "<div class='g_d_line'>&nbsp;- HID Digitizer : " + t3kdata["host"]["HID Digitizer"] + "</div>";
+	}
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Display :</span></div>";
+	if ( t3kdata["host"]["display_0"] != null )
+		if ( t3kdata["host"]["primary_display"] == 0 )
+			strHTML += "<div class='g_d_line'>&nbsp;- Display 0 : <span class='g_d_t'>" + t3kdata["host"]["display_0"] + "</span></div>";
+		else
+			strHTML += "<div class='g_d_line'>&nbsp;- Display 0 : " + t3kdata["host"]["display_0"] + "</div>";
+	if ( t3kdata["host"]["display_1"] != null )
+		if ( t3kdata["host"]["primary_display"] == 1 )
+			strHTML += "<div class='g_d_line'>&nbsp;- Display 1 : <span class='g_d_t'>" + t3kdata["host"]["display_1"] + "</span></div>";
+		else
+			strHTML += "<div class='g_d_line'>&nbsp;- Display 1 : " + t3kdata["host"]["display_1"] + "</div>";
+	if ( t3kdata["host"]["display_2"] != null )
+		if ( t3kdata["host"]["primary_display"] == 2 )
+			strHTML += "<div class='g_d_line'>&nbsp;- Display 2 : <span class='g_d_t'>" + t3kdata["host"]["display_2"] + "</span></div>";
+		else
+			strHTML += "<div class='g_d_line'>&nbsp;- Display 2 : " + t3kdata["host"]["display_2"] + "</div>";
+
+	objMain.innerHTML = strHTML;
+}
+
+function layoutBody()
+{
+}
+</script>
+
+<body id="body" onload="initBody();" onresize="layoutBody();">
+
+<div id="main"></div>
+
+</body>
+
+</html>

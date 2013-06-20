@@ -1,0 +1,248 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="No-Cache">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="description" content="Habilience T3k series - State Report View-page ver 2.6">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimum-scale=1, maximum-scale=1">
+<link rel="stylesheet" type="text/css" href=".common.css">
+</head>
+
+<style type="text/css">
+<!--
+body {
+	margin:0px; padding:0; border:0;
+	margin-left:0px; margin-bottom:0px; margin-top:0px; margin-right:0px;
+	-webkit-user-select:none;
+  -webkit-text-size-adjust:none;
+}
+
+#body_wrapper {
+	position:absolute;
+	left:0; top:0;
+	width:100%;
+}
+
+#mainmenu {
+	position:absolute;
+	left:0px; width:100%;
+	top:0px; height:30px;
+	border-bottom:1px solid #888888;
+	background:#aaaaaa;
+	overflow:hidden;
+}
+#mainmenu_back{
+	position:absolute;
+	left:0px; width:100%;
+	top:0px; height:30px;
+	background:#ffffff;
+	overflow:hidden;
+}
+
+#sub_iframe {
+	position:absolute;
+	left:0px; width:100%;
+	top:30px;
+	border:0;
+	overflow:hidden;
+}
+
+.mainmenu_item, .mainmenu_item_sel {
+	position:absolute;
+	top:0; height:29px;
+	font-size:14px;
+	font-weight:bold;
+	line-height:25px;
+	text-align:center;
+	color:#343434;
+	border:1px solid #888888;
+	-webkit-border-top-left-radius:7px; -webkit-border-top-right-radius:7px;
+	-moz-border-top-left-radius:7px; -moz-border-top-right-radius:7px;
+	-o-border-top-left-radius:7px; -o-border-top-right-radius:7px;
+	border-top-left-radius:7px; border-top-right-radius:7px;
+}
+.mainmenu_item {
+	background:#aaaaaa;
+}
+.mainmenu_item_sel {
+	background:#ffffff;
+}
+-->
+</style>
+
+<script type="text/javascript">
+var s_subpage = 0;
+var $ = function ( id ) { return document.getElementById(id); };
+
+function initBody()
+{
+	layoutBody();
+	
+	t3k_MainPage();
+}
+
+function layoutBody()
+{
+	var obj = document.getElementsByTagName("body").item(0);
+	var nWinWidth = obj.clientWidth;
+	
+	var nMenuLineSel = 1;
+	
+	var aryMenu = new Array("mainmenu_main","mainmenu_sideview","mainmenu_detection","mainmenu_actionmap","mainmenu_extra");
+	
+	var idx;
+	var bFirst = true;
+	var nMenusWidth = 5;
+	var nMenuLineTotal = 1;
+	for ( idx in aryMenu )
+	{
+		obj = $(aryMenu[idx]);
+		if ( !bFirst && (nMenusWidth + obj.clientWidth + 5) > nWinWidth )
+		{
+			bFirst = true;
+			nMenusWidth = 5;
+			nMenuLineTotal++;
+		}
+		else
+			bFirst = false;
+		nMenusWidth += obj.clientWidth + 5;
+			
+		if ( idx == s_subpage )
+			nMenuLineSel = nMenuLineTotal - 1;
+	}
+	bFirst = true;
+	nMenusWidth = 5;
+	var nMenuLineCur = 0;
+	for ( idx in aryMenu )
+	{
+		obj = $(aryMenu[idx]);
+		if ( !bFirst && (nMenusWidth + obj.clientWidth + 5) > nWinWidth )
+		{
+			bFirst = true;
+			nMenusWidth = 5;
+			nMenuLineCur++;
+		}
+		else
+			bFirst = false;
+		if ( nMenuLineCur == nMenuLineSel )
+		{
+			obj.style.top = ((nMenuLineTotal - 1) * 25) + "px";
+			obj.style.left = nMenusWidth + "px";
+			obj.style.zIndex = (nMenuLineTotal - 1);
+		}
+		else if ( nMenuLineCur < nMenuLineSel )
+		{
+			obj.style.top = (nMenuLineCur * 25) + "px";
+			obj.style.left = nMenusWidth + "px";
+			obj.style.zIndex = nMenuLineCur;
+		}
+		else
+		{
+			obj.style.top = ((nMenuLineCur - 1) * 25) + "px";
+			obj.style.left = nMenusWidth + "px";
+			obj.style.zIndex = nMenuLineCur - 1;
+		}
+		nMenusWidth += obj.clientWidth + 5;
+	}
+
+	var heightMainMenu = 25 * nMenuLineTotal + 5;
+
+	obj = $("sub_iframe");
+	var doc = obj.contentWindow.document;
+	if ( !doc )
+	{
+		obj.style.height = (window.innerHeight - heightMainMenu) + "px";
+	}
+	obj.style.top = heightMainMenu + "px";
+	obj = $("mainmenu");
+	obj.style.height = heightMainMenu + "px";
+}
+
+function setMenuStyle( pagenumber )
+{
+	s_subpage = pagenumber;
+	
+	var obj;
+	obj = $("mainmenu_main");
+	obj.className = (s_subpage == 0) ? "mainmenu_item_sel" : "mainmenu_item";
+	obj = $("mainmenu_sideview");
+	obj.className = (s_subpage == 1) ? "mainmenu_item_sel" : "mainmenu_item";
+	obj = $("mainmenu_detection");
+	obj.className = (s_subpage == 2) ? "mainmenu_item_sel" : "mainmenu_item";
+	obj = $("mainmenu_actionmap");
+	obj.className = (s_subpage == 4) ? "mainmenu_item_sel" : "mainmenu_item";
+	obj = $("mainmenu_extra");
+	obj.className = (s_subpage == 3) ? "mainmenu_item_sel" : "mainmenu_item";
+	
+	layoutBody();
+}
+
+function t3k_MainPage()
+{
+	setMenuStyle(0);
+	
+	var objSub = $("sub_iframe");
+	objSub.src = ".mainpage.html";
+}
+
+function t3k_SideviewPage()
+{
+	setMenuStyle(1);
+	
+	var objSub = $("sub_iframe");
+	objSub.src = ".sideviewpage.html";
+}
+
+function t3k_DetectionPage()
+{
+	setMenuStyle(2);
+	
+	var objSub = $("sub_iframe");
+	objSub.src = ".detectionpage.html";
+}
+
+function t3k_ExtraPage()
+{
+	setMenuStyle(3);
+	
+	var objSub = $("sub_iframe");
+	objSub.src = ".extrapage.html";
+}
+
+function t3k_ActionMapPage()
+{
+	setMenuStyle(4);
+	
+	var objSub = $("sub_iframe");
+	objSub.src = ".actionmappage.html";
+}
+
+function updateSubSize()
+{
+	var objSub = $("sub_iframe");
+	var doc = objSub.contentWindow.document;
+	if ( doc )
+		objSub.style.height = (doc.getElementsByTagName("body").item(0).clientHeight + 5) + "px";
+}
+</script>
+
+<body onload="initBody();" onresize="layoutBody();"><div id="body_wrapper">
+
+<div id="mainmenu">
+	<div id="mainmenu_back"></div>
+	<a href='#' onclick='t3k_MainPage(); return false;'><div id='mainmenu_main' class='mainmenu_item' style='left:5px; width:60px;'>Main</div></a>
+	<a href='#' onclick='t3k_SideviewPage(); return false;'><div id='mainmenu_sideview' class='mainmenu_item' style='left:70px; width:80px;'>Sideview</div></a>
+	<a href='#' onclick='t3k_DetectionPage(); return false;'><div id='mainmenu_detection' class='mainmenu_item' style='left:155px; width:85px;'>Detection</div></a>
+	<a href='#' onclick='t3k_ActionMapPage(); return false;'><div id='mainmenu_actionmap' class='mainmenu_item' style='left:245px; width:90px;'>ActionMap</div></a>
+	<a href='#' onclick='t3k_ExtraPage(); return false;'><div id='mainmenu_extra' class='mainmenu_item' style='left:340px; width:70px;'>Extra</div></a>
+</div>
+
+<iframe id='sub_iframe' onload="updateSubSize();"></iframe>
+
+</div></body>
+
+</html>

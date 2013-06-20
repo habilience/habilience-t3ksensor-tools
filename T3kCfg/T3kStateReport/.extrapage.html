@@ -1,0 +1,244 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="No-Cache">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="description" content="Habilience T3k series - State Report View-page ver 2.6">
+<link rel="stylesheet" type="text/css" href=".common.css">
+<script type="text/javascript"> function t3k_start() {} </script>
+<script type="text/javascript" src="data/T3k.dat"></script>
+</head>
+
+<style type="text/css">
+<!--
+.g_d_line {
+	position:relative;
+	height:12px;
+	padding:5px 0 0 0px;
+	font-size:12px;
+}
+.g_d_t {
+	font-weight:bold;
+}
+-->
+</style>
+
+<script type="text/javascript">
+function initBody()
+{
+	// rotation
+	var str = t3kdata["display_orientation"];
+	var rot = 0;
+	var strRot = "";
+	if ( str == null )
+	{	// ver 2.5
+		str = t3kdata["input_mode"];
+		var d = str.split(',');
+		rot = d[2] * 1;
+	}
+	else
+	{
+		rot = str * 1;
+	}
+	switch ( rot )
+	{
+	case 0:
+		strRot += "0' - Landscape";
+		break;
+	case 1:
+		strRot += "270' - Portrait";
+		break;
+	case 2:
+		strRot += "180' - Landscape (flipped)";
+		break;
+	case 2:
+		strRot += "90' - Portrait (flipped)";
+		break;
+	}
+	
+	var u, f;
+	var ni, nt;
+	var stri;
+	
+	var objMain = document.getElementById("main");
+	var strHTML = "";
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Area Setting (% of Screen)</div>";
+	u = Math.floor(t3kdata["area_c"] * 1000 / 0x7fff + 0.5) / 10;
+	f = Math.floor(t3kdata["factory"]["area_c"] * 1000 / 0x7fff + 0.5) / 10;
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Single Click :</span> " + u + " % (" + f + " %)</div>";
+	u = Math.floor(t3kdata["area_d"] * 1000 / 0x7fff + 0.5) / 10;
+	f = Math.floor(t3kdata["factory"]["area_d"] * 1000 / 0x7fff + 0.5) / 10;
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Double Click :</span> " + u + " % (" + f + " %)</div>";
+	u = Math.floor(t3kdata["area_p"] * 1000 / 0x7fff + 0.5) / 10;
+	f = Math.floor(t3kdata["factory"]["area_p"] * 1000 / 0x7fff + 0.5) / 10;
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Palm :</span> " + u + " % (" + f + " %)</div>";
+	u = Math.floor(t3kdata["area_m"] * 1000 / 0x7fff + 0.5) / 10;
+	f = Math.floor(t3kdata["factory"]["area_m"] * 1000 / 0x7fff + 0.5) / 10;
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Put & Tap :</span> " + u + " % (" + f + " %)</div>";
+	strHTML += "<br>";
+	
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Time Setting (msec)</div>";
+	u = t3kdata["time_a"] * 1;
+	f = t3kdata["factory"]["time_a"] * 1;
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Tap :</span> " + u + " ms (" + f + " ms)</div>";
+	u = t3kdata["time_l"] * 1;
+	f = t3kdata["factory"]["time_l"] * 1;
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Long-Tap :</span> " + u + " ms (" + f + " ms)</div>";
+	strHTML += "<br>";
+	
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Wheel / Zoom Sensitivity Setting</div>";
+	u = t3kdata["wheel_sensitivity"] * 1;
+	f = t3kdata["factory"]["wheel_sensitivity"] * 1;
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Wheel :</span> " + u + " (" + f + ")</div>";
+	u = t3kdata["zoom_sensitivity"] * 1;
+	f = t3kdata["factory"]["zoom_sensitivity"] * 1;
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Zoom :</span> " + u + " (" + f + ")</div>";
+	strHTML += "<br>";
+	
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Touch Area Margin (% of Screen)</div>";
+	if ( t3kdata["factory"]["f41"] == null )
+		strHTML += "<div class='g_d_line'> undefined</div>";
+	else
+	{
+		str = t3kdata["factory"]["f41"];
+		strHTML += "<table><tr><td></td><td>" + (("0x" + str.substring(2, 4)) * 1) + " %</td><td></td></tr>";
+		strHTML += "<tr><td>" + (("0x" + str.substring(0, 2)) * 1) + " %</td><td></td><td>" + (("0x" + str.substring(4, 6)) * 1) + " %</td></tr>";
+		strHTML += "<tr><td></td><td>" + (("0x" + str.substring(6)) * 1) + " %</td><td></td></tr></table>";
+	}
+	strHTML += "<br>";
+	
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Enable/Disable Touch Screen</div>";
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Touch Screen :</span> <input type='checkbox' " + (t3kdata["touch_enable"] == "1" ? "checked " : "") + "disabled></input></div>";
+	strHTML += "<br>";
+	
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Buzzer</div>";
+	str = t3kdata["buzzer"];
+	d = str.split(' ');
+	var strClick = "";
+	var strError = "";
+	for ( idx in d )
+	{
+		var i = d[idx].split(':');
+		var v = "";
+		if ( (i[1] * 1) != 0 )
+			v = "checked ";
+		switch ( (i[0] * 1) )
+		{
+		case 0: strClick = v;  break;
+		case 3: strError = v;  break;
+		}
+	}
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Click :</span> <input type='checkbox' " + strClick + "disabled></input></div>";
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Error :</span> <input type='checkbox' " + strError + "disabled></input></div>";
+	strHTML += "<br>";
+	
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Shortcur Key</div>";
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Calibration Key :</span> ";
+	switch ( t3kdata["calibration_key"] * 1 )
+	{
+	case 0: strHTML += "Scroll Lock"; break;
+	case 1: strHTML += "Num Lock"; break;
+	case 2: strHTML += "Caps Lock"; break;
+	default: strHTML += "Not Used"; break;
+	}
+	strHTML += "&nbsp;&nbsp;x&nbsp;&nbsp;" + (t3kdata["calibration_no"] * 1) + "</div>";
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Touch-enable Key :</span> ";
+	switch ( t3kdata["touch_disable_key"] * 1 )
+	{
+	case 0: strHTML += "Scroll Lock"; break;
+	case 1: strHTML += "Num Lock"; break;
+	case 2: strHTML += "Caps Lock"; break;
+	default: strHTML += "Not Used"; break;
+	}
+	strHTML += "&nbsp;&nbsp;x&nbsp;&nbsp;" + (t3kdata["touch_disable_no"] * 1) + "</div>";
+	strHTML += "<br>";
+	
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Calibration</div>";
+	u = t3kdata["calibration_screen_margin"];
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Screen Margin :</span> " + u + " % of Screen</div>";
+	strHTML += "<br>";
+	
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Display Orientation</div>";
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Orientation :</span> " + strRot + "</div>";
+	strHTML += "<br>";
+	
+	strHTML += "<div class='g_title'><span class='g_t_icon'></span>&nbsp;Softkey, Softlogic, GPIO</div>";
+	str = t3kdata["factory"]["f51"];
+	ni = 0; nt = 0;
+	if ( str != null )
+	{
+		while ( (stri = str.substring(0, 11)).length == 11 )
+		{
+			str = str.substring(11);
+			if ( stri == "00000000000" )
+				continue;
+			
+			if ( (((stri.charCodeAt(0) - 0x30) >> 4) & 0x01) != 0 )
+				ni++;
+			nt++;
+		}
+	}
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Fixed key :</span> " + (nt - ni);
+	strHTML += "&nbsp;&nbsp;&nbsp;<span class='g_d_t'>User key :</span> " + ni;
+	strHTML += "&nbsp;&nbsp;&nbsp;<span class='g_d_t'>Total :</span> " + nt + " key(s)</div>";
+	str = t3kdata["factory"]["f52"];
+	ni = 0; nt = 0;
+	if ( str != null )
+	{
+		ni = str.charCodeAt(0) - 0x30;
+		str = str.substring(1);
+		while ( (stri = str.substring(0, 6)).length == 6 )
+		{
+			str = str.substring(6);
+			if ( stri == "000000" )
+				continue;
+			
+			nt++;
+		}
+	}
+	strHTML += "<div class='g_d_line'><span class='g_d_t'>Hidden logic :</span> " + ni;
+	strHTML += "&nbsp;&nbsp;&nbsp;<span class='g_d_t'>User logic :</span> " + (nt - ni);
+	strHTML += "&nbsp;&nbsp;&nbsp;<span class='g_d_t'>Total :</span> " + nt + " logic(s)</div>";
+	str = t3kdata["factory"]["f55"];
+	if ( str != null )
+	{
+		ni = 1;
+		strHTML += "<div class='g_d_line'>";
+		while ( (stri = str.substring(0, 2)).length == 2 )
+		{
+			str = str.substring(2);
+			if ( stri[0] == '8' )
+			{
+				strHTML += "<span class='g_d_t'>GPIO#" + ni + " :</span> ";
+				if ( stri[1] == '0' )
+					strHTML += "in&nbsp;&nbsp;&nbsp;";
+				else
+					strHTML += "out&nbsp;&nbsp;&nbsp;";
+			}
+			else
+				strHTML += "<span class='g_d_t'>GPIO#" + ni + " :</span> n/a&nbsp;&nbsp;&nbsp;";
+			ni++;
+		}
+		strHTML += "</div>";
+	}
+	strHTML += "<br>";
+	
+	objMain.innerHTML = strHTML;
+}
+
+function layoutBody()
+{
+}
+</script>
+
+<body id="body" onload="initBody();" onresize="layoutBody();">
+
+<div id="main"></div>
+
+</body>
+
+</html>

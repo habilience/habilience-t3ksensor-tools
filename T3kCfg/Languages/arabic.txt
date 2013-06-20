@@ -1,0 +1,330 @@
+﻿
+[MAIN]
+APP_ERROR_MSG1 = !لا يمكنك تشغيلها على الأجهزة المحمولة
+TITLE_GENERAL_ERROR = خطأ
+
+BTN_CAPTION_EXIT = نهاية
+BTN_CAPTION_CLOSE = أغلق
+BTN_CAPTION_DEFAULT = الافتراضي
+BTN_CAPTION_REFRESH = التحديث
+MENU_TOOLTIP_START_PAGE = صفحة البداية
+MENU_TOOLTIP_MOUSE = لفتات
+MENU_TOOLTIP_CALIBRATION = تصحيح  التنسيق اللمسة
+MENU_TOOLTIP_SENSOR_SETTING = تحديد المستشعر
+MENU_TOOLTIP_GENERAL_SETTING = تحديد عامي
+MENU_TOOLTIP_SOFTKEY_SETTING = وضع الأزرار الوظيفية
+MSGBOX_TITLE_DEFAULT = تحقق من تغييرالإعدادات الأولية
+MSGBOX_TEXT_DEFAULT = هل  متأكد أنك تريد تغيير الإعدادات الأولية ؟
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = v%1  هذا البرنامج لا يدعم نظام تشغيل.v%1  هذا البرنامج لا يدعم نظام تشغيل. إصدار البرامج الثابتة الحالية \n: %1, \nإصدار البرامج الثابت الدعم: %2 ~ %3
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = تحقق من أخطاء
+TITLE_CAPTION_INFORMATION = معلومات البرامج
+TITLE_CAPTION_FIRMWARE = معلومات البرامج الثابتة
+TEXT_DEVICE_NOT_CONNECTED = لم يتم توصيل الجهاز
+TEXT_FIRMWARE_DOWNLOAD = تحميل البرامج الثابتة
+
+TITLE_CAPTION_LICENSE = 
+
+[SELECT DEVICE]
+WINDOW_CAPTION = اختيار جهاز
+TITLE_CAPTION_DEVICE_LIST = قائمة جهاز
+TEXT_DEV_PATH = مسار
+TEXT_MODEL = نموذج
+TEXT_NUMBER = رقم
+BTN_CAPTION_PLAY_BUZZER = لعب الطنان
+BTN_CAPTION_SELECT = اختيار جهاز
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = تأكيد
+BTN_CAPTION_CANCEL = الغاء
+BTN_CAPTION_YES = نعم
+BTN_CAPTION_NO = لا
+
+[START PAGE]
+BTN_CAPTION_MOUSE = لفتات
+BTN_CAPTION_MOUSE_SUB1 = تحديد اللفتات اللمسة
+BTN_CAPTION_MOUSE_SUB2 = تحديد الملف اللمس
+BTN_CAPTION_CALIBRATION = تصحيح  التنسيق اللمس
+BTN_CAPTION_CALIBRATION_SUB1 = أداة  لتصحيح  التنسيق اللمسة
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = تحديد المستشعر
+BTN_CAPTION_SENSOR_SETTING_SUB1 = وجود الاستخدام اللمس
+BTN_CAPTION_SENSOR_SETTING_SUB2 = تحديد الصوت ، الإختصارات
+BTN_CAPTION_GENERAL_SETTING = تحديد عامي
+BTN_CAPTION_GENERAL_SETTING_SUB1 = اللغة، وضع الإدخال
+BTN_CAPTION_GENERAL_SETTING_SUB2 = دوران الشاشة
+BTN_CAPTION_REMOTE_ASSISTANCE = دعم  بعيد
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Softkey
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = اللفتات اللمسة
+BTN_CAPTION_TOUCH_SETTING = تحديد اللمس
+
+;TEXT_SINGLE = إصبع
+;TEXT_FINGERS = الأصابع  المتعددة
+;TEXT_PALM = كف
+;TEXT_PUTNTAP = Put & Tap
+;TEXT_DRAG = سحب
+;TEXT_TAP = النقر
+;TEXT_DOUBLE_TAP = النقر مرتين
+;TEXT_LONG_TAP = ضغط طويل
+;TEXT_ROTATE = تناوب
+;TEXT_ZOOM = تكبير/ تصغير
+TEXT_MOVE_WITH_ZOOM = ممكنن التكبير/ التصغير في السحب
+TEXT_INERTIAL_WHEEL = تطبيق الجمود العجلة الماوس
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Put & Tap و Put & Double Tap عمل شخصيا
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = استخدام اللفتات  في وضع الإدخال اللمسة المتعددة
+TEXT_MAC_OS_MARGIN = Mac OS X هامش من الشاشة
+TEXT_INVERT_WHEEL = عكس عجلة الماوس
+
+TEXT_LEFT = الجانب الأيسر
+TEXT_RIGHT = الجانب الأيمن
+TEXT_MIDDLE = وسط
+TEXT_DOUBLE_CLICK = نقرا مزدوجا
+TEXT_CLICK = نقر
+
+TEXT_PROFILE_LEGEND_MODE1 = Mouse
+TEXT_PROFILE_LEGEND_MODE2 = Windows 7
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = تحرير عنصر
+TEXT_PROFILE_ITEM = عنصر
+TEXT_ACTION = عمل
+TEXT_USER_DEFINE_KEY = مفتاح التحديد المستخدم
+TEXT_KEY = مفتاح
+TEXT_FUNCTION_KEY = مفتاح الوظيفة(Function Key)
+TEXT_NONE = غير موجود
+TEXT_NOT_DEFINED = غير محدد
+BTN_CAPTION_APPLY = تطبيق
+BTN_CAPTION_CANCEL = إلغاء
+
+TEXT_PROFILE_ITEM_DISABLED = (لم يستخدم)
+TEXT_PROFILE_ITEM_USER_DEFINED = (تحديد المستخدم)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (مفتاح الوظيفة)
+TEXT_PROFILE_ITEM_MOUSE = (الماوس)
+TEXT_PROFILE_ITEM_ESCAPE = إلغاء(Esc)
+TEXT_PROFILE_ITEM_FORWARD = إلى الأمام
+TEXT_PROFILE_ITEM_BACK = إلى  الظهر
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = تحويل جزء المهام
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = تحويل جزء المهام(Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = مدير العمل
+TEXT_PROFILE_ITEM_EXPLORER = تشغيل المستكشف
+TEXT_PROFILE_ITEM_DESKTOP = تظهر على سطح المكتب
+TEXT_PROFILE_ITEM_VKBOARD = لوحة المفاتيح الافتراضية
+TEXT_PROFILE_ITEM_T3KCFG = T3k برنامج التحديد السلسلة
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Left Click
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Right Click
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Middle Click
+TEXT_PROFILE_ITEM_MLEFT_DOWN = الزراليسار
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = الزر اليمين
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = الزر الأوسط
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = تصحيح  التنسيق اللمس
+TEXT_SCREEN_MARGIN = هوامش الشاشة
+TEXT_SCREEN_PERCENT_OF_SCREEN = %
+TEXT_CALIBRATE = تصحيح
+BTN_CAPTION_CALIBRATE = تصحيح
+
+TITLE_AREA_SETTING = (%)تقسيم المناطق
+TEXT_SINGLE_CLICK = نقر
+TEXT_DOUBLE_CLICK = نقرا مزدوجا
+;TEXT_TWO_TOUCH = Put & Tap
+TEXT_PALM = كف
+
+TEXT_CALIBRATION_WARNING = قد لا تعمل التصحيح. بشكل صحيح  .   "Mac OS X لم يتم تعيين من القائمة "بادرة"  "هامش الشاشة .
+TEXT_CALIBRATION_WARNING2 = 
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = وجود الاستخدام اللمس
+TEXT_TOUCH_ENABLE = استخدام اللمس
+TEXT_RADIO_TOUCH_ENABLE = تنشيط
+TEXT_RADIO_TOUCH_DISABLE = تعطيل
+
+TITLE_CAPTION_BUZZER = الطنان
+TEXT_CLICK = نقر
+TEXT_CALIBRATION = تصحيح  التنسيق اللمس
+TEXT_ERROR = تحذيرالخطأ
+TEXT_KEYTONE = الكيتونات(Keytone)
+TEXT_SENSOR_ATTACH = إعلام  الاتصال الاستشعار
+TEXT_PEN_PAIRING = Pen pairing
+TEXT_USB_ATTACH = USB  إعلام  الاتصال
+
+TITLE_SHORTCUT_KEY = اختصارات
+TEXT_CALIBRATION_KEY = مفتاح لتصحيح  التنسيق اللمس
+TEXT_CALIBRATION_NUMBER_OF_PRESS = عدد التكرارات المفتاح
+TEXT_TOUCH_ENABLE_KEY = مفتاح الاستخدام اللمس
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = عدد التكرارات المفتاح
+TEXT_NOT_USED = لم يستخدم
+TEXT_ON = اشغال
+TEXT_OFF = إيقاف
+
+TITLE_TRAY_ICON = أيقونة علبة
+TEXT_CHECK_TRAYICON = استخدام أيقونة علبة
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = وضع الإدخال اللمس
+TEXT_INPUT_MODE = وضع الإدخال
+TEXT_INPUT_MODE_MOUSE = الماوس
+TEXT_INPUT_MODE_SINGLE_TOUCH = إدخال بللمس الواحد(Tablet Pen)
+TEXT_INPUT_MODE_MULTI_TOUCH = إدخال بللمس المتعددة
+TEXT_INPUT_MODE_AUTO_SELECT = اختيار تلقائي
+TEXT_INPUT_MODE_WARNING_MSG = الأخرىOSقد لا تعمل اللمس بشكل صحيح في .هل أنت متأكد أنك تريد الاستمرار؟
+
+TITLE_MULTI_MONITOR = تحديد العرض الشاشات المتعددة
+TEXT_MULTI_MONITOR = تحديد الشاشة
+TEXT_MULTI_MONITOR_SETTING = حدد الشاشة العرض
+
+TEXT_BTN_MULTI_MONITOR_APPLY = تطبيق
+TEXT_BTN_MULTI_MONITOR_CANCEL = إلغاء
+TEXT_BTN_MULTI_MONITOR_CLOSE = أغلق
+TEXT_PRIMARY_MONITOR = الشاشة الرئيسية : %d
+TEXT_NON_MULTI_MONITOR = غيرالدعم للشاشات المتعددة
+
+BTN_TOOLTIP_PLAY = تجديد
+
+BTN_CAMERA_DIAGNOSTICS = تحقق_الاستشعار
+
+TITLE_LANGUAGE = تحديد اللغة(Language)
+TEXT_LANGUAGE = حدد لغة
+TEXT_LANGUAGE_NOT_FOUND = لا وجود ملف اللغة
+
+TITLE_DISPLAY_ORIENTATION = اتجاه شاشة المراقبة
+TEXT_DISPLAY_ORIENTATION = اتجاه
+TEXT_DISPLAY_ORIENTATION_1 = 0' -  أفقي
+TEXT_DISPLAY_ORIENTATION_2 = 90' -  عمودي
+TEXT_DISPLAY_ORIENTATION_3 = 180' - أفقي (انتقال الوجه)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - عمودي (انتقال الوجه)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' -  عادة
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - الجانب الأيسر
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - الجانب الأيمن
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - استبدال أعلى وأسفل
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 
+
+TITLE_DISPLAY_WARNING = تحذير
+TEXT_DISPLAY_WARNING = الاتجاه الحالي والتصحيح لا تتطابق مع الشاشة
+
+[TOUCH SETTING]
+WINDOW_CAPTION = تحديد اللمس
+TITLE_TIME_SETTING = تحديد الوقت(ms)
+TEXT_TAP = ضغط
+TEXT_LONG_TAP = ضغط طويل
+TEXT_SLOW = بطيء
+TEXT_FAST = سريع
+TITLE_WHEEL_SENSITIVITY_SETTING = عجلة الماوس، تكبير / تصغير تحديد حساسية
+TEXT_WHEEL = عجلة الماوس
+TEXT_ZOOM = تكبير / تصغير
+
+BTN_CAPTION_DEFAULT = الافتراضي
+BTN_CAPTION_REFRESH = تحديث
+BTN_CAPTION_CLOSE = أغلق
+MSGBOX_TEXT_DEFAULT = هل متأكد أنك تريد تغيير إعداد الأولى
+MSGBOX_TITLE_DEFAULT = تأكيد التغيير إلى الإعدادات الافتراضية
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = تأكيد التعطيل اللمس
+TEXT_MESSAGE = عند تعطيل اللمس تحتاج الماوس   انقر على زر أدناه مع الماوس
+BTN_TIMER_TEXT = %1  ثانية
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = تحذير
+TEXT_MESSAGE = تحذير! تحتوي على إعدادات  في الشاشة التالية لفحص حالة من أجهزة الاستشعار  . إذا قمت بتغيير الإعدادات قد لا تعمل أجهزة الاستشعار عادة
+BTN_CAPTION_CONTINUE = مواصلة
+BTN_CAPTION_CLOSE = أغلق
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = موافقة
+TEXT_MESSAGE = (تجمع في الشاشة التالية معلومات الاستشعار وبيئة المستخدم (إصدار نظام التشغيل، والقرار
+BTN_CAPTION_CONTINUE = موافقة
+BTN_CAPTION_CLOSE = رفض
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = أداة التشخيص الاستشعار
+BTN_CAPTION_DEFAULT = الافتراضي
+BTN_CAPTION_REFRESH = تحديث
+BTN_CAPTION_CLOSE = أغلق
+BTN_CAPTION_SAVELOG = مخزن حالة الاستشعار
+BTN_CAPTION_MAIN = 
+BTN_CAPTION_SUB = 
+TAB_CAPTION_SIDEVIEW = مظهرة جانبية
+TAB_CAPTION_DETECTION = رسم البياني الكشف
+
+LOG_CAPTION_ERROR = خطأ! فشلت في مخزن
+LOG_SIDEVIEW = مظهرة جانبية
+LOG_DETECTION = كشف
+LOG_DATA = البيانات الإعدادات
+LOG_SAVING = أثناء التخزين
+LOG_LOADING = أثناء القراءة
+LOG_COMPLETE = إنتهاء
+LOG_OK = تأكيد
+LOG_FAIL = فشل
+LOG_PROGRESS = تقدم
+LOG_START = بداية
+LOG_CAMERA = كاميرا
+
+TITLE_SENSOR1 = استشعار 1
+TITLE_SENSOR2 = استشعار 2
+TITLE_SENSOR1_1 = 1-استشعار 1
+TITLE_SENSOR2_1 = 2-استشعار 1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = تكبير
+BTN_TOOLTIP_ZOOM_OUT = تصغير
+BTN_TOOLTIP_RESET_ZOOM = محاذاة
+TEXT_SENSOR1_GRAPH_LEFT = الأسفل اليسار
+TEXT_SENSOR1_GRAPH_RIGHT = العلوية  اليمنى
+TEXT_SENSOR2_GRAPH_LEFT = العلوية اليسرى
+TEXT_SENSOR2_GRAPH_RIGHT = الأسفل اليمين
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = لا صورة
+BTN_CAPTION_SNAPSHOT = لقطة(Snapshot)
+
+[SOFTKEY SETTING]
+TEXT_TITLE = تحديد المفتاح الوظيفي
+TEXT_HEADER_NUMBER = رقم
+TEXT_HEADER_TYPE = تصنيف
+TEXT_HEADER_ACTION = عمل
+TEXT_ITEM_KEY = مفتاح
+TEXT_ITEM_STATE = حالة
+TEXT_ITEM_NOT_USED = (لم  يستخدم)
+TEXT_ITEM_CALIBRATION = دخول لتصحيح التنسيق  الاستشعار / خروج
+TEXT_ITEM_TOUCH = تمكين لمس / تعطيل
+
+[TRAYICON]
+TEXT_MENU_OPEN = فتح
+TEXT_MENU_EXIT = نهاية
+TEXT_BALLOONTIP_TITLE = T3k Configurator
+TEXT_BALLOONTIP_MSG = T3k Configurator Factory Edition ("T3kCfgFE.exe")   يعمل البرنامج بنظام التشغيل
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = 
+TITLE_REMOTE = 
+TEXT_SELECT_SERVER = 
+TEXT_PORT = 
+TEXT_USERNAME = 
+BTN_REQUEST = 
+TEXT_RECONNECTING = 
+BTN_CANCEL = 
+TEXT_CONNECTING = 
+TEXT_REMOTE_CONTROL = 
+BTN_DISCONNECT = 
+TEXT_WAIT_MSG = 
+TEXT_REPAIRCONNECTION = 
+TEXT_ID = 
+TEXT_SERV_NOT_RES = 
+TITLE_CHAT = 
+BTN_SEND = 
+MSG_CHAT_DISCONNECTED = 
+TITLE_REMOTE_MSG = 
+MSG_REMOTE_DISCONNECT = 
+TEXT_HELP_MSG = 
+TEXT_HELP_ARROW = 

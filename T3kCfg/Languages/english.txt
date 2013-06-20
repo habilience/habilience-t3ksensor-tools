@@ -1,0 +1,330 @@
+﻿
+[MAIN]
+APP_ERROR_MSG1 = Cannot Execute on Removable Devices!
+TITLE_GENERAL_ERROR = Error
+
+BTN_CAPTION_EXIT = Exit
+BTN_CAPTION_CLOSE = Close
+BTN_CAPTION_DEFAULT = Default
+BTN_CAPTION_REFRESH = Refresh
+MENU_TOOLTIP_START_PAGE = Start Page
+MENU_TOOLTIP_MOUSE = Gesture
+MENU_TOOLTIP_CALIBRATION = Calibration
+MENU_TOOLTIP_SENSOR_SETTING = Sensor Settings
+MENU_TOOLTIP_GENERAL_SETTING = General Settings
+MENU_TOOLTIP_SOFTKEY_SETTING = Softkey Settings
+MSGBOX_TITLE_DEFAULT = Change to Default
+MSGBOX_TEXT_DEFAULT = Restore all to original settings?
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = This program does not support v%1 firmware.\nCurrent: %1\nSupports %2 ~ %3
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = [Error] Invalid Firmware
+TITLE_CAPTION_INFORMATION = Program Information
+TITLE_CAPTION_FIRMWARE = Firmware Information
+TEXT_DEVICE_NOT_CONNECTED = The device is not connected.
+TEXT_FIRMWARE_DOWNLOAD = Firmware is being downloaded.
+
+TITLE_CAPTION_LICENSE = About
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Select Device
+TITLE_CAPTION_DEVICE_LIST = Device List
+TEXT_DEV_PATH = Device Path
+TEXT_MODEL = Model
+TEXT_NUMBER = No.
+BTN_CAPTION_PLAY_BUZZER = Play Buzzer
+BTN_CAPTION_SELECT = Select
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = OK
+BTN_CAPTION_CANCEL = Cancel
+BTN_CAPTION_YES = Yes
+BTN_CAPTION_NO = No
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Gesture
+BTN_CAPTION_MOUSE_SUB1 = Touch Gesture Settings
+BTN_CAPTION_MOUSE_SUB2 = Gesture Profiles
+BTN_CAPTION_CALIBRATION = Calibration
+BTN_CAPTION_CALIBRATION_SUB1 = Touch Screen Calibration
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Sensor Settings
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Enable/Disable Touch
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Buzzer, Shortcut Key
+BTN_CAPTION_GENERAL_SETTING = General Settings
+BTN_CAPTION_GENERAL_SETTING_SUB1 = Language, Input Mode
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Display Orientation
+BTN_CAPTION_REMOTE_ASSISTANCE = Remote Assistance
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Softkey
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Touch Gesture
+BTN_CAPTION_TOUCH_SETTING = Touch Settings...
+
+TEXT_SINGLE = Single
+TEXT_FINGERS = Fingers
+TEXT_PALM = Palm
+TEXT_PUTNTAP = Put & Tap
+TEXT_DRAG = Drag
+TEXT_TAP = Tap
+TEXT_DOUBLE_TAP = Double Tap
+TEXT_LONG_TAP = Long Tap
+TEXT_ROTATE = Rotate
+TEXT_ZOOM = Zoom
+TEXT_MOVE_WITH_ZOOM = Move With Zoom
+TEXT_INERTIAL_WHEEL = Inertial Wheel
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Individual Put & Tap, Put & Double Tap
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Hybrid Multi-Touch
+TEXT_MAC_OS_MARGIN = Mac OS X Margin
+TEXT_INVERT_WHEEL = Invert Wheel
+
+TEXT_LEFT = Left
+TEXT_RIGHT = Right
+TEXT_MIDDLE = Middle
+TEXT_DOUBLE_CLICK = Double Click
+TEXT_CLICK = Click
+
+TEXT_PROFILE_LEGEND_MODE1 = Mouse
+TEXT_PROFILE_LEGEND_MODE2 = Windows 7
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Edit Action
+TEXT_PROFILE_ITEM = Profile Item
+TEXT_ACTION = Action
+TEXT_USER_DEFINE_KEY = User Defined Key
+TEXT_KEY = Key
+TEXT_FUNCTION_KEY = Function Key
+TEXT_NONE = None
+TEXT_NOT_DEFINED = Not Defined
+BTN_CAPTION_APPLY = Apply
+BTN_CAPTION_CANCEL = Cancel
+
+TEXT_PROFILE_ITEM_DISABLED = (Disabled)
+TEXT_PROFILE_ITEM_USER_DEFINED = (User Defined)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Function Key)
+TEXT_PROFILE_ITEM_MOUSE = (Mouse)
+TEXT_PROFILE_ITEM_ESCAPE = Escape (Esc)
+TEXT_PROFILE_ITEM_FORWARD = Forward
+TEXT_PROFILE_ITEM_BACK = Back
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Task Switcher
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Task Switcher (Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Task Manager
+TEXT_PROFILE_ITEM_EXPLORER = Explorer
+TEXT_PROFILE_ITEM_DESKTOP = Desktop
+TEXT_PROFILE_ITEM_VKBOARD = Virtual Keyboard
+TEXT_PROFILE_ITEM_T3KCFG = T3k Series Configure Program
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Left Click
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Right Click
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Middle Click
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Left Button
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Right Button
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Middle Button
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Calibration
+TEXT_SCREEN_MARGIN = Screen Margins
+TEXT_SCREEN_PERCENT_OF_SCREEN = % of Screen
+TEXT_CALIBRATE = Calibrate
+BTN_CAPTION_CALIBRATE = Calibration...
+
+TITLE_AREA_SETTING = Area Settings (% of Screen)
+TEXT_SINGLE_CLICK = Single Click
+TEXT_DOUBLE_CLICK = Double Click
+TEXT_TWO_TOUCH = Put & Tap
+TEXT_PALM = Palm
+
+TEXT_CALIBRATION_WARNING = Didn't check 'Mac OS X Margin' in 'Gesture' menu. Because the calibration may not work properly.
+TEXT_CALIBRATION_WARNING2 = Did check 'Mac OS X Margin' in 'Gesture' menu. Because the calibration may not work properly.
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Turn on/off Touch Screen
+TEXT_TOUCH_ENABLE = Touch Screen
+TEXT_RADIO_TOUCH_ENABLE = Enable
+TEXT_RADIO_TOUCH_DISABLE = Disable
+
+TITLE_CAPTION_BUZZER = Buzzer
+TEXT_CLICK = Click
+TEXT_CALIBRATION = Calibration
+TEXT_ERROR = Error
+TEXT_KEYTONE = Keytone
+TEXT_SENSOR_ATTACH = Sensor Attach
+TEXT_PEN_PAIRING = Pen Pairing
+TEXT_USB_ATTACH = USB Attach
+
+TITLE_SHORTCUT_KEY = Shortcut Key
+TEXT_CALIBRATION_KEY = Calibration Key
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Number of key presses
+TEXT_TOUCH_ENABLE_KEY = Touch-enable key
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Number of key presses
+TEXT_NOT_USED = Not Used
+TEXT_ON = ON
+TEXT_OFF = OFF
+
+TITLE_TRAY_ICON = Tray Icon
+TEXT_CHECK_TRAYICON = Use Tray Icon
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Touch Input Mode
+TEXT_INPUT_MODE = Input Mode
+TEXT_INPUT_MODE_MOUSE = Mouse
+TEXT_INPUT_MODE_SINGLE_TOUCH = Single Touch (Tablet Pen)
+TEXT_INPUT_MODE_MULTI_TOUCH = Multi-touch
+TEXT_INPUT_MODE_AUTO_SELECT = Auto Select
+TEXT_INPUT_MODE_WARNING_MSG = Touch may not work properly under other OS. Continue?
+
+TITLE_MULTI_MONITOR = Multi-monitor Display Setting
+TEXT_MULTI_MONITOR = Monitor Setting
+TEXT_MULTI_MONITOR_SETTING = Select Display Monitor...
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Apply
+TEXT_BTN_MULTI_MONITOR_CANCEL = Cancel
+TEXT_BTN_MULTI_MONITOR_CLOSE = Close
+TEXT_PRIMARY_MONITOR = Primary Monitor : %d
+TEXT_NON_MULTI_MONITOR = Do Not Support Multi-Monitor
+
+BTN_TOOLTIP_PLAY = Play
+
+BTN_CAMERA_DIAGNOSTICS = Sensor Diagnostics...
+
+TITLE_LANGUAGE = Language
+TEXT_LANGUAGE = Language Selection
+TEXT_LANGUAGE_NOT_FOUND = Language file does not exist.
+
+TITLE_DISPLAY_ORIENTATION = Display Orientation
+TEXT_DISPLAY_ORIENTATION = Orientation
+TEXT_DISPLAY_ORIENTATION_1 = 0' - Landscape
+TEXT_DISPLAY_ORIENTATION_2 = 90' - Portrait
+TEXT_DISPLAY_ORIENTATION_3 = 180' - Landscape (flipped)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - Portrait (flipped)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - Normal
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Left
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Right
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Upside Down
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
+
+TITLE_DISPLAY_WARNING = Warning
+TEXT_DISPLAY_WARNING = Current display orientation and calibration value does not correspond.
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Touch Settings
+TITLE_TIME_SETTING = Time Settings (ms)
+TEXT_TAP = Tap
+TEXT_LONG_TAP = Long-Tap
+TEXT_SLOW = Slow
+TEXT_FAST = Fast
+TITLE_WHEEL_SENSITIVITY_SETTING = Wheel/Zoom Sensitivity Settings
+TEXT_WHEEL = Wheel
+TEXT_ZOOM = Zoom
+
+BTN_CAPTION_DEFAULT = Default
+BTN_CAPTION_REFRESH = Refresh
+BTN_CAPTION_CLOSE = Close
+MSGBOX_TEXT_DEFAULT = Restore to the original settings?
+MSGBOX_TITLE_DEFAULT = Default
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Select "Touch Turn-off"
+TEXT_MESSAGE = Please click on the timer button\nto turn off the sensor.
+BTN_TIMER_TEXT = %1 secs
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Warning
+TEXT_MESSAGE = Warning! The following screen contains settings data crucial to the workings of the touch sensors.\n\nChanging these settings data may make your touch screen unstable.
+BTN_CAPTION_CONTINUE = Continue
+BTN_CAPTION_CLOSE = Close
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = Agreement
+TEXT_MESSAGE = It will be collect the sensor information and the user environment(OS Version, Tablet Input Service on MS Windows, Screen Resolution) on the next screen.
+BTN_CAPTION_CONTINUE = Agree
+BTN_CAPTION_CLOSE = Reject
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Sensor Diagnostics
+BTN_CAPTION_DEFAULT = Default
+BTN_CAPTION_REFRESH = Refresh
+BTN_CAPTION_CLOSE = Close
+BTN_CAPTION_SAVELOG = Save Sensor State
+BTN_CAPTION_MAIN = Main
+BTN_CAPTION_SUB = Sub
+TAB_CAPTION_SIDEVIEW = Sideview
+TAB_CAPTION_DETECTION = Detection Graph
+
+LOG_CAPTION_ERROR = Error! failed to save the state.
+LOG_SIDEVIEW = Sideview
+LOG_DETECTION = Detection
+LOG_DATA = Setting Data
+LOG_SAVING = Saving
+LOG_LOADING = Loading
+LOG_COMPLETE = Complete
+LOG_OK = OK
+LOG_FAIL = FAIL
+LOG_PROGRESS = PRG
+LOG_START = Start
+LOG_CAMERA = Camera
+
+TITLE_SENSOR1 = Sensor 1
+TITLE_SENSOR2 = Sensor 2
+TITLE_SENSOR1_1 = Sensor 1-1
+TITLE_SENSOR2_1 = Sensor 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Zoom In
+BTN_TOOLTIP_ZOOM_OUT = Zoom Out
+BTN_TOOLTIP_RESET_ZOOM = Fit Screen
+TEXT_SENSOR1_GRAPH_LEFT = Lower Left
+TEXT_SENSOR1_GRAPH_RIGHT = Upper Right
+TEXT_SENSOR2_GRAPH_LEFT = Upper Left
+TEXT_SENSOR2_GRAPH_RIGHT = Lower Right
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = No Image
+BTN_CAPTION_SNAPSHOT = Snapshot
+
+[SOFTKEY SETTING]
+TEXT_TITLE = Softkey Setting
+TEXT_HEADER_NUMBER = No.
+TEXT_HEADER_TYPE = Type
+TEXT_HEADER_ACTION = Action
+TEXT_ITEM_KEY = Key
+TEXT_ITEM_STATE = State
+TEXT_ITEM_NOT_USED = (Not Used)
+TEXT_ITEM_CALIBRATION = Entering/Exiting Sensor Calibration
+TEXT_ITEM_TOUCH = Enable/Disable Touch Screen
+
+[TRAYICON]
+TEXT_MENU_OPEN = Open...
+TEXT_MENU_EXIT = Exit
+TEXT_BALLOONTIP_TITLE = T3k Configuration
+TEXT_BALLOONTIP_MSG = T3k Configuration Factory Edition ("T3kCfgFE.exe") is running.
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = Sensor Status
+TITLE_REMOTE = Remote Control
+TEXT_SELECT_SERVER = Select Server
+TEXT_PORT = Port
+TEXT_USERNAME = User Name
+BTN_REQUEST = Request
+TEXT_RECONNECTING = Retry connection to server... %1
+BTN_CANCEL = Cancel
+TEXT_CONNECTING = Connecting...
+TEXT_REMOTE_CONTROL = Remote Control...
+BTN_DISCONNECT = Disconnect
+TEXT_WAIT_MSG = Waiting for connection of admin.
+TEXT_REPAIRCONNECTION = Remote control disconnects session.\r\nWaiting for connection of admin.
+TEXT_ID = ID: %1
+TEXT_SERV_NOT_RES = Server is not responding.
+TITLE_CHAT = Chat
+BTN_SEND = Send
+MSG_CHAT_DISCONNECTED = Disconnected.
+TITLE_REMOTE_MSG = Close Remote Session
+MSG_REMOTE_DISCONNECT = Are you sure you want to disconnect?
+TEXT_HELP_MSG = Please touch center of cross mark.
+TEXT_HELP_ARROW = Please touch the arrow mark.

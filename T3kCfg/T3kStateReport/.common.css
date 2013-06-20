@@ -1,0 +1,31 @@
+body {
+	margin:0px; border:0;
+	margin-left:0px; margin-bottom:0px; margin-top:0px; margin-right:0px;
+	padding:10px 10px 10px 10px;
+	font-size:12px;
+}
+
+a:link    { text-decoration:none; }
+a:visited { text-decoration:none; }
+img       { border:0 none; }
+
+#main {
+	position:relative;
+	left:0px; width:100%;
+}
+
+.g_title {
+	width:100%;
+	font-size:12px;
+	font-weight:bold;
+	line-height:14px;
+	color:#5577bb;
+	border-bottom:2px solid #bbccee;
+}
+.g_t_icon {
+	float:left;
+	width:15px;
+	height:12px;
+	background:#444444;
+	border:1px solid #999999;
+}

@@ -1,0 +1,3 @@
+[SERVER_LIST]
+server1=solnux.nuribom.com
+port=35000
