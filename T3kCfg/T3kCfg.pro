@@ -34,26 +34,26 @@ Release:linux-g++-64:QMAKE_RPATHDIR  += /usr/share/T3kShare/lib
 
 
 win32:LIBS += -lsetupapi -lole32 -luuid -lws2_32 \
-                ../../WindowApp/T3kHIDLib/build/Win32/Out/Dll/Lib/T3kHIDLib.lib
+                ../external/T3kHIDLibrary/win32/Dll/Lib/T3kHIDLib.lib
 
 Debug:win32:LIBS += ../quazip/debug/libquazip.a
 Release:win32:LIBS += ../quazip/release/libquazip.a
 
 linux-g++:LIBS += -L/usr/lib -lusb-1.0 \
                 ../quazip-build-desktop/libquazip.so.1 \
-                ../../WindowApp/T3kHIDLib/build/Linux/out/lib/T3kHIDLib-1.0.so.0.0.0
+                ../external/T3kHIDLibrary/linux/lib/x32/T3kHIDLib-1.0.so.0.0.0
 
 linux-g++-64:LIBS += -L/usr/lib -lusb-1.0 \
                 ../quazip-build-desktop/libquazip.so.1 \
-                ../../WindowApp/T3kHIDLib/build/Linux/out/lib/T3kHIDLib-1.0.so.0.0.0
+                ../external/T3kHIDLibrary/linux/lib/x64/T3kHIDLib-1.0.so.0.0.0
 
 macx:LIBS += -framework CoreFoundation \
             -framework IOKit \
             -framework CoreServices \
             ../quazip-build-desktop/libquazip.1.0.0.dylib \
 
-Release:macx:LIBS += ../../WindowApp/T3kHIDLib/build/OSX/T3kHIDLib/build/Release/libT3kHIDLib.dylib
-Debug:macx:LIBS += ../../WindowApp/T3kHIDLib/build/OSX/T3kHIDLib/build/Debug/libT3kHIDLib.dylib
+Release:macx:LIBS += ../external/T3kHIDLibrary/mac/lib/Release/libT3kHIDLib.dylib
+Debug:macx:LIBS += ../external/T3kHIDLibrary/mac/lib/Debug/libT3kHIDLib.dylib
 
 Debug:macx:QMAKE_POST_LINK += \
                            install_name_tool -change libquazip.1.dylib \
@@ -63,8 +63,12 @@ Debug:macx:QMAKE_POST_LINK += \
                            @executable_path/../../../../../WindowApp/T3kHIDLib/build/OSX/T3kHIDLib/build/Debug/libT3kHIDLib.dylib \
                            ../T3kCfg-build-desktop/T3kCfg.app/Contents/MacOS/T3kCfg
 
-INCLUDEPATH += ../quazip/zlib/ \
-               ../../WindowApp/T3kHIDLib/T3kHIDLib/Include/
+INCLUDEPATH += ../quazip/zlib/
+
+win32:INCLUDEPATH += ../external/T3kHIDLibrary/win32/Dll/Include/
+macx:INCLUDEPATH += ../external/T3kHIDLibrary/mac/include/
+linux-g++-64:INCLUDEPATH += ../external/T3kHIDLibrary/linux/include/
+linux-g++:INCLUDEPATH += ../external/T3kHIDLibrary/linux/include/
 
 #Socoures
 SOURCES += main.cpp\

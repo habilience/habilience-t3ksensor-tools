@@ -17,11 +17,7 @@
 
 enum FlatMenuStatus { MenuHome = 0, MenuMouseSetting, MenuCalibrationSetting, MenuSensorSetting, MenuSoftkeySetting, MenuGeneralSetting, MenuRemote };
 
-#ifdef Q_OS_WIN
-#include "../../WindowApp/Common/T30xConstStr.h"
-#else
-#include "Common/T30xConstStr.h"
-#endif
+#include "../Common/T3kConstStr.h"
 
 #define RoundP1(A)          (float)((long int) (((A)+.05) * 10))/10;
 

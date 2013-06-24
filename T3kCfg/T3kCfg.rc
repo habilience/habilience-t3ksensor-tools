@@ -1,6 +1,6 @@
 IDI_ICON1	ICON	DISCARDABLE	"./Resources/T3kCfg.ico"
 
-#include "../../WindowApp/T3000_ver.h"
+#include "../Common/T3k_ver.h"
 #include <windows.h> 
 
 VS_VERSION_INFO VERSIONINFO

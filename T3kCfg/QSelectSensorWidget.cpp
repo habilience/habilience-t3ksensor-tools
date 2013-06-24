@@ -2,11 +2,7 @@
 #include "ui_QSelectSensorWidget.h"
 
 #include "QWidgetCloseEventManager.h"
-#ifdef Q_OS_WIN
-#include "../../WindowApp/Common/T30xConstStr.h"
-#else
-#include "Common/T30xConstStr.h"
-#endif
+#include "../Common/T3kConstStr.h"
 #include "T3kCfgWnd.h"
 #include "QT3kUserData.h"
 

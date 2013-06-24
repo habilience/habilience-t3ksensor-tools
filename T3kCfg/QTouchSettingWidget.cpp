@@ -3,11 +3,7 @@
 
 #include "stdInclude.h"
 
-#ifdef Q_OS_WIN
-#include "../../WindowApp/Common/nv.h"
-#else
 #include "Common/nv.h"
-#endif
 
 #include <QShowEvent>
 #include <QTimer>

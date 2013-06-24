@@ -1,13 +1,8 @@
 #include "QSideviewWidget.h"
 #include "ui_QSideviewWidget.h"
 
-#ifdef Q_OS_WIN
-#include "../../WindowApp/Common/T30xConstStr.h"
-#include "../../WindowApp/Common/nv.h"
-#else
-#include "Common/T30xConstStr.h"
+#include "../Common/T3kConstStr.h"
 #include "Common/nv.h"
-#endif
 
 #include <QtEvents>
 #include <QPainter>

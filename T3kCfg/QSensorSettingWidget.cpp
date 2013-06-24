@@ -5,11 +5,7 @@
 
 #include <QShowEvent>
 
-#ifdef Q_OS_WIN
-#include "../../WindowApp/Common/nv.h"
-#else
 #include "Common/nv.h"
-#endif
 
 #include "QAssistanceWidget.h"
 #include "QDetectionGraphView.h"

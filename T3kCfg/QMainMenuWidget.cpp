@@ -1,10 +1,6 @@
 //#include "stdInclude.h"
 
-#ifdef Q_OS_WIN
-#include "../../WindowApp/T3000_ver.h"
-#else
-#include "Common/T3000_ver.h"
-#endif
+#include "../Common/T3k_ver.h"
 
 #include "QMainMenuWidget.h"
 #include "ui_QMainMenuWidget.h"

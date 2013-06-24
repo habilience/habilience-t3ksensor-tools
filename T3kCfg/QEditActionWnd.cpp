@@ -7,11 +7,7 @@
 #include "KeyMapStr.h"
 #include "stdInclude.h"
 
-#ifdef Q_OS_WIN
-#include "../../WindowApp/Common/nv.h"
-#else
 #include "Common/nv.h"
-#endif
 
 #include "T3kPacketDef.h"
 

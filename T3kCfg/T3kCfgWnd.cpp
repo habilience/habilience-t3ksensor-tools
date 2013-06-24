@@ -19,13 +19,8 @@
 
 #include "QWidgetCloseEventManager.h"
 
-#ifdef Q_OS_WIN
-#include "../../WindowApp/Common/nv.h"
-#include "../../WindowApp/T3000_ver.h"
-#else
 #include "Common/nv.h"
-#include "Common/T3000_ver.h"
-#endif
+#include "../Common/T3k_ver.h"
 
 #include <QMenu>
 #include <QSettings>

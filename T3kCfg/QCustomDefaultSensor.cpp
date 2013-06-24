@@ -4,11 +4,7 @@
 #include <QFile>
 #include <QDir>
 
-#ifdef Q_OS_WIN
-#include "../../WindowApp/Common/T30xConstStr.h"
-#else
-#include "Common/T30xConstStr.h"
-#endif
+#include "../Common/T3kConstStr.h"
 
 
 QCustomDefaultSensor* QCustomDefaultSensor::s_pInstance = NULL;

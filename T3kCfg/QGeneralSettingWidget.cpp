@@ -10,11 +10,7 @@
 #include "QT3kUserData.h"
 #include "QCustomDefaultSensor.h"
 
-#ifdef Q_OS_WIN
-#include "../../WindowApp/Common/nv.h"
-#else
 #include "Common/nv.h"
-#endif
 
 #ifdef Q_OS_WIN
 #include <windows.h>

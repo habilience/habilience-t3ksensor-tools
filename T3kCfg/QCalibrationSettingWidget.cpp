@@ -3,11 +3,7 @@
 #include "QCalibrationSettingWidget.h"
 #include "ui_QCalibrationSettingWidget.h"
 
-#ifdef Q_OS_WIN
-#include "../../WindowApp/Common/nv.h"
-#else
 #include "Common/nv.h"
-#endif
 
 #include "T3kCfgWnd.h"
 #include "QT3kUserData.h"
