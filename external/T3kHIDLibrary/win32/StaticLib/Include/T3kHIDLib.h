@@ -1,8 +1,6 @@
 #ifndef __T3K_HID_LIBRARY_H__
 #define __T3K_HID_LIBRARY_H__
 
-#define USE_T3K_STATIC_LIBS
-
 #if defined(OS_LINUX)		/* linux */
 #  ifdef T3KHIDLIB_EXPORTS
 #    define T3K_API	
@@ -400,6 +398,9 @@ T3K_API char T3kFindUsageId( int nScanCode );
 
 T3K_API unsigned short T3kCalculateCRC( unsigned char *pkt_ptr, unsigned short pkt_len );
 T3K_API unsigned short T3kCheckCRC( unsigned char *pkt_ptr, unsigned short pkt_len );
+
+T3K_API void T3kLockFirmwareDownload( T3K_HANDLE hDevice );
+T3K_API void T3kUnlockFirmwareDownload( T3K_HANDLE hDevice );
 
 };
 
