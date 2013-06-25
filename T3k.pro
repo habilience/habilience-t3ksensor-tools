@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 SUBDIRS = \
-    quazip \
+    external/quazip \
     T3kCfg \
     T3kSoftlogic \
     T3kCfgFE \
@@ -8,4 +8,4 @@ SUBDIRS = \
     T3kUpgrade
 CONFIG += ordered
 
-T3kCfg.depends = quazip
+T3kCfg.depends = external/quazip

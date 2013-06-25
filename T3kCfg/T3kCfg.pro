@@ -36,8 +36,8 @@ Release:linux-g++-64:QMAKE_RPATHDIR  += /usr/share/T3kShare/lib
 win32:LIBS += -lsetupapi -lole32 -luuid -lws2_32 \
                 ../external/T3kHIDLibrary/win32/Dll/Lib/T3kHIDLib.lib
 
-Debug:win32:LIBS += ../quazip/debug/libquazip.a
-Release:win32:LIBS += ../quazip/release/libquazip.a
+Debug:win32:LIBS += ../external/quazip/debug/libquazip.a
+Release:win32:LIBS += ../external/quazip/release/libquazip.a
 
 linux-g++:LIBS += -L/usr/lib -lusb-1.0 \
                 ../quazip-build-desktop/libquazip.so.1 \
@@ -63,7 +63,8 @@ Debug:macx:QMAKE_POST_LINK += \
                            @executable_path/../../../../../WindowApp/T3kHIDLib/build/OSX/T3kHIDLib/build/Debug/libT3kHIDLib.dylib \
                            ../T3kCfg-build-desktop/T3kCfg.app/Contents/MacOS/T3kCfg
 
-INCLUDEPATH += ../quazip/zlib/
+INCLUDEPATH += ../external/quazip/zlib/
+INCLUDEPATH += ../external/quazip/
 
 win32:INCLUDEPATH += ../external/T3kHIDLibrary/win32/Dll/Include/
 macx:INCLUDEPATH += ../external/T3kHIDLibrary/mac/include/
