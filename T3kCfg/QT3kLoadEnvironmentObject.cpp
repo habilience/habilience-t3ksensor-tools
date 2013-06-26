@@ -17,7 +17,7 @@
 #endif
 
 #ifndef Q_OS_WIN
-//#include <sys/utsname.h>
+#include <sys/utsname.h>
 #include <stdio.h>
 #endif
 

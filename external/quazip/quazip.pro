@@ -1,3 +1,5 @@
+CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
+
 TEMPLATE = lib
 CONFIG += qt warn_on
 QT -= gui
@@ -11,9 +13,9 @@ CONFIG(staticlib): DEFINES += QUAZIP_STATIC
 
 #macx:QMAKE_LFLAGS_SONAME  = -Wl,-install_name,@executable_path/../Frameworks/
 
-macx:QMAKE_POST_LINK += install_name_tool -change QtCore.framework/Versions/4/QtCore \
-                        @executable_path/../Frameworks/QtCore.framework/Versions/4/QtCore \
-                        ../quazip-build-desktop/libquazip.1.0.0.dylib
+#macx:QMAKE_POST_LINK += install_name_tool -change QtCore.framework/Versions/4/QtCore \
+#                        @executable_path/../Frameworks/QtCore.framework/Versions/4/QtCore \
+#                        ../quazip-build-desktop/libquazip.1.0.0.dylib
 
 # Input
 HEADERS += \
@@ -35,7 +37,6 @@ SOURCES += *.c *.cpp \
     zlib/zutil.c \
     zlib/uncompr.c \
     zlib/trees.c \
-    zlib/minigzip.c \
     zlib/inftrees.c \
     zlib/inflate.c \
     zlib/inffast.c \

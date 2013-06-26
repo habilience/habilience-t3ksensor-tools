@@ -9,6 +9,8 @@ QT       += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = T3kCfg
+CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
+
 TEMPLATE = app
 
 CONFIG += static staticlib
@@ -16,60 +18,81 @@ CONFIG += static staticlib
 #Define
 DEFINES += _QT_COMPILER_ QUAZIP_STATIC
 
-linux-g++:DEFINES += OS_LINUX
-linux-g++-64:DEFINES += OS_LINUX
+linux-g++|linux-g++-64:DEFINES += OS_LINUX
 
 macx:DEFINES += OS_MAC
 
-Debug:DEFINES += _DEBUG
-Release:DEFINES += QT_NO_DEBUG_OUTPUT
+CONFIG(debug, debug|release):DEFINES += _DEBUG
+CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 #Library
-Debug:linux-g++:QMAKE_RPATHDIR  += ../quazip-build-desktop/ \
-                                    ../../WindowApp/T3kHIDLib/build/Linux/out/lib
-Debug:linux-g++-64:QMAKE_RPATHDIR  += ../quazip-build-desktop/ \
-                                        ../../WindowApp/T3kHIDLib/build/Linux/out/lib
-Release:linux-g++:QMAKE_RPATHDIR  += /usr/share/T3kShare/lib
-Release:linux-g++-64:QMAKE_RPATHDIR  += /usr/share/T3kShare/lib
+INCLUDEPATH += $$PWD/../external/quazip \
+                $$PWD/../external/T3kHIDLibrary/include \
+                $$PWD../external/quazip/zlib/ \
 
+DEPENDPATH += $$PWD/../external/quazip \
+                $$PWD/../external/T3kHIDLibrary/include \
+                $$PWD../external/quazip/zlib/ \
 
-win32:LIBS += -lsetupapi -lole32 -luuid -lws2_32 \
-                ../external/T3kHIDLibrary/win32/Dll/Lib/T3kHIDLib.lib
+win32 {
+    LIBS += -lsetupapi -lole32 -luuid -lws2_32 \
 
-Debug:win32:LIBS += ../external/quazip/debug/libquazip.a
-Release:win32:LIBS += ../external/quazip/release/libquazip.a
+    CONFIG(release, debug|release) {
+        LIBS += -L$$OUT_PWD/../external/quazip/release/ -lquazip \
+                -L$$PWD/../external/T3kHIDLibrary/win32/lib/ -lT3kHIDLibStatic
+        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/release/quazip.lib \
+                            $$PWD/../external/T3kHIDLibrary/win32/lib/T3kHIDLibStatic.lib
+    }
 
-linux-g++:LIBS += -L/usr/lib -lusb-1.0 \
-                ../quazip-build-desktop/libquazip.so.1 \
-                ../external/T3kHIDLibrary/linux/lib/x32/T3kHIDLib-1.0.so.0.0.0
+    CONFIG(debug, debug|release) {
+        LIBS += -L$$OUT_PWD/../external/quazip/debug/ -lquazipd \
+                -L$$PWD/../external/T3kHIDLibrary/win32/lib/ -lT3kHIDLibStaticd
+        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/debug/quazipd.lib \
+                            $$PWD/../external/T3kHIDLibrary/win32/lib/T3kHIDLibStaticd.lib
+    }
+}
 
-linux-g++-64:LIBS += -L/usr/lib -lusb-1.0 \
-                ../quazip-build-desktop/libquazip.so.1 \
-                ../external/T3kHIDLibrary/linux/lib/x64/T3kHIDLib-1.0.so.0.0.0
+linux-g++|linux-g++-64 {
+    LIBS += #-L/usr/lib -lusb-1.0 \
 
-macx:LIBS += -framework CoreFoundation \
+    CONFIG(release, debug|release) {
+        LIBS += -L$$OUT_PWD/../external/quazip/ -lquazip \
+                -L$$PWD/../external/T3kHIDLibrary/linux/ -lT3kHIDLibStatic
+
+        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/libquazip.a \
+                           $$PWD/../external/T3kHIDLibrary/linux/libT3kHIDLibStatic.a
+    }
+
+    CONFIG(debug, debug|release) {
+        LIBS += -L$$OUT_PWD/../external/quazip/ -lquazipd \
+                -L$$PWD/../external/T3kHIDLibrary/linux/ -lT3kHIDLibStaticd
+
+        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/libquazipd.a \
+                            $$PWD/../external/T3kHIDLibrary/linux/libT3kHIDLibStaticd.a
+    }
+}
+
+macx: {
+    LIBS += -framework CoreFoundation \
             -framework IOKit \
             -framework CoreServices \
-            ../quazip-build-desktop/libquazip.1.0.0.dylib \
 
-Release:macx:LIBS += ../external/T3kHIDLibrary/mac/lib/Release/libT3kHIDLib.dylib
-Debug:macx:LIBS += ../external/T3kHIDLibrary/mac/lib/Debug/libT3kHIDLib.dylib
+    CONFIG(release, debug|release): {
+        LIBS += -L$$OUT_PWD/../external/quazip/ -lquazip \
+                -L$$PWD/../external/T3kHIDLibrary/mac/ -lT3kHIDLibStatic
 
-Debug:macx:QMAKE_POST_LINK += \
-                           install_name_tool -change libquazip.1.dylib \
-                           @executable_path/../../../../quazip-build-desktop/libquazip.1.0.0.dylib \
-                           ../T3kCfg-build-desktop/T3kCfg.app/Contents/MacOS/T3kCfg &&\
-                            install_name_tool -change /libT3kHIDLib.dylib \
-                           @executable_path/../../../../../WindowApp/T3kHIDLib/build/OSX/T3kHIDLib/build/Debug/libT3kHIDLib.dylib \
-                           ../T3kCfg-build-desktop/T3kCfg.app/Contents/MacOS/T3kCfg
+        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/libquazip.a \
+                            $$PWD/../external/T3kHIDLibrary/mac/libT3kHIDLibStatic.a
+    }
 
-INCLUDEPATH += ../external/quazip/zlib/
-INCLUDEPATH += ../external/quazip/
+    CONFIG(debug, debug|release): {
+        LIBS += -L$$OUT_PWD/../external/quazip/ -lquazipd \
+                -L$$PWD/../external/T3kHIDLibrary/mac/ -lT3kHIDLibStaticd
 
-win32:INCLUDEPATH += ../external/T3kHIDLibrary/win32/Dll/Include/
-macx:INCLUDEPATH += ../external/T3kHIDLibrary/mac/include/
-linux-g++-64:INCLUDEPATH += ../external/T3kHIDLibrary/linux/include/
-linux-g++:INCLUDEPATH += ../external/T3kHIDLibrary/linux/include/
+        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/libquazipd.a \
+                            $$PWD/../external/T3kHIDLibrary/mac/libT3kHIDLibStaticd.a
+    }
+}
 
 #Socoures
 SOURCES += main.cpp\
