@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = T3kCfgFE
 TEMPLATE = app
 
+CONFIG += static staticlib
+QMAKE_LFLAGS += -static
 
 SOURCES += main.cpp\
         dialog.cpp

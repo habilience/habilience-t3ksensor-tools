@@ -10,6 +10,7 @@ QT       -= gui
 
 TARGET = T3kCmd
 CONFIG   += console
+CONFIG += static staticlib
 CONFIG   -= app_bundle
 
 TEMPLATE = app
