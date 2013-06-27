@@ -381,7 +381,7 @@ void QDetectionGraphView::DrawGrid( QPainter& dc, const QRectF& rectBody )
 
 
     QFont ftCaption( font() );
-#if defined(Q_OS_MAC) || defined(Q_OS_X11)
+#if defined(Q_OS_MAC) || defined(Q_OS_LINUX)
     ftCaption.setPointSize( ftCaption.pointSize()-2 );
     dc.setFont( ftCaption );
 #endif
@@ -399,7 +399,7 @@ void QDetectionGraphView::DrawGrid( QPainter& dc, const QRectF& rectBody )
     dc.setPen( QColor(80,80,80) );
     dc.drawText( rectCaption, strText );
 
-#if defined(Q_OS_MAC) || defined(Q_OS_X11)
+#if defined(Q_OS_MAC) || defined(Q_OS_LINUX)
     dc.setFont( font() );
 #endif
 /*

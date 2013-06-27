@@ -137,7 +137,7 @@ void QGeneralSettingWidget::OnChangeLanguage()
     RBtnPortrait->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION_2") ) );
     RBtnLandscapeF->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION_3") ) );
     RBtnPortraitF->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION_4") ) );
-#elif defined(Q_OS_X11)
+#elif defined(Q_OS_LINUX)
     GBOrientation->setTitle( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION") ) );
     RBtnLandscape->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION_1") ) );
     RBtnPortrait->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION_2") ) );

@@ -38,7 +38,7 @@ QFont QCustomCmdLinkButton::titleFont() const
     ft.setWeight( QFont::Bold );
 #if defined(Q_OS_MAC)
     ft.setPointSizeF(13.0);
-#elif defined(Q_OS_X11)
+#elif defined(Q_OS_LINUX)
     ft.setPointSizeF(11.0);
 #elif defined(Q_OS_WIN)
     ft.setPointSizeF(10.0);
@@ -58,7 +58,7 @@ QFont QCustomCmdLinkButton::descriptionFont() const
 #if defined(Q_OS_MAC)
     ft.setPointSizeF(12.0);
     ft.setWeight( QFont::DemiBold );
-#elif defined(Q_OS_X11)
+#elif defined(Q_OS_LINUX)
     ft.setPointSizeF(10.0);
     ft.setWeight( QFont::Normal );
 #elif defined(Q_OS_WIN)

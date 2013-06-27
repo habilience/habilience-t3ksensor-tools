@@ -14,6 +14,7 @@
 #include <windows.h>
 #endif
 
+
 bool g_bIsScreenShotMode = false;
 
 int main(int argc, char *argv[])

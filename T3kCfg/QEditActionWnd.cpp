@@ -21,7 +21,7 @@ QEditActionWnd::QEditActionWnd(T30xHandle*& pHandle, QWidget *parent) :
     setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
     ui->setupUi(this);
 
-#if defined(Q_OS_WIN) || defined(Q_OS_X11)
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     genAdjustButtonWidgetForWinAndX11( this );
 #endif
 

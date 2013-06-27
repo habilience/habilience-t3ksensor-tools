@@ -428,7 +428,7 @@ bool QLoadSensorDataWidget::SaveLogToFile()
                 QStringList args;
                 args << "/select," << QDir::toNativeSeparators( strDeskTopPath + "/" + strZipFileName );
                 QProcess::startDetached( "explorer", args );
-#elif defined(Q_OS_X11)
+#elif defined(Q_OS_LINUX)
                 QStringList args;
                 args << strDeskTopPath;
                 QProcess::startDetached( "xdg-open", args );

@@ -28,7 +28,7 @@ QAssistanceWidget::QAssistanceWidget(T30xHandle*& pHandle, QWidget *parent) :
 
     ui->setupUi(this);
 
-#if defined(Q_OS_WIN) || defined(Q_OS_X11)
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     genAdjustButtonWidgetForWinAndX11( this );
 #endif
 

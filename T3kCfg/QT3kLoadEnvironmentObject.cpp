@@ -303,7 +303,7 @@ QString QT3kLoadEnvironmentObject::GetOSDisplayString()
    {
       return "Not support this version of Windows.";
    }
-#elif defined(Q_OS_X11)
+#elif defined(Q_OS_LINUX)
    QString strOSVer;
    char szBuff[512];
    FILE *fp = ::popen( "cat /etc/issue", "r" );

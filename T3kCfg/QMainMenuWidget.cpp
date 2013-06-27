@@ -36,7 +36,7 @@ QMainMenuWidget::QMainMenuWidget(T30xHandle*& pHandle, QWidget *parent) :
     ft.setPointSize( ft.pointSize()-1 );
     ui->EditFirmWareVer->setFont( ft );
     ui->MainMenuLayout->setSpacing( 10 );
-#elif defined(Q_OS_X11)
+#elif defined(Q_OS_LINUX)
     QFont font( parent->font() );
     font.setPointSize(10);
     ui->EditFirmWareVer->setFont( font );
