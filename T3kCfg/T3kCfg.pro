@@ -37,18 +37,20 @@ DEPENDPATH += $$PWD/../external/quazip \
 win32 {
     LIBS += -lsetupapi -lole32 -luuid -lws2_32 \
 
+    QMAKE_LFLAGS += -static
+
     CONFIG(release, debug|release) {
         LIBS += -L$$OUT_PWD/../external/quazip/release/ -lquazip \
-                -L$$PWD/../external/T3kHIDLibrary/win32/lib/ -lT3kHIDLibStatic
-        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/release/quazip.lib \
-                            $$PWD/../external/T3kHIDLibrary/win32/lib/T3kHIDLibStatic.lib
+                -L$$PWD/../external/T3kHIDLibrary/win32/Dll/Lib/ -lT3kHIDLib
+        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/release/libquazip.a \
+                            $$PWD/../external/T3kHIDLibrary/win32/Dll/Lib/T3kHIDLib.lib
     }
 
     CONFIG(debug, debug|release) {
         LIBS += -L$$OUT_PWD/../external/quazip/debug/ -lquazipd \
-                -L$$PWD/../external/T3kHIDLibrary/win32/lib/ -lT3kHIDLibStaticd
-        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/debug/quazipd.lib \
-                            $$PWD/../external/T3kHIDLibrary/win32/lib/T3kHIDLibStaticd.lib
+                -L$$PWD/../external/T3kHIDLibrary/win32/Dll/Lib/ -lT3kHIDLibd
+        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/debug/libquazipd.a \
+                            $$PWD/../external/T3kHIDLibrary/win32/Dll/Lib/T3kHIDLibd.lib
     }
 }
 
