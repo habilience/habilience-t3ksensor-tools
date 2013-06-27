@@ -48,8 +48,6 @@ protected:
 
     QList<QIcon*>           m_listIcon;
 
-    bool                    m_bDigitizerMode;
-
 private:
     Ui::QMenuStripWidget *ui;
     T30xHandle*&            m_pT3kHandle;

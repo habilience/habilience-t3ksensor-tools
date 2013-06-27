@@ -83,20 +83,20 @@ linux-g++-64 {
 
     CONFIG(release, debug|release) {
         LIBS += -L$$OUT_PWD/../external/quazip/ -lquazip \
-                #-L$$PWD/../external/T3kHIDLibrary/linux/64bit/ -lT3kHIDLibStatic-1.0
-                $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLibStatic-1.0.a
+                #-L$$PWD/../external/T3kHIDLibrary/linux/64bit/ -lT3kHIDLib-1.0.so.0.0.0
+                $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
 
         PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/libquazip.a \
-                           $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLibStatic-1.0.a
+                           $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
     }
 
     CONFIG(debug, debug|release) {
         LIBS += -L$$OUT_PWD/../external/quazip/ -lquazipd \
-                #-L$$PWD/../external/T3kHIDLibrary/linux/64bit/ -lT3kHIDLibStatic-1.0
-                $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLibStatic-1.0.a
+                #-L$$PWD/../external/T3kHIDLibrary/linux/64bit/ -lT3kHIDLib-1.0.so.0.0.0
+                $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
 
         PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/libquazipd.a \
-                            $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLibStatic-1.0.a
+                            $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
     }
 }
 

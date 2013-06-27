@@ -178,9 +178,9 @@ void QMainMenuWidget::RequestInformation()
         m_pT3kHandle->SendCommand( (const char*)QString("%1sub/%2?").arg(cstrCam2).arg(cstrAdminSettingTime).toUtf8().data(), true );
     }
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrUsbConfigMode).toUtf8().data(), false );
+    //m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrUsbConfigMode).toUtf8().data(), false );
 
-    if( !m_bDigitizerMode )
+//    if( !m_bDigitizerMode )
     {
         m_RequestSensorData.AddItem( cstrSoftkey, "?" );
 
