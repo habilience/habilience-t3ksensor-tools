@@ -11,6 +11,9 @@ DEFINES += QUAZIP_BUILD
 CONFIG += static staticlib
 CONFIG(staticlib): DEFINES += QUAZIP_STATIC
 
+QMAKE_CFLAGS_RELEASE = -Os
+QMAKE_LFLAGS += -static -flto
+
 #macx:QMAKE_LFLAGS_SONAME  = -Wl,-install_name,@executable_path/../Frameworks/
 
 #macx:QMAKE_POST_LINK += install_name_tool -change QtCore.framework/Versions/4/QtCore \
