@@ -126,6 +126,7 @@ macx: {
 
 #Socoures
 SOURCES += main.cpp\
+    ../Common/T30xHandle.cpp \
     QMouseSettingWidget.cpp \
     QCalibrationSettingWidget.cpp \
     QGeneralSettingWidget.cpp \
@@ -138,7 +139,6 @@ SOURCES += main.cpp\
     QTouchSettingWidget.cpp \
     QProfileLabel.cpp \
     QTPDPEventMultiCaster.cpp \
-    T30xHandle.cpp \
     QCalibrationWidget.cpp \
     QWarningWidget.cpp \
     QDiableTouchWidget.cpp \
@@ -201,6 +201,7 @@ SOURCES += main.cpp\
     QSimpleLed.cpp
 
 HEADERS  += \
+    ../common/T30xHandle.h \
     QMouseSettingWidget.h \
     QCalibrationSettingWidget.h \
     QGeneralSettingWidget.h \
@@ -214,7 +215,6 @@ HEADERS  += \
     QProfileLabel.h \
     QTPDPEventMultiCaster.h \
     stdInclude.h \
-    T30xHandle.h \
     QCalibrationWidget.h \
     QWarningWidget.h \
     QDiableTouchWidget.h \
