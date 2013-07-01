@@ -1,4 +1,4 @@
-#include "T30xHandle.h"
+#include "./T3kHandle.h"
 
 #include <stdio.h>
 #include <QCoreApplication>
@@ -10,7 +10,7 @@
 
 static int g_nRawDataCount = 0;
 
-T30xHandle::T30xHandle()
+T3kHandle::T3kHandle()
 {
     m_pT3kDevice = NULL;
     m_pNotify = NULL;
@@ -37,7 +37,7 @@ T30xHandle::T30xHandle()
     m_T30xNotify.fnOnDisconnect = OnDisconnect;
 }
 
-T30xHandle::~T30xHandle()
+T3kHandle::~T3kHandle()
 {
     if( IsOpen() )
         Close();
@@ -69,7 +69,7 @@ T30xHandle::~T30xHandle()
     m_qBytes.clear();
 }
 
-t3kpacket* T30xHandle::GetReceivePacket()
+t3kpacket* T3kHandle::GetReceivePacket()
 {
     QMutexLocker Locker( &m_Mutex );
     if( m_qRecvPacket.isEmpty() ) return NULL;
@@ -78,7 +78,7 @@ t3kpacket* T30xHandle::GetReceivePacket()
     return packet;
 }
 
-char* T30xHandle::GetRawDataPacket( int& nRetBytes )
+char* T3kHandle::GetRawDataPacket( int& nRetBytes )
 {
     QMutexLocker Locker( &m_RawDataMutex );
 
@@ -102,7 +102,7 @@ char* T30xHandle::GetRawDataPacket( int& nRetBytes )
     return pBuffer;
 }
 
-void T30xHandle::ConnectSignal()
+void T3kHandle::ConnectSignal()
 {
     connect( this, SIGNAL(Connect()), m_pNotify, SLOT(onConnect()), Qt::DirectConnection );
     connect( this, SIGNAL(Disconnect()), m_pNotify, SLOT(onSensorDisconnect()), Qt::QueuedConnection );
@@ -113,7 +113,7 @@ void T30xHandle::ConnectSignal()
     connect( this, SIGNAL(ReceiveRawDataFlag(bool)), m_pNotify, SLOT(onReceiveRawDataFlag(bool)), Qt::QueuedConnection );
 }
 
-void T30xHandle::DisconnectSignal()
+void T3kHandle::DisconnectSignal()
 {
     disconnect( this, SIGNAL(Connect()), NULL, NULL );
     disconnect( this, SIGNAL(Disconnect()), NULL, NULL );
@@ -124,7 +124,7 @@ void T30xHandle::DisconnectSignal()
     disconnect( this, SIGNAL(ReceiveRawDataFlag(bool)), NULL, NULL );
 }
 
-bool T30xHandle::SetNotify(ITPDPT30xNotify *pNotify)
+bool T3kHandle::SetNotify(ITPDPT3kNotify *pNotify)
 {
     m_pNotify = pNotify;
 
@@ -133,33 +133,33 @@ bool T30xHandle::SetNotify(ITPDPT30xNotify *pNotify)
 
     if( pNotify )
     {
-        m_T30xNotify.Context = this;
-        m_T30xNotify.fnOnPacket = OnPacket;
-        m_T30xNotify.fnOnReceiveRawData = NULL;
-        m_T30xNotify.fnOnDownloadingFirmware = OnDownloadingFirmware;
-        m_T30xNotify.fnOnDisconnect = OnDisconnect;
-        m_T30xNotify.fnOnHandleEvents = OnHandleEvents;
+        m_T3kNotify.Context = this;
+        m_T3kNotify.fnOnPacket = OnPacket;
+        m_T3kNotify.fnOnReceiveRawData = NULL;
+        m_T3kNotify.fnOnDownloadingFirmware = OnDownloadingFirmware;
+        m_T3kNotify.fnOnDisconnect = OnDisconnect;
+        m_T3kNotify.fnOnHandleEvents = OnHandleEvents;
 
-        ::T3kSetEventNotify( m_pT3kDevice, &m_T30xNotify );
+        ::T3kSetEventNotify( m_pT3kDevice, &m_T3kNotify );
         ConnectSignal();
     }
     else
     {
-        ::memset( &m_T30xNotify, 0, sizeof(T3K_EVENT_NOTIFY) );
+        ::memset( &m_T3kNotify, 0, sizeof(T3K_EVENT_NOTIFY) );
 
-        ::T3kSetEventNotify( m_pT3kDevice, &m_T30xNotify );
+        ::T3kSetEventNotify( m_pT3kDevice, &m_T3kNotify );
         DisconnectSignal();
     }
 
     return true;
 }
 
-bool T30xHandle::IsOpen()
+bool T3kHandle::IsOpen()
 {
     return m_pT3kDevice != NULL ? true : false;
 }
 
-bool T30xHandle::Open()
+bool T3kHandle::Open()
 {
 #ifdef HITACHI_VER
     m_pT3kDevice = ::T3kOpenDevice( HITACHI_VID, HITACHI_PID, 1, 0 );
@@ -214,7 +214,7 @@ bool T30xHandle::Open()
     return bRet;
 }
 
-bool T30xHandle::OpenWithVIDPID( unsigned short nVID, unsigned short nPID, unsigned short nMI /*= 1*/, int nDevIndex /*= 0*/ )
+bool T3kHandle::OpenWithVIDPID( unsigned short nVID, unsigned short nPID, unsigned short nMI /*= 1*/, int nDevIndex /*= 0*/ )
 {
 #ifdef HITACHI_VER
     if( nVID != HITACHI_VID || nPID != HITACHI_PID ) return false;
@@ -228,11 +228,11 @@ bool T30xHandle::OpenWithVIDPID( unsigned short nVID, unsigned short nPID, unsig
 
         emit Connect();
     }
-    qDebug( "T30xHandle::OpenWithVIDPID - %d", bRet );
+    qDebug( "T3kHandle::OpenWithVIDPID - %d", bRet );
     return bRet;
 }
 
-bool T30xHandle::Close( bool bNotify )
+bool T3kHandle::Close( bool bNotify )
 {
     if( !m_pT3kDevice )
         return false;
@@ -246,26 +246,26 @@ bool T30xHandle::Close( bool bNotify )
     return true;
 }
 
-unsigned long T30xHandle::GetLastError()
+unsigned long T3kHandle::GetLastError()
 {
     if( !m_pT3kDevice )
         return 0x00;
     return ::T3kGetLastError();
 }
 
-int T30xHandle::GetDeviceCount( unsigned short nVID, unsigned short nPID, unsigned short nMI /*= 1*/ )
+int T3kHandle::GetDeviceCount( unsigned short nVID, unsigned short nPID, unsigned short nMI /*= 1*/ )
 {
     return ::T3kGetDeviceCount( nVID, nPID, nMI );
 }
 
-char* T30xHandle::GetDevPath(unsigned short nVID, unsigned short nPID, unsigned short nMI, int nDevIndex)
+char* T3kHandle::GetDevPath(unsigned short nVID, unsigned short nPID, unsigned short nMI, int nDevIndex)
 {
     T3K_DEVICE_INFO devInfo = ::T3kGetDeviceInfo( nVID, nPID, nMI, nDevIndex );
     if( !devInfo ) return NULL;
     return ::T3kGetDevInfoPath( devInfo );
 }
 
-int T30xHandle::SendBuffer(const unsigned char *pBuffer, unsigned short nBufferSize, int bAsync, unsigned short nTimeout)
+int T3kHandle::SendBuffer(const unsigned char *pBuffer, unsigned short nBufferSize, int bAsync, unsigned short nTimeout)
 {
     if( !m_pT3kDevice )
         return -1;
@@ -273,16 +273,16 @@ int T30xHandle::SendBuffer(const unsigned char *pBuffer, unsigned short nBufferS
     return ::T3kSendBuffer( m_pT3kDevice, pBuffer, nBufferSize, bAsync, nTimeout );
 }
 
-int T30xHandle::SendCommand(const char* lpszCmd, bool bASync, unsigned short nTimeout )
+int T3kHandle::SendCommand(const char* lpszCmd, bool bASync, unsigned short nTimeout )
 {
     if( !m_pT3kDevice )
         return bASync ? -1 : 0;
 
-    qDebug( "T30xHandle::SendCommand - %s", lpszCmd );
+    qDebug( "T3kHandle::SendCommand - %s", lpszCmd );
     return ::T3kSendCommand( m_pT3kDevice, lpszCmd, bASync, nTimeout );
 }
 
-int T30xHandle::EnableTouch(bool bEnable, bool bASync, unsigned short nTimeout )
+int T3kHandle::EnableTouch(bool bEnable, bool bASync, unsigned short nTimeout )
 {
     static const char cstrTouchEnable[] = "touch_enable";
     char szBuffer[64];
@@ -291,14 +291,14 @@ int T30xHandle::EnableTouch(bool bEnable, bool bASync, unsigned short nTimeout )
     return SendCommand( szBuffer, bASync, nTimeout ) > 0 ? true : false;
 }
 
-int T30xHandle::EnableMouse(bool bEnable, bool /*bASync*/, unsigned short /*nTimeout*/ )
+int T3kHandle::EnableMouse(bool bEnable, bool /*bASync*/, unsigned short /*nTimeout*/ )
 {
     int nInstantMode = GetInstantMode();
     (bEnable) ? nInstantMode &= ~T3K_HID_MODE_MOUSE_DISABLE : nInstantMode |= T3K_HID_MODE_MOUSE_DISABLE;
     return (SetInstantMode(nInstantMode, GetExpireTime(), GetFGstValue()) > 0) ? true : false;
 }
 
-int T30xHandle::SetInstantMode(int nMode, unsigned short nExpireTime, unsigned long dwFgstValue)
+int T3kHandle::SetInstantMode(int nMode, unsigned short nExpireTime, unsigned long dwFgstValue)
 {
     if( !m_pT3kDevice )
         return -1;
@@ -314,13 +314,13 @@ int T30xHandle::SetInstantMode(int nMode, unsigned short nExpireTime, unsigned l
     return ::T3kSetInstantMode( m_pT3kDevice, nMode, nExpireTime, dwFgstValue );
 }
 
-bool T30xHandle::QueryFirmwareVersion(unsigned short wAddrMask, int *pnMode)
+bool T3kHandle::QueryFirmwareVersion(unsigned short wAddrMask, int *pnMode)
 {
     return ::T3kQueryFirmwareVersion( m_pT3kDevice, wAddrMask, pnMode, 0, 1000 ) == 1 ? true : false;
 }
 
 // slot
-void T30xHandle::onReceiveRawDataFlag(bool bReceive)
+void T3kHandle::onReceiveRawDataFlag(bool bReceive)
 {
     m_RemoteStatusMutex.lock();
     m_bRemoting = bReceive;
@@ -328,7 +328,7 @@ void T30xHandle::onReceiveRawDataFlag(bool bReceive)
 
     if( bReceive )
     {
-        m_T30xNotify.fnOnReceiveRawData = OnReceiveRawData;
+        m_T3kNotify.fnOnReceiveRawData = OnReceiveRawData;
 
         QMutexLocker Lock( &m_RawDataMutex );
         // create buffer
@@ -340,7 +340,7 @@ void T30xHandle::onReceiveRawDataFlag(bool bReceive)
     }
     else
     {
-        m_T30xNotify.fnOnReceiveRawData = NULL;
+        m_T3kNotify.fnOnReceiveRawData = NULL;
     }
 
     emit ReceiveRawDataFlag( bReceive );
@@ -348,7 +348,7 @@ void T30xHandle::onReceiveRawDataFlag(bool bReceive)
     if( !m_pT3kDevice )
         return;
 
-    ::T3kSetEventNotify( m_pT3kDevice, &m_T30xNotify );
+    ::T3kSetEventNotify( m_pT3kDevice, &m_T3kNotify );
 
     if( !bReceive )
     {
@@ -372,7 +372,7 @@ void T30xHandle::onReceiveRawDataFlag(bool bReceive)
     }
 }
 
-void T30xHandle::ExOnDisconnect()
+void T3kHandle::ExOnDisconnect()
 {
     m_nInstantMode = 0;
     m_dwFgstValue = 0;
@@ -389,7 +389,7 @@ void T30xHandle::ExOnDisconnect()
     emit Disconnect();
 }
 
-void T30xHandle::ExOnPacket(t3kpacket *packet, int nSync)
+void T3kHandle::ExOnPacket(t3kpacket *packet, int nSync)
 {
     if( !m_pNotify )
         return;
@@ -406,7 +406,7 @@ void T30xHandle::ExOnPacket(t3kpacket *packet, int nSync)
         emit Packet( this );
 }
 
-int T30xHandle::ExOnReceiveRawData(unsigned char *pBuffer, unsigned short nBytes)
+int T3kHandle::ExOnReceiveRawData(unsigned char *pBuffer, unsigned short nBytes)
 {
     m_RemoteStatusMutex.lock();
     bool bRemoting = m_bRemoting;
@@ -436,39 +436,39 @@ int T30xHandle::ExOnReceiveRawData(unsigned char *pBuffer, unsigned short nBytes
     return 0;
 }
 
-void T30xHandle::ExOnDownloadingFirmware(int bDownload)
+void T3kHandle::ExOnDownloadingFirmware(int bDownload)
 {
     if( !m_pNotify )
         return;
     emit DownloadingFirmware( bDownload );
 }
 
-void T30xHandle::OnDisconnect(T3K_HANDLE /*hDevice*/, void *pContext)
+void T3kHandle::OnDisconnect(T3K_HANDLE /*hDevice*/, void *pContext)
 {
-    ((T30xHandle*)pContext)->ExOnDisconnect();
+    ((T3kHandle*)pContext)->ExOnDisconnect();
 }
 
-void T30xHandle::OnPacket(T3K_HANDLE /*hDevice*/, t3kpacket *packet, int nSync, void *pContext)
+void T3kHandle::OnPacket(T3K_HANDLE /*hDevice*/, t3kpacket *packet, int nSync, void *pContext)
 {
-    ((T30xHandle*)pContext)->ExOnPacket( packet, nSync );
+    ((T3kHandle*)pContext)->ExOnPacket( packet, nSync );
 }
 
-int T30xHandle::OnReceiveRawData(T3K_HANDLE /*hDevice*/, unsigned char *pBuffer, unsigned short nBytes, void *pContext)
+int T3kHandle::OnReceiveRawData(T3K_HANDLE /*hDevice*/, unsigned char *pBuffer, unsigned short nBytes, void *pContext)
 {
-    return ((T30xHandle*)pContext)->ExOnReceiveRawData( pBuffer, nBytes );
+    return ((T3kHandle*)pContext)->ExOnReceiveRawData( pBuffer, nBytes );
 }
 
-void T30xHandle::OnDownloadingFirmware(T3K_HANDLE /*hDevice*/, int bDownload, void *pContext)
+void T3kHandle::OnDownloadingFirmware(T3K_HANDLE /*hDevice*/, int bDownload, void *pContext)
 {
-    ((T30xHandle*)pContext)->ExOnDownloadingFirmware( bDownload );
+    ((T3kHandle*)pContext)->ExOnDownloadingFirmware( bDownload );
 }
 
-void T30xHandle::OnHandleEvents(T3K_HANDLE /*hDevice*/, void */*pContext*/)
+void T3kHandle::OnHandleEvents(T3K_HANDLE /*hDevice*/, void */*pContext*/)
 {
     qApp->processEvents();
 }
 
-void T30xHandle::SetExpireTime(int nTime)
+void T3kHandle::SetExpireTime(int nTime)
 {
     if( !m_pT3kDevice )
         return;
@@ -478,42 +478,42 @@ void T30xHandle::SetExpireTime(int nTime)
     ::T3kSetInstantMode( m_pT3kDevice, m_nInstantMode, GetExpireTime(), GetFGstValue() );
 }
 
-bool T30xHandle::GetReportMessage()
+bool T3kHandle::GetReportMessage()
 {
     return m_nInstantMode & T3K_HID_MODE_MESSAGE ? true : false;
 }
 
-bool T30xHandle::GetReportCommand()
+bool T3kHandle::GetReportCommand()
 {
     return m_nInstantMode & T3K_HID_MODE_COMMAND ? true : false;
 }
 
-bool T30xHandle::GetReportView()
+bool T3kHandle::GetReportView()
 {
     return m_nInstantMode & T3K_HID_MODE_VIEW ? true : false;
 }
 
-bool T30xHandle::GetReportObject()
+bool T3kHandle::GetReportObject()
 {
     return m_nInstantMode & T3K_HID_MODE_OBJECT ? true : false;
 }
 
-bool T30xHandle::GetReportTouchPoint()
+bool T3kHandle::GetReportTouchPoint()
 {
     return m_nInstantMode & T3K_HID_MODE_TOUCHPNT ? true : false;
 }
 
-bool T30xHandle::GetReportGesture()
+bool T3kHandle::GetReportGesture()
 {
     return m_nInstantMode & T3K_HID_MODE_GESTURE ? true : false;
 }
 
-bool T30xHandle::GetReportDevice()
+bool T3kHandle::GetReportDevice()
 {
     return m_nInstantMode & T3K_HID_MODE_DEVICE ? true : false;
 }
 
-void T30xHandle::SetReportMessage(bool bReport)
+void T3kHandle::SetReportMessage(bool bReport)
 {
     if( !m_pT3kDevice )
         return;
@@ -526,7 +526,7 @@ void T30xHandle::SetReportMessage(bool bReport)
     ::T3kSetInstantMode( m_pT3kDevice, m_nInstantMode, GetExpireTime(), GetFGstValue() );
 }
 
-void T30xHandle::SetReportCommand(bool bReport)
+void T3kHandle::SetReportCommand(bool bReport)
 {
     if( !m_pT3kDevice )
         return;
@@ -539,7 +539,7 @@ void T30xHandle::SetReportCommand(bool bReport)
     ::T3kSetInstantMode( m_pT3kDevice, m_nInstantMode, GetExpireTime(), GetFGstValue() );
 }
 
-void T30xHandle::SetReportView(bool bReport)
+void T3kHandle::SetReportView(bool bReport)
 {
     if( !m_pT3kDevice )
         return;
@@ -552,7 +552,7 @@ void T30xHandle::SetReportView(bool bReport)
     ::T3kSetInstantMode( m_pT3kDevice, m_nInstantMode, GetExpireTime(), GetFGstValue() );
 }
 
-void T30xHandle::SetReportObject(bool bReport)
+void T3kHandle::SetReportObject(bool bReport)
 {
     if( !m_pT3kDevice )
         return;
@@ -565,7 +565,7 @@ void T30xHandle::SetReportObject(bool bReport)
     ::T3kSetInstantMode( m_pT3kDevice, m_nInstantMode, GetExpireTime(), GetFGstValue() );
 }
 
-void T30xHandle::SetReportTouchPoint(bool bReport)
+void T3kHandle::SetReportTouchPoint(bool bReport)
 {
     if( !m_pT3kDevice )
         return;
@@ -578,7 +578,7 @@ void T30xHandle::SetReportTouchPoint(bool bReport)
     ::T3kSetInstantMode( m_pT3kDevice, m_nInstantMode, GetExpireTime(), GetFGstValue() );
 }
 
-void T30xHandle::SetReportGesture(bool bReport)
+void T3kHandle::SetReportGesture(bool bReport)
 {
     if( !m_pT3kDevice )
         return;
@@ -591,7 +591,7 @@ void T30xHandle::SetReportGesture(bool bReport)
     ::T3kSetInstantMode( m_pT3kDevice, m_nInstantMode, GetExpireTime(), GetFGstValue() );
 }
 
-void T30xHandle::SetReportDevice(bool bReport)
+void T3kHandle::SetReportDevice(bool bReport)
 {
     if( !m_pT3kDevice )
         return;
@@ -605,8 +605,8 @@ void T30xHandle::SetReportDevice(bool bReport)
 }
 
 
-// ITPDPT30xNotify
-ITPDPT30xNotify::ITPDPT30xNotify(QObject *pParent) :
+// ITPDPT3kNotify
+ITPDPT3kNotify::ITPDPT3kNotify(QObject *pParent) :
         QObject(pParent)
 {
     // OBJ
@@ -637,7 +637,7 @@ ITPDPT30xNotify::ITPDPT30xNotify(QObject *pParent) :
     m_bRemoteMode       = false;
 }
 
-ITPDPT30xNotify::~ITPDPT30xNotify()
+ITPDPT3kNotify::~ITPDPT3kNotify()
 {
     if( m_pOBJ )
     {
@@ -680,23 +680,23 @@ ITPDPT30xNotify::~ITPDPT30xNotify()
     m_pFillCheck = NULL;
 }
 
-void ITPDPT30xNotify::onConnect()
+void ITPDPT3kNotify::onConnect()
 {
-    OnOpenT30xDevice();
+    OnOpenT3kDevice();
 }
 
-void ITPDPT30xNotify::onSensorDisconnect()
+void ITPDPT3kNotify::onSensorDisconnect()
 {
     // send to remote
     if( m_bRemoteMode )
         SendRemoteNotifyPacket( Client | NotifySensorDisconnected );
 
-    OnCloseT30xDevice();
+    OnCloseT3kDevice();
 }
 
-void ITPDPT30xNotify::onPacket(void* pContext)
+void ITPDPT3kNotify::onPacket(void* pContext)
 {
-    t3kpacket* packet = ((T30xHandle*)pContext)->GetReceivePacket();
+    t3kpacket* packet = ((T3kHandle*)pContext)->GetReceivePacket();
     if( !packet ) return;
     switch( packet->type )
     {
@@ -1102,7 +1102,7 @@ void ITPDPT30xNotify::onPacket(void* pContext)
     ::free( packet );
 }
 
-int ITPDPT30xNotify::onReceiveRawData(void* pContext)
+int ITPDPT3kNotify::onReceiveRawData(void* pContext)
 {
     // send to remote
     if( m_bRemoteMode )
@@ -1113,7 +1113,7 @@ int ITPDPT30xNotify::onReceiveRawData(void* pContext)
         int nTotalBytes = 0;
         do
         {
-            char* rawData = ((T30xHandle*)pContext)->GetRawDataPacket( nTotalBytes );
+            char* rawData = ((T3kHandle*)pContext)->GetRawDataPacket( nTotalBytes );
             if( nTotalBytes == 0 || rawData == NULL ) break;
 
             Q_ASSERT( nTotalBytes < MAX_RAWDATA_BLOCK+1 );
@@ -1154,7 +1154,7 @@ int ITPDPT30xNotify::onReceiveRawData(void* pContext)
     return 0;
 }
 
-void ITPDPT30xNotify::onDownloadingFirmware(int bDownload)
+void ITPDPT3kNotify::onDownloadingFirmware(int bDownload)
 {
     // send to remote
     if( m_bRemoteMode )
@@ -1163,12 +1163,12 @@ void ITPDPT30xNotify::onDownloadingFirmware(int bDownload)
     OnFirmwareDownload( bDownload == 1 ? true : false );
 }
 
-void ITPDPT30xNotify::onReceiveRawDataFlag(bool bReceive)
+void ITPDPT3kNotify::onReceiveRawDataFlag(bool bReceive)
 {
     m_bRemoteMode = bReceive;
 }
 
-void ITPDPT30xNotify::SendRemoteNotifyPacket(int nType)
+void ITPDPT3kNotify::SendRemoteNotifyPacket(int nType)
 {
     QTcpSocket* pSocket = QT3kUserData::GetInstance()->GetRemoteSocket();
 
@@ -1181,7 +1181,7 @@ void ITPDPT30xNotify::SendRemoteNotifyPacket(int nType)
     /*qint64 nRet = */pSocket->write( (const char*)&packet, packet.nPktSize );
 }
 
-void ITPDPT30xNotify::SendRemoteRawDataPacket(int nType, const char *pData, qint64 nDataSize)
+void ITPDPT3kNotify::SendRemoteRawDataPacket(int nType, const char *pData, qint64 nDataSize)
 {
     Q_ASSERT( pData != NULL && nDataSize != 0 );
     QTcpSocket* pSocket = QT3kUserData::GetInstance()->GetRemoteSocket();

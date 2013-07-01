@@ -1,5 +1,5 @@
-#ifndef T30XHANDLE_H
-#define T30XHANDLE_H
+#ifndef T3KHANDLE_H
+#define T3KHANDLE_H
 
 #include <T3kHIDLib.h>
 
@@ -61,14 +61,14 @@ typedef struct _T3kRangeF
 } T3kRangeF;
 
 
-class ITPDPT30xNotify;
-class T30xHandle : public QObject
+class ITPDPT3kNotify;
+class T3kHandle : public QObject
 {
     Q_OBJECT
 
 public:
-    T30xHandle();
-    virtual ~T30xHandle();
+    T3kHandle();
+    virtual ~T3kHandle();
 
     enum TouchSensorModel { TSM_NONE, TSM_OLDT3000, TSM_T3000, TSM_T3100, TSM_T3200, TSM_T3500, TSM_T3900, TSM_SPEC };
 
@@ -76,7 +76,7 @@ public:
     void SetBothSensorData( bool bBoth ) { m_bGetBothSensorData = bBoth ;}
 
     // after open func
-    bool SetNotify( ITPDPT30xNotify* pNotify );
+    bool SetNotify( ITPDPT3kNotify* pNotify );
 
     bool IsOpen();
     bool Open();
@@ -145,9 +145,9 @@ protected:
 
 protected:
     bool                                    m_bOpen;
-    ITPDPT30xNotify*                        m_pNotify;
+    ITPDPT3kNotify*                        m_pNotify;
 
-    T3K_EVENT_NOTIFY                        m_T30xNotify;
+    T3K_EVENT_NOTIFY                        m_T3kNotify;
     T3K_HANDLE                              m_pT3kDevice;
 
     bool                                    m_bCloseNotify;
@@ -188,17 +188,17 @@ public slots:
 
 };
 
-class ITPDPT30xNotify : public QObject
+class ITPDPT3kNotify : public QObject
 {
     Q_OBJECT
 
 public:
-    ITPDPT30xNotify(QObject* pParent = NULL);
-    virtual ~ITPDPT30xNotify();
+    ITPDPT3kNotify(QObject* pParent = NULL);
+    virtual ~ITPDPT3kNotify();
 
 protected:
-    virtual void OnOpenT30xDevice() {}
-    virtual void OnCloseT30xDevice() {}
+    virtual void OnOpenT3kDevice() {}
+    virtual void OnCloseT3kDevice() {}
     virtual void OnFirmwareDownload( bool /*bDownload*/ ) {}
 
     virtual void OnMSG( short /*nTickTime*/, const char* /*sPartId*/, const char* /*sTxt*/ ) {}
@@ -262,4 +262,4 @@ public slots:
     void onReceiveRawDataFlag( bool bReceive );
 };
 
-#endif // T30XHANDLE_H
+#endif // T3KHANDLE_H
