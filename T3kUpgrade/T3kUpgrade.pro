@@ -57,8 +57,14 @@ SOURCES += main.cpp\
     #    dialog.cpp \
     #QSlidingStackedWidget.cpp \
     #QFWDPacket.cpp
+    QSlidingStackedWidget.cpp \
+    QFWDPacket.cpp \
+    dialog.cpp
 
-HEADERS  += #dialog.h \
+HEADERS  += \ #dialog.h \
+    QSlidingStackedWidget.h \
+    QFWDPacket.h \
+    dialog.h
     #QSlidingStackedWidget.h \
     #QFWDPacket.h
 

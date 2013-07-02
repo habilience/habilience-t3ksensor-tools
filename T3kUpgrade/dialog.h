@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QFWDPacket.h>
+#include <QList>
 
 namespace Ui {
 class Dialog;
@@ -15,6 +16,55 @@ class Dialog : public QDialog
 private:
     QFWDPacket  m_Packet;
     int         m_TimerConnectDevice;
+    int         m_TimerRequestTimeout;
+
+    enum QueryInfoStep {
+        SUB_QUERY_MODE = 0,
+        SUB_QUERY_VERSION,
+        SUB_QUERY_IAP_VERSION,
+        SUB_QUERY_IAP_REVISION,
+        SUB_QUERY_FINISH
+    };
+
+    enum JobItemType {
+        JOBF_NONE = 0,
+        JOBF_QUERY_INFO,
+        JOBF_MARK_IAP,
+        JOBF_MARK_APP,
+        JOBF_RESET,
+        JOBF_ERASE,
+        JOBF_WRITE
+    };
+
+    struct JobItem {
+        JobItemType type;
+        QueryInfoStep subStep;
+        unsigned short which;
+    };
+
+    struct SensorInfo {
+        unsigned short nMode;
+        unsigned short nModelNumber;
+        unsigned short nIapRevision;
+        unsigned short nVersionMajor;
+        unsigned short nVersionMinor;
+        char szVersion[256];
+        char szDateTime[256];
+    };
+
+    QList<JobItem>  m_JobList;
+    bool            m_bIsExecuteJob;
+    JobItem         m_CurrentJob;
+    unsigned short  m_nPacketId;
+
+#define IDX_MM      (0)
+#define IDX_CM1     (1)
+#define IDX_CM2     (2)
+#define IDX_CM1_1   (3)
+#define IDX_CM2_1   (4)
+#define IDX_MAX     (5)
+    SensorInfo      m_SensorInfo[IDX_MAX];
+
 public:
     explicit Dialog(QWidget *parent = 0);
     ~Dialog();
@@ -25,6 +75,14 @@ protected:
     virtual void closeEvent(QCloseEvent *evt);
 
     void connectDevice();
+
+    void startRequestTimeoutTimer();
+    void killRequestTimeroutTimer();
+
+    void queryInformation();
+    void stopAllJobs();
+
+    void executeNextJob();
     
 private slots:
     void on_pushButtonUpgrade_clicked();
@@ -32,6 +90,7 @@ private slots:
     void on_pushButtonCancel_clicked();
 
     void onDisconnected();
+    void onResponseFromSensor(unsigned short nPacketId);
 
 private:
     Ui::Dialog *ui;
