@@ -53,20 +53,14 @@ linux-g++-64:INCLUDEPATH += ../external/T3kHIDLibrary/linux/include/
 linux-g++:INCLUDEPATH += ../external/T3kHIDLibrary/linux/include/
 
 
-SOURCES += main.cpp\
-    #    dialog.cpp \
-    #QSlidingStackedWidget.cpp \
-    #QFWDPacket.cpp
+SOURCES += main.cpp \
     QSlidingStackedWidget.cpp \
     QFWDPacket.cpp \
     dialog.cpp
 
-HEADERS  += \ #dialog.h \
+HEADERS  += dialog.h \
     QSlidingStackedWidget.h \
     QFWDPacket.h \
-    dialog.h
-    #QSlidingStackedWidget.h \
-    #QFWDPacket.h
 
 FORMS    += dialog.ui
 
