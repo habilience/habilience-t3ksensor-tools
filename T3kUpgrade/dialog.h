@@ -17,6 +17,7 @@ private:
     QFWDPacket  m_Packet;
     int         m_TimerConnectDevice;
     int         m_TimerRequestTimeout;
+    int         m_TimerRequestInformation;
 
     enum QueryInfoStep {
         SUB_QUERY_MODE = 0,
@@ -50,12 +51,16 @@ private:
         unsigned short nVersionMinor;
         char szVersion[256];
         char szDateTime[256];
+        char szModel[256];
     };
 
     QList<JobItem>  m_JobList;
     bool            m_bIsExecuteJob;
+    bool            m_bIsStartRequestInformation;
     JobItem         m_CurrentJob;
     unsigned short  m_nPacketId;
+
+    bool            m_bIsInformationUpdated;
 
 #define IDX_MM      (0)
 #define IDX_CM1     (1)
@@ -69,6 +74,9 @@ public:
     explicit Dialog(QWidget *parent = 0);
     ~Dialog();
 
+private:
+    QString m_strSensorInformation;
+
 protected:
     virtual void timerEvent(QTimerEvent *evt);
     virtual void showEvent(QShowEvent *evt);
@@ -77,12 +85,20 @@ protected:
     void connectDevice();
 
     void startRequestTimeoutTimer();
-    void killRequestTimeroutTimer();
+    void killRequestTimeoutTimer();
+
+    void startQueryInformation();
+    void stopQueryInformation();
 
     void queryInformation();
     void stopAllJobs();
 
-    void executeNextJob();
+    void executeNextJob( bool bRetry=false );
+
+    void onFinishAllJobs();
+
+    void updateSensorInformation();
+    void displayInformation( const char* szText );
     
 private slots:
     void on_pushButtonUpgrade_clicked();

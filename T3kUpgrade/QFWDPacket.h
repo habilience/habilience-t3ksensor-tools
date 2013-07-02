@@ -219,8 +219,8 @@ private:
         unsigned short nNV;
         unsigned short nMinor;
         unsigned short nMajor;
-        char szDate[VER_DATE_LEN];
-        char szTime[VER_TIME_LEN];
+        char szDate[VER_DATE_LEN+1];
+        char szTime[VER_TIME_LEN+1];
     } SensorResponse;
 
     SensorResponse m_SensorResponse;

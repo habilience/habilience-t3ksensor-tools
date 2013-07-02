@@ -5,7 +5,7 @@
 #include <QMessageBox>
 
 #define RETRY_CONNECTION_INTERVAL        (3000)
-#define REQUEST_TIMEOUT                  (400)
+#define REQUEST_TIMEOUT                  (200)
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -13,7 +13,13 @@ Dialog::Dialog(QWidget *parent) :
 {
     m_TimerConnectDevice = 0;
     m_TimerRequestTimeout = 0;
+    m_TimerRequestInformation = 0;
     m_nPacketId = -1;
+
+    m_bIsStartRequestInformation = false;
+    m_bIsInformationUpdated = false;
+
+    memset( &m_SensorInfo, 0, sizeof(m_SensorInfo) );
 
     ui->setupUi(this);
 
@@ -32,6 +38,16 @@ Dialog::Dialog(QWidget *parent) :
     connect( &m_Packet, SIGNAL(disconnected()), this, SLOT(onDisconnected()), Qt::QueuedConnection );
     connect( &m_Packet, SIGNAL(responseFromSensor(unsigned short)), this, SLOT(onResponseFromSensor(unsigned short)), Qt::QueuedConnection );
 
+    ui->pushButtonUpgrade->setEnabled(false);
+    displayInformation("Device is not connected.");
+    m_strSensorInformation = "";
+
+    //ui->labelSensorInformation->setStyleSheet("QLabel { background-color : #448CCB; color : white; }");
+    //ui->labelFirmwareInformation->setStyleSheet("QLabel { background-color : #448CCB; color : white; }");
+    ui->labelSensorInformation->setStyleSheet("QLabel { background-color : #DDE7E7; color : black; }");
+    ui->labelFirmwareInformation->setStyleSheet("QLabel { background-color : #DDE7E7; color : black; }");
+    ui->labelProgress->setStyleSheet("QLabel { background-color : #DDE7E7; color : black; }");
+
     stopAllJobs();
 }
 
@@ -44,6 +60,14 @@ Dialog::~Dialog()
 void Dialog::onDisconnected()
 {
     qDebug( "disconnected" );
+
+    ui->pushButtonUpgrade->setEnabled(false);
+    displayInformation("Device is not connected.");
+    m_strSensorInformation = "";
+    m_bIsInformationUpdated = false;
+
+    stopAllJobs();
+    ui->stackedWidget->setCurrentIndex(0);
 
     if (m_Packet.isOpen())
     {
@@ -79,7 +103,7 @@ void Dialog::onResponseFromSensor(unsigned short nPacketId)
         return;
     }
 
-    killRequestTimeroutTimer();
+    killRequestTimeoutTimer();
 
     int nFWMode = 0;
     int nIndex = 0;
@@ -107,6 +131,15 @@ void Dialog::onResponseFromSensor(unsigned short nPacketId)
             m_SensorInfo[nIndex].nVersionMajor = m_Packet.getVersionMajor();
             m_SensorInfo[nIndex].nVersionMinor = m_Packet.getVersionMinor();
 
+            if ((m_SensorInfo[nIndex].nModelNumber == 0x3500) && (m_CurrentJob.which == PKT_ADDR_MM) )
+            {
+                snprintf( m_SensorInfo[nIndex].szModel, 256, "T3k A" );
+            }
+            else
+            {
+                snprintf( m_SensorInfo[nIndex].szModel, 256, "%c%04x", (m_CurrentJob.which == PKT_ADDR_MM) ? 'T' : 'C', m_SensorInfo[nIndex].nModelNumber );
+            }
+
             if ((m_SensorInfo[nIndex].nVersionMinor & 0x0f) != 0)
             {
                 snprintf( m_SensorInfo[nIndex].szVersion, 256, "%x.%02x", m_SensorInfo[nIndex].nVersionMajor,
@@ -117,11 +150,19 @@ void Dialog::onResponseFromSensor(unsigned short nPacketId)
                 snprintf( m_SensorInfo[nIndex].szVersion, 256, "%x.%x", m_SensorInfo[nIndex].nVersionMajor,
                     m_SensorInfo[nIndex].nVersionMinor );
             }
-            snprintf( m_SensorInfo[nIndex].szDateTime, 256, "%s, %s", m_Packet.getDate(), m_Packet.getTime() );
+            snprintf( m_SensorInfo[nIndex].szDateTime, 256, " %s, %s", m_Packet.getDate(), m_Packet.getTime() );
             m_CurrentJob.subStep = SUB_QUERY_FINISH;
             break;
         case SUB_QUERY_IAP_VERSION:
             m_SensorInfo[nIndex].nModelNumber = m_Packet.getModelNumber();
+            if ((m_SensorInfo[nIndex].nModelNumber == 0x3500) && (m_CurrentJob.which == PKT_ADDR_MM) )
+            {
+                snprintf( m_SensorInfo[nIndex].szModel, 256, "T3k A" );
+            }
+            else
+            {
+                snprintf( m_SensorInfo[nIndex].szModel, 256, "%c%04x", (m_CurrentJob.which == PKT_ADDR_MM) ? 'T' : 'C', m_SensorInfo[nIndex].nModelNumber );
+            }
             m_CurrentJob.subStep = SUB_QUERY_IAP_REVISION;
             break;
         case SUB_QUERY_IAP_REVISION:
@@ -160,8 +201,6 @@ void Dialog::onResponseFromSensor(unsigned short nPacketId)
     }
 
     executeNextJob();
-    if (m_bIsExecuteJob)
-        startRequestTimeoutTimer();
 }
 
 void Dialog::timerEvent(QTimerEvent *evt)
@@ -176,7 +215,7 @@ void Dialog::timerEvent(QTimerEvent *evt)
         }
         else if (evt->timerId() == m_TimerRequestTimeout )
         {
-            killRequestTimeroutTimer();
+            killRequestTimeoutTimer();
             // TODO: 재전송????
             if (m_CurrentJob.type == JOBF_QUERY_INFO)
             {
@@ -196,8 +235,6 @@ void Dialog::timerEvent(QTimerEvent *evt)
                     }
                     m_CurrentJob.subStep = SUB_QUERY_FINISH;
                     executeNextJob();
-                    if (m_bIsExecuteJob)
-                        startRequestTimeoutTimer();
                 }
                 else if (m_CurrentJob.subStep == SUB_QUERY_MODE)
                 {
@@ -206,12 +243,51 @@ void Dialog::timerEvent(QTimerEvent *evt)
                     m_SensorInfo[nIndex].nMode = MODE_UNKNOWN;
                     m_CurrentJob.subStep = SUB_QUERY_FINISH;
                     executeNextJob();
-                    if (m_bIsExecuteJob)
-                        startRequestTimeoutTimer();
+                }
+                else
+                {
+                    executeNextJob( true );
                 }
             }
+            else
+            {
+                executeNextJob( true );
+            }
+        }
+        else if (evt->timerId() == m_TimerRequestInformation)
+        {
+            killTimer(m_TimerRequestInformation);
+            m_TimerRequestInformation = 0;
+
+            queryInformation();
         }
     }
+}
+
+void Dialog::startQueryInformation()
+{
+    if (m_TimerRequestInformation)
+    {
+        killTimer(m_TimerRequestInformation);
+        m_TimerRequestInformation = 0;
+    }
+
+    m_bIsStartRequestInformation = true;
+
+    queryInformation();
+}
+
+void Dialog::stopQueryInformation()
+{
+    if (m_TimerRequestInformation)
+    {
+        killTimer(m_TimerRequestInformation);
+        m_TimerRequestInformation = 0;
+    }
+
+    stopAllJobs();
+
+    m_bIsStartRequestInformation = false;
 }
 
 void Dialog::startRequestTimeoutTimer()
@@ -222,7 +298,7 @@ void Dialog::startRequestTimeoutTimer()
     m_TimerRequestTimeout = startTimer(REQUEST_TIMEOUT);
 }
 
-void Dialog::killRequestTimeroutTimer()
+void Dialog::killRequestTimeoutTimer()
 {
     if (m_TimerRequestTimeout != 0)
     {
@@ -233,7 +309,7 @@ void Dialog::killRequestTimeroutTimer()
 
 void Dialog::stopAllJobs()
 {
-    killRequestTimeroutTimer();
+    killRequestTimeoutTimer();
     m_JobList.clear();
     m_bIsExecuteJob = false;
 
@@ -243,6 +319,8 @@ void Dialog::stopAllJobs()
 void Dialog::queryInformation()
 {
     stopAllJobs();
+
+    memset( &m_SensorInfo, 0, sizeof(m_SensorInfo) );
 
     JobItem job;
     job.type = JOBF_QUERY_INFO;
@@ -274,16 +352,16 @@ void Dialog::queryInformation()
     executeNextJob();
 }
 
-void Dialog::executeNextJob()
+void Dialog::executeNextJob( bool bRetry/*=false*/ )
 {
     if (!m_bIsExecuteJob)
         return;
 
     m_nPacketId = (unsigned short)-1;
 
-    if (!m_JobList.isEmpty())
+    if (!m_JobList.isEmpty() || bRetry || ((m_CurrentJob.type == JOBF_QUERY_INFO) && (m_CurrentJob.subStep != SUB_QUERY_FINISH)) )
     {
-        if ( (m_CurrentJob.type != JOBF_QUERY_INFO) || ((m_CurrentJob.type == JOBF_QUERY_INFO) && (m_CurrentJob.subStep == SUB_QUERY_FINISH)) )
+        if ( !bRetry && ((m_CurrentJob.type != JOBF_QUERY_INFO) || ((m_CurrentJob.type == JOBF_QUERY_INFO) && (m_CurrentJob.subStep == SUB_QUERY_FINISH))) )
         {
             JobItem job = m_JobList.front();
             m_JobList.pop_front();
@@ -341,12 +419,140 @@ void Dialog::executeNextJob()
         else
         {
             qDebug("execute job");
+            startRequestTimeoutTimer();
         }
 
         return;
     }
-    qDebug( "job finish!" );
+
+    onFinishAllJobs();
     m_bIsExecuteJob = false;
+}
+
+void Dialog::onFinishAllJobs()
+{
+    qDebug( "job finish!" );
+    if (m_bIsStartRequestInformation)
+    {
+        updateSensorInformation();
+        if (m_TimerRequestInformation)
+        {
+            killTimer(m_TimerRequestInformation);
+        }
+        m_TimerRequestInformation = startTimer(2000);
+    }
+}
+
+void Dialog::displayInformation( const char * szText )
+{
+    QString strText = szText;
+    QString strInformation;
+    strInformation = "<html><body>"
+            "<table width=\"100%\" height=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
+            "<tr>"
+            "<td><div align=\"center\"><font size=\"3\" color=#880015>"
+            + strText +
+            "</font></div></td>"
+            "</tr>"
+            "</table>"
+            "</body></html>";
+    ui->textEditSensorInformation->setHtml(strInformation);
+}
+
+void Dialog::updateSensorInformation()
+{
+    QString strInformationHTML;
+    QString strTableHeader =
+        "<table width=\"100%\" cellspacing=\"0\" style=\"border-collapse:collapse;\"><tr>"
+        "<td width=\"30%\" style=\"border-width:1px; border-color:black; border-style:solid;\" bgcolor=\"#d5dffb\">"
+            "<p><font size=\"3\" color=black>Part</font></p>"
+        "</td>"
+        "<td width=\"30%\" style=\"border-width:1px; border-color:black; border-style:solid;\" bgcolor=\"#d5dffb\">"
+            "<p><font size=\"3\" color=black>Version</font></p>"
+        "</td>"
+        "<td width=\"40%\" style=\"border-width:1px; border-color:black; border-style:solid;\" bgcolor=\"#d5dffb\">"
+            "<p><font size=\"3\" color=black>Build</font></p>"
+        "</td></tr>";
+    QString strTableTail = "</table>";
+    QString strRowStart = "<tr>";
+    QString strRowEnd = "</tr>";
+    QString strColumn1Start = "<td width=\"30%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#000000>";
+    QString strColumn2Start = "<td width=\"30%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#000000>";
+    QString strColumn2RedStart = "<td width=\"30%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#880015>";
+    QString strColumn3Start = "<td width=\"40%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#000000>";
+    QString strColumnEnd = "</font></p></td>";
+
+    strInformationHTML = "<html>\n";
+    strInformationHTML += "<body>\n";
+    strInformationHTML += strTableHeader;
+
+    QString PartName[] = { "MM", "CM1", "CM2", "CM1-1", "CM2-1" };
+
+    int nMaxPart = 3;
+    if ( m_SensorInfo[IDX_CM1_1].nMode != MODE_UNKNOWN ||
+         m_SensorInfo[IDX_CM2_1].nMode != MODE_UNKNOWN ) {
+        nMaxPart = 5;
+    }
+    for (int i=0 ; i<nMaxPart ; i++)
+    {
+        strInformationHTML += strRowStart;
+        if ( m_SensorInfo[i].nMode == MODE_UNKNOWN )
+            strInformationHTML += strColumn2RedStart;
+        else
+            strInformationHTML += strColumn1Start;
+        strInformationHTML += PartName[i];
+        strInformationHTML += strColumnEnd;
+        if ( m_SensorInfo[i].nMode == MODE_UNKNOWN )
+        {
+            strInformationHTML += strColumn2RedStart;
+            strInformationHTML += "Disconnected";
+            strInformationHTML += strColumnEnd;
+
+            strInformationHTML += strColumn2RedStart;
+            strInformationHTML += "-";
+            strInformationHTML += strColumnEnd;
+        }
+        else
+        {
+            strInformationHTML += strColumn2Start;
+            strInformationHTML += QString(m_SensorInfo[i].szVersion) + " " + QString(m_SensorInfo[i].szModel);
+            strInformationHTML += strColumnEnd;
+
+            strInformationHTML += strColumn3Start;
+            strInformationHTML += QString(m_SensorInfo[i].szDateTime);
+            strInformationHTML += strColumnEnd;
+        }
+        strInformationHTML += strRowEnd;
+    }
+
+    strInformationHTML += strTableTail;
+    strInformationHTML += "</body>\n</html>";
+
+    QString strInformation = "";
+    for (int i=0 ; i<nMaxPart ; i++)
+    {
+        strInformation += PartName[i];
+        if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
+        {
+            strInformation += "Disconnected";
+        }
+        else
+        {
+            strInformation += QString(m_SensorInfo[i].szVersion) + QString(m_SensorInfo[i].szModel) + QString(m_SensorInfo[i].szDateTime);
+        }
+    }
+
+    if (m_strSensorInformation != strInformation)
+    {
+        ui->textEditSensorInformation->setHtml(strInformationHTML);
+        m_strSensorInformation = strInformation;
+    }
+
+    if ( !m_bIsInformationUpdated )
+    {
+        m_bIsInformationUpdated = true;
+        ui->pushButtonUpgrade->setEnabled(true);
+    }
 }
 
 void Dialog::connectDevice()
@@ -355,7 +561,9 @@ void Dialog::connectDevice()
     if (m_Packet.open())
     {
         qDebug( "connection ok" );
-        queryInformation();
+        displayInformation("Connected.");
+        m_strSensorInformation = "";
+        startQueryInformation();
     }
     else
     {
@@ -379,6 +587,8 @@ void Dialog::closeEvent(QCloseEvent *evt)
     if ( evt->type() == QEvent::Close )
     {
         qDebug( "closeEvent" );
+        stopQueryInformation();
+
         if (m_Packet.isOpen())
         {
             m_Packet.close();

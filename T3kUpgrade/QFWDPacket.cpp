@@ -489,8 +489,10 @@ void QFWDPacket::processHIDData(unsigned char* pBuffer, unsigned short nBytes)
             m_SensorResponse.nMinor = rx_pkt->body.ver.min;
             m_SensorResponse.nMajor = rx_pkt->body.ver.maj;
             m_SensorResponse.nModelNumber = rx_pkt->body.ver.model;
-            strncpy( m_SensorResponse.szDate, rx_pkt->body.ver.date, VER_DATE_LEN );
-            strncpy( m_SensorResponse.szTime, rx_pkt->body.ver.time, VER_TIME_LEN );
+            memcpy( m_SensorResponse.szDate, rx_pkt->body.ver.date, VER_DATE_LEN );
+            m_SensorResponse.szDate[VER_DATE_LEN] = 0;
+            memcpy( m_SensorResponse.szTime, rx_pkt->body.ver.time, VER_TIME_LEN );
+            m_SensorResponse.szTime[VER_TIME_LEN] = 0;
             break;
         }
 
