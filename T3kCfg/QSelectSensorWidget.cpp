@@ -28,7 +28,7 @@ QSelectSensorWidget::QSelectSensorWidget(QWidget *parent) :
 
     ui->TitleSelectSensor->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_HABILIENCE.png" );
 
-    m_pT3kHandle = new T30xHandle();
+    m_pT3kHandle = new T3kHandle();
 
     int nW = ui->TableSensor->width() - ui->TableSensor->verticalHeader()->size().width();
     ui->TableSensor->verticalHeader()->setVisible( false );

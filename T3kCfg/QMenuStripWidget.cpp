@@ -11,12 +11,15 @@
 #define QICON_WIDTH             40
 #define QICON_HEIGHT            40
 
-QMenuStripWidget::QMenuStripWidget(T30xHandle*& pHandle, QWidget *parent) :
+QMenuStripWidget::QMenuStripWidget(T3kHandle*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QMenuStripWidget), m_pT3kHandle(pHandle)
 {
     ui->setupUi(this);
     setFont( parent->font() );
+
+    m_bSoftkey = false;
+    m_bDigitizerMode = false;
 
     m_arybtnMenu = new QRaisePushButton*[QMENU_COUNT];
     m_arybtnMenu[QMENU_HOME] = ui->BtnHome;
@@ -105,7 +108,10 @@ void QMenuStripWidget::showEvent(QShowEvent *evt)
     {
         setFocusPolicy( Qt::NoFocus );
 
-        m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrSoftkey).toUtf8().data(), true );
+        m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrUsbConfigMode).toUtf8().data(), false );
+
+        if( !m_bDigitizerMode )
+            m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrSoftkey).toUtf8().data(), true );
     }
     QWidget::showEvent(evt);
 }
@@ -129,7 +135,24 @@ void QMenuStripWidget::OnRSP(ResponsePart /*Part*/, short /*lTickTime*/, const c
 {
     if( !winId() ) return;
 
-    if( strstr(sCmd, cstrSoftkey) == sCmd )
+    if( strstr(sCmd, cstrUsbConfigMode) == sCmd )
+    {
+        int nMode = strtol(sCmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
+        switch( nMode )
+        {
+        case 0x04: // digitizer
+            ui->BtnSoftkey->setVisible( false );
+            m_bDigitizerMode = true;
+            break;
+        case 0x07: // full
+            ui->BtnSoftkey->setVisible( m_bSoftkey );
+            m_bDigitizerMode = false;
+            break;
+        default:
+            break;
+        }
+    }
+    else if( strstr(sCmd, cstrSoftkey) == sCmd )
     {
         QString strSoftKey( sCmd );
 
@@ -137,7 +160,8 @@ void QMenuStripWidget::OnRSP(ResponsePart /*Part*/, short /*lTickTime*/, const c
         if( nE >= 0 )
         {
             strSoftKey.remove( 0, nE+1 );
-            ui->BtnSoftkey->setVisible( strSoftKey.size() ? true : false );
+            m_bSoftkey = strSoftKey.size() ? true : false;
+            ui->BtnSoftkey->setVisible( m_bSoftkey );
         }
     }
 }

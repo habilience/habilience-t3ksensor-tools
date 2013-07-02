@@ -23,7 +23,7 @@ class QTabRemoteAssistance : public QDialog, public QLangManager::LangChangeNoti
     Q_OBJECT
 
 public:
-    explicit QTabRemoteAssistance(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QTabRemoteAssistance(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QTabRemoteAssistance();
 
     enum eConnectState { Disconnected, Connecting, Connected };
@@ -75,7 +75,7 @@ protected:
 private:
     Ui::QTabRemoteAssistance *ui;
 
-    T30xHandle*&                m_pT3kHandle;
+    T3kHandle*&                m_pT3kHandle;
 
 signals:
     void StartRemoteMode();

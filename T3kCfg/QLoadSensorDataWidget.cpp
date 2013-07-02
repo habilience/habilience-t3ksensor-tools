@@ -14,7 +14,6 @@
 
 #ifdef Q_OS_WIN
 #include <windows.h>
-#include <shlobj.h>
 #endif
 
 #include <QDesktopWidget>
@@ -29,7 +28,7 @@
 //static const char cstrSytaxError[] = "systax error";
 
 
-QLoadSensorDataWidget::QLoadSensorDataWidget(T30xHandle*& pHandle, QWidget *parent) :
+QLoadSensorDataWidget::QLoadSensorDataWidget(T3kHandle*& pHandle, QWidget *parent) :
     QDialog(parent), ui(new Ui::QLoadSensorDataWidget), m_pT3kHandle(pHandle)
 {
     setWindowFlags( Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint );
@@ -78,26 +77,18 @@ void QLoadSensorDataWidget::MoveWidgetToCenter()
 
 void QLoadSensorDataWidget::CreateSavePath()
 {
-    QDir tempDir = QDir().home();
-#if defined(Q_OS_WIN)
-    TCHAR szPath[MAX_PATH];
-    ::SHGetFolderPath( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, 0, szPath );
+    QDir tempDir;
+    QString strPath = QStandardPaths::writableLocation( QStandardPaths::DocumentsLocation )
+            + "/" + ZIP_STATEREPORT_NAME;
 
-    tempDir.setPath( QString( "%1").arg(QString::fromWCharArray(szPath)) );
-#else
-    tempDir.setPath( tempDir.path() );
-#endif
-    if( tempDir.path().right(1) == "/" ) // / ? \ ?
-    {
-        tempDir.setPath( tempDir.path().left( tempDir.path().length()-1 ) );
-    }
-    m_strSavePath = tempDir.path() + "/" + ZIP_STATEREPORT_NAME;
-    if( !tempDir.exists( m_strSavePath ) )
-        tempDir.mkpath( m_strSavePath );
-    if( tempDir.exists( m_strSavePath + "/data" ) )
-        RemoveDirectoryR( m_strSavePath + "/data" );
+    if( !tempDir.exists( strPath ) )
+        tempDir.mkpath( strPath );
+    if( tempDir.exists( strPath + "/data" ) )
+        RemoveDirectoryR( strPath + "/data" );
 
-    tempDir.mkdir( m_strSavePath + "/data" );
+    tempDir.mkdir( strPath + "/data" );
+
+    m_strSavePath = strPath;
 }
 
 void QLoadSensorDataWidget::ResetStorage()
@@ -302,7 +293,7 @@ void QLoadSensorDataWidget::LoadSideView()
         m_pHIDObject = NULL;
     }
     m_pHIDObject = new QT3kLoadSideviewObject( m_pT3kHandle, this );
-    connect( m_pHIDObject, SIGNAL(Complete(int)), this, SLOT(on_LoadComplete(int)), Qt::QueuedConnection );
+    connect( m_pHIDObject, SIGNAL(Complete(int)), this, SLOT(onLoadComplete(int)), Qt::QueuedConnection );
     connect( m_pHIDObject, SIGNAL(PrintProgreeLog(QString,bool)), this, SLOT(on_InsertProgressLog(QString,bool)), Qt::QueuedConnection );
 
     QT3kLoadSideviewObject* pTempObj = (QT3kLoadSideviewObject*)m_pHIDObject;
@@ -320,7 +311,7 @@ void QLoadSensorDataWidget::LoadDetection()
         m_pHIDObject = NULL;
     }
     m_pHIDObject = new QT3kLoadDetectionObject( m_pT3kHandle, this );
-    connect( m_pHIDObject, SIGNAL(Complete(int)), this, SLOT(on_LoadComplete(int)), Qt::QueuedConnection );
+    connect( m_pHIDObject, SIGNAL(Complete(int)), this, SLOT(onLoadComplete(int)), Qt::QueuedConnection );
     connect( m_pHIDObject, SIGNAL(PrintProgreeLog(QString,bool)), this, SLOT(on_InsertProgressLog(QString,bool)), Qt::QueuedConnection );
 
     QTPDPEventMultiCaster::GetPtr()->SetSingleListener( m_pHIDObject );
@@ -335,7 +326,7 @@ void QLoadSensorDataWidget::LoadData()
         m_pHIDObject = NULL;
     }
     m_pHIDObject = new QT3kLoadSensorDataObject( m_pT3kHandle, this );
-    connect( m_pHIDObject, SIGNAL(Complete(int)), this, SLOT(on_LoadComplete(int)), Qt::QueuedConnection );
+    connect( m_pHIDObject, SIGNAL(Complete(int)), this, SLOT(onLoadComplete(int)), Qt::QueuedConnection );
     connect( m_pHIDObject, SIGNAL(PrintProgreeLog(QString,bool)), this, SLOT(on_InsertProgressLog(QString,bool)), Qt::QueuedConnection );
 
     QTPDPEventMultiCaster::GetPtr()->SetSingleListener( m_pHIDObject );
@@ -353,10 +344,10 @@ void QLoadSensorDataWidget::LoadEnvironment()
     Q_ASSERT( bRet );
 #endif
 
-    on_LoadComplete( LDS_ENVIRONMENT );
+    onLoadComplete( LDS_ENVIRONMENT );
 }
 
-void QLoadSensorDataWidget::on_LoadComplete(int nStep)
+void QLoadSensorDataWidget::onLoadComplete(int nStep)
 {
     if( nStep > LDS_SAVE ) return;
 
@@ -371,7 +362,6 @@ void QLoadSensorDataWidget::on_LoadComplete(int nStep)
     m_nTimerLoadStep = startTimer( 1 );
 }
 
-#include <QMessageBox>
 bool QLoadSensorDataWidget::SaveLogToFile()
 {
     bool bRet = false;
@@ -407,7 +397,7 @@ bool QLoadSensorDataWidget::SaveLogToFile()
 
             if( CompressZip.CompressFolderAll( strOutputZipPath, strZipFileName, m_strSavePath, true/*, "habilience"*/ ) )
             {
-                QString strDeskTopPath( QStandardPaths::displayName( QStandardPaths::DesktopLocation ) );
+                QString strDeskTopPath( QStandardPaths::writableLocation( QStandardPaths::DesktopLocation ) );
 #if defined(Q_OS_MAC)
                 int nPos = strOutputZipPath.lastIndexOf( "/T3kCfg.app" );
                 if( nPos > 0 )
@@ -527,15 +517,8 @@ void QLoadSensorDataWidget::on_BTOK_clicked()
 
 QString QLoadSensorDataWidget::GetLastFELogFileNamePath()
 {
-#if defined(Q_OS_WIN)
-    TCHAR szPath[MAX_PATH];
-    ::SHGetFolderPath( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, 0, szPath );
-
-    QString strPath = QString( "%1\\T3kCfgFE\\Logs\\").arg(QString::fromWCharArray(szPath));
-#else
-    QString strPath = QDir::homePath();
-    strPath += "/Documents/T3kCfgFE/Logs/";
-#endif
+    QString strPath = QStandardPaths::writableLocation( QStandardPaths::DocumentsLocation );
+    strPath += "/T3kCfgFE/Logs/";
 
     QDir dir( strPath );
     QStringList strUsableExtensionList;

@@ -39,7 +39,7 @@ protected:
 
 private:
     Ui::QSelectSensorWidget *ui;
-    T30xHandle*             m_pT3kHandle;
+    T3kHandle*             m_pT3kHandle;
 
     QTimer                  m_TimerBuzzer;
 

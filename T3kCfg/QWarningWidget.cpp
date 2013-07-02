@@ -5,7 +5,7 @@
 
 #include "Common/nv.h"
 
-QWarningWidget::QWarningWidget(T30xHandle*& pHandle, QWidget *parent) :
+QWarningWidget::QWarningWidget(T3kHandle*& pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QWarningWidget), m_pT3kHandle(pHandle)
 {

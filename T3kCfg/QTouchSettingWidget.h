@@ -15,7 +15,7 @@ class QTouchSettingWidget : public QDialog, public QTPDPEventMultiCaster::ITPDPE
     Q_OBJECT
 
 public:
-    explicit QTouchSettingWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QTouchSettingWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QTouchSettingWidget();
 
 protected:
@@ -39,7 +39,7 @@ protected:
 
 private:
     Ui::QTouchSettingWidget* ui;
-    T30xHandle*&                m_pT3kHandle;
+    T3kHandle*&                m_pT3kHandle;
 
 private slots:
     void on_SldZoom_valueChanged(int value);

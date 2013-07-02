@@ -19,7 +19,7 @@ class QCalibrationSettingWidget : public QWidget, public QTPDPEventMultiCaster::
     Q_OBJECT
 
 public:
-    explicit QCalibrationSettingWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QCalibrationSettingWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QCalibrationSettingWidget();
 
     void SetDefault();
@@ -55,7 +55,7 @@ protected:
 private:
     Ui::QCalibrationSettingWidget *ui;
 
-    T30xHandle*&                m_pT3kHandle;
+    T3kHandle*&                m_pT3kHandle;
 
 signals:
     void ByPassKeyPressEvent(QKeyEvent *evt);

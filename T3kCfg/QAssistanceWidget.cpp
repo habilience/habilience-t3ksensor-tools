@@ -20,7 +20,7 @@
 #include "CfgCustomCmdDef.h"
 
 
-QAssistanceWidget::QAssistanceWidget(T30xHandle*& pHandle, QWidget *parent) :
+QAssistanceWidget::QAssistanceWidget(T3kHandle*& pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QAssistanceWidget), m_pT3kHandle(pHandle)
 {

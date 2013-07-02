@@ -26,7 +26,7 @@ class QMenuStripWidget : public QWidget, public QTPDPEventMultiCaster::ITPDPEven
 {
     Q_OBJECT
 public:
-    explicit QMenuStripWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QMenuStripWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QMenuStripWidget();
 
     void SetMenuButton( int nIndex );
@@ -48,9 +48,12 @@ protected:
 
     QList<QIcon*>           m_listIcon;
 
+    bool                    m_bSoftkey;
+    bool                    m_bDigitizerMode;
+
 private:
     Ui::QMenuStripWidget *ui;
-    T30xHandle*&            m_pT3kHandle;
+    T3kHandle*&            m_pT3kHandle;
 
 signals:
     void ShowMenuEvent(int nMenu);

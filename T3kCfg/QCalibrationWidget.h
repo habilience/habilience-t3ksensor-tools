@@ -13,7 +13,7 @@ class QCalibrationWidget : public QWidget, public QLangManager::LangChangeNotify
 {
     Q_OBJECT
 public:
-    explicit QCalibrationWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QCalibrationWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QCalibrationWidget();
 
     bool ShowWindow( bool nShow, int nUsbConfigMode=0, float fScreenMargin=0, int nMacMargin=0, float fMMVersion=0.0f );
@@ -33,7 +33,7 @@ protected:
     virtual void timerEvent(QTimerEvent *);
 
 protected:
-    T30xHandle*&                m_pT3kHandle;
+    T3kHandle*&                m_pT3kHandle;
     float                       m_fScreenMargin;
 
     bool*                       m_paryCaliPoints;

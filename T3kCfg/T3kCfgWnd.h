@@ -72,8 +72,8 @@ protected:
 
     void ExceptionFirmwareVer( QString str );
 
-    virtual void OnOpenT30xDevice();
-    virtual void OnCloseT30xDevice();
+    virtual void OnOpenT3kDevice();
+    virtual void OnCloseT3kDevice();
     virtual void OnFirmwareDownload( bool bDownload );
     virtual void OnRSP( ResponsePart Part, short lTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd );
 
@@ -101,7 +101,7 @@ private:
     QAction*                    m_pOpenQAction;
     QAction*                    m_pExitQAction;
 
-    T30xHandle*                 m_pT3kHandle;
+    T3kHandle*                  m_pT3kHandle;
     int                         m_nProfileIndex;
     int                         m_nCurrentMenu;
 

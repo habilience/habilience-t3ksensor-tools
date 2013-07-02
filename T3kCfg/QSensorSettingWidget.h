@@ -19,7 +19,7 @@ class QSensorSettingWidget : public QWidget, public QTPDPEventMultiCaster::ITPDP
     Q_OBJECT
 
 public:
-    explicit QSensorSettingWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QSensorSettingWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QSensorSettingWidget();
 
     enum BuzzerType { BT_ERROR, BT_CLICK, BT_KEYTONE, BT_CALIBRATION, BT_SENSORATTACH, BT_USBATTACH, BT_PENPAIRING, MaxBuzzer };
@@ -46,7 +46,7 @@ protected:
 private:
     Ui::QSensorSettingWidget *ui;
 
-    T30xHandle*&                m_pT3kHandle;
+    T3kHandle*&                m_pT3kHandle;
 
     QString                     m_strCaptionON;
     QString                     m_strCaptionOFF;

@@ -18,7 +18,7 @@
 #define	USER_AREA_RANGE_MAX		USER_AREA_RANGE_END		//NV_DEF_..._AREA_RANGE_MAX
 
 
-QCalibrationSettingWidget::QCalibrationSettingWidget(T30xHandle*& pHandle, QWidget *parent) :
+QCalibrationSettingWidget::QCalibrationSettingWidget(T3kHandle*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QCalibrationSettingWidget), m_pT3kHandle(pHandle)
 {

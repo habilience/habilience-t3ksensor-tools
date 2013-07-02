@@ -21,7 +21,7 @@ class QMouseSettingWidget : public QWidget, public QTPDPEventMultiCaster::ITPDPE
     Q_OBJECT
 
 public:
-    explicit QMouseSettingWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QMouseSettingWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QMouseSettingWidget();
 
     void SetDefault();
@@ -69,7 +69,7 @@ signals:
 
 private:
     Ui::QMouseSettingWidget *ui;
-    T30xHandle*&            m_pT3kHandle;
+    T3kHandle*&            m_pT3kHandle;
 
 private slots:
     void on_Profile5_clicked();

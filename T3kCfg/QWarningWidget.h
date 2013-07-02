@@ -14,7 +14,7 @@ class QWarningWidget : public QDialog, public QLangManager::LangChangeNotify
     Q_OBJECT
 
 public:
-    explicit QWarningWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QWarningWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QWarningWidget();
 
     void SetTextFromLanguage( QString strTitleGroup, QString strTitleText, QString strMsgGroup, QString strMsgText );
@@ -27,7 +27,7 @@ protected:
 private:
     Ui::QWarningWidget *ui;
 
-    T30xHandle*&        m_pT3kHandle;
+    T3kHandle*&        m_pT3kHandle;
 
     QString             m_strTitleGroup;
     QString             m_strTitleText;

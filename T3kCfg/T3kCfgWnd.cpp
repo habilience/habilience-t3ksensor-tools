@@ -109,7 +109,7 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     setAnimated( true );
     setDockOptions( AnimatedDocks );
 
-    m_pT3kHandle = new T30xHandle();
+    m_pT3kHandle = new T3kHandle();
 
     QSettings regT3kCfg( "Habilience", "T3kCfg" );
 
@@ -291,7 +291,7 @@ void T3kCfgWnd::Init()
     OnChangeLanguage();
 
     m_bShow = false;
-    // Open T30x
+    // Open T3k
     if( !OpenT30xHandle() )
     {
         if( !m_nTimerExit )
@@ -318,46 +318,48 @@ bool T3kCfgWnd::OpenT30xHandle()
 
     m_pT3kHandle->SetNotify( QTPDPEventMultiCaster::GetPtr() );
 
+    QTPDPEventMultiCaster::GetPtr()->SetSocket( QT3kUserData::GetInstance()->GetRemoteSocket() );
+
     int nTotalSensorCount = 0;
     char pszPath[MAX_PATH];
     memset( pszPath, 0, sizeof(char)*MAX_PATH );
-    T30xHandle::TouchSensorModel eModel = T30xHandle::TSM_NONE;
+    T3kHandle::TouchSensorModel eModel = T3kHandle::TSM_NONE;
     do
     {
 #ifdef HITACHI_VER
         nTotalSensorCount = m_pT3kHandle->GetDeviceCount( HITACHI_VID, HITACHI_PID );
-        if( nTotalSensorCount != 0 ) eModel = T30xHandle::TSM_SPEC;
+        if( nTotalSensorCount != 0 ) eModel = T3kHandle::TSM_SPEC;
         break;
 #endif
         int nOldT3000DetectCnt = m_pT3kHandle->GetDeviceCount( 0xFFFF, 0x0000 );
         nTotalSensorCount += nOldT3000DetectCnt;
         if( nTotalSensorCount > 1 ) break;
-        if( nOldT3000DetectCnt != 0 ) eModel = T30xHandle::TSM_OLDT3000;
+        if( nOldT3000DetectCnt != 0 ) eModel = T3kHandle::TSM_OLDT3000;
 
         int nT3000DetectCnt = m_pT3kHandle->GetDeviceCount( 0x2200, 0x3000 );
         nTotalSensorCount += nT3000DetectCnt;
         if( nTotalSensorCount > 1 ) break;
-        if( nT3000DetectCnt != 0 ) eModel = T30xHandle::TSM_T3000;
+        if( nT3000DetectCnt != 0 ) eModel = T3kHandle::TSM_T3000;
 
         int nT3100DetectCnt = m_pT3kHandle->GetDeviceCount( 0x2200, 0x3100 );
         nTotalSensorCount += nT3100DetectCnt;
         if( nTotalSensorCount > 1 ) break;
-        if( nT3100DetectCnt != 0 ) eModel = T30xHandle::TSM_T3100;
+        if( nT3100DetectCnt != 0 ) eModel = T3kHandle::TSM_T3100;
 
         int nT3200DetectCnt = m_pT3kHandle->GetDeviceCount( 0x2200, 0x3200 );
         nTotalSensorCount += nT3200DetectCnt;
         if( nTotalSensorCount > 1 ) break;
-        if( nT3200DetectCnt != 0 ) eModel = T30xHandle::TSM_T3200;
+        if( nT3200DetectCnt != 0 ) eModel = T3kHandle::TSM_T3200;
 
         int nT3500DetectCnt = m_pT3kHandle->GetDeviceCount( 0x2200, 0x3500 );
         nTotalSensorCount += nT3500DetectCnt;
         if( nTotalSensorCount > 1 ) break;
-        if( nT3500DetectCnt != 0 ) eModel = T30xHandle::TSM_T3500;
+        if( nT3500DetectCnt != 0 ) eModel = T3kHandle::TSM_T3500;
 
         int nT3900DetectCnt = m_pT3kHandle->GetDeviceCount( 0x2200, 0x3900 );
         nTotalSensorCount += nT3900DetectCnt;
         if( nTotalSensorCount > 1 ) break;
-        if( nT3900DetectCnt != 0 ) eModel = T30xHandle::TSM_T3900;
+        if( nT3900DetectCnt != 0 ) eModel = T3kHandle::TSM_T3900;
     }
     while( false );
 
@@ -391,30 +393,30 @@ bool T3kCfgWnd::OpenT30xHandle()
     unsigned short nPID = 0x0000;
     switch( eModel )
     {
-    case T30xHandle::TSM_OLDT3000:
+    case T3kHandle::TSM_OLDT3000:
         nVID = 0xFFFF;  nPID = 0x0000;
         break;
-    case T30xHandle::TSM_T3000:
+    case T3kHandle::TSM_T3000:
         nVID = 0x2200;  nPID = 0x3000;
         break;
-    case T30xHandle::TSM_T3100:
+    case T3kHandle::TSM_T3100:
         nVID = 0x2200;  nPID = 0x3100;
         break;
-    case T30xHandle::TSM_T3200:
+    case T3kHandle::TSM_T3200:
         nVID = 0x2200;  nPID = 0x3200;
         break;
-    case T30xHandle::TSM_T3500:
+    case T3kHandle::TSM_T3500:
         nVID = 0x2200;  nPID = 0x3500;
         break;
-    case T30xHandle::TSM_T3900:
+    case T3kHandle::TSM_T3900:
         nVID = 0x2200;  nPID = 0x3900;
         break;
 #ifdef HITACHI_VER
-    case T30xHandle::TSM_SPEC:
+    case T3kHandle::TSM_SPEC:
         nVID = HITACHI_VID;  nPID = HITACHI_PID;
         break;
 #endif
-    case T30xHandle::TSM_NONE:
+    case T3kHandle::TSM_NONE:
     default:
         return false;
         break;
@@ -1105,7 +1107,7 @@ void T3kCfgWnd::HideContentsMenu()
     m_pMainWidget->hide();
 }
 
-void T3kCfgWnd::OnOpenT30xDevice()
+void T3kCfgWnd::OnOpenT3kDevice()
 {
     if( !m_pT3kHandle->GetReportCommand() )
         m_pT3kHandle->SetReportCommand( true );
@@ -1118,7 +1120,7 @@ void T3kCfgWnd::OnOpenT30xDevice()
     EnableTrayProfile( true );
 }
 
-void T3kCfgWnd::OnCloseT30xDevice()
+void T3kCfgWnd::OnCloseT3kDevice()
 {
     if( m_pT3kHandle )
     {

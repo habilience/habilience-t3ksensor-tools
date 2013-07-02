@@ -8,7 +8,7 @@ class QSaveLogWidget : public QDialog
 {
     Q_OBJECT
 public:
-    explicit QSaveLogWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QSaveLogWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QSaveLogWidget();
 
 protected:
@@ -17,7 +17,7 @@ protected:
     virtual void keyPressEvent(QKeyEvent *);
 
 private:
-    T30xHandle*&        m_pT3kHandle;
+    T3kHandle*&        m_pT3kHandle;
 
     int                 m_nTimer;
 

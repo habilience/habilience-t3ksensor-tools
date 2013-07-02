@@ -11,7 +11,7 @@ class QT3kLoadSideviewObject : public QT3kHIDObject
 {
     Q_OBJECT
 public:
-    explicit QT3kLoadSideviewObject(T30xHandle*& pHandle, QObject *parent = 0);
+    explicit QT3kLoadSideviewObject(T3kHandle*& pHandle, QObject *parent = 0);
     virtual ~QT3kLoadSideviewObject();
 
     void SetSavePath( QString strSavePath ) { m_strSavePath = strSavePath; }

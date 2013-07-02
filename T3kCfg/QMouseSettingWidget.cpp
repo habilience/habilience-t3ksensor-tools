@@ -14,7 +14,7 @@
 #include <QStringList>
 #endif
 
-QMouseSettingWidget::QMouseSettingWidget(T30xHandle*& pHandle, QWidget *parent) :
+QMouseSettingWidget::QMouseSettingWidget(T3kHandle*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QMouseSettingWidget), m_pT3kHandle(pHandle)
 {

@@ -1,5 +1,7 @@
 #include <QCoreApplication>
 
+#include "../common/T3kHandle.h"
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);

@@ -109,29 +109,29 @@ void QTPDPEventMultiCaster::ClearSingleListener()
     m_pSingleListener = NULL;
 }
 
-void QTPDPEventMultiCaster::OnCloseT30xDevice()
+void QTPDPEventMultiCaster::OnCloseT3kDevice()
 {
     if( m_pSingleListener )
     {
-        m_pSingleListener->OnCloseT30xDevice();
+        m_pSingleListener->OnCloseT3kDevice();
         return;
     }
     for( int nI = 0 ; nI < m_vEventListener.count() ; nI ++ )
     {
-        (m_vEventListener.at(nI))->OnCloseT30xDevice();
+        (m_vEventListener.at(nI))->OnCloseT3kDevice();
     }
 }
 
-void QTPDPEventMultiCaster::OnOpenT30xDevice()
+void QTPDPEventMultiCaster::OnOpenT3kDevice()
 {
     if( m_pSingleListener )
     {
-        m_pSingleListener->OnOpenT30xDevice();
+        m_pSingleListener->OnOpenT3kDevice();
         return;
     }
     for( int nI = 0 ; nI < m_vEventListener.count() ; nI ++ )
     {
-        (m_vEventListener.at(nI))->OnOpenT30xDevice();
+        (m_vEventListener.at(nI))->OnOpenT3kDevice();
     }
 }
 

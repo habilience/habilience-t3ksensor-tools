@@ -7,6 +7,7 @@
 #include <QDesktopWidget>
 #include <QHostAddress>
 #include <QDir>
+#include <QStandardPaths>
 
 #include "../Common/PacketStructure.h"
 
@@ -16,10 +17,9 @@
 
 #ifdef Q_OS_WIN
 #include <winsock2.h>
-#include <shlobj.h>
 #else
-//#include <netdb.h>
-//#include <sys/socket.h>
+#include <netdb.h>
+#include <sys/socket.h>
 #endif
 
 #define SVC_TABLETINPUT         "TabletInputService"
@@ -30,7 +30,7 @@
 
 QString GetAbstractSocketErrorStr(QAbstractSocket::SocketError err);
 
-QTabRemoteAssistance::QTabRemoteAssistance(T30xHandle *&pHandle, QWidget *parent) :
+QTabRemoteAssistance::QTabRemoteAssistance(T3kHandle *&pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QTabRemoteAssistance), m_pT3kHandle(pHandle)
 {
@@ -107,17 +107,8 @@ QTabRemoteAssistance::~QTabRemoteAssistance()
 
 void QTabRemoteAssistance::LoadServerList()
 {
-#if defined(Q_OS_WIN)
-    TCHAR szPath[MAX_PATH];
-    ::SHGetFolderPath( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, 0, szPath );
-
-    QString strPath = QString( "%1\\t3kcfg\\config\\").arg(QString::fromWCharArray(szPath));
-#elif defined(Q_OS_MAC)
-    QString strPath = QApplication::applicationDirPath() + "/Config/";
-#else
-    QString strPath = QDir::homePath();
-    strPath += "/Documents/t3kcfg/config/";
-#endif
+    QString strPath = QStandardPaths::writableLocation( QStandardPaths::DocumentsLocation );
+    strPath += "t3kcfg/config/";
 
     m_strServierListPath = strPath;
     if( !QFile::exists( m_strServierListPath + "serverlist.txt" ) )

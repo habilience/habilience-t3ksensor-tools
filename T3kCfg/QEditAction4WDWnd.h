@@ -8,7 +8,7 @@ namespace Ui{
     class QEditAction4WDWnd;
 }
 
-class T30xHandle;
+class T3kHandle;
 class QMouseMappingTable;
 class QLabel;
 class QComboBox;
@@ -18,7 +18,7 @@ class QEditAction4WDWnd : public QDialog, public QLangManager::LangChangeNotify
     Q_OBJECT
 
 public:
-    explicit QEditAction4WDWnd(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QEditAction4WDWnd(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QEditAction4WDWnd();
 
     enum EditMode { ModeNone, ModeUserDefined, ModeFunctionKey };
@@ -56,7 +56,7 @@ protected:
 private:
     Ui::QEditAction4WDWnd* ui;
 
-    T30xHandle*&                m_pT3kHandle;
+    T3kHandle*&                m_pT3kHandle;
 
 private slots:
     void on_ChkLinkHorz_toggled(bool checked);

@@ -10,7 +10,7 @@ class QT3kLoadSensorDataObject : public QT3kHIDObject
 {
     Q_OBJECT
 public:
-    explicit QT3kLoadSensorDataObject(T30xHandle*& pHandle, QObject *parent = 0);
+    explicit QT3kLoadSensorDataObject(T3kHandle*& pHandle, QObject *parent = 0);
     virtual ~QT3kLoadSensorDataObject();
 
     enum eDataPart { DP_CM1 = 1, DP_CM2, DP_CM1_1, DP_CM2_1, DP_MM, DP_END };

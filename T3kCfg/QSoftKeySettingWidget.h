@@ -19,7 +19,7 @@ class QSoftKeySettingWidget : public QWidget, public QTPDPEventMultiCaster::ITPD
     Q_OBJECT
 
 public:
-    explicit QSoftKeySettingWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QSoftKeySettingWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QSoftKeySettingWidget();
 
     void SetDefault();
@@ -70,7 +70,7 @@ signals:
 
 private:
     Ui::QSoftKeySettingWidget   *ui;
-    T30xHandle*&                m_pT3kHandle;
+    T3kHandle*&                m_pT3kHandle;
 
 private slots:
     void onslot_TableSoftkeyMap_cellChanged(int nRow, int nColumn, int nIndex);

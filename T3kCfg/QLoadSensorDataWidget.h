@@ -32,7 +32,7 @@ class QLoadSensorDataWidget : public QDialog, public QTPDPEventMultiCaster::ITPD
 {
     Q_OBJECT
 public:
-    explicit QLoadSensorDataWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QLoadSensorDataWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QLoadSensorDataWidget();
     enum eDataPart { DP_CM1 = 1, DP_CM2, DP_CM1_1, DP_CM2_1, DP_MM, DP_END };
     enum eLoadStep { LS_SIDEVIEW, LS_DETECTION, LS_DATA, LS_SAVE };
@@ -73,7 +73,7 @@ protected:
 
 private:
     Ui::QLoadSensorDataWidget   *ui;
-    T30xHandle*&            m_pT3kHandle;
+    T3kHandle*&            m_pT3kHandle;
 
     int                     m_nTimerLoadStep;
     int                     m_nLoadProgStep;
@@ -94,7 +94,7 @@ private slots:
 
 public slots:
     void on_InsertProgressLog( QString strMessage, bool bError = false );
-    void on_LoadComplete( int nStep );
+    void onLoadComplete( int nStep );
 };
 
 #endif // QLOADSENSORDATAWIDGET_H

@@ -13,7 +13,7 @@ static const char cstrMode[] = "mode=";
 static const char cstrSytaxError[] = "systax error";
 
 
-QT3kLoadSensorDataObject::QT3kLoadSensorDataObject(T30xHandle*& pHandle, QObject *parent) :
+QT3kLoadSensorDataObject::QT3kLoadSensorDataObject(T3kHandle*& pHandle, QObject *parent) :
     QT3kHIDObject(pHandle, parent)
 {
     m_bFactoryCmd = false;

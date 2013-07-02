@@ -9,7 +9,7 @@
 #include <windows.h>
 #endif
 
-QSaveLogWidget::QSaveLogWidget(T30xHandle*& pHandle, QWidget *parent) :
+QSaveLogWidget::QSaveLogWidget(T3kHandle*& pHandle, QWidget *parent) :
     QDialog(parent), m_pT3kHandle(pHandle)
 {
     setWindowFlags( Qt::Dialog | Qt::FramelessWindowHint );

@@ -16,7 +16,7 @@
 #include <windows.h>
 #endif
 
-QGeneralSettingWidget::QGeneralSettingWidget(T30xHandle*& pHandle, QWidget *parent) :
+QGeneralSettingWidget::QGeneralSettingWidget(T3kHandle*& pHandle, QWidget *parent) :
     QWidget(parent),
     m_pT3kHandle(pHandle)
 {

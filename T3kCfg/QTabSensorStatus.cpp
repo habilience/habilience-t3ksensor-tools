@@ -3,7 +3,7 @@
 
 #include "QSaveLogWidget.h"
 
-QTabSensorStatus::QTabSensorStatus(T30xHandle *&pHandle, QWidget *parent) :
+QTabSensorStatus::QTabSensorStatus(T3kHandle *&pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QTabSensorStatus), m_pT3kHandle(pHandle)
 {

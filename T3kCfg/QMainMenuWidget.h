@@ -17,7 +17,7 @@ class QMainMenuWidget : public QWidget, public QTPDPEventMultiCaster::ITPDPEvent
     Q_OBJECT
 
 public:
-    explicit QMainMenuWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QMainMenuWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QMainMenuWidget();
 
     void RequestInformation();
@@ -37,7 +37,7 @@ protected:
 private:
     Ui::QMainMenuWidget *ui;
 
-    T30xHandle*&            m_pT3kHandle;
+    T3kHandle*&            m_pT3kHandle;
 
     QString                 m_strMMVersion;
     QString                 m_strMMSN;
@@ -58,6 +58,7 @@ private:
 
     QRequestHIDManager      m_RequestSensorData;
 
+    bool                    m_bSoftkey;
     bool                    m_bDigitizerMode;
 
 signals:

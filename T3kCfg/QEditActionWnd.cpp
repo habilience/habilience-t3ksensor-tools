@@ -1,7 +1,7 @@
 #include "QEditActionWnd.h"
 #include "ui_QEditActionWnd.h"
 
-#include "T30xHandle.h"
+#include "../common/T3kHandle.h"
 #include "QMouseMappingTable.h"
 
 #include "KeyMapStr.h"
@@ -14,7 +14,7 @@
 #include <QShowEvent>
 #include <QHideEvent>
 
-QEditActionWnd::QEditActionWnd(T30xHandle*& pHandle, QWidget *parent) :
+QEditActionWnd::QEditActionWnd(T3kHandle*& pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QEditActionWnd), m_pT3kHandle(pHandle)
 {

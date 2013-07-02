@@ -1,6 +1,6 @@
 #pragma once
 
-#include <T30xHandle.h>
+#include "../common/T3kHandle.h"
 
 #define PROMPT_MAX  3
 
@@ -10,7 +10,7 @@ protected:
 	HANDLE		m_hExitEvent;
 	HANDLE		m_hThread;
 
-	CT30xHandle * m_pT30xHandle;
+    T3kHandle*  m_T3kHandle;
 
 	CRITICAL_SECTION	m_csTextOut;
 

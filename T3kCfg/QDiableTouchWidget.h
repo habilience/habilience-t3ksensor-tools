@@ -17,7 +17,7 @@ class QDiableTouchWidget : public QDialog, public QTPDPEventMultiCaster::ITPDPEv
     Q_OBJECT
 
 public:
-    explicit QDiableTouchWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QDiableTouchWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QDiableTouchWidget();
 
 protected:
@@ -28,7 +28,7 @@ protected:
     virtual void OnRSP(ResponsePart Part, short lTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
 
 protected:
-    T30xHandle*&            m_pT3kHandle;
+    T3kHandle*&            m_pT3kHandle;
 
     int                     m_nTimerRemain;
     QString                 m_strTimeout;

@@ -1,11 +1,13 @@
 #ifndef QTPDPEVENTMULTICASTER_H
 #define QTPDPEVENTMULTICASTER_H
 
-#include "T30xHandle.h"
+#include "../common/IncludeRemoteNotify.h"
+
+#include <QVector>
 
 enum ResponsePart { MM = 0, CM1, CM2, CM1_1, CM2_1 };
 
-class QTPDPEventMultiCaster : public ITPDPT30xNotify
+class QTPDPEventMultiCaster : public IncludeRemoteNotify
 {
 public:
     QTPDPEventMultiCaster();
@@ -16,8 +18,8 @@ public:
     public:
         ITPDPEventListener() { QTPDPEventMultiCaster::GetPtr()->AddListener(this); }
         ~ITPDPEventListener() { QTPDPEventMultiCaster::GetPtr()->RemoveListener(this); }
-        virtual void OnOpenT30xDevice() {}
-        virtual void OnCloseT30xDevice() {}
+        virtual void OnOpenT3kDevice() {}
+        virtual void OnCloseT3kDevice() {}
         virtual void OnFirmwareDownload( bool /*bDownload*/ ) {}
 
         virtual void OnMSG( ResponsePart /*Part*/, short /*nTickTime*/, const char* /*sPartId*/, const char* /*sTxt*/ ) {}
@@ -54,8 +56,8 @@ public:
     void ClearSingleListener();
 
 protected:
-    virtual void OnOpenT30xDevice();
-    virtual void OnCloseT30xDevice();
+    virtual void OnOpenT3kDevice();
+    virtual void OnCloseT3kDevice();
     virtual void OnFirmwareDownload( bool bDownload );
 
     virtual void OnMSG( short nTickTime, const char* sPartId, const char* sTxt );
@@ -76,10 +78,10 @@ protected:
 
 protected:
     QVector<ITPDPEventListener*>	m_vEventListener;
-    ITPDPEventListener*                 m_pSingleListener;
+    ITPDPEventListener*             m_pSingleListener;
 
 private:
-    static QTPDPEventMultiCaster* s_pThis;
+    static QTPDPEventMultiCaster*   s_pThis;
 };
 
 #endif // QTPDPEVENTMULTICASTER_H

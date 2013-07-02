@@ -52,7 +52,7 @@ public:
     explicit QMouseMappingTable(QWidget *parent = 0);
     ~QMouseMappingTable();
 
-    void SetT3kHandle( T30xHandle* pHandle ) { m_pT3kHandle = pHandle; }
+    void SetT3kHandle( T3kHandle* pHandle ) { m_pT3kHandle = pHandle; }
 
     void SetProfileIndex( int nIndex );
     void ResetSelect();
@@ -87,7 +87,7 @@ private:
     CellInfo* GetAt(int nIndex);
 
 protected:
-    T30xHandle*                 m_pT3kHandle;
+    T3kHandle*                 m_pT3kHandle;
 
     QEditActionEDWnd*           m_pEditActionEDWnd;
     QEditAction2WDWnd*          m_pEditAction2WDWnd;

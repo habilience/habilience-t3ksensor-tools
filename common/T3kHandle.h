@@ -4,7 +4,9 @@
 #include <T3kHIDLib.h>
 
 #include <QObject>
+#ifndef _T3KHANDLE_REMOVE_PRV
 #include <QImage>
+#endif
 #include <QQueue>
 #include <QMutex>
 
@@ -207,7 +209,9 @@ protected:
     virtual void OnDTC( short /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, T3kRangeF* /*pDTC*/, unsigned short /*count*/ ) {}
     virtual void OnIRD( short /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, int /*nCount*/, uchar* /*pIRD*/ ) {}
     virtual void OnITD( short /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, int /*nCount*/, uchar* /*pITD*/ ) {}
+#ifndef _T3KHANDLE_REMOVE_PRV
     virtual void OnPRV( short /*nTickTime*/, const char* /*sPartId*/, int /*nWidth*/, int /*nHeight*/, int /*nBitCount*/, unsigned char* /*pBitmapBuffer*/ ) {}
+#endif
     virtual void OnCMD( short /*nTickTime*/, const char* /*sPartId*/, long /*lId*/, const char* /*sCmd*/ ) {}
     virtual void OnRSP( short /*nTickTime*/, const char* /*sPartId*/, long /*lId*/, bool /*bFinal*/, const char* /*sCmd*/ ) {}
     virtual void OnRSE( short /*nTickTime*/, const char* /*sPartId*/, long /*lId*/, bool /*bFinal*/, const char* /*sCmd*/ ) {}
@@ -216,10 +220,6 @@ protected:
     virtual void OnTPT( short /*nTickTime*/, short /*nActualTouch*/, short /*nTouchCount*/, t3ktouchpoint* /*points*/ ) {}
     virtual void OnGST( short /*nTickTime*/, T3kGST& /*GST*/ ) {}
     virtual void OnVER( short /*nTickTime*/, const char* /*sPartId*/, T3kVER& /*Ver*/ ) {}
-
-protected:
-    void SendRemoteNotifyPacket( int nType );
-    void SendRemoteRawDataPacket( int nType, const char* pData, qint64 nDataSize );
 
 protected:
     // OBJ
@@ -240,26 +240,25 @@ protected:
     uchar**             m_ppITD;
     int*                m_pnITD;
     uchar**             m_ppChkFillITD;
+#ifndef _T3KHANDLE_REMOVE_PRV
     // PRV
     QImage              m_SideView;
     int                 m_nCamPRVMax;
     uchar*              m_pFillCheck;
+#endif
     // TPT
     int                 m_nMaxContact;
-
-    // Remote
-    bool                m_bRemoteMode;
 
 signals:
 
 public slots:
     void onConnect();
-    void onSensorDisconnect();
+    virtual void onSensorDisconnect();
     void onPacket(void* pContext);
-    int onReceiveRawData(void* pContext);
-    void onDownloadingFirmware(int bDownload);
+    virtual int onReceiveRawData(void* pContext) = 0;
+    virtual void onDownloadingFirmware(int bDownload);
 
-    void onReceiveRawDataFlag( bool bReceive );
+    virtual void onReceiveRawDataFlag( bool bReceive ) = 0;
 };
 
 #endif // T3KHANDLE_H

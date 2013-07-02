@@ -21,7 +21,7 @@ class QT3kHIDObject : public QObject, public QLangManager::LangChangeNotify, pub
 {
     Q_OBJECT
 public:
-    explicit QT3kHIDObject(T30xHandle*& pHandle, QObject *parent = 0);
+    explicit QT3kHIDObject(T3kHandle*& pHandle, QObject *parent = 0);
     virtual ~QT3kHIDObject();
 
     virtual bool Start( SensorLogData* pStorage ) = 0;
@@ -35,7 +35,7 @@ protected:
     void StopAsyncTimeoutChecker();
 
 protected:
-    T30xHandle*&        m_pT3kHandle;
+    T3kHandle*&        m_pT3kHandle;
 
     QTimer              m_Timer;
     QString             m_strSendCmd;

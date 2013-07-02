@@ -9,7 +9,7 @@
 #include <QPalette>
 #include <QPixmap>
 
-QSoftKeySettingWidget::QSoftKeySettingWidget(T30xHandle*& pHandle, QWidget *parent) :
+QSoftKeySettingWidget::QSoftKeySettingWidget(T3kHandle*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QSoftKeySettingWidget), m_pT3kHandle(pHandle)
 {

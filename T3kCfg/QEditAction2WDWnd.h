@@ -10,7 +10,7 @@ namespace Ui{
     class QEditAction2WDWnd;
 }
 
-class T30xHandle;
+class T3kHandle;
 class QMouseMappingTable;
 class QComboBox;
 class QLabel;
@@ -20,7 +20,7 @@ class QEditAction2WDWnd : public QDialog, public QLangManager::LangChangeNotify
     Q_OBJECT
 
 public:
-    explicit QEditAction2WDWnd(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QEditAction2WDWnd(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QEditAction2WDWnd();
 
     enum EditMode { ModeNone, ModeUserDefined, ModeFunctionKey };
@@ -44,7 +44,7 @@ protected:
 
 private:
     Ui::QEditAction2WDWnd* ui;
-    T30xHandle*&            m_pT3kHandle;
+    T3kHandle*&            m_pT3kHandle;
 
     QMouseMappingTable*     m_pTableWnd;
     QComboBox*              m_pWndActiveComboAction;

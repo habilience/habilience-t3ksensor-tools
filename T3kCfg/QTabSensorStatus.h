@@ -15,7 +15,7 @@ class QTabSensorStatus : public QDialog, public QTPDPEventMultiCaster::ITPDPEven
     Q_OBJECT
 
 public:
-    explicit QTabSensorStatus(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QTabSensorStatus(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QTabSensorStatus();
 
 protected:
@@ -24,7 +24,7 @@ protected:
 private:
     Ui::QTabSensorStatus *ui;
 
-    T30xHandle*&            m_pT3kHandle;
+    T3kHandle*&            m_pT3kHandle;
 
 private slots:
     void on_BtnInfoSave_clicked();

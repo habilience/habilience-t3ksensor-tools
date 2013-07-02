@@ -8,14 +8,14 @@ namespace Ui{
     class QEditActionEDWnd;
 }
 
-class T30xHandle;
+class T3kHandle;
 class QMouseMappingTable;
 class QEditActionEDWnd : public QDialog, public QLangManager::LangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QEditActionEDWnd(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QEditActionEDWnd(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QEditActionEDWnd();
 
     void SetProfileInfo( int nProfileIndex, uchar cKey, ushort wKeyValue, ushort wFlags );
@@ -37,7 +37,7 @@ protected:
 private:
     Ui::QEditActionEDWnd* ui;
 
-    T30xHandle*&        m_pT3kHandle;
+    T3kHandle*&        m_pT3kHandle;
 
 private slots:
     void on_BtnApply_clicked();

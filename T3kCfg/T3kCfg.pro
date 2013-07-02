@@ -16,7 +16,7 @@ TEMPLATE = app
 CONFIG += static staticlib
 
 #Define
-DEFINES += _QT_COMPILER_ QUAZIP_STATIC
+DEFINES += _QT_COMPILER_ QUAZIP_STATIC _T3K
 
 linux-g++|linux-g++-64:DEFINES += OS_LINUX
 
@@ -126,7 +126,7 @@ macx: {
 
 #Socoures
 SOURCES += main.cpp\
-    ../Common/T30xHandle.cpp \
+    ../common/T3kHandle.cpp \
     QMouseSettingWidget.cpp \
     QCalibrationSettingWidget.cpp \
     QGeneralSettingWidget.cpp \
@@ -198,10 +198,11 @@ SOURCES += main.cpp\
     QTabChat.cpp \
     QColorTabWidget.cpp \
     QColorTabBar.cpp \
-    QSimpleLed.cpp
+    QSimpleLed.cpp \
+    ../common/IncludeRemoteNotify.cpp
 
 HEADERS  += \
-    ../common/T30xHandle.h \
+    ../common/T3kHandle.h \
     QMouseSettingWidget.h \
     QCalibrationSettingWidget.h \
     QGeneralSettingWidget.h \
@@ -279,7 +280,8 @@ HEADERS  += \
     QTabChat.h \
     QColorTabWidget.h \
     QColorTabBar.h \
-    QSimpleLed.h
+    QSimpleLed.h \
+    ../common/IncludeRemoteNotify.h
 
 FORMS    += \
     QMouseSettingWidget.ui \

@@ -11,7 +11,7 @@ class QT3kLoadDetectionObject : public QT3kHIDObject
 {
     Q_OBJECT
 public:
-    explicit QT3kLoadDetectionObject(T30xHandle*& pHandle, QObject *parent = 0);
+    explicit QT3kLoadDetectionObject(T3kHandle*& pHandle, QObject *parent = 0);
     virtual ~QT3kLoadDetectionObject();
 
     // QT3kHIDObject

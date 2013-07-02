@@ -1,5 +1,3 @@
-//#include "stdInclude.h"
-
 #include "../Common/T3k_ver.h"
 
 #include "QMainMenuWidget.h"
@@ -24,7 +22,7 @@ extern bool g_bIsScreenShotMode;
 #define QICON_WIDTH             40
 #define QICON_HEIGHT            40
 
-QMainMenuWidget::QMainMenuWidget(T30xHandle*& pHandle, QWidget *parent) :
+QMainMenuWidget::QMainMenuWidget(T3kHandle*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QMainMenuWidget), m_pT3kHandle(pHandle)
 {
@@ -44,6 +42,7 @@ QMainMenuWidget::QMainMenuWidget(T30xHandle*& pHandle, QWidget *parent) :
 
     m_fMMVersion = 0.0f;
     m_bMMNoCam = 0;
+    m_bSoftkey = false;
     m_bDigitizerMode = false;
 
     ui->ProgramInfoLabel->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_INFO.png" );
@@ -178,9 +177,9 @@ void QMainMenuWidget::RequestInformation()
         m_pT3kHandle->SendCommand( (const char*)QString("%1sub/%2?").arg(cstrCam2).arg(cstrAdminSettingTime).toUtf8().data(), true );
     }
 
-    //m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrUsbConfigMode).toUtf8().data(), false );
+    m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrUsbConfigMode).toUtf8().data(), false );
 
-//    if( !m_bDigitizerMode )
+    if( !m_bDigitizerMode )
     {
         m_RequestSensorData.AddItem( cstrSoftkey, "?" );
 
@@ -271,11 +270,11 @@ void QMainMenuWidget::OnRSP(ResponsePart Part, short /*lTickTime*/, const char *
         switch( nMode )
         {
         case 0x04: // digitizer
-            ui->BtnMainSoftkey->setVisible(false);
+            ui->BtnMainSoftkey->setVisible( false );
             m_bDigitizerMode = true;
             break;
         case 0x07: // full
-            ui->BtnMainSoftkey->setVisible(true);
+            ui->BtnMainSoftkey->setVisible( m_bSoftkey );
             m_bDigitizerMode = false;
             break;
         default:
@@ -299,9 +298,13 @@ void QMainMenuWidget::OnRSP(ResponsePart Part, short /*lTickTime*/, const char *
                 arySK.Load( strSoftKey.toStdString().c_str(), NULL );
                 int nSKCount = arySK.GetSize();
                 ui->BtnMainSoftkey->setVisible( nSKCount ? true : false );
+                m_bSoftkey = true;
             }
             else
+            {
+                m_bSoftkey = false;
                 ui->BtnMainSoftkey->setVisible( false );
+            }
         }
     }
     else

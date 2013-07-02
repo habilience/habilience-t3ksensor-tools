@@ -2,7 +2,7 @@
 #include "ui_QEditAction2WDWnd.h"
 
 #include "stdInclude.h"
-#include "T30xHandle.h"
+#include "../common/T3kHandle.h"
 #include "QMouseMappingTable.h"
 
 #include "KeyMapStr.h"
@@ -13,7 +13,7 @@
 #include <QShowEvent>
 #include <QHideEvent>
 
-QEditAction2WDWnd::QEditAction2WDWnd(T30xHandle*& pHandle, QWidget *parent) :
+QEditAction2WDWnd::QEditAction2WDWnd(T3kHandle*& pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QEditAction2WDWnd), m_pT3kHandle(pHandle), m_pTableWnd(NULL)
 {

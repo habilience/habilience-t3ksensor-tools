@@ -19,7 +19,7 @@ TEMPLATE = app
 CONFIG += static staticlib
 
 #Define
-DEFINES += _QT_COMPILER_ QUAZIP_STATIC
+DEFINES += _QT_COMPILER_ QUAZIP_STATIC _T3KHANDLE_REMOVE_PRV
 
 linux-g++|linux-g++-64:DEFINES += OS_LINUX
 
@@ -96,9 +96,11 @@ macx: {
 }
 
 SOURCES += main.cpp \
-    T3000Cmd.cpp \
-    HIDCmdThread.cpp
+    ../common/T3kHandle.cpp \
+    #T3000Cmd.cpp \
+    #HIDCmdThread.cpp
 
 HEADERS += \
-    T3000Cmd.h \
-    HIDCmdThread.h
+    ../common/T3kHandle.h \
+    #T3000Cmd.h \
+    #HIDCmdThread.h

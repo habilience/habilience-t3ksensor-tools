@@ -19,7 +19,7 @@ public:
     explicit QSideviewWidget(QWidget *parent = 0);
     ~QSideviewWidget();
 
-    void SetT3kHandle(T30xHandle* pHandle) { m_pT3kHandle = pHandle; }
+    void SetT3kHandle(T3kHandle* pHandle) { m_pT3kHandle = pHandle; }
 
 protected:
     virtual void showEvent(QShowEvent *evt);
@@ -39,7 +39,7 @@ protected:
     void RequestSensorData( bool bDefault );
 
 protected:
-    T30xHandle*         m_pT3kHandle;
+    T3kHandle*         m_pT3kHandle;
 
     QString             m_strModelName;
 

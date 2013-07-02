@@ -12,7 +12,7 @@ class QGeneralSettingWidget : public QWidget, private Ui::QGeneralSettingWidget,
     Q_OBJECT
 
 public:
-    explicit QGeneralSettingWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QGeneralSettingWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QGeneralSettingWidget();
 
     void SetDefault();
@@ -42,7 +42,7 @@ protected:
     int                         m_nDisplayOrientation;
 
 private:
-    T30xHandle*&                m_pT3kHandle;
+    T3kHandle*&                m_pT3kHandle;
 
 signals:
     void ByPassKeyPressEvent(QKeyEvent *evt);

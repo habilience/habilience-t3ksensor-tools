@@ -19,7 +19,7 @@ class QAssistanceWidget : public QDialog, public QTPDPEventMultiCaster::ITPDPEve
     Q_OBJECT
 
 public:
-    explicit QAssistanceWidget(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QAssistanceWidget(T3kHandle*& pHandle, QWidget *parent = 0);
     virtual ~QAssistanceWidget();
     virtual void OnChangeLanguage();
 
@@ -40,7 +40,7 @@ private:
     QTabRemoteAssistance*       m_pTabRemote;
     QTabChat*                   m_pTabChat;
 
-    T30xHandle*&                m_pT3kHandle;
+    T3kHandle*&                m_pT3kHandle;
 
     int                         m_nCurrentTab;
     bool                        m_bForcedClose;

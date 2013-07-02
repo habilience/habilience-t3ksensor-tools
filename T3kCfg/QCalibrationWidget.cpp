@@ -20,7 +20,7 @@
 #define STD_SCALE 32767.0f
 #define MAC_SCALE 27827.0f // STD_SCALE-MAC_MARGIN*2
 
-QCalibrationWidget::QCalibrationWidget(T30xHandle*& pHandle, QWidget *parent) :
+QCalibrationWidget::QCalibrationWidget(T3kHandle*& pHandle, QWidget *parent) :
     QWidget(parent), m_pT3kHandle(pHandle)
 {
     m_fScreenMargin = 0.f;

@@ -2,7 +2,7 @@
 
 #define CHECK_TIMEOUT_COUNT     3
 
-QT3kHIDObject::QT3kHIDObject(T30xHandle*& pHandle, QObject *parent) :
+QT3kHIDObject::QT3kHIDObject(T3kHandle*& pHandle, QObject *parent) :
     QObject(parent), m_pT3kHandle(pHandle)
 {
     m_nSendCmdID = -1;

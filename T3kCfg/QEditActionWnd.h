@@ -8,14 +8,14 @@ namespace Ui{
     class QEditActionWnd;
 }
 
-class T30xHandle;
+class T3kHandle;
 class QMouseMappingTable;
 class QEditActionWnd : public QDialog, public QLangManager::LangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QEditActionWnd(T30xHandle*& pHandle, QWidget *parent = 0);
+    explicit QEditActionWnd(T3kHandle*& pHandle, QWidget *parent = 0);
     ~QEditActionWnd();
 
     enum ProfileType { TypeSingle, TypeDouble, TypeMove, TypeError };
@@ -41,7 +41,7 @@ protected:
 
 private:
     Ui::QEditActionWnd* ui;
-    T30xHandle*&        m_pT3kHandle;
+    T3kHandle*&        m_pT3kHandle;
     QMouseMappingTable* m_pTableWnd;
 
 private slots:
