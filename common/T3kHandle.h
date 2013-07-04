@@ -2,6 +2,7 @@
 #define T3KHANDLE_H
 
 #include <T3kHIDLib.h>
+#include <HID.h>
 
 #include <QObject>
 #ifndef _T3KHANDLE_REMOVE_PRV
@@ -90,6 +91,9 @@ public:
     static int GetDeviceCount( unsigned short nVID, unsigned short nPID, unsigned short nMI = 1 );
     static char* GetDevPath( unsigned short nVID, unsigned short nPID, unsigned short nMI = 1, int nDevIndex = 0 );
 
+    static ushort GetDeviceVID( T3K_DEVICE_INFO devInfo );
+    static ushort GetDevicePID( T3K_DEVICE_INFO devInfo );
+
     int SendBuffer( const unsigned char* pBuffer, unsigned short nBufferSize, int bAsync, unsigned short nTimeout );
     int SendCommand( const char* lpszCmd, bool bASync=false, unsigned short lTimeout=1000 );
     int EnableTouch( bool bEnable, bool bASync=false, unsigned short nTimeout=1000 );
@@ -132,7 +136,7 @@ protected:
     static void T3K_CALLBACK OnHandleEvents( T3K_HANDLE hDevice, void * pContext );
 
 public:
-    void ExOnDisconnect();
+    void ExOnDisconnect(T3K_HANDLE hDevice);
     void ExOnPacket(t3kpacket* packet, int nSync);
     int ExOnReceiveRawData(unsigned char* pBuffer, unsigned short nBytes);
     void ExOnDownloadingFirmware(int bDownload);
@@ -147,10 +151,13 @@ protected:
 
 protected:
     bool                                    m_bOpen;
-    ITPDPT3kNotify*                        m_pNotify;
+    ITPDPT3kNotify*                         m_pNotify;
 
     T3K_EVENT_NOTIFY                        m_T3kNotify;
     T3K_HANDLE                              m_pT3kDevice;
+
+    t3k_hid_library::CHID                   m_T3kVirtualDevice;
+    bool                                    m_bIsVirtualDevice;
 
     bool                                    m_bCloseNotify;
 
@@ -174,8 +181,8 @@ protected:
     bool                                    m_bRemoting;
 
 signals:
-    void Connect();
-    void Disconnect();
+    void Connect(T3K_HANDLE hDevice);
+    void Disconnect(T3K_HANDLE hDevice);
     void Packet(void* pContext);
     // deadlock caution
     void PacketSync(void* pContext);
@@ -199,8 +206,8 @@ public:
     virtual ~ITPDPT3kNotify();
 
 protected:
-    virtual void OnOpenT3kDevice() {}
-    virtual void OnCloseT3kDevice() {}
+    virtual void OnOpenT3kDevice(T3K_HANDLE /*hDevice*/) {}
+    virtual void OnCloseT3kDevice(T3K_HANDLE /*hDevice*/) {}
     virtual void OnFirmwareDownload( bool /*bDownload*/ ) {}
 
     virtual void OnMSG( short /*nTickTime*/, const char* /*sPartId*/, const char* /*sTxt*/ ) {}
@@ -252,12 +259,11 @@ protected:
 signals:
 
 public slots:
-    void onConnect();
-    virtual void onSensorDisconnect();
+    void onConnect(T3K_HANDLE hDevice);
+    void onDisconnect(T3K_HANDLE hDevice);
     void onPacket(void* pContext);
-    virtual int onReceiveRawData(void* pContext) = 0;
     virtual void onDownloadingFirmware(int bDownload);
-
+    virtual int onReceiveRawData(void* pContext) = 0;
     virtual void onReceiveRawDataFlag( bool bReceive ) = 0;
 };
 

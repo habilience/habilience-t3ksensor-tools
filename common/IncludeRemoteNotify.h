@@ -9,6 +9,7 @@ class IncludeRemoteNotify : public ITPDPT3kNotify
 {
 public:
     IncludeRemoteNotify();
+    virtual ~IncludeRemoteNotify() {}
 
     void SendRemoteNotifyPacket(int nType);
     void SendRemoteRawDataPacket(int nType, const char* pData, qint64 nDataSize);
@@ -21,7 +22,7 @@ protected:
     bool                m_bRemoteMode;
 
 public slots:
-    virtual void onSensorDisconnect();
+    virtual void onDisconnect();
     virtual int onReceiveRawData(void* pContext);
     virtual void onReceiveRawDataFlag(bool bReceive);
     virtual void onDownloadingFirmware(int bDownload);

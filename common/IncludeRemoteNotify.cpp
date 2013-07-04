@@ -105,6 +105,7 @@ int IncludeRemoteNotify::onReceiveRawData(void* pContext)
         } while( nTotalBytes > 0 );
     }
 
+    return 0;
 }
 
 void IncludeRemoteNotify::onReceiveRawDataFlag(bool bReceive)

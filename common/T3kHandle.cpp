@@ -15,6 +15,8 @@ T3kHandle::T3kHandle()
     m_pNotify = NULL;
     m_bOpen = false;
 
+    m_bIsVirtualDevice = false;
+
     m_bCloseNotify = true;
     m_nInstantMode = 0;
     m_nExpireTime = 5000;
@@ -103,8 +105,8 @@ char* T3kHandle::GetRawDataPacket( int& nRetBytes )
 
 void T3kHandle::ConnectSignal()
 {
-    connect( this, SIGNAL(Connect()), m_pNotify, SLOT(onConnect()), Qt::DirectConnection );
-    connect( this, SIGNAL(Disconnect()), m_pNotify, SLOT(onSensorDisconnect()), Qt::QueuedConnection );
+    connect( this, SIGNAL(Connect(T3K_HANDLE)), m_pNotify, SLOT(onConnect(T3K_HANDLE)), Qt::DirectConnection );
+    connect( this, SIGNAL(Disconnect(T3K_HANDLE)), m_pNotify, SLOT(onDisconnect(T3K_HANDLE)), Qt::QueuedConnection );
     connect( this, SIGNAL(Packet(void*)), m_pNotify, SLOT(onPacket(void*)), Qt::QueuedConnection );
     connect( this, SIGNAL(PacketSync(void*)), m_pNotify, SLOT(onPacket(void*)), Qt::BlockingQueuedConnection );
     connect( this, SIGNAL(ReceiveRawData(void*)), m_pNotify, SLOT(onReceiveRawData(void*)), Qt::QueuedConnection );
@@ -114,8 +116,8 @@ void T3kHandle::ConnectSignal()
 
 void T3kHandle::DisconnectSignal()
 {
-    disconnect( this, SIGNAL(Connect()), NULL, NULL );
-    disconnect( this, SIGNAL(Disconnect()), NULL, NULL );
+    disconnect( this, SIGNAL(Connect(T3K_HANDLE)), NULL, NULL );
+    disconnect( this, SIGNAL(Disconnect(T3K_HANDLE)), NULL, NULL );
     disconnect( this, SIGNAL(Packet(void*)), NULL, NULL );
     disconnect( this, SIGNAL(PacketSync(void*)), NULL, NULL );
     disconnect( this, SIGNAL(ReceiveRawData(void*)), NULL, NULL );
@@ -208,7 +210,7 @@ bool T3kHandle::Open()
     {
         SetNotify( m_pNotify );
 
-        emit Connect();
+        emit Connect( m_pT3kDevice );
     }
     return bRet;
 }
@@ -225,9 +227,9 @@ bool T3kHandle::OpenWithVIDPID( unsigned short nVID, unsigned short nPID, unsign
     {
         SetNotify( m_pNotify );
 
-        emit Connect();
+        emit Connect( m_pT3kDevice );
     }
-    qDebug( "T3kHandle::OpenWithVIDPID - %d", bRet );
+    //qDebug( "T3kHandle::OpenWithVIDPID - %d", bRet );
     return bRet;
 }
 
@@ -264,6 +266,16 @@ char* T3kHandle::GetDevPath(unsigned short nVID, unsigned short nPID, unsigned s
     return ::T3kGetDevInfoPath( devInfo );
 }
 
+ushort T3kHandle::GetDeviceVID( T3K_DEVICE_INFO devInfo )
+{
+    return ::T3kGetDevInfoVendorID( devInfo );
+}
+
+ushort T3kHandle::GetDevicePID( T3K_DEVICE_INFO devInfo )
+{
+    return ::T3kGetDevInfoProductID( devInfo );
+}
+
 int T3kHandle::SendBuffer(const unsigned char *pBuffer, unsigned short nBufferSize, int bAsync, unsigned short nTimeout)
 {
     if( !m_pT3kDevice )
@@ -277,7 +289,7 @@ int T3kHandle::SendCommand(const char* lpszCmd, bool bASync, unsigned short nTim
     if( !m_pT3kDevice )
         return bASync ? -1 : 0;
 
-    qDebug( "T3kHandle::SendCommand - %s", lpszCmd );
+    //qDebug( "T3kHandle::SendCommand - %s", lpszCmd );
     return ::T3kSendCommand( m_pT3kDevice, lpszCmd, bASync, nTimeout );
 }
 
@@ -371,7 +383,7 @@ void T3kHandle::onReceiveRawDataFlag(bool bReceive)
     }
 }
 
-void T3kHandle::ExOnDisconnect()
+void T3kHandle::ExOnDisconnect(T3K_HANDLE hDevice)
 {
     m_nInstantMode = 0;
     m_dwFgstValue = 0;
@@ -385,7 +397,7 @@ void T3kHandle::ExOnDisconnect()
         m_bCloseNotify = true;
         return;
     }
-    emit Disconnect();
+    emit Disconnect(hDevice);
 }
 
 void T3kHandle::ExOnPacket(t3kpacket *packet, int nSync)
@@ -399,9 +411,10 @@ void T3kHandle::ExOnPacket(t3kpacket *packet, int nSync)
     QMutexLocker Locker( &m_Mutex );
     m_qRecvPacket.push_back( pPacket );
     }
+    qDebug("ExOnPacket : %d, %d", pPacket->type, nSync );
     if( nSync )
         PacketSync( this );
-    else
+    else 
         emit Packet( this );
 }
 
@@ -442,9 +455,9 @@ void T3kHandle::ExOnDownloadingFirmware(int bDownload)
     emit DownloadingFirmware( bDownload );
 }
 
-void T3kHandle::OnDisconnect(T3K_HANDLE /*hDevice*/, void *pContext)
+void T3kHandle::OnDisconnect(T3K_HANDLE hDevice, void *pContext)
 {
-    ((T3kHandle*)pContext)->ExOnDisconnect();
+    ((T3kHandle*)pContext)->ExOnDisconnect( hDevice );
 }
 
 void T3kHandle::OnPacket(T3K_HANDLE /*hDevice*/, t3kpacket *packet, int nSync, void *pContext)
@@ -681,14 +694,14 @@ ITPDPT3kNotify::~ITPDPT3kNotify()
 #endif
 }
 
-void ITPDPT3kNotify::onConnect()
+void ITPDPT3kNotify::onConnect(T3K_HANDLE hDevice)
 {
-    OnOpenT3kDevice();
+    OnOpenT3kDevice(hDevice);
 }
 
-void ITPDPT3kNotify::onSensorDisconnect()
+void ITPDPT3kNotify::onDisconnect(T3K_HANDLE hDevice)
 {
-    OnCloseT3kDevice();
+    OnCloseT3kDevice(hDevice);
 }
 
 void ITPDPT3kNotify::onPacket(void* pContext)
