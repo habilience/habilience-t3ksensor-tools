@@ -10,13 +10,10 @@ QT       -= gui
 TARGET = T3kCmd
 CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
 
-CONFIG   += console
-CONFIG += static staticlib
+CONFIG   += console static staticlib
 CONFIG   -= app_bundle
 
 TEMPLATE = app
-
-CONFIG += static staticlib
 
 #Define
 DEFINES += _QT_COMPILER_ QUAZIP_STATIC _T3KHANDLE_REMOVE_PRV
@@ -97,10 +94,11 @@ macx: {
 
 SOURCES += main.cpp \
     ../common/T3kHandle.cpp \
-    #T3000Cmd.cpp \
-    #HIDCmdThread.cpp
+    HIDCmdThread.cpp \
+    T3kHIDNotify.cpp \
 
 HEADERS += \
     ../common/T3kHandle.h \
-    #T3000Cmd.h \
-    #HIDCmdThread.h
+    HIDCmdThread.h \
+    DefineString.h \
+    T3kHIDNotify.h \

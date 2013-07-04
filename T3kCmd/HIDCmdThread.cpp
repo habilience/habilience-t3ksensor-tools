@@ -1,31 +1,23 @@
+#include "HIDCmdThread.h"
 
-#include "StdAfx.h"
+#include <QCoreApplication>
+#include <QTime>
 
-#include "resource.h"
+#include "DefineString.h"
 
-#include ".\HIDCmdThread.h"
-#include ".\T3000Cmd.h"
-
+#ifdef Q_OS_WIN
+#include <windows.h>
 #include <process.h>
+#endif
 
 #define SYSTIME_PER_MSEC 10000
 
-const char cszInstantMode[] = "instant_mode=";
 
-const char cszIsNotConnected[] = "T3k series is not connected.\r\n";
-
-const char cstrGetNv[] = "\
-Displays the system values of T3k series.\r\n\
-\r\n\
-";
-const char cszGetNv_End[] = "\r\n\
-The end of a command.\r\n";
-
-CHIDCmdThread::CHIDCmdThread(void)
+CHIDCmdThread::CHIDCmdThread(QObject *parent) :
+    QThread(parent)
 {
-	m_pT30xHandle = NULL;
-	m_bIsConnect = FALSE;
-	m_hExitEvent = ::CreateEvent( NULL, TRUE, FALSE, NULL );
+    m_pT3kHandle = NULL;
+    m_bIsConnect = false;
 
 	for ( int ni = 0; ni < PROMPT_MAX; ni++ )
 	{
@@ -33,22 +25,20 @@ CHIDCmdThread::CHIDCmdThread(void)
 	}
 
 	m_ppPreCommands = NULL;
-	m_nPreCommands = NULL;
+    m_nPreCommands = 0;
 
 	m_pFileGetNv = NULL;
 	m_eGetNv = enFalse;
 
-	m_tmStart = GetCurrentSystime();
-	m_bTextOut = TRUE;
-	m_bInstantMode = FALSE;
+    m_tmStart = QTime::currentTime().elapsed();
+    m_bTextOut = true;
+    m_bInstantMode = false;
 
 	m_szInstantMode[0] = '\0';
 
 	m_dwTimeCheck = 0;
 
-	m_nGetNvId = 0;
-
-	::InitializeCriticalSection( &m_csTextOut );
+    m_nGetNvId = 0;
 }
 
 CHIDCmdThread::~CHIDCmdThread(void)
@@ -68,581 +58,309 @@ CHIDCmdThread::~CHIDCmdThread(void)
 		fclose(m_pFileGetNv);
 		m_pFileGetNv = NULL;
 	}
-
-	::CloseHandle( m_hExitEvent );
-	m_hExitEvent = NULL;
-
-	::DeleteCriticalSection( &m_csTextOut );
 }
 
 void CHIDCmdThread::Start()
 {
-	if( m_hThread )
-	{
-		return;
-	}
+    if( isRunning() )
+        return;
 
-	::ResetEvent( m_hExitEvent );
+    connect( this, SIGNAL(ProcessEvents()), this, SLOT(onProcessEvents()), Qt::QueuedConnection );
 
-	unsigned int nThreadID;
-	m_hThread = (HANDLE)_beginthreadex( NULL, 0, _OnThread, (void *)this, 0, &nThreadID );
+    start();
 }
 
 void CHIDCmdThread::Stop()
 {
-	if( !m_hThread )
-	{
+    if( isFinished() )
 		return;
-	}
 
-	::SetEvent( m_hExitEvent );
+    disconnect( this, SIGNAL(ProcessEvents()), NULL, NULL );
 
-	if( ::WaitForSingleObject( m_hThread, 1000 ) != WAIT_OBJECT_0 )
-	{
-		::TerminateThread( m_hThread, 0 );
-	}
-
-	::CloseHandle( m_hThread );
-
-	m_hThread = NULL;
+    terminate();
 }
 
-unsigned int __stdcall CHIDCmdThread::_OnThread( LPVOID lpParam )
+void CHIDCmdThread::run()
 {
-	CHIDCmdThread* pThis = (CHIDCmdThread*)lpParam;
-	pThis->OnThread();
-	_endthreadex( 0 );
-	return 0;
+    OnThread();
 }
 
 struct DEVICE_ID
 {
-	WORD nVID;
-	WORD nPID;
-	WORD nMI;
+    ushort nVID;
+    ushort nPID;
+    ushort nMI;
 	int nDeviceIndex;
 };
 
-DEVICE_ID	g_DevId;
-
-void ListView_SetItemData( HWND hWnd, int nItem, DWORD_PTR dwData )
+bool CHIDCmdThread::OpenT3kHandle()
 {
-	ASSERT(::IsWindow(hWnd));
-	LVITEM lvi;
-	memset(&lvi, 0, sizeof(LVITEM));
-	lvi.iItem = nItem;
-	lvi.mask = LVIF_PARAM;
-	lvi.lParam = (LPARAM)dwData;
-	VERIFY(::SendMessage(hWnd, LVM_SETITEM, 0, (LPARAM)&lvi));
-}
-DWORD_PTR ListView_GetItemData( HWND hWnd, int nItem )
-{
-	ASSERT(::IsWindow(hWnd));
-	LVITEM lvi;
-	memset(&lvi, 0, sizeof(LVITEM));
-	lvi.iItem = nItem;
-	lvi.mask = LVIF_PARAM;
-	VERIFY(::SendMessage(hWnd, LVM_GETITEM, 0, (LPARAM)&lvi));
-	return lvi.lParam;
-}
+    bool bRet = false;
 
-void InsertListItem( HWND hListCtrl, LPCTSTR lpszModelName, int nDevCnt, WORD nVID, WORD nPID, WORD nMI, int nDeviceIndex )
-{
-	TCHAR szNum[10];
-	LVITEM lvi;
-	memset( &lvi, 0, sizeof(LVITEM) );
-	lvi.mask = LVIF_TEXT;
-
-	_stprintf( szNum, _T("%d"), nDevCnt );
-	lvi.iItem = ListView_GetItemCount( hListCtrl );
-	lvi.iSubItem = 0;
-	lvi.pszText = szNum;
-	int nIdx = ListView_InsertItem( hListCtrl, &lvi );
-	lvi.iItem = nIdx;
-	lvi.iSubItem = 1;
-	lvi.pszText = (LPTSTR)lpszModelName;
-	ListView_SetItem( hListCtrl, &lvi );
-	lvi.iSubItem = 2;
-	lvi.pszText = CT30xHandle::GetDevicePath( nVID, nPID, nMI, nDeviceIndex );
-	ListView_SetItem( hListCtrl, &lvi );
-}
-
-void RefreshDeviceList( HWND hListCtrl )
-{
-	for ( int nI=0 ; nI<ListView_GetItemCount(hListCtrl) ; nI++ )
-	{
-		DEVICE_ID* pDevId = (DEVICE_ID*)ListView_GetItemData( hListCtrl, nI);
-		delete pDevId;
-	}
-
-	ListView_DeleteAllItems( hListCtrl );
-
-	int nOldT3000 = CT30xHandle::GetDeviceCount( 0xFFFF, 0x0000, 1 );
-	int nDevCnt = 1;
-	for( int i=0 ; i<nOldT3000 ; i++ )
-	{
-		InsertListItem( hListCtrl, _T("T3000"), nDevCnt++, 0xFFFF, 0x0000, 0x01, i );
-	}
-
-	int nT3000 = CT30xHandle::GetDeviceCount( 0x2200, 0x3000, 1 );
-	for( int i=0 ; i<nT3000 ; i++ )
-	{
-		InsertListItem( hListCtrl, _T("T3000"), nDevCnt++, 0x2200, 0x3000, 0x01, i );
-	}
-
-	int nT3100 = CT30xHandle::GetDeviceCount( 0x2200, 0x3100, 1 );
-	for( int i=0 ; i<nT3100 ; i++ )
-	{
-		InsertListItem( hListCtrl, _T("T3100"), nDevCnt++, 0x2200, 0x3100, 0x01, i );
-	}
-	// later model
-	int nT3200 = CT30xHandle::GetDeviceCount( 0x2200, 0x3200, 1 );
-	for( int i=0 ; i<nT3200 ; i++ )
-	{
-		InsertListItem( hListCtrl, _T("T3200"), nDevCnt++, 0x2200, 0x3200, 0x01, i );
-	}
-	
-	int nT3500 = CT30xHandle::GetDeviceCount( 0x2200, 0x3500, 1 );
-	for( int i=0 ; i<nT3500 ; i++ )
-	{
-		InsertListItem( hListCtrl, _T("T3k A"), nDevCnt++, 0x2200, 0x3500, 0x01, i );
-	}
-
-	int nT3900 = CT30xHandle::GetDeviceCount( 0x2200, 0x3900, 1 );
-	for( int i=0 ; i<nT3900 ; i++ )
-	{
-		InsertListItem( hListCtrl, _T("T3900"), nDevCnt++, 0x2200, 0x3900, 0x01, i );
-	}
-
-	int nT3kVHID = CT30xHandle::GetDeviceCount( 0x2200, 0xFF02, 0 );
-	for( int i=0 ; i<nT3kVHID ; i++ )
-	{
-		InsertListItem( hListCtrl, _T("T3900"), nDevCnt++, 0x2200, 0xFF02, 0, i );
-	}
-}
-
-BOOL CenterWindow(HWND hWnd, HWND hWndCenter = NULL)
-{
-	// determine owner window to center against
-	DWORD dwStyle = (DWORD)::GetWindowLong(hWnd, GWL_STYLE);
-	if(hWndCenter == NULL)
-	{
-		if(dwStyle & WS_CHILD)
-			hWndCenter = ::GetParent(hWnd);
-		else
-			hWndCenter = ::GetWindow(hWnd, GW_OWNER);
-	}
-
-	// get coordinates of the window relative to its parent
-	RECT rcDlg;
-	::GetWindowRect(hWnd, &rcDlg);
-	RECT rcArea;
-	RECT rcCenter;
-	HWND hWndParent;
-	if(!(dwStyle & WS_CHILD))
-	{
-		// don't center against invisible or minimized windows
-		if(hWndCenter != NULL)
-		{
-			DWORD dwStyleCenter = ::GetWindowLong(hWndCenter, GWL_STYLE);
-			if(!(dwStyleCenter & WS_VISIBLE) || (dwStyleCenter & WS_MINIMIZE))
-				hWndCenter = NULL;
-		}
-
-		// center within screen coordinates
-#if WINVER < 0x0500
-		::SystemParametersInfo(SPI_GETWORKAREA, NULL, &rcArea, NULL);
-#else
-		HMONITOR hMonitor = NULL;
-		if(hWndCenter != NULL)
-		{
-			hMonitor = ::MonitorFromWindow(hWndCenter, MONITOR_DEFAULTTONEAREST);
-		}
-		else
-		{
-			hMonitor = ::MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST);
-		}
-
-		MONITORINFO minfo;
-		minfo.cbSize = sizeof(MONITORINFO);
-		BOOL bResult = ::GetMonitorInfo(hMonitor, &minfo);
-
-		rcArea = minfo.rcWork;
-#endif
-		if(hWndCenter == NULL)
-			rcCenter = rcArea;
-		else
-			::GetWindowRect(hWndCenter, &rcCenter);
-	}
-	else
-	{
-		// center within parent client coordinates
-		hWndParent = ::GetParent(hWnd);
-
-		::GetClientRect(hWndParent, &rcArea);
-		::GetClientRect(hWndCenter, &rcCenter);
-		::MapWindowPoints(hWndCenter, hWndParent, (POINT*)&rcCenter, 2);
-	}
-
-	int DlgWidth = rcDlg.right - rcDlg.left;
-	int DlgHeight = rcDlg.bottom - rcDlg.top;
-
-	// find dialog's upper left based on rcCenter
-	int xLeft = (rcCenter.left + rcCenter.right) / 2 - DlgWidth / 2;
-	int yTop = (rcCenter.top + rcCenter.bottom) / 2 - DlgHeight / 2;
-
-	// if the dialog is outside the screen, move it inside
-	if(xLeft + DlgWidth > rcArea.right)
-		xLeft = rcArea.right - DlgWidth;
-	if(xLeft < rcArea.left)
-		xLeft = rcArea.left;
-
-	if(yTop + DlgHeight > rcArea.bottom)
-		yTop = rcArea.bottom - DlgHeight;
-	if(yTop < rcArea.top)
-		yTop = rcArea.top;
-
-	// map screen coordinates to child coordinates
-	return ::SetWindowPos(hWnd, NULL, xLeft, yTop, -1, -1,
-		SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-}
-
-BOOL CALLBACK DeviceSelectDlgProc(HWND hDlg,UINT iMessage,WPARAM wParam,LPARAM lParam)
-{
-	LVCOLUMN lvc;
-	NMHDR* pNMHDR;
-	switch(iMessage)
-	{
-	case WM_INITDIALOG:
-		ListView_SetExtendedListViewStyle( GetDlgItem(hDlg, IDC_LIST_DEVICE), LVS_EX_FULLROWSELECT|LVS_EX_GRIDLINES );
-
-		lvc.mask = LVCF_TEXT|LVCF_WIDTH;
-		lvc.fmt = LVCFMT_LEFT;
-		lvc.cx = 40;
-		lvc.pszText = _T("No.");
-		ListView_InsertColumn( GetDlgItem(hDlg, IDC_LIST_DEVICE), 0, &lvc );
-		lvc.cx = 80;
-		lvc.pszText = _T("Model");
-		ListView_InsertColumn( GetDlgItem(hDlg, IDC_LIST_DEVICE), 1, &lvc );
-		lvc.cx = 250;
-		lvc.pszText = _T("Device Path");
-		ListView_InsertColumn( GetDlgItem(hDlg, IDC_LIST_DEVICE), 2, &lvc );
-
-		RefreshDeviceList( GetDlgItem(hDlg, IDC_LIST_DEVICE) );
-
-		EnableWindow( GetDlgItem(hDlg, IDC_BTN_PLAY_BUZZER), FALSE );
-		EnableWindow( GetDlgItem(hDlg, IDC_BTN_SELECT), FALSE );
-
-		CenterWindow( hDlg );
-
-		return TRUE;
-	case WM_COMMAND:
-		switch (wParam)
-		{
-		case IDOK:
-		case IDCANCEL:
-			EndDialog(hDlg,IDCANCEL);
-			return TRUE;
-		case IDC_BTN_PLAY_BUZZER:
-			{
-				int nSelIdx = ListView_GetSelectionMark(GetDlgItem(hDlg, IDC_LIST_DEVICE));
-				if( nSelIdx >= 0 )
-				{
-					DEVICE_ID* pDevId = (DEVICE_ID*)ListView_GetItemData( GetDlgItem(hDlg, IDC_LIST_DEVICE), nSelIdx );
-					memcpy( &g_DevId, pDevId, sizeof(DEVICE_ID) );
-
-					CT30xHandle handle;
-					handle.Open( NULL, pDevId->nVID, pDevId->nPID, pDevId->nMI, pDevId->nDeviceIndex );
-
-					handle.SendCommand( "buzzer_play=3,1", TRUE );
-
-					handle.Close();
-				}
-			}
-			return TRUE;
-		case IDC_BTN_SELECT:
-				{
-					int nSelIdx = ListView_GetSelectionMark(GetDlgItem(hDlg, IDC_LIST_DEVICE));
-					if( nSelIdx >= 0 )
-					{
-						DEVICE_ID* pDevId = (DEVICE_ID*)ListView_GetItemData( GetDlgItem(hDlg, IDC_LIST_DEVICE), nSelIdx );
-						memcpy( &g_DevId, pDevId, sizeof(DEVICE_ID) );
-
-						EndDialog( hDlg, IDOK );
-					}
-				}
-			return TRUE;
-		}
-		break;
-	case WM_DESTROY:
-		{
-			HWND hListCtrl = GetDlgItem(hDlg, IDC_LIST_DEVICE);
-			for ( int nI=0 ; nI<ListView_GetItemCount(hListCtrl) ; nI++ )
-			{
-				DEVICE_ID* pDevId = (DEVICE_ID*)ListView_GetItemData( hListCtrl, nI);
-				delete pDevId;
-			}
-
-			ListView_DeleteAllItems( hListCtrl );
-		}
-		break;
-	case WM_NOTIFY:
-		if( wParam == IDC_LIST_DEVICE )
-		{
-			pNMHDR = (LPNMHDR)lParam;
-			switch( pNMHDR->code )
-			{
-			case NM_DBLCLK:
-				{
-					int nSelIdx = ListView_GetSelectionMark(GetDlgItem(hDlg, IDC_LIST_DEVICE));
-					if( nSelIdx >= 0 )
-					{
-						DEVICE_ID* pDevId = (DEVICE_ID*)ListView_GetItemData( GetDlgItem(hDlg, IDC_LIST_DEVICE), nSelIdx );
-						memcpy( &g_DevId, pDevId, sizeof(DEVICE_ID) );
-						EndDialog( hDlg, IDOK );
-					}
-				}
-				break;
-			case LVN_ITEMCHANGED:
-				{
-					LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
-
-					if( pNMLV->uNewState & LVIS_SELECTED )
-					{
-						EnableWindow( GetDlgItem( hDlg, IDC_BTN_PLAY_BUZZER ), TRUE );
-						EnableWindow( GetDlgItem( hDlg, IDC_BTN_SELECT ), TRUE );
-					}
-					else
-					{
-						EnableWindow( GetDlgItem( hDlg, IDC_BTN_PLAY_BUZZER ), FALSE );
-						EnableWindow( GetDlgItem( hDlg, IDC_BTN_SELECT ), FALSE );
-					}
-				}
-				break;
-			}
-		}
-		break;
-	}
-	return FALSE;
-}
-
-
-BOOL CHIDCmdThread::OpenT30xHandle()
-{
-	BOOL bRet = FALSE;
-
-#if 0
-	int nDevCnt =	CT30xHandle::EnumDevice( 0xFFFF, 0x0000, 1 ) +
-					CT30xHandle::EnumDevice( 0x2200, 0x3000, 1 ) +
-					CT30xHandle::EnumDevice( 0x2200, 0x3100, 1 ) +
-					// later model
-					CT30xHandle::EnumDevice( 0x2200, 0x3200, 1 ) +
-					CT30xHandle::EnumDevice( 0x2200, 0x3500, 1 ) +
-					CT30xHandle::EnumDevice( 0x2200, 0x3900, 1 ) +
-					CT30xHandle::EnumDevice( 0x2200, 0xFF02, 0 );
-
-	if( nDevCnt > 1 )
-	{
-
-		int nRet = DialogBox( GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_SELECT_DEVICE), NULL, DeviceSelectDlgProc );
-		if( nRet == IDCANCEL )
-		{
-			//exit( 0 );
-		}
-		else
-		{
-			return m_pT30xHandle->Open( this, g_szDevPath );
-		}
-	}
-#endif
+    // setnotify
+    m_pT3kHandle->SetNotify( T3kHIDNotify::Instance() );
 
 	do
 	{
-		int nOldT3000DetectCnt = CT30xHandle::GetDeviceCount( 0xFFFF, 0x0000, 1 );
+        int nOldT3000DetectCnt = T3kHandle::GetDeviceCount( 0xFFFF, 0x0000, 1 );
 		if( nOldT3000DetectCnt > 0 )
 		{
-			bRet = m_pT30xHandle->Open( this, 0xFFFF, 0x0000, 1, 0 );
+            bRet = m_pT3kHandle->OpenWithVIDPID( 0xFFFF, 0x0000, 1, 0 );
 			if( bRet ) break;
 		}
-		int nT3000DetectCnt = CT30xHandle::GetDeviceCount( 0x2200, 0x3000, 1 );
+        int nT3000DetectCnt = T3kHandle::GetDeviceCount( 0x2200, 0x3000, 1 );
 		if( nT3000DetectCnt > 0 )
 		{
-			bRet = m_pT30xHandle->Open( this, 0x2200, 0x3000, 1, 0 );
+            bRet = m_pT3kHandle->OpenWithVIDPID( 0x2200, 0x3000, 1, 0 );
 			if( bRet ) break;
 		}
-		int nT3100DetectCnt = CT30xHandle::GetDeviceCount( 0x2200, 0x3100, 1 );
+        int nT3100DetectCnt = T3kHandle::GetDeviceCount( 0x2200, 0x3100, 1 );
 		if( nT3100DetectCnt > 0 )
 		{
-			bRet = m_pT30xHandle->Open( this, 0x2200, 0x3100, 1, 0 );
+            bRet = m_pT3kHandle->OpenWithVIDPID( 0x2200, 0x3100, 1, 0 );
 			if( bRet ) break;
 		}
-		int nT3200DetectCnt = CT30xHandle::GetDeviceCount( 0x2200, 0x3200, 1 );
+        int nT3200DetectCnt = T3kHandle::GetDeviceCount( 0x2200, 0x3200, 1 );
 		if( nT3200DetectCnt > 0 )
 		{
-			bRet = m_pT30xHandle->Open( this, 0x2200, 0x3200, 1, 0 );
+            bRet = m_pT3kHandle->OpenWithVIDPID( 0x2200, 0x3200, 1, 0 );
 			if( bRet ) break;
 		}
-		int nT3500DetectCnt = CT30xHandle::GetDeviceCount( 0x2200, 0x3500, 1 );
+        int nT3500DetectCnt = T3kHandle::GetDeviceCount( 0x2200, 0x3500, 1 );
 		if( nT3500DetectCnt > 0 )
 		{
-			bRet = m_pT30xHandle->Open( this, 0x2200, 0x3500, 1, 0 );
+            bRet = m_pT3kHandle->OpenWithVIDPID( 0x2200, 0x3500, 1, 0 );
 			if( bRet ) break;
 		}
-		int nT3900DetectCnt = CT30xHandle::GetDeviceCount( 0x2200, 0x3900, 1 );
+        int nT3900DetectCnt = T3kHandle::GetDeviceCount( 0x2200, 0x3900, 1 );
 		if( nT3900DetectCnt > 0 )
 		{
-			bRet = m_pT30xHandle->Open( this, 0x2200, 0x3900, 1, 0 );
+            bRet = m_pT3kHandle->OpenWithVIDPID( 0x2200, 0x3900, 1, 0 );
 			if( bRet ) break;
 		}
-		int nT3kVHIDDetectCnt = CT30xHandle::GetDeviceCount( 0x2200, 0xFF02, 0 );
+        int nT3kVHIDDetectCnt = T3kHandle::GetDeviceCount( 0x2200, 0xFF02, 0 );
 		if ( nT3kVHIDDetectCnt > 0 )
 		{
-			bRet = m_pT30xHandle->Open( this, 0x2200, 0xFF02, 0, 0 );
+            bRet = m_pT3kHandle->OpenWithVIDPID( 0x2200, 0xFF02, 0, 0 );
 			break;
 		}
 
-	} while( FALSE );
+    } while( false );
 
 	if( bRet )
 	{
 		m_dwTimeCheck = 0;
 	}
 	else
-	{
-		FILETIME f;
-		::GetSystemTimeAsFileTime(&f);
-		m_dwTimeCheck = (DWORD)((f.dwLowDateTime | (((LONGLONG)f.dwHighDateTime) << 32)) / SYSTIME_PER_MSEC);
+    {
+        m_dwTimeCheck = QTime::currentTime().elapsed();
 	}
 
 	return bRet;
 }
 
+bool CHIDCmdThread::OnCommand( char * cmd, bool * pbSysCmd )
+{
+    char * buf;
+    char * file = NULL;
+
+    if ( pbSysCmd )
+        *pbSysCmd = true;
+
+    if ( strcmp(cmd, "") == 0 )
+    {
+        //qDebug("no command");
+    }
+    else if ( strcmp(cmd, cstrHelp0) == 0 || strcmp(cmd, cstrHelp1) == 0 )
+    {
+        TextOutRuntime(cstrHelpOut, 0);
+    }
+    else if( strcmp(cmd, cstrCls) == 0 )
+    {
+        system("cls");
+    }
+    else if( strcmp(cmd, cstrExit) == 0 )
+    {
+        //g_bExit = true;
+        TextOutRuntime(cstrExitOut, 0);
+        return false;
+    }
+    else if ( strstr(cmd, cstrGetNv) == cmd )
+    {
+        bool bFactoryNv = false;
+
+        buf = cmd + sizeof(cstrGetNv) - 1;
+        while ( *buf != 0 )
+        {
+            if ( !isspace(*buf) )
+            {
+                if ( *buf == '/' )
+                {
+                    if ( *(++buf) == 'f' )
+                    {
+                        bFactoryNv = true;
+                    }
+                    buf++;
+                    while ( true )
+                    {
+                        if ( *buf != 0 )
+                        {
+                            buf--;
+                            break;
+                        }
+                        if ( isspace(*buf) )
+                            break;
+                        buf++;
+                    }
+                }
+                else if ( *buf == '>' )
+                {
+                    file = buf + 1;
+                    buf += strlen(buf) - 1;
+                }
+            }
+
+            buf++;
+        }
+
+        if ( file != NULL )
+        {
+            while ( *file != 0 )
+            {
+                if ( isspace(*file) )
+                {
+                    file++;
+                    continue;
+                }
+                else
+                    break;
+            }
+        }
+
+        GetNv(bFactoryNv, file);
+    }
+    else
+    {
+        if ( SendCommand(cmd) )
+        {
+            if ( pbSysCmd )
+                *pbSysCmd = false;
+        }
+    }
+    return true;
+}
+
+
 void CHIDCmdThread::OnThread()
 {
-	m_pT30xHandle = new CT30xHandle();
+    m_pT3kHandle = new T3kHandle();
 
-	OpenT30xHandle();
+    OpenT3kHandle();
 
 	if ( !m_bIsConnect )
 	{
 		FlushPreCommand();
 	}
 
-	while( TRUE )
+    while( isRunning() )
 	{
-		if( ::WaitForSingleObject( m_hExitEvent, 10 ) == WAIT_OBJECT_0 )
-		{
-			break;
-		}
+        msleep(10);
 
-		if( !m_pT30xHandle )
-			break;
+        if( !m_pT3kHandle )
+            break;
 
-		HWND hWnd = m_pT30xHandle->GetMsgWndHandle();
-		if( hWnd && IsWindow(hWnd) )
-		{
-			MSG msg;
-			while( ::PeekMessage( &msg, hWnd, 0, 0, PM_NOREMOVE ) )
-			{
-				if( ::GetMessage( &msg, hWnd, 0, 0 ) )
-				{
-					::TranslateMessage( &msg );
-					::DispatchMessage( &msg );
-				}
-			}
-		}
+        emit ProcessEvents();
+        QCoreApplication::processEvents();
 
 		if( !m_bIsConnect )
 		{
-			FILETIME f;
-			::GetSystemTimeAsFileTime(&f);
-			DWORD dwCurTimeCheck = (DWORD)((f.dwLowDateTime | (((LONGLONG)f.dwHighDateTime) << 32)) / SYSTIME_PER_MSEC);
+            ulong dwCurTimeCheck = QTime::currentTime().elapsed();
 
 			if( (dwCurTimeCheck - m_dwTimeCheck) > 2000 )		// 2s
 			{
-				OpenT30xHandle();
+                OpenT3kHandle();
 			}
 		}
 	}
 
-	if( m_pT30xHandle )
+    if( m_pT3kHandle )
 	{
-		m_pT30xHandle->Close();
-		delete m_pT30xHandle;
-		m_pT30xHandle = NULL;
+        m_pT3kHandle->Close();
+        delete m_pT3kHandle;
+        m_pT3kHandle = NULL;
 	}
 }
 
-void CHIDCmdThread::OnDeviceConnected(T3K_DEVICE_INFO devInfo)
+void CHIDCmdThread::OnDeviceConnected(T3K_HANDLE hDevice)
 {
-	m_bIsConnect = TRUE;
+    m_bIsConnect = true;
 
-	WORD nVID = ::T3kGetDevInfoVendorID( devInfo );
-	WORD nPID = ::T3kGetDevInfoProductID( devInfo );
+    ushort nVID = T3kHandle::GetDeviceVID( hDevice );
+    ushort nPID = T3kHandle::GetDevicePID( hDevice );
 
 	if ( nVID == 0xFFFF && nPID == 0x0000 )
 	{
-		TextOut(-1, _T("T3000 Open!\r\n"));
+        TextOutConsole(-1, "T3000 Open!\r\n");
 	}
 	else
 	{
 		switch( nPID )
 		{
 		case 0x3000:
-			TextOut(-1, _T("T3000 Open!\r\n"));
+            TextOutConsole(-1, "T3000 Open!\r\n");
 			break;
 		case 0x3100:
-			TextOut(-1, _T("T3100 Open!\r\n"));
+            TextOutConsole(-1, "T3100 Open!\r\n");
 			break;
 		case 0x3200:
-			TextOut(-1, _T("T3200 Open!\r\n"));
+            TextOutConsole(-1, "T3200 Open!\r\n");
 			break;
 		case 0x3500:
-			TextOut(-1, _T("T3k A Open!\r\n"));
+            TextOutConsole(-1, "T3k A Open!\r\n");
 			break;
 		case 0x3900:
-			TextOut(-1, _T("T3900 Open!\r\n"));
+            TextOutConsole(-1, "T3900 Open!\r\n");
 			break;
 		default:
-			TextOut(-1, _T("T3k series Open!\r\n"));
+            TextOutConsole(-1, "T3k series Open!\r\n");
 			break;
 		}
 	}
 
-	m_bInstantMode = FALSE;
-	m_pT30xHandle->SetInstantMode(T3K_HID_MODE_COMMAND, 5000, 0);
+    m_bInstantMode = false;
+    m_pT3kHandle->SetInstantMode(T3K_HID_MODE_COMMAND, 5000, 0);
 }
 
-void CHIDCmdThread::OnDeviceDisconnected(T3K_DEVICE_INFO devInfo)
+void CHIDCmdThread::OnDeviceDisconnected(T3K_HANDLE hDevice)
 {
-	WORD nVID = ::T3kGetDevInfoVendorID( devInfo );
-	WORD nPID = ::T3kGetDevInfoProductID( devInfo );
+    ushort nVID = T3kHandle::GetDeviceVID( hDevice );
+    ushort nPID = T3kHandle::GetDevicePID( hDevice );
 
 	if ( nVID == 0xFFFF && nPID == 0x0000 )
 	{
-		TextOut(-1, _T("T3000 Close!\r\n"));
+        TextOutConsole(-1, "T3000 Close!\r\n");
 	}
 	else
 	{
 		switch( nPID )
 		{
 		case 0x3000:
-			TextOut(-1, _T("T3000 Close!\r\n"));
+            TextOutConsole(-1, "T3000 Close!\r\n");
 			break;
 		case 0x3100:
-			TextOut(-1, _T("T3100 Close!\r\n"));
+            TextOutConsole(-1, "T3100 Close!\r\n");
 			break;
 		case 0x3200:
-			TextOut(-1, _T("T3200 Close!\r\n"));
+            TextOutConsole(-1, "T3200 Close!\r\n");
 			break;
 		case 0x3500:
-			TextOut(-1, _T("T3k A Close!\r\n"));
+            TextOutConsole(-1, "T3k A Close!\r\n");
 			break;
 		case 0x3900:
-			TextOut(-1, _T("T3900 Close!\r\n"));
+            TextOutConsole(-1, "T3900 Close!\r\n");
 			break;
 		default:
-			TextOut(-1, _T("T3k series Close!\r\n"));
+            TextOutConsole(-1, "T3k series Close!\r\n");
 			break;
 		}
 	}
@@ -678,15 +396,15 @@ void CHIDCmdThread::AddPreCommand( const char * szCmd )
 }
 
 
-BOOL CHIDCmdThread::SendCommand( char * szCmd )
+bool CHIDCmdThread::SendCommand( char * szCmd )
 {
 	if( !IsHIDConnect() )
 	{
 		TextOutRuntime(cszIsNotConnected, 0);
-		return FALSE;
+        return false;
 	}
 
-	ASSERT( m_pT30xHandle );
+    Q_ASSERT( m_pT3kHandle );
 
 	if ( strstr(szCmd, cszInstantMode) == szCmd )
 	{
@@ -705,15 +423,15 @@ BOOL CHIDCmdThread::SendCommand( char * szCmd )
 		if ( pD == NULL )
 			pD = szCmd + strlen(szCmd);
 		strcpy(szBuffer, cszInstantMode);
-		BOOL bCmd = FALSE;
-		BOOL bQuery = FALSE;
+        bool bCmd = false;
+        bool bQuery = false;
 		while ( szCmd < pD )
 		{
 			if ( *szCmd == 'c' || *szCmd == 'C' )
-				bCmd = TRUE;
+                bCmd = true;
 			if ( *szCmd == '*' || *szCmd == '!' || *szCmd == '?' )
 			{
-				bQuery = TRUE;
+                bQuery = true;
 			}
 			szBuffer[strlen(szBuffer)] = *szCmd++;
 		}
@@ -724,35 +442,33 @@ BOOL CHIDCmdThread::SendCommand( char * szCmd )
 		strcat(szBuffer, pD);
 		szCmd = szBuffer;
 
-		m_bInstantMode = TRUE;
+        m_bInstantMode = true;
 	}
 
-	m_tmStart = GetCurrentSystime();
-	m_pT30xHandle->SendCommand(szCmd);
+    m_tmStart = QTime::currentTime().elapsed();
+    m_pT3kHandle->SendCommand(szCmd);
 
-	return TRUE;
+    return true;
 }
 
 
 void CHIDCmdThread::LockTextOut()
 {
-	::EnterCriticalSection( &m_csTextOut );
-	m_bTextOut = FALSE;
-	::LeaveCriticalSection( &m_csTextOut );
-	TRACE("LockTextOut\r\n");
+    QMutexLocker Lock( &m_csTextOut );
+    m_bTextOut = false;
+    //qDebug("LockTextOut\r\n");
 }
 
 void CHIDCmdThread::UnlockTextOut()
 {
 	//@@ lock textout
 
-	TRACE("UnlockTextOut\r\n");
-	::EnterCriticalSection( &m_csTextOut );
-	m_bTextOut = TRUE;
-	::LeaveCriticalSection( &m_csTextOut );
+    //qDebug("UnlockTextOut\r\n");
+    QMutexLocker Lock( &m_csTextOut );
+    m_bTextOut = true;
 }
 
-void CHIDCmdThread::TextOut( DWORD ticktime, const char * szFormat, ... )
+void CHIDCmdThread::TextOutConsole( ulong ticktime, const char * szFormat, ... )
 {
 	va_list varpars;
 	va_start(varpars, szFormat);
@@ -760,7 +476,7 @@ void CHIDCmdThread::TextOut( DWORD ticktime, const char * szFormat, ... )
 	char szCommand[1024];
 	vsprintf(szCommand, szFormat, varpars);
 
-	::EnterCriticalSection( &m_csTextOut );
+    QMutexLocker Lock( &m_csTextOut );
 
 	if ( m_bTextOut )
 	{
@@ -769,19 +485,17 @@ void CHIDCmdThread::TextOut( DWORD ticktime, const char * szFormat, ... )
 	else
 	{
 		//@@ lock textout
-		szCommand;
+        //szCommand;
 	}
-
-	::LeaveCriticalSection( &m_csTextOut );
 
 	va_end(varpars);
 }
 
-void CHIDCmdThread::TextOutRuntime( const char * szCmd, UINT_PTR time, DWORD ticktime )
+void CHIDCmdThread::TextOutRuntime( const char * szCmd, uint time, ulong ticktime )
 {
-	if ( time == -1 )
+    if ( time == 0xFFFF )
 	{
-		time = GetCurrentSystime();
+        time = QTime::currentTime().elapsed();
 	}
 
 	if ( time == 0 )
@@ -813,8 +527,8 @@ void CHIDCmdThread::TextOutRuntime( const char * szCmd, UINT_PTR time, DWORD tic
 			case promptSystemTime:
 				pCur += sprintf(pCur, "%03d.%03d ", sys_sec, sys_msec);
 				break;
-			case promptT3000Time:
-				if ( ticktime != -1 )
+            case promptT3kTime:
+                if ( ticktime != 0xFFFF )
 					pCur += sprintf(pCur, "%03d.%03d ", t_sec, t_msec);
 				else
 				{
@@ -831,76 +545,76 @@ void CHIDCmdThread::TextOutRuntime( const char * szCmd, UINT_PTR time, DWORD tic
 	}
 }
 
-void CHIDCmdThread::TPDP_OnConnected( T3K_DEVICE_INFO devInfo )
+void CHIDCmdThread::OnOpenT3kDevice(T3K_HANDLE hDevice)
 {
-	OnDeviceConnected( devInfo );
+    OnDeviceConnected( hDevice );
 }
 
-void CHIDCmdThread::TPDP_OnDisconnected( T3K_DEVICE_INFO devInfo )
+void CHIDCmdThread::OnCloseT3kDevice(T3K_HANDLE hDevice)
 {
-	OnDeviceDisconnected( devInfo );
-	m_pT30xHandle->Close();
-	m_bIsConnect = FALSE;
+    OnDeviceDisconnected( hDevice );
+    m_pT3kHandle->Close();
+    m_bIsConnect = false;
 }
 
-void CHIDCmdThread::TPDP_OnMSG( T3K_DEVICE_INFO devInfo, WORD ticktime, LPCSTR partid, const char * txt )
+void CHIDCmdThread::OnMSG(short nTicktime, const char *sPardID, const char *sTxt)
 {
-	TextOut(ticktime, "%s: %s\r\n", partid, txt);
+    TextOutConsole(nTicktime, "%s: %s\r\n", sPardID, sTxt);
 }
 
-void CHIDCmdThread::TPDP_OnVER( T3K_DEVICE_INFO devInfo, WORD ticktime, LPCSTR partid, t3kpacket::_body::_ver* ver )
+void CHIDCmdThread::OnVER(short nTicktime, const char *sPartID, T3kVER &ver)
 {
 	char szVersion[128] = { 0, };
 	char date[T3K_VER_DATE_LEN + 1];
 	char time[T3K_VER_TIME_LEN + 1];
 
-	memcpy(date, ver->date, T3K_VER_DATE_LEN); date[T3K_VER_DATE_LEN] = 0;
-	memcpy(time, ver->time, T3K_VER_TIME_LEN); time[T3K_VER_TIME_LEN] = 0;
+    memcpy(date, ver.date, T3K_VER_DATE_LEN); date[T3K_VER_DATE_LEN] = 0;
+    memcpy(time, ver.time, T3K_VER_TIME_LEN); time[T3K_VER_TIME_LEN] = 0;
 
-	if ( ver->nv == 0 && ver->major == 0 && ver->minor == 0 )	// IAP
+    if ( ver.nv == 0 && ver.major == 0 && ver.minor == 0 )	// IAP
 	{
-		if ( partid[3] == 0 )
+        if ( sPartID[3] == 0 )
 		{
-			sprintf(szVersion, "Model: %X (IAP)", ver->model);
+            sprintf(szVersion, "Model: %X (IAP)", ver.model);
 		}
 		else
-			sprintf(szVersion, "Model: T%X (IAP)", ver->model);
+            sprintf(szVersion, "Model: T%X (IAP)", ver.model);
 	}
 	else
 	{
-		if ( partid[3] == 0 )
+        if ( sPartID[3] == 0 )
 		{
-			sprintf(szVersion, "NV: %d, Ver: %X.%X, Model: %X  %s %s", ver->nv, ver->major, ver->minor, ver->model, date, time);
+            sprintf(szVersion, "NV: %d, Ver: %X.%X, Model: %X  %s %s", ver.nv, ver.major, ver.minor, ver.model, date, time);
 		}
 		else
-			sprintf(szVersion, "NV: %d, Ver: %X.%X, Model: T%X  %s %s", ver->nv, ver->major, ver->minor, ver->model, date, time);
+            sprintf(szVersion, "NV: %d, Ver: %X.%X, Model: T%X  %s %s", ver.nv, ver.major, ver.minor, ver.model, date, time);
 	}
-	TextOut(ticktime, "%s: %s\r\n", partid, szVersion);
+    TextOutConsole(nTicktime, "%s: %s\r\n", sPartID, szVersion);
 }
 
-void CHIDCmdThread::TPDP_OnSTT( T3K_DEVICE_INFO devInfo, WORD ticktime, LPCSTR partid, const char * status )
+void CHIDCmdThread::OnSTT(short nTicktime, const char *sPartID, const char *sStatus)
 {
-	TextOut(ticktime, "%s: %s\r\n", partid, status);
+    TextOutConsole(nTicktime, "%s: %s\r\n", sPartID, sStatus);
 }
 
-void CHIDCmdThread::TPDP_OnRSP( T3K_DEVICE_INFO devInfo, WORD ticktime, LPCSTR partid, int id, BOOL bFinal, const char * cmd )
+void CHIDCmdThread::OnRSP(short nTicktime, const char * sPartID, long lID, bool, const char *sCmd)
 {
-	BOOL bSend = FALSE;
+    bool bSend = false;
 
-	if ( strstr(cmd, cszInstantMode) == cmd )
+    if ( strstr(sCmd, cszInstantMode) == sCmd )
 	{
-		if ( strcmp( m_szInstantMode, cmd ) != 0 )
+        if ( strcmp( m_szInstantMode, sCmd ) != 0 )
 		{
-			strncpy( m_szInstantMode, cmd, 100 );
+            strncpy( m_szInstantMode, sCmd, 100 );
 			if ( !m_bInstantMode )
 			{
-				TextOut(ticktime, "%s: %s\r\n", partid, cmd);
+                TextOutConsole(nTicktime, "%s: %s\r\n", sPartID, sCmd);
 			}
 		}
 		if ( m_bInstantMode )
 		{
-			TextOut(ticktime, "%s: %s\r\n", partid, cmd);
-			m_bInstantMode = FALSE;
+            TextOutConsole(nTicktime, "%s: %s\r\n", sPartID, sCmd);
+            m_bInstantMode = false;
 		}
 	}
 	else
@@ -909,85 +623,85 @@ void CHIDCmdThread::TPDP_OnRSP( T3K_DEVICE_INFO devInfo, WORD ticktime, LPCSTR p
 
 		if ( m_eGetNv > enFalse )
 		{
-			if ( m_nGetNvId != id )
+            if ( m_nGetNvId != lID )
 				return;
-			if ( strstr( cmd, "no cam" ) == cmd || strstr( cmd, "syntax error" ) == cmd )
+            if ( strstr( sCmd, "no cam" ) == sCmd || strstr( sCmd, "syntax error" ) == sCmd )
 			{
-				bSend = GetNv_SendNext( TRUE );
+                bSend = GetNv_SendNext( true );
 			}
 			else
 			{
-				if ( cmd[0] != 0 )
+                if ( sCmd[0] != 0 )
 				{
 					if ( m_nNvIdx < 0 )
-						TextOut(ticktime, "%s: [%s]\r\n", partid, cmd);
+                        TextOutConsole(nTicktime, "%s: [%s]\r\n", sPartID, sCmd);
 					else
-						TextOut(ticktime, "%s: %s\r\n", partid, cmd);
+                        TextOutConsole(nTicktime, "%s: %s\r\n", sPartID, sCmd);
 
 					if ( m_pFileGetNv )
 					{
 						if ( m_nNvIdx < 0 )
 						{
-							int nPartIdIdx = (int)strlen( partid )-1;
+                            int nPartIdIdx = (int)strlen( sPartID )-1;
 
-							if( partid[nPartIdIdx-1] == '-' )
+                            if( sPartID[nPartIdIdx-1] == '-' )
 							{
 								nPartIdIdx -= 2;
 							}
 							int nCamSub = 0;
 
-							switch( partid[nPartIdIdx] )
+                            switch( sPartID[nPartIdIdx] )
 							{
 							default:
 							case 0:
-								sprintf(szBuf, "[%s]\r\n", cmd);
+                                sprintf(szBuf, "[%s]\r\n", sCmd);
 								break;
 							case '1':
-								nCamSub = (int)(partid[nPartIdIdx + 2]-'0');
+                                nCamSub = (int)(sPartID[nPartIdIdx + 2]-'0');
 								if ( nCamSub > 0 )
-									sprintf(szBuf, "[cam1/sub/%s]\r\n", cmd);
+                                    sprintf(szBuf, "[cam1/sub/%s]\r\n", sCmd);
 								else
-									sprintf(szBuf, "[cam1/%s]\r\n", cmd);
+                                    sprintf(szBuf, "[cam1/%s]\r\n", sCmd);
 								break;
 							case '2':
-								nCamSub = (int)(partid[nPartIdIdx + 2]-'0');
+                                nCamSub = (int)(sPartID[nPartIdIdx + 2]-'0');
 								if ( nCamSub > 0 )
-									sprintf(szBuf, "[cam2/sub/%s]\r\n", cmd);
+                                    sprintf(szBuf, "[cam2/sub/%s]\r\n", sCmd);
 								else
-									sprintf(szBuf, "[cam2/%s]\r\n", cmd);
+                                    sprintf(szBuf, "[cam2/%s]\r\n", sCmd);
 								break;
 							}
 							fwrite(szBuf, sizeof(char), strlen(szBuf), m_pFileGetNv);
 						}
 						else
 						{
-							int nPartIdIdx = (int)strlen( partid )-1;
+                            int nPartIdIdx = (int)strlen( sPartID )-1;
 
-							if( partid[nPartIdIdx-1] == '-' )
+                            if( sPartID[nPartIdIdx-1] == '-' )
 							{
 								nPartIdIdx -= 2;
 							}
 							int nCamSub = 0;
 
-							switch( partid[nPartIdIdx] )
+                            switch( sPartID[nPartIdIdx] )
 							{
 							default:
 							case 0:
-								sprintf(szBuf, "%s\r\n", cmd);
+                                sprintf(szBuf, "%s\r\n", sCmd);
 								break;
 							case '1':
-								nCamSub = (int)(partid[nPartIdIdx + 2]-'0');
+                                nCamSub = (int)(sPartID[nPartIdIdx + 2]-'0');
 								if ( nCamSub > 0 )
-									sprintf(szBuf, "cam1/sub/%s\r\n", cmd);
+                                    sprintf(szBuf, "cam1/sub/%s\r\n", sCmd);
 								else
-									sprintf(szBuf, "cam1/%s\r\n", cmd);
+                                    sprintf(szBuf, "cam1/%s\r\n", sCmd);
 								break;
 							case '2':
-								nCamSub = (int)(partid[nPartIdIdx + 2]-'0');
+                                nCamSub = (int)(sPartID[nPartIdIdx + 2]-'0');
 								if ( nCamSub > 0 )
-									sprintf(szBuf, "cam2/sub/%s\r\n", cmd);
+                                    sprintf(szBuf, "cam2/sub/%s\r\n", sCmd);
 								else
-									sprintf(szBuf, "cam2/%s\r\n", cmd);
+                                    sprintf(szBuf, "cam2/%s\r\n", sCmd);
 								break;
 							}
 							fwrite(szBuf, sizeof(char), strlen(szBuf), m_pFileGetNv);
@@ -995,31 +709,31 @@ void CHIDCmdThread::TPDP_OnRSP( T3K_DEVICE_INFO devInfo, WORD ticktime, LPCSTR p
 					}
 				}
 
-				bSend = GetNv_SendNext(cmd[0] == 0);
+                bSend = GetNv_SendNext(sCmd[0] == 0);
 			}
 		}
 		else if ( m_pFileGetNv )
 		{
-			switch ( partid[3] )
+            switch ( sPartID[3] )
 			{
 			default:
 			case 0:
-				sprintf(szBuf, ";%s\r\n", cmd);
+                sprintf(szBuf, ";%s\r\n", sCmd);
 				break;
 			case '1':
-				sprintf(szBuf, ";cam1/%s\r\n", cmd);
+                sprintf(szBuf, ";cam1/%s\r\n", sCmd);
 				break;
 			case '2':
-				sprintf(szBuf, ";cam2/%s\r\n", cmd);
+                sprintf(szBuf, ";cam2/%s\r\n", sCmd);
 				break;
 			}
-			int strn = strlen(szBuf);
-			TRACE( _T("[0x%02x][0x%02x]\r\n"), szBuf[strn-2], szBuf[strn-1] );
+            //int strn = strlen(szBuf);
+            //qDebug( "[0x%02x][0x%02x]\r\n", szBuf[strn-2], szBuf[strn-1] );
 			fwrite(szBuf, sizeof(char), strlen(szBuf), m_pFileGetNv);
 		}
 		else
 		{
-			TextOut(ticktime, "%s: %s\r\n", partid, cmd);
+            TextOutConsole(nTicktime, "%s: %s\r\n", sPartID, sCmd);
 		}
 	}
 
@@ -1029,12 +743,17 @@ void CHIDCmdThread::TPDP_OnRSP( T3K_DEVICE_INFO devInfo, WORD ticktime, LPCSTR p
 	}
 }
 
+void CHIDCmdThread::OnRSE(short ticktime, const char *partid, long id, bool finish, const char *cmd)
+{
+    OnRSP(ticktime, partid, id, finish, cmd);
+}
+
 void CHIDCmdThread::FlushPreCommand()
 {
-	BOOL bSysCmd = FALSE;
+    bool bSysCmd = false;
 	while ( m_nPreCommands > 0 )
 	{
-		BOOL bCmd = OnCommand(m_ppPreCommands[0], &bSysCmd);
+        bool bCmd = OnCommand(m_ppPreCommands[0], &bSysCmd);
 
 		m_nPreCommands--;
 		delete [] m_ppPreCommands[0];
@@ -1053,17 +772,19 @@ void CHIDCmdThread::FlushPreCommand()
 
 		if ( !bCmd )
 		{
-			HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
-			INPUT_RECORD ir;
-			ir.EventType = KEY_EVENT;
-			ir.Event.KeyEvent.bKeyDown = 1;
-			ir.Event.KeyEvent.wRepeatCount = 1;
-			ir.Event.KeyEvent.wVirtualKeyCode = VK_SPACE;
-			ir.Event.KeyEvent.wVirtualScanCode = 0x39;
-			ir.Event.KeyEvent.uChar.AsciiChar = ' ';
-			ir.Event.KeyEvent.dwControlKeyState = 0x0;
-			DWORD dwWrite;
-			WriteConsoleInput(hIn, &ir, 1, &dwWrite);
+#ifdef Q_OS_WIN
+            HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+            INPUT_RECORD ir;
+            ir.EventType = KEY_EVENT;
+            ir.Event.KeyEvent.bKeyDown = 1;
+            ir.Event.KeyEvent.wRepeatCount = 1;
+            ir.Event.KeyEvent.wVirtualKeyCode = VK_SPACE;
+            ir.Event.KeyEvent.wVirtualScanCode = 0x39;
+            ir.Event.KeyEvent.uChar.AsciiChar = ' ';
+            ir.Event.KeyEvent.dwControlKeyState = 0x0;
+            DWORD dwWrite;
+            WriteConsoleInput(hIn, &ir, 1, &dwWrite);
+#endif
 			return;
 		}
 		if ( !bSysCmd )
@@ -1072,7 +793,7 @@ void CHIDCmdThread::FlushPreCommand()
 }
 
 
-void CHIDCmdThread::GetNv( BOOL bFactory, const char * szFile )
+void CHIDCmdThread::GetNv( bool bFactory, const char * szFile )
 {
 	m_eGetNv = enFalse;
 	if ( !m_bIsConnect )
@@ -1081,7 +802,7 @@ void CHIDCmdThread::GetNv( BOOL bFactory, const char * szFile )
 		return;
 	}
 
-	TextOutRuntime(cstrGetNv, 0);
+    TextOutRuntime(cstrGetNvString, 0);
 
 	if ( szFile )
 	{
@@ -1094,28 +815,28 @@ void CHIDCmdThread::GetNv( BOOL bFactory, const char * szFile )
 
 	int nMode;
 #if 1
-	if ( m_pT30xHandle->QueryFirmwareVersion(PKT_ADDR_MM, &nMode) )
+    if ( m_pT3kHandle->QueryFirmwareVersion(PKT_ADDR_MM, &nMode) )
 	{
 		if ( nMode == MODE_MM_APP )
 		{
-			if ( m_pT30xHandle->QueryFirmwareVersion(PKT_ADDR_CM1, &nMode) )
+            if ( m_pT3kHandle->QueryFirmwareVersion(PKT_ADDR_CM1, &nMode) )
 			{
 				//if ( nMode == MODE_CM_APP )
-				m_pT30xHandle->QueryFirmwareVersion(PKT_ADDR_CM1 | PKT_ADDR_CM_SUB, &nMode);
+                m_pT3kHandle->QueryFirmwareVersion(PKT_ADDR_CM1 | PKT_ADDR_CM_SUB, &nMode);
 			}
-			if ( m_pT30xHandle->QueryFirmwareVersion(PKT_ADDR_CM2, &nMode) )
+            if ( m_pT3kHandle->QueryFirmwareVersion(PKT_ADDR_CM2, &nMode) )
 			{
 				//if ( nMode == MODE_CM_APP )
-				m_pT30xHandle->QueryFirmwareVersion(PKT_ADDR_CM2 | PKT_ADDR_CM_SUB, &nMode);
+                m_pT3kHandle->QueryFirmwareVersion(PKT_ADDR_CM2 | PKT_ADDR_CM_SUB, &nMode);
 			}
 		}
 	}
 #else
-	m_pT30xHandle->SendCommand("firmware_version=?");
-	m_pT30xHandle->SendCommand("cam1/firmware_version=?");
-	m_pT30xHandle->SendCommand("cam1/sub/firmware_version=?");
-	m_pT30xHandle->SendCommand("cam2/firmware_version=?");
-	m_pT30xHandle->SendCommand("cam2/sub/firmware_version=?");
+    m_pT3kHandle->SendCommand("firmware_version=?");
+    m_pT3kHandle->SendCommand("cam1/firmware_version=?");
+    m_pT3kHandle->SendCommand("cam1/sub/firmware_version=?");
+    m_pT3kHandle->SendCommand("cam2/firmware_version=?");
+    m_pT3kHandle->SendCommand("cam2/sub/firmware_version=?");
 #endif
 
 	// 
@@ -1125,15 +846,15 @@ void CHIDCmdThread::GetNv( BOOL bFactory, const char * szFile )
 	else
 		m_nNvIdx = 0;
 	m_eGetNv = enCM1;
-	m_tmStart = GetCurrentSystime();
+    m_tmStart = QTime::currentTime().elapsed();
 
-	GetNv_SendNext(FALSE);
+    GetNv_SendNext( false );
 }
 
-BOOL CHIDCmdThread::GetNv_SendNext( BOOL bEndOfGetNv )
+bool CHIDCmdThread::GetNv_SendNext( bool bEndOfGetNv )
 {
 	if ( m_eGetNv == enFalse )
-		return FALSE;
+        return false;
 
 	if ( bEndOfGetNv )
 	{
@@ -1151,7 +872,7 @@ BOOL CHIDCmdThread::GetNv_SendNext( BOOL bEndOfGetNv )
 				}
 
 				TextOutRuntime(cszGetNv_End, 0);
-				return FALSE;
+                return false;
 			}
 			else
 			{
@@ -1192,9 +913,19 @@ BOOL CHIDCmdThread::GetNv_SendNext( BOOL bEndOfGetNv )
 	else
 		m_nNvIdx++;
 
-	int nId = m_pT30xHandle->SendCommand(szCmd, TRUE);
+    int nId = m_pT3kHandle->SendCommand(szCmd, true);
 	m_nGetNvId = nId;
 	//TRACE( "Send cmd[%d]: %s\r\n", nId, szCmd );
 
-	return TRUE;
+    return true;
+}
+
+void CHIDCmdThread::onStop()
+{
+    Stop();
+}
+
+void CHIDCmdThread::onProcessEvents()
+{
+    qApp->processEvents();
 }

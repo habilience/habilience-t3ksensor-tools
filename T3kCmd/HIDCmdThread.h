@@ -1,101 +1,112 @@
-#pragma once
+#ifndef CHIDCMDTHREAD_H
+#define CHIDCMDTHREAD_H
 
-#include "../common/T3kHandle.h"
+#include "T3kHIDNotify.h"
+
+#include <QThread>
+#include <QMutex>
+#include <QFile>
+
+#include <QEventLoop>
 
 #define PROMPT_MAX  3
 
-class CHIDCmdThread : public CT30xHandle::ITPDPNotify
+class CHIDCmdThread : public QThread, public T3kHIDNotify::IT3kEventListener
 {
+    Q_OBJECT
+
+public:
+    explicit CHIDCmdThread(QObject *parent = 0);
+    virtual ~CHIDCmdThread();
+
+    void Start();
+    void Stop();
+
+    QEventLoop* loop;
+
+    bool SendCommand( char * szCmd );
+
+    bool OnCommand( char* szCmd, bool* pbSysCmd = NULL );
+
+    enum Prompt
+    {
+        promptNil,
+        promptSystemTime,
+        promptT3kTime
+    };
+    Prompt m_prompt[PROMPT_MAX];
+    void AddPrompt( Prompt p );
+
+    char ** m_ppPreCommands;
+    int     m_nPreCommands;
+    void AddPreCommand( const char * szCmd );
+    void FlushPreCommand();
+
+    FILE * m_pFileGetNv;
+    int  m_bFactorialNv;
+    int  m_nNvIdx;
+    int  m_nGetNvId;
+    enum tagGetNv
+    {
+        enFalse,
+        enMM,
+        enCM2c,
+        enCM2,
+        enCM1c,
+        enCM1
+    } m_eGetNv;
+    void GetNv( bool bFactory, const char * szFile );
+    bool GetNv_SendNext( bool bEndOfGetNv );
+
+    void LockTextOut();
+    void UnlockTextOut();
+    void TextOutConsole( ulong ticktime, const char * szFormat, ... );
+    void TextOutRuntime( const char * szCmd, uint time = -1, ulong ticktime = -1 );
+
 protected:
-	HANDLE		m_hExitEvent;
-	HANDLE		m_hThread;
+    T3kHandle*  m_pT3kHandle;
 
-    T3kHandle*  m_T3kHandle;
-
-	CRITICAL_SECTION	m_csTextOut;
+    QMutex      m_csTextOut;
 
 	char m_szInstantMode[100];
 
-public:
-	void Start();
-	void Stop();
+    uint m_tmStart;
+    bool m_bTextOut;
+    bool m_bInstantMode;
 
-	BOOL SendCommand( char * szCmd );
+    bool				m_bIsConnect;
+    bool IsHIDConnect() { return m_bIsConnect; }
 
-public:
-	enum Prompt
-	{
-		promptNil,
-		promptSystemTime,
-		promptT3000Time,
-	};
-	Prompt m_prompt[PROMPT_MAX];
-	void AddPrompt( Prompt p );
+    bool OpenT3kHandle();
 
-public:
-	char ** m_ppPreCommands;
-	int     m_nPreCommands;
-	void AddPreCommand( const char * szCmd );
-	void FlushPreCommand();
+    ulong				m_dwTimeCheck;
 
-public:
-	FILE * m_pFileGetNv;
-	int  m_bFactorialNv;
-	int  m_nNvIdx;
-	int  m_nGetNvId;
-	enum tagGetNv
-	{
-		enFalse,
-		enMM,
-		enCM2c,
-		enCM2,
-		enCM1c,
-		enCM1,
-	} m_eGetNv;
-	void GetNv( BOOL bFactory, const char * szFile );
-	BOOL GetNv_SendNext( BOOL bEndOfGetNv );
+    void OnDeviceConnected(T3K_HANDLE hDevice);
+    void OnDeviceDisconnected(T3K_HANDLE hDevice);
 
-protected:
-	UINT_PTR m_tmStart;
-	BOOL m_bTextOut;
-	BOOL m_bInstantMode;
-public:
-	void LockTextOut();
-	void UnlockTextOut();
-	void TextOut( DWORD ticktime, const char * szFormat, ... );
-	void TextOutRuntime( const char * szCmd, UINT_PTR time = -1, DWORD ticktime = -1 );
+    // T3kHIDNotify::IT3kEventListener
+    virtual void OnOpenT3kDevice(T3K_HANDLE hDevice);
+    virtual void OnCloseT3kDevice(T3K_HANDLE hDevice);
+    virtual void OnMSG(short, const char *, const char *);
+    virtual void OnRSP(short, const char *, long, bool, const char *);
+    virtual void OnRSE(short, const char *, long, bool, const char *);
+    virtual void OnSTT(short, const char *, const char *);
+    virtual void OnVER(short, const char *, T3kVER &);
 
-	inline UINT_PTR GetCurrentSystime()
-	{
-		FILETIME f;
-		::GetSystemTimeAsFileTime(&f);
-		unsigned __int64 t;
-		t = f.dwLowDateTime | (((unsigned __int64)f.dwHighDateTime) << 32);
-		return (UINT_PTR)(t / 10000);
-	}
+    virtual int onReceiveRawData(void* /*pContext*/) { return 0; }
+    virtual void onReceiveRawDataFlag(bool /*bReceive*/) {}
 
-protected:
-	BOOL				m_bIsConnect;
-	BOOL IsHIDConnect() { return m_bIsConnect; }
+    // QThread
+    virtual void run();
 
-	BOOL OpenT30xHandle();
+    void OnThread();
 
-	DWORD				m_dwTimeCheck;
+signals:
+    void ProcessEvents();
 
-	void OnDeviceConnected(T3K_DEVICE_INFO devInfo);
-	void OnDeviceDisconnected(T3K_DEVICE_INFO devInfo);
-
-	// CT30xHandle::ITPDPNotify
-	virtual void TPDP_OnConnected( T3K_DEVICE_INFO devInfo );
-	virtual void TPDP_OnDisconnected( T3K_DEVICE_INFO devInfo );
-	virtual void TPDP_OnMSG( T3K_DEVICE_INFO devInfo, WORD ticktime, LPCSTR partid, const char * txt );
-	virtual void TPDP_OnRSP( T3K_DEVICE_INFO devInfo, WORD ticktime, LPCSTR partid, int id, BOOL bFinal, const char * cmd );
-	virtual void TPDP_OnSTT( T3K_DEVICE_INFO devInfo, WORD ticktime, LPCSTR partid, const char * status );
-	virtual void TPDP_OnVER( T3K_DEVICE_INFO devInfo, WORD ticktime, LPCSTR partid, t3kpacket::_body::_ver* ver );
-
-	static unsigned int __stdcall _OnThread( LPVOID lpParam );
-	void OnThread();
-public:
-	CHIDCmdThread(void);
-	~CHIDCmdThread(void);
+public slots:
+    void onStop();
+    void onProcessEvents();
 };
+
+#endif //CHIDCMDTHREAD_H
