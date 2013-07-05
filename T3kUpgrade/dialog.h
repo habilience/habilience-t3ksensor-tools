@@ -9,6 +9,28 @@ namespace Ui {
 class Dialog;
 }
 
+struct SensorInfo {
+    unsigned short  nMode;
+    unsigned short  nModelNumber;
+    unsigned short  nIapRevision;
+    unsigned short  nVersionMajor;
+    unsigned short  nVersionMinor;
+    char            szVersion[256];
+    char            szDateTime[256];
+    char            szModel[256];
+};
+
+enum FIRMWARE_TYPE { TYPE_MM=0, TYPE_CM=1 };
+struct FirmwareInfo {
+    char*           pFirmwareBinary;
+    unsigned long   dwFirmwareSize;
+    unsigned long   dwFirmwareVersion;
+    unsigned short  nModelNumber;
+    char            szVersion[256];
+    char            szModel[256];
+    FIRMWARE_TYPE   type;
+};
+
 class Dialog : public QDialog
 {
     Q_OBJECT
@@ -38,20 +60,9 @@ private:
     };
 
     struct JobItem {
-        JobItemType type;
-        QueryInfoStep subStep;
-        unsigned short which;
-    };
-
-    struct SensorInfo {
-        unsigned short nMode;
-        unsigned short nModelNumber;
-        unsigned short nIapRevision;
-        unsigned short nVersionMajor;
-        unsigned short nVersionMinor;
-        char szVersion[256];
-        char szDateTime[256];
-        char szModel[256];
+        JobItemType     type;
+        QueryInfoStep   subStep;
+        unsigned short  which;
     };
 
     QList<JobItem>  m_JobList;
@@ -69,6 +80,8 @@ private:
 #define IDX_CM2_1   (4)
 #define IDX_MAX     (5)
     SensorInfo      m_SensorInfo[IDX_MAX];
+    SensorInfo      m_TempSensorInfo[IDX_MAX];
+    QList<FirmwareInfo*> m_FirmwareInfo;
 
 public:
     explicit Dialog(QWidget *parent = 0);
@@ -98,7 +111,16 @@ protected:
     void onFinishAllJobs();
 
     void updateSensorInformation();
+    void updateFirmwareInformation();
     void displayInformation( const char* szText );
+
+    bool loadFirmwareFile();
+
+    bool analysisFirmwareBinary( const char* ver_info, FirmwareInfo* pFI );
+
+    bool verifyFirmware(QString& strMsg);
+
+    FirmwareInfo* findFirmware( FIRMWARE_TYPE type, unsigned short nModelNumber );
     
 private slots:
     void on_pushButtonUpgrade_clicked();

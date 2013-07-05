@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>510</width>
+    <width>441</width>
     <height>422</height>
    </rect>
   </property>
@@ -23,6 +23,9 @@
    <iconset resource="T3kUpgrade.qrc">
     <normaloff>:/T3kUpgradeRes/resources/T3kUpgrade.ico</normaloff>:/T3kUpgradeRes/resources/T3kUpgrade.ico</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(242, 247, 251);</string>
+  </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
@@ -33,19 +36,19 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
-     <width>491</width>
+     <y>12</y>
+     <width>421</width>
      <height>401</height>
     </rect>
    </property>
    <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
+    <enum>QFrame::NoFrame</enum>
    </property>
    <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
+    <enum>QFrame::Plain</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="pageInformation">
     <widget class="QLabel" name="labelFirmwareInformation">
@@ -53,15 +56,19 @@
       <rect>
        <x>10</x>
        <y>180</y>
-       <width>471</width>
+       <width>401</width>
        <height>31</height>
       </rect>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+	border-color: #82A6A6;
+	background-color : #DDE7E7;
+	color : #395151;
+	font-weight: bold;
+    border-style: solid;
+    border-width: 1px;
+}</string>
      </property>
      <property name="text">
       <string>Firmware Information</string>
@@ -78,9 +85,20 @@
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>471</width>
+       <width>401</width>
        <height>131</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-color: #82A6A6;
+border-style: solid;
+border-width: 1px;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
      </property>
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -97,9 +115,31 @@
       <rect>
        <x>10</x>
        <y>350</y>
-       <width>471</width>
+       <width>401</width>
        <height>41</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"> QPushButton {
+     border: 2px solid #8f8f91;
+     border-radius: 6px;
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #f6f7fa, stop: 1 #dadbde);
+     min-width: 80px;
+ }
+
+ QPushButton:pressed {
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #dadbde, stop: 1 #f6f7fa);
+ }
+
+ QPushButton:flat {
+     border: none; /* no border for a flat push button */
+ }
+
+ QPushButton:default {
+     border-color: rgb(90, 129, 129); /* make the default button prominent */
+ }</string>
      </property>
      <property name="text">
       <string>Upgrade</string>
@@ -107,15 +147,26 @@
     </widget>
     <widget class="QTextEdit" name="textEditFirmwareInformation">
      <property name="enabled">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>210</y>
-       <width>471</width>
+       <width>401</width>
        <height>131</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-color: #82A6A6;
+border-style: solid;
+border-width: 1px;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
      </property>
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -132,15 +183,19 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>471</width>
+       <width>401</width>
        <height>31</height>
       </rect>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+	border-color: #82A6A6;
+	background-color : #DDE7E7;
+	color : #395151;
+	font-weight: bold;
+    border-style: solid;
+    border-width: 1px;
+}</string>
      </property>
      <property name="text">
       <string>Sensor Information</string>
@@ -149,6 +204,11 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
+    <zorder>textEditSensorInformation</zorder>
+    <zorder>pushButtonUpgrade</zorder>
+    <zorder>textEditFirmwareInformation</zorder>
+    <zorder>labelFirmwareInformation</zorder>
+    <zorder>labelSensorInformation</zorder>
    </widget>
    <widget class="QWidget" name="pageProgress">
     <widget class="QLabel" name="labelProgress">
@@ -156,18 +216,22 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>471</width>
+       <width>401</width>
        <height>31</height>
       </rect>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+	border-color: #82A6A6;
+	background-color : #DDE7E7;
+	color : #395151;
+	font-weight: bold;
+    border-style: solid;
+    border-width: 1px;
+}</string>
      </property>
      <property name="text">
-      <string>Progress</string>
+      <string>Firmware Downloading...</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -181,9 +245,20 @@
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>471</width>
+       <width>401</width>
        <height>261</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">	border-color: #82A6A6;
+    border-style: solid;
+    border-width: 1px;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
      </property>
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -199,15 +274,32 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>300</y>
-       <width>471</width>
+       <y>305</y>
+       <width>401</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar {
+     border: 2px solid #8f8f91;
+     border-radius: 5px;
+ }
+
+ QProgressBar::chunk {
+     background-color: rgb(150,182,182);
+     width: 20px;
+ }</string>
      </property>
      <property name="value">
       <number>24</number>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
      <property name="textVisible">
+      <bool>true</bool>
+     </property>
+     <property name="invertedAppearance">
       <bool>false</bool>
      </property>
     </widget>
@@ -216,14 +308,40 @@
       <rect>
        <x>10</x>
        <y>350</y>
-       <width>471</width>
+       <width>401</width>
        <height>41</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"> QPushButton {
+     border: 2px solid #8f8f91;
+     border-radius: 6px;
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #f6f7fa, stop: 1 #dadbde);
+     min-width: 80px;
+ }
+
+ QPushButton:pressed {
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #dadbde, stop: 1 #f6f7fa);
+ }
+
+ QPushButton:flat {
+     border: none; /* no border for a flat push button */
+ }
+
+ QPushButton:default {
+     border-color: rgb(90, 129, 129); /* make the default button prominent */
+ }</string>
      </property>
      <property name="text">
       <string>Cancel</string>
      </property>
     </widget>
+    <zorder>textEditProgress</zorder>
+    <zorder>progressBar</zorder>
+    <zorder>pushButtonCancel</zorder>
+    <zorder>labelProgress</zorder>
    </widget>
   </widget>
  </widget>
