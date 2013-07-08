@@ -8,6 +8,10 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #include <conio.h>
+#else
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
 #endif
 
 #include "DefineString.h"
@@ -91,15 +95,36 @@ int T3kLoop(void* pContext)
     return 0;
 }
 
-#define INPUT_RECORD_SIZE 512
-#define INPUT_BUFFER_SIZE 2048
+int posix_kbhit(void)
+{
+    struct termios oldt, newt;
+    int ch;
+
+    tcgetattr( STDIN_FILENO, &oldt );
+    newt = oldt;
+    newt.c_lflag &= ~( ICANON | ECHO );
+    tcsetattr( STDIN_FILENO, TCSANOW, &newt );
+
+    ch = getchar();
+
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
+
+    return ch;
+}
+
+
+
 int GetCommandPolling(void* pContext)
 {
     QExFuncThread* pSender = (QExFuncThread*)pContext;
 
     while ( !pSender->TerminateFlag() )
     {
+#ifdef Q_OS_WIN
         int n = kbhit();
+#else
+        int n = posix_kbhit();
+#endif
         if( n == 0 )
         {
             QThread::msleep( 100 );
@@ -110,7 +135,7 @@ int GetCommandPolling(void* pContext)
         printf(">");
 
         char szBuf[2048];
-        char* sz = gets(szBuf);
+        char* sz = fgets(szBuf, 2048, stdin);
         size_t len = strlen(sz);
         for ( len--; len >= 0; len-- )
         {
