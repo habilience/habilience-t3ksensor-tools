@@ -195,7 +195,7 @@ void QT3kLoadSensorDataObject::Push_Data(ResponsePart Part, PairRSP &stRSP, cons
     }
 }
 
-void QT3kLoadSensorDataObject::OnRSP(ResponsePart Part, short, const char * /*sPartId*/, long lId, bool, const char *sCmd)
+void QT3kLoadSensorDataObject::OnRSP(ResponsePart Part, ushort, const char * /*sPartId*/, long lId, bool, const char *sCmd)
 {
     if( m_nSendCmdID != lId ) return;
 
@@ -230,7 +230,7 @@ void QT3kLoadSensorDataObject::OnRSP(ResponsePart Part, short, const char * /*sP
     NextCommand();
 }
 
-void QT3kLoadSensorDataObject::OnRSE(ResponsePart Part, short, const char * sPartId, long lId, bool, const char *sCmd)
+void QT3kLoadSensorDataObject::OnRSE(ResponsePart Part, ushort, const char * sPartId, long lId, bool, const char *sCmd)
 {
     if( m_nSendCmdID != lId ) return;
 
@@ -338,7 +338,7 @@ void QT3kLoadSensorDataObject::OnRSE(ResponsePart Part, short, const char * sPar
     m_pStorageHandle->RSE.push_back( sCmd );
 }
 
-void QT3kLoadSensorDataObject::OnVER(ResponsePart Part, short, const char * /*sPartId*/, T3kVER &VER)
+void QT3kLoadSensorDataObject::OnVER(ResponsePart Part, ushort, const char * /*sPartId*/, T3kVER &VER)
 {
     switch( Part )
     {

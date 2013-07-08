@@ -1,28 +1,29 @@
-#ifndef CHIDCMDTHREAD_H
-#define CHIDCMDTHREAD_H
+#ifndef CHIDCMD_H
+#define CHIDCMD_H
 
 #include "T3kHIDNotify.h"
 
-#include <QThread>
+#include <QObject>
 #include <QMutex>
 #include <QFile>
-
-#include <QEventLoop>
+#include <QFuture>
 
 #define PROMPT_MAX  3
 
-class CHIDCmdThread : public QThread, public T3kHIDNotify::IT3kEventListener
+
+class CHIDCmd : public QObject, public T3kHIDNotify::IT3kEventListener
 {
     Q_OBJECT
 
 public:
-    explicit CHIDCmdThread(QObject *parent = 0);
-    virtual ~CHIDCmdThread();
+    CHIDCmd(QObject* parent = NULL);
+    virtual ~CHIDCmd();
 
-    void Start();
-    void Stop();
+    void InitT3k();
+    void EndT3k();
+    bool ProcessT3k();
 
-    QEventLoop* loop;
+    void SetFutureHandle( QFuture<void> ft );
 
     bool SendCommand( char * szCmd );
 
@@ -64,22 +65,9 @@ public:
     void TextOutRuntime( const char * szCmd, uint time = -1, ulong ticktime = -1 );
 
 protected:
-    T3kHandle*  m_pT3kHandle;
-
-    QMutex      m_csTextOut;
-
-	char m_szInstantMode[100];
-
-    uint m_tmStart;
-    bool m_bTextOut;
-    bool m_bInstantMode;
-
-    bool				m_bIsConnect;
     bool IsHIDConnect() { return m_bIsConnect; }
 
     bool OpenT3kHandle();
-
-    ulong				m_dwTimeCheck;
 
     void OnDeviceConnected(T3K_HANDLE hDevice);
     void OnDeviceDisconnected(T3K_HANDLE hDevice);
@@ -87,26 +75,31 @@ protected:
     // T3kHIDNotify::IT3kEventListener
     virtual void OnOpenT3kDevice(T3K_HANDLE hDevice);
     virtual void OnCloseT3kDevice(T3K_HANDLE hDevice);
-    virtual void OnMSG(short, const char *, const char *);
-    virtual void OnRSP(short, const char *, long, bool, const char *);
-    virtual void OnRSE(short, const char *, long, bool, const char *);
-    virtual void OnSTT(short, const char *, const char *);
-    virtual void OnVER(short, const char *, T3kVER &);
+    virtual void OnMSG(ushort, const char *, const char *);
+    virtual void OnRSP(ushort, const char *, long, bool, const char *);
+    virtual void OnRSE(ushort, const char *, long, bool, const char *);
+    virtual void OnSTT(ushort, const char *, const char *);
+    virtual void OnVER(ushort, const char *, T3kVER &);
 
-    virtual int onReceiveRawData(void* /*pContext*/) { return 0; }
-    virtual void onReceiveRawDataFlag(bool /*bReceive*/) {}
+protected:
+    T3kHandle*          m_pT3kHandle;
+    QMutex              m_csTextOut;
 
-    // QThread
-    virtual void run();
+    char                m_szInstantMode[100];
 
-    void OnThread();
+    uint                m_tmStart;
+    bool                m_bTextOut;
+    bool                m_bInstantMode;
+
+    bool				m_bIsConnect;
+    ulong				m_dwTimeCheck;
+
+    QFuture<void>       m_ftCmdThread;
 
 signals:
-    void ProcessEvents();
 
 public slots:
-    void onStop();
-    void onProcessEvents();
+
 };
 
-#endif //CHIDCMDTHREAD_H
+#endif //CHIDCMD_H

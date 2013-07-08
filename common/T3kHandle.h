@@ -10,6 +10,7 @@
 #endif
 #include <QQueue>
 #include <QMutex>
+#include <QTimer>
 
 
 typedef struct _T3kGST
@@ -63,6 +64,14 @@ typedef struct _T3kRangeF
     float End;
 } T3kRangeF;
 
+#define REPORTID_FEATURE_CHK_CONN			10
+#pragma pack(push, 1)
+    typedef struct _FeatureCheckConnection
+    {
+        uchar			ReportID;
+        uchar			ConnectionOK;
+    } FeatureCheckConnection;
+#pragma pack(pop)
 
 class ITPDPT3kNotify;
 class T3kHandle : public QObject
@@ -82,7 +91,7 @@ public:
     bool SetNotify( ITPDPT3kNotify* pNotify );
 
     bool IsOpen();
-    bool Open();
+    //bool Open();
 
     bool OpenWithVIDPID( unsigned short nVID, unsigned short nPID, unsigned short nMI = 1, int nDevIndex = 0 );
     bool Close( bool bNotify=true );
@@ -158,6 +167,7 @@ protected:
 
     t3k_hid_library::CHID                   m_T3kVirtualDevice;
     bool                                    m_bIsVirtualDevice;
+    QTimer                                  m_TimerCheckT3kVD;
 
     bool                                    m_bCloseNotify;
 
@@ -194,7 +204,7 @@ signals:
 
 public slots:
     void onReceiveRawDataFlag(bool bReceive);
-
+    void onTimeout();
 };
 
 class ITPDPT3kNotify : public QObject
@@ -210,23 +220,23 @@ protected:
     virtual void OnCloseT3kDevice(T3K_HANDLE /*hDevice*/) {}
     virtual void OnFirmwareDownload( bool /*bDownload*/ ) {}
 
-    virtual void OnMSG( short /*nTickTime*/, const char* /*sPartId*/, const char* /*sTxt*/ ) {}
-    virtual void OnOBJ( short /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, T3kRangeF* /*pOBJ*/, unsigned short /*count*/ ) {}
-    virtual void OnOBC( short /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, T3kRangeF* /*pOBC*/, unsigned short /*count*/ ) {}
-    virtual void OnDTC( short /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, T3kRangeF* /*pDTC*/, unsigned short /*count*/ ) {}
-    virtual void OnIRD( short /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, int /*nCount*/, uchar* /*pIRD*/ ) {}
-    virtual void OnITD( short /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, int /*nCount*/, uchar* /*pITD*/ ) {}
+    virtual void OnMSG( ushort /*nTickTime*/, const char* /*sPartId*/, const char* /*sTxt*/ ) {}
+    virtual void OnOBJ( ushort /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, T3kRangeF* /*pOBJ*/, unsigned short /*count*/ ) {}
+    virtual void OnOBC( ushort /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, T3kRangeF* /*pOBC*/, unsigned short /*count*/ ) {}
+    virtual void OnDTC( ushort /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, T3kRangeF* /*pDTC*/, unsigned short /*count*/ ) {}
+    virtual void OnIRD( ushort /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, int /*nCount*/, uchar* /*pIRD*/ ) {}
+    virtual void OnITD( ushort /*nTickTime*/, const char* /*sPartId*/, int /*nCamNo*/, int /*nCount*/, uchar* /*pITD*/ ) {}
 #ifndef _T3KHANDLE_REMOVE_PRV
-    virtual void OnPRV( short /*nTickTime*/, const char* /*sPartId*/, int /*nWidth*/, int /*nHeight*/, int /*nBitCount*/, unsigned char* /*pBitmapBuffer*/ ) {}
+    virtual void OnPRV( ushort /*nTickTime*/, const char* /*sPartId*/, int /*nWidth*/, int /*nHeight*/, int /*nBitCount*/, unsigned char* /*pBitmapBuffer*/ ) {}
 #endif
-    virtual void OnCMD( short /*nTickTime*/, const char* /*sPartId*/, long /*lId*/, const char* /*sCmd*/ ) {}
-    virtual void OnRSP( short /*nTickTime*/, const char* /*sPartId*/, long /*lId*/, bool /*bFinal*/, const char* /*sCmd*/ ) {}
-    virtual void OnRSE( short /*nTickTime*/, const char* /*sPartId*/, long /*lId*/, bool /*bFinal*/, const char* /*sCmd*/ ) {}
-    virtual void OnSTT( short /*nTickTime*/, const char* /*sPartId*/, const char* /*pStatus*/ ) {}
-    virtual void OnDVC( short /*nTickTime*/, T3kDVC& /*DVC*/ ) {}
-    virtual void OnTPT( short /*nTickTime*/, short /*nActualTouch*/, short /*nTouchCount*/, t3ktouchpoint* /*points*/ ) {}
-    virtual void OnGST( short /*nTickTime*/, T3kGST& /*GST*/ ) {}
-    virtual void OnVER( short /*nTickTime*/, const char* /*sPartId*/, T3kVER& /*Ver*/ ) {}
+    virtual void OnCMD( ushort /*nTickTime*/, const char* /*sPartId*/, long /*lId*/, const char* /*sCmd*/ ) {}
+    virtual void OnRSP( ushort /*nTickTime*/, const char* /*sPartId*/, long /*lId*/, bool /*bFinal*/, const char* /*sCmd*/ ) {}
+    virtual void OnRSE( ushort /*nTickTime*/, const char* /*sPartId*/, long /*lId*/, bool /*bFinal*/, const char* /*sCmd*/ ) {}
+    virtual void OnSTT( ushort /*nTickTime*/, const char* /*sPartId*/, const char* /*pStatus*/ ) {}
+    virtual void OnDVC( ushort /*nTickTime*/, T3kDVC& /*DVC*/ ) {}
+    virtual void OnTPT( ushort /*nTickTime*/, short /*nActualTouch*/, short /*nTouchCount*/, t3ktouchpoint* /*points*/ ) {}
+    virtual void OnGST( ushort /*nTickTime*/, T3kGST& /*GST*/ ) {}
+    virtual void OnVER( ushort /*nTickTime*/, const char* /*sPartId*/, T3kVER& /*Ver*/ ) {}
 
 protected:
     // OBJ
@@ -259,8 +269,8 @@ protected:
 signals:
 
 public slots:
-    void onConnect(T3K_HANDLE hDevice);
-    void onDisconnect(T3K_HANDLE hDevice);
+    void onSensorConnect(T3K_HANDLE hDevice);
+    void onSensorDisconnect(T3K_HANDLE hDevice);
     void onPacket(void* pContext);
     virtual void onDownloadingFirmware(int bDownload);
     virtual int onReceiveRawData(void* pContext) = 0;

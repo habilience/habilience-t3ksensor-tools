@@ -30,7 +30,7 @@ protected:
     virtual void keyPressEvent(QKeyEvent *evt);
     virtual void timerEvent(QTimerEvent *evt);
 
-    virtual void OnRSP(ResponsePart Part, short lTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
+    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
 
 protected:
     int                         m_nInputModeV;

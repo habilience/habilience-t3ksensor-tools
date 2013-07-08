@@ -131,7 +131,7 @@ void QMenuStripWidget::OnChangeLanguage()
     m_arybtnMenu[QMENU_REMOTE]->setToolTip( Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_REMOTE_SUPPORT") ) );
 }
 
-void QMenuStripWidget::OnRSP(ResponsePart /*Part*/, short /*lTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QMenuStripWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
 {
     if( !winId() ) return;
 

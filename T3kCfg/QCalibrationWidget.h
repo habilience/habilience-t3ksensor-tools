@@ -21,7 +21,7 @@ public:
 protected:
     void EscapeCalibrationMode();
 
-    virtual void OnMSG(ResponsePart Part, short /*TickTime*/, const char *sPartId, const char *sTxt);
+    virtual void OnMSG(ResponsePart Part, ushort /*nTickTime*/, const char *sPartId, const char *sTxt);
 
     virtual void OnChangeLanguage();
 

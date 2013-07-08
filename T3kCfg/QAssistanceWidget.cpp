@@ -96,7 +96,7 @@ void QAssistanceWidget::OnChangeLanguage()
     ui->TabCamWidget->setTabText( 2, Res.GetResString(QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("TITLE_CHAT")) );
 }
 
-void QAssistanceWidget::OnRSP(ResponsePart /*Part*/, short /*lTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QAssistanceWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
 {
     if( !isVisible() ) return;
 
@@ -114,7 +114,7 @@ void QAssistanceWidget::OnRSP(ResponsePart /*Part*/, short /*lTickTime*/, const 
     }
 }
 
-void QAssistanceWidget::OnSTT(ResponsePart, short, const char *, const char *pStatus)
+void QAssistanceWidget::OnSTT(ResponsePart, ushort, const char *, const char *pStatus)
 {
     if( !isVisible() ) return;
 

@@ -13,10 +13,10 @@
 #define SYSTIME_PER_MSEC 10000
 
 
-CHIDCmdThread::CHIDCmdThread(QObject *parent) :
-    QThread(parent)
+CHIDCmd::CHIDCmd(QObject* parent) :
+    QObject(parent)
 {
-    m_pT3kHandle = NULL;
+    m_pT3kHandle = new T3kHandle();
     m_bIsConnect = false;
 
 	for ( int ni = 0; ni < PROMPT_MAX; ni++ )
@@ -30,7 +30,7 @@ CHIDCmdThread::CHIDCmdThread(QObject *parent) :
 	m_pFileGetNv = NULL;
 	m_eGetNv = enFalse;
 
-    m_tmStart = QTime::currentTime().elapsed();
+    m_tmStart = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch();
     m_bTextOut = true;
     m_bInstantMode = false;
 
@@ -41,9 +41,9 @@ CHIDCmdThread::CHIDCmdThread(QObject *parent) :
     m_nGetNvId = 0;
 }
 
-CHIDCmdThread::~CHIDCmdThread(void)
+CHIDCmd::~CHIDCmd(void)
 {
-	Stop();
+    EndT3k();
 
 	for ( int ni = 0; ni < m_nPreCommands; ni++ )
 	{
@@ -60,31 +60,6 @@ CHIDCmdThread::~CHIDCmdThread(void)
 	}
 }
 
-void CHIDCmdThread::Start()
-{
-    if( isRunning() )
-        return;
-
-    connect( this, SIGNAL(ProcessEvents()), this, SLOT(onProcessEvents()), Qt::QueuedConnection );
-
-    start();
-}
-
-void CHIDCmdThread::Stop()
-{
-    if( isFinished() )
-		return;
-
-    disconnect( this, SIGNAL(ProcessEvents()), NULL, NULL );
-
-    terminate();
-}
-
-void CHIDCmdThread::run()
-{
-    OnThread();
-}
-
 struct DEVICE_ID
 {
     ushort nVID;
@@ -93,7 +68,7 @@ struct DEVICE_ID
 	int nDeviceIndex;
 };
 
-bool CHIDCmdThread::OpenT3kHandle()
+bool CHIDCmd::OpenT3kHandle()
 {
     bool bRet = false;
 
@@ -153,13 +128,13 @@ bool CHIDCmdThread::OpenT3kHandle()
 	}
 	else
     {
-        m_dwTimeCheck = QTime::currentTime().elapsed();
+        m_dwTimeCheck = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch();
 	}
 
 	return bRet;
 }
 
-bool CHIDCmdThread::OnCommand( char * cmd, bool * pbSysCmd )
+bool CHIDCmd::OnCommand( char * cmd, bool * pbSysCmd )
 {
     char * buf;
     char * file = NULL;
@@ -250,48 +225,53 @@ bool CHIDCmdThread::OnCommand( char * cmd, bool * pbSysCmd )
     return true;
 }
 
-
-void CHIDCmdThread::OnThread()
+void CHIDCmd::InitT3k()
 {
-    m_pT3kHandle = new T3kHandle();
-
     OpenT3kHandle();
 
-	if ( !m_bIsConnect )
-	{
-		FlushPreCommand();
-	}
+    if ( !m_bIsConnect )
+    {
+        FlushPreCommand();
+    }
+}
 
-    while( isRunning() )
-	{
-        msleep(10);
-
-        if( !m_pT3kHandle )
-            break;
-
-        emit ProcessEvents();
-        QCoreApplication::processEvents();
-
-		if( !m_bIsConnect )
-		{
-            ulong dwCurTimeCheck = QTime::currentTime().elapsed();
-
-			if( (dwCurTimeCheck - m_dwTimeCheck) > 2000 )		// 2s
-			{
-                OpenT3kHandle();
-			}
-		}
-	}
-
+void CHIDCmd::EndT3k()
+{
     if( m_pT3kHandle )
-	{
+    {
         m_pT3kHandle->Close();
         delete m_pT3kHandle;
         m_pT3kHandle = NULL;
-	}
+    }
 }
 
-void CHIDCmdThread::OnDeviceConnected(T3K_HANDLE hDevice)
+bool CHIDCmd::ProcessT3k()
+{
+    if( !m_pT3kHandle )
+    {
+        qDebug( "Debug : null t3k handle " );
+        return false;
+    }
+
+    if( !m_bIsConnect )
+    {
+        ulong dwCurTimeCheck = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch();
+
+        if( (dwCurTimeCheck - m_dwTimeCheck) > 2000 )		// 2s
+        {
+            OpenT3kHandle();
+        }
+    }
+
+    return true;
+}
+
+void CHIDCmd::SetFutureHandle(QFuture<void> ft)
+{
+    m_ftCmdThread = ft;
+}
+
+void CHIDCmd::OnDeviceConnected(T3K_HANDLE hDevice)
 {
     m_bIsConnect = true;
 
@@ -331,7 +311,7 @@ void CHIDCmdThread::OnDeviceConnected(T3K_HANDLE hDevice)
     m_pT3kHandle->SetInstantMode(T3K_HID_MODE_COMMAND, 5000, 0);
 }
 
-void CHIDCmdThread::OnDeviceDisconnected(T3K_HANDLE hDevice)
+void CHIDCmd::OnDeviceDisconnected(T3K_HANDLE hDevice)
 {
     ushort nVID = T3kHandle::GetDeviceVID( hDevice );
     ushort nPID = T3kHandle::GetDevicePID( hDevice );
@@ -367,7 +347,7 @@ void CHIDCmdThread::OnDeviceDisconnected(T3K_HANDLE hDevice)
 }
 
 
-void CHIDCmdThread::AddPrompt( Prompt p )
+void CHIDCmd::AddPrompt( Prompt p )
 {
 	for ( int ni = 0; ni < PROMPT_MAX; ni++ )
 	{
@@ -380,7 +360,7 @@ void CHIDCmdThread::AddPrompt( Prompt p )
 }
 
 
-void CHIDCmdThread::AddPreCommand( const char * szCmd )
+void CHIDCmd::AddPreCommand( const char * szCmd )
 {
 	char ** ppPreCommands = new char *[m_nPreCommands + 1];
 	if ( m_ppPreCommands )
@@ -396,7 +376,7 @@ void CHIDCmdThread::AddPreCommand( const char * szCmd )
 }
 
 
-bool CHIDCmdThread::SendCommand( char * szCmd )
+bool CHIDCmd::SendCommand( char * szCmd )
 {
 	if( !IsHIDConnect() )
 	{
@@ -404,62 +384,67 @@ bool CHIDCmdThread::SendCommand( char * szCmd )
         return false;
 	}
 
-    Q_ASSERT( m_pT3kHandle );
+    Q_ASSERT( m_pT3kHandle != NULL );
+
+    static const char cstrHidModeChar[] = { 'M', 'C', 'V', '\0', 'O', 'T', 'G', 'D', 'S', 'X' };
 
 	if ( strstr(szCmd, cszInstantMode) == szCmd )
 	{
-        // instant_mode=***, time -> 5000...
-		char szBuffer[1024] = { 0 };
-		szCmd += sizeof(cszInstantMode) - 1;
-		int len = (int)strlen(szCmd);
-		for ( int ni = 0; ni < len; ni++ )
-		{
-			if ( isspace(*szCmd) )
-				szCmd++;
-			else
-				break;
-		}
-		char * pD = strchr(szCmd, ',');
-		if ( pD == NULL )
-			pD = szCmd + strlen(szCmd);
-		strcpy(szBuffer, cszInstantMode);
-        bool bCmd = false;
-        bool bQuery = false;
-		while ( szCmd < pD )
-		{
-			if ( *szCmd == 'c' || *szCmd == 'C' )
-                bCmd = true;
-			if ( *szCmd == '*' || *szCmd == '!' || *szCmd == '?' )
-			{
-                bQuery = true;
-			}
-			szBuffer[strlen(szBuffer)] = *szCmd++;
-		}
-		if ( !bQuery && !bCmd )
-		{
-			szBuffer[strlen(szBuffer)] = 'C';
-		}
-		strcat(szBuffer, pD);
-		szCmd = szBuffer;
+        int nInstantMode = T3K_HID_MODE_COMMAND;
+        ushort nTimeout = 5000;
+        ulong dwFGstValue = 0xFFFFFFFF;
+
+        QString strCmd( szCmd );
+        strCmd.trimmed();
+        strCmd = strCmd.remove( 0, strCmd.indexOf( '=' ) + 1 );
+        int nP = strCmd.indexOf( ',' );
+        QString strMode = strCmd.left( nP ).toUpper();
 
         m_bInstantMode = true;
-	}
 
-    m_tmStart = QTime::currentTime().elapsed();
+        if( strMode.length() > 1 &&
+            (strMode.at(0) == '*' || strMode.at(0) == '!' || strMode.at(0) == '?') )
+        {
+
+        }
+        else
+        {
+            for( int i=0; i<strMode.length(); i++ )
+            {
+                if( strMode.at(i) == cstrHidModeChar[i] )
+                    nInstantMode |= (0x01 <<i);
+            }
+
+            strCmd = strCmd.remove( 0, nP + 1 );
+            nP = strCmd.indexOf( ',' );
+            if( nP >= 0 )
+            {
+                nTimeout = strCmd.left( nP ).toUShort();
+                dwFGstValue = strCmd.remove( 0, nP + 1 ).toULong();
+            }
+
+            m_tmStart = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch();
+            m_pT3kHandle->SetInstantMode( nInstantMode, nTimeout, dwFGstValue );
+
+            return true;
+        }
+    }
+
+    m_tmStart = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch();
     m_pT3kHandle->SendCommand(szCmd);
 
     return true;
 }
 
 
-void CHIDCmdThread::LockTextOut()
+void CHIDCmd::LockTextOut()
 {
     QMutexLocker Lock( &m_csTextOut );
     m_bTextOut = false;
     //qDebug("LockTextOut\r\n");
 }
 
-void CHIDCmdThread::UnlockTextOut()
+void CHIDCmd::UnlockTextOut()
 {
 	//@@ lock textout
 
@@ -468,7 +453,7 @@ void CHIDCmdThread::UnlockTextOut()
     m_bTextOut = true;
 }
 
-void CHIDCmdThread::TextOutConsole( ulong ticktime, const char * szFormat, ... )
+void CHIDCmd::TextOutConsole( ulong ticktime, const char * szFormat, ... )
 {
 	va_list varpars;
 	va_start(varpars, szFormat);
@@ -491,11 +476,11 @@ void CHIDCmdThread::TextOutConsole( ulong ticktime, const char * szFormat, ... )
 	va_end(varpars);
 }
 
-void CHIDCmdThread::TextOutRuntime( const char * szCmd, uint time, ulong ticktime )
+void CHIDCmd::TextOutRuntime( const char * szCmd, uint time, ulong ticktime )
 {
-    if ( time == 0xFFFF )
+    if ( time == -1 )
 	{
-        time = QTime::currentTime().elapsed();
+        time = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch();
 	}
 
 	if ( time == 0 )
@@ -528,11 +513,11 @@ void CHIDCmdThread::TextOutRuntime( const char * szCmd, uint time, ulong ticktim
 				pCur += sprintf(pCur, "%03d.%03d ", sys_sec, sys_msec);
 				break;
             case promptT3kTime:
-                if ( ticktime != 0xFFFF )
+                if ( ticktime != -1 )
 					pCur += sprintf(pCur, "%03d.%03d ", t_sec, t_msec);
 				else
-				{
-					strcat(pCur, "---.--- ");
+                {
+                    strcat(pCur, "---.--- ");
 					pCur += strlen(pCur);
 				}
 				break;
@@ -545,24 +530,24 @@ void CHIDCmdThread::TextOutRuntime( const char * szCmd, uint time, ulong ticktim
 	}
 }
 
-void CHIDCmdThread::OnOpenT3kDevice(T3K_HANDLE hDevice)
+void CHIDCmd::OnOpenT3kDevice(T3K_HANDLE hDevice)
 {
     OnDeviceConnected( hDevice );
 }
 
-void CHIDCmdThread::OnCloseT3kDevice(T3K_HANDLE hDevice)
+void CHIDCmd::OnCloseT3kDevice(T3K_HANDLE hDevice)
 {
     OnDeviceDisconnected( hDevice );
     m_pT3kHandle->Close();
     m_bIsConnect = false;
 }
 
-void CHIDCmdThread::OnMSG(short nTicktime, const char *sPardID, const char *sTxt)
+void CHIDCmd::OnMSG(ushort nTickTime, const char *sPardID, const char *sTxt)
 {
-    TextOutConsole(nTicktime, "%s: %s\r\n", sPardID, sTxt);
+    TextOutConsole(nTickTime, "%s: %s\r\n", sPardID, sTxt);
 }
 
-void CHIDCmdThread::OnVER(short nTicktime, const char *sPartID, T3kVER &ver)
+void CHIDCmd::OnVER(ushort nTickTime, const char *sPartID, T3kVER &ver)
 {
 	char szVersion[128] = { 0, };
 	char date[T3K_VER_DATE_LEN + 1];
@@ -589,15 +574,15 @@ void CHIDCmdThread::OnVER(short nTicktime, const char *sPartID, T3kVER &ver)
 		else
             sprintf(szVersion, "NV: %d, Ver: %X.%X, Model: T%X  %s %s", ver.nv, ver.major, ver.minor, ver.model, date, time);
 	}
-    TextOutConsole(nTicktime, "%s: %s\r\n", sPartID, szVersion);
+    TextOutConsole(nTickTime, "%s: %s\r\n", sPartID, szVersion);
 }
 
-void CHIDCmdThread::OnSTT(short nTicktime, const char *sPartID, const char *sStatus)
+void CHIDCmd::OnSTT(ushort nTickTime, const char *sPartID, const char *sStatus)
 {
-    TextOutConsole(nTicktime, "%s: %s\r\n", sPartID, sStatus);
+    TextOutConsole(nTickTime, "%s: %s\r\n", sPartID, sStatus);
 }
 
-void CHIDCmdThread::OnRSP(short nTicktime, const char * sPartID, long lID, bool, const char *sCmd)
+void CHIDCmd::OnRSP(ushort nTickTime, const char * sPartID, long lID, bool, const char *sCmd)
 {
     bool bSend = false;
 
@@ -608,12 +593,12 @@ void CHIDCmdThread::OnRSP(short nTicktime, const char * sPartID, long lID, bool,
             strncpy( m_szInstantMode, sCmd, 100 );
 			if ( !m_bInstantMode )
 			{
-                TextOutConsole(nTicktime, "%s: %s\r\n", sPartID, sCmd);
+                TextOutConsole(nTickTime, "%s: %s\r\n", sPartID, sCmd);
 			}
 		}
 		if ( m_bInstantMode )
 		{
-            TextOutConsole(nTicktime, "%s: %s\r\n", sPartID, sCmd);
+            TextOutConsole(nTickTime, "%s: %s\r\n", sPartID, sCmd);
             m_bInstantMode = false;
 		}
 	}
@@ -634,9 +619,9 @@ void CHIDCmdThread::OnRSP(short nTicktime, const char * sPartID, long lID, bool,
                 if ( sCmd[0] != 0 )
 				{
 					if ( m_nNvIdx < 0 )
-                        TextOutConsole(nTicktime, "%s: [%s]\r\n", sPartID, sCmd);
+                        TextOutConsole(nTickTime, "%s: [%s]\r\n", sPartID, sCmd);
 					else
-                        TextOutConsole(nTicktime, "%s: %s\r\n", sPartID, sCmd);
+                        TextOutConsole(nTickTime, "%s: %s\r\n", sPartID, sCmd);
 
 					if ( m_pFileGetNv )
 					{
@@ -733,7 +718,7 @@ void CHIDCmdThread::OnRSP(short nTicktime, const char * sPartID, long lID, bool,
 		}
 		else
 		{
-            TextOutConsole(nTicktime, "%s: %s\r\n", sPartID, sCmd);
+            TextOutConsole(nTickTime, "%s: %s\r\n", sPartID, sCmd);
 		}
 	}
 
@@ -743,12 +728,12 @@ void CHIDCmdThread::OnRSP(short nTicktime, const char * sPartID, long lID, bool,
 	}
 }
 
-void CHIDCmdThread::OnRSE(short ticktime, const char *partid, long id, bool finish, const char *cmd)
+void CHIDCmd::OnRSE(ushort ticktime, const char *partid, long id, bool finish, const char *cmd)
 {
     OnRSP(ticktime, partid, id, finish, cmd);
 }
 
-void CHIDCmdThread::FlushPreCommand()
+void CHIDCmd::FlushPreCommand()
 {
     bool bSysCmd = false;
 	while ( m_nPreCommands > 0 )
@@ -793,7 +778,7 @@ void CHIDCmdThread::FlushPreCommand()
 }
 
 
-void CHIDCmdThread::GetNv( bool bFactory, const char * szFile )
+void CHIDCmd::GetNv( bool bFactory, const char * szFile )
 {
 	m_eGetNv = enFalse;
 	if ( !m_bIsConnect )
@@ -846,12 +831,12 @@ void CHIDCmdThread::GetNv( bool bFactory, const char * szFile )
 	else
 		m_nNvIdx = 0;
 	m_eGetNv = enCM1;
-    m_tmStart = QTime::currentTime().elapsed();
+    m_tmStart = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch();
 
     GetNv_SendNext( false );
 }
 
-bool CHIDCmdThread::GetNv_SendNext( bool bEndOfGetNv )
+bool CHIDCmd::GetNv_SendNext( bool bEndOfGetNv )
 {
 	if ( m_eGetNv == enFalse )
         return false;
@@ -918,14 +903,4 @@ bool CHIDCmdThread::GetNv_SendNext( bool bEndOfGetNv )
 	//TRACE( "Send cmd[%d]: %s\r\n", nId, szCmd );
 
     return true;
-}
-
-void CHIDCmdThread::onStop()
-{
-    Stop();
-}
-
-void CHIDCmdThread::onProcessEvents()
-{
-    qApp->processEvents();
 }

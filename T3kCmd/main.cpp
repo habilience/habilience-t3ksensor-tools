@@ -1,7 +1,9 @@
 #include <QCoreApplication>
 #include <QtConcurrent/QtConcurrent>
+#include <QFuture>
 
 #include "HIDCmdThread.h"
+#include "QExFuncThread.h"
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -12,21 +14,17 @@
 
 
 
-CHIDCmdThread  g_HIDCmdThread;
-QEventLoop loop;
-bool g_bExit = false;
+CHIDCmd  g_HIDCmd;
 
 static void OnStart();
-void GetCommandPolling();
+int GetCommandPolling(void* pContext);
+int T3kLoop(void* pContext);
 bool CtrlHandler( unsigned long dwEvent );
 
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-
-    g_HIDCmdThread.loop = &loop;
-    int nRetCode = 0;
 
     int ni = 1;
     for ( ; ni < argc; ni++ )
@@ -38,44 +36,77 @@ int main(int argc, char *argv[])
             return 0;
         }
         else if ( strcmp(argv[ni], "/t") == 0 )
-            g_HIDCmdThread.AddPrompt(CHIDCmdThread::promptT3kTime);
+            g_HIDCmd.AddPrompt(CHIDCmd::promptT3kTime);
         else if ( strcmp(argv[ni], "/T") == 0 )
-            g_HIDCmdThread.AddPrompt(CHIDCmdThread::promptSystemTime);
+            g_HIDCmd.AddPrompt(CHIDCmd::promptSystemTime);
         else if ( strstr(argv[ni], "/c:") == argv[ni] )
         {
             char * pCmd = argv[ni] + 3;
-            g_HIDCmdThread.AddPreCommand(pCmd);
+            g_HIDCmd.AddPreCommand(pCmd);
         }
     }
 
-    //QObject::connect( &a, SIGNAL(aboutToQuit(QPrivateSignal)), &g_HIDCmdThread, SLOT(onStop(QPrivateSignal)) );
+    QExFuncThread T3kThread( &a, T3kLoop, NULL );
+    QExFuncThread CmdThread( &a, GetCommandPolling, NULL );
 
-    OnStart();
+    a.connect( a.instance(), &QCoreApplication::aboutToQuit, &T3kThread, &QExFuncThread::onStop, Qt::DirectConnection );
+    a.connect( a.instance(), &QCoreApplication::aboutToQuit, &CmdThread, &QExFuncThread::onStop, Qt::DirectConnection );
 
-    g_HIDCmdThread.Start();
+    T3kThread.connect( &T3kThread, &QThread::started, &CmdThread, &QExFuncThread::onStart );
+    //T3kThread.connect( &T3kThread, &QThread::finished, &CmdThread, &QExFuncThread::onStop );
+    T3kThread.connect( &T3kThread, &QThread::finished, &CmdThread, &QExFuncThread::onExit );
+    CmdThread.connect( &CmdThread, &QThread::finished, &T3kThread, &QExFuncThread::onStop );
+    //CmdThread.connect( &CmdThread, &QThread::finished, &T3kThread, &QExFuncThread::onExit );
+    T3kThread.start();
+    //CmdThread.start();
 
-    QFuture<void> ft = QtConcurrent::run( GetCommandPolling );
+    //QFuture<void> ftT3k = QtConcurrent::run( T3kLoop );
+    //QFuture<void> ftCmd = QtConcurrent::run( GetCommandPolling );
+    //g_HIDCmd.SetFutureHandle( ft );
 
-    GetCommandPolling();
 
-    g_HIDCmdThread.Stop();
+    //QObject::connect( &a, &QCoreApplication::aboutToQuit, g_HIDCmd, &CHIDCmd::onStop, Qt::DirectConnection );
 
     //QObject::disconnect(qApp, SIGNAL(aboutToQuit(QPrivateSignal));
-
-    a.exec();
-
-    return nRetCode;
+    return a.exec();
 }
 
 static void OnStart()
 {
-    g_HIDCmdThread.TextOutRuntime(cstrTitleOut, 0);
+    g_HIDCmd.TextOutRuntime(cstrTitleOut, 0);
+}
+
+int T3kLoop(void* pContext)
+{
+    OnStart();
+
+    g_HIDCmd.InitT3k();
+    g_HIDCmd.ProcessT3k();
+
+    QExFuncThread* pSender = (QExFuncThread*)pContext;
+
+    while( !pSender->TerminateFlag() )
+    {
+#ifdef _DEBUG
+        bool bRet =
+#endif
+        g_HIDCmd.ProcessT3k();
+#ifdef _DEBUG
+        //Q_ASSERT( bRet );
+#endif
+        QThread::msleep( 1 );
+    }
+
+    g_HIDCmd.EndT3k();
+
+    return 0;
 }
 
 #define INPUT_RECORD_SIZE 512
 #define INPUT_BUFFER_SIZE 2048
-void GetCommandPolling()
+int GetCommandPolling(void* pContext)
 {
+    QExFuncThread* pSender = (QExFuncThread*)pContext;
 #ifdef Q_OS_WIN
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
     if( hIn != INVALID_HANDLE_VALUE )
@@ -85,17 +116,17 @@ void GetCommandPolling()
         fdwMode = ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT;
         SetConsoleMode(hIn, fdwMode);
 
-        while ( 1 )
+        while ( !pSender->TerminateFlag() )
         {
+            if( WaitForSingleObject( hIn, 100 ) != WAIT_OBJECT_0 )
+            {
+                continue;
+            }
+
             INPUT_RECORD ir[INPUT_RECORD_SIZE];
             DWORD dw;
             if ( !ReadConsoleInput(hIn, ir, INPUT_RECORD_SIZE, &dw) || dw <= 0 )
                 continue;
-
-            if ( g_bExit )
-            {
-                break;
-            }
 
             if ( ir[0].EventType == KEY_EVENT &&
                 ir[0].Event.KeyEvent.wVirtualKeyCode != VK_PROCESSKEY &&
@@ -110,7 +141,7 @@ void GetCommandPolling()
                 WriteConsoleInput(hIn, ir, dw, &dwWrite);
 
                 // stop output
-                g_HIDCmdThread.LockTextOut();
+                g_HIDCmd.LockTextOut();
 
                 Sleep(100);
                 printf(">");
@@ -139,9 +170,9 @@ void GetCommandPolling()
                 }
 
                 // start output
-                g_HIDCmdThread.UnlockTextOut();
+                g_HIDCmd.UnlockTextOut();
 
-                BOOL bRet = g_HIDCmdThread.OnCommand(sz);
+                BOOL bRet = g_HIDCmd.OnCommand(sz);
 
                 if ( !bRet )
                     break;
@@ -153,6 +184,8 @@ void GetCommandPolling()
 #else
 
 #endif
+
+    return 0;
 }
 
 //static bool __stdcall CtrlHandler( unsigned long dwEvent )

@@ -38,8 +38,8 @@ protected:
     virtual void hideEvent(QHideEvent *evt);
     virtual void keyPressEvent(QKeyEvent *evt);
 
-    virtual void OnRSP(ResponsePart Part, short lTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
-    virtual void OnSTT(ResponsePart Part, short nTickTime, const char *sPartId, const char *pStatus);
+    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
+    virtual void OnSTT(ResponsePart Part, ushort nTickTime, const char *sPartId, const char *pStatus);
 
 protected:
     QCalibrationWidget*         m_pwndCalibration;

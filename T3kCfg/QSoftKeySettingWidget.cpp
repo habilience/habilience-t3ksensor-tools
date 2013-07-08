@@ -122,7 +122,7 @@ void QSoftKeySettingWidget::OnChangeLanguage()
     ui->TitleSotfKey->setText( Res.GetResString( QString::fromUtf8("SOFTKEY SETTING"), QString::fromUtf8("TEXT_TITLE") ) );
 }
 
-void QSoftKeySettingWidget::OnRSP(ResponsePart /*Part*/, short /*lTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QSoftKeySettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
 {
     if( !isVisible() ) return;
 

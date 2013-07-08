@@ -1241,7 +1241,7 @@ int ParseProfileforIsMacMargin( const char* sCmd, int nProfileIndex )
     return -1;
 }
 
-void T3kCfgWnd::OnRSP( ResponsePart /*Part*/, short /*lTickTime*/, const char* /*sPartId*/, long lId, bool /*bFinal*/, const char* sCmd )
+void T3kCfgWnd::OnRSP( ResponsePart /*Part*/, ushort /*nTickTime*/, const char* /*sPartId*/, long lId, bool /*bFinal*/, const char* sCmd )
 {
     if( !winId() ) return;
     if( m_nSendCmdID >= 0 && m_nSendCmdID != lId ) return;

@@ -26,9 +26,9 @@ protected:
 
     // QTPDPEventMultiCaster::ITPDPEventListener
 protected:
-    virtual void OnRSP(ResponsePart, short, const char *, long, bool, const char *);
-    virtual void OnRSE(ResponsePart, short, const char *, long, bool, const char *);
-    virtual void OnVER(ResponsePart, short, const char *, T3kVER &);
+    virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
+    virtual void OnRSE(ResponsePart, ushort, const char *, long, bool, const char *);
+    virtual void OnVER(ResponsePart, ushort, const char *, T3kVER &);
 
 protected:
     long                        m_nNVIndex;

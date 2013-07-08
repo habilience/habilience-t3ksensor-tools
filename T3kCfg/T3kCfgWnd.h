@@ -75,7 +75,7 @@ protected:
     virtual void OnOpenT3kDevice();
     virtual void OnCloseT3kDevice();
     virtual void OnFirmwareDownload( bool bDownload );
-    virtual void OnRSP( ResponsePart Part, short lTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd );
+    virtual void OnRSP( ResponsePart Part, ushort nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd );
 
 private:
     void Init();

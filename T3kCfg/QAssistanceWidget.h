@@ -30,8 +30,8 @@ protected:
     virtual void showEvent(QShowEvent *evt);
     virtual void hideEvent(QHideEvent *evt);
 
-    virtual void OnRSP(ResponsePart Part, short lTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
-    virtual void OnSTT(ResponsePart, short, const char *, const char *pStatus);
+    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
+    virtual void OnSTT(ResponsePart, ushort, const char *, const char *pStatus);
 
 private:
     Ui::QAssistanceWidget* ui;

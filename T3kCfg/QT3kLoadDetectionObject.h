@@ -19,8 +19,8 @@ public:
 
     // QTPDPEventMultiCaster::ITPDPEventListener
 protected:
-    virtual void OnIRD(ResponsePart, short, const char *, int, int, unsigned char *);
-    virtual void OnITD(ResponsePart, short, const char *, int, int, unsigned char *);
+    virtual void OnIRD(ResponsePart, ushort, const char *, int, int, unsigned char *);
+    virtual void OnITD(ResponsePart, ushort, const char *, int, int, unsigned char *);
 
 protected:
     void InitCamDataForDetection();

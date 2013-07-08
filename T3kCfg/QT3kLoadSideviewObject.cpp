@@ -112,7 +112,7 @@ void QT3kLoadSideviewObject::FinishSideView()
     m_bStart = false;
 }
 
-void QT3kLoadSideviewObject::OnPRV(ResponsePart Part, short, const char *, int nWidth, int nHeight, int, unsigned char *pImgBuffer)
+void QT3kLoadSideviewObject::OnPRV(ResponsePart Part, ushort, const char *, int nWidth, int nHeight, int, unsigned char *pImgBuffer)
 {
     int nCamNo = Part-1;
     Q_ASSERT( nCamNo >= 0 && nCamNo < m_nCountAskCam );
@@ -176,7 +176,7 @@ void QT3kLoadSideviewObject::OnPRV(ResponsePart Part, short, const char *, int n
     FinishSideView();
 }
 
-void QT3kLoadSideviewObject::OnRSE(ResponsePart Part, short, const char *sPartId, long lId, bool, const char *sCmd)
+void QT3kLoadSideviewObject::OnRSE(ResponsePart Part, ushort, const char *sPartId, long lId, bool, const char *sCmd)
 {
     if( m_nSendCmdID != lId ) return;
 

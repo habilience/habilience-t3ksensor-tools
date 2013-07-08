@@ -107,7 +107,7 @@ void QSideviewWidget::RequestSensorData( bool /*bDefault*/ )
     m_pT3kHandle->SendCommand( (const char*)QString("%1%2?").arg(strCmd).arg(cstrDetectionLine).toUtf8().data() );
 }
 
-void QSideviewWidget::OnRSP(ResponsePart Part, short, const char *, long, bool, const char *sCmd)
+void QSideviewWidget::OnRSP(ResponsePart Part, ushort, const char *, long, bool, const char *sCmd)
 {
     if( !winId() ) return;
 
@@ -157,7 +157,7 @@ void QSideviewWidget::OnRSP(ResponsePart Part, short, const char *, long, bool, 
     }
 }
 
-void QSideviewWidget::OnRSE(ResponsePart /*Part*/, short, const char *sPartId, long, bool, const char *sStatus)
+void QSideviewWidget::OnRSE(ResponsePart /*Part*/, ushort, const char *sPartId, long, bool, const char *sStatus)
 {
     if( !isVisible() ) return;
 
@@ -193,7 +193,7 @@ void QSideviewWidget::OnRSE(ResponsePart /*Part*/, short, const char *sPartId, l
     }
 }
 
-void QSideviewWidget::OnPRV(ResponsePart /*Part*/, short, const char *, int nWidth, int nHeight, int, unsigned char *pBitmapBuffer)
+void QSideviewWidget::OnPRV(ResponsePart /*Part*/, ushort, const char *, int nWidth, int nHeight, int, unsigned char *pBitmapBuffer)
 {
     if( !isVisible() ) return;
 

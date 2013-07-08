@@ -595,7 +595,7 @@ inline bool Extract2Word( QString& str, uchar& cV )
     return true;
 }
 
-void QMouseMappingTable::OnRSP(ResponsePart /*Part*/, short /*lTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QMouseMappingTable::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
 {
     if( !winId() ) return;
 

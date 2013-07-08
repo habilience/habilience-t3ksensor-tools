@@ -81,7 +81,7 @@ protected:
 
     void OnMouseLBDown(QPointF point);
 
-    virtual void OnRSP(ResponsePart Part, short lTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
+    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
 
 private:
     CellInfo* GetAt(int nIndex);

@@ -31,9 +31,9 @@ protected:
     virtual void OnChangeLanguage();
 
 protected:
-    virtual void OnRSP(ResponsePart Part, short, const char *, long, bool, const char *sCmd);
-    virtual void OnRSE(ResponsePart Part, short, const char *sPartId, long, bool, const char *sStatus);
-    virtual void OnPRV(ResponsePart Part, short, const char *, int nWidth, int nHeight, int, unsigned char *pBitmapBuffer);
+    virtual void OnRSP(ResponsePart Part, ushort, const char *, long, bool, const char *sCmd);
+    virtual void OnRSE(ResponsePart Part, ushort, const char *sPartId, long, bool, const char *sStatus);
+    virtual void OnPRV(ResponsePart Part, ushort, const char *, int nWidth, int nHeight, int, unsigned char *pBitmapBuffer);
 
 protected:
     void RequestSensorData( bool bDefault );

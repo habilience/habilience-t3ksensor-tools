@@ -92,7 +92,7 @@ void QTouchSettingWidget::OnChangeLanguage()
     ui->EditZoom->setAlignment( eFlag );
 }
 
-void QTouchSettingWidget::OnRSP(ResponsePart /*Part*/, short /*lTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QTouchSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
 {
     if( !isVisible() ) return;
 

@@ -37,7 +37,7 @@ protected:
     virtual void showEvent(QShowEvent *evt);
 
     virtual void OnChangeLanguage();
-    virtual void OnRSP(ResponsePart Part, short lTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
+    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
 
 protected:
     QRaisePushButton**      m_arybtnMenu;

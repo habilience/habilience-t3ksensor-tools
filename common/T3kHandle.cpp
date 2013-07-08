@@ -36,6 +36,9 @@ T3kHandle::T3kHandle()
     m_T3kNotify.fnOnReceiveRawData = NULL;
     m_T3kNotify.fnOnDownloadingFirmware = OnDownloadingFirmware;
     m_T3kNotify.fnOnDisconnect = OnDisconnect;
+
+    m_TimerCheckT3kVD.connect( &m_TimerCheckT3kVD, &QTimer::timeout, this, &T3kHandle::onTimeout );
+    //qRegisterMetaType<T3K_HANDLE>("T3K_HANDLE");
 }
 
 T3kHandle::~T3kHandle()
@@ -105,24 +108,25 @@ char* T3kHandle::GetRawDataPacket( int& nRetBytes )
 
 void T3kHandle::ConnectSignal()
 {
-    connect( this, SIGNAL(Connect(T3K_HANDLE)), m_pNotify, SLOT(onConnect(T3K_HANDLE)), Qt::DirectConnection );
-    connect( this, SIGNAL(Disconnect(T3K_HANDLE)), m_pNotify, SLOT(onDisconnect(T3K_HANDLE)), Qt::QueuedConnection );
-    connect( this, SIGNAL(Packet(void*)), m_pNotify, SLOT(onPacket(void*)), Qt::QueuedConnection );
-    connect( this, SIGNAL(PacketSync(void*)), m_pNotify, SLOT(onPacket(void*)), Qt::BlockingQueuedConnection );
-    connect( this, SIGNAL(ReceiveRawData(void*)), m_pNotify, SLOT(onReceiveRawData(void*)), Qt::QueuedConnection );
-    connect( this, SIGNAL(DownloadingFirmware(int)), m_pNotify, SLOT(onDownloadingFirmware(int)), Qt::QueuedConnection );
-    connect( this, SIGNAL(ReceiveRawDataFlag(bool)), m_pNotify, SLOT(onReceiveRawDataFlag(bool)), Qt::QueuedConnection );
+    // QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    connect( this, &T3kHandle::Connect, m_pNotify, &ITPDPT3kNotify::onSensorConnect, Qt::DirectConnection );
+    connect( this, &T3kHandle::Disconnect, m_pNotify, &ITPDPT3kNotify::onSensorDisconnect, Qt::QueuedConnection );
+    connect( this, &T3kHandle::Packet, m_pNotify, &ITPDPT3kNotify::onPacket, Qt::QueuedConnection );
+    connect( this, &T3kHandle::PacketSync, m_pNotify, &ITPDPT3kNotify::onPacket, Qt::BlockingQueuedConnection );
+    connect( this, &T3kHandle::ReceiveRawData, m_pNotify, &ITPDPT3kNotify::onReceiveRawData, Qt::QueuedConnection );
+    connect( this, &T3kHandle::DownloadingFirmware, m_pNotify, &ITPDPT3kNotify::onDownloadingFirmware, Qt::QueuedConnection );
+    connect( this, &T3kHandle::ReceiveRawDataFlag, m_pNotify, &ITPDPT3kNotify::onReceiveRawDataFlag, Qt::QueuedConnection );
 }
 
 void T3kHandle::DisconnectSignal()
 {
-    disconnect( this, SIGNAL(Connect(T3K_HANDLE)), NULL, NULL );
-    disconnect( this, SIGNAL(Disconnect(T3K_HANDLE)), NULL, NULL );
-    disconnect( this, SIGNAL(Packet(void*)), NULL, NULL );
-    disconnect( this, SIGNAL(PacketSync(void*)), NULL, NULL );
-    disconnect( this, SIGNAL(ReceiveRawData(void*)), NULL, NULL );
-    disconnect( this, SIGNAL(DownloadingFirmware(int)), NULL, NULL );
-    disconnect( this, SIGNAL(ReceiveRawDataFlag(bool)), NULL, NULL );
+    disconnect( this, &T3kHandle::Connect, m_pNotify, &ITPDPT3kNotify::onSensorConnect );
+    disconnect( this, &T3kHandle::Disconnect, m_pNotify, &ITPDPT3kNotify::onSensorDisconnect );
+    disconnect( this, &T3kHandle::Packet, m_pNotify, &ITPDPT3kNotify::onPacket );
+    disconnect( this, &T3kHandle::PacketSync, m_pNotify, &ITPDPT3kNotify::onPacket );
+    disconnect( this, &T3kHandle::ReceiveRawData, m_pNotify, &ITPDPT3kNotify::onReceiveRawData );
+    disconnect( this, &T3kHandle::DownloadingFirmware, m_pNotify, &ITPDPT3kNotify::onDownloadingFirmware );
+    disconnect( this, &T3kHandle::ReceiveRawDataFlag, m_pNotify, &ITPDPT3kNotify::onReceiveRawDataFlag );
 }
 
 bool T3kHandle::SetNotify(ITPDPT3kNotify *pNotify)
@@ -160,61 +164,6 @@ bool T3kHandle::IsOpen()
     return m_pT3kDevice != NULL ? true : false;
 }
 
-bool T3kHandle::Open()
-{
-#ifdef HITACHI_VER
-    m_pT3kDevice = ::T3kOpenDevice( HITACHI_VID, HITACHI_PID, 1, 0 );
-#else
-    do
-    {
-        int nOldT3000Cnt = ::T3kGetDeviceCount( 0xFFFF, 0x0000, 1 );
-        if( nOldT3000Cnt )
-        {
-            m_pT3kDevice = ::T3kOpenDevice( 0xFFFF, 0x0000, 1, 0 );
-            break;
-        }
-        int nT3000Cnt = ::T3kGetDeviceCount( 0x2200, 0x3000, 1 );
-        if( nT3000Cnt )
-        {
-            m_pT3kDevice = ::T3kOpenDevice( 0x2200, 0x3000, 1, 0 );
-            break;
-        }
-        int nT3100Cnt = ::T3kGetDeviceCount( 0x2200, 0x3100, 1 );
-        if( nT3100Cnt )
-        {
-            m_pT3kDevice = ::T3kOpenDevice( 0x2200, 0x3100, 1, 0 );
-            break;
-        }
-        int nT3200Cnt = ::T3kGetDeviceCount( 0x2200, 0x3200, 1 );
-        if( nT3200Cnt )
-        {
-            m_pT3kDevice = ::T3kOpenDevice( 0x2200, 0x3200, 1, 0 );
-            break;
-        }
-        int nT3500Cnt = ::T3kGetDeviceCount( 0x2200, 0x3500, 1 );
-        if( nT3500Cnt )
-        {
-            m_pT3kDevice = ::T3kOpenDevice( 0x2200, 0x3500, 1, 0 );
-            break;
-        }
-        int nT3900Cnt = ::T3kGetDeviceCount( 0x2200, 0x3900, 1 );
-        if( nT3900Cnt )
-        {
-            m_pT3kDevice = ::T3kOpenDevice( 0x2200, 0x3900, 1, 0 );
-            break;
-        }
-    } while( false );
-#endif
-    bool bRet = m_pT3kDevice != NULL ? true : false;
-    if( bRet )
-    {
-        SetNotify( m_pNotify );
-
-        emit Connect( m_pT3kDevice );
-    }
-    return bRet;
-}
-
 bool T3kHandle::OpenWithVIDPID( unsigned short nVID, unsigned short nPID, unsigned short nMI /*= 1*/, int nDevIndex /*= 0*/ )
 {
 #ifdef HITACHI_VER
@@ -222,21 +171,51 @@ bool T3kHandle::OpenWithVIDPID( unsigned short nVID, unsigned short nPID, unsign
 #endif
     m_pT3kDevice = ::T3kOpenDevice( nVID, nPID, nMI, nDevIndex );
 
-    bool bRet = m_pT3kDevice != NULL ? true : false;
-    if( bRet )
-    {
-        SetNotify( m_pNotify );
+    if( m_pT3kDevice == NULL ) return false;
 
-        emit Connect( m_pT3kDevice );
+    if( nVID == 0x2200 && nPID == 0xFF02 )
+    {
+        do
+        {
+            if ( m_T3kVirtualDevice.Open( 0x2200, 0xFF02, 0, 0 ) )
+            {
+                FeatureCheckConnection CheckConnection;
+                CheckConnection.ReportID = REPORTID_FEATURE_CHK_CONN;
+                if ( m_T3kVirtualDevice.GetFeature(&CheckConnection, sizeof(CheckConnection)) )
+                {
+                    if ( CheckConnection.ConnectionOK )
+                    {
+                        m_bIsVirtualDevice = true;
+                        if( !m_TimerCheckT3kVD.isActive() )
+                            m_TimerCheckT3kVD.start( 2000 );
+                        break;
+                    }
+                }
+            }
+            Close( false );
+            return false;
+        } while ( false );
     }
+
+    SetNotify( m_pNotify );
+    emit Connect( m_pT3kDevice );
     //qDebug( "T3kHandle::OpenWithVIDPID - %d", bRet );
-    return bRet;
+    return true;
 }
 
 bool T3kHandle::Close( bool bNotify )
 {
     if( !m_pT3kDevice )
         return false;
+
+    if ( m_bIsVirtualDevice )
+    {
+        if( m_TimerCheckT3kVD.isActive() )
+            m_TimerCheckT3kVD.stop();
+
+        m_T3kVirtualDevice.Close();
+        m_bIsVirtualDevice = false;
+    }
 
     m_nInstantMode = 0;
 
@@ -268,12 +247,12 @@ char* T3kHandle::GetDevPath(unsigned short nVID, unsigned short nPID, unsigned s
 
 ushort T3kHandle::GetDeviceVID( T3K_DEVICE_INFO devInfo )
 {
-    return ::T3kGetDevInfoVendorID( devInfo );
+    return ::T3kGetDevInfoVendorID( ::T3kGetDeviceInfoFromHandle(devInfo) );
 }
 
 ushort T3kHandle::GetDevicePID( T3K_DEVICE_INFO devInfo )
 {
-    return ::T3kGetDevInfoProductID( devInfo );
+    return ::T3kGetDevInfoProductID( ::T3kGetDeviceInfoFromHandle(devInfo) );
 }
 
 int T3kHandle::SendBuffer(const unsigned char *pBuffer, unsigned short nBufferSize, int bAsync, unsigned short nTimeout)
@@ -383,6 +362,28 @@ void T3kHandle::onReceiveRawDataFlag(bool bReceive)
     }
 }
 
+void T3kHandle::onTimeout()
+{
+    if ( m_TimerCheckT3kVD.isActive() )
+    {
+        if ( m_bIsVirtualDevice )
+        {
+            FeatureCheckConnection CheckConnection;
+            CheckConnection.ReportID = REPORTID_FEATURE_CHK_CONN;
+            if ( m_T3kVirtualDevice.GetFeature(&CheckConnection, sizeof(CheckConnection)) )
+            {
+                if ( !CheckConnection.ConnectionOK )
+                {
+                    if ( m_pNotify )
+                        emit Disconnect( m_pT3kDevice );
+
+                    m_TimerCheckT3kVD.stop();
+                }
+            }
+        }
+    }
+}
+
 void T3kHandle::ExOnDisconnect(T3K_HANDLE hDevice)
 {
     m_nInstantMode = 0;
@@ -411,7 +412,6 @@ void T3kHandle::ExOnPacket(t3kpacket *packet, int nSync)
     QMutexLocker Locker( &m_Mutex );
     m_qRecvPacket.push_back( pPacket );
     }
-    qDebug("ExOnPacket : %d, %d", pPacket->type, nSync );
     if( nSync )
         PacketSync( this );
     else 
@@ -694,12 +694,12 @@ ITPDPT3kNotify::~ITPDPT3kNotify()
 #endif
 }
 
-void ITPDPT3kNotify::onConnect(T3K_HANDLE hDevice)
+void ITPDPT3kNotify::onSensorConnect(T3K_HANDLE hDevice)
 {
     OnOpenT3kDevice(hDevice);
 }
 
-void ITPDPT3kNotify::onDisconnect(T3K_HANDLE hDevice)
+void ITPDPT3kNotify::onSensorDisconnect(T3K_HANDLE hDevice)
 {
     OnCloseT3kDevice(hDevice);
 }

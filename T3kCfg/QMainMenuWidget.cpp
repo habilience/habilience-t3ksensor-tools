@@ -255,7 +255,7 @@ void QMainMenuWidget::UpdateInformation()
     pInst->SetFirmwareVersion( m_fMMVersion );
 }
 
-void QMainMenuWidget::OnRSP(ResponsePart Part, short /*lTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QMainMenuWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
 {
     if( !isVisible() ) return;
 
@@ -447,7 +447,7 @@ void QMainMenuWidget::OnRSP(ResponsePart Part, short /*lTickTime*/, const char *
     }
 }
 
-void QMainMenuWidget::OnRSE(ResponsePart Part, short /*lTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QMainMenuWidget::OnRSE(ResponsePart Part, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
 {
     if( !isVisible() ) return;
 

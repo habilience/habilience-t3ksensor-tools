@@ -28,8 +28,8 @@ protected:
 
     // QTPDPEventMultiCaster::ITPDPEventListener
 protected:
-    virtual void OnPRV(ResponsePart, short, const char *, int, int, int, unsigned char *);
-    virtual void OnRSE(ResponsePart, short, const char *, long, bool, const char *);
+    virtual void OnPRV(ResponsePart, ushort, const char *, int, int, int, unsigned char *);
+    virtual void OnRSE(ResponsePart, ushort, const char *, long, bool, const char *);
 
 protected:
     QString             m_strSavePath;

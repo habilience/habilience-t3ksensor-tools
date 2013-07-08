@@ -261,7 +261,7 @@ void QSensorSettingWidget::RequestGeneralSetting( bool bDefault )
     m_RequestSensorData.Start( m_pT3kHandle );
 }
 
-void QSensorSettingWidget::OnRSP(ResponsePart /*Part*/, short /*lTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QSensorSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
 {
     if( !isVisible() ) return;
 

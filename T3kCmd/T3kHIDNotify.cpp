@@ -50,90 +50,90 @@ void T3kHIDNotify::OnFirmwareDownload( bool bDownload )
         m_EventListner->OnFirmwareDownload( bDownload );
 }
 
-void T3kHIDNotify::OnMSG(short nTickTime, const char *sPartId, const char *sTxt)
+void T3kHIDNotify::OnMSG(ushort nTickTime, const char *sPartId, const char *sTxt)
 {
     if( m_EventListner != NULL )
         m_EventListner->OnMSG( nTickTime, sPartId, sTxt );
 }
 
-void T3kHIDNotify::OnOBJ(short nTickTime, const char *sPartId, int nCamNo, T3kRangeF *pOBJ, unsigned short nNumberOfOBJ)
+void T3kHIDNotify::OnOBJ(ushort nTickTime, const char *sPartId, int nCamNo, T3kRangeF *pOBJ, unsigned short nNumberOfOBJ)
 {
     if( m_EventListner != NULL )
         m_EventListner->OnOBJ( nTickTime, sPartId, nCamNo, pOBJ, nNumberOfOBJ );
 }
 
-void T3kHIDNotify::OnOBC(short nTickTime, const char *sPartId, int nCamNo, T3kRangeF *pOBC, unsigned short nNumberOfOBC)
+void T3kHIDNotify::OnOBC(ushort nTickTime, const char *sPartId, int nCamNo, T3kRangeF *pOBC, unsigned short nNumberOfOBC)
 {
     if( m_EventListner != NULL )
         m_EventListner->OnOBC( nTickTime, sPartId, nCamNo, pOBC, nNumberOfOBC );
 }
 
-void T3kHIDNotify::OnDTC(short nTickTime, const char *sPartId, int nCamNo, T3kRangeF *pDTC, unsigned short nNumberOfDTC)
+void T3kHIDNotify::OnDTC(ushort nTickTime, const char *sPartId, int nCamNo, T3kRangeF *pDTC, unsigned short nNumberOfDTC)
 {
     if( m_EventListner != NULL )
         m_EventListner->OnDTC( nTickTime, sPartId, nCamNo, pDTC, nNumberOfDTC );
 }
 
-void T3kHIDNotify::OnIRD(short nTickTime, const char *sPartId, int nCamNo, int nCount, uchar *pIRD)
+void T3kHIDNotify::OnIRD(ushort nTickTime, const char *sPartId, int nCamNo, int nCount, uchar *pIRD)
 {
     if( m_EventListner != NULL )
         m_EventListner->OnIRD( nTickTime, sPartId, nCamNo, nCount, pIRD );
 }
 
-void T3kHIDNotify::OnITD(short nTickTime, const char *sPartId, int nCamNo, int nCount, uchar *pITD)
+void T3kHIDNotify::OnITD(ushort nTickTime, const char *sPartId, int nCamNo, int nCount, uchar *pITD)
 {
     if( m_EventListner != NULL )
         m_EventListner->OnITD( nTickTime, sPartId, nCamNo, nCount, pITD );
 }
 
-void T3kHIDNotify::OnPRV(short nTickTime, const char *sPartId, int nWidth, int nHeight, int nBitCount, unsigned char *pBitmapBuffer)
+void T3kHIDNotify::OnPRV(ushort nTickTime, const char *sPartId, int nWidth, int nHeight, int nBitCount, unsigned char *pBitmapBuffer)
 {
     if( m_EventListner != NULL )
         m_EventListner->OnPRV( nTickTime, sPartId, nWidth, nHeight, nBitCount, pBitmapBuffer );
 }
 
-void T3kHIDNotify::OnCMD( short nTickTime, const char* sPartId, long lId, const char* sCmd )
+void T3kHIDNotify::OnCMD( ushort nTickTime, const char* sPartId, long lId, const char* sCmd )
 {
     if( m_EventListner != NULL )
         m_EventListner->OnCMD( nTickTime, sPartId, lId, sCmd );
 }
 
-void T3kHIDNotify::OnRSP( short nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd )
+void T3kHIDNotify::OnRSP( ushort nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd )
 {
     if( m_EventListner != NULL )
         m_EventListner->OnRSP( nTickTime, sPartId, lId, bFinal, sCmd );
 }
 
-void T3kHIDNotify::OnRSE( short nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd )
+void T3kHIDNotify::OnRSE( ushort nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd )
 {
     if( m_EventListner != NULL )
         m_EventListner->OnRSE( nTickTime, sPartId, lId, bFinal, sCmd );
 }
 
-void T3kHIDNotify::OnSTT(short nTickTime, const char *sPartId, const char *pStatus)
+void T3kHIDNotify::OnSTT(ushort nTickTime, const char *sPartId, const char *pStatus)
 {
     if( m_EventListner != NULL )
         m_EventListner->OnSTT( nTickTime, sPartId, pStatus );
 }
 
-//void T3kHIDNotify::OnDVC( short nTickTime, T3kDVC& DVC )
+//void T3kHIDNotify::OnDVC( ushort nTickTime, T3kDVC& DVC )
 //{
 
 //}
 
-void T3kHIDNotify::OnTPT(short nTickTime, short nActualTouch, short nTouchCount, t3ktouchpoint *points)
+void T3kHIDNotify::OnTPT(ushort nTickTime, short nActualTouch, short nTouchCount, t3ktouchpoint *points)
 {
     if( m_EventListner != NULL )
         m_EventListner->OnTPT( nTickTime, nActualTouch, nTouchCount, points );
 }
 
-void T3kHIDNotify::OnGST(short nTickTime, T3kGST &GST)
+void T3kHIDNotify::OnGST(ushort nTickTime, T3kGST &GST)
 {
     if( m_EventListner != NULL )
         m_EventListner->OnGST( nTickTime, GST );
 }
 
-void T3kHIDNotify::OnVER(short nTickTime, const char *sPartId, T3kVER &Ver)
+void T3kHIDNotify::OnVER(ushort nTickTime, const char *sPartId, T3kVER &Ver)
 {
     if( m_EventListner != NULL )
         m_EventListner->OnVER( nTickTime, sPartId, Ver );

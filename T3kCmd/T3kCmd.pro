@@ -16,7 +16,7 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 #Define
-DEFINES += _QT_COMPILER_ QUAZIP_STATIC _T3KHANDLE_REMOVE_PRV
+DEFINES += _QT_COMPILER_ QUAZIP_STATIC _T3KHANDLE_REMOVE_PRV USE_T3K_STATIC_LIBS
 
 linux-g++|linux-g++-64:DEFINES += OS_LINUX
 
@@ -31,19 +31,19 @@ INCLUDEPATH += $$PWD/../external/T3kHIDLibrary/include \
 DEPENDPATH += $$PWD/../external/T3kHIDLibrary/include \
 
 win32 {
-    LIBS += -lsetupapi -lole32 -luuid -lws2_32 \
-
     QMAKE_LFLAGS += -static
 
     CONFIG(release, debug|release) {
-        LIBS += -L$$PWD/../external/T3kHIDLibrary/win32/Dll/Lib/ -lT3kHIDLib
-        PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/win32/Dll/Lib/T3kHIDLib.lib
+        LIBS += -L$$PWD/../external/T3kHIDLibrary/win32/StaticLib/Lib/ -lT3kHIDLib
+        PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/win32/StaticLib/Lib/libT3kHIDLib.a
     }
 
     CONFIG(debug, debug|release) {
-        LIBS += -L$$PWD/../external/T3kHIDLibrary/win32/Dll/Lib/ -lT3kHIDLibd
-        PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/win32/Dll/Lib/T3kHIDLibd.lib
+        LIBS += -L$$PWD/../external/T3kHIDLibrary/win32/StaticLib/Lib/ -lT3kHIDLibd
+        PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/win32/StaticLib/Lib/libT3kHIDLib.a
     }
+
+    LIBS += -lsetupapi -lole32 -luuid -lws2_32 \
 }
 
 linux-g++ {
@@ -58,6 +58,8 @@ linux-g++ {
 
         PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
     }
+
+    LIBS +=
 }
 
 linux-g++-64 {
@@ -72,13 +74,11 @@ linux-g++-64 {
 
         PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
     }
+
+    LIBS +=
 }
 
 macx: {
-    LIBS += -framework CoreFoundation \
-            -framework IOKit \
-            -framework CoreServices \
-
     CONFIG(release, debug|release): {
         LIBS += -L$$PWD/../external/T3kHIDLibrary/mac/ -lT3kHIDLibStatic
 
@@ -90,15 +90,24 @@ macx: {
 
         PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/mac/libT3kHIDLibStaticd.a
     }
+
+    LIBS += -framework CoreFoundation \
+            -framework IOKit \
+            -framework CoreServices \
 }
 
 SOURCES += main.cpp \
     ../common/T3kHandle.cpp \
     HIDCmdThread.cpp \
     T3kHIDNotify.cpp \
+    QExFuncThread.cpp
 
 HEADERS += \
     ../common/T3kHandle.h \
     HIDCmdThread.h \
     DefineString.h \
     T3kHIDNotify.h \
+    QExFuncThread.h
+
+
+win32:RC_FILE = ./resources/T3kCmd.rc

@@ -48,13 +48,13 @@ void IncludeRemoteNotify::SendRemoteRawDataPacket(int nType, const char *pData, 
 //    }
 }
 
-void IncludeRemoteNotify::onSensorDisconnect()
+void IncludeRemoteNotify::onSensorDisconnect(T3K_HANDLE hDevice)
 {
     // send to remote
     if( m_bRemoteMode )
         SendRemoteNotifyPacket( Client | NotifySensorDisconnected );
 
-    OnCloseT3kDevice();
+    OnCloseT3kDevice(hDevice);
 }
 
 int IncludeRemoteNotify::onReceiveRawData(void* pContext)

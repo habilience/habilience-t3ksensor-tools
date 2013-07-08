@@ -57,7 +57,7 @@ void QCalibrationWidget::OnChangeLanguage()
     m_strTitle = QLangManager::GetPtr()->GetResource().GetResString( QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_CALIBRATE") );
 }
 
-void QCalibrationWidget::OnMSG(ResponsePart Part, short /*lTickTime*/, const char *sPartId, const char *sTxt)
+void QCalibrationWidget::OnMSG(ResponsePart Part, ushort /*nTickTime*/, const char *sPartId, const char *sTxt)
 {
     if( Part == MM && QString(sPartId).compare("CAL") == 0 )
     {

@@ -73,7 +73,7 @@ bool QT3kLoadDetectionObject::Start(SensorLogData *pStorage)
     return true;
 }
 
-void QT3kLoadDetectionObject::OnIRD(ResponsePart Part, short, const char *, int, int nCount, unsigned char *pIRD)
+void QT3kLoadDetectionObject::OnIRD(ResponsePart Part, ushort, const char *, int, int nCount, unsigned char *pIRD)
 {
     if ( nCount <= 0 )
         return;
@@ -112,7 +112,7 @@ void QT3kLoadDetectionObject::OnIRD(ResponsePart Part, short, const char *, int,
     ::memcpy( m_vDetectionData[nCamPart].pIRD, pIRD, nCount );
 }
 
-void QT3kLoadDetectionObject::OnITD(ResponsePart Part, short, const char *, int, int nCount, unsigned char *pITD)
+void QT3kLoadDetectionObject::OnITD(ResponsePart Part, ushort, const char *, int, int nCount, unsigned char *pITD)
 {
     if ( nCount <= 0 )
         return;

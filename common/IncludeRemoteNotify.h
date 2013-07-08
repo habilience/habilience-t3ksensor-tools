@@ -22,7 +22,7 @@ protected:
     bool                m_bRemoteMode;
 
 public slots:
-    virtual void onDisconnect();
+    virtual void onSensorDisconnect(T3K_HANDLE hDevice);
     virtual int onReceiveRawData(void* pContext);
     virtual void onReceiveRawDataFlag(bool bReceive);
     virtual void onDownloadingFirmware(int bDownload);

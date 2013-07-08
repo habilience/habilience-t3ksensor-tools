@@ -109,7 +109,7 @@ void QTPDPEventMultiCaster::ClearSingleListener()
     m_pSingleListener = NULL;
 }
 
-void QTPDPEventMultiCaster::OnCloseT3kDevice()
+void QTPDPEventMultiCaster::OnCloseT3kDevice(T3K_HANDLE /*hDevice*/)
 {
     if( m_pSingleListener )
     {
@@ -122,7 +122,7 @@ void QTPDPEventMultiCaster::OnCloseT3kDevice()
     }
 }
 
-void QTPDPEventMultiCaster::OnOpenT3kDevice()
+void QTPDPEventMultiCaster::OnOpenT3kDevice(T3K_HANDLE /*hDevice*/)
 {
     if( m_pSingleListener )
     {
@@ -148,7 +148,7 @@ void QTPDPEventMultiCaster::OnFirmwareDownload( bool bDownload )
     }
 }
 
-void QTPDPEventMultiCaster::OnMSG(short nTickTime, const char *sPartId, const char *sTxt)
+void QTPDPEventMultiCaster::OnMSG(ushort nTickTime, const char *sPartId, const char *sTxt)
 {
     ResponsePart Part = GetResponsePartFromPartId( sPartId, sTxt );
     if( m_pSingleListener )
@@ -162,7 +162,7 @@ void QTPDPEventMultiCaster::OnMSG(short nTickTime, const char *sPartId, const ch
     }
 }
 
-void QTPDPEventMultiCaster::OnOBJ(short nTickTime, const char *sPartId, int nCamNo, T3kRangeF *pOBJ, unsigned short nNumberOfOBJ)
+void QTPDPEventMultiCaster::OnOBJ(ushort nTickTime, const char *sPartId, int nCamNo, T3kRangeF *pOBJ, unsigned short nNumberOfOBJ)
 {
     ResponsePart Part = GetResponsePartFromPartId( sPartId, NULL );
     if( m_pSingleListener )
@@ -176,7 +176,7 @@ void QTPDPEventMultiCaster::OnOBJ(short nTickTime, const char *sPartId, int nCam
     }
 }
 
-void QTPDPEventMultiCaster::OnOBC(short nTickTime, const char *sPartId, int nCamNo, T3kRangeF *pOBC, unsigned short nNumberOfOBC)
+void QTPDPEventMultiCaster::OnOBC(ushort nTickTime, const char *sPartId, int nCamNo, T3kRangeF *pOBC, unsigned short nNumberOfOBC)
 {
     ResponsePart Part = GetResponsePartFromPartId( sPartId, NULL );
     if( m_pSingleListener )
@@ -190,7 +190,7 @@ void QTPDPEventMultiCaster::OnOBC(short nTickTime, const char *sPartId, int nCam
     }
 }
 
-void QTPDPEventMultiCaster::OnDTC(short nTickTime, const char *sPartId, int nCamNo, T3kRangeF *pDTC, unsigned short nNumberOfDTC)
+void QTPDPEventMultiCaster::OnDTC(ushort nTickTime, const char *sPartId, int nCamNo, T3kRangeF *pDTC, unsigned short nNumberOfDTC)
 {
     ResponsePart Part = GetResponsePartFromPartId( sPartId, NULL );
     if( m_pSingleListener )
@@ -204,7 +204,7 @@ void QTPDPEventMultiCaster::OnDTC(short nTickTime, const char *sPartId, int nCam
     }
 }
 
-void QTPDPEventMultiCaster::OnIRD(short nTickTime, const char *sPartId, int nCamNo, int nCount, uchar *pIRD)
+void QTPDPEventMultiCaster::OnIRD(ushort nTickTime, const char *sPartId, int nCamNo, int nCount, uchar *pIRD)
 {
     ResponsePart Part = GetResponsePartFromPartId( sPartId, NULL );
     if( m_pSingleListener )
@@ -218,7 +218,7 @@ void QTPDPEventMultiCaster::OnIRD(short nTickTime, const char *sPartId, int nCam
     }
 }
 
-void QTPDPEventMultiCaster::OnITD(short nTickTime, const char *sPartId, int nCamNo, int nCount, uchar *pITD)
+void QTPDPEventMultiCaster::OnITD(ushort nTickTime, const char *sPartId, int nCamNo, int nCount, uchar *pITD)
 {
     ResponsePart Part = GetResponsePartFromPartId( sPartId, NULL );
     if( m_pSingleListener )
@@ -232,7 +232,7 @@ void QTPDPEventMultiCaster::OnITD(short nTickTime, const char *sPartId, int nCam
     }
 }
 
-void QTPDPEventMultiCaster::OnPRV(short nTickTime, const char *sPartId, int nWidth, int nHeight, int nBitCount, unsigned char *pBitmapBuffer)
+void QTPDPEventMultiCaster::OnPRV(ushort nTickTime, const char *sPartId, int nWidth, int nHeight, int nBitCount, unsigned char *pBitmapBuffer)
 {
     ResponsePart Part = GetResponsePartFromPartId( sPartId, NULL );
     if( m_pSingleListener )
@@ -246,7 +246,7 @@ void QTPDPEventMultiCaster::OnPRV(short nTickTime, const char *sPartId, int nWid
     }
 }
 
-void QTPDPEventMultiCaster::OnCMD( short nTickTime, const char* sPartId, long lId, const char* sCmd )
+void QTPDPEventMultiCaster::OnCMD( ushort nTickTime, const char* sPartId, long lId, const char* sCmd )
 {
     ResponsePart Part = GetResponsePartFromPartId( sPartId, sCmd );
     if( m_pSingleListener )
@@ -260,7 +260,7 @@ void QTPDPEventMultiCaster::OnCMD( short nTickTime, const char* sPartId, long lI
     }
 }
 
-void QTPDPEventMultiCaster::OnRSP( short nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd )
+void QTPDPEventMultiCaster::OnRSP( ushort nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd )
 {
     ResponsePart Part = GetResponsePartFromPartId( sPartId, sCmd );
     if( m_pSingleListener )
@@ -274,7 +274,7 @@ void QTPDPEventMultiCaster::OnRSP( short nTickTime, const char* sPartId, long lI
     }
 }
 
-void QTPDPEventMultiCaster::OnRSE( short nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd )
+void QTPDPEventMultiCaster::OnRSE( ushort nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd )
 {
     ResponsePart Part = GetResponsePartFromPartId( sPartId, sCmd );
     if( m_pSingleListener )
@@ -288,7 +288,7 @@ void QTPDPEventMultiCaster::OnRSE( short nTickTime, const char* sPartId, long lI
     }
 }
 
-void QTPDPEventMultiCaster::OnSTT(short nTickTime, const char *sPartId, const char *pStatus)
+void QTPDPEventMultiCaster::OnSTT(ushort nTickTime, const char *sPartId, const char *pStatus)
 {
     ResponsePart Part = GetResponsePartFromPartId( sPartId, NULL );
     if( m_pSingleListener )
@@ -302,12 +302,12 @@ void QTPDPEventMultiCaster::OnSTT(short nTickTime, const char *sPartId, const ch
     }
 }
 
-//void QTPDPEventMultiCaster::OnDVC( short nTickTime, T3kDVC& DVC )
+//void QTPDPEventMultiCaster::OnDVC( ushort nTickTime, T3kDVC& DVC )
 //{
 
 //}
 
-void QTPDPEventMultiCaster::OnTPT(short nTickTime, short nActualTouch, short nTouchCount, t3ktouchpoint *points)
+void QTPDPEventMultiCaster::OnTPT(ushort nTickTime, short nActualTouch, short nTouchCount, t3ktouchpoint *points)
 {
     if( m_pSingleListener )
     {
@@ -320,7 +320,7 @@ void QTPDPEventMultiCaster::OnTPT(short nTickTime, short nActualTouch, short nTo
     }
 }
 
-void QTPDPEventMultiCaster::OnGST(short nTickTime, T3kGST &GST)
+void QTPDPEventMultiCaster::OnGST(ushort nTickTime, T3kGST &GST)
 {
     if( m_pSingleListener )
     {
@@ -333,7 +333,7 @@ void QTPDPEventMultiCaster::OnGST(short nTickTime, T3kGST &GST)
     }
 }
 
-void QTPDPEventMultiCaster::OnVER(short nTickTime, const char *sPartId, T3kVER &Ver)
+void QTPDPEventMultiCaster::OnVER(ushort nTickTime, const char *sPartId, T3kVER &Ver)
 {
     ResponsePart Part = GetResponsePartFromPartId( sPartId, NULL );
     if( m_pSingleListener )

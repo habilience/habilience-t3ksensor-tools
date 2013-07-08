@@ -203,7 +203,7 @@ void QCalibrationSettingWidget::keyPressEvent(QKeyEvent *evt)
     QWidget::keyPressEvent(evt);
 }
 
-void QCalibrationSettingWidget::OnRSP(ResponsePart Part, short /*lTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QCalibrationSettingWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
 {
     if( !winId() ) return;
 
@@ -382,7 +382,7 @@ void QCalibrationSettingWidget::OnRSP(ResponsePart Part, short /*lTickTime*/, co
     }
 }
 
-void QCalibrationSettingWidget::OnSTT(ResponsePart /*Part*/, short /*nTickTime*/, const char */*sPartId*/, const char *pStatus)
+void QCalibrationSettingWidget::OnSTT(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, const char *pStatus)
 {
     if( !winId() ) return;
 

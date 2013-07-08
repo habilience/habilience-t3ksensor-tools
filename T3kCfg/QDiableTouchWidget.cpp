@@ -87,7 +87,7 @@ void QDiableTouchWidget::timerEvent(QTimerEvent *evt)
     QDialog::timerEvent(evt);
 }
 
-void QDiableTouchWidget::OnRSP(ResponsePart /*Part*/, short /*lTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QDiableTouchWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
 {
     if( !isVisible() ) return;
 

@@ -25,7 +25,7 @@ protected:
     virtual void closeEvent(QCloseEvent *evt);
 
     virtual void OnChangeLanguage();
-    virtual void OnRSP(ResponsePart Part, short lTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
+    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
 
 protected:
     T3kHandle*&            m_pT3kHandle;
