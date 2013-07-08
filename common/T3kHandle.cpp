@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <QCoreApplication>
 
-#include "../Common/PacketStructure.h"
+#include "../common/PacketStructure.h"
 #define MAX_RAWBUFFER           4194304     // 4M
 #define DEPTH_FORMAT32          32
 
