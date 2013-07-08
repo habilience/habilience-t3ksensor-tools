@@ -540,6 +540,7 @@ void CHIDCmd::OnCloseT3kDevice(T3K_HANDLE hDevice)
     OnDeviceDisconnected( hDevice );
     m_pT3kHandle->Close();
     m_bIsConnect = false;
+    ::memset( m_szInstantMode, 0, sizeof(char)*100 );
 }
 
 void CHIDCmd::OnMSG(ushort nTickTime, const char *sPardID, const char *sTxt)

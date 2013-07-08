@@ -6,6 +6,8 @@ QExFuncThread::QExFuncThread(QObject *parent, FnExternalFunction fn, void* pFnEx
     QThread(parent),
     m_fnExFunc(fn)
 {
+    m_bTerminateFlag = false;
+
     if( pFnExFuncContext )
         m_pFnExFuncContext = pFnExFuncContext;
     else

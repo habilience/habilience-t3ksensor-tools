@@ -199,7 +199,7 @@ bool T3kHandle::OpenWithVIDPID( unsigned short nVID, unsigned short nPID, unsign
 
     SetNotify( m_pNotify );
     emit Connect( m_pT3kDevice );
-    //qDebug( "T3kHandle::OpenWithVIDPID - %d", bRet );
+    //qDebug( "T3kHandle::OpenWithVIDPID - %x", m_pT3kDevice );
     return true;
 }
 
@@ -220,6 +220,8 @@ bool T3kHandle::Close( bool bNotify )
     m_nInstantMode = 0;
 
     m_bCloseNotify = bNotify;
+    DisconnectSignal();
+    //qDebug( "T3kHandle::Close - %x", m_pT3kDevice );
     ::T3kCloseDevice( m_pT3kDevice );
     m_pT3kDevice = NULL;
 
