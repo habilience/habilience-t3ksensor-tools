@@ -187,6 +187,7 @@ typedef union {
     //iap_pkt_page_erase_type         page_erase;
     //iap_pkt_usart_tx_pin_low_type   usart_tx_pin;
     iap_pkt_bad_type                bad;
+    unsigned char                   dummy[1024];
 } pkt_body_type;
 
 typedef struct

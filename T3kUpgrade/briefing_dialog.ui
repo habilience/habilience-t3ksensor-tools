@@ -48,7 +48,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>44</y>
+     <y>40</y>
      <width>351</width>
      <height>131</height>
     </rect>
@@ -82,7 +82,7 @@ p, li { white-space: pre-wrap; }
      <x>10</x>
      <y>10</y>
      <width>351</width>
-     <height>28</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -93,20 +93,25 @@ p, li { white-space: pre-wrap; }
 	font-weight: bold;
     border-style: solid;
     border-width: 1px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }</string>
    </property>
    <property name="text">
-    <string>Firmware Upgrade Information</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/T3kUpgradeRes/resources/brief.png&quot;/&gt; Firmware Upgrade Information&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
    </property>
    <property name="alignment">
-    <set>Qt::AlignCenter</set>
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>183</y>
+     <y>182</y>
      <width>331</width>
      <height>16</height>
     </rect>

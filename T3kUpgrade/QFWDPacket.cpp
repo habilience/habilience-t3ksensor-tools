@@ -471,7 +471,7 @@ void QFWDPacket::processHIDData(unsigned char* pBuffer, unsigned short nBytes)
 
         pkt_type* rx_pkt = (pkt_type*)m_pReceiveBuffer;
 
-        qDebug( "-> pkt_id: %x, length: %d", rx_pkt->hdr.pkt_id, m_nReceiveBufferSize );
+        //qDebug( "-> pkt_id: %x, length: %d", rx_pkt->hdr.pkt_id, m_nReceiveBufferSize );
 
         switch (rx_pkt->hdr.pkt_id & PKT_TYPEMASK)
         {

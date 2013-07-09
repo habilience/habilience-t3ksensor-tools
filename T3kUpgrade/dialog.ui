@@ -48,7 +48,7 @@
     <enum>QFrame::Plain</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="pageInformation">
     <widget class="QLabel" name="labelFirmwareInformation">
@@ -68,13 +68,15 @@
 	font-weight: bold;
     border-style: solid;
     border-width: 1px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }</string>
      </property>
      <property name="text">
-      <string>Firmware Information</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/T3kUpgradeRes/resources/package.png&quot; /&gt; Firmware Information&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QTextEdit" name="textEditSensorInformation">
@@ -195,13 +197,15 @@ border-width: 1px;</string>
 	font-weight: bold;
     border-style: solid;
     border-width: 1px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }</string>
      </property>
      <property name="text">
-      <string>Sensor Information</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/T3kUpgradeRes/resources/usb.png&quot;/&gt; Sensor Information&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
     <zorder>textEditSensorInformation</zorder>
@@ -228,54 +232,23 @@ border-width: 1px;</string>
 	font-weight: bold;
     border-style: solid;
     border-width: 1px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }</string>
      </property>
      <property name="text">
-      <string>Firmware Downloading...</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/T3kUpgradeRes/resources/download.png&quot;/&gt; Upgrading the firmware...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QTextEdit" name="textEditProgress">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>40</y>
-       <width>401</width>
-       <height>261</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">	border-color: #82A6A6;
-    border-style: solid;
-    border-width: 1px;</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="undoRedoEnabled">
-      <bool>false</bool>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QProgressBar" name="progressBar">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>305</y>
-       <width>401</width>
+       <x>60</x>
+       <y>266</y>
+       <width>351</width>
        <height>31</height>
       </rect>
      </property>
@@ -287,11 +260,11 @@ border-width: 1px;</string>
 
  QProgressBar::chunk {
      background-color: rgb(150,182,182);
-     width: 20px;
+     width: 1px;
  }</string>
      </property>
      <property name="value">
-      <number>24</number>
+      <number>50</number>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -338,10 +311,123 @@ border-width: 1px;</string>
       <string>Cancel</string>
      </property>
     </widget>
-    <zorder>textEditProgress</zorder>
+    <widget class="QListWidget" name="listWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>401</width>
+       <height>222</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QListWidget {
+border-color: #82A6A6;
+border-style: solid;
+border-width: 1px;
+}
+
+QScrollBar:vertical {
+      border: 1px solid #82A6A6;
+      background: #DDE7E7;
+      width: 20px;
+      margin: 22px 0 22px 0;
+  }
+  QScrollBar::handle:vertical {
+      background: white;
+      min-height: 20px;
+  }
+
+  QScrollBar::add-line:vertical {
+      border: 1px solid #82A6A6;
+      background: #DDE7E7;
+      height: 20px;
+      subcontrol-position: bottom;
+      subcontrol-origin: margin;
+  }
+
+  QScrollBar::sub-line:vertical {
+      border: 1px solid #82A6A6;
+      background: #DDE7E7;
+      height: 20px;
+      subcontrol-position: top;
+      subcontrol-origin: margin;
+  }
+
+  QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+      border: 1px solid #82A6A6;
+      width: 7px;
+      height: 7px;
+      background: white;
+  }
+
+  QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+      background: none;
+  }</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAsNeeded</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::NoSelection</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelPart">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>266</y>
+       <width>41</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+	color : #395151;
+	font-weight: bold;
+}</string>
+     </property>
+     <property name="text">
+      <string>CM2-1</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelMessage">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>308</y>
+       <width>401</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(203, 45, 5); font-weight: bold;</string>
+     </property>
+     <property name="text">
+      <string>CAUTION: Do not unplug the device until the process is completed.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
     <zorder>progressBar</zorder>
     <zorder>pushButtonCancel</zorder>
     <zorder>labelProgress</zorder>
+    <zorder>listWidget</zorder>
+    <zorder>labelPart</zorder>
+    <zorder>labelMessage</zorder>
    </widget>
   </widget>
  </widget>

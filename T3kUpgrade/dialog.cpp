@@ -6,8 +6,8 @@
 #include <quazipfile.h>
 #include <QBriefingDialog.h>
 
-#define RETRY_CONNECTION_INTERVAL        (3000)
-#define REQUEST_TIMEOUT                  (200)
+#define RETRY_CONNECTION_INTERVAL       (3000)
+#define WAIT_MODECHANGE_TIMEOUT         (30000)
 
 static const QString PartName[] = { "MM", "CM1", "CM2", "CM1-1", "CM2-1" };
 
@@ -18,10 +18,22 @@ Dialog::Dialog(QWidget *parent) :
     m_TimerConnectDevice = 0;
     m_TimerRequestTimeout = 0;
     m_TimerRequestInformation = 0;
+    m_TimerWaitModeChange = 0;
     m_nPacketId = -1;
 
+    m_bWaitIAP = false;
+    m_bWaitIAPCheckOK = false;
+
+    m_bWaitAPP = false;
+    m_bWaitAPPCheckOK = false;
+
+    m_nStableCheck = 0;
+
     m_bIsStartRequestInformation = false;
+    m_bIsStartFirmwareDownload = false;
     m_bIsInformationUpdated = false;
+
+    m_strDownloadProgress.clear();
 
     memset( &m_TempSensorInfo, 0, sizeof(m_TempSensorInfo) );
     memset( &m_SensorInfo, 0, sizeof(m_SensorInfo) );
@@ -48,7 +60,8 @@ Dialog::Dialog(QWidget *parent) :
     displayInformation("Device is not connected.");
     m_strSensorInformation = "";
 
-    stopAllJobs();
+    stopAllFirmwareDownloadJobs();
+    stopAllQueryInformationJobs();
 
     loadFirmwareFile();
     updateFirmwareInformation();
@@ -133,6 +146,7 @@ bool Dialog::loadFirmwareFile()
         if ( file.size() > 0 )
         {
             FirmwareInfo* pFI = new FirmwareInfo;
+            memset( pFI, 0, sizeof(FirmwareInfo) );
             pFI->pFirmwareBinary = (char*)malloc(sizeof(char) * file.size());
             int nReadBytes = file.read( pFI->pFirmwareBinary, file.size() );
             pFI->dwFirmwareSize = nReadBytes;
@@ -277,8 +291,12 @@ void Dialog::onDisconnected()
     m_strSensorInformation = "";
     m_bIsInformationUpdated = false;
 
-    stopAllJobs();
-    ui->stackedWidget->setCurrentIndex(0);
+    stopAllQueryInformationJobs();
+    if (!m_bWaitIAP && !m_bWaitAPP)
+    {
+        stopAllFirmwareDownloadJobs();
+        ui->stackedWidget->setCurrentIndex(0);
+    }
 
     if (m_Packet.isOpen())
     {
@@ -305,116 +323,6 @@ inline int getIndex(unsigned short which)
     return IDX_MM;
 }
 
-void Dialog::onResponseFromSensor(unsigned short nPacketId)
-{
-    qDebug( "responseFromSensor" );
-
-    if ( nPacketId != m_nPacketId )
-    {
-        qDebug( "invalid packet id" );
-        return;
-    }
-
-    killRequestTimeoutTimer();
-
-    int nFWMode = 0;
-    int nIndex = 0;
-    switch (m_CurrentJob.type)
-    {
-    default:
-        qDebug( "invalid job type" );
-        break;
-    case JOBF_QUERY_INFO:
-        nIndex = getIndex(m_CurrentJob.which);
-        switch (m_CurrentJob.subStep)
-        {
-        case SUB_QUERY_MODE:
-            nFWMode = m_Packet.getFirmwareMode();
-            m_TempSensorInfo[nIndex].nMode = nFWMode;
-            if ((nFWMode != MODE_MM_APP) && (nFWMode != MODE_CM_APP))
-            {
-                m_CurrentJob.subStep = SUB_QUERY_IAP_VERSION;
-                break;
-            }
-            m_CurrentJob.subStep = SUB_QUERY_VERSION;
-            break;
-        case SUB_QUERY_VERSION:
-            m_TempSensorInfo[nIndex].nModelNumber = m_Packet.getModelNumber();
-            m_TempSensorInfo[nIndex].nVersionMajor = m_Packet.getVersionMajor();
-            m_TempSensorInfo[nIndex].nVersionMinor = m_Packet.getVersionMinor();
-
-            if ((m_TempSensorInfo[nIndex].nModelNumber == 0x3500) && (m_CurrentJob.which == PKT_ADDR_MM) )
-            {
-                snprintf( m_TempSensorInfo[nIndex].szModel, 256, "T3k A" );
-            }
-            else
-            {
-                snprintf( m_TempSensorInfo[nIndex].szModel, 256, "%c%04x", (m_CurrentJob.which == PKT_ADDR_MM) ? 'T' : 'C', m_TempSensorInfo[nIndex].nModelNumber );
-            }
-
-            if ((m_TempSensorInfo[nIndex].nVersionMinor & 0x0f) != 0)
-            {
-                snprintf( m_TempSensorInfo[nIndex].szVersion, 256, "%x.%02x", m_TempSensorInfo[nIndex].nVersionMajor,
-                    m_TempSensorInfo[nIndex].nVersionMinor );
-            }
-            else
-            {
-                snprintf( m_TempSensorInfo[nIndex].szVersion, 256, "%x.%x", m_TempSensorInfo[nIndex].nVersionMajor,
-                    m_TempSensorInfo[nIndex].nVersionMinor );
-            }
-            snprintf( m_TempSensorInfo[nIndex].szDateTime, 256, " %s, %s", m_Packet.getDate(), m_Packet.getTime() );
-            m_CurrentJob.subStep = SUB_QUERY_FINISH;
-            break;
-        case SUB_QUERY_IAP_VERSION:
-            m_TempSensorInfo[nIndex].nModelNumber = m_Packet.getModelNumber();
-            if ((m_TempSensorInfo[nIndex].nModelNumber == 0x3500) && (m_CurrentJob.which == PKT_ADDR_MM) )
-            {
-                snprintf( m_TempSensorInfo[nIndex].szModel, 256, "T3k A" );
-            }
-            else
-            {
-                snprintf( m_TempSensorInfo[nIndex].szModel, 256, "%c%04x", (m_CurrentJob.which == PKT_ADDR_MM) ? 'T' : 'C', m_TempSensorInfo[nIndex].nModelNumber );
-            }
-            m_CurrentJob.subStep = SUB_QUERY_IAP_REVISION;
-            break;
-        case SUB_QUERY_IAP_REVISION:
-            m_TempSensorInfo[nIndex].nIapRevision = m_Packet.getRevision();
-            if ( (m_TempSensorInfo[nIndex].nMode == MODE_MM_IAP) ||
-                    (m_TempSensorInfo[nIndex].nMode == MODE_CM_IAP) )
-            {
-                snprintf( m_TempSensorInfo[nIndex].szVersion, 256, "IAP Rev(%04x)", m_TempSensorInfo[nIndex].nIapRevision );
-            }
-            else
-            {
-                snprintf( m_TempSensorInfo[nIndex].szVersion, 256, "UPG Rev(%04x)", m_TempSensorInfo[nIndex].nIapRevision );
-            }
-            m_CurrentJob.subStep = SUB_QUERY_FINISH;
-            break;
-        default:
-            qDebug( "already finished..." );
-            break;
-        }
-        break;
-    case JOBF_MARK_IAP:
-
-        break;
-    case JOBF_MARK_APP:
-
-        break;
-    case JOBF_RESET:
-
-        break;
-    case JOBF_ERASE:
-
-        break;
-    case JOBF_WRITE:
-        // TODO: write fwb
-        break;
-    }
-
-    executeNextJob();
-}
-
 void Dialog::timerEvent(QTimerEvent *evt)
 {
     if ( evt->type() == QEvent::Timer )
@@ -427,6 +335,7 @@ void Dialog::timerEvent(QTimerEvent *evt)
         }
         else if (evt->timerId() == m_TimerRequestTimeout )
         {
+            qDebug( "request timeout" );
             killRequestTimeoutTimer();
             // TODO: 재전송????
             if (m_CurrentJob.type == JOBF_QUERY_INFO)
@@ -461,6 +370,13 @@ void Dialog::timerEvent(QTimerEvent *evt)
                     executeNextJob( true );
                 }
             }
+            else if (m_CurrentJob.type == JOBF_WRITE)
+            {
+                qDebug( "write timeout!!!!" );
+                QString strMessage = QString("[%1] Write Error").arg(PartName[getIndex(m_CurrentJob.which)]);
+                addProgressText(strMessage, TM_NG);
+                onFirmwareUpdateFailed();
+            }
             else
             {
                 executeNextJob( true );
@@ -473,10 +389,18 @@ void Dialog::timerEvent(QTimerEvent *evt)
 
             queryInformation();
         }
+        else if (evt->timerId() == m_TimerWaitModeChange)
+        {
+            killWaitModeChangeTimer();
+            qDebug( "Wait IAP/APP timeout!!!" );
+            QString strMessage = QString("[%1] Wait timeout!").arg(PartName[getIndex(m_CurrentJob.which)]);
+            addProgressText(strMessage, TM_NG);
+            onFirmwareUpdateFailed();
+        }
     }
 }
 
-void Dialog::startQueryInformation()
+void Dialog::startQueryInformation(bool bDelay)
 {
     if (m_TimerRequestInformation)
     {
@@ -486,7 +410,14 @@ void Dialog::startQueryInformation()
 
     m_bIsStartRequestInformation = true;
 
-    queryInformation();
+    if (bDelay)
+    {
+        m_TimerRequestInformation = startTimer(500);
+    }
+    else
+    {
+        queryInformation();
+    }
 }
 
 void Dialog::stopQueryInformation()
@@ -497,17 +428,136 @@ void Dialog::stopQueryInformation()
         m_TimerRequestInformation = 0;
     }
 
-    stopAllJobs();
+    killRequestTimeoutTimer();
+
+    stopAllQueryInformationJobs();
 
     m_bIsStartRequestInformation = false;
 }
 
-void Dialog::startRequestTimeoutTimer()
+void Dialog::startFirmwareDownload()
+{
+    ui->listWidget->clear();
+    ui->progressBar->setValue(0);
+    ui->labelPart->setText("");
+
+    ui->labelMessage->setStyleSheet("color: rgb(203, 45, 5); font-weight: bold;");
+    ui->labelMessage->setText("CAUTION: Do not unplug the device until the process is completed.");
+
+    if (m_TimerRequestInformation)
+    {
+        killTimer(m_TimerRequestInformation);
+        m_TimerRequestInformation = 0;
+    }
+
+    m_bIsStartFirmwareDownload = true;
+
+    firmwareDownload();
+}
+
+void Dialog::stopFirmwareDownload()
+{
+    if (m_TimerRequestInformation)
+    {
+        killTimer(m_TimerRequestInformation);
+        m_TimerRequestInformation = 0;
+    }
+
+    killRequestTimeoutTimer();
+
+    stopAllFirmwareDownloadJobs();
+
+    m_bWaitIAP = false;
+    m_bWaitIAPCheckOK = false;
+    m_bWaitAPP = false;
+    m_bWaitAPPCheckOK = false;
+    m_bIsStartFirmwareDownload = false;
+}
+
+void Dialog::firmwareDownload()
+{
+    stopAllFirmwareDownloadJobs();
+
+    JobItem job;
+
+    bool bIAPModeOK = true;
+    // check iap mode
+    for ( int i=IDX_MAX-1 ; i>=0 ; i-- )
+    {
+        if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
+            continue;
+        if ((m_SensorInfo[i].nMode != MODE_CM_IAP) && (m_SensorInfo[i].nMode != MODE_MM_IAP))
+        {
+            bIAPModeOK = false;
+            break;
+        }
+    }
+
+    if (!bIAPModeOK)
+    {
+        for ( int i=IDX_MAX-1 ; i>=0 ; i-- )
+        {
+            if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
+                continue;
+            job.type = JOBF_MARK_IAP;
+            job.subStep = SUB_QUERY_FINISH;
+            job.which = m_SensorInfo[i].nWhich;
+            m_JobListForFirmwareDownload.append( job );
+        }
+
+        job.type = JOBF_RESET;
+        job.subStep = SUB_QUERY_FINISH;
+        job.which = PKT_ADDR_MM;
+        m_JobListForFirmwareDownload.append( job );
+
+        job.type = JOBF_WAIT_IAP_ALL;
+        job.subStep = SUB_QUERY_FINISH;
+        job.which = 0;
+        m_JobListForFirmwareDownload.append( job );
+    }
+
+    for ( int i=IDX_MAX-1 ; i>=0 ; i-- )
+    {
+        if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
+            continue;
+
+        job.type = JOBF_ERASE;
+        job.subStep = SUB_QUERY_FINISH;
+        job.which = m_SensorInfo[i].nWhich;
+        m_JobListForFirmwareDownload.append( job );
+
+        job.type = JOBF_WRITE;
+        job.subStep = SUB_QUERY_WRITE_PROGRESS;
+        job.firmwareBinaryPos = 0;
+        job.which = m_SensorInfo[i].nWhich;
+        m_JobListForFirmwareDownload.append( job );
+
+        job.type = JOBF_MARK_APP;
+        job.subStep = SUB_QUERY_FINISH;
+        job.which = m_SensorInfo[i].nWhich;
+        m_JobListForFirmwareDownload.append( job );
+    }
+
+    job.type = JOBF_RESET;
+    job.subStep = SUB_QUERY_FINISH;
+    job.which = PKT_ADDR_MM;
+    m_JobListForFirmwareDownload.append( job );
+
+    job.type = JOBF_WAIT_APP_ALL;
+    job.subStep = SUB_QUERY_FINISH;
+    job.which = 0;
+    m_JobListForFirmwareDownload.append( job );
+
+    m_bIsExecuteJob = true;
+    executeNextJob();
+}
+
+void Dialog::startRequestTimeoutTimer( int nTimeout )
 {
     if (m_TimerRequestTimeout != 0)
         killTimer(m_TimerRequestTimeout);
 
-    m_TimerRequestTimeout = startTimer(REQUEST_TIMEOUT);
+    m_TimerRequestTimeout = startTimer(nTimeout);
 }
 
 void Dialog::killRequestTimeoutTimer()
@@ -519,10 +569,36 @@ void Dialog::killRequestTimeoutTimer()
     }
 }
 
-void Dialog::stopAllJobs()
+void Dialog::startWaitModeChangeTimer()
+{
+    if (m_TimerWaitModeChange !=0)
+        killTimer(m_TimerWaitModeChange);
+    m_TimerWaitModeChange = startTimer(WAIT_MODECHANGE_TIMEOUT);
+}
+
+void Dialog::killWaitModeChangeTimer()
+{
+    if (m_TimerWaitModeChange !=0)
+    {
+        killTimer(m_TimerWaitModeChange);
+        m_TimerWaitModeChange = 0;
+    }
+}
+
+void Dialog::stopAllQueryInformationJobs()
 {
     killRequestTimeoutTimer();
-    m_JobList.clear();
+    m_JobListForRequestInformation.clear();
+    if (!m_bIsStartFirmwareDownload)
+        m_bIsExecuteJob = false;
+
+    memset( &m_CurrentJob, 0, sizeof(JobItem) );
+}
+
+void Dialog::stopAllFirmwareDownloadJobs()
+{
+    killRequestTimeoutTimer();
+    m_JobListForFirmwareDownload.clear();
     m_bIsExecuteJob = false;
 
     memset( &m_CurrentJob, 0, sizeof(JobItem) );
@@ -530,7 +606,7 @@ void Dialog::stopAllJobs()
 
 void Dialog::queryInformation()
 {
-    stopAllJobs();
+    stopAllQueryInformationJobs();
 
     memset( &m_TempSensorInfo, 0, sizeof(m_TempSensorInfo) );
 
@@ -538,29 +614,163 @@ void Dialog::queryInformation()
     job.type = JOBF_QUERY_INFO;
     job.subStep = SUB_QUERY_MODE;
     job.which = PKT_ADDR_MM;
-    m_JobList.append( job );
+    m_JobListForRequestInformation.append( job );
 
     job.type = JOBF_QUERY_INFO;
     job.subStep = SUB_QUERY_MODE;
     job.which = PKT_ADDR_CM1;
-    m_JobList.append( job );
+    m_JobListForRequestInformation.append( job );
 
     job.type = JOBF_QUERY_INFO;
     job.subStep = SUB_QUERY_MODE;
     job.which = PKT_ADDR_CM2;
-    m_JobList.append( job );
+    m_JobListForRequestInformation.append( job );
 
     job.type = JOBF_QUERY_INFO;
     job.subStep = SUB_QUERY_MODE;
     job.which = PKT_ADDR_CM_SUB | PKT_ADDR_CM1;
-    m_JobList.append( job );
+    m_JobListForRequestInformation.append( job );
 
     job.type = JOBF_QUERY_INFO;
     job.subStep = SUB_QUERY_MODE;
     job.which = PKT_ADDR_CM_SUB | PKT_ADDR_CM2;
-    m_JobList.append( job );
+    m_JobListForRequestInformation.append( job );
 
     m_bIsExecuteJob = true;
+    executeNextJob();
+}
+
+void Dialog::onResponseFromSensor(unsigned short nPacketId)
+{
+    //qDebug( "responseFromSensor: %x", nPacketId );
+
+    if ( nPacketId != m_nPacketId )
+    {
+        qDebug( "invalid packet id" );
+        return;
+    }
+
+    killRequestTimeoutTimer();
+
+    int nFWMode = 0;
+    int nIndex = 0;
+    QString strMessage;
+    switch (m_CurrentJob.type)
+    {
+    default:
+        qDebug( "invalid job type" );
+        break;
+    case JOBF_QUERY_INFO:
+        nIndex = getIndex(m_CurrentJob.which);
+        switch (m_CurrentJob.subStep)
+        {
+        case SUB_QUERY_MODE:
+            nFWMode = m_Packet.getFirmwareMode();
+            m_TempSensorInfo[nIndex].nMode = nFWMode;
+            if ((nFWMode != MODE_MM_APP) && (nFWMode != MODE_CM_APP))
+            {
+                m_CurrentJob.subStep = SUB_QUERY_IAP_VERSION;
+                break;
+            }
+            m_CurrentJob.subStep = SUB_QUERY_VERSION;
+            break;
+        case SUB_QUERY_VERSION:
+            m_TempSensorInfo[nIndex].nModelNumber = m_Packet.getModelNumber();
+            m_TempSensorInfo[nIndex].nVersionMajor = m_Packet.getVersionMajor();
+            m_TempSensorInfo[nIndex].nVersionMinor = m_Packet.getVersionMinor();
+            m_TempSensorInfo[nIndex].nWhich = m_CurrentJob.which;
+
+            if ((m_TempSensorInfo[nIndex].nModelNumber == 0x3500) && (m_CurrentJob.which == PKT_ADDR_MM) )
+            {
+                snprintf( m_TempSensorInfo[nIndex].szModel, 256, "T3k A" );
+            }
+            else
+            {
+                snprintf( m_TempSensorInfo[nIndex].szModel, 256, "%c%04x", (m_CurrentJob.which == PKT_ADDR_MM) ? 'T' : 'C', m_TempSensorInfo[nIndex].nModelNumber );
+            }
+
+            if ((m_TempSensorInfo[nIndex].nVersionMinor & 0x0f) != 0)
+            {
+                snprintf( m_TempSensorInfo[nIndex].szVersion, 256, "%x.%02x", m_TempSensorInfo[nIndex].nVersionMajor,
+                    m_TempSensorInfo[nIndex].nVersionMinor );
+            }
+            else
+            {
+                snprintf( m_TempSensorInfo[nIndex].szVersion, 256, "%x.%x", m_TempSensorInfo[nIndex].nVersionMajor,
+                    m_TempSensorInfo[nIndex].nVersionMinor );
+            }
+            snprintf( m_TempSensorInfo[nIndex].szDateTime, 256, " %s, %s", m_Packet.getDate(), m_Packet.getTime() );
+            m_CurrentJob.subStep = SUB_QUERY_FINISH;
+            break;
+        case SUB_QUERY_IAP_VERSION:
+            m_TempSensorInfo[nIndex].nWhich = m_CurrentJob.which;
+            m_TempSensorInfo[nIndex].nModelNumber = m_Packet.getModelNumber();
+            if ((m_TempSensorInfo[nIndex].nModelNumber == 0x3500) && (m_CurrentJob.which == PKT_ADDR_MM) )
+            {
+                snprintf( m_TempSensorInfo[nIndex].szModel, 256, "T3k A" );
+            }
+            else
+            {
+                snprintf( m_TempSensorInfo[nIndex].szModel, 256, "%c%04x", (m_CurrentJob.which == PKT_ADDR_MM) ? 'T' : 'C', m_TempSensorInfo[nIndex].nModelNumber );
+            }
+            m_CurrentJob.subStep = SUB_QUERY_IAP_REVISION;
+            break;
+        case SUB_QUERY_IAP_REVISION:
+            m_TempSensorInfo[nIndex].nIapRevision = m_Packet.getRevision();
+            if ( (m_TempSensorInfo[nIndex].nMode == MODE_MM_IAP) ||
+                    (m_TempSensorInfo[nIndex].nMode == MODE_CM_IAP) )
+            {
+                snprintf( m_TempSensorInfo[nIndex].szVersion, 256, "IAP Rev(%04x)", m_TempSensorInfo[nIndex].nIapRevision );
+            }
+            else
+            {
+                snprintf( m_TempSensorInfo[nIndex].szVersion, 256, "UPG Rev(%04x)", m_TempSensorInfo[nIndex].nIapRevision );
+            }
+            m_CurrentJob.subStep = SUB_QUERY_FINISH;
+            break;
+        default:
+            qDebug( "already finished..." );
+            break;
+        }
+        break;
+    case JOBF_MARK_IAP:
+        strMessage = QString("[%1] Mark IAP OK").arg(PartName[getIndex(m_CurrentJob.which)]);
+        addProgressText(strMessage, TM_OK);
+        qDebug( "mark iap: %x ok", m_CurrentJob.which );
+        break;
+    case JOBF_MARK_APP:
+        strMessage = QString("[%1] Mark APP OK").arg(PartName[getIndex(m_CurrentJob.which)]);
+        addProgressText(strMessage, TM_OK);
+        qDebug( "mark app: %x ok", m_CurrentJob.which );
+        break;
+    case JOBF_RESET:
+        strMessage = QString("[%1] Reset OK").arg(PartName[getIndex(m_CurrentJob.which)]);
+        addProgressText(strMessage, TM_OK);
+        qDebug( "reset: %x ok", m_CurrentJob.which );
+        break;
+    case JOBF_ERASE:
+        strMessage = QString("[%1] Erase OK").arg(PartName[getIndex(m_CurrentJob.which)]);
+        addProgressText(strMessage, TM_OK);
+        qDebug( "erase: %x ok", m_CurrentJob.which );
+        break;
+    case JOBF_WRITE:
+        FirmwareInfo* pFI = findFirmware( m_CurrentJob.which == PKT_ADDR_MM ? TYPE_MM : TYPE_CM, m_SensorInfo[getIndex(m_CurrentJob.which)].nModelNumber );
+        if (m_CurrentJob.firmwareBinaryPos == pFI->dwFirmwareSize)
+        {
+            qDebug( "write: %x finish", m_CurrentJob.which );
+            m_CurrentJob.subStep = SUB_QUERY_FINISH;
+            strMessage = QString("[%1] Write Firmware... Finish").arg(PartName[getIndex(m_CurrentJob.which)]);
+            addProgressText(strMessage, TM_OK);
+            ui->progressBar->setValue(100);
+        }
+        else
+        {
+            qDebug( "write: %x %ld/%ld", m_CurrentJob.which, m_CurrentJob.firmwareBinaryPos, pFI->dwFirmwareSize );
+            ui->progressBar->setValue( (int)(m_CurrentJob.firmwareBinaryPos * 100 / pFI->dwFirmwareSize) );
+        }
+        break;
+    }
+
     executeNextJob();
 }
 
@@ -571,79 +781,252 @@ void Dialog::executeNextJob( bool bRetry/*=false*/ )
 
     m_nPacketId = (unsigned short)-1;
 
-    if (!m_JobList.isEmpty() || bRetry || ((m_CurrentJob.type == JOBF_QUERY_INFO) && (m_CurrentJob.subStep != SUB_QUERY_FINISH)) )
+    if (m_bIsStartRequestInformation)
     {
-        if ( !bRetry && ((m_CurrentJob.type != JOBF_QUERY_INFO) || ((m_CurrentJob.type == JOBF_QUERY_INFO) && (m_CurrentJob.subStep == SUB_QUERY_FINISH))) )
+        if (!m_JobListForRequestInformation.isEmpty() || bRetry || ((m_CurrentJob.type == JOBF_QUERY_INFO) && (m_CurrentJob.subStep != SUB_QUERY_FINISH)) )
         {
-            JobItem job = m_JobList.front();
-            m_JobList.pop_front();
-
-            m_CurrentJob = job;
-        }
-
-        switch (m_CurrentJob.type)
-        {
-        default:
-            qDebug( "invalid job type" );
-            break;
-        case JOBF_QUERY_INFO:
-            switch (m_CurrentJob.subStep)
+            if ( !bRetry && ((m_CurrentJob.type != JOBF_QUERY_INFO) || ((m_CurrentJob.type == JOBF_QUERY_INFO) && (m_CurrentJob.subStep == SUB_QUERY_FINISH))) )
             {
-            case SUB_QUERY_MODE:
-                m_nPacketId = m_Packet.queryMode(m_CurrentJob.which);
-                break;
-            case SUB_QUERY_VERSION:
-                m_nPacketId = m_Packet.queryVersion(m_CurrentJob.which);
-                break;
-            case SUB_QUERY_IAP_VERSION:
-                m_nPacketId = m_Packet.queryIapVersion(m_CurrentJob.which);
-                break;
-            case SUB_QUERY_IAP_REVISION:
-                m_nPacketId = m_Packet.queryIapRevision(m_CurrentJob.which);
-                break;
+                JobItem job = m_JobListForRequestInformation.front();
+                m_JobListForRequestInformation.pop_front();
+
+                m_CurrentJob = job;
+            }
+
+            switch (m_CurrentJob.type)
+            {
             default:
-                qDebug( "already finished..." );
+                qDebug( "invalid job type" );
+                break;
+            case JOBF_QUERY_INFO:
+                switch (m_CurrentJob.subStep)
+                {
+                case SUB_QUERY_MODE:
+                    m_nPacketId = m_Packet.queryMode(m_CurrentJob.which);
+                    break;
+                case SUB_QUERY_VERSION:
+                    m_nPacketId = m_Packet.queryVersion(m_CurrentJob.which);
+                    break;
+                case SUB_QUERY_IAP_VERSION:
+                    m_nPacketId = m_Packet.queryIapVersion(m_CurrentJob.which);
+                    break;
+                case SUB_QUERY_IAP_REVISION:
+                    m_nPacketId = m_Packet.queryIapRevision(m_CurrentJob.which);
+                    break;
+                default:
+                    qDebug( "already finished..." );
+                    break;
+                }
                 break;
             }
-            break;
-        case JOBF_MARK_IAP:
-            m_nPacketId = m_Packet.markIap(m_CurrentJob.which);
-            break;
-        case JOBF_MARK_APP:
-            m_nPacketId = m_Packet.markApp(m_CurrentJob.which);
-            break;
-        case JOBF_RESET:
-            m_nPacketId = m_Packet.reset(m_CurrentJob.which);
-            break;
-        case JOBF_ERASE:
-            m_nPacketId = m_Packet.erase(m_CurrentJob.which);
-            break;
-        case JOBF_WRITE:
-            // TODO: write fwb
-            break;
+
+            if (m_nPacketId == (unsigned short)-1)
+            {
+                qDebug( "job failed" );
+                stopAllQueryInformationJobs();
+            }
+            else
+            {
+                //qDebug("execute job");
+                startRequestTimeoutTimer(200);
+            }
+
+            return;
         }
 
-        if (m_nPacketId == (unsigned short)-1)
-        {
-            qDebug( "job failed" );
-            stopAllJobs();
-        }
-        else
-        {
-            qDebug("execute job");
-            startRequestTimeoutTimer();
-        }
-
-        return;
+        onFinishAllRequestInformationJobs();
     }
 
-    onFinishAllJobs();
+    if (m_bIsStartFirmwareDownload)
+    {
+        if (!m_JobListForFirmwareDownload.isEmpty() || bRetry || ((m_CurrentJob.type == JOBF_WRITE) && (m_CurrentJob.subStep != SUB_QUERY_FINISH)) || m_bWaitAPP || m_bWaitIAP )
+        {
+            if ( (!bRetry && !m_bWaitIAP && !m_bWaitAPP && (m_CurrentJob.type != JOBF_WRITE)) ||
+                 ((m_CurrentJob.type == JOBF_WRITE) && (m_CurrentJob.subStep == SUB_QUERY_FINISH)))
+            {
+                JobItem job = m_JobListForFirmwareDownload.front();
+                m_JobListForFirmwareDownload.pop_front();
+
+                m_CurrentJob = job;
+            }
+
+            QString strMessage;
+            switch (m_CurrentJob.type)
+            {
+            default:
+                if ( m_CurrentJob.type != JOBF_QUERY_INFO )
+                    qDebug( "invalid job type" );
+                break;
+            case JOBF_MARK_IAP:
+                strMessage = QString("[%1] Mark IAP...").arg(PartName[getIndex(m_CurrentJob.which)]);
+                addProgressText(strMessage, TM_NORMAL);
+                qDebug( "mark Iap: %x", m_CurrentJob.which );
+                m_nPacketId = m_Packet.markIap(m_CurrentJob.which);
+                break;
+            case JOBF_MARK_APP:
+                strMessage = QString("[%1] Mark APP...").arg(PartName[getIndex(m_CurrentJob.which)]);
+                addProgressText(strMessage, TM_NORMAL);
+                qDebug( "mark App: %x", m_CurrentJob.which );
+                m_nPacketId = m_Packet.markApp(m_CurrentJob.which);
+                break;
+            case JOBF_RESET:
+                strMessage = QString("[%1] Reset...").arg(PartName[getIndex(m_CurrentJob.which)]);
+                addProgressText(strMessage, TM_NORMAL);
+                qDebug( "reset: %x", m_CurrentJob.which );
+                m_nPacketId = m_Packet.reset(m_CurrentJob.which);
+                break;
+            case JOBF_WAIT_IAP_ALL:
+                strMessage = QString("Wait IAP Mode...");
+                addProgressText(strMessage, TM_NORMAL);
+                m_bWaitIAP = true;
+                m_bWaitIAPCheckOK = false;
+                m_nStableCheck = 0;
+                startWaitModeChangeTimer();
+                break;
+            case JOBF_WAIT_APP_ALL:
+                strMessage = QString("Wait APP Mode...");
+                addProgressText(strMessage, TM_NORMAL);
+                m_bWaitAPP = true;
+                m_bWaitAPPCheckOK = false;
+                m_nStableCheck = 0;
+                startWaitModeChangeTimer();
+                break;
+            case JOBF_ERASE:
+                strMessage = QString("[%1] Erase...").arg(PartName[getIndex(m_CurrentJob.which)]);
+                addProgressText(strMessage, TM_NORMAL);
+                qDebug( "erase: %x", m_CurrentJob.which );
+                m_nPacketId = m_Packet.erase(m_CurrentJob.which);
+                break;
+            case JOBF_WRITE:
+                if (m_CurrentJob.firmwareBinaryPos == 0)
+                {
+                    strMessage = QString("[%1] Write Firmware...").arg(PartName[getIndex(m_CurrentJob.which)]);
+                    addProgressText(strMessage, TM_NORMAL);
+                    ui->labelPart->setText(PartName[getIndex(m_CurrentJob.which)]);
+                    ui->progressBar->setValue(0);
+                }
+                FirmwareInfo* pFI = findFirmware( m_CurrentJob.which == PKT_ADDR_MM ? TYPE_MM : TYPE_CM, m_SensorInfo[getIndex(m_CurrentJob.which)].nModelNumber);
+                qDebug( "firmware info: %s %s %ld bytes", pFI->szModel, pFI->szVersion, pFI->dwFirmwareSize );
+
+                unsigned short nWriteBytes = 0;
+                if ((pFI->dwFirmwareSize - m_CurrentJob.firmwareBinaryPos) > TX_BUF_LEN)
+                {
+                    nWriteBytes = TX_BUF_LEN;
+                }
+                else
+                {
+                    nWriteBytes = (unsigned short)(pFI->dwFirmwareSize - m_CurrentJob.firmwareBinaryPos);
+                }
+
+                qDebug( "write %d bytes", nWriteBytes );
+
+                m_nPacketId = m_Packet.write( m_CurrentJob.which, m_CurrentJob.firmwareBinaryPos, nWriteBytes, (unsigned char*)(pFI->pFirmwareBinary+m_CurrentJob.firmwareBinaryPos));
+                if (m_nPacketId != (unsigned short)-1)
+                    m_CurrentJob.firmwareBinaryPos += nWriteBytes;
+                break;
+            }
+
+            if (!m_bWaitIAP && !m_bWaitAPP)
+            {
+                if (m_nPacketId == (unsigned short)-1)
+                {
+                    qDebug( "job failed" );
+                    strMessage = QString("[%1] Failed...").arg(PartName[getIndex(m_CurrentJob.which)]);
+                    addProgressText(strMessage, TM_NG);
+                    onFirmwareUpdateFailed();
+                }
+                else
+                {
+                    //qDebug("execute job");
+                    if ( m_CurrentJob.type == JOBF_ERASE )
+                        startRequestTimeoutTimer( 10000 );
+                    else
+                        startRequestTimeoutTimer( 300 );
+                }
+            }
+            else
+            {
+                if (!m_bIsStartRequestInformation)
+                {
+                    startQueryInformation(true);
+                }
+                else
+                {
+                    if (m_bWaitIAP)
+                    {
+                        qDebug( "check IAP" );
+                        bool bIAPModeOK = true;
+                        for (int i=0 ; i<IDX_MAX ; i++)
+                        {
+                            if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
+                                continue;
+                            if ( (m_SensorInfo[i].nMode != MODE_CM_IAP) && (m_SensorInfo[i].nMode != MODE_MM_IAP) )
+                            {
+                                bIAPModeOK = false;
+                                break;
+                            }
+                        }
+                        if (bIAPModeOK)
+                        {
+                            m_nStableCheck++;
+                            if (m_nStableCheck > 2)
+                            {
+                                killWaitModeChangeTimer();
+                                m_bWaitIAP = false;
+                                m_bWaitIAPCheckOK = true;
+                                stopQueryInformation();
+                                qDebug( "check IAP OK" );
+                                strMessage = QString("IAP Mode OK");
+                                addProgressText(strMessage, TM_OK);
+                                executeNextJob();
+                            }
+                        }
+                    }
+                    else if (m_bWaitAPP)
+                    {
+                        qDebug( "check APP" );
+                        bool bAPPModeOK = true;
+                        for (int i=0 ; i<IDX_MAX ; i++)
+                        {
+                            if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
+                                continue;
+                            if ( (m_SensorInfo[i].nMode != MODE_CM_APP) && (m_SensorInfo[i].nMode != MODE_MM_APP) )
+                            {
+                                bAPPModeOK = false;
+                                break;
+                            }
+                        }
+                        if (bAPPModeOK)
+                        {
+                            m_nStableCheck++;
+                            if (m_nStableCheck > 2)
+                            {
+                                killWaitModeChangeTimer();
+                                m_bWaitAPP = false;
+                                m_bWaitAPPCheckOK = true;
+                                stopQueryInformation();
+                                qDebug( "check APP OK" );
+                                strMessage = QString("APP Mode OK");
+                                addProgressText(strMessage, TM_OK);
+                                executeNextJob();
+                            }
+                        }
+                    }
+                }
+            }
+
+            return;
+        }
+
+        onFinishAllFirmwareDownloadJobs();
+    }
+
     m_bIsExecuteJob = false;
 }
 
-void Dialog::onFinishAllJobs()
+void Dialog::onFinishAllRequestInformationJobs()
 {
-    qDebug( "job finish!" );
+    qDebug( "request information job finish!" );
     if (m_bIsStartRequestInformation)
     {
         updateSensorInformation();
@@ -653,6 +1036,35 @@ void Dialog::onFinishAllJobs()
         }
         m_TimerRequestInformation = startTimer(2000);
     }
+}
+
+void Dialog::onFinishAllFirmwareDownloadJobs()
+{
+    m_bIsStartFirmwareDownload = false;
+    qDebug( "firmware download job finish!" );
+
+    QString strMessage = QString("Firmware Download OK!");
+    addProgressText(strMessage, TM_OK);
+
+    ui->labelMessage->setText("The firmware has been updated successfully.");
+    ui->labelMessage->setStyleSheet("color: rgb(31, 160, 70); font-weight: bold;");
+
+    ui->pushButtonCancel->setText("OK");
+    ui->pushButtonCancel->setEnabled(true);
+
+    Qt::WindowFlags flags = windowFlags();
+    flags |= Qt::WindowCloseButtonHint;
+    setWindowFlags(flags);
+    show();
+}
+
+void Dialog::onFirmwareUpdateFailed()
+{
+    ui->labelMessage->setText("Failed to update firmware");
+    ui->labelMessage->setStyleSheet("color: rgb(203, 45, 5); font-weight: bold;");
+    stopFirmwareDownload();
+    ui->pushButtonCancel->setText("Cancel");
+    ui->pushButtonCancel->setEnabled(true);
 }
 
 void Dialog::displayInformation( const char * szText )
@@ -833,7 +1245,7 @@ void Dialog::connectDevice()
         qDebug( "connection ok" );
         displayInformation("Connected.");
         m_strSensorInformation = "";
-        startQueryInformation();
+        startQueryInformation(false);
     }
     else
     {
@@ -914,8 +1326,10 @@ bool Dialog::verifyFirmware(QString& strMsg)
 
 void Dialog::on_pushButtonUpgrade_clicked()
 {
-    //ui->pushButtonUpgrade->setEnabled(false);
+    ui->pushButtonCancel->setEnabled(false);
     stopQueryInformation();
+
+    qDebug( "Stop Query Information" );
 
     QString strMsg;
     if (!verifyFirmware(strMsg))
@@ -935,16 +1349,16 @@ void Dialog::on_pushButtonUpgrade_clicked()
         "<html><body><font color=black>"
         "<table width=\"100%\" cellspacing=\"0\" bgcolor=\"#d5dffb\">"
             "<tr>"
-                "<td width=\"20%\">"
+                "<td width=\"15%\">"
                     "<p align=\"left\">Part</p>"
                 "</td>"
-                "<td width=\"20%\">"
+                "<td width=\"15%\">"
                     "<p align=\"left\">Model</p>"
                 "</td>"
-                "<td width=\"20%\">"
+                "<td width=\"40%\">"
                     "<p align=\"center\">from</p>"
                 "</td>"
-                "<td width=\"20%\">"
+                "<td width=\"10%\">"
                     "<p align=\"center\">&nbsp;</p>"
                 "</td>"
                 "<td width=\"20%\">"
@@ -968,13 +1382,13 @@ void Dialog::on_pushButtonUpgrade_clicked()
         pFI_CM = findFirmware( TYPE_CM, m_SensorInfo[i].nModelNumber );
         QString strCMItem =
             "<tr>"
-                "<td width=\"20%\">"
+                "<td width=\"15%\">"
                     "<p align=\"left\">" + QString(PartName[i]) + "</p>"
                 "</td>"
-                "<td width=\"20%\">"
+                "<td width=\"15%\">"
                     "<p align=\"left\">" + QString(m_SensorInfo[i].szModel) + "</p>"
                 "</td>"
-                "<td width=\"20%\">"
+                "<td width=\"40%\">"
                 "<p align=\"center\">" + QString(m_SensorInfo[i].szVersion) + "</p>"
                 "</td>"
                 "<td width=\"20%\">"
@@ -988,16 +1402,16 @@ void Dialog::on_pushButtonUpgrade_clicked()
     FirmwareInfo* pFI_MM = findFirmware( TYPE_MM, m_SensorInfo[IDX_MM].nModelNumber );
     QString strMMInfo =
         "<tr>"
-            "<td width=\"20%\">"
+            "<td width=\"15%\">"
                 "<p align=\"left\">MM</p>"
             "</td>"
-            "<td width=\"20%\">"
+            "<td width=\"15%\">"
                 "<p align=\"left\">" + QString(m_SensorInfo[IDX_MM].szModel) + "</p>"
             "</td>"
-            "<td width=\"20%\">"
+            "<td width=\"40%\">"
                 "<p align=\"center\">" + QString(m_SensorInfo[IDX_MM].szVersion) + "</p>"
             "</td>"
-            "<td width=\"20%\" rowspan=" + QString("%1").arg(nCMCount+1) + " align=\"center\" valign=\"middle\">"
+            "<td width=\"10%\" rowspan=" + QString("%1").arg(nCMCount+1) + " align=\"center\" valign=\"middle\">"
                 "<p align=\"center\">=&gt;</p>"
             "</td>"
             "<td width=\"20%\">"
@@ -1018,18 +1432,53 @@ void Dialog::on_pushButtonUpgrade_clicked()
 
     if (nResult == QDialog::Accepted)
     {
+        Qt::WindowFlags flags = windowFlags();
+        flags &= ~Qt::WindowCloseButtonHint;
+        setWindowFlags(flags);
+        show();
+
         emit ui->stackedWidget->slideInNext();
+        startFirmwareDownload();
     }
     else
     {
-        startQueryInformation();
+        startQueryInformation(false);
     }
 }
 
 void Dialog::on_pushButtonCancel_clicked()
 {
-    // TODO: confirm cancel
+    if (m_bIsStartFirmwareDownload)
+    {
+        // TODO: confirm cancel
+    }
+    Qt::WindowFlags flags = windowFlags();
+    flags |= Qt::WindowCloseButtonHint;
+    setWindowFlags(flags);
+    show();
 
     emit ui->stackedWidget->slideInPrev();
-    startQueryInformation();
+    stopFirmwareDownload();
+    startQueryInformation(true);
+}
+
+void Dialog::addProgressText(QString& strMessage, TextMode tm)
+{
+    ui->listWidget->addItem(strMessage);
+    int idx = ui->listWidget->count()-1;
+
+    switch (tm)
+    {
+    case TM_NORMAL:
+        ui->listWidget->item(idx)->setForeground(QColor(100, 100, 100));
+        break;
+    case TM_NG:
+        ui->listWidget->item(idx)->setForeground(QColor(170, 0, 26));
+        break;
+    case TM_OK:
+        ui->listWidget->item(idx)->setForeground(QColor(26, 136, 58));
+        break;
+    }
+
+    ui->listWidget->scrollToBottom();
 }

@@ -15,6 +15,7 @@ struct SensorInfo {
     unsigned short  nIapRevision;
     unsigned short  nVersionMajor;
     unsigned short  nVersionMinor;
+    unsigned short  nWhich;
     char            szVersion[256];
     char            szDateTime[256];
     char            szModel[256];
@@ -40,12 +41,14 @@ private:
     int         m_TimerConnectDevice;
     int         m_TimerRequestTimeout;
     int         m_TimerRequestInformation;
+    int         m_TimerWaitModeChange;
 
     enum QueryInfoStep {
         SUB_QUERY_MODE = 0,
         SUB_QUERY_VERSION,
         SUB_QUERY_IAP_VERSION,
         SUB_QUERY_IAP_REVISION,
+        SUB_QUERY_WRITE_PROGRESS,
         SUB_QUERY_FINISH
     };
 
@@ -56,22 +59,35 @@ private:
         JOBF_MARK_APP,
         JOBF_RESET,
         JOBF_ERASE,
-        JOBF_WRITE
+        JOBF_WRITE,
+        JOBF_WAIT_IAP_ALL,
+        JOBF_WAIT_APP_ALL
     };
 
     struct JobItem {
         JobItemType     type;
         QueryInfoStep   subStep;
+        unsigned long   firmwareBinaryPos;
         unsigned short  which;
     };
 
-    QList<JobItem>  m_JobList;
+    QList<JobItem>  m_JobListForRequestInformation;
+    QList<JobItem>  m_JobListForFirmwareDownload;
     bool            m_bIsExecuteJob;
     bool            m_bIsStartRequestInformation;
+    bool            m_bIsStartFirmwareDownload;
     JobItem         m_CurrentJob;
     unsigned short  m_nPacketId;
 
     bool            m_bIsInformationUpdated;
+
+    bool            m_bWaitIAP;
+    bool            m_bWaitIAPCheckOK;
+
+    bool            m_bWaitAPP;
+    bool            m_bWaitAPPCheckOK;
+
+    int             m_nStableCheck;
 
 #define IDX_MM      (0)
 #define IDX_CM1     (1)
@@ -89,6 +105,7 @@ public:
 
 private:
     QString m_strSensorInformation;
+    QString m_strDownloadProgress;
 
 protected:
     virtual void timerEvent(QTimerEvent *evt);
@@ -97,18 +114,29 @@ protected:
 
     void connectDevice();
 
-    void startRequestTimeoutTimer();
+    void startRequestTimeoutTimer(int nTimeout);
     void killRequestTimeoutTimer();
 
-    void startQueryInformation();
+    void startWaitModeChangeTimer();
+    void killWaitModeChangeTimer();
+
+    void startQueryInformation( bool bDelay );
     void stopQueryInformation();
 
+    void startFirmwareDownload();
+    void stopFirmwareDownload();
+
     void queryInformation();
-    void stopAllJobs();
+    void firmwareDownload();
+    void stopAllQueryInformationJobs();
+    void stopAllFirmwareDownloadJobs();
 
     void executeNextJob( bool bRetry=false );
 
-    void onFinishAllJobs();
+    void onFinishAllRequestInformationJobs();
+    void onFinishAllFirmwareDownloadJobs();
+
+    void onFirmwareUpdateFailed();
 
     void updateSensorInformation();
     void updateFirmwareInformation();
@@ -121,6 +149,9 @@ protected:
     bool verifyFirmware(QString& strMsg);
 
     FirmwareInfo* findFirmware( FIRMWARE_TYPE type, unsigned short nModelNumber );
+
+    enum TextMode{ TM_NORMAL, TM_NG, TM_OK };
+    void addProgressText(QString& strMessage, TextMode tm);
     
 private slots:
     void on_pushButtonUpgrade_clicked();
