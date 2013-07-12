@@ -50,8 +50,6 @@ Dialog::Dialog(QWidget *parent) :
     setWindowFlags(flags);
     setFixedSize(this->size());
 
-    setWindowIcon( QIcon(":/T3kUpgradeRes/resources/T3kUpgrade.png") );
-
     ui->stackedWidget->setCurrentIndex(0);
     connect( &m_Packet, SIGNAL(disconnected()), this, SLOT(onDisconnected()), Qt::QueuedConnection );
     connect( &m_Packet, SIGNAL(responseFromSensor(unsigned short)), this, SLOT(onResponseFromSensor(unsigned short)), Qt::QueuedConnection );

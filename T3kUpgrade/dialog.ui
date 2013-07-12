@@ -19,10 +19,6 @@
   <property name="windowTitle">
    <string>T3k Firmware Upgrader</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="T3kUpgrade.qrc">
-    <normaloff>:/T3kUpgradeRes/resources/T3kUpgrade.ico</normaloff>:/T3kUpgradeRes/resources/T3kUpgrade.ico</iconset>
-  </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(242, 247, 251);</string>
   </property>
@@ -68,8 +64,9 @@
 	font-weight: bold;
     border-style: solid;
     border-width: 1px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+	padding-bottom: 2px;
 }</string>
      </property>
      <property name="text">
@@ -197,8 +194,9 @@ border-width: 1px;</string>
 	font-weight: bold;
     border-style: solid;
     border-width: 1px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+	padding-bottom: 2px;
 }</string>
      </property>
      <property name="text">
@@ -232,8 +230,9 @@ border-width: 1px;</string>
 	font-weight: bold;
     border-style: solid;
     border-width: 1px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+	padding-bottom: 2px;
 }</string>
      </property>
      <property name="text">
@@ -440,8 +439,6 @@ QScrollBar:vertical {
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="T3kUpgrade.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

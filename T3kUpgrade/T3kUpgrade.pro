@@ -144,7 +144,7 @@ RESOURCES += \
 
 win32:RC_FILE = T3kUpgrade.rc
 
-macx:ICON = resources/T3kUpgrade.icns
+macx:ICON =
 
 OTHER_FILES += \
     T3kUpgrade.rc

@@ -1,8 +1,5 @@
 <RCC>
     <qresource prefix="/T3kUpgradeRes">
-        <file>resources/T3kUpgrade.ico</file>
-        <file>resources/T3kUpgrade.png</file>
-        <file>resources/T3kUpgrade.icns</file>
         <file>resources/package.png</file>
         <file>resources/usb.png</file>
         <file>resources/brief.png</file>
