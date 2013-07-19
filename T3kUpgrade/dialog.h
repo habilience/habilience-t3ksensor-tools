@@ -140,7 +140,7 @@ protected:
 
     void updateSensorInformation();
     void updateFirmwareInformation();
-    void displayInformation( const char* szText );
+    void displayInformation(const QString &strText );
 
     bool loadFirmwareFile();
 

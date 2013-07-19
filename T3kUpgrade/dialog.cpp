@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <quazipfile.h>
 #include <QBriefingDialog.h>
+#include "../common/QUtils.h"
 
 #define RETRY_CONNECTION_INTERVAL       (3000)
 #define WAIT_MODECHANGE_TIMEOUT         (30000)
@@ -83,21 +84,6 @@ Dialog::~Dialog()
     delete ui;
 }
 
-QString rstrip(const QString& str, const char *chars)
-{
-    QByteArray byteArray = str.toUtf8();
-    int n = byteArray.size() - 1;
-    for (; n >= 0; --n)
-    {
-        if (0 == strchr(chars, byteArray.at(n)))
-        {
-            byteArray = byteArray.left(n+1);
-            break;
-        }
-    }
-    return QString(byteArray);
-}
-
 bool Dialog::loadFirmwareFile()
 {
     QString strPath = QCoreApplication::applicationDirPath();
@@ -138,8 +124,8 @@ bool Dialog::loadFirmwareFile()
     {
         file.open(QIODevice::ReadOnly);
 
-        //qDebug( "filename: %s", (const char*)file.getActualFileName().toLatin1() );
-        //qDebug( "size: %ld, %ld", (long)file.size(), (long)file.csize() );
+        //qDebug( "actual filename: %s", (const char*)file.getActualFileName().toLatin1() );
+        //qDebug( "filename: %s", (const char*)file.getFileName().toLatin1() );
 
         if ( file.size() > 0 )
         {
@@ -1065,9 +1051,8 @@ void Dialog::onFirmwareUpdateFailed()
     ui->pushButtonCancel->setEnabled(true);
 }
 
-void Dialog::displayInformation( const char * szText )
+void Dialog::displayInformation( const QString& strText )
 {
-    QString strText = szText;
     QString strInformation;
     strInformation = "<html><body>"
             "<table width=\"100%\" height=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
