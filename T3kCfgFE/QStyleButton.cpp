@@ -83,8 +83,6 @@ QStyleButton::QStyleButton(QWidget *parent) :
 
 void QStyleButton::paintEvent(QPaintEvent */*evt*/)
 {
-    //QPushButton::paintEvent(evt);
-
     const double dPenWidth = 0.9;
     QRect rcBody(0, 0, width()-1, height()-1);
 
@@ -112,7 +110,7 @@ void QStyleButton::paintEvent(QPaintEvent */*evt*/)
     int nBtmAlpha = 220+nAlphaOffset;
 
     QColor color;
-    if (m_bIsHovered || m_bIsSelected)
+    if (m_bIsHovered || m_bIsSelected || isChecked())
     {
         color = m_clrActive;
     }
@@ -139,7 +137,7 @@ void QStyleButton::paintEvent(QPaintEvent */*evt*/)
         QGradientStops stops;
         double factors[4] = {0.0, 0.2, 0.4, 0.6};
         double positions[4] = {0.0, 0.46, 0.47, 1.0};
-        if (m_bIsSelected)
+        if (m_bIsSelected || isChecked())
         {
             positions[1] = 0.54; positions[2] = 0.55;
             factors[1] = 0.5;
@@ -162,7 +160,7 @@ void QStyleButton::paintEvent(QPaintEvent */*evt*/)
         p.drawRoundedRect( rcBody, BORDER_ROUND, BORDER_ROUND );
         p.setBrush(Qt::NoBrush);
 
-        if (m_bIsSelected)
+        if (m_bIsSelected || isChecked())
         {
             p.setPen( QPen(QBrush(QColor().fromRgb(0xFFF5F5F5)), dPenWidth) );
         }
@@ -178,7 +176,7 @@ void QStyleButton::paintEvent(QPaintEvent */*evt*/)
             drawFocusRect( p, rcBody );
         }
 
-        if (m_bIsSelected)
+        if (m_bIsSelected || isChecked())
         {
             p.setPen( QPen(QBrush(m_clrBorder), dPenWidth));
         }
@@ -212,16 +210,15 @@ void QStyleButton::paintEvent(QPaintEvent */*evt*/)
         break;
     }
 
-    // Qt::AlignRight;
-    // Qt::AlignHCenter;
-    // Qt::AlignVCenter;
+    flags |= Qt::TextSingleLine;
 
     QFontMetricsF ftMetrics( m_fntCaption );
     QRectF rectTopBBF = ftMetrics.boundingRect(rectCaptionF, flags, strCaption);
     QRectF rectBtmBBF;
+
+    QFontMetricsF ftMetricsAdditional( m_fntAdditionalText );
     if (bAdditionalText)
     {
-        QFontMetricsF ftMetricsAdditional( m_fntAdditionalText );
         QString strTemplate;
         for ( int i=0 ; i<m_nAdditionalTextLineCount ; i++ )
         {
@@ -255,6 +252,7 @@ void QStyleButton::paintEvent(QPaintEvent */*evt*/)
 
     p.setPen( m_clrText );
     p.setFont(m_fntCaption);
+    strCaption = ftMetrics.elidedText( strCaption, Qt::ElideRight, rectTopTextF.width() );
     p.drawText( rectTopTextF, flags, strCaption );
 
     if (bAdditionalText)
@@ -272,7 +270,8 @@ void QStyleButton::paintEvent(QPaintEvent */*evt*/)
         rectBtmTextF.setTop( rectTopTextF.bottom() );
         rectBtmTextF.setHeight(rectBtmBBF.height());
         p.setFont(m_fntAdditionalText);
-        p.drawText( rectBtmTextF, flags, m_strAdditionalText );
+        QString strAdditionalText = ftMetricsAdditional.elidedText( m_strAdditionalText, Qt::ElideRight, rectBtmTextF.width() );
+        p.drawText( rectBtmTextF, flags, strAdditionalText );
     }
 
     p.restore();
@@ -327,6 +326,12 @@ bool QStyleButton::eventFilter(QObject *obj, QEvent *evt)
         default:
             break;
         }
+    }
+    else
+    {
+        m_bIsHovered = false;
+        m_bIsFocused = false;
+        m_bIsSelected = false;
     }
     return QPushButton::eventFilter(obj, evt);
 }

@@ -1,0 +1,224 @@
+﻿
+[MAIN]
+
+TITLE = T3k Konfigüratörü (Fabrika Sürümü)
+BTN_CAPTION_SELECT_SENSOR = Sensör Seçin..
+BTN_CAPTION_SIDE_VIEW = 1. Yan görünüm
+TEXT_SIDE_VIEW_ADDITIONAL_TEXT = " - algılama_çizgisi, ışık"
+BTN_CAPTION_DETECTION = 2. Algılama ….
+TEXT_DETECTION_ADDITIONAL_TEXT = " - aralık, eşik, kazanç"
+BTN_CAPTION_BENT_ADJUSTMENT = 3. Eğim Ayarı
+TEXT_BENT_ADJUSTMENT_ADDITIONAL_TEXT = " - açı, kalibrasyon"
+BTN_CAPTION_TOUCH_SETTING = 4. Dokunma Ayarı
+TEXT_TOUCH_SETTING_ADDITIONAL_TEXT = " - marj, zaman, alan, hassasiyet"
+BTN_CAPTION_CHECK_SAFE_MODE = Güvenli Modu
+BTN_CAPTION_TOUCH_MARK = Dokunma İşareti\nWindow
+BTN_CAPTION_RESET_SENSOR = Sensör Sıfırlama
+BTN_CAPTION_SAVE_RESET = Kaydet\nReset Veri
+
+TEXT_WARNING_DEVICE_NOT_CONNECT = Cihaz bağlı değil
+TEXT_WARNING_FIRMWARE_DOWNLOAD = Bellenim indiriliyor
+TEXT_ERROR_INVALID_FIRMWARE = Bu program v%s bellenimini desteklemiyor
+TEXT_ERROR_SUPPORT_FIRMWARE_VERSION1 = - Akım: %s Destek: %1.2f - %1.2 f
+TEXT_ERROR_SUPPORT_FIRMWARE_VERSION2 = - Akım: %s Destek: %1.2f
+
+TEXT_ERROR_MESSAGE_TITLE = Hata
+TEXT_WARNING_MESSAGE_TITLE = Uyarı
+TEXT_ERROR_LOADSAVE_SENSOR_DEFAULT = Hata\n yeniden deneyin
+TEXT_WARNING_RESET_SENSOR_DEFAULT = Hata! Sensör sıfırlama varsayılan değerleri…
+TEXT_WARNING_SENSOR_TURNED_OFF = Sensör kapalı. Sensörü açmak istiyor musunuz?
+TEXT_WARNING_SENSOR_DATA_IS_CHANGED = Sensör verisi değişti.\n Kaydetmek istiyor musunuz?
+TEXT_ERROR_WRITE_FACTORY_DEFAULT_FAILURE = [Hata] Fabrika Varsayılan Ayarına Yazın \n Yeniden Deneyin
+TEXT_WARNING_RESET_ALL_VALUES = Uyarı! Tüm değerleri sıfırlayın…
+TEXT_ERROR_RESET_ALL_VALUES = [Hata] Sıfırlama Hatası \n Yeniden deneyin!
+
+BTN_CAPTION_SAVE = Kaydet
+BTN_CAPTION_LOAD = Yükle
+BTN_CAPTION_OK = OK
+BTN_CAPTION_CANCEL = İptal
+BTN_CAPTION_SELECT = Seçim
+BTN_CAPTION_EXIT = Çıkış
+BTN_CAPTION_RESET = Sıfırla
+BTN_CAPTION_CLOSE = Kapat
+BTN_CAPTION_REFRESH = Yenile
+BTN_CAPTION_APPLY = Uygula
+BTN_CAPTION_YES = Evet
+BTN_CAPTION_NO = Hayır
+
+TEXT_CAMERA = Kamera
+
+[SELECT SENSOR DATA DIALOG]
+
+TITLE = Sensör Verilerini Seçin
+TEXT_DATA_LIST = Veriler Listesi
+BTN_CAPTION_NEW_DATA = Yeni Veriler…
+TEXT_DATE = Tarih
+TEXT_FILENAME = Dosya Adı
+
+TEXT_WARNING_FILE_EXIST_OVERWRITE_PROMPT1 = "%s" dosyası zaten mevcut. \n Üzerine yazmak istiyor musunuz?
+TEXT_WARNING_FILE_EXIST_OVERWRITE_PROMPT2 = Dosya adı: \n Üzerine yazmak istiyor musunuz?
+
+[ENTER FILENAME DIALOG]
+
+TITLE = Dosya Adını Girin
+TEXT_FILENAME = Dosya Adı
+
+[SELECT SENSOR DIALOG]
+
+TITLE = Cihazı Seçin
+TEXT_DEVICE_LIST = Cihaz Listesi
+BTN_CAPTION_PLAY_BUZZER = Buzzer'ı oynatın
+TEXT_NUMBER = No
+TEXT_MODEL = Model
+TEXT_DEVICE_PATH = Cihaz Yolu
+
+[DATA PROGRESS DIALOG]
+
+TITLE = İlerleme
+
+[AUTORANGE COMPLETE DIALOG]
+
+TEXT_PROCESSING = İşleniyor
+TEXT_DO_NOT_TOUCH = DOKUNMAYIN!
+
+[SIDEVIEW]
+
+TEXT_DETECTION_LINE = Tespit Çizgisi
+TEXT_AMBIENT_LIGHTS = Ortam Işıkları
+TEXT_IR_BAR = IR Çubuğu
+BTN_CAPTION_REMOTE_SHARE_SIDEVIEW = [Uzak] Yan görünümü paylaşın
+TEXT_NO_DATA = Veri yok
+
+[DETECTION]
+
+BTN_CAPTION_MAIN_CAMERA = Ana
+BTN_CAPTION_SUB_CAMERA = Alt
+BTN_CAPTION_AUTO_CORRECTION_DETECTION_LINE = Otomatik Düzeltme: Düzeltme Çizgisi
+BTN_CAPTION_SIMPLE_DETECTION = Basit Algılama
+BTN_CAPTION_INVERT_DETECTION = Ters Algılama
+BTN_CAPTION_AUTO_RANGE_SETTING = Otomatik Aralık Ayarı
+BTN_CAPTION_CANCEL_AUTO_RANGE = Otomatik Aralık İptali
+
+TEXT_ZOOM_IN = Yakınlaştırma
+TEXT_ZOOM_OUT = Uzaklaştırma
+TEXT_FIT_SCREEN = Ekrana Sığdırın
+TEXT_LOWER_LEFT = Alt Sol
+TEXT_UPPER_RIGHT = Üst Sağ
+
+TEXT_THRESHOLD = Eşik
+TEXT_GAIN = Kazanç
+TEXT_AUTO_OFFSET = Otomatik Offset
+TEXT_OFFSET = Offset
+TEXT_LEFT_RANGE = Sol Mesafe
+TEXT_RIGHT_RANGE = Sağ Mesafe
+
+TEXT_WARNING_ENABLE_SIMPLE_DETECTION_PROMPT = "Basit Algılama"yı aktif hale getirmek istiyor musunuz?
+TEXT_WARNING_DISABLE_SIMPLE_DETECTION_PROMPT = "Basit Algılama"yı kapatmak istiyor musunuz?
+TEXT_WARNING_ENABLE_INVERT_DETECTION_PROMPT = "Ters Algılama"yı aktif hale getirmek istiyor musunuz?
+TEXT_WARNING_DISABLE_INVERT_DETECTION_PROMPT = "Ters Algılama"yı kapatmak istiyor musunuz?
+
+TEXT_TOUCH_COUNT = Dokunma Sayımı
+
+[BENT ADJUSTMENT]
+
+BTN_CAPTION_UP = Yukarı
+BTN_CAPTION_DOWN = Aşağı
+BTN_CAPTION_LEFT = Sol
+BTN_CAPTION_RIGHT = Sağ
+
+[TOUCH SETTING]
+
+TEXT_TOUCH_AREA_MARGIN = Dokunma Alanı Marjı (Ekran %si)
+TEXT_TIME_SETTING = Zaman Ayarı (ms)
+TEXT_WHEEL_ZOOM_SENS_SETTING = Teker/Yakınlaştırma Hassasiyeti Ayarı
+TEXT_INPUT_MODE_SETTING = Giriş Modu Ayarı
+TEXT_USB_CONFIG_MODE_SETTING = USB Konfigürasyon Modu Ayarı
+TEXT_AREA_SETTING = Alan Ayarı (Ekran %si)
+TEXT_TAP = Tap:
+TEXT_LONG_TAP = Uzun sekme:
+TEXT_SLOW = Yavaş
+TEXT_FAST = Hızlı
+TEXT_WHEEL = Teker
+TEXT_ZOOM = Yakınlaştırma
+TEXT_SCREEN = Ekran
+BTN_CAPTION_INPUT_MODE_AUTO_SELECT = Otomatik Seçin
+BTN_CAPTION_INPUT_MODE_MOUSE = Fare
+BTN_CAPTION_INPUT_MODE_MULTITOUCH = Çoklu dokunma
+BTN_CAPTION_USB_CFG_FULL = Tam
+BTN_CAPTION_USB_CFG_DIGITIZER_ONLY = Sadece sayısallaştırıcı
+BTN_CAPTION_GESTURE_PROFILE = Jest Profili..
+TEXT_SINGLE_CLICK = Tek tıklama
+TEXT_DOUBLE_CLICK = Çift tıklama
+TEXT_PALM = Avuç içi
+TEXT_PUTNTAP = Put & Tap
+TEXT_AREA = Alan
+
+[GESTURE PROFILE DIALOG]
+
+TITLE = Jest Profili
+
+TEXT_ITEM_GENERAL = Genel
+TEXT_ITEM_WINDOWS7 = Windows 7
+TEXT_ITEM_MAC_OS_X = Mac OS X
+TEXT_ITEM_LINUX = Linux (GNOME)
+TEXT_ITEM_USER_DEFINED = Kullanıcı Tanımlı
+
+TEXT_DRAG = Sürükle
+TEXT_TAP = Tap
+TEXT_DOUBLE_TAP = Çift Tap
+TEXT_LONG_TAP = Uzun Tap
+TEXT_ROTATE = Döndür
+TEXT_ZOOM = Yakınlaştır
+TEXT_SINGLE = Tek
+TEXT_FINGERS = Parmaklar
+TEXT_PALM = Avuçiçi
+TEXT_PUTNTAP = Put & Tap
+TEXT_INDIVIDUAL_PUTNTAP = Bireysel Put & Tap, Put & Çift Tap
+TEXT_INERTIAL_WHEEL = Etkisiz Teker
+TEXT_PUTNAD_ON_MULTITOUCHDEVICE = Melez Çoklu dokunma
+TEXT_MAC_OS_MARGIN = Mac OS X Marjı
+TEXT_INVERT_WHEEL = Ters Teker
+
+TEXT_SELECT_PROFILE = Selekt Profili
+TEXT_INPUT_MODE = Giriş Modu
+TEXT_INPUT_MODE_MOUSE = Fare
+TEXT_INPUT_MODE_MULTITOUCH = Çoklu dokunma
+
+[EDIT PROFILE ITEM]
+
+TITLE = Eylemi Düzenle
+TEXT_PROFILE_ITEM = Profil Maddesi
+TEXT_ACTION = Eylem
+TEXT_USER_DEFINE_KEY = Kullanıcı Tanımlı Tuş
+TEXT_KEY = Tuş
+TEXT_FUNCTION_KEY = Fonksiyon Tuşu
+TEXT_NONE = Yok
+TEXT_NOT_DEFINED = Tanımlı değil
+
+TEXT_PROFILE_ITEM_DISABLED = (Kapalı)
+TEXT_PROFILE_ITEM_USER_DEFINED = (Kullanıcı Tanımlı)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Fonksiyon Tuşu)
+TEXT_PROFILE_ITEM_MOUSE = (Fare)
+TEXT_PROFILE_ITEM_ESCAPE = Çıkış (Esc)
+TEXT_PROFILE_ITEM_FORWARD = İleri
+TEXT_PROFILE_ITEM_BACK = Geri
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Görev Anahtarı
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Görev Anahtarı (Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Görev Yöneticisi
+TEXT_PROFILE_ITEM_EXPLORER = Explorer
+TEXT_PROFILE_ITEM_DESKTOP = Masaüstü
+TEXT_PROFILE_ITEM_VKBOARD = Sanal Klavye
+TEXT_PROFILE_ITEM_T3KCFG = T3k Serisi Yapılandırma Programı
+
+TEXT_PROFILE_ITEM_LEFT_BUTTON = Sol Buton
+TEXT_PROFILE_ITEM_RIGHT_BUTTON = Sağ Buton
+TEXT_PROFILE_ITEM_MIDDLE_BUTTON = Orta Buton
+TEXT_PROFILE_ITEM_LEFT_DRAG = Sol Çekme
+TEXT_PROFILE_ITEM_RIGHT_DRAG = Sağ Çekme
+TEXT_PROFILE_ITEM_MIDDLE_DRAG = Orta Çekme
+TEXT_PROFILE_ITEM_LEFT_CLICK = Sol Tıklama
+TEXT_PROFILE_ITEM_RIGHT_CLICK = Sağ Tıklama
+TEXT_PROFILE_ITEM_MIDDLE_CLICK = Orta tıklama
+TEXT_PROFILE_ITEM_LEFT_DBLCLICK = Sol çift tıklama
+TEXT_PROFILE_ITEM_RIGHT_DBLCLICK = Sağ çift tıklama
+TEXT_PROFILE_ITEM_MIDDLE_DBLCLICK = Orta çift taklama

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/T3kCfgFERes">
+        <file>Languages/english.txt</file>
+    </qresource>
+</RCC>

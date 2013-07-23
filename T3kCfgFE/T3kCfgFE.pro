@@ -132,14 +132,73 @@ SOURCES += main.cpp\
         dialog.cpp \
     QStyleButton.cpp \
     QT3kDevice.cpp \
-    QT3kDeviceEventHandler.cpp
+    QT3kDeviceEventHandler.cpp \
+    QCmdAsyncManagerCtrl.cpp \
+    QLogSystem.cpp \
+    QSensorInitDataCfg.cpp \
+    QMultimonSupport.cpp \
+    QLangRes.cpp \
+    QIni.cpp \
+    QLangZipFile.cpp \
+    QLangManager.cpp \
+    QInitDataIni.cpp \
+    QSelectSensorDataDialog.cpp \
+    QShowMessageBox.cpp \
+    QEnterFileNameDialog.cpp \
+    QFileNameEdit.cpp \
+    QSelectDeviceDialog.cpp \
+    QDataProgressDialog.cpp \
+    QSideviewDialog.cpp \
+    QDetectionDialog.cpp \
+    QBentAdjustmentDialog.cpp \
+    QTouchSettingDialog.cpp \
+    QAreaSettingForm.cpp \
+    QBentDirectionMarginForm.cpp \
+    QDetectionGraphForm.cpp
 
 HEADERS  += dialog.h \
     QStyleButton.h \
     QT3kDevice.h \
-    QT3kDeviceEventHandler.h
+    QT3kDeviceEventHandler.h \
+    AppData.h \
+    QCmdAsyncManagerCtrl.h \
+    QLogSystem.h \
+    QSensorInitDataCfg.h \
+    QMultimonSupport.h \
+    QSingletone.h \
+    QLangRes.h \
+    QIni.h \
+    QLangZipFile.h \
+    QLangManager.h \
+    QInitDataIni.h \
+    ../common/QUtils.h \
+    QSelectSensorDataDialog.h \
+    QShowMessageBox.h \
+    QEnterFileNameDialog.h \
+    QFileNameEdit.h \
+    QSelectDeviceDialog.h \
+    t3kcomdef.h \
+    QDataProgressDialog.h \
+    QSideviewDialog.h \
+    QDetectionDialog.h \
+    QBentAdjustmentDialog.h \
+    QTouchSettingDialog.h \
+    QAreaSettingForm.h \
+    QBentDirectionMarginForm.h \
+    QDetectionGraphForm.h
 
-FORMS    += dialog.ui
+FORMS    += dialog.ui \
+    QSelectSensorDataDialog.ui \
+    QEnterFileNameDialog.ui \
+    QSelectDeviceDialog.ui \
+    QDataProgressDialog.ui \
+    QSideviewDialog.ui \
+    QDetectionDialog.ui \
+    QBentAdjustmentDialog.ui \
+    QTouchSettingDialog.ui \
+    QAreaSettingForm.ui \
+    QBentDirectionMarginForm.ui \
+    QDetectionGraphForm.ui
 
 RESOURCES += \
     T3kCfgFE.qrc

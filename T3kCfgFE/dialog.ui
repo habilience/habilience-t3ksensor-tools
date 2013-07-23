@@ -7,18 +7,18 @@
     <x>0</x>
     <y>0</y>
     <width>433</width>
-    <height>437</height>
+    <height>458</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>T3k Configurator(Factory Edition)</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="T3kCfgFE.qrc">
+   <iconset>
     <normaloff>:/T3kCfgFERes/resources/T3kCfgFE.ico</normaloff>:/T3kCfgFERes/resources/T3kCfgFE.ico</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(225, 225, 225);</string>
+   <string notr="true"/>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -48,6 +48,9 @@
    <property name="text">
     <string>1. Sideview...</string>
    </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QStyleButton" name="btnDetection">
    <property name="geometry">
@@ -60,6 +63,9 @@
    </property>
    <property name="text">
     <string>2. Detection...</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QStyleButton" name="btnBentAdjustment">
@@ -74,8 +80,11 @@
    <property name="text">
     <string>3. Bent Adjustment...</string>
    </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
   </widget>
-  <widget class="QStyleButton" name="btnTouhSetting">
+  <widget class="QStyleButton" name="btnTouchSetting">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -87,14 +96,17 @@
    <property name="text">
     <string>4. Touch Setting...</string>
    </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QStyleButton" name="btnReset">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>328</y>
-     <width>122</width>
-     <height>92</height>
+     <width>120</width>
+     <height>110</height>
     </rect>
    </property>
    <property name="text">
@@ -105,8 +117,8 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>379</y>
-     <width>122</width>
+     <y>398</y>
+     <width>120</width>
      <height>41</height>
     </rect>
    </property>
@@ -121,11 +133,14 @@ Window...</string>
    </property>
    <property name="geometry">
     <rect>
-     <x>149</x>
+     <x>143</x>
      <y>328</y>
-     <width>141</width>
-     <height>92</height>
+     <width>151</width>
+     <height>110</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">QTextEdit {
@@ -148,10 +163,10 @@ Window...</string>
   <widget class="QStyleButton" name="btnExit">
    <property name="geometry">
     <rect>
-     <x>295</x>
+     <x>297</x>
      <y>328</y>
-     <width>122</width>
-     <height>92</height>
+     <width>120</width>
+     <height>110</height>
     </rect>
    </property>
    <property name="text">
@@ -175,7 +190,7 @@ Window...</string>
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>12</y>
+     <y>20</y>
      <width>211</width>
      <height>31</height>
     </rect>
@@ -196,17 +211,61 @@ Window...</string>
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QCheckBox" name="chkSafeMode">
+   <property name="geometry">
+    <rect>
+     <x>22</x>
+     <y>284</y>
+     <width>191</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QCheckBox {
+	color: rgb(80,80,80);
+	font: bold 13px;
+}
+
+QCheckBox::indicator {
+	width: 20px;
+	height: 20px;
+}
+
+QCheckBox:hover {
+	color: rgb(200, 80, 80);
+}
+
+QCheckBox:checked {
+	color: rgb(240, 30, 30);
+}</string>
+   </property>
+   <property name="text">
+    <string>Safe Mode</string>
+   </property>
+  </widget>
+  <widget class="QCmdAsyncManagerCtrl" name="cmdAsyncMngr" native="true">
+   <property name="geometry">
+    <rect>
+     <x>7</x>
+     <y>441</y>
+     <width>300</width>
+     <height>10</height>
+    </rect>
+   </property>
+  </widget>
   <zorder>btnSideview</zorder>
   <zorder>btnSelectSensor</zorder>
   <zorder>btnDetection</zorder>
   <zorder>btnBentAdjustment</zorder>
-  <zorder>btnTouhSetting</zorder>
+  <zorder>btnTouchSetting</zorder>
   <zorder>btnReset</zorder>
   <zorder>btnTouchMark</zorder>
   <zorder>txtEdtDisplayFirmware</zorder>
   <zorder>btnExit</zorder>
   <zorder>line</zorder>
   <zorder>lblSoftlogicInfo</zorder>
+  <zorder>chkSafeMode</zorder>
+  <zorder>cmdAsyncMngr</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -215,9 +274,13 @@ Window...</string>
    <extends>QPushButton</extends>
    <header>QStyleButton.h</header>
   </customwidget>
+  <customwidget>
+   <class>QCmdAsyncManagerCtrl</class>
+   <extends>QWidget</extends>
+   <header>QCmdAsyncManagerCtrl.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
- <resources>
-  <include location="T3kCfgFE.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

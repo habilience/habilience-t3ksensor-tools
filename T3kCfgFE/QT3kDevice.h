@@ -7,6 +7,7 @@
 #include <QQueue>
 #include <QVector>
 #include <QMutex>
+#include "QSingletone.h"
 
 #ifdef Q_OS_WIN
 #include <HID.h>
@@ -23,7 +24,7 @@
 #define PACKET_DEF_SIZE     (1024)
 #define PACKET_POOL_SIZE    (1000)
 
-class QT3kDevice : public QObject
+class QT3kDevice : public QObject, public QSingleton<QT3kDevice>
 {
     Q_OBJECT
 private:
@@ -33,6 +34,7 @@ private:
 #ifdef Q_OS_WIN
     bool                    m_bIsVirtualDevice;
     t3k_hid_library::CHID   m_T3kVirtualDeviceHandle;
+    int                     m_TimerCheckVirtualDevice;
 #endif
 
     int             m_nInstantMode;
@@ -55,10 +57,10 @@ public:
     static char* getDevicePath( unsigned short nVID, unsigned short nPID, unsigned short nMI, int nDevIndex );
     static char* getDevicePath( int nDevIndex );
 
-    int sendCommand( QString strCmd, bool bAsync=false, unsigned short nTimeout=1000 );
+    int sendCommand( const QString& cmd, bool bAsync=false, unsigned short nTimeout=1000 );
     bool writeBuffer( void* pBuffer, unsigned short nBytesToWrite, bool bAsync, unsigned short nTimeout );
 
-    void setInstantMode( int nMode, int nExpireTime, unsigned long dwFgstValue=0x00 );
+    int setInstantMode( int nMode, int nExpireTime, unsigned long dwFgstValue=0x00 );
     int getInstantMode() { return m_nInstantMode; }
 
     void setFgstValue( unsigned long dwFgstValue ) { m_dwFgstValue = dwFgstValue; }
@@ -76,18 +78,38 @@ public:
 
     bool queryFirmwareVersion( unsigned short nAddrMask, int* pnMode );
 
+    // + instant mode helper functions
+    bool getReportMessage();
+    bool getReportCommand();
+    bool getReportView();
+    bool getReportObject();
+    bool getReportTouchPoint();
+    bool getReportGesture();
+    bool getReportDevice();
+
+    void setReportMessage( bool bReport );
+    void setReportCommand( bool bReport );
+    void setReportView( bool bReport );
+    void setReportObject( bool bReport );
+    void setReportTouchPoint( bool bReport );
+    void setReportGesture( bool bReport );
+    void setReportDevice( bool bReport );
+    // - instant mode helper functions
+
 #ifdef Q_OS_WIN
     // for virtual device
     bool setFeature( void *pFeature, int nFeatureSize );
     bool getFeature( void *pFeature, int nFeatureSize );
 
     bool isVirtualDevice() { return m_bIsVirtualDevice; }
+    virtual void timerEvent(QTimerEvent *evt);
 #else
     bool isVirtualDevice() { return false; }
 #endif
 
 public:
     explicit QT3kDevice(QObject *parent = 0);
+    ~QT3kDevice();
 
 protected:
     static void T3K_CALLBACK _OnT3kHandleEventsHandler( T3K_HANDLE hDevice, void * pContext );
