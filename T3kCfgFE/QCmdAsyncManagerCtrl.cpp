@@ -17,6 +17,9 @@ QCmdAsyncManagerCtrl::QCmdAsyncManagerCtrl(QWidget *parent) :
     m_bIsStarted = false;
     m_nAsyncId = -1;
     m_bSetSensorCfgMode = false;
+
+    m_bLastResult = false;
+    m_nLastResultReason = 0;
 }
 
 void QCmdAsyncManagerCtrl::startAsyncCheckTimer()
@@ -26,12 +29,20 @@ void QCmdAsyncManagerCtrl::startAsyncCheckTimer()
     m_TimerAsyncTimeout = startTimer(1500);
 }
 
+void QCmdAsyncManagerCtrl::setResult( bool bResult, int nReason )
+{
+    m_bLastResult = bResult;
+    m_nLastResultReason = nReason;
+
+    emit asyncFinished( bResult, nReason );
+}
+
 void QCmdAsyncManagerCtrl::onFinish()
 {
     if (isStarted())
         stop();
 
-    emit asyncFinished( true, 0 );
+    setResult(true, 0);
 }
 
 void QCmdAsyncManagerCtrl::TPDP_OnDisconnected(T3K_DEVICE_INFO /*devInfo*/)
@@ -47,7 +58,7 @@ void QCmdAsyncManagerCtrl::TPDP_OnDisconnected(T3K_DEVICE_INFO /*devInfo*/)
 
     if (bNotify)
     {
-        emit asyncFinished( false, ID_RESULT_DEVICE_DISCONNECT );
+        setResult( false, ID_RESULT_DEVICE_DISCONNECT );
     }
 }
 
@@ -158,7 +169,7 @@ void QCmdAsyncManagerCtrl::TPDP_OnDownloadingFirmware(T3K_DEVICE_INFO /*devInfo*
 
         if (bNotify)
         {
-            emit asyncFinished( false, ID_RESULT_FIRMWARE_DOWNLOAD );
+            setResult( false, ID_RESULT_FIRMWARE_DOWNLOAD );
         }
     }
 }
@@ -237,7 +248,7 @@ void QCmdAsyncManagerCtrl::timerEvent(QTimerEvent *evt)
 
         resetCommands();
 
-        emit asyncFinished( false, ID_RESULT_TIMEOUT );
+        setResult( false, ID_RESULT_TIMEOUT );
     }
 }
 
@@ -305,4 +316,11 @@ void QCmdAsyncManagerCtrl::stop()
 bool QCmdAsyncManagerCtrl::isStarted()
 {
     return m_bIsStarted;
+}
+
+bool QCmdAsyncManagerCtrl::getLastResult(int *reason/*=NULL*/)
+{
+    if (reason != NULL)
+        *reason = m_nLastResultReason;
+    return m_bLastResult;
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
-    <height>768</height>
+    <width>960</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="font">
@@ -165,39 +165,49 @@
     </widget>
    </item>
    <item>
-    <widget class="QDetectionGraphForm" name="widgetDetection1" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <layout class="QVBoxLayout" name="layoutMid">
+     <property name="leftMargin">
+      <number>10</number>
      </property>
-     <property name="minimumSize">
-      <size>
-       <width>770</width>
-       <height>200</height>
-      </size>
+     <property name="rightMargin">
+      <number>10</number>
      </property>
-    </widget>
+     <item>
+      <widget class="QDetectionGraphForm" name="widgetDetection1" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>770</width>
+         <height>200</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDetectionGraphForm" name="widgetDetection2" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>770</width>
+         <height>200</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
-    <widget class="QDetectionGraphForm" name="widgetDetection2" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>770</width>
-       <height>200</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCmdAsyncManagerCtrl" name="cmAsyncMngr" native="true">
+    <widget class="QCmdAsyncManagerCtrl" name="cmdAsyncMngr" native="true">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -318,7 +328,7 @@
         <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Minimum</enum>
+        <enum>QSizePolicy::Maximum</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

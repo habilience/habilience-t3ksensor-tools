@@ -275,8 +275,8 @@ void CHIDCmd::OnDeviceConnected(T3K_HANDLE hDevice)
 {
     m_bIsConnect = true;
 
-    ushort nVID = T3kHandle::GetDeviceVID( hDevice );
-    ushort nPID = T3kHandle::GetDevicePID( hDevice );
+    ushort nVID = ::T3kGetDevInfoVendorID(::T3kGetDeviceInfoFromHandle(hDevice));
+    ushort nPID = ::T3kGetDevInfoProductID(::T3kGetDeviceInfoFromHandle(hDevice));
 
 	if ( nVID == 0xFFFF && nPID == 0x0000 )
 	{
@@ -313,8 +313,8 @@ void CHIDCmd::OnDeviceConnected(T3K_HANDLE hDevice)
 
 void CHIDCmd::OnDeviceDisconnected(T3K_HANDLE hDevice)
 {
-    ushort nVID = T3kHandle::GetDeviceVID( hDevice );
-    ushort nPID = T3kHandle::GetDevicePID( hDevice );
+    ushort nVID = ::T3kGetDevInfoVendorID(::T3kGetDeviceInfoFromHandle(hDevice));
+    ushort nPID = ::T3kGetDevInfoProductID(::T3kGetDeviceInfoFromHandle(hDevice));
 
 	if ( nVID == 0xFFFF && nPID == 0x0000 )
 	{

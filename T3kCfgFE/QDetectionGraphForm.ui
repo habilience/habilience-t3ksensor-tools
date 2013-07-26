@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>955</width>
-    <height>411</height>
+    <width>900</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="font">
@@ -31,7 +31,13 @@
       <number>2</number>
      </property>
      <item>
-      <widget class="QLabel" name="lblSensorTitle">
+      <widget class="QUnderlineTitle" name="lblSensorTitle">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Sensor 1</string>
        </property>
@@ -42,9 +48,12 @@
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Minimum</enum>
+       </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>20</width>
          <height>20</height>
         </size>
        </property>
@@ -298,7 +307,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QTextEdit" name="txtEdtThreshold">
+              <widget class="QBorderStyleEdit" name="txtEdtThreshold">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -307,13 +316,13 @@
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>50</width>
+                 <width>35</width>
                  <height>28</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>70</width>
+                 <width>50</width>
                  <height>28</height>
                 </size>
                </property>
@@ -401,7 +410,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QTextEdit" name="txtEdtGain">
+              <widget class="QBorderStyleEdit" name="txtEdtGain">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -410,13 +419,13 @@
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>50</width>
+                 <width>35</width>
                  <height>28</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>70</width>
+                 <width>50</width>
                  <height>28</height>
                 </size>
                </property>
@@ -504,7 +513,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QTextEdit" name="txtEdtAutoOffset">
+              <widget class="QBorderStyleEdit" name="txtEdtAutoOffset">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -513,13 +522,13 @@
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>50</width>
+                 <width>35</width>
                  <height>28</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>70</width>
+                 <width>50</width>
                  <height>28</height>
                 </size>
                </property>
@@ -607,7 +616,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QTextEdit" name="txtEdtOffset">
+              <widget class="QBorderStyleEdit" name="txtEdtOffset">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -616,13 +625,13 @@
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>50</width>
+                 <width>35</width>
                  <height>28</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>70</width>
+                 <width>50</width>
                  <height>28</height>
                 </size>
                </property>
@@ -712,7 +721,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="sensitivityCtrl">
+          <widget class="QGraphSensitivityCtrl" name="sensitivityCtrl">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -737,28 +746,41 @@
              <height>0</height>
             </size>
            </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(255, 255, 127);</string>
-           </property>
            <property name="text">
             <string>Sensitivity</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="detectionGraphCtrl">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+          <widget class="QScrollArea" name="scrollArea">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
            </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(255, 255, 0);</string>
+           <property name="widgetResizable">
+            <bool>true</bool>
            </property>
-           <property name="text">
-            <string>Detection Graph</string>
-           </property>
+           <widget class="QWidget" name="widgetDetectionGraph">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>630</width>
+              <height>289</height>
+             </rect>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
           </widget>
          </item>
         </layout>
@@ -887,7 +909,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QTextEdit" name="txtEdtLeftRange">
+              <widget class="QBorderStyleEdit" name="txtEdtLeftRange">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -1112,7 +1134,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QTextEdit" name="txtEdtRightRange">
+              <widget class="QBorderStyleEdit" name="txtEdtRightRange">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -1253,6 +1275,23 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QUnderlineTitle</class>
+   <extends>QLabel</extends>
+   <header>QUnderlineTitle.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QBorderStyleEdit</class>
+   <extends>QTextEdit</extends>
+   <header>QBorderStyleEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QGraphSensitivityCtrl</class>
+   <extends>QLabel</extends>
+   <header>QGraphSensitivityCtrl.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

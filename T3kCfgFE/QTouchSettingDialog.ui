@@ -24,6 +24,12 @@
      <property name="spacing">
       <number>1</number>
      </property>
+     <property name="leftMargin">
+      <number>10</number>
+     </property>
+     <property name="bottomMargin">
+      <number>10</number>
+     </property>
      <item>
       <widget class="QScrollArea" name="scrollArea">
        <property name="sizePolicy">

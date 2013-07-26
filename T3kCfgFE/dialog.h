@@ -43,6 +43,17 @@ private:
     QBentAdjustmentDialog*  m_pDlgBentAdjustment;
     QTouchSettingDialog*    m_pDlgTouchSetting;
 
+    enum SelectMenu
+    {
+        MenuNone,
+        MenuSideview,
+        MenuDetection,
+        MenuBentAdjustment,
+        MenuTouchSetting
+    };
+
+    SelectMenu      m_oldMenu;
+
     QSelectDeviceDialog*    m_pDlgSelectDevice;
 
     struct SensorAppInfo {
@@ -76,18 +87,8 @@ protected:
     virtual void timerEvent(QTimerEvent *evt);
     virtual bool eventFilter(QObject *target, QEvent *evt);
 
-    void drawSafeMode(QPainter& p);
-
-    enum SelectMenu
-    {
-        MenuSideview,
-        MenuDetection,
-        MenuBentAdjustment,
-        MenuTouchSetting
-    };
-
     void switchMenu( SelectMenu menu );
-    void closeAllSubMenuDialogs();
+    bool closeAllSubMenuDialogs();
 
     void refreshInfo();
     bool openDevice();
@@ -118,10 +119,11 @@ public:
     const QString& getModelName() { return m_strModelName; }
     const QString& getFirmwareVersion() { return m_strFirmwareVersion; }
 
-    bool isExistSubCamera();
-    bool isAvailableSubCameraModel();
-
     void onCloseMenu();
+
+    void setInstantMode( int nInstantMode );
+
+    void drawSafeMode(QRect rcBody, QPainter& p);
     
 private slots:
     void on_btnSelectSensor_clicked();

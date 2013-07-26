@@ -5,6 +5,7 @@
 
 class QFileNameEdit : public QTextEdit
 {
+    Q_OBJECT
 protected:
     virtual void keyPressEvent(QKeyEvent *e);
 public:

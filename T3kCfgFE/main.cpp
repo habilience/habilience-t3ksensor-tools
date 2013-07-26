@@ -1,8 +1,9 @@
 #include "dialog.h"
-#include <QApplication>
+#include "QMyApplication.h"
 #include "AppData.h"
 
 AppData g_AppData;
+QMyApplication* g_pApp = NULL;
 
 int main(int argc, char *argv[])
 {
@@ -20,7 +21,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    QApplication a(argc, argv);
+    QMyApplication a(argc, argv);
+    g_pApp = &a;
     Dialog w;
     w.show();
     

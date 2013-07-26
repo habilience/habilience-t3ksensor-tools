@@ -71,7 +71,7 @@ void QSelectDeviceDialog::onChangeLanguage()
     if (!isVisible())
         return;
 
-    QLangRes& res = QLangManager::instance()->getResource();
+    QLangRes& res = QLangManager::getResource();
 
     static bool s_bIsR2L = false;
     bool bIsR2L = res.isR2L();

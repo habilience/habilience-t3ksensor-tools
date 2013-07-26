@@ -14,10 +14,15 @@ class QBentAdjustmentDialog : public QDialog
     
 protected:
     virtual void paintEvent(QPaintEvent *);
+    virtual void closeEvent(QCloseEvent *);
+
+    virtual void reject();
+    virtual void accept();
 public:
     explicit QBentAdjustmentDialog(Dialog *parent = 0);
     ~QBentAdjustmentDialog();
-    
+    bool canClose();
+
 private slots:
     void on_btnClose_clicked();
 

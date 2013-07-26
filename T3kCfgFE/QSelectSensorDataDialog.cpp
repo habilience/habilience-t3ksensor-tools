@@ -44,7 +44,7 @@ void QSelectSensorDataDialog::onChangeLanguage()
     if (!isVisible())
         return;
 
-    QLangRes& res = QLangManager::instance()->getResource();
+    QLangRes& res = QLangManager::getResource();
 
     static bool s_bIsR2L = false;
     bool bIsR2L = res.isR2L();
@@ -190,7 +190,7 @@ void QSelectSensorDataDialog::on_btnOK_clicked()
         pEnumerator->enumCfgData();
         if ( pEnumerator->findCfgData(m_strFileName) )
         {
-            QLangRes& res = QLangManager::instance()->getResource();
+            QLangRes& res = QLangManager::getResource();
             QString strMessage;
             if ( m_bIsNewData )
             {

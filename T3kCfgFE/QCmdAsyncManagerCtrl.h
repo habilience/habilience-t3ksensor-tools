@@ -33,6 +33,9 @@ private:
 
     int         m_nTotal;
 
+    bool        m_bLastResult;
+    int         m_nLastResultReason;
+
 protected:
     void startAsyncCheckTimer();
     void onFinish();
@@ -51,6 +54,8 @@ protected:
     void setProgress( int pos );
 
     void nextCommand();
+
+    void setResult( bool bResult, int nReason );
 public:
     void insertCommand( const QString& strCommand );
     void resetCommands();
@@ -60,6 +65,8 @@ public:
     void start(unsigned int nTimeout);
     void stop();
     bool isStarted();
+
+    bool getLastResult(int *reason=NULL);
 
     int getCount() { return (int)m_DataStorage.size(); }
     

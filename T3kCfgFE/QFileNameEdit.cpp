@@ -12,9 +12,10 @@ void QFileNameEdit::keyPressEvent(QKeyEvent *e)
     if (e->type() == QEvent::KeyPress)
     {
         int nKey = e->key();
-        if ( nKey == Qt::Key_Back )
+        if ( nKey == Qt::Key_Backspace )
             return QTextEdit::keyPressEvent(e);
-        if (strBlockString.indexOf(char(nKey)) >= 0)
+        QString strChar = e->text();
+        if (strBlockString.indexOf(strChar) >= 0)
             return;
     }
 

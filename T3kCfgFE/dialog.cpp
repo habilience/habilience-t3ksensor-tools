@@ -66,6 +66,8 @@ Dialog::Dialog(QWidget *parent) :
     m_pDlgBentAdjustment = NULL;
     m_pDlgTouchSetting = NULL;
 
+    m_oldMenu = MenuNone;
+
     memset( m_SensorAppInfo, 0, sizeof(SensorAppInfo) * IDX_MAX );
     memset( m_TempSensorAppInfo, 0, sizeof(SensorAppInfo) * IDX_MAX );
 
@@ -152,8 +154,6 @@ Dialog::~Dialog()
 
 void Dialog::onCreate()
 {
-    DISABLE_MSWINDOWS_TOUCH_PROPERTY
-
     if ( !QInitDataIni::instance()->load() )
     {
         QInitDataIni::instance()->save();
@@ -192,6 +192,14 @@ void Dialog::onDestroy()
     winPosSettings.setValue( "x", QVariant::fromValue(x()) );
     winPosSettings.setValue( "y", QVariant::fromValue(y()) );
     winPosSettings.endGroup();
+}
+
+void Dialog::setInstantMode( int nInstantMode )
+{
+    if (g_AppData.bIsSafeMode)
+        nInstantMode |= T3K_HID_MODE_MOUSE_DISABLE;
+
+    QT3kDevice::instance()->setInstantMode(nInstantMode, 5000);
 }
 
 bool Dialog::openDevice()
@@ -281,7 +289,7 @@ void Dialog::onChangeLanguage()
 
 #define MAIN_TAG "MAIN"
 
-    QLangRes& res = QLangManager::instance()->getResource();
+    QLangRes& res = QLangManager::getResource();
     static bool s_bIsR2L = false;
     bool bIsR2L = res.isR2L();
     if (bIsR2L)
@@ -450,9 +458,8 @@ void Dialog::updateResetButton()
     }
 }
 
-void Dialog::drawSafeMode(QPainter& p)
+void Dialog::drawSafeMode(QRect rcBody, QPainter& p)
 {
-    QRect rcBody(0, 0, width()-1, height()-1);
     rcBody.adjust(1, 1, -1, -1);
 
     QFont fntSafeMode;
@@ -512,7 +519,7 @@ void Dialog::paintEvent(QPaintEvent */*evt*/)
 
     p.fillRect(rcBody, QColor(225, 225, 225));
 
-    QLangRes& res = QLangManager::instance()->getResource();
+    QLangRes& res = QLangManager::getResource();
 
     QString strWarningTitle = "";
     QString strWarningDetail = "";
@@ -592,7 +599,10 @@ void Dialog::paintEvent(QPaintEvent */*evt*/)
     }
 
     if (g_AppData.bIsSafeMode)
-        drawSafeMode( p );
+    {
+        QRect rcBody(0, 0, width()-1, height()-1);
+        drawSafeMode( rcBody, p );
+    }
 }
 
 void Dialog::closeEvent(QCloseEvent *evt)
@@ -630,7 +640,7 @@ bool Dialog::eventFilter(QObject *target, QEvent *evt)
 
         if (keyEvent->key() == Qt::Key_Control)
         {
-            QLangRes& res = QLangManager::instance()->getResource();
+            QLangRes& res = QLangManager::getResource();
 
             QString strBtnTitle = ui->btnReset->text();
             QString strResetText = res.getResString(MAIN_TAG, "BTN_CAPTION_RESET");
@@ -668,8 +678,8 @@ void Dialog::onDeviceConnected()
     ui->btnTouchMark->setEnabled(true);
     ui->chkSafeMode->setVisible(false);
 
+    setInstantMode(T3K_HID_MODE_COMMAND);
     QT3kDevice* pDevice = QT3kDevice::instance();
-    pDevice->setReportCommand(true);
 
     refreshInfo();
     if (m_TimerRefreshInfo)
@@ -778,27 +788,23 @@ void Dialog::refreshInfo()
     if ( !pDevice->isOpen() )
         return;
 
-    if (m_bFirmwareDownload)
-        return;
-
     QCmdAsyncManagerCtrl& cmd = *ui->cmdAsyncMngr;
-
     if ( cmd.isStarted() )
     {
         cmd.stop();
         cmd.resetCommands();
     }
 
-    /*
-    if ( (m_wndCalibration && m_wndCalibration.IsWindowVisible()) ||
-        (m_dlgAngleSetting && m_dlgAngleSetting.IsWindowVisible()) ||
-        (m_dlgCalibration && m_dlgCalibration.IsWindowVisible()) ||
-        (m_dlgDetection && m_dlgDetection.IsWindowVisible()) ||
-        (m_dlgSideView && m_dlgSideView.IsWindowVisible()) )
+    if (m_bFirmwareDownload)
+        return;
+
+    if ( (m_pDlgSideview && m_pDlgSideview->isVisible()) ||
+         (m_pDlgDetection && m_pDlgDetection->isVisible()) ||
+         (m_pDlgBentAdjustment && m_pDlgBentAdjustment->isVisible()) ||
+         (m_pDlgTouchSetting && m_pDlgTouchSetting->isVisible()) )
     {
         return;
     }
-    */
 
     memset( m_TempSensorAppInfo, 0, sizeof(SensorAppInfo) * IDX_MAX );
 
@@ -1153,7 +1159,7 @@ void Dialog::TPDP_OnRSP( T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigne
 {
     if ( !isVisible() ) return;
 
-    QLangRes& res = QLangManager::instance()->getResource();
+    QLangRes& res = QLangManager::getResource();
 
     //qDebug( "[%s] %s", partid, szCmd );
 
@@ -1329,22 +1335,74 @@ void Dialog::onCloseMenu()
     }
 }
 
-void Dialog::closeAllSubMenuDialogs()
+bool Dialog::closeAllSubMenuDialogs()
 {
-    if (m_pDlgSideview) delete m_pDlgSideview;
-    if (m_pDlgDetection) delete m_pDlgDetection;
-    if (m_pDlgBentAdjustment) delete m_pDlgBentAdjustment;
-    if (m_pDlgTouchSetting) delete m_pDlgTouchSetting;
+    if (m_pDlgSideview)
+    {
+        if (m_pDlgSideview->canClose())
+            delete m_pDlgSideview;
+        else
+            return false;
+    }
+    if (m_pDlgDetection)
+    {
+        if (m_pDlgDetection->canClose())
+            delete m_pDlgDetection;
+        else
+            return false;
+    }
+    if (m_pDlgBentAdjustment)
+    {
+        if (m_pDlgBentAdjustment->canClose())
+            delete m_pDlgBentAdjustment;
+        else
+            return false;
+    }
+    if (m_pDlgTouchSetting)
+    {
+        if (m_pDlgTouchSetting->canClose())
+            delete m_pDlgTouchSetting;
+        else
+            return false;
+    }
     // NULL -> onCloseMenu()
+
+    return true;
 }
 
 void Dialog::switchMenu( SelectMenu menu )
 {
-    closeAllSubMenuDialogs();
+    if (!closeAllSubMenuDialogs())
+    {
+        ui->btnSideview->setChecked(false);
+        ui->btnDetection->setChecked(false);
+        ui->btnBentAdjustment->setChecked(false);
+        ui->btnTouchSetting->setChecked(false);
+        switch (m_oldMenu)
+        {
+        case MenuNone:
+            break;
+        case MenuSideview:
+            ui->btnSideview->setChecked(true);
+            break;
+        case MenuDetection:
+            ui->btnDetection->setChecked(true);
+            break;
+        case MenuBentAdjustment:
+            ui->btnBentAdjustment->setChecked(true);
+            break;
+        case MenuTouchSetting:
+            ui->btnTouchSetting->setChecked(true);
+            break;
+        }
+        return;
+    }
 
     QDialog* pCurrentDlg = NULL;
     switch (menu)
     {
+    case MenuNone:
+        return;
     case MenuSideview:
         if (ui->btnSideview->isChecked())
         {
@@ -1382,10 +1440,24 @@ void Dialog::switchMenu( SelectMenu menu )
     if (pCurrentDlg)
     {
         QRect rcScreen = QApplication::desktop()->screenGeometry(QApplication::desktop()->primaryScreen());
-        pCurrentDlg->move(rcScreen.x(), rcScreen.y());
-        pCurrentDlg->resize(rcScreen.width(), rcScreen.height());
-        pCurrentDlg->showMaximized();//showFullScreen();
+        if (g_AppData.bScreenShotMode || QT3kDevice::instance()->isVirtualDevice())
+        {
+            rcScreen.setWidth(1024);
+            rcScreen.setHeight(768);
+
+            pCurrentDlg->move(rcScreen.x(), rcScreen.y());
+            pCurrentDlg->resize(rcScreen.width(), rcScreen.height());
+            pCurrentDlg->show();
+        }
+        else
+        {
+            pCurrentDlg->move(rcScreen.x(), rcScreen.y());
+            pCurrentDlg->resize(rcScreen.width(), rcScreen.height());
+            pCurrentDlg->showFullScreen();
+        }
     }
+
+    m_oldMenu = menu;
 }
 
 void Dialog::on_btnSelectSensor_clicked()
@@ -1398,7 +1470,6 @@ void Dialog::on_btnSelectSensor_clicked()
 
 void Dialog::on_btnSideview_clicked()
 {
-    qDebug( "sideview!!" );
     LOG_B( "Sideview" );
     switchMenu(MenuSideview);
 }
@@ -1432,7 +1503,7 @@ void Dialog::on_btnReset_clicked()
     ui->btnReset->setEnabled(false);
 
     QString strBtnTitle = ui->btnReset->text();
-    QLangRes& res = QLangManager::instance()->getResource();
+    QLangRes& res = QLangManager::getResource();
     QString strResetText = res.getResString( MAIN_TAG, "BTN_CAPTION_RESET" );
     if (strBtnTitle == strResetText )
     {
@@ -1495,16 +1566,16 @@ void Dialog::saveSensorDefaultSettings()
 
     /* sideview section */
     dataProgressDlg.insertCommand( "# sideview section" );
-    strCmd = QString("cam1/") + cstrAmbientLight + "*";
+    strCmd = sCam1 + cstrAmbientLight + "*";
     dataProgressDlg.insertCommand( strCmd );
-    strCmd = QString("cam2/") + cstrAmbientLight + "*";
+    strCmd = sCam2 + cstrAmbientLight + "*";
     dataProgressDlg.insertCommand( strCmd );
 
     if (g_AppData.bIsSubCameraExist)
     {
-        strCmd = QString("cam1/sub/") + cstrAmbientLight + "*";
+        strCmd = sCam1_1 + cstrAmbientLight + "*";
         dataProgressDlg.insertCommand( strCmd );
-        strCmd = QString("cam2/sub/") + cstrAmbientLight + "*";
+        strCmd = sCam2_1 + cstrAmbientLight + "*";
         dataProgressDlg.insertCommand( strCmd );
     }
 
@@ -1518,30 +1589,30 @@ void Dialog::saveSensorDefaultSettings()
     strCmd = QString(cstrInvertDetection) + "?";
     dataProgressDlg.insertCommand( strCmd );
 
-    strCmd = QString("cam1/") + cstrDetectionThreshold + "*";
+    strCmd = sCam1 + cstrDetectionThreshold + "*";
     dataProgressDlg.insertCommand( strCmd );
-    strCmd = QString("cam1/") + cstrSensorGain + "*";
+    strCmd = sCam1 + cstrSensorGain + "*";
     dataProgressDlg.insertCommand( strCmd );
 
-    strCmd = QString("cam2/") + cstrDetectionThreshold + "*";
+    strCmd = sCam2 + cstrDetectionThreshold + "*";
     dataProgressDlg.insertCommand( strCmd );
-    strCmd = QString("cam2/") + cstrSensorGain + "*";
+    strCmd = sCam2 + cstrSensorGain + "*";
     dataProgressDlg.insertCommand( strCmd );
 
     if ( g_AppData.bIsSubCameraExist )
     {
-        strCmd = QString("cam1/sub/") + cstrDetectionThreshold + "*";
+        strCmd = sCam1_1 + cstrDetectionThreshold + "*";
         dataProgressDlg.insertCommand( strCmd );
-        strCmd = QString("cam1/sub/") + cstrDetectionRange + "*";
+        strCmd = sCam1_1 + cstrDetectionRange + "*";
         dataProgressDlg.insertCommand( strCmd );
-        strCmd = QString("cam1/sub/") + cstrSensorGain + "*";
+        strCmd = sCam1_1 + cstrSensorGain + "*";
         dataProgressDlg.insertCommand( strCmd );
 
-        strCmd = QString("cam2/sub/") + cstrDetectionThreshold + "*";
+        strCmd = sCam2_1 + cstrDetectionThreshold + "*";
         dataProgressDlg.insertCommand( strCmd );
-        strCmd = QString("cam2/sub/") + cstrDetectionRange + "*";
+        strCmd = sCam2_1 + cstrDetectionRange + "*";
         dataProgressDlg.insertCommand( strCmd );
-        strCmd = QString("cam2/sub/") + cstrSensorGain + "*";
+        strCmd = sCam2_1 + cstrSensorGain + "*";
         dataProgressDlg.insertCommand( strCmd );
     }
 
@@ -1601,7 +1672,7 @@ void Dialog::saveSensorDefaultSettings()
 
     if ( dataProgressDlg.exec() != QDialog::Accepted )
     {
-        QLangRes& res = QLangManager::instance()->getResource();
+        QLangRes& res = QLangManager::getResource();
         int nRet = showMessageBox( this,
             res.getResString( MAIN_TAG, "TEXT_ERROR_LOADSAVE_SENSOR_DEFAULT" ),
             res.getResString( MAIN_TAG, "TEXT_ERROR_MESSAGE_TITLE" ),
@@ -1649,7 +1720,7 @@ bool Dialog::isExistSensorDefaultValue( const QString& strSensorCmd )
 
 void Dialog::loadSensorDefaultSettings( bool bQuestion/*=true*/ )
 {
-    QLangRes& res = QLangManager::instance()->getResource();
+    QLangRes& res = QLangManager::getResource();
     if ( bQuestion )
     {
         int nRet = showMessageBox( this,
@@ -1710,9 +1781,9 @@ void Dialog::loadSensorDefaultSettings( bool bQuestion/*=true*/ )
 
     for ( int i=0 ; i<(int)(sizeof(strCMCmd)/sizeof(QString)) ; i++ )
     {
-        strCmd = QString("cam1/") + strCMCmd[i] + "*";
+        strCmd = sCam1 + strCMCmd[i] + "*";
         dataProgressDlg.insertCommand( strCmd );
-        strCmd = QString("cam2/") + strCMCmd[i] + "*";
+        strCmd = sCam2 + strCMCmd[i] + "*";
         dataProgressDlg.insertCommand( strCmd );
     }
 

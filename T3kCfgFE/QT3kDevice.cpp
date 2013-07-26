@@ -109,9 +109,13 @@ void QT3kDevice::releasePacket( t3kpacket* packet )
     QMutexLocker Lock(&m_PktPoolLock);
     if (m_PacketPool.size() >= PACKET_POOL_SIZE)
     {
+        qDebug( "overflow packet pool" );
         free( packet );
     }
-    m_PacketPool.push_back(packet);
+    else
+    {
+        m_PacketPool.push_back(packet);
+    }
 }
 
 void T3K_CALLBACK QT3kDevice::_OnT3kPacketHandler( T3K_HANDLE /*hDevice*/, t3kpacket* packet, int /*bSync*/, void * pContext )

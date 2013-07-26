@@ -21,4 +21,34 @@ const T3K_SENSOR_DEVICE DEVICE_LIST[] = {
 
 #define COUNT_OF_DEVICE_LIST ((int)(sizeof(DEVICE_LIST) / sizeof(T3K_SENSOR_DEVICE)))
 
+
+#define REPORTID_FEATURE_SENSOR_STATUS		8
+#define REPORTID_FEATURE_SCREEN_MODE		9
+#define REPORTID_FEATURE_CURSOR_POS			12
+
+#pragma pack(1)
+    typedef struct _FeatureSensorStatus
+    {
+        unsigned char   ReportID;
+        unsigned char   Status;             // 0: Normal, 1: Firmware Downloading
+    } FeatureSensorStatus;
+
+    typedef struct _FeatureScreenMode
+    {
+        unsigned char   ReportID;
+        unsigned char   ScreenMode;         // 0: Normal, 1: Sideview, 2: Detection
+    } FeatureScreenMode;
+
+    typedef struct _FeatureCursorPos
+    {
+        unsigned char   ReportID;
+        unsigned char   Show;
+        unsigned char   IsScreenCoordinate; // if 0 -> X, Y is 4 corner(LT:0,0 RT:1,0 RB:1,1, LB:0,1)
+        unsigned char   TouchOK;
+        short           X;
+        short           Y;
+        unsigned char   Progress;
+    } FeatureCursorPos;
+#pragma pack()
+
 #endif // T3K_COMDEF_H

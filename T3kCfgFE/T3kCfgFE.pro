@@ -153,8 +153,11 @@ SOURCES += main.cpp\
     QBentAdjustmentDialog.cpp \
     QTouchSettingDialog.cpp \
     QAreaSettingForm.cpp \
-    QBentDirectionMarginForm.cpp \
-    QDetectionGraphForm.cpp
+    QDetectionGraphForm.cpp \
+    QBorderStyleEdit.cpp \
+    QUnderlineTitle.cpp \
+    QMyApplication.cpp \
+    QGraphSensitivityCtrl.cpp
 
 HEADERS  += dialog.h \
     QStyleButton.h \
@@ -184,8 +187,11 @@ HEADERS  += dialog.h \
     QBentAdjustmentDialog.h \
     QTouchSettingDialog.h \
     QAreaSettingForm.h \
-    QBentDirectionMarginForm.h \
-    QDetectionGraphForm.h
+    QDetectionGraphForm.h \
+    QBorderStyleEdit.h \
+    QUnderlineTitle.h \
+    QMyApplication.h \
+    QGraphSensitivityCtrl.h
 
 FORMS    += dialog.ui \
     QSelectSensorDataDialog.ui \
@@ -197,7 +203,6 @@ FORMS    += dialog.ui \
     QBentAdjustmentDialog.ui \
     QTouchSettingDialog.ui \
     QAreaSettingForm.ui \
-    QBentDirectionMarginForm.ui \
     QDetectionGraphForm.ui
 
 RESOURCES += \

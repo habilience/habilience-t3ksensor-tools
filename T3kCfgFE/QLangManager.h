@@ -21,7 +21,7 @@ public:
     QLangManager();
     ~QLangManager();
 
-    QLangRes& getResource() { return m_LanguageResource; }
+    static QLangRes& getResource() { return QLangManager::instance()->m_LanguageResource; }
 
     bool setRootPath( const QString& strPath ) { return m_LanguageResource.setRootPath(strPath); }
     bool setZipResource( const QString& strPathName ) { return m_LanguageResource.setZipResource(strPathName); }

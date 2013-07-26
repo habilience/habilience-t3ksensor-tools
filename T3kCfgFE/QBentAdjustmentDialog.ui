@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>616</height>
+    <width>749</width>
+    <height>482</height>
    </rect>
   </property>
   <property name="font">
@@ -20,85 +20,328 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <spacer name="vspacer1">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="layoutMidBox">
+    <layout class="QVBoxLayout" name="layoutVMidBox" stretch="1,3,1">
      <property name="spacing">
-      <number>10</number>
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
      </property>
      <item>
-      <spacer name="spacer2">
+      <spacer name="vspacer1">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
-         <height>20</height>
+         <width>20</width>
+         <height>40</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QBentDirectionMarginForm" name="widgetBentDirMargin" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <layout class="QHBoxLayout" name="layoutHMidBox" stretch="1,3,1">
+       <property name="spacing">
+        <number>0</number>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>500</width>
-         <height>500</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>400</width>
-         <height>400</height>
-        </size>
-       </property>
-      </widget>
+       <item>
+        <spacer name="spacer2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QWidget" name="widgetBentDirMargin" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>200</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>200</width>
+           <height>200</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 0);</string>
+         </property>
+         <widget class="QPushButton" name="btnLeft_2">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>70</y>
+            <width>120</width>
+            <height>90</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Left</string>
+          </property>
+         </widget>
+         <widget class="QTextEdit" name="txtEdtMarginLeft_2">
+          <property name="geometry">
+           <rect>
+            <x>122</x>
+            <y>100</y>
+            <width>30</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
+          <property name="tabChangesFocus">
+           <bool>true</bool>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="btnMarginLeftInc_2">
+          <property name="geometry">
+           <rect>
+            <x>120</x>
+            <y>130</y>
+            <width>34</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>+</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="btnMarginLeftDec_2">
+          <property name="geometry">
+           <rect>
+            <x>120</x>
+            <y>70</y>
+            <width>34</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="btnMaringUpDec_2">
+          <property name="geometry">
+           <rect>
+            <x>172</x>
+            <y>71</y>
+            <width>34</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="btnUp_2">
+          <property name="geometry">
+           <rect>
+            <x>160</x>
+            <y>0</y>
+            <width>120</width>
+            <height>71</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Up</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="btnMaringUpInc_2">
+          <property name="geometry">
+           <rect>
+            <x>236</x>
+            <y>71</y>
+            <width>34</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>+</string>
+          </property>
+         </widget>
+         <widget class="QTextEdit" name="txtEdtMarginUp_2">
+          <property name="geometry">
+           <rect>
+            <x>206</x>
+            <y>71</y>
+            <width>30</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
+          <property name="tabChangesFocus">
+           <bool>true</bool>
+          </property>
+         </widget>
+         <widget class="QTextEdit" name="txtEdtMarginRight_2">
+          <property name="geometry">
+           <rect>
+            <x>286</x>
+            <y>100</y>
+            <width>30</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
+          <property name="tabChangesFocus">
+           <bool>true</bool>
+          </property>
+          <property name="html">
+           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Gulim'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="btnMarginRightInc_2">
+          <property name="geometry">
+           <rect>
+            <x>284</x>
+            <y>130</y>
+            <width>34</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>+</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="btnRight_2">
+          <property name="geometry">
+           <rect>
+            <x>318</x>
+            <y>70</y>
+            <width>120</width>
+            <height>90</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Right</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="btnMarginRightDec_2">
+          <property name="geometry">
+           <rect>
+            <x>284</x>
+            <y>70</y>
+            <width>34</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="btnMarginDownInc_2">
+          <property name="geometry">
+           <rect>
+            <x>236</x>
+            <y>124</y>
+            <width>34</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>+</string>
+          </property>
+         </widget>
+         <widget class="QTextEdit" name="txtEdtMarginDown_2">
+          <property name="geometry">
+           <rect>
+            <x>206</x>
+            <y>124</y>
+            <width>30</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
+          <property name="tabChangesFocus">
+           <bool>true</bool>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="btnDown_2">
+          <property name="geometry">
+           <rect>
+            <x>160</x>
+            <y>153</y>
+            <width>120</width>
+            <height>71</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Down</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="btnMarginDownDec_2">
+          <property name="geometry">
+           <rect>
+            <x>172</x>
+            <y>124</y>
+            <width>34</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <spacer name="spacer3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
      <item>
-      <spacer name="spacer3">
+      <spacer name="vspacer2">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
-         <height>20</height>
+         <width>20</width>
+         <height>40</height>
         </size>
        </property>
       </spacer>
      </item>
     </layout>
-   </item>
-   <item>
-    <spacer name="vspacer2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item>
     <widget class="QCmdAsyncManagerCtrl" name="cmAsyncMngr" native="true">
@@ -194,12 +437,6 @@
    <class>QCmdAsyncManagerCtrl</class>
    <extends>QWidget</extends>
    <header>QCmdAsyncManagerCtrl.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QBentDirectionMarginForm</class>
-   <extends>QWidget</extends>
-   <header>QBentDirectionMarginForm.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
