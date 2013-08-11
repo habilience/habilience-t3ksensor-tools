@@ -25,6 +25,8 @@ private:
     int         m_TimerWarning;
     bool        m_bIsBlink;
     bool        m_bIsWarning;
+
+    int         m_nMaxTextLength;
 protected:
     virtual void keyPressEvent(QKeyEvent *e);
     virtual void focusInEvent(QFocusEvent *e);
@@ -37,14 +39,18 @@ public:
     void setFloatStyle( bool bFloatStyle );
     void setWarning( bool bWarning );
 
-    bool isEditing() { return m_bNowEditing; }
-    bool isFloatStyle() { return m_bIsFloatStyle; }
+    bool isEditing() const { return m_bNowEditing; }
+    bool isFloatStyle() const { return m_bIsFloatStyle; }
+
+    int maxTextLength() const { return m_nMaxTextLength; }
+    void setMaxTextLength( int nMax ) { m_nMaxTextLength = nMax; }
 
     explicit QBorderStyleEdit(QWidget *parent = 0);
     
 signals:
     void editModified( QBorderStyleEdit* sender, int nValue, double dValue );
 public slots:
+    void setText(const QString &text);
     
 };
 

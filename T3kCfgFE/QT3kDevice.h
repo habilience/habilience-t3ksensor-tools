@@ -22,7 +22,7 @@
 #endif
 
 #define PACKET_DEF_SIZE     (1024)
-#define PACKET_POOL_SIZE    (1000)
+#define PACKET_POOL_SIZE    (2000)
 
 class QT3kDevice : public QObject, public QSingleton<QT3kDevice>
 {

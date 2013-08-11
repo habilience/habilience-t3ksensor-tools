@@ -3,13 +3,7 @@
 #include <QCoreApplication>
 #include "../common/QUtils.h"
 
-#define BENT_MARGIN_INIT_LEFT			(2)
-#define BENT_MARGIN_INIT_TOP			(2)
-#define BENT_MARGIN_INIT_RIGHT			(2)
-#define BENT_MARGIN_INIT_BOTTOM			(2)
-#define BENT_MARGIN_INIT_DIR			(0)
-#define BENT_INIT_ALGORITHM2			(2)
-#define BENT_INIT_ALGORITHM4			(1)
+#include "QBentCfgParam.h"
 
 #define DTC_GRAPH_INIT_SHARP_WIDTH					(50)
 #define DTC_GRAPH_INIT_CRACK_THRESHOLD_ERROR		(0.6f)

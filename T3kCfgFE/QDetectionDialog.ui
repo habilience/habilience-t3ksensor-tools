@@ -16,9 +16,9 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Detection</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="layoutBody">
    <item>
     <layout class="QHBoxLayout" name="layoutTopBox">
      <property name="spacing">
@@ -127,7 +127,7 @@
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer">
+      <spacer name="spacerTop">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -317,9 +317,6 @@
        <property name="text">
         <string>Auto Range Setting</string>
        </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
       </widget>
      </item>
      <item>
@@ -413,6 +410,18 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>btnMain</tabstop>
+  <tabstop>btnSub</tabstop>
+  <tabstop>btnReset</tabstop>
+  <tabstop>chkAutoDetectionLine</tabstop>
+  <tabstop>chkSimpleDetection</tabstop>
+  <tabstop>chkInvertDetection</tabstop>
+  <tabstop>btnAutoRangeSetting</tabstop>
+  <tabstop>btnRefresh</tabstop>
+  <tabstop>btnSave</tabstop>
+  <tabstop>btnClose</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -6,6 +6,7 @@
 #include <QTimerEvent>
 #include <QCloseEvent>
 #include "QSensorInitDataCfg.h"
+#include <QLinearGradient>
 
 QCmdAsyncManagerCtrl::QCmdAsyncManagerCtrl(QWidget *parent) :
     QWidget(parent)
@@ -14,12 +15,17 @@ QCmdAsyncManagerCtrl::QCmdAsyncManagerCtrl(QWidget *parent) :
     m_TimerAsyncTimeout = 0;
     m_TimerStart = 0;
     m_TimerTimeout = 0;
+    m_TimerDrawProgress = 0;
     m_bIsStarted = false;
     m_nAsyncId = -1;
     m_bSetSensorCfgMode = false;
 
     m_bLastResult = false;
     m_nLastResultReason = 0;
+
+    m_bDrawProgress = false;
+
+    m_nProgress = 0;
 }
 
 void QCmdAsyncManagerCtrl::startAsyncCheckTimer()
@@ -148,8 +154,8 @@ goto_recheck:
         LOG_C( "-> %s", (const char*)m_strLastCmd.toLatin1() );
         m_nAsyncId = m_pDevice->sendCommand( m_strLastCmd.toLatin1(), true );
 
-        setProgress( m_nTotal - m_DataStorage.size());
-        qDebug( "progress %d/%d", m_nTotal-m_DataStorage.size(), m_nTotal);
+        setProgress( m_nTotal - m_DataStorage.size() );
+        //qDebug( "progress %d/%d", m_nTotal-m_DataStorage.size(), m_nTotal);
 
     }
 }
@@ -181,9 +187,9 @@ void QCmdAsyncManagerCtrl::paintEvent(QPaintEvent */*evt*/)
 
     p.save();
 
-    if (!m_bIsStarted)
+    if (!m_bIsStarted || !m_bDrawProgress)
     {
-        p.fillRect( rcBody, Qt::white );
+        //p.fillRect( rcBody, Qt::white );
 
         QPen pen( QColor(128, 128, 128) );
         p.setPen( pen );
@@ -192,7 +198,6 @@ void QCmdAsyncManagerCtrl::paintEvent(QPaintEvent */*evt*/)
     }
     else
     {
-        // draw progress
         drawProgress( p );
     }
 
@@ -202,13 +207,49 @@ void QCmdAsyncManagerCtrl::paintEvent(QPaintEvent */*evt*/)
 
 void QCmdAsyncManagerCtrl::drawProgress(QPainter& p)
 {
-    // with m_nTotal, m_nTotal-m_DataStorage.size()
+    QRect rcBody(0, 0, width()-1, height()-1);
+
+    //p.fillRect( rcBody, Qt::white );
+
+    rcBody.adjust( 0, 2, 0, -2 );
+
+    QColor clrBorder(39, 74, 122);
+    QColor clrBk(242, 245, 251);
+    QColor clrChunk(57, 108, 179);
+
+    QPen penBorder( QBrush(clrBorder), 1.f );
+    p.setPen(penBorder);
+    p.setBrush(clrBk);
+    p.drawRect(rcBody);
+
+    if (m_nProgress != 0)
+    {
+        p.setPen(Qt::NoPen);
+        QRect rcChunk = rcBody;
+        rcChunk.setWidth(m_nProgress * rcBody.width() / 100);
+        rcChunk.adjust( 1, 1, 0, 0 );
+
+        QLinearGradient grad(QPointF(rcChunk.topLeft()), QPointF(rcChunk.bottomRight()));
+        clrChunk.setAlpha(200);
+        grad.setColorAt( 0.0, clrChunk );
+        clrChunk.setAlpha(255);
+        grad.setColorAt( 1.0, clrChunk );
+
+        p.setBrush( QBrush(grad) );
+
+        p.drawRect(rcChunk);
+    }
 }
 
 
 void QCmdAsyncManagerCtrl::setProgress( int pos )
 {
-
+    int progress = pos * 100 / m_nTotal;
+    if (m_nProgress != progress)
+    {
+        m_nProgress = progress;
+        update();
+    }
 }
 
 void QCmdAsyncManagerCtrl::timerEvent(QTimerEvent *evt)
@@ -250,6 +291,13 @@ void QCmdAsyncManagerCtrl::timerEvent(QTimerEvent *evt)
 
         setResult( false, ID_RESULT_TIMEOUT );
     }
+    else if (evt->timerId() == m_TimerDrawProgress)
+    {
+        m_bDrawProgress = true;
+        killTimer(m_TimerDrawProgress);
+        m_TimerDrawProgress = 0;
+        update();
+    }
 }
 
 void QCmdAsyncManagerCtrl::closeEvent(QCloseEvent *evt)
@@ -270,7 +318,7 @@ void QCmdAsyncManagerCtrl::resetCommands()
     m_DataStorage.clear();
 }
 
-void QCmdAsyncManagerCtrl::start( unsigned int nTimeout )
+void QCmdAsyncManagerCtrl::start( unsigned int nTimeout, bool bForceDrawProgress/*=false*/ )
 {
     m_bIsStarted = true;
 
@@ -286,6 +334,17 @@ void QCmdAsyncManagerCtrl::start( unsigned int nTimeout )
     if (nTimeout != (unsigned int)-1)
     {
         m_TimerTimeout = startTimer(nTimeout);
+    }
+
+    if (bForceDrawProgress)
+    {
+        m_bDrawProgress = true;
+    }
+    else
+    {
+        m_TimerDrawProgress = startTimer( 1000 );
+
+        m_bDrawProgress = false;
     }
     update();
 }
@@ -309,7 +368,14 @@ void QCmdAsyncManagerCtrl::stop()
         m_TimerAsyncTimeout = 0;
     }
 
+    if (m_TimerDrawProgress)
+    {
+        killTimer(m_TimerDrawProgress);
+        m_TimerDrawProgress = 0;
+    }
+
     m_bIsStarted = false;
+    m_bDrawProgress = false;
     update();
 }
 

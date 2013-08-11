@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <QGradientStop>
 #include <QSettings>
+#include <QMouseEvent>
 
 #define BORDER_ROUND        (3)
 
@@ -31,10 +32,7 @@ QStyleButton::QStyleButton(QWidget *parent) :
     QPushButton(parent)
 {
     setBackgroundRole(QPalette::Background);
-    setMouseTracking(true);
-    setAttribute(Qt::WA_Hover);
-
-    installEventFilter(this);
+    //setAttribute(Qt::WA_Hover);
 
     m_bIsHovered = false;
     m_bIsFocused = false;
@@ -301,16 +299,20 @@ void QStyleButton::drawFocusRect( QPainter& p, QRect& rcBody )
     p.drawRoundedRect( rcFocus, BORDER_ROUND, BORDER_ROUND );
 }
 
-bool QStyleButton::eventFilter(QObject *obj, QEvent *evt)
+bool QStyleButton::event(QEvent *evt)
 {
     if (isEnabled())
     {
         switch (evt->type())
         {
+        case QEvent::DragEnter:
+        case QEvent::Enter:
         case QEvent::HoverEnter:
             m_bIsHovered = true;
             update();
             break;
+        case QEvent::DragLeave:
+        case QEvent::Leave:
         case QEvent::HoverLeave:
             m_bIsHovered = false;
             update();
@@ -333,23 +335,31 @@ bool QStyleButton::eventFilter(QObject *obj, QEvent *evt)
         m_bIsFocused = false;
         m_bIsSelected = false;
     }
-    return QPushButton::eventFilter(obj, evt);
+
+    return QPushButton::event(evt);
 }
 
 void QStyleButton::mousePressEvent(QMouseEvent *e)
 {
-    m_bIsSelected = true;
-    update();
+    if (e->button() == Qt::LeftButton)
+    {
+        setFocus();
+        m_bIsSelected = true;
+        update();
 
-    QPushButton::mousePressEvent(e);
+        QPushButton::mousePressEvent(e);
+    }
 }
 
 void QStyleButton::mouseReleaseEvent(QMouseEvent *e)
 {
-    m_bIsSelected = false;
-    update();
+    if (e->button() == Qt::LeftButton)
+    {
+        m_bIsSelected = false;
+        update();
 
-    QPushButton::mouseReleaseEvent(e);
+        QPushButton::mouseReleaseEvent(e);
+    }
 }
 
 void QStyleButton::setMargin(int left, int top, int right, int bottom)

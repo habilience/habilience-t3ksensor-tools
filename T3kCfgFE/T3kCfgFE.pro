@@ -157,7 +157,12 @@ SOURCES += main.cpp\
     QBorderStyleEdit.cpp \
     QUnderlineTitle.cpp \
     QMyApplication.cpp \
-    QGraphSensitivityCtrl.cpp
+    QGraphSensitivityCtrl.cpp \
+    QDetectionGraphWidget.cpp \
+    QEventRedirection.cpp \
+    QBentCfgParam.cpp \
+    QArrowButton.cpp \
+    t3kcomdef.cpp
 
 HEADERS  += dialog.h \
     QStyleButton.h \
@@ -191,7 +196,11 @@ HEADERS  += dialog.h \
     QBorderStyleEdit.h \
     QUnderlineTitle.h \
     QMyApplication.h \
-    QGraphSensitivityCtrl.h
+    QGraphSensitivityCtrl.h \
+    QDetectionGraphWidget.h \
+    QEventRedirection.h \
+    QBentCfgParam.h \
+    QArrowButton.h
 
 FORMS    += dialog.ui \
     QSelectSensorDataDialog.ui \

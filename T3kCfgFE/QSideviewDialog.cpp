@@ -9,7 +9,6 @@
 #include "QShowMessageBox.h"
 #include "QLogSystem.h"
 #include "QT3kDevice.h"
-#include "AppData.h"
 
 #include "../common/QUtils.h"
 #include "../common/T3kConstStr.h"
@@ -126,6 +125,11 @@ QSideviewDialog::QSideviewDialog(Dialog *parent) :
     connect( ui->txtEdtLight1, SIGNAL(editModified(QBorderStyleEdit*,int,double)), SLOT(onEditModified(QBorderStyleEdit*,int,double)) );
     connect( ui->txtEdtLight2, SIGNAL(editModified(QBorderStyleEdit*,int,double)), SLOT(onEditModified(QBorderStyleEdit*,int,double)) );
     connect( ui->txtEdtLight3, SIGNAL(editModified(QBorderStyleEdit*,int,double)), SLOT(onEditModified(QBorderStyleEdit*,int,double)) );
+
+    ui->btnCam1->setEnabled(g_AppData.cameraConnectionInfo[IDX_CM1]);
+    ui->btnCam2->setEnabled(g_AppData.cameraConnectionInfo[IDX_CM2]);
+    ui->btnCam1_1->setEnabled(g_AppData.cameraConnectionInfo[IDX_CM1_1]);
+    ui->btnCam2_1->setEnabled(g_AppData.cameraConnectionInfo[IDX_CM2_1]);
 }
 
 QSideviewDialog::~QSideviewDialog()
@@ -143,6 +147,8 @@ QSideviewDialog::~QSideviewDialog()
 
     m_pMainDlg->onCloseMenu();
     delete ui;
+
+    LOG_I( "Exit [Sideview]" );
 }
 
 void QSideviewDialog::onChangeLanguage()
@@ -221,30 +227,6 @@ bool QSideviewDialog::canClose()
     }
 
     return true;
-}
-
-int QSideviewDialog::getIndexFromPart(ResponsePart Part)
-{
-    int nIndex = -1;
-    switch( Part )
-    {
-    case CM1:
-        nIndex = IDX_CM1;
-        break;
-    case CM2:
-        nIndex = IDX_CM2;
-        break;
-    case CM1_1:
-        nIndex = IDX_CM1_1;
-        break;
-    case CM2_1:
-        nIndex = IDX_CM2_1;
-        break;
-    default:
-        nIndex = IDX_MM;
-        break;
-    }
-    return nIndex;
 }
 
 QString QSideviewDialog::getCameraPrefix( int nCameraIndex )
@@ -752,7 +734,14 @@ bool QSideviewDialog::requestSensorData( RequestCmd cmd, bool bWait )
         loop.exec();
     }
 
-    return ui->cmdAsyncMngr->getLastResult();
+    bool bResult = ui->cmdAsyncMngr->getLastResult();
+
+    if (bResult && (cmd == cmdInitialize || cmd == cmdWriteToFactoryDefault))
+    {
+        resetEditColors();
+    }
+
+    return bResult;
 }
 
 void QSideviewDialog::sensorReset()
@@ -1241,7 +1230,8 @@ void QSideviewDialog::on_btnCam1_clicked()
     ui->btnCam1_1->setChecked(false);
     ui->btnCam2_1->setChecked(false);
 
-    setSideview(IDX_CM1, true);
+    if (m_nCurrentCameraIndex != IDX_CM1)
+        setSideview(IDX_CM1, true);
 }
 
 void QSideviewDialog::on_btnCam2_clicked()
@@ -1252,7 +1242,8 @@ void QSideviewDialog::on_btnCam2_clicked()
     ui->btnCam1_1->setChecked(false);
     ui->btnCam2_1->setChecked(false);
 
-    setSideview(IDX_CM2, true);
+    if (m_nCurrentCameraIndex != IDX_CM2)
+        setSideview(IDX_CM2, true);
 }
 
 void QSideviewDialog::on_btnCam1_1_clicked()
@@ -1263,7 +1254,8 @@ void QSideviewDialog::on_btnCam1_1_clicked()
     ui->btnCam1_1->setChecked(true);
     ui->btnCam2_1->setChecked(false);
 
-    setSideview(IDX_CM1_1, true);
+    if (m_nCurrentCameraIndex != IDX_CM1_1)
+        setSideview(IDX_CM1_1, true);
 }
 
 void QSideviewDialog::on_btnCam2_1_clicked()
@@ -1274,7 +1266,8 @@ void QSideviewDialog::on_btnCam2_1_clicked()
     ui->btnCam1_1->setChecked(false);
     ui->btnCam2_1->setChecked(true);
 
-    setSideview(IDX_CM2_1, true);
+    if (m_nCurrentCameraIndex != IDX_CM2_1)
+        setSideview(IDX_CM2_1, true);
 }
 
 void QSideviewDialog::on_btnDetectLineUp_clicked()

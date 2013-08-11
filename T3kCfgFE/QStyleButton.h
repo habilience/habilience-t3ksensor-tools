@@ -44,7 +44,7 @@ protected:
     void drawFocusRect( QPainter& p, QRect& rcBody );
 
     virtual void paintEvent(QPaintEvent *evt);
-    virtual bool eventFilter(QObject *obj, QEvent *evt);
+    virtual bool event(QEvent *evt);
     virtual void mousePressEvent(QMouseEvent *e);
     virtual void mouseReleaseEvent(QMouseEvent *e);
     

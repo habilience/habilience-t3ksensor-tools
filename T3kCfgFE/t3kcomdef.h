@@ -51,4 +51,7 @@ const T3K_SENSOR_DEVICE DEVICE_LIST[] = {
     } FeatureCursorPos;
 #pragma pack()
 
+enum BuzzerType { BuzzerEnterCalibration, BuzzerCancelCalibration, BuzzerCalibrationSucces, BuzzerClick, BuzzerNextPoint };
+void playBuzzer( BuzzerType type );
+
 #endif // T3K_COMDEF_H

@@ -10,6 +10,7 @@ QBorderStyleEdit::QBorderStyleEdit(QWidget *parent) :
     m_TimerWarning = 0;
 
     m_bNowEditing = false;
+    m_nMaxTextLength = -1;
 
     m_dValueRangeMin = -DBL_MAX;
     m_dValueRangeMax = DBL_MAX;
@@ -55,6 +56,13 @@ void QBorderStyleEdit::keyPressEvent(QKeyEvent *e)
             QString strChar = e->text();
             if (m_strAllowChars.indexOf(strChar) < 0)
                 return;
+
+            if (m_nMaxTextLength >= 0)
+            {
+                QString strCurrent = toPlainText();
+                if (strCurrent.length() >= m_nMaxTextLength)
+                    return;
+            }
         }
     }
 
@@ -223,4 +231,14 @@ void QBorderStyleEdit::setWarning( bool bWarning )
             killTimer(m_TimerWarning);
         m_TimerWarning = 0;
     }
+}
+
+void QBorderStyleEdit::setText(const QString &text)
+{
+    QString strText = text;
+    if (alignment() == Qt::AlignCenter)
+    {
+        strText = "<center>" + text + "</center>";
+    }
+    QTextEdit::setText(strText);
 }

@@ -5,10 +5,38 @@
 #include <QVector>
 #include <T3kHIDLib.h>
 #include "QSingletone.h"
+#include "AppData.h"
 
 enum ResponsePart { MM, CM1, CM2, CM1_1, CM2_1 };
 
-#define UNUSE_ARG(xxx); xxx=xxx
+
+inline int getIndexFromPart(ResponsePart Part)
+{
+    int nIndex = -1;
+    switch( Part )
+    {
+    case CM1:
+        nIndex = IDX_CM1;
+        break;
+    case CM2:
+        nIndex = IDX_CM2;
+        break;
+    case CM1_1:
+        nIndex = IDX_CM1_1;
+        break;
+    case CM2_1:
+        nIndex = IDX_CM2_1;
+        break;
+    default:
+        nIndex = IDX_MM;
+        break;
+    }
+    return nIndex;
+}
+
+#ifndef UNUSE_ARG
+#define UNUSE_ARG(xxx) xxx=xxx
+#endif
 
 class QT3kDevice;
 class QT3kDeviceEventHandler : public QObject, public QSingleton<QT3kDeviceEventHandler>

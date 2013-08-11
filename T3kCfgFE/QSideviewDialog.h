@@ -2,7 +2,7 @@
 #define QSIDEVIEWDIALOG_H
 
 #include <QDialog>
-#include <QT3kDeviceEventHandler.h>
+#include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "t3kcomdef.h"
 
@@ -48,7 +48,7 @@ protected:
     virtual void reject();
     virtual void accept();
 
-    // override QT3kDeviceEventHandler::IListener
+    // override QLangManager::ILangChangeNotify
     virtual void onChangeLanguage();
 
     enum RequestCmd { cmdRefresh, cmdWriteToFactoryDefault, cmdLoadFactoryDefault, cmdInitialize };
@@ -69,7 +69,6 @@ protected:
 
     void setSideview(int nCameraIndex, bool setMode);
     QString getCameraPrefix( int nCameraIndex );
-    int getIndexFromPart(ResponsePart Part);
 
     void initImageBuffer( int width, int height );
 
@@ -79,7 +78,7 @@ protected:
     void adjustAmbientLight(int nLight1, int nLight2, int nLight3);
     void stopPreviewCountDown();
 
-    // override QLangManager::ILangChangeNotify
+    // override QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnPRV(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int total, int offset, const unsigned char *data, int cnt);
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
     virtual void TPDP_OnMSG(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, const char *txt);

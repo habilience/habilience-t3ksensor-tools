@@ -3,16 +3,18 @@
 #include <QString>
 #include <QApplication>
 #include "QLangManager.h"
+#include <QFont>
 
 static bool s_bShowMessageBox = false;
 static QMessageBox* s_pShowedMessageBox = NULL;
+
 int showMessageBox( QWidget* parent, const QString& strMessage, const QString& strTitle,
                     QMessageBox::Icon icon, QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defButton )
 {
     QString strLog = strMessage;
     strLog.replace( "\r", " " );
     strLog.replace( "\n", " " );
-    LOG_I( strLog.toLatin1() );
+    LOG_I( strLog );
 
     QString strStyle =
         "QWidget {"
@@ -51,6 +53,10 @@ int showMessageBox( QWidget* parent, const QString& strMessage, const QString& s
     msgBox.setButtonText(QMessageBox::Cancel, res.getResString(MAIN, "BTN_CAPTION_CANCEL"));
     msgBox.setButtonText(QMessageBox::Yes, res.getResString(MAIN, "BTN_CAPTION_YES"));
     msgBox.setButtonText(QMessageBox::No, res.getResString(MAIN, "BTN_CAPTION_NO"));
+
+    QFont fnt(msgBox.font());
+    fnt.setPointSize(fnt.pointSize()+2);
+    msgBox.setFont(fnt);
     s_pShowedMessageBox = &msgBox;
     int nRet = msgBox.exec();
 

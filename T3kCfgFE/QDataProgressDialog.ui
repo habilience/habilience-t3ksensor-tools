@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>380</width>
-    <height>106</height>
+    <height>111</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,29 +37,27 @@ QPushButton:default {
 	border-color: rgb(90, 129, 129);
 }</string>
   </property>
-  <widget class="QPushButton" name="btnCancel">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>52</y>
-     <width>181</width>
-     <height>41</height>
-    </rect>
+  <layout class="QVBoxLayout" name="layoutBody">
+   <property name="spacing">
+    <number>16</number>
    </property>
-   <property name="text">
-    <string>Cancel</string>
-   </property>
-  </widget>
-  <widget class="QCmdAsyncManagerCtrl" name="cmdAsyncMngr" native="true">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>361</width>
-     <height>31</height>
-    </rect>
-   </property>
-  </widget>
+   <item>
+    <widget class="QCmdAsyncManagerCtrl" name="cmdAsyncMngr" native="true"/>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnCancel">
+     <property name="minimumSize">
+      <size>
+       <width>84</width>
+       <height>34</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Cancel</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <customwidgets>
   <customwidget>

@@ -26,15 +26,19 @@ private:
     int         m_TimerAsyncTimeout;
     int         m_TimerStart;
     int         m_TimerTimeout;
+    int         m_TimerDrawProgress;
     QString     m_strLastCmd;
     int         m_nAsyncId;
 
     bool        m_bIsStarted;
+    bool        m_bDrawProgress;
 
     int         m_nTotal;
 
     bool        m_bLastResult;
     int         m_nLastResultReason;
+
+    int         m_nProgress;
 
 protected:
     void startAsyncCheckTimer();
@@ -62,7 +66,7 @@ public:
     void setSensorCfgMode( bool bSetMode ) { m_bSetSensorCfgMode = bSetMode; }
     void setT3kDevice( QT3kDevice* pDevice ) { m_pDevice = pDevice; }
 
-    void start(unsigned int nTimeout);
+    void start(unsigned int nTimeout, bool bForceDrawProgress=false);
     void stop();
     bool isStarted();
 

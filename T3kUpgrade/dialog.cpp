@@ -321,7 +321,7 @@ void Dialog::timerEvent(QTimerEvent *evt)
         {
             qDebug( "request timeout" );
             killRequestTimeoutTimer();
-            // TODO: 재전송????
+            // TODO: retry????
             if (m_CurrentJob.type == JOBF_QUERY_INFO)
             {
                 if (m_CurrentJob.subStep == SUB_QUERY_IAP_REVISION)

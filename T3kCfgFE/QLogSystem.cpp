@@ -76,6 +76,11 @@ void QLogSystem::operator()( const char* szFormat, ... )
     writeV( m_strTag, szBuffer );
 }
 
+void QLogSystem::operator()( const QString& strLog )
+{
+    writeV( m_strTag, strLog );
+}
+
 void QLogSystem::write( const QString& strTag, const char* szFormat, ... )
 {
     if (szFormat == NULL)
@@ -94,7 +99,7 @@ void QLogSystem::write( const QString& strTag, const char* szFormat, ... )
 
 void QLogSystem::writeV(const QString &strTag, const QString &strFormatV )
 {
-    if (strFormatV == NULL)
+    if (strFormatV.isEmpty())
         return;
 
     do

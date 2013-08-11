@@ -18,7 +18,23 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_7">
+  <property name="styleSheet">
+   <string notr="true">QTextEdit {
+	border: 2px solid rgb(112,154,209);
+	background-color : rgb(242,245,251);
+	color : rgb(0,0,0);
+	border-radius: 5px;
+}
+
+QTextEdit:disabled {
+	border: 2px solid rgb(143,143,143);
+	background-color : rgb(240,240,240);
+	color : gray;
+	border-radius: 5px;
+}
+</string>
+  </property>
+  <layout class="QVBoxLayout" name="layoutBody">
    <property name="spacing">
     <number>2</number>
    </property>
@@ -53,8 +69,8 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>20</width>
-         <height>20</height>
+         <width>10</width>
+         <height>10</height>
         </size>
        </property>
       </spacer>
@@ -85,13 +101,43 @@
          <height>32</height>
         </size>
        </property>
+       <property name="styleSheet">
+        <string notr="true"> QPushButton {
+     border: 1px solid #8f8f91;
+     border-radius: 6px;
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #f6f7fa, stop: 1 #dadbde);
+ }
+
+ QPushButton:pressed {
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #dadbde, stop: 1 #f6f7fa);
+ }
+
+ QPushButton:checked {
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 rgb(112,146,190), stop: 1 rgb(197,210,228));
+ }
+
+ QPushButton:flat {
+     border: none; /* no border for a flat push button */
+ }
+
+ QPushButton:default {
+     border-color: rgb(90, 90, 90); /* make the default button prominent 90, 129, 129*/
+ }</string>
+       </property>
        <property name="text">
         <string/>
        </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>resources/zoom_in.png</normaloff>resources/zoom_in.png</iconset>
+       </property>
        <property name="iconSize">
         <size>
-         <width>24</width>
-         <height>24</height>
+         <width>16</width>
+         <height>16</height>
         </size>
        </property>
       </widget>
@@ -122,13 +168,43 @@
          <height>32</height>
         </size>
        </property>
+       <property name="styleSheet">
+        <string notr="true"> QPushButton {
+     border: 1px solid #8f8f91;
+     border-radius: 6px;
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #f6f7fa, stop: 1 #dadbde);
+ }
+
+ QPushButton:pressed {
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #dadbde, stop: 1 #f6f7fa);
+ }
+
+ QPushButton:checked {
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 rgb(112,146,190), stop: 1 rgb(197,210,228));
+ }
+
+ QPushButton:flat {
+     border: none; /* no border for a flat push button */
+ }
+
+ QPushButton:default {
+     border-color: rgb(90, 90, 90); /* make the default button prominent 90, 129, 129*/
+ }</string>
+       </property>
        <property name="text">
         <string/>
        </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>resources/zoom_out.png</normaloff>resources/zoom_out.png</iconset>
+       </property>
        <property name="iconSize">
         <size>
-         <width>24</width>
-         <height>24</height>
+         <width>16</width>
+         <height>16</height>
         </size>
        </property>
       </widget>
@@ -159,13 +235,43 @@
          <height>32</height>
         </size>
        </property>
+       <property name="styleSheet">
+        <string notr="true"> QPushButton {
+     border: 1px solid #8f8f91;
+     border-radius: 6px;
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #f6f7fa, stop: 1 #dadbde);
+ }
+
+ QPushButton:pressed {
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #dadbde, stop: 1 #f6f7fa);
+ }
+
+ QPushButton:checked {
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 rgb(112,146,190), stop: 1 rgb(197,210,228));
+ }
+
+ QPushButton:flat {
+     border: none; /* no border for a flat push button */
+ }
+
+ QPushButton:default {
+     border-color: rgb(90, 90, 90); /* make the default button prominent 90, 129, 129*/
+ }</string>
+       </property>
        <property name="text">
         <string/>
        </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>resources/zoom_fit.png</normaloff>resources/zoom_fit.png</iconset>
+       </property>
        <property name="iconSize">
         <size>
-         <width>24</width>
-         <height>24</height>
+         <width>16</width>
+         <height>16</height>
         </size>
        </property>
       </widget>
@@ -482,38 +588,26 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QPushButton" name="btnAutoOffsetDec">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
+              <spacer name="offsetSpacer1">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
                </property>
-               <property name="minimumSize">
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
                 <size>
                  <width>32</width>
                  <height>32</height>
                 </size>
                </property>
-               <property name="maximumSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="baseSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>-1</string>
-               </property>
-              </widget>
+              </spacer>
              </item>
              <item>
               <widget class="QBorderStyleEdit" name="txtEdtAutoOffset">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -547,35 +641,20 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="btnAutoOffsetInc">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
+              <spacer name="offsetSpacer2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
                </property>
-               <property name="minimumSize">
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
                 <size>
                  <width>32</width>
                  <height>32</height>
                 </size>
                </property>
-               <property name="maximumSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="baseSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>+1</string>
-               </property>
-              </widget>
+              </spacer>
              </item>
             </layout>
            </item>
@@ -752,35 +831,13 @@
           </widget>
          </item>
          <item>
-          <widget class="QScrollArea" name="scrollArea">
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
+          <widget class="QDetectionGraphWidget" name="widgetDetectionGraph" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
-           <property name="widgetResizable">
-            <bool>true</bool>
-           </property>
-           <widget class="QWidget" name="widgetDetectionGraph">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>0</y>
-              <width>630</width>
-              <height>289</height>
-             </rect>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
           </widget>
          </item>
         </layout>
@@ -797,38 +854,20 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="lblDummy">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+          <spacer name="spacer2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
-           <property name="minimumSize">
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
             <size>
-             <width>40</width>
+             <width>46</width>
              <height>0</height>
             </size>
            </property>
-           <property name="maximumSize">
-            <size>
-             <width>40</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="baseSize">
-            <size>
-             <width>40</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(255, 255, 127);</string>
-           </property>
-           <property name="text">
-            <string>Sensitivity</string>
-           </property>
-          </widget>
+          </spacer>
          </item>
          <item>
           <layout class="QVBoxLayout" name="layoutLeftRangeBox">
@@ -1043,17 +1082,23 @@
           </layout>
          </item>
          <item>
-          <spacer name="spacer2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+          <widget class="QLabel" name="lblTouchCount">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
+           <property name="text">
+            <string>Touch Count</string>
            </property>
-          </spacer>
+           <property name="alignment">
+            <set>Qt::AlignHCenter|Qt::AlignTop</set>
+           </property>
+           <property name="margin">
+            <number>5</number>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QVBoxLayout" name="layoutRightRangeBox">
@@ -1291,7 +1336,38 @@
    <extends>QLabel</extends>
    <header>QGraphSensitivityCtrl.h</header>
   </customwidget>
+  <customwidget>
+   <class>QDetectionGraphWidget</class>
+   <extends>QWidget</extends>
+   <header>QDetectionGraphWidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>btnThresholdDec</tabstop>
+  <tabstop>txtEdtThreshold</tabstop>
+  <tabstop>btnThresholdInc</tabstop>
+  <tabstop>btnGainDec</tabstop>
+  <tabstop>txtEdtGain</tabstop>
+  <tabstop>btnGainInc</tabstop>
+  <tabstop>txtEdtAutoOffset</tabstop>
+  <tabstop>btnOffsetDec</tabstop>
+  <tabstop>txtEdtOffset</tabstop>
+  <tabstop>btnOffsetInc</tabstop>
+  <tabstop>btnZoomIn</tabstop>
+  <tabstop>btnZoomOut</tabstop>
+  <tabstop>btnZoomFit</tabstop>
+  <tabstop>btnLeftRangeDec500</tabstop>
+  <tabstop>btnLeftRangeDec100</tabstop>
+  <tabstop>txtEdtLeftRange</tabstop>
+  <tabstop>btnLeftRangeInc100</tabstop>
+  <tabstop>btnLeftRangeInc500</tabstop>
+  <tabstop>btnRightRangeDec500</tabstop>
+  <tabstop>btnRightRangeDec100</tabstop>
+  <tabstop>txtEdtRightRange</tabstop>
+  <tabstop>btnRightRangeInc100</tabstop>
+  <tabstop>btnRightRangeInc500</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

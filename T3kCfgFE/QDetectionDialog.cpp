@@ -7,7 +7,6 @@
 #include "QShowMessageBox.h"
 #include "QLogSystem.h"
 #include "QT3kDevice.h"
-#include "AppData.h"
 
 #include "../common/QUtils.h"
 #include "../common/T3kConstStr.h"
@@ -16,17 +15,20 @@
 
 #include "QMyApplication.h"
 
+#define MAX_TICK_COUNT      (400)
+
 QDetectionDialog::QDetectionDialog(Dialog *parent) :
     QDialog(parent), m_pMainDlg(parent),
-    ui(new Ui::QDetectionDialog)
+    ui(new Ui::QDetectionDialog),
+    m_EventRedirect(this)
 {
     ui->setupUi(this);
-    QT3kDevice* pDevice = QT3kDevice::instance();
 
     Qt::WindowFlags flags = windowFlags();
     Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
     flags &= ~helpFlag;
-    if (!pDevice->isVirtualDevice())
+
+    if (!QT3kDevice::instance()->isVirtualDevice())
     {
 #if defined(Q_OS_WIN)
         flags |= Qt::MSWindowsFixedSizeDialogHint;
@@ -37,6 +39,8 @@ QDetectionDialog::QDetectionDialog(Dialog *parent) :
     setWindowFlags(flags);
     setAttribute(Qt::WA_DeleteOnClose);
 
+    //DISABLE_MSWINDOWS_TOUCH_PROPERTY
+
     m_detectionMode = DetectionModeNone;
     m_bEnterAutoRangeSetting = false;
     m_nCamTouchCount[0] = m_nCamTouchCount[1] = 0;
@@ -44,6 +48,13 @@ QDetectionDialog::QDetectionDialog(Dialog *parent) :
     m_bTouchOK = false;
     m_bCamTouch = false;
     m_dwTickTouch = 0;
+
+    m_bToggleArrow = false;
+    m_nTouchProgress = 0;
+
+    m_TimerRefreshAutoOffset = 0;
+    m_TimerUpdateGraph = 0;
+    m_TimerBlinkArrow = 0;
 
     LOG_I( "Enter [Detection]" );
     onChangeLanguage();
@@ -63,19 +74,26 @@ QDetectionDialog::QDetectionDialog(Dialog *parent) :
     }
 
     setDetectionMode(DetectionModeMain);
-    // TODO:
-    //ui->widgetDetection1->setDisplayCrackInfo(true);
-    //ui->widgetDetection2->setDisplayCrackInfo(true);
+
+    ui->widgetDetection1->setDisplayCrackInfo(true);
+    ui->widgetDetection2->setDisplayCrackInfo(true);
 
     requestSensorData( cmdLoadFactoryDefault, false );
 
-    installEventFilter(this);
+    m_EventRedirect.installEventListener(this);
+    installEventFilter(&m_EventRedirect);
+    ui->widgetDetection1->installEventFilterForTextEdit(&m_EventRedirect);
+    ui->widgetDetection2->installEventFilterForTextEdit(&m_EventRedirect);
+
+    m_TimerUpdateGraph = startTimer( 350 );
 }
 
 QDetectionDialog::~QDetectionDialog()
 {
     m_pMainDlg->onCloseMenu();
     delete ui;
+
+    LOG_I( "Exit [Detection]" );
 }
 
 #define MAIN_TAG    "MAIN"
@@ -113,33 +131,9 @@ void QDetectionDialog::onChangeLanguage()
     s_bIsR2L = bIsR2L;
 }
 
-int QDetectionDialog::getIndexFromPart(ResponsePart Part)
-{
-    int nIndex = -1;
-    switch( Part )
-    {
-    case CM1:
-        nIndex = IDX_CM1;
-        break;
-    case CM2:
-        nIndex = IDX_CM2;
-        break;
-    case CM1_1:
-        nIndex = IDX_CM1_1;
-        break;
-    case CM2_1:
-        nIndex = IDX_CM2_1;
-        break;
-    default:
-        nIndex = IDX_MM;
-        break;
-    }
-    return nIndex;
-}
-
 bool QDetectionDialog::canClose()
 {
-    if (false)  // TODO:
+    if ( ui->widgetDetection1->isModified() || ui->widgetDetection2->isModified() )
     {
         QLangRes& res = QLangManager::getResource();
         QString strPrompt = res.getResString( MAIN_TAG, "TEXT_WARNING_SENSOR_DATA_IS_CHANGED" );
@@ -180,11 +174,26 @@ bool QDetectionDialog::canClose()
     return true;
 }
 
+#define ARROW_OFFSETXY  (4)
 void QDetectionDialog::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
-    QRect rcBody(0, 0, width()-1, height()-1);
+    QRect rcBody(0, 0, width(), height());
     p.fillRect( rcBody, Qt::white );
+
+    const QRect rcArrow(0, 0, 55, 55);
+    // LT, RT, RB, LB
+    m_rcArrow[0] = rcArrow;
+    m_rcArrow[1] = QRect(rcBody.right()-rcArrow.width(), rcBody.top(), rcArrow.width(), rcArrow.height());
+    m_rcArrow[2] = QRect(rcBody.right()-rcArrow.width(), rcBody.bottom()-rcArrow.height(), rcArrow.width(), rcArrow.height());
+    m_rcArrow[3] = QRect(rcBody.left(), rcBody.bottom()-rcArrow.height(), rcArrow.width(), rcArrow.height());
+
+    m_rcProgress[0] = QRect(m_rcArrow[0].left() + ARROW_OFFSETXY, m_rcArrow[0].bottom() + 2, m_rcArrow[0].width()-ARROW_OFFSETXY*2, 2);
+    m_rcProgress[1] = QRect(m_rcArrow[1].left() + ARROW_OFFSETXY, m_rcArrow[1].bottom() + 2, m_rcArrow[1].width()-ARROW_OFFSETXY*2, 2);
+    m_rcProgress[2] = QRect(m_rcArrow[2].left() + ARROW_OFFSETXY, m_rcArrow[2].top() - 2 - 2, m_rcArrow[2].width()-ARROW_OFFSETXY*2, 2);
+    m_rcProgress[3] = QRect(m_rcArrow[3].left() + ARROW_OFFSETXY, m_rcArrow[3].top() - 2 - 2, m_rcArrow[3].width()-ARROW_OFFSETXY*2, 2);
+
+    drawArrow(p);
 
     if (g_AppData.bIsSafeMode)
     {
@@ -192,12 +201,140 @@ void QDetectionDialog::paintEvent(QPaintEvent *)
     }
 }
 
+void QDetectionDialog::drawArrow(QPainter& p)
+{
+    if (!m_bEnterAutoRangeSetting)
+        return;
+
+    Q_ASSERT( m_nAutoRangeStep <= 3 );
+
+    p.save();
+    p.setRenderHint(QPainter::Antialiasing);
+
+    QRect rcArea = m_rcArrow[m_nAutoRangeStep];
+    const int nOffset = 1;
+    const int nAW = rcArea.width() - nOffset - 1;
+    const int nAH = rcArea.height() - nOffset - 1;
+    QPointF ptArrowLT[] =
+    {
+        QPointF(nOffset, nOffset),
+        QPointF(nAW+nOffset, nOffset),
+        QPointF(nAW*4.f/5.f+nOffset, nAH/5.f+nOffset),
+        QPointF(nAW+nOffset, nAH*2.f/5.f+nOffset),
+        QPointF(nAW*2.f/5.f+nOffset, nAH+nOffset),
+        QPointF(nAW/5.f+nOffset, nAH*4.f/5.f+nOffset),
+        QPointF(nOffset, nAH+nOffset),
+        QPointF(nOffset, nOffset)
+    };
+
+    int nPtCnt = (int)(sizeof(ptArrowLT) / sizeof(QPointF));
+
+    QPointF* pDrawArrow = NULL;
+    QPointF* pArrowMirror = NULL;
+    switch ( m_nAutoRangeStep )
+    {
+    case 0:		// LT
+        pDrawArrow = ptArrowLT;
+        break;
+    case 1:		// RT
+        pArrowMirror = new QPointF[ nPtCnt ];
+        pDrawArrow = pArrowMirror;
+        for ( int i=0 ; i<nPtCnt ; i++ )
+        {
+            pArrowMirror[i].setX(rcArea.x() + rcArea.width() - ptArrowLT[i].x());
+            pArrowMirror[i].setY(rcArea.y() + ptArrowLT[i].y());
+        }
+        break;
+    case 2:		// RB
+        pArrowMirror = new QPointF[ nPtCnt ];
+        pDrawArrow = pArrowMirror;
+        for ( int i=0 ; i<nPtCnt ; i++ )
+        {
+            pArrowMirror[i].setX(rcArea.x() + rcArea.width() - ptArrowLT[i].x());
+            pArrowMirror[i].setY(rcArea.y() + rcArea.height() - ptArrowLT[i].y());
+        }
+        break;
+    case 3:		// LB
+        pArrowMirror = new QPointF[ nPtCnt ];
+        pDrawArrow = pArrowMirror;
+        for ( int i=0 ; i<nPtCnt ; i++ )
+        {
+            pArrowMirror[i].setX(rcArea.x() + ptArrowLT[i].x());
+            pArrowMirror[i].setY(rcArea.y() + rcArea.height() - ptArrowLT[i].y());
+        }
+        break;
+    }
+
+    if (!m_bCamTouch)
+    {
+        if (!m_bToggleArrow)
+        {
+            p.setPen( QColor(195, 195, 195) );
+            p.setBrush( QColor(232, 232, 232) );
+        }
+        else
+        {
+            if (!m_bTouchOK)
+            {
+                p.setPen( QColor(237, 28, 36, 100) );
+                p.setBrush( QColor(243, 109, 116, 100) );
+            }
+            else
+            {
+                p.setPen( QColor(237, 28, 36) );
+                p.setBrush( QColor(243, 109, 116) );
+            }
+        }
+    }
+    else
+    {
+        p.setPen( QColor(237, 28, 36) );
+        p.setBrush( QColor(243, 109, 116) );
+    }
+
+    p.drawPolygon( pDrawArrow, nPtCnt );
+
+    if (m_bCamTouch)
+    {
+        if (!m_bTouchOK)
+        {
+            p.setPen( Qt::NoPen );
+            p.setBrush( QColor(243, 109, 116) );
+            int progress = m_nTouchProgress * m_rcProgress[m_nAutoRangeStep].width() / 100;
+            p.drawRect( m_rcProgress[m_nAutoRangeStep].left(), m_rcProgress[m_nAutoRangeStep].top(), progress, m_rcProgress[m_nAutoRangeStep].height() );
+        }
+    }
+
+    if (pArrowMirror)
+        delete[] pArrowMirror;
+
+    p.restore();
+}
+
 void QDetectionDialog::closeEvent(QCloseEvent *evt)
 {
     if (!canClose())
+    {
         evt->ignore();
+    }
+    else
+    {
+        if (m_TimerRefreshAutoOffset)
+            killTimer(m_TimerRefreshAutoOffset);
+        m_TimerRefreshAutoOffset = 0;
+
+        if (m_TimerUpdateGraph)
+            killTimer(m_TimerUpdateGraph);
+        m_TimerUpdateGraph = 0;
+
+        QT3kDevice* pDevice = QT3kDevice::instance();
+        pDevice->sendCommand( "cam1/mode=detection", true );
+        pDevice->sendCommand( "cam2/mode=detection", true );
+        m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND);
+    }
 }
 
+/*
 bool QDetectionDialog::eventFilter(QObject *obj, QEvent *evt)
 {
     if (evt->type() == QEvent::KeyPress)
@@ -214,6 +351,7 @@ bool QDetectionDialog::eventFilter(QObject *obj, QEvent *evt)
     }
     return QDialog::eventFilter(obj, evt);
 }
+*/
 
 void QDetectionDialog::reject()
 {
@@ -266,7 +404,15 @@ bool QDetectionDialog::requestSensorData( RequestCmd cmd, bool bWait )
         loop.exec();
     }
 
-    return ui->cmdAsyncMngr->getLastResult();
+    bool bResult = ui->cmdAsyncMngr->getLastResult();
+
+    if (bResult && (cmd == cmdInitialize || cmd == cmdWriteToFactoryDefault))
+    {
+        ui->widgetDetection1->setModified(false);
+        ui->widgetDetection2->setModified(false);
+    }
+
+    return bResult;
 }
 
 void QDetectionDialog::sensorReset()
@@ -311,9 +457,8 @@ void QDetectionDialog::sensorReset()
 
 void QDetectionDialog::sensorLoadFactoryDefault()
 {
-    // TODO:
-    //ui->widgetDetection1->clear();
-    //ui->widgetDetection2->clear();
+    ui->widgetDetection1->clear();
+    ui->widgetDetection2->clear();
     QString strSensorCmd;
 
     strSensorCmd = QString(cstrAutoTuning) + "?";
@@ -357,9 +502,8 @@ void QDetectionDialog::sensorLoadFactoryDefault()
 
 void QDetectionDialog::sensorRefresh()
 {
-    // TODO:
-    //ui->widgetDetection1->clear();
-    //ui->widgetDetection2->clear();
+    ui->widgetDetection1->clear();
+    ui->widgetDetection2->clear();
 
     QString strSensorCmd;
 
@@ -489,42 +633,14 @@ void QDetectionDialog::enableAllControls( bool bEnable )
         controls[i]->setEnabled(bEnable);
     }
 
-    // TODO:
-    //ui->widgetDetection1->enableAllControls(bEnable);
-    //ui->widgetDetection2->enableAllControls(bEnable);
-}
-
-void QDetectionDialog::playBuzzer( BuzzerType type )
-{
-    int nCat = 0, nType = 0;
-
-    switch( type )
-    {
-    case BuzzerEnterCalibration:
-        nCat = 3, nType = 1;
-        break;
-    case BuzzerCancelCalibration:
-        nCat = 3, nType = 3;
-        break;
-    case BuzzerCalibrationSucces:
-        nCat = 3, nType = 2;
-        break;
-    case BuzzerClick:
-        nCat = 1, nType = 1;
-        break;
-    case BuzzerNextPoint:
-        nCat = 5, nType = 1;
-        break;
-    }
-
-    QString strCmd;
-    strCmd = QString(cstrBuzzerPlay) + QString::number(nCat) + "," + QString::number(nType);
-    QT3kDevice::instance()->sendCommand(strCmd, true);
+    ui->widgetDetection1->enableAllControls(bEnable);
+    ui->widgetDetection2->enableAllControls(bEnable);
 }
 
 void QDetectionDialog::enterAutoRangeSetting()
 {
     QLayout* layout = this->layout();
+    layout->getContentsMargins(&m_nOldMargins[0], &m_nOldMargins[1], &m_nOldMargins[2], &m_nOldMargins[3]);
     layout->setContentsMargins(60, 60, 60, 60);
     update();
 
@@ -578,15 +694,14 @@ void QDetectionDialog::enterAutoRangeSetting()
 
     playBuzzer( BuzzerEnterCalibration );
 
-    // TODO:
-    //ui->widgetDetection1->setDisplayCrackInfo(false);
-    //ui->widgetDetection2->setDisplayCrackInfo(false);
+    ui->widgetDetection1->setDisplayCrackInfo(false);
+    ui->widgetDetection2->setDisplayCrackInfo(false);
 }
 
 void QDetectionDialog::leaveAutoRangeSetting()
 {
     QLayout* layout = this->layout();
-    layout->setContentsMargins(9, 9, 9, 9);
+    layout->setContentsMargins(m_nOldMargins[0], m_nOldMargins[1], m_nOldMargins[2], m_nOldMargins[3]);
     update();
 
     ui->btnClose->setEnabled(true);
@@ -649,15 +764,19 @@ void QDetectionDialog::leaveAutoRangeSetting()
 
     ui->cmdAsyncMngr->start( (unsigned int)-1 );
 
-    // TODO:
-    //ui->widgetDetection1->setDisplayCrackInfo(true);
-    //ui->widgetDetection2->setDisplayCrackInfo(true);
+    ui->widgetDetection1->setDisplayCrackInfo(true);
+    ui->widgetDetection2->setDisplayCrackInfo(true);
 }
 
 void QDetectionDialog::setDetectionMode( DetectionMode mode )
 {
     if (mode == DetectionModeNone)
         return;
+    if (m_detectionMode == mode)
+        return;
+
+    ui->widgetDetection1->clear();
+    ui->widgetDetection2->clear();
 
     QLangRes& res = QLangManager::getResource();
     QString strCamera = res.getResString(MAIN_TAG, "TEXT_CAMERA");
@@ -677,6 +796,9 @@ void QDetectionDialog::setDetectionMode( DetectionMode mode )
 
         ui->cmdAsyncMngr->insertCommand( sCam1 + "mode=detection" );
         ui->cmdAsyncMngr->insertCommand( sCam2 + "mode=detection" );
+
+        ui->widgetDetection1->enableAllControls(g_AppData.cameraConnectionInfo[IDX_CM1]);
+        ui->widgetDetection2->enableAllControls(g_AppData.cameraConnectionInfo[IDX_CM2]);
     }
     else
     {
@@ -685,6 +807,9 @@ void QDetectionDialog::setDetectionMode( DetectionMode mode )
 
         ui->cmdAsyncMngr->insertCommand( sCam1_1 + "mode=detection" );
         ui->cmdAsyncMngr->insertCommand( sCam2_1 + "mode=detection" );
+
+        ui->widgetDetection1->enableAllControls(g_AppData.cameraConnectionInfo[IDX_CM1_1]);
+        ui->widgetDetection2->enableAllControls(g_AppData.cameraConnectionInfo[IDX_CM2_1]);
     }
 
     QEventLoop loop;
@@ -702,20 +827,19 @@ void QDetectionDialog::setDetectionMode( DetectionMode mode )
         qDebug( "QDetectionDialog::setDetectionMode - error: %d", nReason );
     }
 
-    // TODO:
     if ( mode == DetectionModeMain )
     {
-//        ui->widgetDetection1->setTitle( strCamera + " 1" );
-//        ui->widgetDetection2->setTitle( strCamera + " 2" );
-//        ui->widgetDetection1->setCameraIndex( IDX_CM1 );
-//        ui->widgetDetection2->setCameraIndex( IDX_CM2 );
+        ui->widgetDetection1->setTitle( strCamera + " 1" );
+        ui->widgetDetection2->setTitle( strCamera + " 2" );
+        ui->widgetDetection1->setCameraIndex( IDX_CM1 );
+        ui->widgetDetection2->setCameraIndex( IDX_CM2 );
     }
     else
     {
-//        ui->widgetDetection1->setTitle( strCamera + " 1-1" );
-//        ui->widgetDetection2->setTitle( strCamera + " 2-1" );
-//        ui->widgetDetection1->setCameraIndex( IDX_CM1_1 );
-//        ui->widgetDetection2->setCameraIndex( IDX_CM2_1 );
+        ui->widgetDetection1->setTitle( strCamera + " 1-1" );
+        ui->widgetDetection2->setTitle( strCamera + " 2-1" );
+        ui->widgetDetection1->setCameraIndex( IDX_CM1_1 );
+        ui->widgetDetection2->setCameraIndex( IDX_CM2_1 );
     }
 }
 
@@ -795,18 +919,16 @@ void QDetectionDialog::onFinishAutoRange()
 
         ui->cmdAsyncMngr->start( (unsigned int)-1 );
 
-        // TODO:
-        //ui->widgetDetection1->setModifiedRange();
-        //ui->widgetDetection2->setModifiedRange();
+        ui->widgetDetection1->setModifiedRange();
+        ui->widgetDetection2->setModifiedRange();
     }
     else    // fail
     {
         playBuzzer( BuzzerCancelCalibration );
     }
 
-    // TODO:
-    //ui->widgetDetection1->setDisplayCrackInfo(true);
-    //ui->widgetDetection2->setDisplayCrackInfo(true);
+    ui->widgetDetection1->setDisplayCrackInfo(true);
+    ui->widgetDetection2->setDisplayCrackInfo(true);
 }
 
 void QDetectionDialog::TPDP_OnDTC(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, unsigned char */*layerid*/, unsigned long *start_pos, unsigned long *end_pos, int cnt)
@@ -842,33 +964,54 @@ void QDetectionDialog::TPDP_OnDTC(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part
         {
             m_bCamTouch = true;
             m_dwTickTouch = 0;
+            if (m_nTouchProgress != 0)
+            {
+                m_nTouchProgress = 0;
+                updateRect(m_rcProgress[m_nAutoRangeStep]);
+            }
+            else
+            {
+                updateRect(m_rcArrow[m_nAutoRangeStep]);
+            }
         }
 
         if (m_bCamTouch)
         {
             if (end_pos[cnt-1] - start_pos[0] < 0xffff/4)
             {
-                if (m_dwTickTouch < 200)
+                if (m_dwTickTouch < MAX_TICK_COUNT / 2)
                 {
                     m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setX( start_pos[0] );
                     m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setY( end_pos[cnt-1] );
                     m_dwTickTouch ++;
+                    int progress = m_dwTickTouch * 100 / MAX_TICK_COUNT;
+                    if (m_nTouchProgress != progress)
+                    {
+                        m_nTouchProgress = progress;
+                        updateRect(m_rcProgress[m_nAutoRangeStep]);
+                    }
                 }
                 else
                 {
                     m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setX( start_pos[0] < (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].x() ? start_pos[0] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].x() );
                     m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setY( end_pos[cnt-1] > (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].y() ? end_pos[cnt-1] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].y() );
                     m_dwTickTouch ++;
+                    int progress = m_dwTickTouch * 100 / MAX_TICK_COUNT;
+                    if (m_nTouchProgress != progress)
+                    {
+                        m_nTouchProgress = progress;
+                        updateRect(m_rcProgress[m_nAutoRangeStep]);
+                    }
                 }
             }
 
-            if (m_dwTickTouch >= 400)
+            if (m_dwTickTouch >= MAX_TICK_COUNT)
             {
                 if (m_nAutoRangeStep < 3)
                 {
                     m_bTouchOK = true;
                     m_nAutoRangeStep ++;
-                    showArrow();
+                    update();
                     playBuzzer( BuzzerNextPoint );
                 }
                 else
@@ -883,6 +1026,74 @@ void QDetectionDialog::TPDP_OnDTC(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part
         if (m_bTouchOK)
             m_bTouchOK = false;
         m_bCamTouch = false;
+        m_dwTickTouch = 0;
+        if (m_nTouchProgress != 0)
+        {
+            m_nTouchProgress = 0;
+            updateRect(m_rcArrow[m_nAutoRangeStep]);
+            updateRect(m_rcProgress[m_nAutoRangeStep]);
+        }
+    }
+}
+
+void QDetectionDialog::setCheckAutoOffset(bool bCheck)
+{
+    if (bCheck)
+    {
+        if (m_TimerRefreshAutoOffset)
+            killTimer(m_TimerRefreshAutoOffset);
+        m_TimerRefreshAutoOffset = startTimer( 4000 );
+    }
+    else
+    {
+        if (m_TimerRefreshAutoOffset)
+            killTimer(m_TimerRefreshAutoOffset);
+        m_TimerRefreshAutoOffset = 0;
+    }
+}
+
+void QDetectionDialog::timerEvent(QTimerEvent *evt)
+{
+    if (evt->timerId() == m_TimerRefreshAutoOffset)
+    {
+        QT3kDevice* pDevice = QT3kDevice::instance();
+        QString strCmd;
+        if (m_detectionMode == DetectionModeMain)
+        {
+            strCmd = sCam1 + cstrDetectionLine + "?";
+            pDevice->sendCommand( strCmd, true );
+            strCmd = sCam2 + cstrDetectionLine + "?";
+            pDevice->sendCommand( strCmd, true );
+        }
+        else if (m_detectionMode == DetectionModeSub)
+        {
+            strCmd = sCam1_1 + cstrDetectionLine + "?";
+            pDevice->sendCommand( strCmd, true );
+            strCmd = sCam2_1 + cstrDetectionLine + "?";
+            pDevice->sendCommand( strCmd, true );
+        }
+    }
+    else if (evt->timerId() == m_TimerUpdateGraph)
+    {
+        if (ui->widgetDetection1->isSetUpdateGraph())
+        {
+            ui->widgetDetection1->setUpdateGraph(false);
+            ui->widgetDetection1->updateGraph();
+        }
+
+        if (ui->widgetDetection2->isSetUpdateGraph())
+        {
+            ui->widgetDetection2->setUpdateGraph(false);
+            ui->widgetDetection2->updateGraph();
+        }
+    }
+    else if (evt->timerId() == m_TimerBlinkArrow)
+    {
+        m_bToggleArrow = !m_bToggleArrow;
+        if (m_nAutoRangeStep < 4)
+        {
+            updateRect( m_rcArrow[m_nAutoRangeStep] );
+        }
     }
 }
 
@@ -893,10 +1104,7 @@ void QDetectionDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Pa
         const char* pC = cmd + sizeof(cstrAutoTuning) - 1;
         int nI = atoi(pC);
         ui->chkAutoDetectionLine->setChecked( nI==1 ? true : false );
-
-        // TODO:
-        //ui->widgetDetection1->setCheckAutoOffset( nI==1 ? true : false );
-        //ui->widgetDetection2->setCheckAutoOffset( nI==1 ? true : false );
+        setCheckAutoOffset( nI==1 ? true : false );
     }
     else if ( strstr(cmd, cstrSimpleDetection) == cmd )
     {
@@ -912,15 +1120,62 @@ void QDetectionDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Pa
     }
 }
 
+bool QDetectionDialog::onKeyPress(QKeyEvent *evt)
+{
+    if (evt->key() == Qt::Key_Escape)
+    {
+        if (m_bEnterAutoRangeSetting)
+        {
+            leaveAutoRangeSetting();
+            return true;
+        }
+        else
+        {
+            LOG_I( "From Keyboard(ESC)" );
+            on_btnClose_clicked();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool QDetectionDialog::onKeyRelease(QKeyEvent *evt)
+{
+    QKeyEvent* keyEvt = (QKeyEvent*)evt;
+    if ( (keyEvt->key() == Qt::Key_Enter) ||
+         (keyEvt->key() == Qt::Key_Return) )
+    {
+        QWidget* pWidget = focusWidget();
+        if (pWidget->objectName().indexOf("txtEdt") >= 0)
+        {
+            pWidget->clearFocus();
+            return true;
+        }
+    }
+    return false;
+}
 
 void QDetectionDialog::showArrow()
 {
+    if (m_TimerBlinkArrow)
+        killTimer(m_TimerBlinkArrow);
+    m_bToggleArrow = true;
+    m_TimerBlinkArrow = startTimer(500);
 
+    update(m_rcArrow[m_nAutoRangeStep]);
 }
 
 void QDetectionDialog::hideArrow()
 {
+    if (m_TimerBlinkArrow)
+        killTimer(m_TimerBlinkArrow);
+    m_bToggleArrow = false;
+}
 
+void QDetectionDialog::updateRect(QRect rc)
+{
+    rc.adjust( -2, -2, 2, 2 );
+    update( rc );
 }
 
 void QDetectionDialog::analysisTouchObj()
@@ -976,14 +1231,26 @@ void QDetectionDialog::analysisTouchObj()
 
 void QDetectionDialog::on_btnMain_clicked()
 {
+    if (m_detectionMode == DetectionModeMain)
+    {
+        ui->btnMain->setChecked(true);
+        return;
+    }
     LOG_B( "Main" );
     setDetectionMode(DetectionModeMain);
+    requestSensorData( cmdRefresh, false );
 }
 
 void QDetectionDialog::on_btnSub_clicked()
 {
+    if (m_detectionMode == DetectionModeSub)
+    {
+        ui->btnSub->setChecked(true);
+        return;
+    }
     LOG_B( "Sub" );
     setDetectionMode(DetectionModeSub);
+    requestSensorData( cmdRefresh, false );
 }
 
 void QDetectionDialog::on_btnReset_clicked()
@@ -1073,9 +1340,8 @@ void QDetectionDialog::on_btnSave_clicked()
     }
     enableAllControls( true );
 
-    // TODO:
-//    ui->widgetDetection1->setModified(false);
-//    ui->widgetDetection2->setModified(false);
+    ui->widgetDetection1->setModified(false);
+    ui->widgetDetection2->setModified(false);
 
     setEnabled( true );
     ui->btnSave->setFocus();

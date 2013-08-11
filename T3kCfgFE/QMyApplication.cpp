@@ -1,5 +1,8 @@
 #include "QMyApplication.h"
 
+#include <QTimerEvent>
+#include <QKeyEvent>
+
 QMyApplication::QMyApplication(int &argc, char **argv) :
     QApplication(argc, argv)
 {

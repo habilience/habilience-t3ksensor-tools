@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/T3kCfgFERes">
         <file>Languages/english.txt</file>
+        <file>resources/zoom_fit.png</file>
+        <file>resources/zoom_in.png</file>
+        <file>resources/zoom_out.png</file>
     </qresource>
 </RCC>

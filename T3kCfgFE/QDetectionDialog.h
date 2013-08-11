@@ -5,6 +5,7 @@
 #include <QT3kDeviceEventHandler.h>
 #include "QLangManager.h"
 #include "t3kcomdef.h"
+#include "QEventRedirection.h"
 
 namespace Ui {
 class QDetectionDialog;
@@ -12,7 +13,10 @@ class QDetectionDialog;
 
 class Dialog;
 class QBorderStyleEdit;
-class QDetectionDialog : public QDialog, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
+class QDetectionDialog : public QDialog
+        , public QT3kDeviceEventHandler::IListener
+        , public QLangManager::ILangChangeNotify
+        , public QEventRedirection::IEventListener
 {
     Q_OBJECT
 private:
@@ -28,21 +32,37 @@ private:
     QPoint  m_ptCamTouchObj[2][4];
     int     m_nCamTouchMax[2];
 
+    int     m_nOldMargins[4];
+
     long    m_lCam1Left;
     long    m_lCam1Right;
     long    m_lCam2Left;
     long    m_lCam2Right;
 
+    int     m_TimerRefreshAutoOffset;
+    int     m_TimerUpdateGraph;
+
+    int     m_TimerBlinkArrow;
+    bool    m_bToggleArrow;     // true: show, false: hide
+    int     m_nTouchProgress;   // for Auto Range Setting
+    QRect   m_rcArrow[4];
+    QRect   m_rcProgress[4];
+
 protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void closeEvent(QCloseEvent *);
-    virtual bool eventFilter(QObject *obj, QEvent *evt);
+    //virtual bool eventFilter(QObject *obj, QEvent *evt);
+    virtual void timerEvent(QTimerEvent *);
 
     virtual void reject();
     virtual void accept();
 
+    void drawArrow(QPainter& p);
+
     // override QT3kDeviceEventHandler::IListener
     virtual void onChangeLanguage();
+
+    void setCheckAutoOffset(bool bCheck);
 
     enum RequestCmd { cmdRefresh, cmdWriteToFactoryDefault, cmdLoadFactoryDefault, cmdInitialize };
     bool requestSensorData( RequestCmd cmd, bool bWait );
@@ -55,14 +75,13 @@ protected:
 
     void enableAllControls( bool bEnable );
 
-    enum BuzzerType { BuzzerEnterCalibration, BuzzerCancelCalibration, BuzzerCalibrationSucces, BuzzerClick, BuzzerNextPoint };
-    void playBuzzer( BuzzerType type );
-
-    int getIndexFromPart(ResponsePart Part);
-
     // override QLangManager::ILangChangeNotify
     virtual void TPDP_OnDTC(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, unsigned char *layerid, unsigned long *start_pos, unsigned long *end_pos, int cnt);
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+
+    // override QEventRedirection::IEventListener
+    virtual bool onKeyPress(QKeyEvent *evt);
+    virtual bool onKeyRelease(QKeyEvent *evt);
 
     void onFinishAutoRange();
 
@@ -73,6 +92,7 @@ protected:
 
     void showArrow();
     void hideArrow();
+    void updateRect(QRect rc);
 
     void analysisTouchObj();
 
@@ -84,28 +104,20 @@ public:
     
 private slots:
     void on_btnClose_clicked();
-
     void on_btnMain_clicked();
-
     void on_btnSub_clicked();
-
     void on_btnReset_clicked();
-
     void on_btnAutoRangeSetting_clicked();
-
     void on_btnRefresh_clicked();
-
     void on_btnSave_clicked();
-
     void on_chkAutoDetectionLine_clicked();
-
     void on_chkSimpleDetection_clicked();
-
     void on_chkInvertDetection_clicked();
 
 private:
     Dialog* m_pMainDlg;
     Ui::QDetectionDialog *ui;
+    QEventRedirection m_EventRedirect;
 };
 
 #endif // QDETECTIONDIALOG_H

@@ -26,7 +26,7 @@ void QDataProgressDialog::showEvent(QShowEvent *)
 
     ui->cmdAsyncMngr->setSensorCfgMode(m_bSetSensorCfg);
     ui->cmdAsyncMngr->setT3kDevice(m_pDevice);
-    ui->cmdAsyncMngr->start(-1);
+    ui->cmdAsyncMngr->start(-1, true);
 }
 
 void QDataProgressDialog::on_btnCancel_clicked()
@@ -70,7 +70,7 @@ void QDataProgressDialog::onChangeLanguage()
     s_bIsR2L = bIsR2L;
 }
 
-void QDataProgressDialog::onFinish(bool bResult, int nReason)
+void QDataProgressDialog::onFinish(bool bResult, int /*nReason*/)
 {
     if (bResult)
     {

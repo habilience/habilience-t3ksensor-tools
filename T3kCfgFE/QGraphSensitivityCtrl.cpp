@@ -69,7 +69,7 @@ void QGraphSensitivityCtrl::paintEvent(QPaintEvent *)
         rcItem.setY( rcBody.bottom() - fItemH * (i+1) );
         rcItem.setHeight( fItemH );
 
-        if (i > m_nStep)
+        if (i > m_nStep || !isEnabled())
             drawItem( p, rcItem, -1 );
         else
             drawItem( p, rcItem, nLevel );

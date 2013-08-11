@@ -6,15 +6,16 @@
 class QMyApplication : public QApplication
 {
     Q_OBJECT
+
 private:
     bool    m_bWatchMouseMovement;
+
+protected:
+    virtual bool eventFilter(QObject *, QEvent *);
 public:
     explicit QMyApplication(int &argc, char **argv);
 
     void setMonitoringMouseMovement( bool bMonitoring );
-
-protected:
-    virtual bool eventFilter(QObject *obj, QEvent *evt);
     
 signals:
     void mouseMoved();

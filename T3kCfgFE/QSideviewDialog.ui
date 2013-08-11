@@ -16,7 +16,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Sideview</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -777,6 +777,29 @@
    <header>QBorderStyleEdit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>btnCam1</tabstop>
+  <tabstop>btnCam2</tabstop>
+  <tabstop>btnCam1_1</tabstop>
+  <tabstop>btnCam2_1</tabstop>
+  <tabstop>btnDetectLineUp</tabstop>
+  <tabstop>txtEdtDetectLine</tabstop>
+  <tabstop>btnDetectLineDn</tabstop>
+  <tabstop>btnLight1Dec</tabstop>
+  <tabstop>txtEdtLight1</tabstop>
+  <tabstop>btnLight1Inc</tabstop>
+  <tabstop>btnLight2Dec</tabstop>
+  <tabstop>txtEdtLight2</tabstop>
+  <tabstop>btnLight2Inc</tabstop>
+  <tabstop>btnLight3Dec</tabstop>
+  <tabstop>txtEdtLight3</tabstop>
+  <tabstop>btnLight3Inc</tabstop>
+  <tabstop>btnReset</tabstop>
+  <tabstop>btnRemoteSideview</tabstop>
+  <tabstop>btnRefresh</tabstop>
+  <tabstop>btnSave</tabstop>
+  <tabstop>btnClose</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

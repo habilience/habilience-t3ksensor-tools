@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QT3kDeviceEventHandler.h>
 #include "QLangManager.h"
+#include "QEventRedirection.h"
 
 namespace Ui {
 class Dialog;
@@ -15,6 +16,7 @@ class QBentAdjustmentDialog;
 class QTouchSettingDialog;
 class QSelectDeviceDialog;
 class Dialog : public QDialog, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
+        , public QEventRedirection::IEventListener
 {
     Q_OBJECT
 
@@ -64,12 +66,6 @@ private:
         char            szModel[256];
     };
 
-#define IDX_MM      (0)
-#define IDX_CM1     (1)
-#define IDX_CM2     (2)
-#define IDX_CM1_1   (3)
-#define IDX_CM2_1   (4)
-#define IDX_MAX     (5)
     SensorAppInfo      m_SensorAppInfo[IDX_MAX];
     SensorAppInfo      m_TempSensorAppInfo[IDX_MAX];
 
@@ -111,6 +107,16 @@ protected:
 
     // override QLangManager::ILangChangeNotify
     virtual void onChangeLanguage();
+
+    QEventRedirection   m_EventRedirect;
+    // override QEventRedirection::IEventListener
+    virtual void onRButtonClicked();
+    virtual void onRButtonDblClicked();
+    virtual bool onKeyPress(QKeyEvent *evt);
+    virtual bool onMouseWheel(QWheelEvent *evt);
+
+    void focusChangeToNextShortcutWidget(bool bDirection);
+    bool isShortcutWidget(QWidget* widget);
 
 public:
     explicit Dialog(QWidget *parent = 0);

@@ -18,6 +18,8 @@
 #include "QSelectSensorDataDialog.h"
 #include "../common/T3kConstStr.h"
 
+#include "QBentCfgParam.h"
+
 #include "t3kcomdef.h"
 
 #include "QSelectDeviceDialog.h"
@@ -48,6 +50,7 @@ inline QFont::Weight weightFromInteger(long weight)
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
+    m_EventRedirect(this),
     ui(new Ui::Dialog)
 {
     m_bFirmwareDownload = false;
@@ -93,25 +96,33 @@ Dialog::Dialog(QWidget *parent) :
     ui->btnTouchMark->setAlignment(QStyleButton::AlignCenter);
     ui->btnTouchMark->setCaptionFontHeight(15);
 
+    const int nMenuButtonMargin = 8;
+
     ui->btnSideview->setAlignment(QStyleButton::AlignLeft);
     ui->btnSideview->setCaptionFontHeight(19);
-    ui->btnSideview->setMargin( 5, 0, 0, 0 );
+    ui->btnSideview->setMargin( nMenuButtonMargin, 0, 0, 0 );
+    qDebug( "xxx: %s", ui->btnSideview->testAttribute(Qt::WA_NoMousePropagation) ? "true" : "false" );
 
     ui->btnDetection->setAlignment(QStyleButton::AlignLeft);
     ui->btnDetection->setCaptionFontHeight(19);
-    ui->btnDetection->setMargin( 5, 0, 0, 0 );
+    ui->btnDetection->setMargin( nMenuButtonMargin, 0, 0, 0 );
 
     ui->btnBentAdjustment->setAlignment(QStyleButton::AlignLeft);
     ui->btnBentAdjustment->setCaptionFontHeight(19);
-    ui->btnBentAdjustment->setMargin( 5, 0, 0, 0 );
+    ui->btnBentAdjustment->setMargin( nMenuButtonMargin, 0, 0, 0 );
 
     ui->btnTouchSetting->setAlignment(QStyleButton::AlignLeft);
     ui->btnTouchSetting->setCaptionFontHeight(19);
-    ui->btnTouchSetting->setMargin( 5, 0, 0, 0 );
+    ui->btnTouchSetting->setMargin( nMenuButtonMargin, 0, 0, 0 );
 
     ui->lblSoftlogicInfo->setVisible(false);
     ui->btnTouchMark->setVisible(false);
-    ui->chkSafeMode->setVisible(false);
+    if (ui->chkSafeMode->isVisible())
+    {
+        ui->chkSafeMode->setVisible(false);
+        ui->layoutMid->removeWidget(ui->chkSafeMode);
+        ui->layoutMid->removeItem(ui->spacerBody);
+    }
 
     ui->cmdAsyncMngr->setVisible(false);
 
@@ -144,7 +155,17 @@ Dialog::Dialog(QWidget *parent) :
     m_fntErrorTitle.setBold(true);
     m_fntErrorDetail.setBold(false);
 
-    installEventFilter(this);
+    //installEventFilter(this);
+    m_EventRedirect.installEventListener(this);
+    installEventFilter(&m_EventRedirect);
+    ui->btnBentAdjustment->installEventFilter(&m_EventRedirect);
+    ui->btnDetection->installEventFilter(&m_EventRedirect);
+    ui->btnExit->installEventFilter(&m_EventRedirect);
+    ui->btnReset->installEventFilter(&m_EventRedirect);
+    ui->btnSelectSensor->installEventFilter(&m_EventRedirect);
+    ui->btnSideview->installEventFilter(&m_EventRedirect);
+    ui->btnTouchMark->installEventFilter(&m_EventRedirect);
+    ui->btnTouchSetting->installEventFilter(&m_EventRedirect);
 }
 
 Dialog::~Dialog()
@@ -162,8 +183,6 @@ void Dialog::onCreate()
 
 void Dialog::onDestroy()
 {
-    closeAllSubMenuDialogs();
-
     if (m_TimerReconnect)
     {
         killTimer(m_TimerReconnect);
@@ -368,7 +387,12 @@ void Dialog::onInitDialog()
 
         ui->btnReset->setEnabled(true);
         ui->btnTouchMark->setEnabled(true);
-        ui->chkSafeMode->setVisible(false);
+        if (ui->chkSafeMode->isVisible())
+        {
+            ui->chkSafeMode->setVisible(false);
+            ui->layoutMid->removeWidget(ui->chkSafeMode);
+            ui->layoutMid->removeItem(ui->spacerBody);
+        }
     }
     else
     {
@@ -379,7 +403,12 @@ void Dialog::onInitDialog()
 
         ui->btnReset->setEnabled(false);
         ui->btnTouchMark->setEnabled(false);
-        ui->chkSafeMode->setVisible(true);
+        if (!ui->chkSafeMode->isVisible())
+        {
+            ui->layoutMid->addItem(ui->spacerBody);
+            ui->layoutMid->addWidget(ui->chkSafeMode);
+            ui->chkSafeMode->setVisible(true);
+        }
     }
 
     // restore window position
@@ -570,7 +599,10 @@ void Dialog::paintEvent(QPaintEvent */*evt*/)
 
         int nTitleOffsetY = 0;
         int nTitleOffsetX = 0;
+
+        int nBtm = ui->line->frameGeometry().top();
         QRect rcText = rcBody;
+        rcText.setBottom(nBtm);
         if (!strWarningDetail.isEmpty())
         {
             QFontMetrics fntMetrics(m_fntErrorTitle);
@@ -607,6 +639,9 @@ void Dialog::paintEvent(QPaintEvent */*evt*/)
 
 void Dialog::closeEvent(QCloseEvent *evt)
 {
+    if (!closeAllSubMenuDialogs())
+        evt->ignore();
+
     if (evt->type() == QEvent::Close)
     {
         onDestroy();
@@ -676,7 +711,12 @@ void Dialog::onDeviceConnected()
 
     ui->btnReset->setEnabled(true);
     ui->btnTouchMark->setEnabled(true);
-    ui->chkSafeMode->setVisible(false);
+    if (ui->chkSafeMode->isVisible())
+    {
+        ui->chkSafeMode->setVisible(false);
+        ui->layoutMid->removeWidget(ui->chkSafeMode);
+        ui->layoutMid->removeItem(ui->spacerBody);
+    }
 
     setInstantMode(T3K_HID_MODE_COMMAND);
     QT3kDevice* pDevice = QT3kDevice::instance();
@@ -690,31 +730,11 @@ void Dialog::onDeviceConnected()
     {
         if (!ui->btnTouchMark->isVisible())
         {
-            QRect rc = ui->btnReset->frameGeometry();
-            int nBtnHeight = rc.height() - 1;
-            nBtnHeight /= 2;
-            ui->btnReset->move( rc.left(), rc.top() );
-            ui->btnReset->resize( rc.width(), nBtnHeight );
-            ui->btnTouchMark->move( rc.left(), rc.top() + nBtnHeight + 2 );
-            ui->btnTouchMark->resize( rc.width(), nBtnHeight );
-            ui->btnReset->setCaptionFontHeight(15);
-
             ui->btnTouchMark->setVisible(true);
         }
         else
         {
-            if (ui->btnTouchMark->isVisible())
-            {
-                QRect rc = ui->btnReset->frameGeometry();
-                int nBtnHeight = rc.height();
-                nBtnHeight *= 2;
-                nBtnHeight += 2;
-                ui->btnReset->move( rc.left(), rc.top() );
-                ui->btnReset->resize( rc.width(), nBtnHeight );
-                ui->btnReset->setCaptionFontHeight(19);
-
-                ui->btnTouchMark->setVisible(false);
-            }
+            ui->btnTouchMark->setVisible(false);
         }
     }
 
@@ -749,7 +769,12 @@ void Dialog::onDeviceDisconnected()
     ui->btnBentAdjustment->setVisible(false);
     ui->btnTouchSetting->setVisible(false);
 
-    ui->chkSafeMode->setVisible(true);
+    if (!ui->chkSafeMode->isVisible())
+    {
+        ui->layoutMid->addItem(ui->spacerBody);
+        ui->layoutMid->addWidget(ui->chkSafeMode);
+        ui->chkSafeMode->setVisible(true);
+    }
     ui->btnReset->setEnabled(false);
     ui->btnTouchMark->setEnabled(false);
 
@@ -938,6 +963,9 @@ void Dialog::updateVersionInformation()
     if (m_SensorAppInfo[IDX_CM2].bIsValid) g_AppData.nCameraCount++;
     if (m_SensorAppInfo[IDX_CM1_1].bIsValid) g_AppData.nCameraCount++;
     if (m_SensorAppInfo[IDX_CM2_1].bIsValid) g_AppData.nCameraCount++;
+
+    for ( int i=0 ; i<IDX_MAX ; i++ )
+        g_AppData.cameraConnectionInfo[i] = m_SensorAppInfo[i].bIsValid;
 
     g_AppData.strFirmwareVersion = m_SensorAppInfo[IDX_MM].szVersion;
     g_AppData.strModelName = m_SensorAppInfo[IDX_MM].szModel;
@@ -1333,6 +1361,9 @@ void Dialog::onCloseMenu()
         if (ui->btnTouchSetting->isChecked())
             ui->btnTouchSetting->setChecked(false);
     }
+
+    m_oldMenu = MenuNone;
+    ui->btnReset->setEnabled(true);
 }
 
 bool Dialog::closeAllSubMenuDialogs()
@@ -1455,9 +1486,14 @@ void Dialog::switchMenu( SelectMenu menu )
             pCurrentDlg->resize(rcScreen.width(), rcScreen.height());
             pCurrentDlg->showFullScreen();
         }
-    }
 
-    m_oldMenu = menu;
+        m_oldMenu = menu;
+        ui->btnReset->setEnabled(false);
+    }
+    else
+    {
+        m_oldMenu = MenuNone;
+    }
 }
 
 void Dialog::on_btnSelectSensor_clicked()
@@ -1471,24 +1507,28 @@ void Dialog::on_btnSelectSensor_clicked()
 void Dialog::on_btnSideview_clicked()
 {
     LOG_B( "Sideview" );
+
     switchMenu(MenuSideview);
 }
 
 void Dialog::on_btnDetection_clicked()
 {
     LOG_B( "Detection" );
+
     switchMenu(MenuDetection);
 }
 
 void Dialog::on_btnBentAdjustment_clicked()
 {
     LOG_B( "Bent Adjustment" );
+
     switchMenu(MenuBentAdjustment);
 }
 
 void Dialog::on_btnTouchSetting_clicked()
 {
     LOG_B( "Touch Setting" );
+
     switchMenu(MenuTouchSetting);
 }
 
@@ -1618,17 +1658,17 @@ void Dialog::saveSensorDefaultSettings()
 
     /* bentadjustment section */
     dataProgressDlg.insertCommand( "# bentadjustment section" );
+
     // only margin!!
-    // TODO: !!!!!!!!!!!!
-    /*
+    QBentCfgParam* param = QBentCfgParam::instance();
+    char szTemp[256];
     snprintf( szTemp, 256, "{bent margin}=%d,%d,%d,%d,%d",
-              (int)(DBentAdjustment::s_fMarginLeft * 100 + .5f),
-              (int)(DBentAdjustment::s_fMarginUp * 100 + .5f),
-              (int)(DBentAdjustment::s_fMarginRight * 100 + .5f),
-              (int)(DBentAdjustment::s_fMarginDown * 100 + .5f),
-              (int)(DBentAdjustment::s_edDirection) );
+              (int)(param->marginLeft() * 100 + .5f),
+              (int)(param->marginTop() * 100 + .5f),
+              (int)(param->marginRight() * 100 + .5f),
+              (int)(param->marginBottom() * 100 + .5f),
+              param->direction() );
     dataProgressDlg.insertCommand( szTemp );
-    */
 
     /* sensor setting section */
     dataProgressDlg.insertCommand( "# sensor setting section" );
@@ -1854,14 +1894,9 @@ void Dialog::loadSensorDefaultSettings( bool bQuestion/*=true*/ )
                     if ( strValue.isEmpty() ) break;
                     nDirection = trim( strValue.left(nCP) ).toInt(0, 10);
 
-                    // TODO: !!!!!!!!!!!!!!
-                    /*
-                    DBentAdjustment::s_fMarginLeft = nMarginLeft/100.f;
-                    DBentAdjustment::s_fMarginUp = nMarginUp/100.f;
-                    DBentAdjustment::s_fMarginRight = nMarginRight/100.f;
-                    DBentAdjustment::s_fMarginDown = nMarginDown/100.f;
-                    DBentAdjustment::s_edDirection = (DBentAdjustment::ed)nDirection;
-                    */
+                    QBentCfgParam* param = QBentCfgParam::instance();
+                    param->setMargin(nMarginLeft/100.f, nMarginUp/100.f, nMarginRight/100.f, nMarginDown/100.f);
+                    param->setDirection( nDirection );
                 } while ( false );
             }
         }
@@ -1880,11 +1915,13 @@ void Dialog::loadSensorDefaultSettings( bool bQuestion/*=true*/ )
 void Dialog::on_btnTouchMark_clicked()
 {
     LOG_B( "Touch Mark Window..." );
+
 }
 
 void Dialog::on_btnExit_clicked()
 {
     LOG_B( "Exit" );
+
     close();
 }
 
@@ -1893,5 +1930,131 @@ void Dialog::on_chkSafeMode_clicked(bool checked)
     g_AppData.bIsSafeMode = checked;
     LOG_B( "Safe Mode: Checked(%s)", g_AppData.bIsSafeMode ? "true" : "false" );
 
+    ui->chkSafeMode->setFocus();
+
     update();
+}
+
+bool Dialog::isShortcutWidget(QWidget* widget)
+{
+    QWidget* shortcutWidgets[] = {
+        ui->btnSideview,
+        ui->btnDetection,
+        ui->btnBentAdjustment,
+        ui->btnTouchSetting,
+        ui->btnReset
+    };
+    int nCountOfWidgets = sizeof(shortcutWidgets) / sizeof(QWidget*);
+
+    for ( int i=0 ; i<nCountOfWidgets ; i++ )
+    {
+        if (shortcutWidgets[i] == widget)
+            return true;
+    }
+
+    return false;
+}
+
+void Dialog::focusChangeToNextShortcutWidget(bool bDirection)
+{
+    QWidget* shortcutWidgets[] = {
+        ui->btnSideview,
+        ui->btnDetection,
+        ui->btnBentAdjustment,
+        ui->btnTouchSetting,
+        ui->btnReset
+    };
+    int nCountOfWidgets = sizeof(shortcutWidgets) / sizeof(QWidget*);
+
+    QWidget* focus = focusWidget();
+    if (bDirection)
+    {
+        bool bIsShortcutWidget = false;
+        for ( int i=0 ; i<nCountOfWidgets ; i++ )
+        {
+            if (shortcutWidgets[i] == focus)
+            {
+                if (i != nCountOfWidgets-1)
+                    shortcutWidgets[i+1]->setFocus();
+                bIsShortcutWidget = true;
+            }
+        }
+
+        if (!bIsShortcutWidget)
+            shortcutWidgets[0]->setFocus();
+    }
+    else
+    {
+        bool bIsShortcutWidget = false;
+        for ( int i=nCountOfWidgets-1 ; i>=0 ; i-- )
+        {
+            if (shortcutWidgets[i] == focus)
+            {
+                if (i != 0)
+                    shortcutWidgets[i-1]->setFocus();
+                bIsShortcutWidget = true;
+            }
+        }
+
+        if (!bIsShortcutWidget)
+            shortcutWidgets[nCountOfWidgets-1]->setFocus();
+    }
+}
+
+bool Dialog::onKeyPress(QKeyEvent *evt)
+{
+    qDebug( "keypressed" );
+    if (evt->key() == Qt::Key_Control)
+    {
+        QLangRes& res = QLangManager::getResource();
+
+        QString strBtnTitle = ui->btnReset->text();
+        QString strResetText = res.getResString(MAIN_TAG, "BTN_CAPTION_RESET");
+        QString strSaveResetText = res.getResString(MAIN_TAG, "BTN_CAPTION_SAVE_RESET");
+
+        if (strBtnTitle == strResetText)
+        {
+            ui->btnReset->setText( strSaveResetText );
+            ui->btnReset->setAdditionalText( "", 2 );
+        }
+        else
+        {
+            ui->btnReset->setText( strResetText );
+            updateResetButton();
+        }
+        return true;
+    }
+    else if (evt->key() == Qt::Key_Escape)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Dialog::onMouseWheel(QWheelEvent *evt)
+{
+    int nDelta = evt->delta();
+
+    qDebug( "wheel" );
+
+    focusChangeToNextShortcutWidget( nDelta < 0 );
+
+    return true;
+}
+
+void Dialog::onRButtonClicked()
+{
+    qDebug( "rbutton clicked" );
+
+    QWidget* focus = focusWidget();
+    if (isShortcutWidget(focus))
+    {
+        QPushButton* btnWidget = (QPushButton*)focus;
+        btnWidget->click();
+    }
+}
+
+void Dialog::onRButtonDblClicked()
+{
+    qDebug( "rbutton dblclicked" );
 }

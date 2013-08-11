@@ -30,6 +30,7 @@ public:
     void writeV( const QString& strTag, const QString& strFormatV );
 
     void operator()( const char* szFormat, ... );
+    void operator()( const QString& strLog );
 
 protected:
     void getLogPathName( QDateTime& time, QString& strLogPathName );
