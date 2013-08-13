@@ -5,6 +5,7 @@
 #include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "t3kcomdef.h"
+#include "QEventRedirection.h"
 
 namespace Ui {
 class QSideviewDialog;
@@ -12,7 +13,10 @@ class QSideviewDialog;
 
 class Dialog;
 class QBorderStyleEdit;
-class QSideviewDialog : public QDialog, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
+class QSideviewDialog : public QDialog
+        , public QT3kDeviceEventHandler::IListener
+        , public QLangManager::ILangChangeNotify
+        , public QEventRedirection::IEventListener
 {
     Q_OBJECT
 
@@ -38,15 +42,17 @@ private:
     uchar*  m_pImgTempBuffer;
 
     QRect   m_rcUpdateImage;
-
 protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void timerEvent(QTimerEvent *evt);
     virtual void closeEvent(QCloseEvent *);
-    virtual bool eventFilter(QObject *obj, QEvent *evt);
 
-    virtual void reject();
-    virtual void accept();
+    // override QEventRedirection::IEventListener
+    virtual bool onKeyPress(QKeyEvent *evt);
+    virtual bool onKeyRelease(QKeyEvent *evt);
+    virtual bool onMouseWheel(QWheelEvent *evt);
+    virtual void onRButtonClicked();
+    virtual bool onRButtonDblClicked();
 
     // override QLangManager::ILangChangeNotify
     virtual void onChangeLanguage();
@@ -89,6 +95,9 @@ public:
     bool canClose();
     
 private slots:
+    virtual void reject();
+    virtual void accept();
+
     void onGlobalMouseMoved();
     void onEditModified(QBorderStyleEdit* pEdit, int nValue, double dValue);
 
@@ -112,6 +121,7 @@ private slots:
 private:
     Dialog*     m_pMainDlg;
     Ui::QSideviewDialog *ui;
+    QEventRedirection m_EventRedirect;
 };
 
 #endif // QSIDEVIEWDIALOG_H

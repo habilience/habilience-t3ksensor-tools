@@ -45,7 +45,7 @@ public:
     void updateGraph();
     bool isSetUpdateGraph();
     void setUpdateGraph(bool bSet);
-    void installEventFilterForTextEdit(QObject* obj);
+    void installEventFilterForEventRedirect(QObject* obj);
 
 protected:
     virtual void timerEvent(QTimerEvent *);

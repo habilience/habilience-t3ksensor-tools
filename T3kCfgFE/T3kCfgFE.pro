@@ -162,7 +162,11 @@ SOURCES += main.cpp\
     QEventRedirection.cpp \
     QBentCfgParam.cpp \
     QArrowButton.cpp \
-    t3kcomdef.cpp
+    t3kcomdef.cpp \
+    QPointClipper.cpp \
+    QBentProgressDialog.cpp \
+    QCalcCamValue.cpp \
+    QAutoRangeCompleteDialog.cpp
 
 HEADERS  += dialog.h \
     QStyleButton.h \
@@ -200,7 +204,11 @@ HEADERS  += dialog.h \
     QDetectionGraphWidget.h \
     QEventRedirection.h \
     QBentCfgParam.h \
-    QArrowButton.h
+    QArrowButton.h \
+    QPointClipper.h \
+    QBentProgressDialog.h \
+    QCalcCamValue.h \
+    QAutoRangeCompleteDialog.h
 
 FORMS    += dialog.ui \
     QSelectSensorDataDialog.ui \
@@ -212,7 +220,9 @@ FORMS    += dialog.ui \
     QBentAdjustmentDialog.ui \
     QTouchSettingDialog.ui \
     QAreaSettingForm.ui \
-    QDetectionGraphForm.ui
+    QDetectionGraphForm.ui \
+    QBentProgressDialog.ui \
+    QAutoRangeCompleteDialog.ui
 
 RESOURCES += \
     T3kCfgFE.qrc

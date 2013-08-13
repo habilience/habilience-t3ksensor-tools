@@ -23,8 +23,10 @@
 #define PREVIEW_COUNT_DOWN      (10*2)      // 10 secs by 500m timer
 
 QSideviewDialog::QSideviewDialog(Dialog *parent) :
-    QDialog(parent), m_pMainDlg(parent),
-    ui(new Ui::QSideviewDialog)
+    QDialog(parent),
+    m_pMainDlg(parent),
+    ui(new Ui::QSideviewDialog),
+    m_EventRedirect(this)
 {
     ui->setupUi(this);
     QT3kDevice* pDevice = QT3kDevice::instance();
@@ -130,6 +132,9 @@ QSideviewDialog::QSideviewDialog(Dialog *parent) :
     ui->btnCam2->setEnabled(g_AppData.cameraConnectionInfo[IDX_CM2]);
     ui->btnCam1_1->setEnabled(g_AppData.cameraConnectionInfo[IDX_CM1_1]);
     ui->btnCam2_1->setEnabled(g_AppData.cameraConnectionInfo[IDX_CM2_1]);
+
+    m_EventRedirect.installEventListener(this);
+    installEventFilter(&m_EventRedirect);
 }
 
 QSideviewDialog::~QSideviewDialog()
@@ -560,50 +565,88 @@ void QSideviewDialog::closeEvent(QCloseEvent *evt)
     LOG_I( "Exit [Sideview]" );
 }
 
-bool QSideviewDialog::eventFilter(QObject *obj, QEvent *evt)
+bool QSideviewDialog::onKeyPress(QKeyEvent */*evt*/)
 {
-    switch (evt->type())
+    stopPreviewCountDown();
+    return false;
+}
+
+bool QSideviewDialog::onKeyRelease(QKeyEvent *evt)
+{
+    if ( (evt->key() == Qt::Key_Enter) ||
+         (evt->key() == Qt::Key_Return) )
     {
-    default:
-        break;
-    case QEvent::Wheel:
+        QWidget* pWidget = focusWidget();
+        if (pWidget->objectName().indexOf("txtEdt") >= 0)
         {
-            QWheelEvent* wheelEvt = (QWheelEvent*)evt;
-            int delta = wheelEvt->delta();
-            if (delta > 0)
-            {
-                LOG_I( "From Mouse Shortcut(WHEEL UP)" );
-                on_btnDetectLineUp_clicked();
-            }
-            else
-            {
-                LOG_I( "From Mouse Shortcut(WHEEL DN)" );
-                on_btnDetectLineDn_clicked();
-            }
+            pWidget->clearFocus();
+            ui->lblFocusStealer->setFocus();
+            return true;
         }
-        break;
-    case QEvent::KeyPress:
+    }
+    return false;
+}
+
+bool QSideviewDialog::onMouseWheel(QWheelEvent *evt)
+{
+    int delta = evt->delta();
+    if (delta > 0)
+    {
+        LOG_I( "From Mouse Shortcut(WHEEL UP)" );
+        on_btnDetectLineUp_clicked();
+    }
+    else
+    {
+        LOG_I( "From Mouse Shortcut(WHEEL DN)" );
+        on_btnDetectLineDn_clicked();
+    }
+    return false;
+}
+
+void QSideviewDialog::onRButtonClicked()
+{
+    if (m_TimerPreviewCountDown && (m_nPreviewCountDown < (PREVIEW_COUNT_DOWN-1)) )
+    {
         stopPreviewCountDown();
-        break;
-    case QEvent::KeyRelease:
-        {
-            QKeyEvent* keyEvt = (QKeyEvent*)evt;
-            if ( (keyEvt->key() == Qt::Key_Enter) ||
-                 (keyEvt->key() == Qt::Key_Return) )
-            {
-                QWidget* pWidget = focusWidget();
-                if (pWidget->objectName().indexOf("txtEdt") >= 0)
-                {
-                    pWidget->clearFocus();
-                    ui->lblFocusStealer->setFocus();
-                    return true;
-                }
-            }
-        }
-        break;
     }
 
-    return QDialog::eventFilter(obj, evt);
+    LOG_I( "From Mouse Shortcut(RBUTTON CLICK)" );
+
+    int nNextCameraIndex = -1;
+    for (int i=m_nCurrentCameraIndex+1 ; i<IDX_MAX ; i++)
+    {
+        if (g_AppData.cameraConnectionInfo[i])
+        {
+            nNextCameraIndex = i;
+            break;
+        }
+    }
+
+    if (nNextCameraIndex < 0)
+        nNextCameraIndex = IDX_CM1;
+
+    switch (nNextCameraIndex)
+    {
+    case IDX_CM1:
+        on_btnCam1_clicked();
+        break;
+    case IDX_CM2:
+        on_btnCam2_clicked();
+        break;
+    case IDX_CM1_1:
+        on_btnCam1_1_clicked();
+        break;
+    case IDX_CM2_1:
+        on_btnCam2_1_clicked();
+        break;
+    }
+}
+
+bool QSideviewDialog::onRButtonDblClicked()
+{
+    LOG_I( "From Mouse Shortcut(RBUTTON DOUBLE CLICK)" );
+    on_btnSave_clicked();
+    return true;
 }
 
 void QSideviewDialog::onGlobalMouseMoved()
@@ -1225,6 +1268,7 @@ void QSideviewDialog::on_btnSave_clicked()
 void QSideviewDialog::on_btnCam1_clicked()
 {
     LOG_B( "Cam1" );
+    ui->btnCam1->setFocus();
     ui->btnCam1->setChecked(true);
     ui->btnCam2->setChecked(false);
     ui->btnCam1_1->setChecked(false);
@@ -1237,6 +1281,7 @@ void QSideviewDialog::on_btnCam1_clicked()
 void QSideviewDialog::on_btnCam2_clicked()
 {
     LOG_B( "Cam2" );
+    ui->btnCam2->setFocus();
     ui->btnCam1->setChecked(false);
     ui->btnCam2->setChecked(true);
     ui->btnCam1_1->setChecked(false);
@@ -1249,6 +1294,7 @@ void QSideviewDialog::on_btnCam2_clicked()
 void QSideviewDialog::on_btnCam1_1_clicked()
 {
     LOG_B( "Cam1-1" );
+    ui->btnCam1_1->setFocus();
     ui->btnCam1->setChecked(false);
     ui->btnCam2->setChecked(false);
     ui->btnCam1_1->setChecked(true);
@@ -1261,6 +1307,7 @@ void QSideviewDialog::on_btnCam1_1_clicked()
 void QSideviewDialog::on_btnCam2_1_clicked()
 {
     LOG_B( "Cam2-1" );
+    ui->btnCam2_1->setFocus();
     ui->btnCam1->setChecked(false);
     ui->btnCam2->setChecked(false);
     ui->btnCam1_1->setChecked(false);

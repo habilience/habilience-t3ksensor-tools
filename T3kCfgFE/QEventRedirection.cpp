@@ -12,7 +12,7 @@ QEventRedirection::QEventRedirection(QObject *parent) :
     m_bRButtonDblClicked = false;
 }
 
-bool QEventRedirection::eventFilter(QObject */*obj*/, QEvent *evt)
+bool QEventRedirection::eventFilter(QObject *obj, QEvent *evt)
 {
     if (evt->type() == QEvent::KeyPress)
     {
@@ -49,7 +49,7 @@ bool QEventRedirection::eventFilter(QObject */*obj*/, QEvent *evt)
         QMouseEvent* mouseEvt = (QMouseEvent*)evt;
         if (mouseEvt->button() == Qt::RightButton)
         {
-            //qDebug( "r release: %s", (const char*)obj->objectName().toLatin1() );
+            qDebug( "r release: %s", (const char*)obj->objectName().toLatin1() );
             if (m_bRButtonDblClicked)
             {
                 m_bRButtonDblClicked = false;
@@ -76,9 +76,10 @@ bool QEventRedirection::eventFilter(QObject */*obj*/, QEvent *evt)
         {
             if (m_pListener)
             {
-                //qDebug( "r dblclk: %s", (const char*)obj->objectName().toLatin1() );
+                qDebug( "r dblclk: %s", (const char*)obj->objectName().toLatin1() );
                 m_bRButtonDblClicked = true;
-                m_pListener->onRButtonDblClicked();
+                if (m_pListener->onRButtonDblClicked())
+                    return true;
             }
         }
     }

@@ -94,7 +94,7 @@ QDetectionGraphForm::~QDetectionGraphForm()
     delete ui;
 }
 
-void QDetectionGraphForm::installEventFilterForTextEdit(QObject* obj)
+void QDetectionGraphForm::installEventFilterForEventRedirect(QObject* obj)
 {
     ui->txtEdtAutoOffset->installEventFilter(obj);
     ui->txtEdtGain->installEventFilter(obj);
@@ -102,6 +102,7 @@ void QDetectionGraphForm::installEventFilterForTextEdit(QObject* obj)
     ui->txtEdtOffset->installEventFilter(obj);
     ui->txtEdtRightRange->installEventFilter(obj);
     ui->txtEdtThreshold->installEventFilter(obj);
+    ui->widgetDetectionGraph->installEventFilter(obj);
 }
 
 void QDetectionGraphForm::onChangeLanguage()

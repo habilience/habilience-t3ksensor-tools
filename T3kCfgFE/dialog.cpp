@@ -2003,7 +2003,6 @@ void Dialog::focusChangeToNextShortcutWidget(bool bDirection)
 
 bool Dialog::onKeyPress(QKeyEvent *evt)
 {
-    qDebug( "keypressed" );
     if (evt->key() == Qt::Key_Control)
     {
         QLangRes& res = QLangManager::getResource();
@@ -2044,17 +2043,11 @@ bool Dialog::onMouseWheel(QWheelEvent *evt)
 
 void Dialog::onRButtonClicked()
 {
-    qDebug( "rbutton clicked" );
-
     QWidget* focus = focusWidget();
     if (isShortcutWidget(focus))
     {
+        LOG_I( "From Mouse Shortcut(RBUTTON CLICK)" );
         QPushButton* btnWidget = (QPushButton*)focus;
         btnWidget->click();
     }
-}
-
-void Dialog::onRButtonDblClicked()
-{
-    qDebug( "rbutton dblclicked" );
 }

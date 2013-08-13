@@ -20,7 +20,7 @@ public:
         virtual bool onKeyPress( QKeyEvent* evt ) { UNUSE_ARG(evt); return false; }
         virtual bool onKeyRelease( QKeyEvent* evt ) { UNUSE_ARG(evt); return false; }
 
-        virtual void onRButtonDblClicked() {}
+        virtual bool onRButtonDblClicked() { return false; }
         virtual void onRButtonClicked() {}
         virtual bool onMouseWheel( QWheelEvent* evt ) { UNUSE_ARG(evt); return false; }
     };

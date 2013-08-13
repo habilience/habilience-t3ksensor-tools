@@ -21,6 +21,11 @@
 #include <QtNumeric>
 #include "t3kcomdef.h"
 #include "../common/T3kConstStr.h"
+#include "QSensorInitDataCfg.h"
+
+#include "QBentProgressDialog.h"
+#include <QEvent>
+#include "QCalcCamValue.h"
 
 #define NaN ((float)qQNaN())
 #define WAIT_ANIMATION_FRAME	(10)
@@ -206,6 +211,7 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog *parent) :
     }
     ui->lblScreenInformation->setText( strScreenInformation );
 
+    m_EventRedirect.installEventListener(this);
     installEventFilter(&m_EventRedirect);
 
     QBorderStyleEdit* edits[] = {
@@ -221,6 +227,8 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog *parent) :
         edits[i]->setMaxTextLength(2);
         edits[i]->setFloatStyle(false);
 
+        edits[i]->installEventFilter(&m_EventRedirect);
+
         connect( edits[i], SIGNAL(editModified(QBorderStyleEdit*,int,double)), SLOT(onEditModified(QBorderStyleEdit*,int,double)) );
     }
 
@@ -232,29 +240,11 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog *parent) :
     m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_OBJECT );
     ui->cmdAsyncMngr->setT3kDevice(QT3kDevice::instance());
 
-    // request information
-    if (ui->cmdAsyncMngr->isStarted())
-    {
-        ui->cmdAsyncMngr->stop();
-        ui->cmdAsyncMngr->resetCommands();
-    }
+    requestSensorData( cmdLoadFactoryDefault, false );
 
-    QString strCmd;
-    strCmd = sCam1 + cstrFactorialCamPos + "?";
-    ui->cmdAsyncMngr->insertCommand(strCmd);
-    strCmd = sCam2 + cstrFactorialCamPos + "?";
-    ui->cmdAsyncMngr->insertCommand(strCmd);
-    if ( g_AppData.bIsSubCameraExist )
-    {
-        strCmd = sCam1_1 + cstrFactorialCamPos + "?";
-        ui->cmdAsyncMngr->insertCommand(strCmd);
-        strCmd = sCam2_1 + cstrFactorialCamPos + "?";
-        ui->cmdAsyncMngr->insertCommand(strCmd);
-    }
-    strCmd = QString(cstrAreaC) + "?";
-    ui->cmdAsyncMngr->insertCommand(strCmd);
+    m_TimerBlinkCursor = startTimer(500);
 
-    ui->cmdAsyncMngr->start( (unsigned int)-1 );
+    ui->btnUp->setFocus();
 }
 
 QBentAdjustmentDialog::~QBentAdjustmentDialog()
@@ -331,6 +321,7 @@ bool QBentAdjustmentDialog::onKeyPress(QKeyEvent *evt)
         if (m_bEnterAdjustmentMode)
         {
             leaveAdjustmentMode( false );
+            requestSensorData(cmdRefresh, false);
             return true;
         }
         else
@@ -357,6 +348,112 @@ bool QBentAdjustmentDialog::onKeyRelease(QKeyEvent *evt)
         }
     }
     return false;
+}
+
+bool QBentAdjustmentDialog::onMouseWheel(QWheelEvent *evt)
+{
+    int nDelta = evt->delta();
+
+    qDebug( "wheel" );
+
+    focusChangeToNextShortcutWidget( nDelta < 0 );
+
+    return true;
+}
+
+void QBentAdjustmentDialog::onRButtonClicked()
+{
+    if (!m_bEnterAdjustmentMode)
+    {
+        QWidget* focus = focusWidget();
+        if (isShortcutWidget(focus))
+        {
+            LOG_I( "From Mouse Shortcut(RBUTTON CLICK)" );
+            QPushButton* btnWidget = (QPushButton*)focus;
+            btnWidget->click();
+        }
+    }
+}
+
+bool QBentAdjustmentDialog::onRButtonDblClicked()
+{
+    LOG_I( "From Mouse Shortcut(RBUTTON DOUBLE CLICK)" );
+    if (m_bEnterAdjustmentMode)
+    {
+        leaveAdjustmentMode( false );
+        requestSensorData(cmdRefresh, false);
+        return true;
+    }
+    else
+    {
+        on_btnSave_clicked();
+        return true;
+    }
+    return false;
+}
+
+bool QBentAdjustmentDialog::isShortcutWidget(QWidget* widget)
+{
+    QWidget* shortcutWidgets[] = {
+        ui->btnUp,
+        ui->btnRight,
+        ui->btnDown,
+        ui->btnLeft
+    };
+    int nCountOfWidgets = sizeof(shortcutWidgets) / sizeof(QWidget*);
+
+    for ( int i=0 ; i<nCountOfWidgets ; i++ )
+    {
+        if (shortcutWidgets[i] == widget)
+            return true;
+    }
+
+    return false;
+}
+
+void QBentAdjustmentDialog::focusChangeToNextShortcutWidget(bool bDirection)
+{
+    QWidget* shortcutWidgets[] = {
+        ui->btnUp,
+        ui->btnRight,
+        ui->btnDown,
+        ui->btnLeft
+    };
+    int nCountOfWidgets = sizeof(shortcutWidgets) / sizeof(QWidget*);
+
+    QWidget* focus = focusWidget();
+    if (bDirection)
+    {
+        bool bIsShortcutWidget = false;
+        for ( int i=0 ; i<nCountOfWidgets ; i++ )
+        {
+            if (shortcutWidgets[i] == focus)
+            {
+                if (i != nCountOfWidgets-1)
+                    shortcutWidgets[i+1]->setFocus();
+                bIsShortcutWidget = true;
+            }
+        }
+
+        if (!bIsShortcutWidget)
+            shortcutWidgets[0]->setFocus();
+    }
+    else
+    {
+        bool bIsShortcutWidget = false;
+        for ( int i=nCountOfWidgets-1 ; i>=0 ; i-- )
+        {
+            if (shortcutWidgets[i] == focus)
+            {
+                if (i != 0)
+                    shortcutWidgets[i-1]->setFocus();
+                bIsShortcutWidget = true;
+            }
+        }
+
+        if (!bIsShortcutWidget)
+            shortcutWidgets[nCountOfWidgets-1]->setFocus();
+    }
 }
 
 bool QBentAdjustmentDialog::loadDefaultSettingValues()
@@ -477,22 +574,177 @@ void QBentAdjustmentDialog::updateData( bool bSaveAndValidate )
 
 void QBentAdjustmentDialog::enterAdjustmentMode()
 {
+    LOG_I( "enter adjustment mode" );
     setCursor(QCursor(Qt::BlankCursor));
+    showAllButtons(false);
+
+    QT3kDevice* pDevice = QT3kDevice::instance();
+
+    // reset camera enabler
+    QString strCmd;
+    strCmd = QString("cam_enable=") + "**";
+    int nRetry = 3;
+    bool bCamEnableOK = false;
+    do
+    {
+        if (pDevice->sendCommand(strCmd, false))
+        {
+            bCamEnableOK = true;
+            break;
+        }
+    } while (--nRetry > 0);
+
+    if (!bCamEnableOK)
+    {
+        showMessageBox( this, "Command sending fail. \"cam_enable\"", "Error", QMessageBox::Critical, QMessageBox::Ok, QMessageBox::Ok );
+        return;
+    }
+
+    if (m_TimerShowButtons)
+    {
+        killTimer(m_TimerShowButtons);
+        m_TimerShowButtons = 0;
+    }
+    if (m_TimerHideButtons)
+    {
+        killTimer(m_TimerHideButtons);
+        m_TimerHideButtons = 0;
+    }
+
+    m_nBentProgress = 0;
+
+    m_BentItemArray.clear();
+    m_bEnterAdjustmentMode = true;
+    m_bIsValidTouch = false;
+    m_nValidTouchCount = 0;
+    m_cError = m_cNG = 0;
+    m_nAdjustmentStep = 0;
+
+    playBuzzer( BuzzerEnterCalibration );
+
+    update();
+
+    QPoint ptRemote = getRemoteCursorPos(m_nAdjustmentStep);
+    remoteCursor( true, false, ptRemote.x(), ptRemote.y(), 0 );
+    m_nWaitCountDown = WAIT_TOUCH_TIME;
+    if (m_TimerDrawWaitTimeout)
+    {
+        killTimer(m_TimerDrawWaitTimeout);
+    }
+    m_TimerDrawWaitTimeout = startTimer( 1000 / WAIT_ANIMATION_FRAME );
 }
 
 void QBentAdjustmentDialog::leaveAdjustmentMode( bool bSuccess )
 {
+    LOG_I( "leave adjustment mode" );
+    m_nAdjustmentStep = 0;
+    m_bIsValidTouch = false;
+    m_nValidTouchCount = 0;
+
+    m_bIsTouchOK = false;
+    m_nTouchCount = 0;
+
+    m_bEnterAdjustmentMode = false;
+    m_bShowCursor = false;
+    update( m_rcCursor );
+
+    playBuzzer( bSuccess ? BuzzerCalibrationSucces : BuzzerCancelCalibration );
+
+    if (bSuccess)
+    {
+        m_bBentAdjustmentPerformed = true;
+        m_bIsModified = true;
+    }
+    else
+    {
+        m_BentItemArray.clear();
+        m_bIsModified = false;
+    }
+
     setCursor(QCursor(Qt::ArrowCursor));
+    showAllButtons(true);
+
+    update();
+
+    remoteCursor( false );
+    m_bDrawWaitTimeout = false;
+    if (m_TimerDrawWaitTimeout)
+    {
+        killTimer(m_TimerDrawWaitTimeout);
+        m_TimerDrawWaitTimeout = 0;
+    }
 }
 
 void QBentAdjustmentDialog::enableAllControls(bool bEnable)
 {
-
+    ui->widgetBentDirMargin->setEnabled(bEnable);
+    ui->btnReset->setEnabled(bEnable);
+    ui->btnSave->setEnabled(bEnable);
+    ui->btnClose->setEnabled(bEnable);
 }
 
 void QBentAdjustmentDialog::on_btnClose_clicked()
 {
     close();
+}
+
+void QBentAdjustmentDialog::timerEvent(QTimerEvent *evt)
+{
+    if (evt->timerId() == m_TimerReCheckPoint)
+    {
+        m_bIsValidTouch = true;
+        setInvalidTouch();
+
+        for ( int i=0 ; i<m_BentItemArray.size() ; i++ )
+        {
+            BentItem& item = m_BentItemArray[i];
+            item.fLastTouchPos = item.fLastTouchPosS = item.fLastTouchPosE = NaN;
+        }
+        killTimer(m_TimerReCheckPoint);
+        m_TimerReCheckPoint = 0;
+    }
+    else if (evt->timerId() == m_TimerBlinkCursor)
+    {
+        if (m_bEnterAdjustmentMode)
+        {
+            m_bShowCursor = !m_bShowCursor;
+            update( m_rcCursor );
+        }
+    }
+    else if (evt->timerId() == m_TimerShowButtons)
+    {
+        killTimer(m_TimerShowButtons);
+        m_TimerShowButtons = 0;
+        showAllButtons(true);
+    }
+    else if (evt->timerId() == m_TimerHideButtons)
+    {
+        killTimer(m_TimerHideButtons);
+        m_TimerHideButtons = 0;
+        showAllButtons(false);
+    }
+    else if (m_TimerDrawWaitTimeout)
+    {
+        m_nWaitCountDown--;
+        if (m_nWaitCountDown <= WAIT_TOUCH_DRAW_TIME-1)
+        {
+            int nTime = m_nWaitCountDown / WAIT_ANIMATION_FRAME;
+            if (nTime != 0)
+            {
+                m_bDrawWaitTimeout = true;
+            }
+        }
+        if (m_bDrawWaitTimeout)
+            update( m_rcWaitTime );
+        if (m_nWaitCountDown/WAIT_ANIMATION_FRAME <= 0)
+        {
+            if (m_bEnterAdjustmentMode)
+            {
+                leaveAdjustmentMode(false);
+                requestSensorData(cmdRefresh, false);
+            }
+        }
+    }
 }
 
 void QBentAdjustmentDialog::paintEvent(QPaintEvent *)
@@ -503,8 +755,6 @@ void QBentAdjustmentDialog::paintEvent(QPaintEvent *)
     QRect rcBody(0, 0, width(), height());
     p.fillRect( rcBody, Qt::white );
 
-    p.setRenderHint(QPainter::Antialiasing);
-
     QPoint ptCursor;
 
     if (ui->widgetBentDirMargin->isVisible())
@@ -513,6 +763,37 @@ void QBentAdjustmentDialog::paintEvent(QPaintEvent *)
     }
 
     drawAdjustmentGrid( p, rcBody, &ptCursor );
+
+    if ( !m_bIsTouchLift )
+    {
+        drawTouchLines( p, rcBody );
+    }
+
+#ifdef DEVELOP_CROSSTRACE
+    p.setBrush(Qt::NoBrush);
+    for ( int ni = m_aryCTs.size() - 1; ni >= 0; ni-- )
+    {
+        QPen pen(QColor(255,ni*2,ni*2), 1);
+        p.setPen(pen);
+        QPolygon polyline;
+        int np = 0;
+        for ( np = 0; np < 6; np++ )
+        {
+            if ( m_aryCTs[ni].pts[np].x() == -1 && m_aryCTs[ni].pts[np].y() == -1 )
+                continue;
+            p.drawRect(m_aryCTs[ni].pts[np].x() - 2, m_aryCTs[ni].pts[np].y() - 2, 4, 4);
+            polyline.push_back(m_aryCTs[ni].pts[np]);
+            break;
+        }
+        for ( ; np < 6; np++ )
+        {
+            if ( m_aryCTs[ni].pts[np].x() == -1 && m_aryCTs[ni].pts[np].y() == -1 )
+                continue;
+            polyline.push_back(m_aryCTs[ni].pts[np]);
+        }
+        p.drawPolyline(polyline);
+    }
+#endif //DEVELOP_CROSSTRACE
 
     int nIn = (int)hypotf( (float)rcBody.width(), (float)rcBody.height() );
 
@@ -529,6 +810,11 @@ void QBentAdjustmentDialog::paintEvent(QPaintEvent *)
         drawWaitTime( p, rcWait );
 
     p.restore();
+
+    if (g_AppData.bIsSafeMode)
+    {
+        m_pMainDlg->drawSafeMode(rcBody, p);
+    }
 }
 
 QPoint QBentAdjustmentDialog::PosToDCC( float x, float y, const QRect rcClient )
@@ -607,6 +893,8 @@ inline int camIdxToIdx( int nCameraIndex )
 
 void QBentAdjustmentDialog::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint* pPtCursor)
 {
+    p.setRenderHint(QPainter::Antialiasing);
+
     //float fx, fy;
     QPoint pt;
 
@@ -627,7 +915,8 @@ void QBentAdjustmentDialog::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint
     int nPosXYSel = QBentCfgParam::instance()->algorithm();
 
     //QPainterPath gridPath;
-    QPolygon gridPolyline;
+    QPolygon gridPolyline1;
+    QPolygon gridPolyline2;
     for ( int i=0; i<ADJUSTMENT_STEP; i++ )
     {
         if ( qIsNaN(s_PosXY[nPosXYSel][i].x) )
@@ -636,14 +925,26 @@ void QBentAdjustmentDialog::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint
         pt = PosToDCC( s_PosXY[nPosXYSel][i].x, s_PosXY[nPosXYSel][i].y, rcBody );
         if ( m_bEnterAdjustmentMode )
         {
-            if ( i > m_nAdjustmentStep )
-                p.setPen( penGd );
+            if ( i <= m_nAdjustmentStep )
+            {
+                gridPolyline2.push_back( pt );
+            }
         }
-        gridPolyline.push_back( pt );
+        gridPolyline1.push_back( pt );
         if ( m_nAdjustmentStep == i ) *pPtCursor = pt;
     }
 
-    p.drawPolyline( gridPolyline );
+    p.setPen( penGd );
+    p.drawPolyline( gridPolyline1 );
+
+    if (m_bEnterAdjustmentMode)
+    {
+        if (gridPolyline2.size() > 1)
+        {
+            p.setPen( penGd2 );
+            p.drawPolyline( gridPolyline2 );
+        }
+    }
 
     for ( int i=0; i<ADJUSTMENT_STEP; i++ )
     {
@@ -724,73 +1025,69 @@ void QBentAdjustmentDialog::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint
             }
         }
     }
+}
 
-    if ( !m_bIsTouchLift )
-    {
-        QPen pen(QColor(255,0,0), 1);
+void QBentAdjustmentDialog::drawTouchLines( QPainter& p, QRect rcBody )
+{
+    p.setRenderHint(QPainter::Antialiasing, false);
+
+    QPen pen(QColor(255,0,0), 1);
 #if 1
-        QBrush brush(QColor(220,220,220));
+    QBrush brush(QColor(220,220,220));
 
-        p.setBrush(brush);
-        p.setPen(Qt::NoPen);
+    p.setBrush(brush);
+    p.setPen(Qt::NoPen);
 
-        for ( int i=0 ; i<m_BentItemArray.size(); i++ )
+    for ( int i=0 ; i<m_BentItemArray.size(); i++ )
+    {
+        const BentItem& item = m_BentItemArray.at(i);
+
+        for ( int j=1 ; j<item.nTouchCnt && j<T3K_MAX_DTC_COUNT; j++ )
         {
-            const BentItem& item = m_BentItemArray.at(i);
+            //QPoint pts[3];
+            //pts[0] = TPosToDCC(item.fCamE, item.fCamF, rcBody);
+            //pts[1] = TPosToDCC((item.fTouchPosS[j] * item.fCamA + item.fCamC) * 25.f + item.fCamE, (item.fTouchPosS[j] * item.fCamB + item.fCamD) * 25.f + item.fCamF, rcBody);
+            //pts[2] = TPosToDCC((item.fTouchPosE[j] * item.fCamA + item.fCamC) * 25.f + item.fCamE, (item.fTouchPosE[j] * item.fCamB + item.fCamD) * 25.f + item.fCamF, rcBody);
 
-            for ( int j=1 ; j<item.nTouchCnt && j<T3K_MAX_DTC_COUNT; j++ )
-            {
-                QPoint pts[3];
-                pts[0] = TPosToDCC(item.fCamE, item.fCamF, rcBody);
-                pts[1] = TPosToDCC((item.fTouchPosS[j] * item.fCamA + item.fCamC) * 25.f + item.fCamE, (item.fTouchPosS[j] * item.fCamB + item.fCamD) * 25.f + item.fCamF, rcBody);
-                pts[2] = TPosToDCC((item.fTouchPosE[j] * item.fCamA + item.fCamC) * 25.f + item.fCamE, (item.fTouchPosE[j] * item.fCamB + item.fCamD) * 25.f + item.fCamF, rcBody);
+            m_PointClipper.reset();
+            QPoint pt;
+            pt = TPosToDCC(item.fCamE, item.fCamF, rcBody);
+            m_PointClipper.addPoint(pt);
+            pt = TPosToDCC((item.fTouchPosS[j] * item.fCamA + item.fCamC) * 25.f + item.fCamE, (item.fTouchPosS[j] * item.fCamB + item.fCamD) * 25.f + item.fCamF, rcBody);
+            m_PointClipper.addPoint(pt);
+            pt = TPosToDCC((item.fTouchPosE[j] * item.fCamA + item.fCamC) * 25.f + item.fCamE, (item.fTouchPosE[j] * item.fCamB + item.fCamD) * 25.f + item.fCamF, rcBody);
+            m_PointClipper.addPoint(pt);
+            m_PointClipper.closePolygon();
 
-                p.drawPolygon(pts, 3);
-            }
+            m_PointClipper.clip(rcBody);
+
+            p.drawPolygon( m_PointClipper.getClippedPoints(), m_PointClipper.getClippedPointCount() );
         }
+    }
 #endif
 
-        p.setPen(pen);
-        for ( int i=0 ; i<m_BentItemArray.size(); i++ )
+    p.setPen(pen);
+    for ( int i=0 ; i<m_BentItemArray.size(); i++ )
+    {
+        const BentItem& item = m_BentItemArray.at(i);
+
+        for ( int j=1 ; j<item.nTouchCnt && j<T3K_MAX_DTC_COUNT; j++ )
         {
-            const BentItem& item = m_BentItemArray.at(i);
+            QPoint pt0 = TPosToDCC(item.fCamE, item.fCamF, rcBody);
+            float fCam = (item.fTouchPosS[j] + item.fTouchPosE[j]) / 2.f;
+            QPoint ptV = TPosToDCC((fCam * item.fCamA + item.fCamC) * 25.f + item.fCamE, (fCam * item.fCamB + item.fCamD) * 25.f + item.fCamF, rcBody);
+            m_PointClipper.reset();
+            m_PointClipper.addPoint(pt0);
+            m_PointClipper.addPoint(ptV);
+            m_PointClipper.closePolygon();
+            m_PointClipper.clip(rcBody);
 
-            for ( int j=1 ; j<item.nTouchCnt && j<T3K_MAX_DTC_COUNT; j++ )
+            if (m_PointClipper.getClippedPointCount() >= 2)
             {
-                QPoint pt0 = TPosToDCC(item.fCamE, item.fCamF, rcBody);
-                float fCam = (item.fTouchPosS[j] + item.fTouchPosE[j]) / 2.f;
-                QPoint ptV = TPosToDCC((fCam * item.fCamA + item.fCamC) * 25.f + item.fCamE, (fCam * item.fCamB + item.fCamD) * 25.f + item.fCamF, rcBody);
-
-                p.drawLine(pt0, ptV);
+                p.drawLine(m_PointClipper.getClippedPoint(0), m_PointClipper.getClippedPoint(1));
             }
         }
     }
-
-#ifdef DEVELOP_CROSSTRACE
-    p.setBrush(Qt::NoBrush);
-    for ( int ni = m_aryCTs.size() - 1; ni >= 0; ni-- )
-    {
-        QPen pen(QColor(255,ni*2,ni*2), 1);
-        p.setPen(pen);
-        QPolygon polyline;
-        int np = 0;
-        for ( np = 0; np < 6; np++ )
-        {
-            if ( m_aryCTs[ni].pts[np].x() == -1 && m_aryCTs[ni].pts[np].y() == -1 )
-                continue;
-            p.drawRect(m_aryCTs[ni].pts[np].x() - 2, m_aryCTs[ni].pts[np].y() - 2, 4, 4);
-            polyline.push_back(m_aryCTs[ni].pts[np]);
-            break;
-        }
-        for ( ; np < 6; np++ )
-        {
-            if ( m_aryCTs[ni].pts[np].x == -1 && m_aryCTs[ni].pts[np].y == -1 )
-                continue;
-            polyline.push_back(m_aryCTs[ni].pts[np]);
-        }
-        p.drawPolyline(polyline);
-    }
-#endif //DEVELOP_CROSSTRACE
 }
 
 inline QString getCameraText( int nIndex )
@@ -827,10 +1124,14 @@ inline QString getCameraPrefix( int nIndex )
 
 void QBentAdjustmentDialog::drawCameraLocations( QPainter& p, QRect rcBody )
 {
+    p.setRenderHint(QPainter::Antialiasing);
+
     int nt = rcBody.width() / 42;
     int nth = rcBody.height() / 24;
     int ntx = nt > nth ? nth : nt;
-    QFont fnt("Arial", ntx, QFont::DemiBold);
+    QFont fnt("Arial");
+    fnt.setPixelSize(ntx);
+    fnt.setWeight(QFont::DemiBold);
     p.setFont(fnt);
     p.setPen(Qt::white);
     p.setBrush(QColor(220,220,120));
@@ -922,6 +1223,8 @@ void QBentAdjustmentDialog::drawCameraLocations( QPainter& p, QRect rcBody )
 
 void QBentAdjustmentDialog::drawCursor( QPainter& p, int nx, int ny, int nc )
 {
+    p.setRenderHint(QPainter::Antialiasing, false);
+
     int nPW1 = nc/4;
     int nPW2 = nc/8;
     int nIR = nc/4;
@@ -960,10 +1263,12 @@ void QBentAdjustmentDialog::drawCursor( QPainter& p, int nx, int ny, int nc )
 
             if ( m_nBentProgress != 0 )
             {
+                p.setRenderHint(QPainter::Antialiasing);
                 QPen penArc( QColor(237, 28, 36, 128), nc/4 );
                 p.setPen(penArc);
-                p.drawArc( nx-nc/2, ny-nc/2, nc, nc, -90, -m_nBentProgress*360/100 );
-                p.drawArc( nx-nc/2, ny-nc/2, nc, nc, -90, m_nBentProgress*360/100 );
+                p.drawArc( nx-nc/2, ny-nc/2, nc, nc, 90*16, -m_nBentProgress*360/100 * 16 ); // Qt 1/16th of a degree
+                p.drawArc( nx-nc/2, ny-nc/2, nc, nc, 90*16, m_nBentProgress*360/100 * 16 );
+                p.setRenderHint(QPainter::Antialiasing, false);
             }
         }
     }
@@ -979,6 +1284,8 @@ void QBentAdjustmentDialog::drawErrorText( QPainter& p, int nx, int ny, int nc )
 {
     if ( m_cError == 0 && m_cNG == 0 )
         return;
+
+    p.setRenderHint(QPainter::Antialiasing);
 
     QFont fntError("Arial", nc);
     p.setFont(fntError);
@@ -1029,6 +1336,8 @@ void QBentAdjustmentDialog::drawWaitTime( QPainter& p, QRect rcWait )
     int nTime = m_nWaitCountDown/WAIT_ANIMATION_FRAME;
     if ( nTime == 0 ) return;
 
+    p.setRenderHint(QPainter::Antialiasing);
+
     int nStep = WAIT_ANIMATION_FRAME - (m_nWaitCountDown-nTime*WAIT_ANIMATION_FRAME);
 
     int nLineW = rcWait.width()/10;
@@ -1046,9 +1355,11 @@ void QBentAdjustmentDialog::drawWaitTime( QPainter& p, QRect rcWait )
 
     QPen penMovingCircle(QColor(200, 200, 200, 150), nLineW);
     p.setPen(penMovingCircle);
-    p.drawArc( rectWait, 0, 360*nStep/WAIT_ANIMATION_FRAME );
+    p.drawArc( rectWait, 90*16 + (-360*nStep/WAIT_ANIMATION_FRAME * 16), 30*16 );  // Qt 1/16th of a degree
 
-    QFont fntWait("Arial", rectWait.height()*2/3, QFont::Bold);
+    QFont fntWait("Arial");
+    fntWait.setPixelSize(rectWait.height()*2/3);
+    fntWait.setWeight(QFont::Bold);
     p.setFont(fntWait);
     int flags = Qt::AlignCenter|Qt::AlignVCenter|Qt::TextSingleLine;
 
@@ -1065,6 +1376,38 @@ void QBentAdjustmentDialog::closeEvent(QCloseEvent *evt)
 {
     if (!canClose())
         evt->ignore();
+
+    QBentCfgParam* param = QBentCfgParam::instance();
+
+    QInitDataIni::instance()->setBentMargin(
+        (int)(param->marginLeft() * 100 + .5f),
+        (int)(param->marginTop() * 100 + .5f),
+        (int)(param->marginRight() * 100 + .5f),
+        (int)(param->marginBottom() * 100 + .5f),
+        param->direction() );
+    QInitDataIni::instance()->save();
+
+    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND );
+
+    if (m_TimerBlinkCursor)
+    {
+        killTimer(m_TimerBlinkCursor);
+        m_TimerBlinkCursor = 0;
+    }
+    if (m_TimerReCheckPoint)
+    {
+        killTimer(m_TimerReCheckPoint);
+        m_TimerReCheckPoint = 0;
+    }
+    if (m_TimerDrawWaitTimeout)
+    {
+        killTimer(m_TimerDrawWaitTimeout);
+        m_TimerDrawWaitTimeout = 0;
+    }
+
+    m_bDrawWaitTimeout = false;
+    m_nWaitCountDown = WAIT_TOUCH_TIME;
+    m_nBentProgress = 0;
 }
 
 void QBentAdjustmentDialog::reject()
@@ -1084,10 +1427,96 @@ void QBentAdjustmentDialog::calculateCameraPosition( float* /*fObcS*/, float* /*
 
 }
 
+#define PROGSIZE_scanCamFactor  900
+
+bool scanCamFactor_cb( float fProg, void* lpUser )
+{
+    int & nCalcPosProg = *(int *)lpUser;
+
+    nCalcPosProg = (int)(fProg * PROGSIZE_scanCamFactor);
+
+    //::Sleep(1);
+
+    return true;
+}
+
 bool QBentAdjustmentDialog::calculateCameraValues( BentItem& item )
 {
-    // TODO:
-    return false;
+    float * fObcS = item.fObcS;
+    float * fObcE = item.fObcE;
+
+    item.nCalcPosProg = 0;
+
+    if ( qIsNaN(fObcS[0]) || qIsNaN(fObcE[0]) )
+    {
+        Q_ASSERT(0);
+        return false;
+    }
+    float fsObc0 = (fObcS[0] + fObcE[0]) / 2.f;
+
+    float fInitCamS = 0.f;
+    float fInitCamR = 0.f;
+    QCalcCamValue ccv;
+    QBentCfgParam* param = QBentCfgParam::instance();
+    ccv.setNewMethod(param->algorithm() > 0);
+    ccv.scanCamFactor(fObcS, fObcE, &fInitCamS, &fInitCamR, scanCamFactor_cb, &item.nCalcPosProg);
+
+    item.nCalcPosProg = PROGSIZE_scanCamFactor;
+
+    float fFinalCamS = fInitCamS;
+    float fFinalCamR = fInitCamR;
+#if 0 //!!
+    QPointF ptsCalc[CALC_PNTCNT_MAX];
+    QPointF pt = ccv.findCamSR(fObcS, fObcE, &fFinalCamS, &fFinalCamR, ptsCalc);
+    int nCalcPosCnt = 0;
+    for ( int ni = 0; ni < CALC_PNTCNT_MAX; ni++ )
+    {
+        if ( qIsNaN(ptsCalc[ni].x) )
+            continue;
+
+        nCalcPosCnt++;
+    }
+#else
+    item.fDistortion[0] = 0.f;
+    QPointF pt = ccv.find2CamSR(fObcS, fObcE, &fFinalCamS, &fFinalCamR, item.fDistortion + 1);
+    for ( int ni = 0; ni < CALC_PNTCNT_MAX; ni++ )
+    {
+        if ( item.fDistortionMax < item.fDistortion[ni + 1] )
+            item.fDistortionMax = item.fDistortion[ni + 1];
+    }
+#endif
+
+    float fCamX = item.fCamX = pt.x();
+    float fCamY = item.fCamY = pt.y();
+    float fCamS = item.fCamS = fFinalCamS;
+    float fCamR = item.fCamR = fFinalCamR;
+
+    float fObx0 = fCamS * fsObc0 + 0.5f;
+    float fOby0 = (1.f - fObx0) * fCamR;
+    float fCmdx = -fCamX;
+    float fCmdy = -fCamY;
+    float fCamAngle = atan2f(fOby0, fObx0);
+    fCamAngle -= atan2f(fCmdy, fCmdx);
+
+    float fCamCos = cosf(fCamAngle);
+    float fCamSin = sinf(fCamAngle);
+    float fa = fCamS * fCamCos - fCamS * fCamR * fCamSin;
+    float fb = -fCamS * fCamSin - fCamS * fCamR * fCamCos;
+    float fc = (fCamCos + fCamR * fCamSin) / 2.f;
+    float fd = (-fCamSin + fCamR * fCamCos) / 2.f;
+    QPointF cp = PosToTPos(fa, fb, 0.f);
+    item.fCamA = cp.x();
+    item.fCamB = cp.y();
+    cp = PosToTPos(fc, fd, 0.f);
+    item.fCamC = cp.x();
+    item.fCamD = cp.y();
+    cp = PosToTPos(fCamX, fCamY, 1.f);
+    item.fCamE = cp.x();
+    item.fCamF = cp.y();
+
+    item.nCalcPosProg = 1000;
+
+    return (item.fDistortionMax <= 0.01f);
 }
 
 void QBentAdjustmentDialog::showArrowButtons( bool bShow )
@@ -1100,33 +1529,230 @@ void QBentAdjustmentDialog::showAllButtonsWithoutClose( bool bShow )
     showArrowButtons(bShow);
     ui->btnReset->setVisible(bShow);
     ui->btnSave->setVisible(bShow);
+    ui->cmdAsyncMngr->setVisible(bShow);
+}
+
+void QBentAdjustmentDialog::showAllButtons( bool bShow )
+{
+    showArrowButtons(bShow);
+    ui->btnReset->setVisible(bShow);
+    ui->btnSave->setVisible(bShow);
     ui->btnClose->setVisible(bShow);
     ui->cmdAsyncMngr->setVisible(bShow);
+}
+
+QCalcCamPosThread::QCalcCamPosThread(BentItem &item) : m_item(item)
+{
+
+}
+
+void QCalcCamPosThread::run()
+{
+    m_item.bCalcPos = QBentAdjustmentDialog::calculateCameraValues(m_item) && !qIsNaN(m_item.fCamX) && !qIsNaN(m_item.fCamY);
+
+    qDebug( "exit thread: %p", m_item.pThread );
+}
+
+bool QKeyWatcher::eventFilter(QObject *obj, QEvent *evt)
+{
+    if (evt->type() == QEvent::KeyPress)
+    {
+        m_bStopGUI = !m_bStopGUI;
+    }
+    return QObject::eventFilter(obj, evt);
 }
 
 void QBentAdjustmentDialog::onAdjustmentFinish()
 {
     m_cError = m_cNG = 0;
 
+    QRect rcBody(0, 0, width(), height());
+
     // TODO:
-
-    playBuzzer( BuzzerCalibrationSucces );
-
-    m_bEnterAdjustmentMode = false;
-    m_bShowCursor = false;
-
-    m_bIsModified = true;
-    showAllButtonsWithoutClose(true);
-
-    m_bDrawWaitTimeout = false;
-    if (m_TimerDrawWaitTimeout)
+#define PROG_SIZE  150
+    for ( int i = 0; i < m_BentItemArray.size(); i++ )
     {
-        killTimer(m_TimerDrawWaitTimeout);
-        m_TimerDrawWaitTimeout = 0;
-    }
-    update();
+        BentItem & item = m_BentItemArray[i];
 
-    m_bBentAdjustmentPerformed = true;
+        int ni;
+        float fObcD[ADJUSTMENT_STEP];
+        for ( ni = 0; ni < ADJUSTMENT_STEP; ni++ )
+        {
+            if ( qIsNaN(item.fObcS[ni]) || qIsNaN(item.fObcE[ni]) )
+            {
+                fObcD[ni] = NaN;
+                continue;
+            }
+
+            fObcD[ni] = qAbs(item.fObcS[ni] - item.fObcE[ni]);
+        }
+        float fDn[ADJUSTMENT_STEP];
+        float fDnTot = 0.f;
+        float nDnTot = 0;
+        for ( ni = 0; ni < ADJUSTMENT_STEP; ni++ )
+        {
+            if ( qIsNaN(fObcD[ni]) )
+            {
+                fDn[ni] = NaN;
+                continue;
+            }
+
+
+            float fTot = 0.f;
+            int nTot = 0;
+            for ( int nj = 0; nj < ADJUSTMENT_STEP; nj++ )
+            {
+                if ( nj == ni )
+                    continue;
+                if ( qIsNaN(fObcD[nj]) )
+                    continue;
+
+                fTot += qAbs(fObcD[nj] - fObcD[ni]);
+                nTot++;
+            }
+            fDnTot += (fDn[ni] = fTot / nTot);
+            nDnTot++;
+        }
+        float fDnAvr = fDnTot / nDnTot;
+        for ( ni = 0; ni < ADJUSTMENT_STEP; ni++ )
+        {
+            if ( qIsNaN(fObcD[ni]) )
+            {
+                fObcD[ni] = NaN;
+                continue;
+            }
+        }
+
+        item.mode = 0;
+        item.nCalcPosDataCnt = 0;
+        for ( ni = 0; ni < ADJUSTMENT_STEP; ni++ )
+        {
+            if ( qIsNaN(item.fObcS[ni]) || qIsNaN(item.fObcE[ni]) )
+                continue;
+
+            item.nCalcPosDataCnt++;
+        }
+        memset(item.fDistortion, 0, sizeof(item.fDistortion));
+        item.fDistortionMax = 0.f;
+        item.nCalcPosProg = 0;
+        item.pCalcPosWnd = new QBentProgressDialog(item);
+        QRect rcProg;
+        rcProg.setTop(rcBody.top() + (rcBody.height() - PROG_SIZE) / 2);
+        rcProg.setBottom(rcProg.top()+ PROG_SIZE);
+        rcProg.setLeft(rcBody.left() + (rcBody.width() - PROG_SIZE * m_BentItemArray.size()) / 2 + PROG_SIZE * camIdxToIdx(item.nCameraIndex));
+        rcProg.setRight(rcProg.left() + PROG_SIZE);
+        item.pCalcPosWnd->move(rcProg.topLeft());
+        item.pCalcPosWnd->resize(rcProg.width(), rcProg.height());
+        item.pCalcPosWnd->show();
+        item.pThread = new QCalcCamPosThread(item);
+        item.pThread->start();
+    }
+
+    bool bStopGUI = false;
+    int cnt = 0;
+
+    QKeyWatcher keyWatcher(bStopGUI);
+    installEventFilter( &keyWatcher );
+    do
+    {
+        cnt = 0;
+        for ( int ni = 0; ni < m_BentItemArray.size(); ni++ )
+        {
+            const BentItem & item = m_BentItemArray.at(ni);
+            item.pCalcPosWnd->update();
+            if ( item.pThread->isRunning() )
+                cnt++;
+        }
+
+        QCoreApplication::processEvents();
+    }
+    while ( cnt != 0 );
+
+    while ( bStopGUI )
+    {
+        QCoreApplication::processEvents();
+    }
+
+    removeEventFilter( &keyWatcher );
+
+    QString strBaLog;
+    for ( int i = 0; i < m_BentItemArray.size(); i++ )
+    {
+        BentItem & item = m_BentItemArray[i];
+
+        Q_ASSERT( item.pCalcPosWnd );
+        delete item.pCalcPosWnd;
+        item.pCalcPosWnd = NULL;
+        delete item.pThread;
+        item.pThread = NULL;
+
+        int nCamNumber = camIdxToIdx(item.nCameraIndex);
+        if ( item.bCalcPos )
+        {
+            if ( item.fDistortionMax > 0.01f )
+            {
+                if ( nCamNumber > 1 )
+                    m_cError |= (FLAG_CAM1_1 << (nCamNumber - 2));
+                else
+                    m_cError |= (FLAG_CAM1 << nCamNumber);
+            }
+            else if ( item.fDistortionMax > 0.0005f )
+            {
+                if ( nCamNumber > 1 )
+                    m_cNG |= (FLAG_CAM1_1 << (nCamNumber - 2));
+                else
+                    m_cNG |= (FLAG_CAM1 << nCamNumber);
+            }
+        }
+        else
+        {
+            item.fCamA = 0.f;
+            item.fCamB = 0.f;
+            item.fCamC = 0.f;
+            item.fCamD = 0.f;
+            item.fCamE = 0.f;
+            item.fCamF = 0.f;
+
+            item.fCamX = 0.f;
+            item.fCamY = 0.f;
+            item.fCamS = 1.f;
+            item.fCamR = 1.f;
+
+            if ( nCamNumber > 1 )
+                m_cError |= (FLAG_CAM1_1 << (nCamNumber - 2));
+            else
+                m_cError |= (FLAG_CAM1 << nCamNumber);
+        }
+
+        char buf[2048] = {0};
+        char * bufC = buf;
+        bufC += sprintf( bufC, "@Cam%d:", nCamNumber+1 );
+        for ( int ni = 0; ni < ADJUSTMENT_STEP; ni++ )
+        {
+            bufC += sprintf( bufC, "%f,%f|", item.fObcS[ni], item.fObcE[ni]);
+        }
+        bufC += sprintf(bufC, "%f,%f,%f,%f|", item.fCamX, item.fCamY, item.fCamS, item.fCamR);
+        LOG_I(buf);
+
+        QDateTime curDate = QDateTime::currentDateTime();
+        if ( !strBaLog.isEmpty() )
+            strBaLog += "\r\n";
+        strBaLog += curDate.toString("yyyy-MM-dd hh-mm-ss ") + buf;
+    }
+
+    QString strPath = QCoreApplication::applicationDirPath();
+    strPath = rstrip(strPath, "/\\");
+    strPath += "/";
+    strPath += "bent_adjustment.txt";
+
+    QFile file(strPath);
+    if (file.open(QIODevice::WriteOnly))
+    {
+        file.write( strBaLog.toLatin1() );
+        file.close();
+    }
+
+    leaveAdjustmentMode(true);
 }
 
 void QBentAdjustmentDialog::checkTouchPoints( bool bTouch )
@@ -1412,7 +2038,7 @@ void QBentAdjustmentDialog::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
 
         bool bNew = false;
 
-        QRect rcClient(0, 0, width(), height());
+        QRect rcBody(0, 0, width(), height());
         CT ct;
         memset(&ct, -1, sizeof(CT));
         float f;
@@ -1428,7 +2054,7 @@ void QBentAdjustmentDialog::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
                 float fdy2 = f * item2->fCamB + item2->fCamD;
                 ct.pts[0] = CalcCrossPoint(item1->fCamE, fdx1, item1->fCamF, fdy1,
                                            item2->fCamE, fdx2, item2->fCamF, fdy2,
-                                           rcClient);
+                                           rcBody);
                 bNew = true;
             }
             if ( item3 )
@@ -1438,7 +2064,7 @@ void QBentAdjustmentDialog::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
                 float fdy3 = f * item3->fCamB + item3->fCamD;
                 ct.pts[1] = CalcCrossPoint(item1->fCamE, fdx1, item1->fCamF, fdy1,
                                            item3->fCamE, fdx3, item3->fCamF, fdy3,
-                                           rcClient);
+                                           rcBody);
                 bNew = true;
             }
             if ( item4 )
@@ -1448,7 +2074,7 @@ void QBentAdjustmentDialog::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
                 float fdy4 = f * item4->fCamB + item4->fCamD;
                 ct.pts[2] = CalcCrossPoint(item1->fCamE, fdx1, item1->fCamF, fdy1,
                                            item4->fCamE, fdx4, item4->fCamF, fdy4,
-                                           rcClient);
+                                           rcBody);
                 bNew = true;
             }
         }
@@ -1464,7 +2090,7 @@ void QBentAdjustmentDialog::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
                 float fdy3 = f * item3->fCamB + item3->fCamD;
                 ct.pts[3] = CalcCrossPoint(item2->fCamE, fdx2, item2->fCamF, fdy2,
                                            item3->fCamE, fdx3, item3->fCamF, fdy3,
-                                           rcClient);
+                                           rcBody);
                 bNew = true;
             }
             if ( item4 )
@@ -1474,7 +2100,7 @@ void QBentAdjustmentDialog::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
                 float fdy4 = f * item4->fCamB + item4->fCamD;
                 ct.pts[4] = CalcCrossPoint(item2->fCamE, fdx2, item2->fCamF, fdy2,
                                            item4->fCamE, fdx4, item4->fCamF, fdy4,
-                                           rcClient);
+                                           rcBody);
                 bNew = true;
             }
         }
@@ -1490,7 +2116,7 @@ void QBentAdjustmentDialog::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
                 float fdy4 = f * item4->fCamB + item4->fCamD;
                 ct.pts[5] = CalcCrossPoint(item3->fCamE, fdx3, item3->fCamF, fdy3,
                                            item4->fCamE, fdx4, item4->fCamF, fdy4,
-                                           rcClient);
+                                           rcBody);
                 bNew = true;
             }
         }
@@ -1842,6 +2468,243 @@ void QBentAdjustmentDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
     }
 }
 
+bool QBentAdjustmentDialog::requestSensorData( RequestCmd cmd, bool bWait )
+{
+    if (ui->cmdAsyncMngr->isStarted())
+    {
+        ui->cmdAsyncMngr->stop();
+        ui->cmdAsyncMngr->resetCommands();
+    }
+
+    switch (cmd)
+    {
+    case cmdInitialize:
+        sensorReset();
+        break;
+    case cmdLoadFactoryDefault:
+        sensorLoadFactoryDefault();
+        break;
+    case cmdRefresh:
+        sensorRefresh();
+        break;
+    case cmdWriteToFactoryDefault:
+        sensorWriteToFactoryDefault();
+        break;
+    default:
+        return false;
+    }
+
+    QEventLoop loop;
+    if (bWait)
+    {
+        loop.connect( ui->cmdAsyncMngr, SIGNAL(asyncFinished(bool,int)), SLOT(quit()));
+    }
+
+    ui->cmdAsyncMngr->start( bWait ? 6000 : (unsigned int)-1 );
+
+    if (bWait)
+    {
+        loop.exec();
+    }
+
+    bool bResult = ui->cmdAsyncMngr->getLastResult();
+
+    if (bResult && (cmd == cmdInitialize || cmd == cmdWriteToFactoryDefault))
+    {
+    }
+
+    return bResult;
+}
+
+void QBentAdjustmentDialog::sensorReset()
+{
+    QString strCmd;
+    strCmd = sCam1 + cstrFactorialCamPos + "**";
+    ui->cmdAsyncMngr->insertCommand( strCmd );
+    strCmd = sCam2 + cstrFactorialCamPos + "**";
+    ui->cmdAsyncMngr->insertCommand( strCmd );
+
+    if (g_AppData.bIsSubCameraExist)
+    {
+        strCmd = sCam1_1 + cstrFactorialCamPos + "**";
+        ui->cmdAsyncMngr->insertCommand( strCmd );
+        strCmd = sCam2_1 + cstrFactorialCamPos + "**";
+        ui->cmdAsyncMngr->insertCommand( strCmd );
+    }
+
+    strCmd = QString(cstrCalibration) + "**";
+    ui->cmdAsyncMngr->insertCommand( strCmd );
+    strCmd = QString(cstrFactoryCalibration) + "**";
+    ui->cmdAsyncMngr->insertCommand( strCmd );
+}
+
+void QBentAdjustmentDialog::sensorLoadFactoryDefault()
+{
+    QString strCmd;
+    strCmd = sCam1 + cstrFactorialCamPos + "?";
+    ui->cmdAsyncMngr->insertCommand(strCmd);
+    strCmd = sCam2 + cstrFactorialCamPos + "?";
+    ui->cmdAsyncMngr->insertCommand(strCmd);
+    if ( g_AppData.bIsSubCameraExist )
+    {
+        strCmd = sCam1_1 + cstrFactorialCamPos + "?";
+        ui->cmdAsyncMngr->insertCommand(strCmd);
+        strCmd = sCam2_1 + cstrFactorialCamPos + "?";
+        ui->cmdAsyncMngr->insertCommand(strCmd);
+    }
+    strCmd = QString(cstrAreaC) + "?";
+    ui->cmdAsyncMngr->insertCommand(strCmd);
+}
+
+void QBentAdjustmentDialog::sensorRefresh()
+{
+    QString strCmd;
+    strCmd = sCam1 + cstrFactorialCamPos + "?";
+    ui->cmdAsyncMngr->insertCommand(strCmd);
+    strCmd = sCam2 + cstrFactorialCamPos + "?";
+    ui->cmdAsyncMngr->insertCommand(strCmd);
+
+    if (g_AppData.bIsSubCameraExist)
+    {
+        strCmd = sCam1_1 + cstrFactorialCamPos + "?";
+        ui->cmdAsyncMngr->insertCommand(strCmd);
+        strCmd = sCam2_1 + cstrFactorialCamPos + "?";
+        ui->cmdAsyncMngr->insertCommand(strCmd);
+    }
+}
+
+void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
+{
+    QBentCfgParam* param = QBentCfgParam::instance();
+    const int nPosXYSel = param->algorithm();
+    QString strCmd;
+    QString strCam;
+    char szTemp[256];
+
+    snprintf( szTemp, 256, "%s0x%02x", cstrDisplayOrientation, m_nMonitorOrientation );
+    ui->cmdAsyncMngr->insertCommand( szTemp );
+    strCmd = sCam1 + cstrFactorialCamPos + "**";
+    ui->cmdAsyncMngr->insertCommand( strCmd );
+    strCmd = sCam2 + cstrFactorialCamPos + "**";
+    ui->cmdAsyncMngr->insertCommand( strCmd );
+    if (g_AppData.bIsSubCameraExist)
+    {
+        strCmd = sCam1_1 + cstrFactorialCamPos + "**";
+        ui->cmdAsyncMngr->insertCommand( strCmd );
+        strCmd = sCam2_1 + cstrFactorialCamPos + "**";
+        ui->cmdAsyncMngr->insertCommand( strCmd );
+    }
+
+    for ( int nI=0 ; nI<m_BentItemArray.size() ; nI++ )
+    {
+        const BentItem& item = m_BentItemArray.at(nI);
+        unsigned long dwA, dwB, dwC, dwD, dwE, dwF;
+        dwA = *(unsigned long*)(&item.fCamA);
+        dwB = *(unsigned long*)(&item.fCamB);
+        dwC = *(unsigned long*)(&item.fCamC);
+        dwD = *(unsigned long*)(&item.fCamD);
+        dwE = *(unsigned long*)(&item.fCamE);
+        dwF = *(unsigned long*)(&item.fCamF);
+
+        snprintf( szTemp, 256, "%08lx,%08lx,%08lx,%08lx,%08lx,%08lx,0x%02x", dwA, dwB, dwC, dwD, dwE, dwF, item.mode );
+        strCmd = getCameraPrefix(item.nCameraIndex) + cstrFactorialCamPos;
+        strCmd += szTemp;
+        ui->cmdAsyncMngr->insertCommand( strCmd );
+    }
+
+    // reset calibration
+    strCmd = QString(cstrCalibration) + "**";
+    ui->cmdAsyncMngr->insertCommand( strCmd );
+
+    // f42!
+    QString strMargin;
+    snprintf( szTemp, 256, "%02x%02x%02x%02x",
+              (unsigned char)(param->marginLeft() * 100 + .5f),
+              (unsigned char)(param->marginTop() * 100 + .5f),
+              (unsigned char)(param->marginRight() * 100 + .5f),
+              (unsigned char)(param->marginBottom() * 100 + .5f) );
+    strMargin = szTemp;
+
+    int nCam1Idx = -1, nCam2Idx = -1;
+    for ( int nI=0 ; nI<m_BentItemArray.size() ; nI++ )
+    {
+        const BentItem& item = m_BentItemArray.at(nI);
+        if ( item.nCameraIndex == IDX_CM1 )
+        {
+            nCam1Idx = nI;
+        }
+        else if ( item.nCameraIndex == IDX_CM2 )
+        {
+            nCam2Idx = nI;
+        }
+    }
+
+    QString strCalPos;
+    if ( nCam1Idx >= 0 && nCam2Idx >= 0 )
+    {
+        const BentItem& item1 = m_BentItemArray.at(nCam1Idx);
+        const BentItem& item2 = m_BentItemArray.at(nCam2Idx);
+        for ( int i=0 ; i<ADJUSTMENT_STEP ; i++ )
+        {
+            float fV = item1.fObcCenter[i];
+            if ( (nPosXYSel == 1 || nPosXYSel == 2) &&
+                 (i == 1 || i == 4 || i == 8 || i == 11) )
+            {
+                fV = NaN;
+            }
+            int *x = (int*)&fV;
+            snprintf( szTemp, 256, "%08x", (unsigned int)*x );
+            strCalPos += szTemp;
+        }
+
+        for ( int i=0 ; i<ADJUSTMENT_STEP ; i++ )
+        {
+            float fV = item2.fObcCenter[i];
+            if ( (nPosXYSel == 1 || nPosXYSel == 2) &&
+                 (i == 1 || i == 4 || i == 8 || i == 11) )
+            {
+                fV = NaN;
+            }
+            int *x = (int*)&fV;
+            snprintf( szTemp, 256, "%08x", (unsigned int)*x );
+            strCalPos += szTemp;
+        }
+    }
+
+    if ( !strMargin.isEmpty() && !strCalPos.isEmpty() )
+    {
+        strCmd = QString(cstrFactoryCalibration) + strMargin + strCalPos;
+        ui->cmdAsyncMngr->insertCommand( strCmd );
+    }
+
+    if ( QSensorInitDataCfg::instance()->isSoftkeyLoaded() )
+    {
+        const QSensorInitDataCfg::SoftkeyData& softkey = QSensorInitDataCfg::instance()->getSoftkeyData();
+        if (!softkey.strKey.isEmpty())
+        {
+            strCmd = QString(cstrFactorialSoftkey) + softkey.strKey;
+            ui->cmdAsyncMngr->insertCommand( strCmd );
+        }
+        if (!softkey.strKeyBind.isEmpty())
+        {
+            strCmd = QString(cstrFactorialSoftkeyBind) + softkey.strKeyBind;
+            ui->cmdAsyncMngr->insertCommand( strCmd );
+        }
+        if (!softkey.strGPIO.isEmpty())
+        {
+            strCmd = QString(cstrFactorialGPIO) + softkey.strGPIO;
+            ui->cmdAsyncMngr->insertCommand( strCmd );
+        }
+        if (!softkey.strLogic.isEmpty())
+        {
+            strCmd = QString(cstrFactorialSoftlogic) + softkey.strLogic;
+            ui->cmdAsyncMngr->insertCommand( strCmd );
+        }
+        strCmd = QString(cstrSoftlogic) + "*";
+        ui->cmdAsyncMngr->insertCommand( strCmd );
+    }
+}
+
 void QBentAdjustmentDialog::onEditModified(QBorderStyleEdit* /*pEdit*/, int /*nValue*/, double /*dValue*/)
 {
     updateData(true);
@@ -1862,12 +2725,83 @@ void QBentAdjustmentDialog::onRangeChange(QBorderStyleEdit* pEdit, int nMin, int
 
 void QBentAdjustmentDialog::on_btnSave_clicked()
 {
+    LOG_B( "Save" );
 
+    if ( !m_bBentAdjustmentPerformed )
+    {
+        LOG_I( "BentAdjustment is not performed." );
+        close();
+        return;
+    }
+
+    setEnabled(false);
+    enableAllControls(false);
+
+    if (!requestSensorData(cmdWriteToFactoryDefault, true))
+    {
+        QLangRes& res = QLangManager::getResource();
+        QString strPrompt = res.getResString( MAIN_TAG, "TEXT_ERROR_WRITE_FACTORY_DEFAULT_FAILURE" );
+        QString strTitle = res.getResString( MAIN_TAG, "TEXT_ERROR_MESSAGE_TITLE" );
+        showMessageBox( this,
+            strPrompt,
+            strTitle,
+            QMessageBox::Critical, QMessageBox::Ok, QMessageBox::Ok );
+
+        enableAllControls( true );
+        setEnabled( true );
+        ui->btnSave->setFocus();
+        return;
+    }
+    enableAllControls( true );
+    m_bIsModified = false;
+    setEnabled( true );
+    ui->btnSave->setFocus();
+    close();
 }
 
 void QBentAdjustmentDialog::on_btnReset_clicked()
 {
+    LOG_B( "Reset" );
 
+    QLangRes& res = QLangManager::getResource();
+    QString strPrompt = res.getResString( MAIN_TAG, "TEXT_WARNING_RESET_ALL_VALUES" );
+    QString strTitle = res.getResString( MAIN_TAG, "TEXT_WARNING_MESSAGE_TITLE" );
+    int nRet = showMessageBox( this,
+        strPrompt,
+        strTitle,
+        QMessageBox::Warning, QMessageBox::Yes|QMessageBox::No, QMessageBox::No );
+
+    if (nRet != QMessageBox::Yes)
+        return;
+
+    if ( !loadDefaultSettingValues() )
+    {
+        QInitDataIni::instance()->setBentMargin( BENT_MARGIN_INIT_LEFT, BENT_MARGIN_INIT_TOP, BENT_MARGIN_INIT_RIGHT, BENT_MARGIN_INIT_BOTTOM, 0 );
+        QInitDataIni::instance()->save();
+
+        QBentCfgParam* param = QBentCfgParam::instance();
+        param->setMargin(BENT_MARGIN_INIT_LEFT / 100.0f, BENT_MARGIN_INIT_TOP / 100.0f, BENT_MARGIN_INIT_RIGHT / 100.0f, BENT_MARGIN_INIT_BOTTOM / 100.0f);
+        param->setDirection(BENT_MARGIN_INIT_DIR);
+    }
+    updateData( false );
+    update();
+
+    enableAllControls( false );
+    if ( !requestSensorData(cmdInitialize, true) )
+    {
+        strPrompt = res.getResString( MAIN_TAG, "TEXT_ERROR_RESET_ALL_VALUES" );
+        strTitle = res.getResString( MAIN_TAG, "TEXT_ERROR_MESSAGE_TITLE" );
+        nRet = showMessageBox( this,
+            strPrompt,
+            strTitle,
+            QMessageBox::Critical, QMessageBox::Ok, QMessageBox::Ok );
+
+        enableAllControls( true );
+        ui->btnReset->setFocus();
+        return;
+    }
+    enableAllControls( true );
+    ui->btnReset->setFocus();
 }
 
 void QBentAdjustmentDialog::on_btnMarginLeftDec_clicked()
@@ -1912,20 +2846,24 @@ void QBentAdjustmentDialog::on_btnMarginDownInc_clicked()
 
 void QBentAdjustmentDialog::on_btnLeft_clicked()
 {
-
+    QBentCfgParam::instance()->setDirection(BENT_DIR_LEFT);
+    enterAdjustmentMode();
 }
 
 void QBentAdjustmentDialog::on_btnUp_clicked()
 {
-
+    QBentCfgParam::instance()->setDirection(BENT_DIR_UP);
+    enterAdjustmentMode();
 }
 
 void QBentAdjustmentDialog::on_btnRight_clicked()
 {
-
+    QBentCfgParam::instance()->setDirection(BENT_DIR_RIGHT);
+    enterAdjustmentMode();
 }
 
 void QBentAdjustmentDialog::on_btnDown_clicked()
 {
-
+    QBentCfgParam::instance()->setDirection(BENT_DIR_DOWN);
+    enterAdjustmentMode();
 }

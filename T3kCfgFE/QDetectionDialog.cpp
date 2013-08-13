@@ -14,6 +14,7 @@
 #include "QSensorInitDataCfg.h"
 
 #include "QMyApplication.h"
+#include "QAutoRangeCompleteDialog.h"
 
 #define MAX_TICK_COUNT      (400)
 
@@ -82,8 +83,8 @@ QDetectionDialog::QDetectionDialog(Dialog *parent) :
 
     m_EventRedirect.installEventListener(this);
     installEventFilter(&m_EventRedirect);
-    ui->widgetDetection1->installEventFilterForTextEdit(&m_EventRedirect);
-    ui->widgetDetection2->installEventFilterForTextEdit(&m_EventRedirect);
+    ui->widgetDetection1->installEventFilterForEventRedirect(&m_EventRedirect);
+    ui->widgetDetection2->installEventFilterForEventRedirect(&m_EventRedirect);
 
     m_TimerUpdateGraph = startTimer( 350 );
 }
@@ -333,25 +334,6 @@ void QDetectionDialog::closeEvent(QCloseEvent *evt)
         m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND);
     }
 }
-
-/*
-bool QDetectionDialog::eventFilter(QObject *obj, QEvent *evt)
-{
-    if (evt->type() == QEvent::KeyPress)
-    {
-        QKeyEvent* keyEvt = (QKeyEvent*)evt;
-        if (keyEvt->key() == Qt::Key_Escape)
-        {
-            if (m_bEnterAutoRangeSetting)
-            {
-                leaveAutoRangeSetting();
-                return true;
-            }
-        }
-    }
-    return QDialog::eventFilter(obj, evt);
-}
-*/
 
 void QDetectionDialog::reject()
 {
@@ -639,6 +621,7 @@ void QDetectionDialog::enableAllControls( bool bEnable )
 
 void QDetectionDialog::enterAutoRangeSetting()
 {
+    LOG_I( "enter autorange setting" );
     QLayout* layout = this->layout();
     layout->getContentsMargins(&m_nOldMargins[0], &m_nOldMargins[1], &m_nOldMargins[2], &m_nOldMargins[3]);
     layout->setContentsMargins(60, 60, 60, 60);
@@ -700,6 +683,7 @@ void QDetectionDialog::enterAutoRangeSetting()
 
 void QDetectionDialog::leaveAutoRangeSetting()
 {
+    LOG_I( "leave autorange setting" );
     QLayout* layout = this->layout();
     layout->setContentsMargins(m_nOldMargins[0], m_nOldMargins[1], m_nOldMargins[2], m_nOldMargins[3]);
     update();
@@ -893,8 +877,10 @@ void QDetectionDialog::onFinishAutoRange()
         playBuzzer( BuzzerCalibrationSucces );
 
         m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND);
-        // TODO:
-        // autorange complete dialog show!!!
+
+        QAutoRangeCompleteDialog AutoRangeCompleteDialog;
+        AutoRangeCompleteDialog.exec();
+
         m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW);
 
         if (ui->cmdAsyncMngr->isStarted())
@@ -1155,6 +1141,31 @@ bool QDetectionDialog::onKeyRelease(QKeyEvent *evt)
     return false;
 }
 
+void QDetectionDialog::onRButtonClicked()
+{
+    if (!m_bEnterAutoRangeSetting)
+    {
+        LOG_I( "From Mouse Shortcut(RBUTTON CLICK)" );
+        on_btnAutoRangeSetting_clicked();
+    }
+}
+
+bool QDetectionDialog::onRButtonDblClicked()
+{
+    LOG_I( "From Mouse Shortcut(RBUTTON DOUBLE CLICK)" );
+    if (m_bEnterAutoRangeSetting)
+    {
+        leaveAutoRangeSetting();
+        return true;
+    }
+    else
+    {
+        on_btnSave_clicked();
+        return true;
+    }
+    return false;
+}
+
 void QDetectionDialog::showArrow()
 {
     if (m_TimerBlinkArrow)
@@ -1169,6 +1180,7 @@ void QDetectionDialog::hideArrow()
 {
     if (m_TimerBlinkArrow)
         killTimer(m_TimerBlinkArrow);
+    m_TimerBlinkArrow = 0;
     m_bToggleArrow = false;
 }
 

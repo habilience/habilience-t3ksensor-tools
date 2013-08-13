@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>958</width>
-    <height>717</height>
+    <width>974</width>
+    <height>732</height>
    </rect>
   </property>
   <property name="font">
@@ -18,17 +18,14 @@
   <property name="windowTitle">
    <string>Touch Settings</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="layoutMidBox">
      <property name="spacing">
-      <number>1</number>
-     </property>
-     <property name="leftMargin">
-      <number>10</number>
-     </property>
-     <property name="bottomMargin">
-      <number>10</number>
+      <number>6</number>
      </property>
      <item>
       <widget class="QScrollArea" name="scrollArea">
@@ -40,13 +37,19 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>390</width>
-         <height>0</height>
+         <width>380</width>
+         <height>500</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>380</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="baseSize">
         <size>
-         <width>390</width>
+         <width>380</width>
          <height>0</height>
         </size>
        </property>
@@ -70,317 +73,102 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>390</width>
+          <width>360</width>
           <height>600</height>
          </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>360</width>
+          <height>600</height>
+         </size>
+        </property>
+        <property name="baseSize">
+         <size>
+          <width>360</width>
+          <height>600</height>
+         </size>
         </property>
         <property name="styleSheet">
          <string notr="true">QWidget#scrollAreaWidgetContents { background: transparent; }</string>
         </property>
-        <widget class="QLabel" name="lblTouchAreaMarginTitle">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>4</y>
-           <width>371</width>
-           <height>21</height>
-          </rect>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="margin">
+          <number>0</number>
          </property>
-         <property name="text">
-          <string>Touch Area Margin(% of Screen)</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="lblTimeSettingTitle">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>220</y>
-           <width>371</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Time Setting(ms)</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="lblWheelZoomTitle">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>310</y>
-           <width>371</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Wheel/Zoom Sensitivity Setting</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="lblInputModeTitle">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>400</y>
-           <width>371</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Input Mode Setting</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="lblUsbCfgModeTitle">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>500</y>
-           <width>371</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>USB Config Mode Setting</string>
-         </property>
-        </widget>
-        <widget class="QFrame" name="frameTM">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>30</y>
-           <width>361</width>
-           <height>181</height>
-          </rect>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::Box</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Plain</enum>
-         </property>
-         <widget class="QPushButton" name="btnTMTopInc">
-          <property name="geometry">
-           <rect>
-            <x>210</x>
-            <y>10</y>
-            <width>34</width>
-            <height>30</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>+</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="btnTMTopDec">
-          <property name="geometry">
-           <rect>
-            <x>130</x>
-            <y>10</y>
-            <width>34</width>
-            <height>30</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>-</string>
-          </property>
-         </widget>
-         <widget class="QTextEdit" name="txtEdtTMTop">
-          <property name="geometry">
-           <rect>
-            <x>164</x>
-            <y>11</y>
-            <width>46</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::StrongFocus</enum>
-          </property>
-          <property name="tabChangesFocus">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="btnTMBottomDec">
-          <property name="geometry">
-           <rect>
-            <x>130</x>
-            <y>140</y>
-            <width>34</width>
-            <height>30</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>-</string>
-          </property>
-         </widget>
-         <widget class="QTextEdit" name="txtEdtTMBottom">
-          <property name="geometry">
-           <rect>
-            <x>164</x>
-            <y>141</y>
-            <width>46</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::StrongFocus</enum>
-          </property>
-          <property name="tabChangesFocus">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="btnTMBottomInc">
-          <property name="geometry">
-           <rect>
-            <x>210</x>
-            <y>140</y>
-            <width>34</width>
-            <height>30</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>+</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="btnTMLeftDec">
-          <property name="geometry">
-           <rect>
-            <x>7</x>
-            <y>70</y>
-            <width>34</width>
-            <height>30</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>-</string>
-          </property>
-         </widget>
-         <widget class="QTextEdit" name="txtEdtTMLeft">
-          <property name="geometry">
-           <rect>
-            <x>41</x>
-            <y>71</y>
-            <width>46</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::StrongFocus</enum>
-          </property>
-          <property name="tabChangesFocus">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="btnTMLeftInc">
-          <property name="geometry">
-           <rect>
-            <x>87</x>
-            <y>70</y>
-            <width>34</width>
-            <height>30</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>+</string>
-          </property>
-         </widget>
-         <widget class="QTextEdit" name="txtEdtTMRight">
-          <property name="geometry">
-           <rect>
-            <x>274</x>
-            <y>81</y>
-            <width>46</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::StrongFocus</enum>
-          </property>
-          <property name="tabChangesFocus">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="btnTMRightInc">
-          <property name="geometry">
-           <rect>
-            <x>320</x>
-            <y>80</y>
-            <width>34</width>
-            <height>30</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>+</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="btnTMRightDec">
-          <property name="geometry">
-           <rect>
-            <x>240</x>
-            <y>80</y>
-            <width>34</width>
-            <height>30</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>-</string>
-          </property>
-         </widget>
-        </widget>
-        <widget class="QWidget" name="horizontalLayoutWidget">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>240</y>
-           <width>361</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <layout class="QHBoxLayout" name="layoutTapBox">
-          <item>
-           <widget class="QLabel" name="lblTap">
-            <property name="minimumSize">
-             <size>
-              <width>80</width>
-              <height>0</height>
-             </size>
+         <item>
+          <widget class="QUnderlineTitle" name="lblTouchAreaMarginTitle">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Touch Area Margin(% of Screen)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="frameTM">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>180</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
+           </property>
+           <widget class="QPushButton" name="btnTMTopInc">
+            <property name="geometry">
+             <rect>
+              <x>210</x>
+              <y>10</y>
+              <width>34</width>
+              <height>28</height>
+             </rect>
             </property>
             <property name="text">
-             <string>Tap:</string>
+             <string>+</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="horzSliderTap">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+           <widget class="QPushButton" name="btnTMTopDec">
+            <property name="geometry">
+             <rect>
+              <x>130</x>
+              <y>10</y>
+              <width>34</width>
+              <height>28</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>-</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <widget class="QTextEdit" name="txtEdtTap">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>60</width>
-              <height>26</height>
-             </size>
-            </property>
-            <property name="baseSize">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
+           <widget class="QBorderStyleEdit" name="txtEdtTMTop">
+            <property name="geometry">
+             <rect>
+              <x>164</x>
+              <y>11</y>
+              <width>46</width>
+              <height>28</height>
+             </rect>
             </property>
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
@@ -389,64 +177,27 @@
              <bool>true</bool>
             </property>
            </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="horizontalLayoutWidget_2">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>270</y>
-           <width>361</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <layout class="QHBoxLayout" name="layoutLongTapBox">
-          <item>
-           <widget class="QLabel" name="lblLongTap">
-            <property name="minimumSize">
-             <size>
-              <width>80</width>
-              <height>0</height>
-             </size>
+           <widget class="QPushButton" name="btnTMBottomDec">
+            <property name="geometry">
+             <rect>
+              <x>130</x>
+              <y>140</y>
+              <width>34</width>
+              <height>28</height>
+             </rect>
             </property>
             <property name="text">
-             <string>Long-Tap:</string>
+             <string>-</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="horzSliderLongTap">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTextEdit" name="txtEdtLongTap">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>60</width>
-              <height>26</height>
-             </size>
-            </property>
-            <property name="baseSize">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
+           <widget class="QBorderStyleEdit" name="txtEdtTMBottom">
+            <property name="geometry">
+             <rect>
+              <x>164</x>
+              <y>141</y>
+              <width>46</width>
+              <height>28</height>
+             </rect>
             </property>
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
@@ -455,64 +206,40 @@
              <bool>true</bool>
             </property>
            </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="horizontalLayoutWidget_3">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>330</y>
-           <width>361</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <layout class="QHBoxLayout" name="layoutWheelBox">
-          <item>
-           <widget class="QLabel" name="lblWheel">
-            <property name="minimumSize">
-             <size>
-              <width>80</width>
-              <height>0</height>
-             </size>
+           <widget class="QPushButton" name="btnTMBottomInc">
+            <property name="geometry">
+             <rect>
+              <x>210</x>
+              <y>140</y>
+              <width>34</width>
+              <height>28</height>
+             </rect>
             </property>
             <property name="text">
-             <string>Wheel:</string>
+             <string>+</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="horzSliderWheel">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+           <widget class="QPushButton" name="btnTMLeftDec">
+            <property name="geometry">
+             <rect>
+              <x>7</x>
+              <y>70</y>
+              <width>34</width>
+              <height>28</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>-</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <widget class="QTextEdit" name="txtEdtWheel">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>60</width>
-              <height>26</height>
-             </size>
-            </property>
-            <property name="baseSize">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
+           <widget class="QBorderStyleEdit" name="txtEdtTMLeft">
+            <property name="geometry">
+             <rect>
+              <x>41</x>
+              <y>71</y>
+              <width>46</width>
+              <height>28</height>
+             </rect>
             </property>
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
@@ -521,64 +248,27 @@
              <bool>true</bool>
             </property>
            </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="horizontalLayoutWidget_4">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>360</y>
-           <width>361</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <layout class="QHBoxLayout" name="layoutZoomBox">
-          <item>
-           <widget class="QLabel" name="lblZoom">
-            <property name="minimumSize">
-             <size>
-              <width>80</width>
-              <height>0</height>
-             </size>
+           <widget class="QPushButton" name="btnTMLeftInc">
+            <property name="geometry">
+             <rect>
+              <x>87</x>
+              <y>70</y>
+              <width>34</width>
+              <height>28</height>
+             </rect>
             </property>
             <property name="text">
-             <string>Zoom:</string>
+             <string>+</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="horzSliderZoom">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTextEdit" name="txtEdtZoom">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>60</width>
-              <height>26</height>
-             </size>
-            </property>
-            <property name="baseSize">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
+           <widget class="QBorderStyleEdit" name="txtEdtTMRight">
+            <property name="geometry">
+             <rect>
+              <x>274</x>
+              <y>81</y>
+              <width>46</width>
+              <height>28</height>
+             </rect>
             </property>
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
@@ -587,106 +277,558 @@
              <bool>true</bool>
             </property>
            </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QGroupBox" name="gbAutoSelect">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>430</y>
-           <width>361</width>
-           <height>51</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Auto Select</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-        <widget class="QWidget" name="horizontalLayoutWidget_5">
-         <property name="geometry">
-          <rect>
-           <x>43</x>
-           <y>445</y>
-           <width>301</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <layout class="QHBoxLayout" name="layoutInputModeBox">
-          <item>
-           <widget class="QRadioButton" name="btnMouse">
+           <widget class="QPushButton" name="btnTMRightInc">
+            <property name="geometry">
+             <rect>
+              <x>320</x>
+              <y>80</y>
+              <width>34</width>
+              <height>28</height>
+             </rect>
+            </property>
             <property name="text">
-             <string>Mouse</string>
+             <string>+</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="btnMultitouch">
+           <widget class="QPushButton" name="btnTMRightDec">
+            <property name="geometry">
+             <rect>
+              <x>240</x>
+              <y>80</y>
+              <width>34</width>
+              <height>28</height>
+             </rect>
+            </property>
             <property name="text">
-             <string>Multi-touch</string>
+             <string>-</string>
             </property>
            </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="horizontalLayoutWidget_6">
-         <property name="geometry">
-          <rect>
-           <x>40</x>
-           <y>530</y>
-           <width>301</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <layout class="QHBoxLayout" name="layoutUSBCfgBox">
-          <item>
-           <widget class="QRadioButton" name="btnFull">
-            <property name="text">
-             <string>Full</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="btnDigitizerOnly">
-            <property name="text">
-             <string>Digitizer only</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QLabel" name="lblFocusStealer">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>580</y>
-           <width>87</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::ClickFocus</enum>
-         </property>
-         <property name="text">
-          <string>Focus Stealer</string>
-         </property>
-        </widget>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>4</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QUnderlineTitle" name="lblTimeSettingTitle">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Time Setting(ms)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="layoutTapBox">
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="lblTap">
+             <property name="minimumSize">
+              <size>
+               <width>80</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Tap:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="horzSliderTap">
+             <property name="pageStep">
+              <number>1</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QBorderStyleEdit" name="txtEdtTap">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>40</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>40</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+             <property name="tabChangesFocus">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="layoutLongTapBox">
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="lblLongTap">
+             <property name="minimumSize">
+              <size>
+               <width>80</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Long-Tap:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="horzSliderLongTap">
+             <property name="pageStep">
+              <number>1</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QBorderStyleEdit" name="txtEdtLongTap">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>40</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>40</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+             <property name="tabChangesFocus">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>4</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QUnderlineTitle" name="lblWheelZoomTitle">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Wheel/Zoom Sensitivity Setting</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="layoutWheelBox">
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="lblWheel">
+             <property name="minimumSize">
+              <size>
+               <width>80</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Wheel:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="horzSliderWheel">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QBorderStyleEdit" name="txtEdtWheel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>40</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>40</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+             <property name="tabChangesFocus">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="layoutZoomBox">
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="lblZoom">
+             <property name="minimumSize">
+              <size>
+               <width>80</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Zoom:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="horzSliderZoom">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QBorderStyleEdit" name="txtEdtZoom">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>40</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>40</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+             <property name="tabChangesFocus">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>4</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QUnderlineTitle" name="lblInputModeTitle">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Input Mode Setting</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="layoutInputModeBox">
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QGroupBox" name="gbAutoSelect">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>Auto Select</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QRadioButton" name="btnMouse">
+                <property name="text">
+                 <string>Mouse</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="btnMultitouch">
+                <property name="text">
+                 <string>Multi-touch</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>4</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QUnderlineTitle" name="lblUsbCfgModeTitle">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>USB Config Mode Setting</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="layoutUSBCfgBox">
+           <property name="leftMargin">
+            <number>30</number>
+           </property>
+           <item>
+            <widget class="QRadioButton" name="btnFull">
+             <property name="text">
+              <string>Full</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="btnDigitizerOnly">
+             <property name="text">
+              <string>Digitizer only</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </widget>
       </widget>
      </item>
      <item>
-      <widget class="QAreaSettingForm" name="widgetAreaSetting" native="true"/>
+      <layout class="QVBoxLayout" name="layoutAreaSetting">
+       <property name="spacing">
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QUnderlineTitle" name="lblAreaSettingTitle">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Area Setting(% of Screen)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QAreaSettingForm" name="widgetAreaSetting" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>400</width>
+           <height>400</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QCmdAsyncManagerCtrl" name="cmAsyncMngr" native="true">
+    <widget class="QCmdAsyncManagerCtrl" name="cmdAsyncMngr" native="true">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -839,10 +981,20 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>QBorderStyleEdit</class>
+   <extends>QTextEdit</extends>
+   <header>QBorderStyleEdit.h</header>
+  </customwidget>
+  <customwidget>
    <class>QAreaSettingForm</class>
    <extends>QWidget</extends>
    <header>QAreaSettingForm.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QUnderlineTitle</class>
+   <extends>QLabel</extends>
+   <header>QUnderlineTitle.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -867,9 +1019,6 @@
   <tabstop>txtEdtWheel</tabstop>
   <tabstop>horzSliderZoom</tabstop>
   <tabstop>txtEdtZoom</tabstop>
-  <tabstop>gbAutoSelect</tabstop>
-  <tabstop>btnMouse</tabstop>
-  <tabstop>btnMultitouch</tabstop>
   <tabstop>btnFull</tabstop>
   <tabstop>btnDigitizerOnly</tabstop>
   <tabstop>btnReset</tabstop>

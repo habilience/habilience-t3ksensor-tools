@@ -59,8 +59,15 @@ void QBorderStyleEdit::keyPressEvent(QKeyEvent *e)
 
             if (m_nMaxTextLength >= 0)
             {
+                QTextCursor c = textCursor();
+                int nD = 0;
+                if (c.hasSelection())
+                {
+                    QString strSel = c.selectedText();
+                    nD = strSel.length();
+                }
                 QString strCurrent = toPlainText();
-                if (strCurrent.length() >= m_nMaxTextLength)
+                if ((strCurrent.length()-nD) >= m_nMaxTextLength)
                     return;
             }
         }
@@ -113,7 +120,7 @@ void QBorderStyleEdit::focusInEvent(QFocusEvent *e)
 
     m_bNowEditing = true;
 
-    selectAll();
+    //selectAll();
 
     QString strValue = toPlainText();
     if (strValue.isEmpty())
@@ -236,9 +243,17 @@ void QBorderStyleEdit::setWarning( bool bWarning )
 void QBorderStyleEdit::setText(const QString &text)
 {
     QString strText = text;
-    if (alignment() == Qt::AlignCenter)
+    switch (alignment())
     {
-        strText = "<center>" + text + "</center>";
+    case Qt::AlignCenter:
+        strText = "<p align=center>" + text + "</p>";
+        break;
+    case Qt::AlignRight:
+        strText = "<p align=right>"+text+"</p>";
+        break;
+    default:
+        strText = "<p align=left>"+text+"</p>";
+        break;
     }
     QTextEdit::setText(strText);
 }

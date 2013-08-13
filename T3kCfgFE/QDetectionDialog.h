@@ -2,7 +2,7 @@
 #define QDETECTIONDIALOG_H
 
 #include <QDialog>
-#include <QT3kDeviceEventHandler.h>
+#include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "t3kcomdef.h"
 #include "QEventRedirection.h"
@@ -41,8 +41,8 @@ private:
 
     int     m_TimerRefreshAutoOffset;
     int     m_TimerUpdateGraph;
-
     int     m_TimerBlinkArrow;
+
     bool    m_bToggleArrow;     // true: show, false: hide
     int     m_nTouchProgress;   // for Auto Range Setting
     QRect   m_rcArrow[4];
@@ -51,15 +51,11 @@ private:
 protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void closeEvent(QCloseEvent *);
-    //virtual bool eventFilter(QObject *obj, QEvent *evt);
     virtual void timerEvent(QTimerEvent *);
-
-    virtual void reject();
-    virtual void accept();
 
     void drawArrow(QPainter& p);
 
-    // override QT3kDeviceEventHandler::IListener
+    // override QLangManager::ILangChangeNotify
     virtual void onChangeLanguage();
 
     void setCheckAutoOffset(bool bCheck);
@@ -75,13 +71,15 @@ protected:
 
     void enableAllControls( bool bEnable );
 
-    // override QLangManager::ILangChangeNotify
+    // override QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnDTC(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, unsigned char *layerid, unsigned long *start_pos, unsigned long *end_pos, int cnt);
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
     // override QEventRedirection::IEventListener
     virtual bool onKeyPress(QKeyEvent *evt);
     virtual bool onKeyRelease(QKeyEvent *evt);
+    virtual void onRButtonClicked();
+    virtual bool onRButtonDblClicked();
 
     void onFinishAutoRange();
 
@@ -103,6 +101,9 @@ public:
     bool canClose();
     
 private slots:
+    virtual void reject();
+    virtual void accept();
+
     void on_btnClose_clicked();
     void on_btnMain_clicked();
     void on_btnSub_clicked();

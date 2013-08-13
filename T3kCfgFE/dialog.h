@@ -2,7 +2,7 @@
 #define DIALOG_H
 
 #include <QDialog>
-#include <QT3kDeviceEventHandler.h>
+#include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "QEventRedirection.h"
 
@@ -111,7 +111,6 @@ protected:
     QEventRedirection   m_EventRedirect;
     // override QEventRedirection::IEventListener
     virtual void onRButtonClicked();
-    virtual void onRButtonDblClicked();
     virtual bool onKeyPress(QKeyEvent *evt);
     virtual bool onMouseWheel(QWheelEvent *evt);
 

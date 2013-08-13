@@ -6,6 +6,8 @@
 #include "QLangManager.h"
 #include "QEventRedirection.h"
 #include <QVector>
+#include "QPointClipper.h"
+#include <QThread>
 
 namespace Ui {
 class QBentAdjustmentDialog;
@@ -13,6 +15,8 @@ class QBentAdjustmentDialog;
 
 #define ADJUSTMENT_STEP	(7+6)
 
+class QBentProgressDialog;
+class QCalcCamPosThread;
 struct BentItem
 {
     int		nCameraIndex;
@@ -47,15 +51,41 @@ struct BentItem
     // processing
     int     nCalcPosDataCnt;
     float   fDistortionMax;
-    //int     nCalcPosProg;
+    int     nCalcPosProg;
     //HANDLE  hThread;
-    //CWnd *  pCalcPosWnd;
-    //BOOL    bCalcPos;
+    QCalcCamPosThread* pThread;
+    QBentProgressDialog*    pCalcPosWnd;
+    bool    bCalcPos;
 
     bool	bDataValid;
     int		nAveCount;
     long	lPrevTouch;
     long	lAveDiff;
+};
+
+class QCalcCamPosThread : public QThread
+{
+private:
+    BentItem& m_item;
+protected:
+    virtual void run();
+public:
+    QCalcCamPosThread(BentItem& item);
+};
+
+class QKeyWatcher : public QObject
+{
+    Q_OBJECT
+private:
+    bool m_bStopGUI;
+public:
+    QKeyWatcher(bool& bStopGUI) : m_bStopGUI(bStopGUI)
+    {
+    }
+
+protected:
+    virtual bool eventFilter(QObject *obj, QEvent *evt);
+
 };
 
 class Dialog;
@@ -66,6 +96,7 @@ class QBentAdjustmentDialog : public QDialog
         , public QEventRedirection::IEventListener
 {
     Q_OBJECT
+friend class QCalcCamPosThread;
 private:
     bool    m_bIsModified;
 
@@ -108,6 +139,7 @@ private:
     int     m_TimerDrawWaitTimeout;
 
     QVector<BentItem> m_BentItemArray;
+    QPointClipper     m_PointClipper;
 
 public:
     static QPoint PosToDCC( float x, float y, const QRect rcClient );
@@ -116,9 +148,7 @@ public:
 protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void closeEvent(QCloseEvent *);
-
-    virtual void reject();
-    virtual void accept();
+    virtual void timerEvent(QTimerEvent *);
 
     // override QLangManager::ILangChangeNotify
     virtual void onChangeLanguage();
@@ -126,6 +156,12 @@ protected:
     // override QEventRedirection::IEventListener
     virtual bool onKeyPress(QKeyEvent *evt);
     virtual bool onKeyRelease(QKeyEvent *evt);
+    virtual bool onMouseWheel(QWheelEvent *evt);
+    virtual void onRButtonClicked();
+    virtual bool onRButtonDblClicked();
+
+    bool isShortcutWidget(QWidget* widget);
+    void focusChangeToNextShortcutWidget(bool bDirection);
 
     void enableAllControls(bool bEnable);
 
@@ -141,6 +177,7 @@ protected:
     void drawCursor( QPainter& p, int nx, int ny, int nc );
     void drawErrorText( QPainter& p, int nx, int ny, int nc );
     void drawWaitTime( QPainter& p, QRect rcWait );
+    void drawTouchLines( QPainter& p, QRect rcBody );
 
     void onRangeChange(QBorderStyleEdit* pEdit, int nMin, int nMax, int nStep);
 
@@ -148,6 +185,7 @@ protected:
     static bool calculateCameraValues( BentItem& item );
 
     void showArrowButtons( bool bShow );
+    void showAllButtons( bool bShow );
     void showAllButtonsWithoutClose( bool bShow );
 
     void onAdjustmentFinish();
@@ -162,12 +200,22 @@ protected:
     // override QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnOBJ(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, unsigned char *layerid, float *start_pos, float *end_pos, int cnt);
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+
+    enum RequestCmd { cmdRefresh, cmdWriteToFactoryDefault, cmdLoadFactoryDefault, cmdInitialize };
+    bool requestSensorData( RequestCmd cmd, bool bWait );
+    void sensorReset();
+    void sensorLoadFactoryDefault();
+    void sensorRefresh();
+    void sensorWriteToFactoryDefault();
 public:
     explicit QBentAdjustmentDialog(Dialog *parent = 0);
     ~QBentAdjustmentDialog();
     bool canClose();
 
 private slots:
+    virtual void reject();
+    virtual void accept();
+
     void onEditModified(QBorderStyleEdit* pEdit, int nValue, double dValue);
 
     void on_btnClose_clicked();
