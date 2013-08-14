@@ -340,6 +340,9 @@
           <property name="text">
            <string>+</string>
           </property>
+          <property name="autoRepeat">
+           <bool>true</bool>
+          </property>
          </widget>
          <widget class="QBorderStyleEdit" name="txtEdtDetectLine">
           <property name="geometry">
@@ -357,6 +360,9 @@
           </property>
           <property name="tabChangesFocus">
            <bool>true</bool>
+          </property>
+          <property name="lineWrapMode">
+           <enum>QTextEdit::NoWrap</enum>
           </property>
          </widget>
          <widget class="QPushButton" name="btnDetectLineDn">
@@ -377,6 +383,9 @@
           </property>
           <property name="text">
            <string>-</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>true</bool>
           </property>
          </widget>
          <widget class="QUnderlineTitle" name="lblAmbientLights">
@@ -404,6 +413,9 @@
           <property name="text">
            <string>&lt;</string>
           </property>
+          <property name="autoRepeat">
+           <bool>true</bool>
+          </property>
          </widget>
          <widget class="QBorderStyleEdit" name="txtEdtLight1">
           <property name="geometry">
@@ -422,6 +434,9 @@
           <property name="tabChangesFocus">
            <bool>true</bool>
           </property>
+          <property name="lineWrapMode">
+           <enum>QTextEdit::NoWrap</enum>
+          </property>
          </widget>
          <widget class="QPushButton" name="btnLight1Inc">
           <property name="geometry">
@@ -434,6 +449,9 @@
           </property>
           <property name="text">
            <string>&gt;</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>true</bool>
           </property>
          </widget>
          <widget class="QBorderStyleEdit" name="txtEdtLight2">
@@ -453,6 +471,9 @@
           <property name="tabChangesFocus">
            <bool>true</bool>
           </property>
+          <property name="lineWrapMode">
+           <enum>QTextEdit::NoWrap</enum>
+          </property>
          </widget>
          <widget class="QPushButton" name="btnLight2Inc">
           <property name="geometry">
@@ -466,6 +487,9 @@
           <property name="text">
            <string>&gt;</string>
           </property>
+          <property name="autoRepeat">
+           <bool>true</bool>
+          </property>
          </widget>
          <widget class="QPushButton" name="btnLight2Dec">
           <property name="geometry">
@@ -478,6 +502,9 @@
           </property>
           <property name="text">
            <string>&lt;</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>true</bool>
           </property>
          </widget>
          <widget class="QBorderStyleEdit" name="txtEdtLight3">
@@ -497,6 +524,9 @@
           <property name="tabChangesFocus">
            <bool>true</bool>
           </property>
+          <property name="lineWrapMode">
+           <enum>QTextEdit::NoWrap</enum>
+          </property>
          </widget>
          <widget class="QPushButton" name="btnLight3Inc">
           <property name="geometry">
@@ -509,6 +539,9 @@
           </property>
           <property name="text">
            <string>&gt;</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>true</bool>
           </property>
          </widget>
          <widget class="QPushButton" name="btnLight3Dec">
@@ -523,21 +556,8 @@
           <property name="text">
            <string>&lt;</string>
           </property>
-         </widget>
-         <widget class="QLabel" name="lblFocusStealer">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>220</y>
-            <width>87</width>
-            <height>16</height>
-           </rect>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::ClickFocus</enum>
-          </property>
-          <property name="text">
-           <string>Focus Stealer</string>
+          <property name="autoRepeat">
+           <bool>true</bool>
           </property>
          </widget>
         </widget>

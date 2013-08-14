@@ -16,6 +16,8 @@
 #include "QMyApplication.h"
 #include "QAutoRangeCompleteDialog.h"
 
+#define MONITORING_EXPIRED_MODE
+
 #define MAX_TICK_COUNT      (400)
 
 QDetectionDialog::QDetectionDialog(Dialog *parent) :
@@ -60,7 +62,11 @@ QDetectionDialog::QDetectionDialog(Dialog *parent) :
     LOG_I( "Enter [Detection]" );
     onChangeLanguage();
 
+#ifdef MONITORING_EXPIRED_MODE
+    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_MESSAGE|T3K_HID_MODE_VIEW );
+#else
     m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW );
+#endif
     ui->cmdAsyncMngr->setT3kDevice(QT3kDevice::instance());
 
     if (g_AppData.bIsSubCameraExist)
@@ -110,6 +116,8 @@ void QDetectionDialog::onChangeLanguage()
     else
         setLayoutDirection( Qt::LeftToRight );
 
+    setWindowTitle( res.getResString(MAIN_TAG, "BTN_CAPTION_DETECTION") );
+
     ui->btnMain->setText( res.getResString(RES_TAG, "BTN_CAPTION_MAIN_CAMERA") );
     ui->btnSub->setText( res.getResString(RES_TAG, "BTN_CAPTION_SUB_CAMERA") );
 
@@ -126,7 +134,7 @@ void QDetectionDialog::onChangeLanguage()
 
     if (bIsR2L != s_bIsR2L)
     {
-        // TODO: !!!!
+        // TODO: adjust ui
     }
 
     s_bIsR2L = bIsR2L;
@@ -320,19 +328,32 @@ void QDetectionDialog::closeEvent(QCloseEvent *evt)
     }
     else
     {
-        if (m_TimerRefreshAutoOffset)
-            killTimer(m_TimerRefreshAutoOffset);
-        m_TimerRefreshAutoOffset = 0;
-
-        if (m_TimerUpdateGraph)
-            killTimer(m_TimerUpdateGraph);
-        m_TimerUpdateGraph = 0;
-
-        QT3kDevice* pDevice = QT3kDevice::instance();
-        pDevice->sendCommand( "cam1/mode=detection", true );
-        pDevice->sendCommand( "cam2/mode=detection", true );
-        m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND);
+        onClose();
     }
+}
+
+void QDetectionDialog::onClose()
+{
+    if (m_TimerRefreshAutoOffset)
+    {
+        killTimer(m_TimerRefreshAutoOffset);
+        m_TimerRefreshAutoOffset = 0;
+    }
+    if (m_TimerUpdateGraph)
+    {
+        killTimer(m_TimerUpdateGraph);
+        m_TimerUpdateGraph = 0;
+    }
+    if (m_TimerBlinkArrow)
+    {
+        killTimer(m_TimerBlinkArrow);
+        m_TimerBlinkArrow = 0;
+    }
+
+    QT3kDevice* pDevice = QT3kDevice::instance();
+    pDevice->sendCommand( "cam1/mode=detection", true );
+    pDevice->sendCommand( "cam2/mode=detection", true );
+    m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND);
 }
 
 void QDetectionDialog::reject()
@@ -603,17 +624,7 @@ void QDetectionDialog::resetDataWithInitData( const QString& strCmd, bool bWithF
 
 void QDetectionDialog::enableAllControls( bool bEnable )
 {
-    QWidget* controls[] = {
-        ui->btnMain, ui->btnSub,
-        ui->btnReset, ui->btnRefresh, ui->btnSave, ui->btnClose,
-        ui->btnAutoRangeSetting,
-        ui->chkAutoDetectionLine, ui->chkInvertDetection, ui->chkSimpleDetection
-    };
-
-    for ( int i=0 ; i<(int)(sizeof(controls)/sizeof(QWidget*)) ; i++ )
-    {
-        controls[i]->setEnabled(bEnable);
-    }
+    setEnabled(bEnable);
 
     ui->widgetDetection1->enableAllControls(bEnable);
     ui->widgetDetection2->enableAllControls(bEnable);
@@ -630,7 +641,11 @@ void QDetectionDialog::enterAutoRangeSetting()
     QLangRes& res = QLangManager::getResource();
     ui->btnAutoRangeSetting->setText( res.getResString(RES_TAG, "BTN_CAPTION_CANCEL_AUTO_RANGE") );
 
+#ifdef MONITORING_EXPIRED_MODE
+    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_MESSAGE|T3K_HID_MODE_VIEW );
+#else
     m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW );
+#endif
 
     if ( ui->cmdAsyncMngr->isStarted() )
     {
@@ -701,7 +716,11 @@ void QDetectionDialog::leaveAutoRangeSetting()
     QLangRes& res = QLangManager::getResource();
     ui->btnAutoRangeSetting->setText( res.getResString(RES_TAG, "BTN_CAPTION_AUTO_RANGE_SETTING") );
 
+#ifdef MONITORING_EXPIRED_MODE
+    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_MESSAGE|T3K_HID_MODE_VIEW );
+#else
     m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW );
+#endif
 
     m_bTouchOK = false;
     m_bCamTouch = false;
@@ -867,7 +886,11 @@ void QDetectionDialog::onFinishAutoRange()
     ui->btnMain->setEnabled(true);
     ui->btnSub->setEnabled(true);
 
-    m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW);
+#ifdef MONITORING_EXPIRED_MODE
+    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_MESSAGE|T3K_HID_MODE_VIEW );
+#else
+    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW );
+#endif
 
     QLangRes& res = QLangManager::getResource();
     ui->btnAutoRangeSetting->setText( res.getResString(RES_TAG, "BTN_CAPTION_AUTO_RANGE_SETTING") );
@@ -881,7 +904,11 @@ void QDetectionDialog::onFinishAutoRange()
         QAutoRangeCompleteDialog AutoRangeCompleteDialog;
         AutoRangeCompleteDialog.exec();
 
-        m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW);
+#ifdef MONITORING_EXPIRED_MODE
+        m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_MESSAGE|T3K_HID_MODE_VIEW );
+#else
+        m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW );
+#endif
 
         if (ui->cmdAsyncMngr->isStarted())
         {
@@ -1018,6 +1045,22 @@ void QDetectionDialog::TPDP_OnDTC(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part
             m_nTouchProgress = 0;
             updateRect(m_rcArrow[m_nAutoRangeStep]);
             updateRect(m_rcProgress[m_nAutoRangeStep]);
+        }
+    }
+}
+
+void QDetectionDialog::TPDP_OnMSG(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char *partid, const char *txt)
+{
+    if ( strstr(partid, "TXT") == partid )
+    {
+        if ( strstr(txt, "expired mode") == txt )
+        {
+            LOG_I( "sensor expired mode => reset detection" );
+            qDebug( "sensor expired mode => reset detection" );
+            DetectionMode oldDetectionMode = m_detectionMode;
+            m_detectionMode = DetectionModeNone;
+            setDetectionMode(oldDetectionMode);
+            requestSensorData( cmdRefresh, false );
         }
     }
 }
@@ -1351,9 +1394,6 @@ void QDetectionDialog::on_btnSave_clicked()
         return;
     }
     enableAllControls( true );
-
-    ui->widgetDetection1->setModified(false);
-    ui->widgetDetection2->setModified(false);
 
     setEnabled( true );
     ui->btnSave->setFocus();

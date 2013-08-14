@@ -27,6 +27,8 @@ private:
     bool        m_bIsWarning;
 
     int         m_nMaxTextLength;
+
+    Qt::Alignment m_alignText;
 protected:
     virtual void keyPressEvent(QKeyEvent *e);
     virtual void focusInEvent(QFocusEvent *e);
@@ -50,6 +52,7 @@ public:
 signals:
     void editModified( QBorderStyleEdit* sender, int nValue, double dValue );
 public slots:
+    void setAlignment(Qt::Alignment a);
     void setText(const QString &text);
     
 };

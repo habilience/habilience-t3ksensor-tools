@@ -25,6 +25,8 @@ QBorderStyleEdit::QBorderStyleEdit(QWidget *parent) :
     m_clrBorder = QColor(143,143,143);
     m_clrBackground = Qt::white;
 
+    m_alignText = Qt::AlignLeft;
+
     QString strValue = toPlainText();
     if (strValue.isEmpty())
     {
@@ -167,7 +169,9 @@ void QBorderStyleEdit::focusOutEvent(QFocusEvent *e)
 
     if (m_bIsFloatStyle)
     {
-        strValue.setNum( dValue, 'g', 1 );
+        char szTemp[64];
+        snprintf( szTemp, 64, "%.1lf", dValue );
+        strValue = szTemp;
     }
     else
     {
@@ -240,20 +244,15 @@ void QBorderStyleEdit::setWarning( bool bWarning )
     }
 }
 
+void QBorderStyleEdit::setAlignment(Qt::Alignment a)
+{
+    m_alignText = a;
+    QTextEdit::setAlignment(m_alignText);
+}
+
 void QBorderStyleEdit::setText(const QString &text)
 {
-    QString strText = text;
-    switch (alignment())
-    {
-    case Qt::AlignCenter:
-        strText = "<p align=center>" + text + "</p>";
-        break;
-    case Qt::AlignRight:
-        strText = "<p align=right>"+text+"</p>";
-        break;
-    default:
-        strText = "<p align=left>"+text+"</p>";
-        break;
-    }
-    QTextEdit::setText(strText);
+    QTextEdit::setText(text);
+
+    QTextEdit::setAlignment(m_alignText);
 }

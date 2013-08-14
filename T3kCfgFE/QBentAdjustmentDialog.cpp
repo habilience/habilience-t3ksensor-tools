@@ -297,6 +297,8 @@ void QBentAdjustmentDialog::onChangeLanguage()
     else
         setLayoutDirection( Qt::LeftToRight );
 
+    setWindowTitle( res.getResString(MAIN_TAG, "BTN_CAPTION_BENT_ADJUSTMENT") );
+
     ui->btnUp->setText( res.getResString(RES_TAG, "BTN_CAPTION_UP") );
     ui->btnDown->setText( res.getResString(RES_TAG, "BTN_CAPTION_DOWN") );
     ui->btnLeft->setText( res.getResString(RES_TAG, "BTN_CAPTION_LEFT") );
@@ -308,7 +310,7 @@ void QBentAdjustmentDialog::onChangeLanguage()
 
     if (bIsR2L != s_bIsR2L)
     {
-        // TODO: !!!!
+        // TODO: adjust ui
     }
 
     s_bIsR2L = bIsR2L;
@@ -677,10 +679,7 @@ void QBentAdjustmentDialog::leaveAdjustmentMode( bool bSuccess )
 
 void QBentAdjustmentDialog::enableAllControls(bool bEnable)
 {
-    ui->widgetBentDirMargin->setEnabled(bEnable);
-    ui->btnReset->setEnabled(bEnable);
-    ui->btnSave->setEnabled(bEnable);
-    ui->btnClose->setEnabled(bEnable);
+    setEnabled(bEnable);
 }
 
 void QBentAdjustmentDialog::on_btnClose_clicked()
@@ -1129,7 +1128,7 @@ void QBentAdjustmentDialog::drawCameraLocations( QPainter& p, QRect rcBody )
     int nt = rcBody.width() / 42;
     int nth = rcBody.height() / 24;
     int ntx = nt > nth ? nth : nt;
-    QFont fnt("Arial");
+    QFont fnt = font();
     fnt.setPixelSize(ntx);
     fnt.setWeight(QFont::DemiBold);
     p.setFont(fnt);
@@ -1265,6 +1264,7 @@ void QBentAdjustmentDialog::drawCursor( QPainter& p, int nx, int ny, int nc )
             {
                 p.setRenderHint(QPainter::Antialiasing);
                 QPen penArc( QColor(237, 28, 36, 128), nc/4 );
+                penArc.setCapStyle(Qt::FlatCap);
                 p.setPen(penArc);
                 p.drawArc( nx-nc/2, ny-nc/2, nc, nc, 90*16, -m_nBentProgress*360/100 * 16 ); // Qt 1/16th of a degree
                 p.drawArc( nx-nc/2, ny-nc/2, nc, nc, 90*16, m_nBentProgress*360/100 * 16 );
@@ -1287,7 +1287,8 @@ void QBentAdjustmentDialog::drawErrorText( QPainter& p, int nx, int ny, int nc )
 
     p.setRenderHint(QPainter::Antialiasing);
 
-    QFont fntError("Arial", nc);
+    QFont fntError = font();
+    fntError.setPixelSize(nc);
     p.setFont(fntError);
     p.setPen( Qt::red );
 
@@ -1357,7 +1358,7 @@ void QBentAdjustmentDialog::drawWaitTime( QPainter& p, QRect rcWait )
     p.setPen(penMovingCircle);
     p.drawArc( rectWait, 90*16 + (-360*nStep/WAIT_ANIMATION_FRAME * 16), 30*16 );  // Qt 1/16th of a degree
 
-    QFont fntWait("Arial");
+    QFont fntWait = font();
     fntWait.setPixelSize(rectWait.height()*2/3);
     fntWait.setWeight(QFont::Bold);
     p.setFont(fntWait);
@@ -1375,8 +1376,17 @@ void QBentAdjustmentDialog::drawWaitTime( QPainter& p, QRect rcWait )
 void QBentAdjustmentDialog::closeEvent(QCloseEvent *evt)
 {
     if (!canClose())
+    {
         evt->ignore();
+    }
+    else
+    {
+        onClose();
+    }
+}
 
+void QBentAdjustmentDialog::onClose()
+{
     QBentCfgParam* param = QBentCfgParam::instance();
 
     QInitDataIni::instance()->setBentMargin(
@@ -1403,6 +1413,16 @@ void QBentAdjustmentDialog::closeEvent(QCloseEvent *evt)
     {
         killTimer(m_TimerDrawWaitTimeout);
         m_TimerDrawWaitTimeout = 0;
+    }
+    if (m_TimerShowButtons)
+    {
+        killTimer(m_TimerShowButtons);
+        m_TimerShowButtons = 0;
+    }
+    if (m_TimerHideButtons)
+    {
+        killTimer(m_TimerHideButtons);
+        m_TimerHideButtons = 0;
     }
 
     m_bDrawWaitTimeout = false;
@@ -1568,7 +1588,6 @@ void QBentAdjustmentDialog::onAdjustmentFinish()
 
     QRect rcBody(0, 0, width(), height());
 
-    // TODO:
 #define PROG_SIZE  150
     for ( int i = 0; i < m_BentItemArray.size(); i++ )
     {
@@ -1613,7 +1632,7 @@ void QBentAdjustmentDialog::onAdjustmentFinish()
             fDnTot += (fDn[ni] = fTot / nTot);
             nDnTot++;
         }
-        float fDnAvr = fDnTot / nDnTot;
+        //float fDnAvr = fDnTot / nDnTot;
         for ( ni = 0; ni < ADJUSTMENT_STEP; ni++ )
         {
             if ( qIsNaN(fObcD[ni]) )
@@ -2389,12 +2408,12 @@ void QBentAdjustmentDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
         else
             nMode = 0;
 
-        fA = *(float *)&dwA;
-        fB = *(float *)&dwB;
-        fC = *(float *)&dwC;
-        fD = *(float *)&dwD;
-        fE = *(float *)&dwE;
-        fF = *(float *)&dwF;
+        memcpy( &fA, &dwA, sizeof(float) );
+        memcpy( &fB, &dwB, sizeof(float) );
+        memcpy( &fC, &dwC, sizeof(float) );
+        memcpy( &fD, &dwD, sizeof(float) );
+        memcpy( &fE, &dwE, sizeof(float) );
+        memcpy( &fF, &dwF, sizeof(float) );
 
         bool bExist = false;
         int nFoundItemPos;
@@ -2511,6 +2530,7 @@ bool QBentAdjustmentDialog::requestSensorData( RequestCmd cmd, bool bWait )
 
     if (bResult && (cmd == cmdInitialize || cmd == cmdWriteToFactoryDefault))
     {
+        m_bIsModified = false;
     }
 
     return bResult;
@@ -2599,12 +2619,13 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
     {
         const BentItem& item = m_BentItemArray.at(nI);
         unsigned long dwA, dwB, dwC, dwD, dwE, dwF;
-        dwA = *(unsigned long*)(&item.fCamA);
-        dwB = *(unsigned long*)(&item.fCamB);
-        dwC = *(unsigned long*)(&item.fCamC);
-        dwD = *(unsigned long*)(&item.fCamD);
-        dwE = *(unsigned long*)(&item.fCamE);
-        dwF = *(unsigned long*)(&item.fCamF);
+
+        memcpy( &dwA, &item.fCamA, sizeof(float) );
+        memcpy( &dwB, &item.fCamB, sizeof(float) );
+        memcpy( &dwC, &item.fCamC, sizeof(float) );
+        memcpy( &dwD, &item.fCamD, sizeof(float) );
+        memcpy( &dwE, &item.fCamE, sizeof(float) );
+        memcpy( &dwF, &item.fCamF, sizeof(float) );
 
         snprintf( szTemp, 256, "%08lx,%08lx,%08lx,%08lx,%08lx,%08lx,0x%02x", dwA, dwB, dwC, dwD, dwE, dwF, item.mode );
         strCmd = getCameraPrefix(item.nCameraIndex) + cstrFactorialCamPos;
@@ -2753,7 +2774,6 @@ void QBentAdjustmentDialog::on_btnSave_clicked()
         return;
     }
     enableAllControls( true );
-    m_bIsModified = false;
     setEnabled( true );
     ui->btnSave->setFocus();
     close();

@@ -210,7 +210,9 @@ protected:
 public:
     explicit QBentAdjustmentDialog(Dialog *parent = 0);
     ~QBentAdjustmentDialog();
+
     bool canClose();
+    void onClose();
 
 private slots:
     virtual void reject();

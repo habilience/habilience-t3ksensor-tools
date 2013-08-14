@@ -63,6 +63,7 @@ public:
     explicit QTouchSettingDialog(Dialog *parent = 0);
     ~QTouchSettingDialog();
     bool canClose();
+    void onClose();
     
 private slots:
     virtual void reject();
@@ -88,13 +89,9 @@ private slots:
     void on_btnMultitouch_clicked();
     void on_btnFull_clicked();
     void on_btnDigitizerOnly_clicked();
-
     void on_horzSliderTap_valueChanged(int value);
-
     void on_horzSliderLongTap_valueChanged(int value);
-
     void on_horzSliderWheel_valueChanged(int value);
-
     void on_horzSliderZoom_valueChanged(int value);
 
 private:

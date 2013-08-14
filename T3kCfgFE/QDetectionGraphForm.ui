@@ -410,6 +410,9 @@ QTextEdit:disabled {
                <property name="text">
                 <string>-5</string>
                </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item>
@@ -444,6 +447,9 @@ QTextEdit:disabled {
                <property name="tabChangesFocus">
                 <bool>true</bool>
                </property>
+               <property name="lineWrapMode">
+                <enum>QTextEdit::NoWrap</enum>
+               </property>
               </widget>
              </item>
              <item>
@@ -474,6 +480,9 @@ QTextEdit:disabled {
                </property>
                <property name="text">
                 <string>+5</string>
+               </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -513,6 +522,9 @@ QTextEdit:disabled {
                <property name="text">
                 <string>-1</string>
                </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item>
@@ -547,6 +559,9 @@ QTextEdit:disabled {
                <property name="tabChangesFocus">
                 <bool>true</bool>
                </property>
+               <property name="lineWrapMode">
+                <enum>QTextEdit::NoWrap</enum>
+               </property>
               </widget>
              </item>
              <item>
@@ -577,6 +592,9 @@ QTextEdit:disabled {
                </property>
                <property name="text">
                 <string>+1</string>
+               </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -638,6 +656,9 @@ QTextEdit:disabled {
                <property name="tabChangesFocus">
                 <bool>true</bool>
                </property>
+               <property name="lineWrapMode">
+                <enum>QTextEdit::NoWrap</enum>
+               </property>
               </widget>
              </item>
              <item>
@@ -692,6 +713,9 @@ QTextEdit:disabled {
                <property name="text">
                 <string>-1</string>
                </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item>
@@ -726,6 +750,9 @@ QTextEdit:disabled {
                <property name="tabChangesFocus">
                 <bool>true</bool>
                </property>
+               <property name="lineWrapMode">
+                <enum>QTextEdit::NoWrap</enum>
+               </property>
               </widget>
              </item>
              <item>
@@ -756,6 +783,9 @@ QTextEdit:disabled {
                </property>
                <property name="text">
                 <string>+1</string>
+               </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -914,6 +944,9 @@ QTextEdit:disabled {
                <property name="text">
                 <string>-500</string>
                </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item>
@@ -944,6 +977,9 @@ QTextEdit:disabled {
                </property>
                <property name="text">
                 <string>-100</string>
+               </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -979,6 +1015,9 @@ QTextEdit:disabled {
                <property name="tabChangesFocus">
                 <bool>true</bool>
                </property>
+               <property name="lineWrapMode">
+                <enum>QTextEdit::NoWrap</enum>
+               </property>
               </widget>
              </item>
              <item>
@@ -1010,6 +1049,9 @@ QTextEdit:disabled {
                <property name="text">
                 <string>+100</string>
                </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item>
@@ -1040,6 +1082,9 @@ QTextEdit:disabled {
                </property>
                <property name="text">
                 <string>+500</string>
+               </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -1145,6 +1190,9 @@ QTextEdit:disabled {
                <property name="text">
                 <string>-500</string>
                </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item>
@@ -1175,6 +1223,9 @@ QTextEdit:disabled {
                </property>
                <property name="text">
                 <string>-100</string>
+               </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -1210,6 +1261,9 @@ QTextEdit:disabled {
                <property name="tabChangesFocus">
                 <bool>true</bool>
                </property>
+               <property name="lineWrapMode">
+                <enum>QTextEdit::NoWrap</enum>
+               </property>
               </widget>
              </item>
              <item>
@@ -1241,6 +1295,9 @@ QTextEdit:disabled {
                <property name="text">
                 <string>+100</string>
                </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item>
@@ -1271,6 +1328,9 @@ QTextEdit:disabled {
                </property>
                <property name="text">
                 <string>+500</string>
+               </property>
+               <property name="autoRepeat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -1322,14 +1382,14 @@ QTextEdit:disabled {
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QUnderlineTitle</class>
-   <extends>QLabel</extends>
-   <header>QUnderlineTitle.h</header>
-  </customwidget>
-  <customwidget>
    <class>QBorderStyleEdit</class>
    <extends>QTextEdit</extends>
    <header>QBorderStyleEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QUnderlineTitle</class>
+   <extends>QLabel</extends>
+   <header>QUnderlineTitle.h</header>
   </customwidget>
   <customwidget>
    <class>QGraphSensitivityCtrl</class>

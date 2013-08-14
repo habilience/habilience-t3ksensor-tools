@@ -38,7 +38,7 @@ QTouchSettingDialog::QTouchSettingDialog(Dialog *parent) :
     Qt::WindowFlags flags = windowFlags();
     Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
     flags &= ~helpFlag;
-#if 0
+
     if (!pDevice->isVirtualDevice())
     {
 #if defined(Q_OS_WIN)
@@ -46,7 +46,6 @@ QTouchSettingDialog::QTouchSettingDialog(Dialog *parent) :
 #endif
         flags |= Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint;
     }
-#endif
 
     setWindowFlags(flags);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -119,7 +118,7 @@ QTouchSettingDialog::QTouchSettingDialog(Dialog *parent) :
     ui->btnTMBottomInc->move( rcEdit.right(), rcEdit.top() );
     ui->btnTMBottomInc->resize( rcBtn.width(), rcBtn.height() );
 
-    ui->cmdAsyncMngr->setT3kDevice( QT3kDevice::instance() );
+    ui->cmdAsyncMngr->setT3kDevice( pDevice );
 
     requestSensorData( cmdLoadFactoryDefault, false );
 
@@ -158,6 +157,8 @@ QTouchSettingDialog::QTouchSettingDialog(Dialog *parent) :
 
     ui->btnMouse->setEnabled(true);
     ui->btnMultitouch->setEnabled(true);
+
+    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_TOUCHPNT );
 }
 
 QTouchSettingDialog::~QTouchSettingDialog()
@@ -180,6 +181,7 @@ void QTouchSettingDialog::onChangeLanguage()
     else
         setLayoutDirection( Qt::LeftToRight );
 
+    setWindowTitle( res.getResString(MAIN_TAG, "BTN_CAPTION_TOUCH_SETTING") );
 
     ui->lblTouchAreaMarginTitle->setText( res.getResString(RES_TAG, "TEXT_TOUCH_AREA_MARGIN") );
     ui->lblTimeSettingTitle->setText( res.getResString(RES_TAG, "TEXT_TIME_SETTING") );
@@ -206,7 +208,7 @@ void QTouchSettingDialog::onChangeLanguage()
 
     if (bIsR2L != s_bIsR2L)
     {
-        // TODO: !!!!
+        // TODO: adjust ui
     }
 
     s_bIsR2L = bIsR2L;
@@ -214,7 +216,7 @@ void QTouchSettingDialog::onChangeLanguage()
 
 bool QTouchSettingDialog::canClose()
 {
-    if (m_bIsModified)
+    if (m_bIsModified || ui->widgetAreaSetting->isModified())
     {
         QLangRes& res = QLangManager::getResource();
         QString strPrompt = res.getResString( MAIN_TAG, "TEXT_WARNING_SENSOR_DATA_IS_CHANGED" );
@@ -394,7 +396,18 @@ void QTouchSettingDialog::drawVertArrow( QPainter& p, QPoint pt1, QPoint pt2, QP
 void QTouchSettingDialog::closeEvent(QCloseEvent *evt)
 {
     if (!canClose())
+    {
         evt->ignore();
+    }
+    else
+    {
+        onClose();
+    }
+}
+
+void QTouchSettingDialog::onClose()
+{
+    m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND);
 }
 
 void QTouchSettingDialog::reject()
@@ -410,10 +423,12 @@ void QTouchSettingDialog::accept()
 void QTouchSettingDialog::onEditModified(QBorderStyleEdit* pEdit, int /*nValue*/, double /*dValue*/)
 {
     setModifyEditColor( pEdit );
+    m_bIsModified = true;
 
     QT3kDevice* pDevice = QT3kDevice::instance();
 
     char szValue[256];
+    QString strCmd;
     if ( (pEdit == ui->txtEdtTMLeft)
          || (pEdit == ui->txtEdtTMTop)
          || (pEdit == ui->txtEdtTMRight)
@@ -427,25 +442,37 @@ void QTouchSettingDialog::onEditModified(QBorderStyleEdit* pEdit, int /*nValue*/
         b = (unsigned char)ui->txtEdtTMBottom->toPlainText().toFloat() * 10;
 
         snprintf( szValue, 256, "%02x%02x%02x%02x", l, t, r, b );
-        QString strCmd = QString(cstrFactorialScreenMargin) + szValue;
+        strCmd = QString(cstrFactorialScreenMargin) + szValue;
         pDevice->sendCommand( strCmd, true );
     }
     else if (pEdit == ui->txtEdtTap)
     {
         LOG_I( "Manual Edit Time Tap" );
+        int value = ui->txtEdtTap->toPlainText().toInt();
+        strCmd = QString(cstrTimeA) + QString::number(value);
+        pDevice->sendCommand( strCmd );
 
     }
     else if (pEdit == ui->txtEdtLongTap)
     {
         LOG_I( "Manual Edit Time Long Tap" );
+        int value = ui->txtEdtLongTap->toPlainText().toInt();
+        strCmd = QString(cstrTimeL) + QString::number(value);
+        pDevice->sendCommand( strCmd );
     }
     else if (pEdit == ui->txtEdtWheel)
     {
         LOG_I( "Manual Edit Wheel Sensitivity" );
+        int value = ui->txtEdtWheel->toPlainText().toInt();
+        strCmd = QString(cstrWheelSensitivity) + QString::number(value);
+        pDevice->sendCommand( strCmd );
     }
     else if (pEdit == ui->txtEdtZoom)
     {
         LOG_I( "Manual Edit Zoom Sensitivity" );
+        int value = ui->txtEdtZoom->toPlainText().toInt();
+        strCmd = QString(cstrZoomSensitivity) + QString::number(value);
+        pDevice->sendCommand( strCmd );
     }
 }
 
@@ -489,6 +516,12 @@ bool QTouchSettingDialog::requestSensorData( RequestCmd cmd, bool bWait )
     }
 
     bool bResult = ui->cmdAsyncMngr->getLastResult();
+
+    if (bResult && (cmd == cmdInitialize || cmd == cmdWriteToFactoryDefault))
+    {
+        resetEditColors();
+        m_bIsModified = false;
+    }
 
     return bResult;
 }
@@ -635,7 +668,7 @@ void QTouchSettingDialog::resetDataWithInitData( const QString& sCmd, bool bWith
 
 void QTouchSettingDialog::enableAllControls( bool bEnable )
 {
-    // TODO:
+    setEnabled(bEnable);
 }
 
 void QTouchSettingDialog::resetEditColors()
@@ -649,14 +682,12 @@ void QTouchSettingDialog::resetEditColors()
         edits[i]->setColor(s_clrNormalBorderColor, s_clrNormalBgColor);
         edits[i]->update();
     }
-    m_bIsModified = false;
 }
 
 void QTouchSettingDialog::setModifyEditColor(QBorderStyleEdit* pEdit)
 {
     pEdit->setColor(s_clrModifyBorderColor, s_clrModifyBgColor);
     pEdit->update();
-    m_bIsModified = true;
 }
 
 void QTouchSettingDialog::setModifyAllEditColors()
@@ -826,8 +857,9 @@ void QTouchSettingDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /
         ui->btnFull->setEnabled(true);
         ui->btnDigitizerOnly->setEnabled(true);
 
-        static QWidget* controls[] = {
+        QWidget* controls[] = {
             ui->gbAutoSelect, ui->btnMouse, ui->btnMultitouch, ui->btnGestureProfile,
+            ui->lblInputModeTitle,
             ui->lblTimeSettingTitle, ui->lblTap, ui->txtEdtTap, ui->horzSliderTap,
             ui->lblLongTap, ui->txtEdtLongTap, ui->horzSliderLongTap,
             ui->lblWheelZoomTitle, ui->lblWheel, ui->lblZoom,
@@ -842,8 +874,7 @@ void QTouchSettingDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /
             {
                 controls[i]->setEnabled(false);
             }
-            // TODO:
-            //ui->widgetAreaSetting->disableControlsWithoutSingleClick();
+            ui->widgetAreaSetting->enableControlsWithoutSingleClick(false);
             break;
         case 0x07:      // full
             ui->btnFull->setChecked(true);
@@ -852,8 +883,7 @@ void QTouchSettingDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /
             {
                 controls[i]->setEnabled(true);
             }
-            // TODO:
-            //ui->widgetAreaSetting->enableAllControls(true);
+            ui->widgetAreaSetting->enableControlsWithoutSingleClick(true);
             break;
         }
     }
@@ -861,22 +891,43 @@ void QTouchSettingDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /
 
 bool QTouchSettingDialog::onKeyPress(QKeyEvent *evt)
 {
+    if (evt->key() == Qt::Key_Escape)
+    {
+        LOG_I( "From Keyboard(ESC)" );
+        on_btnClose_clicked();
+        return true;
+    }
     return false;
 }
 
 bool QTouchSettingDialog::onKeyRelease(QKeyEvent *evt)
 {
+    QKeyEvent* keyEvt = (QKeyEvent*)evt;
+    if ( (keyEvt->key() == Qt::Key_Enter) ||
+         (keyEvt->key() == Qt::Key_Return) )
+    {
+        QWidget* pWidget = focusWidget();
+        if (pWidget->objectName().indexOf("txtEdt") >= 0)
+        {
+            pWidget->clearFocus();
+            return true;
+        }
+    }
     return false;
 }
 
 bool QTouchSettingDialog::onRButtonDblClicked()
 {
-    return false;
+    LOG_I( "From Mouse Shortcut(RBUTTON DOUBLE CLICK)" );
+
+    on_btnSave_clicked();
+    return true;
 }
 
 void QTouchSettingDialog::on_btnClose_clicked()
 {
     LOG_B( "Exit" );
+
     ui->btnClose->setEnabled(false);
     close();
 }
@@ -966,6 +1017,7 @@ void QTouchSettingDialog::sendEditValue( QBorderStyleEdit* txtEdit, float step, 
     char szValue[256];
 
     setModifyEditColor(txtEdit);
+    m_bIsModified = true;
 
     snprintf( szValue, 256, "%3.1f", fValue );
     txtEdit->setText( szValue );
@@ -1104,10 +1156,10 @@ void QTouchSettingDialog::on_btnDigitizerOnly_clicked()
 
 void QTouchSettingDialog::on_horzSliderTap_valueChanged(int value)
 {
-    LOG_I( "Slider Tap Time" );
     value *= 100;
     if (value != ui->txtEdtTap->toPlainText().toInt())
     {
+        LOG_I( "Slider Tap Time" );
         QString strCmd = QString(cstrTimeA) + QString::number(value);
         QT3kDevice::instance()->sendCommand( strCmd );
     }
@@ -1115,10 +1167,10 @@ void QTouchSettingDialog::on_horzSliderTap_valueChanged(int value)
 
 void QTouchSettingDialog::on_horzSliderLongTap_valueChanged(int value)
 {
-    LOG_I( "Slider Long Tap Time" );
     value *= 100;
     if (value != ui->txtEdtLongTap->toPlainText().toInt())
     {
+        LOG_I( "Slider Long Tap Time" );
         QString strCmd = QString(cstrTimeL) + QString::number(value);
         QT3kDevice::instance()->sendCommand( strCmd );
     }
@@ -1126,9 +1178,9 @@ void QTouchSettingDialog::on_horzSliderLongTap_valueChanged(int value)
 
 void QTouchSettingDialog::on_horzSliderWheel_valueChanged(int value)
 {
-    LOG_I( "Slider Wheel Sensitivity" );
     if (value != ui->txtEdtWheel->toPlainText().toInt())
     {
+        LOG_I( "Slider Wheel Sensitivity" );
         QString strCmd = QString(cstrWheelSensitivity) + QString::number(value);
         QT3kDevice::instance()->sendCommand( strCmd );
     }
@@ -1136,9 +1188,9 @@ void QTouchSettingDialog::on_horzSliderWheel_valueChanged(int value)
 
 void QTouchSettingDialog::on_horzSliderZoom_valueChanged(int value)
 {
-    LOG_I( "Slider Zoom Sensitivity" );
     if (value != ui->txtEdtZoom->toPlainText().toInt())
     {
+        LOG_I( "Slider Zoom Sensitivity" );
         QString strCmd = QString(cstrZoomSensitivity) + QString::number(value);
         QT3kDevice::instance()->sendCommand( strCmd );
     }

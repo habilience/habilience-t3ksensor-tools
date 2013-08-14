@@ -491,8 +491,7 @@ void Dialog::drawSafeMode(QRect rcBody, QPainter& p)
 {
     rcBody.adjust(1, 1, -1, -1);
 
-    QFont fntSafeMode;
-    fntSafeMode.setFamily("Arial");
+    QFont fntSafeMode = font();
     fntSafeMode.setPixelSize(10);
 
     p.save();
@@ -1371,28 +1370,40 @@ bool Dialog::closeAllSubMenuDialogs()
     if (m_pDlgSideview)
     {
         if (m_pDlgSideview->canClose())
+        {
+            m_pDlgSideview->onClose();
             delete m_pDlgSideview;
+        }
         else
             return false;
     }
     if (m_pDlgDetection)
     {
         if (m_pDlgDetection->canClose())
+        {
+            m_pDlgDetection->onClose();
             delete m_pDlgDetection;
+        }
         else
             return false;
     }
     if (m_pDlgBentAdjustment)
     {
         if (m_pDlgBentAdjustment->canClose())
+        {
+            m_pDlgBentAdjustment->onClose();
             delete m_pDlgBentAdjustment;
+        }
         else
             return false;
     }
     if (m_pDlgTouchSetting)
     {
         if (m_pDlgTouchSetting->canClose())
+        {
+            m_pDlgTouchSetting->onClose();
             delete m_pDlgTouchSetting;
+        }
         else
             return false;
     }

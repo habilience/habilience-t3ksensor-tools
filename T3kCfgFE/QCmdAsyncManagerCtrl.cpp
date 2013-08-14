@@ -335,6 +335,10 @@ void QCmdAsyncManagerCtrl::start( unsigned int nTimeout, bool bForceDrawProgress
     {
         m_TimerTimeout = startTimer(nTimeout);
     }
+    else
+    {
+        m_bLastResult = true;
+    }
 
     if (bForceDrawProgress)
     {

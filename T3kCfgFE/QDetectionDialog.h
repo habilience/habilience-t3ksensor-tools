@@ -74,6 +74,7 @@ protected:
     // override QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnDTC(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, unsigned char *layerid, unsigned long *start_pos, unsigned long *end_pos, int cnt);
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnMSG(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, const char *txt);
 
     // override QEventRedirection::IEventListener
     virtual bool onKeyPress(QKeyEvent *evt);
@@ -99,6 +100,7 @@ public:
     ~QDetectionDialog();
 
     bool canClose();
+    void onClose();
     
 private slots:
     virtual void reject();

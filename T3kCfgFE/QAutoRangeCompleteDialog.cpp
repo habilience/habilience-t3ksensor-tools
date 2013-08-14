@@ -60,7 +60,7 @@ void QAutoRangeCompleteDialog::paintEvent(QPaintEvent *)
     rectProgressBody.adjust( 5, 5, -5, -5 );
 
     float fFontHeight = rectText.height() / 4.f;
-    QFont fntCaption("Arial");
+    QFont fntCaption = font();
     fntCaption.setPixelSize((int)(fFontHeight+0.5f));
     fntCaption.setBold(true);
     int flags = Qt::AlignCenter|Qt::AlignVCenter;

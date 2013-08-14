@@ -17,6 +17,8 @@
 
 #include "QMyApplication.h"
 
+#define MONITORING_EXPIRED_MODE
+
 #define MAIN_TAG "MAIN"
 #define RES_TAG "SIDEVIEW"
 
@@ -81,8 +83,6 @@ QSideviewDialog::QSideviewDialog(Dialog *parent) :
     ui->btnLight3Inc->setVisible(false);
     ui->txtEdtLight3->setVisible(false);
 
-    ui->lblFocusStealer->setVisible(false);
-
     if (g_AppData.strModelName.compare( "T3k A" ) == 0)
     {
         ui->lblAmbientLights->setVisible(false);
@@ -98,7 +98,11 @@ QSideviewDialog::QSideviewDialog(Dialog *parent) :
         ui->txtEdtLight1->setVisible(true);
     }
 
+#ifdef MONITORING_EXPIRED_MODE
     m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW|T3K_HID_MODE_MESSAGE );
+#else
+    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW );
+#endif
     pDevice->sendCommand("cam1/mode=sideview", true);
     m_nCurrentCameraIndex = IDX_CM1;
 
@@ -127,6 +131,11 @@ QSideviewDialog::QSideviewDialog(Dialog *parent) :
     connect( ui->txtEdtLight1, SIGNAL(editModified(QBorderStyleEdit*,int,double)), SLOT(onEditModified(QBorderStyleEdit*,int,double)) );
     connect( ui->txtEdtLight2, SIGNAL(editModified(QBorderStyleEdit*,int,double)), SLOT(onEditModified(QBorderStyleEdit*,int,double)) );
     connect( ui->txtEdtLight3, SIGNAL(editModified(QBorderStyleEdit*,int,double)), SLOT(onEditModified(QBorderStyleEdit*,int,double)) );
+
+    ui->txtEdtDetectLine->setAlignment(Qt::AlignCenter);
+    ui->txtEdtLight1->setAlignment(Qt::AlignCenter);
+    ui->txtEdtLight2->setAlignment(Qt::AlignCenter);
+    ui->txtEdtLight3->setAlignment(Qt::AlignCenter);
 
     ui->btnCam1->setEnabled(g_AppData.cameraConnectionInfo[IDX_CM1]);
     ui->btnCam2->setEnabled(g_AppData.cameraConnectionInfo[IDX_CM2]);
@@ -167,6 +176,8 @@ void QSideviewDialog::onChangeLanguage()
     else
         setLayoutDirection( Qt::LeftToRight );
 
+    setWindowTitle( res.getResString(MAIN_TAG, "BTN_CAPTION_SIDE_VIEW") );
+
     QString strCamera = res.getResString( MAIN_TAG, "TEXT_CAMERA" );
 
     ui->btnCam1->setText( strCamera + " 1" );
@@ -185,7 +196,7 @@ void QSideviewDialog::onChangeLanguage()
 
     if (bIsR2L != s_bIsR2L)
     {
-        // TODO: !!!!
+        // TODO: adjust ui
     }
 
     s_bIsR2L = bIsR2L;
@@ -553,16 +564,35 @@ void QSideviewDialog::closeEvent(QCloseEvent *evt)
     }
     else
     {
-        QT3kDevice* pDevice = QT3kDevice::instance();
-        pDevice->sendCommand( "cam1/mode=detection", true );
-        pDevice->sendCommand( "cam2/mode=detection", true );
-        m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND);
+        onClose();
     }
+}
+
+void QSideviewDialog::onClose()
+{
+    if (m_TimerPreviewCountDown)
+    {
+        killTimer(m_TimerPreviewCountDown);
+        m_TimerPreviewCountDown = 0;
+    }
+    if (m_TimerNoData)
+    {
+        killTimer(m_TimerNoData);
+        m_TimerNoData = 0;
+    }
+    if (m_TimerRefreshAutoOffset)
+    {
+        killTimer(m_TimerRefreshAutoOffset);
+        m_TimerRefreshAutoOffset = 0;
+    }
+
+    QT3kDevice* pDevice = QT3kDevice::instance();
+    pDevice->sendCommand( "cam1/mode=detection", true );
+    pDevice->sendCommand( "cam2/mode=detection", true );
+    m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND);
 
     g_pApp->setMonitoringMouseMovement(false);
     disconnect(g_pApp, SIGNAL(mouseMoved()), this, SLOT(onGlobalMouseMoved()));
-
-    LOG_I( "Exit [Sideview]" );
 }
 
 bool QSideviewDialog::onKeyPress(QKeyEvent */*evt*/)
@@ -580,7 +610,6 @@ bool QSideviewDialog::onKeyRelease(QKeyEvent *evt)
         if (pWidget->objectName().indexOf("txtEdt") >= 0)
         {
             pWidget->clearFocus();
-            ui->lblFocusStealer->setFocus();
             return true;
         }
     }
@@ -782,6 +811,7 @@ bool QSideviewDialog::requestSensorData( RequestCmd cmd, bool bWait )
     if (bResult && (cmd == cmdInitialize || cmd == cmdWriteToFactoryDefault))
     {
         resetEditColors();
+        m_bIsModified = false;
     }
 
     return bResult;
@@ -938,15 +968,12 @@ void QSideviewDialog::resetEditColors()
     ui->txtEdtLight2->update();
     ui->txtEdtLight3->update();
     ui->txtEdtDetectLine->update();
-
-    m_bIsModified = false;
 }
 
 void QSideviewDialog::setModifyEditColor(QBorderStyleEdit* pEdit)
 {
     pEdit->setColor(s_clrModifyBorderColor, s_clrModifyBgColor);
     pEdit->update();
-    m_bIsModified = true;
 }
 
 void QSideviewDialog::setModifyAllEditColors()
@@ -963,18 +990,7 @@ void QSideviewDialog::setModifyAllEditColors()
 
 void QSideviewDialog::enableAllControls( bool bEnable )
 {
-    QWidget* controls[] = {
-        ui->btnCam1, ui->btnCam2, ui->btnCam1_1, ui->btnCam2_1,
-        ui->btnReset, ui->btnRefresh, ui->btnSave, ui->btnClose,
-        ui->btnDetectLineDn, ui->btnDetectLineUp,
-        ui->btnLight1Dec, ui->btnLight1Inc, ui->btnLight2Dec, ui->btnLight2Inc, ui->btnLight3Dec, ui->btnLight3Inc,
-        ui->btnRemoteSideview
-    };
-
-    for ( int i=0 ; i<(int)(sizeof(controls)/sizeof(QWidget*)) ; i++ )
-    {
-        controls[i]->setEnabled(bEnable);
-    }
+    setEnabled(bEnable);
 }
 
 void QSideviewDialog::initImageBuffer( int width, int height )
@@ -1221,8 +1237,6 @@ void QSideviewDialog::on_btnReset_clicked()
     }
     enableAllControls( true );
     ui->btnReset->setFocus();
-
-    resetEditColors();
 }
 
 void QSideviewDialog::on_btnRefresh_clicked()
@@ -1257,8 +1271,6 @@ void QSideviewDialog::on_btnSave_clicked()
         return;
     }
     enableAllControls( true );
-
-    m_bIsModified = false;
 
     setEnabled( true );
     ui->btnSave->setFocus();

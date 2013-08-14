@@ -82,7 +82,7 @@ void QGraphSensitivityCtrl::drawItem(QPainter &p, QRectF rcItem, int nLevel)
 {
     rcItem.adjust( 0.5, 0.5, -0.5, -0.5 );
 
-    int nR, nG, nB;
+    int nR=0, nG=0, nB=0;
     switch( nLevel )
     {
     case 3:

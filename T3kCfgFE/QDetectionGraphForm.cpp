@@ -74,6 +74,11 @@ QDetectionGraphForm::QDetectionGraphForm(QWidget *parent) :
     connect( ui->txtEdtOffset, SIGNAL(editModified(QBorderStyleEdit*,int,double)), SLOT(onEditModified(QBorderStyleEdit*,int,double)) );
     connect( ui->txtEdtRightRange, SIGNAL(editModified(QBorderStyleEdit*,int,double)), SLOT(onEditModified(QBorderStyleEdit*,int,double)) );
     connect( ui->txtEdtThreshold, SIGNAL(editModified(QBorderStyleEdit*,int,double)), SLOT(onEditModified(QBorderStyleEdit*,int,double)) );
+    ui->txtEdtGain->setAlignment(Qt::AlignRight);
+    ui->txtEdtLeftRange->setAlignment(Qt::AlignRight);
+    ui->txtEdtOffset->setAlignment(Qt::AlignRight);
+    ui->txtEdtRightRange->setAlignment(Qt::AlignRight);
+    ui->txtEdtThreshold->setAlignment(Qt::AlignRight);
 
     resetEditColors();
 
@@ -129,7 +134,7 @@ void QDetectionGraphForm::onChangeLanguage()
 
     if (bIsR2L != s_bIsR2L)
     {
-        // TODO: !!!!
+        // TODO: adjust ui
     }
 
     s_bIsR2L = bIsR2L;
@@ -423,22 +428,7 @@ void QDetectionGraphForm::clear()
 
 void QDetectionGraphForm::enableAllControls( bool bEnable )
 {
-    QWidget* controls[] = {
-        ui->txtEdtThreshold, ui->txtEdtGain, ui->txtEdtLeftRange, ui->txtEdtRightRange, ui->txtEdtOffset,
-        ui->btnGainDec, ui->btnGainInc,
-        ui->btnLeftRangeDec100, ui->btnLeftRangeDec500, ui->btnLeftRangeInc100, ui->btnLeftRangeInc500,
-        ui->btnOffsetDec, ui->btnOffsetInc,
-        ui->btnRightRangeDec100, ui->btnRightRangeDec500, ui->btnRightRangeInc100, ui->btnRightRangeInc500,
-        ui->btnThresholdDec, ui->btnThresholdInc,
-        ui->btnZoomFit, ui->btnZoomIn, ui->btnZoomOut,
-        ui->sensitivityCtrl,
-        ui->lblAutoOffset, ui->lblGain, ui->lblLeftRange, ui->lblOffset, ui->lblRightRange, ui->lblSensorTitle, ui->lblThreshold
-    };
-
-    for ( int i=0 ; i<(int)(sizeof(controls)/sizeof(QWidget*)) ; i++ )
-    {
-        controls[i]->setEnabled(bEnable);
-    }
+    setEnabled(bEnable);
 }
 
 void QDetectionGraphForm::setTitle( const QString& strTitle )

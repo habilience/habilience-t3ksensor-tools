@@ -93,6 +93,7 @@ public:
     ~QSideviewDialog();
 
     bool canClose();
+    void onClose();
     
 private slots:
     virtual void reject();
