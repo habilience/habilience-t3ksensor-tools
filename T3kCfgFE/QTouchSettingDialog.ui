@@ -939,9 +939,6 @@
        <property name="text">
         <string>Gesture Profile...</string>
        </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
       </widget>
      </item>
      <item>

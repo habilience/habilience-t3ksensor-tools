@@ -1,32 +1,15 @@
 
 #include "QStyleButton.h"
 
-#ifdef Q_OS_WIN
-#include <windows.h>
-#endif
-
 #include <QEvent>
 #include <QPainter>
 #include <QGradientStop>
 #include <QSettings>
 #include <QMouseEvent>
 
-#define BORDER_ROUND        (3)
+#include "../common/QUtils.h"
 
-#ifdef Q_OS_WIN
-inline QFont::Weight weightFromInteger(long weight)
-{
-    if (weight < 400)
-        return QFont::Light;
-    if (weight < 600)
-        return QFont::Normal;
-    if (weight < 700)
-        return QFont::DemiBold;
-    if (weight < 800)
-        return QFont::Bold;
-    return QFont::Black;
-}
-#endif
+#define BORDER_ROUND        (3)
 
 QStyleButton::QStyleButton(QWidget *parent) :
     QPushButton(parent)
@@ -54,27 +37,7 @@ QStyleButton::QStyleButton(QWidget *parent) :
 
     m_TextAlignment = AlignLeft;
 
-#ifdef Q_OS_WIN
-    NONCLIENTMETRICSW ncm;
-    ncm.cbSize = FIELD_OFFSET(NONCLIENTMETRICS, lfMessageFont) + sizeof(LOGFONT);
-    SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, ncm.cbSize, &ncm, 0);
-    QString strFont;
-    strFont = QString::fromWCharArray(ncm.lfMessageFont.lfFaceName);
-    //strFont = "Arial";
-    m_fntCaption = QFont(strFont);
-    if (ncm.lfMessageFont.lfWeight != FW_DONTCARE)
-        m_fntCaption.setWeight(weightFromInteger(ncm.lfMessageFont.lfWeight));
-
-    QSettings s("HKEY_CURRENT_USER\\Control Panel\\Desktop", QSettings::NativeFormat);
-    const int clearTypeEnum = 2;
-    if ( clearTypeEnum == s.value("FontSmoothingType",1) )
-    {
-          m_fntCaption.setStyleStrategy(QFont::PreferAntialias);
-    }
-    m_fntCaption.setPointSizeF( font().pointSizeF() );
-#else
-    m_fntCaption = font();
-#endif
+    m_fntCaption = getSystemFont(this);
     m_fntAdditionalText = m_fntCaption;
     m_fntAdditionalText.setPixelSize(m_fntCaption.pixelSize() * 7 / 10);
 }

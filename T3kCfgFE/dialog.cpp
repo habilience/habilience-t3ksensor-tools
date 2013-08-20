@@ -33,21 +33,6 @@
 #include "QBentAdjustmentDialog.h"
 #include "QTouchSettingDialog.h"
 
-#ifdef Q_OS_WIN
-inline QFont::Weight weightFromInteger(long weight)
-{
-    if (weight < 400)
-        return QFont::Light;
-    if (weight < 600)
-        return QFont::Normal;
-    if (weight < 700)
-        return QFont::DemiBold;
-    if (weight < 800)
-        return QFont::Bold;
-    return QFont::Black;
-}
-#endif
-
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     m_EventRedirect(this),
@@ -82,6 +67,7 @@ Dialog::Dialog(QWidget *parent) :
 #if defined(Q_OS_WIN)
     flags |= Qt::MSWindowsFixedSizeDialogHint;
 #endif
+    flags |= Qt::WindowMinMaxButtonsHint;
     setWindowFlags(flags);
     setFixedSize(this->size());
 
@@ -101,7 +87,6 @@ Dialog::Dialog(QWidget *parent) :
     ui->btnSideview->setAlignment(QStyleButton::AlignLeft);
     ui->btnSideview->setCaptionFontHeight(19);
     ui->btnSideview->setMargin( nMenuButtonMargin, 0, 0, 0 );
-    qDebug( "xxx: %s", ui->btnSideview->testAttribute(Qt::WA_NoMousePropagation) ? "true" : "false" );
 
     ui->btnDetection->setAlignment(QStyleButton::AlignLeft);
     ui->btnDetection->setCaptionFontHeight(19);
@@ -128,34 +113,13 @@ Dialog::Dialog(QWidget *parent) :
 
     onCreate();
 
-#ifdef Q_OS_WIN
-    NONCLIENTMETRICSW ncm;
-    ncm.cbSize = FIELD_OFFSET(NONCLIENTMETRICS, lfMessageFont) + sizeof(LOGFONT);
-    SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, ncm.cbSize, &ncm, 0);
-    QString strFont;
-    strFont = QString::fromWCharArray(ncm.lfMessageFont.lfFaceName);
-    //strFont = "Arial";
-    m_fntErrorTitle = QFont(strFont);
-    if (ncm.lfMessageFont.lfWeight != FW_DONTCARE)
-        m_fntErrorTitle.setWeight(weightFromInteger(ncm.lfMessageFont.lfWeight));
-
-    QSettings s("HKEY_CURRENT_USER\\Control Panel\\Desktop", QSettings::NativeFormat);
-    const int clearTypeEnum = 2;
-    if ( clearTypeEnum == s.value("FontSmoothingType",1) )
-    {
-          m_fntErrorTitle.setStyleStrategy(QFont::PreferAntialias);
-    }
-#else
-    m_fntErrorTitle = font();
-#endif
+    m_fntErrorTitle = getSystemFont(this);
     m_fntErrorTitle.setPixelSize( 14 );
     m_fntErrorDetail = m_fntErrorTitle;
-    //m_fntErrorDetail.setPixelSize(m_fntErrorTitle.pixelSize() * 7 / 10);
 
     m_fntErrorTitle.setBold(true);
     m_fntErrorDetail.setBold(false);
 
-    //installEventFilter(this);
     m_EventRedirect.installEventListener(this);
     installEventFilter(&m_EventRedirect);
     ui->btnBentAdjustment->installEventFilter(&m_EventRedirect);
@@ -759,9 +723,9 @@ void Dialog::onDeviceDisconnected()
     if (!isVisible())
         return;
 
-    closeAllSubMenuDialogs();
-
     m_bIsConnected = false;
+
+    closeAllSubMenuDialogs();
 
     ui->btnSideview->setVisible(false);
     ui->btnDetection->setVisible(false);
@@ -1367,9 +1331,10 @@ void Dialog::onCloseMenu()
 
 bool Dialog::closeAllSubMenuDialogs()
 {
+    bool bForceCloseDialog = m_bFirmwareDownload || !m_bIsConnected;
     if (m_pDlgSideview)
     {
-        if (m_pDlgSideview->canClose())
+        if (bForceCloseDialog || m_pDlgSideview->canClose())
         {
             m_pDlgSideview->onClose();
             delete m_pDlgSideview;
@@ -1379,7 +1344,7 @@ bool Dialog::closeAllSubMenuDialogs()
     }
     if (m_pDlgDetection)
     {
-        if (m_pDlgDetection->canClose())
+        if (bForceCloseDialog || m_pDlgDetection->canClose())
         {
             m_pDlgDetection->onClose();
             delete m_pDlgDetection;
@@ -1389,7 +1354,7 @@ bool Dialog::closeAllSubMenuDialogs()
     }
     if (m_pDlgBentAdjustment)
     {
-        if (m_pDlgBentAdjustment->canClose())
+        if (bForceCloseDialog || m_pDlgBentAdjustment->canClose())
         {
             m_pDlgBentAdjustment->onClose();
             delete m_pDlgBentAdjustment;
@@ -1399,7 +1364,7 @@ bool Dialog::closeAllSubMenuDialogs()
     }
     if (m_pDlgTouchSetting)
     {
-        if (m_pDlgTouchSetting->canClose())
+        if (bForceCloseDialog || m_pDlgTouchSetting->canClose())
         {
             m_pDlgTouchSetting->onClose();
             delete m_pDlgTouchSetting;

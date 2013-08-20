@@ -107,6 +107,18 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>403</width>
+         <height>100</height>
+        </size>
+       </property>
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -125,6 +137,18 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>403</width>
+         <height>100</height>
+        </size>
        </property>
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
@@ -145,6 +169,18 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>403</width>
+         <height>100</height>
+        </size>
+       </property>
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -163,6 +199,18 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>403</width>
+         <height>100</height>
+        </size>
        </property>
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
@@ -314,7 +362,7 @@ Window...</string>
        </property>
        <property name="minimumSize">
         <size>
-         <width>0</width>
+         <width>153</width>
          <height>110</height>
         </size>
        </property>

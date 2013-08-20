@@ -130,6 +130,7 @@ macx: {
 
 SOURCES += main.cpp\
         dialog.cpp \
+    ../common/QUtils.cpp \
     QStyleButton.cpp \
     QT3kDevice.cpp \
     QT3kDeviceEventHandler.cpp \
@@ -166,9 +167,14 @@ SOURCES += main.cpp\
     QPointClipper.cpp \
     QBentProgressDialog.cpp \
     QCalcCamValue.cpp \
-    QAutoRangeCompleteDialog.cpp
+    QAutoRangeCompleteDialog.cpp \
+    QGestureProfileDialog.cpp \
+    QColorTabWidget.cpp \
+    QGestureMappingTable.cpp \
+    QKeyMapStr.cpp
 
 HEADERS  += dialog.h \
+    ../common/QUtils.h \
     QStyleButton.h \
     QT3kDevice.h \
     QT3kDeviceEventHandler.h \
@@ -183,7 +189,6 @@ HEADERS  += dialog.h \
     QLangZipFile.h \
     QLangManager.h \
     QInitDataIni.h \
-    ../common/QUtils.h \
     QSelectSensorDataDialog.h \
     QShowMessageBox.h \
     QEnterFileNameDialog.h \
@@ -208,7 +213,11 @@ HEADERS  += dialog.h \
     QPointClipper.h \
     QBentProgressDialog.h \
     QCalcCamValue.h \
-    QAutoRangeCompleteDialog.h
+    QAutoRangeCompleteDialog.h \
+    QGestureProfileDialog.h \
+    QColorTabWidget.h \
+    QGestureMappingTable.h \
+    QKeyMapStr.h
 
 FORMS    += dialog.ui \
     QSelectSensorDataDialog.ui \
@@ -222,7 +231,8 @@ FORMS    += dialog.ui \
     QAreaSettingForm.ui \
     QDetectionGraphForm.ui \
     QBentProgressDialog.ui \
-    QAutoRangeCompleteDialog.ui
+    QAutoRangeCompleteDialog.ui \
+    QGestureProfileDialog.ui
 
 RESOURCES += \
     T3kCfgFE.qrc

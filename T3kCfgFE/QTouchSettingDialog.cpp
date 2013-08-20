@@ -10,6 +10,7 @@
 #include "../common/T3kConstStr.h"
 #include "../common/QUtils.h"
 #include "QSensorInitDataCfg.h"
+#include "QGestureProfileDialog.h"
 
 #define NV_DEF_TIME_A              400
 #define NV_DEF_TIME_A_RANGE_START  100
@@ -1003,7 +1004,8 @@ void QTouchSettingDialog::on_btnSave_clicked()
 
 void QTouchSettingDialog::on_btnGestureProfile_clicked()
 {
-
+    QGestureProfileDialog gestureProfileDlg(this);
+    gestureProfileDlg.exec();
 }
 
 void QTouchSettingDialog::sendEditValue( QBorderStyleEdit* txtEdit, float step, float fMin, float fMax, const QString& strCmd )
