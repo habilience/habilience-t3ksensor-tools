@@ -129,7 +129,8 @@ SOURCES += main.cpp \
     QSlidingStackedWidget.cpp \
     QFWDPacket.cpp \
     dialog.cpp \
-    QBriefingDialog.cpp
+    QBriefingDialog.cpp \
+    ../common/QUtils.cpp
 
 HEADERS  += dialog.h \
     QSlidingStackedWidget.h \

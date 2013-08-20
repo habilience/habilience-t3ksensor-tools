@@ -8,7 +8,7 @@
 #include "../common/QUtils.h"
 
 #define RETRY_CONNECTION_INTERVAL       (3000)
-#define WAIT_MODECHANGE_TIMEOUT         (30000)
+#define WAIT_MODECHANGE_TIMEOUT         (60000)     // 60 secs
 
 static const QString PartName[] = { "MM", "CM1", "CM2", "CM1-1", "CM2-1" };
 
