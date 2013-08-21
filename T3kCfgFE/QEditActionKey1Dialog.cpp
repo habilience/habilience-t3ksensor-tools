@@ -77,7 +77,7 @@ void QEditActionKey1Dialog::setProfileInfo( int nProfileIndex, unsigned char cKe
     m_wProfileValue = wKeyValue;
 
     QString strLoc;
-    ProfileType type;
+    ProfileType type = TypeSingle;
     bool bUseTaskSwitcher = false;
 
     QLangRes& res = QLangManager::getResource();

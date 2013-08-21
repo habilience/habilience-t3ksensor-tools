@@ -68,7 +68,7 @@ void QEditActionEnableDialog::reject() {}
 
 void QEditActionEnableDialog::setProfileInfo( int nProfileIndex, unsigned char cKey, unsigned short wKeyValue, unsigned short wFlags )
 {
-    unsigned char cMouseKey;
+    unsigned char cMouseKey = 0;
 
     QString strLoc;
     QLangRes& res = QLangManager::getResource();
@@ -140,7 +140,7 @@ void QEditActionEnableDialog::onIndexChangedComboAction( QComboBox* cbAction )
 
     if (m_wProfileFlags & m_wProfileValue)
     {
-        unsigned char cMouseKey;
+        unsigned char cMouseKey = 0;
         switch (m_cProfileKey)
         {
         case MM_GESTURE_SINGLE_MOVE:
