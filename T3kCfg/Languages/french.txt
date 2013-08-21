@@ -76,7 +76,7 @@ BTN_CAPTION_TOUCH_SETTING = Configuration du tactile...
 TEXT_MOVE_WITH_ZOOM = Déplacer avec zoom
 TEXT_INERTIAL_WHEEL = Molette inertielle
 TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Mis et clic individuelle, Mis et double clic
-TEXT_PUTAND_ON_MULTITOUCHDEVICE = Utilisation du souris multi-touche hybride
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Multi-Touch, hybride
 TEXT_MAC_OS_MARGIN = Bordure d'écran Mac OS X
 TEXT_INVERT_WHEEL = Inverser roue
 
@@ -86,8 +86,8 @@ TEXT_MIDDLE = Milieu
 TEXT_DOUBLE_CLICK = Double-clic
 TEXT_CLICK = Clic
 
-TEXT_PROFILE_LEGEND_MODE1 = 
-TEXT_PROFILE_LEGEND_MODE2 = 
+TEXT_PROFILE_LEGEND_MODE1 = Souris
+TEXT_PROFILE_LEGEND_MODE2 = Windows 7
 
 [EDIT PROFILE ITEM]
 TITLE_CAPTION_EDIT_PROFILE_ITEM = Éditer l'action
@@ -137,7 +137,7 @@ TEXT_DOUBLE_CLICK = Double clic
 TEXT_PALM = Paume
 
 TEXT_CALIBRATION_WARNING = La bordure d'écran Mac OS X n'a pas été configurée dans le menu "Souris". La calibration ne peut pas fonctionner correctement.
-TEXT_CALIBRATION_WARNING2 = 
+TEXT_CALIBRATION_WARNING2 = La bordure d'écran Mac OS X' a été vérifiée dans le menu 'Geste'. Il se peut que la calibration ne fonctionne pas correctement.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Activer/Désactiver l'écran tactile
@@ -204,10 +204,10 @@ TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - gauche
 TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - droite
 TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - à l'envers
 
-TEXT_DISPLAY_MAC_ORIENTATION_1 = 
-TEXT_DISPLAY_MAC_ORIENTATION_2 = 
-TEXT_DISPLAY_MAC_ORIENTATION_3 = 
-TEXT_DISPLAY_MAC_ORIENTATION_4 = 
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
 
 TITLE_DISPLAY_WARNING = Attention
 TEXT_DISPLAY_WARNING = La direction d'affichage courant et la valeur de calibration ne correspondent pas.
@@ -252,8 +252,8 @@ BTN_CAPTION_DEFAULT = Par défaut
 BTN_CAPTION_REFRESH = Rafraîchir
 BTN_CAPTION_CLOSE = Fermer
 BTN_CAPTION_SAVELOG = Capturer l'état du capteur
-BTN_CAPTION_MAIN = 
-BTN_CAPTION_SUB = 
+BTN_CAPTION_MAIN = Principal
+BTN_CAPTION_SUB = Secondaire
 TAB_CAPTION_SIDEVIEW = Vue de coté
 TAB_CAPTION_DETECTION = Détection graphique
 
@@ -261,8 +261,8 @@ LOG_CAPTION_ERROR = Erreur! La sauvegarde a échouée.
 LOG_SIDEVIEW = Vue de coté
 LOG_DETECTION = Détection
 LOG_DATA = Données de configuration
-LOG_SAVING = 
-LOG_LOADING = 
+LOG_SAVING = Sauvegarde
+LOG_LOADING = Chargement
 LOG_COMPLETE = Achever
 LOG_OK = OK
 LOG_FAIL = Erreur
@@ -293,7 +293,7 @@ TEXT_TITLE = Configuration des softkey
 TEXT_HEADER_NUMBER = No.
 TEXT_HEADER_TYPE = Type
 TEXT_HEADER_ACTION = Action
-TEXT_ITEM_KEY = 
+TEXT_ITEM_KEY = Touche
 TEXT_ITEM_STATE = État
 TEXT_ITEM_NOT_USED = (Non utilisé)
 TEXT_ITEM_CALIBRATION = Entrée / Sortie de la calibration du capteur
@@ -306,25 +306,25 @@ TEXT_BALLOONTIP_TITLE = Configurateur T3k
 TEXT_BALLOONTIP_MSG = Le programme ("T3kCfgFE.exe") édité par configurateur T3K est en cours d'exécution.
 
 [ASSISTANCE]
-TITLE_SENSOR_STATUS = 
-TITLE_REMOTE = 
-TEXT_SELECT_SERVER = 
-TEXT_PORT = 
-TEXT_USERNAME = 
-BTN_REQUEST = 
-TEXT_RECONNECTING = 
-BTN_CANCEL = 
-TEXT_CONNECTING = 
-TEXT_REMOTE_CONTROL = 
-BTN_DISCONNECT = 
-TEXT_WAIT_MSG = 
-TEXT_REPAIRCONNECTION = 
-TEXT_ID = 
-TEXT_SERV_NOT_RES = 
-TITLE_CHAT = 
-BTN_SEND = 
-MSG_CHAT_DISCONNECTED = 
-TITLE_REMOTE_MSG = 
-MSG_REMOTE_DISCONNECT = 
-TEXT_HELP_MSG = 
-TEXT_HELP_ARROW = 
+TITLE_SENSOR_STATUS = État du capteur
+TITLE_REMOTE = Commande à distance
+TEXT_SELECT_SERVER = Sélectionner un serveur
+TEXT_PORT = Port
+TEXT_USERNAME = Nom utilisateur
+BTN_REQUEST = Demande
+TEXT_RECONNECTING = Nouvelle tentative de connexion au serveur... %1
+BTN_CANCEL = Annuler
+TEXT_CONNECTING = Connexion...
+TEXT_REMOTE_CONTROL = Commande à distance...
+BTN_DISCONNECT = Déconnecter
+TEXT_WAIT_MSG = Attente de connexion de l'admin.
+TEXT_REPAIRCONNECTION = La commande à distance déconnecte la session.\r\nAttente de connexion de l'admin.
+TEXT_ID = ID : %1
+TEXT_SERV_NOT_RES = Le serveur ne répond pas.
+TITLE_CHAT = Conversation
+BTN_SEND = Envoyer
+MSG_CHAT_DISCONNECTED = Déconnecté.
+TITLE_REMOTE_MSG = Fermer la session à distance
+MSG_REMOTE_DISCONNECT = Voulez-vous vraiment vous déconnecter ?
+TEXT_HELP_MSG = Veuillez toucher le centre de la croix.
+TEXT_HELP_ARROW = Veuillez toucher la flèche.

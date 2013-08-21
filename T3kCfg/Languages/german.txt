@@ -22,7 +22,7 @@ TITLE_CAPTION_FIRMWARE = Information zur Firmware
 TEXT_DEVICE_NOT_CONNECTED = Das Gerät ist nicht angeschlossen.
 TEXT_FIRMWARE_DOWNLOAD = Firmware wird heruntergeladen.
 
-TITLE_CAPTION_LICENSE = 
+TITLE_CAPTION_LICENSE = Info
 
 [SELECT DEVICE]
 WINDOW_CAPTION = Gerät auswählen
@@ -136,8 +136,8 @@ TEXT_DOUBLE_CLICK = Doppelklick
 ;TEXT_TWO_TOUCH = Put & Tap
 TEXT_PALM = Handfläche
 
-TEXT_CALIBRATION_WARNING = "Mac OS X Margen des Bildschirms" ist im "Geste" Menü nicht eingestellt worden. Es können Fehler beim Kalibrieren auftreten.
-TEXT_CALIBRATION_WARNING2 = 
+TEXT_CALIBRATION_WARNING = Mac OS X Margen des Bildschirms ist im "Geste" Menü nicht eingestellt worden. Es können Fehler beim Kalibrieren auftreten.
+TEXT_CALIBRATION_WARNING2 = Im Menü "Gesten" ist die Option "Mac OS X Bildschirmränder" aktiviert worden. Es können Fehler beim Kalibrieren auftreten.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Aktivierung/Deaktivierung der Berührungsfunktion
@@ -204,10 +204,10 @@ TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Links
 TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Rechts
 TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Auf den Kopf drehen
 
-TEXT_DISPLAY_MAC_ORIENTATION_1 = 
-TEXT_DISPLAY_MAC_ORIENTATION_2 = 
-TEXT_DISPLAY_MAC_ORIENTATION_3 = 
-TEXT_DISPLAY_MAC_ORIENTATION_4 = 
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
 
 TITLE_DISPLAY_WARNING = Achtung
 TEXT_DISPLAY_WARNING = Aktuelle Monitororientierung entspricht nicht der Kalibrierung.
@@ -252,8 +252,8 @@ BTN_CAPTION_DEFAULT = Voreinstellung
 BTN_CAPTION_REFRESH = Aktualisierung
 BTN_CAPTION_CLOSE = Schließen
 BTN_CAPTION_SAVELOG = Sensorzustand speichern
-BTN_CAPTION_MAIN = 
-BTN_CAPTION_SUB = 
+BTN_CAPTION_MAIN = Hauptmenü
+BTN_CAPTION_SUB = Untermenü
 TAB_CAPTION_SIDEVIEW = Seitenansicht
 TAB_CAPTION_DETECTION = Diagramm der Erkennung
 
@@ -306,25 +306,25 @@ TEXT_BALLOONTIP_TITLE = T3k Configurator
 TEXT_BALLOONTIP_MSG = Das Programm T3k Configurator Factory Edition("T3kCfgFE.exe") wird noch durchgeführt.
 
 [ASSISTANCE]
-TITLE_SENSOR_STATUS = 
-TITLE_REMOTE = 
-TEXT_SELECT_SERVER = 
-TEXT_PORT = 
-TEXT_USERNAME = 
-BTN_REQUEST = 
-TEXT_RECONNECTING = 
-BTN_CANCEL = 
-TEXT_CONNECTING = 
-TEXT_REMOTE_CONTROL = 
-BTN_DISCONNECT = 
-TEXT_WAIT_MSG = 
-TEXT_REPAIRCONNECTION = 
-TEXT_ID = 
-TEXT_SERV_NOT_RES = 
-TITLE_CHAT = 
-BTN_SEND = 
-MSG_CHAT_DISCONNECTED = 
-TITLE_REMOTE_MSG = 
-MSG_REMOTE_DISCONNECT = 
-TEXT_HELP_MSG = 
-TEXT_HELP_ARROW = 
+TITLE_SENSOR_STATUS = Sensor-Status
+TITLE_REMOTE = Fernsteuerung
+TEXT_SELECT_SERVER = Server-Wahl
+TEXT_PORT = Port
+TEXT_USERNAME = Benutzername
+BTN_REQUEST = Anfrage
+TEXT_RECONNECTING = Erneuter Verbindungsversuch zu Server... %1
+BTN_CANCEL = Abbrechen
+TEXT_CONNECTING = Verbindung wird hergestellt...
+TEXT_REMOTE_CONTROL = Fernsteuerung...
+BTN_DISCONNECT = Trennen
+TEXT_WAIT_MSG = Warten auf Verbindung von Admin.
+TEXT_REPAIRCONNECTION = Sitzung per Fernsteuerung getrennt.\r\nWarten auf Verbindung von Admin.
+TEXT_ID = ID: %1
+TEXT_SERV_NOT_RES = Server reagiert nicht.
+TITLE_CHAT = Chat
+BTN_SEND = Senden
+MSG_CHAT_DISCONNECTED = Getrennt.
+TITLE_REMOTE_MSG = Remote-Sitzung beenden
+MSG_REMOTE_DISCONNECT = Soll die Verbindung wirklich getrennt werden?
+TEXT_HELP_MSG = Bitte den Kreuzmittelpunkt berühren.
+TEXT_HELP_ARROW = Bitte den Pfeil berühren.

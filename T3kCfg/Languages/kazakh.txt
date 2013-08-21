@@ -1,0 +1,330 @@
+﻿
+[MAIN]
+APP_ERROR_MSG1 = Алмалы құрылғыларда істемейді!
+TITLE_GENERAL_ERROR = Қателік
+
+BTN_CAPTION_EXIT = Шығу
+BTN_CAPTION_CLOSE = Жабу
+BTN_CAPTION_DEFAULT = Үнсіз келісім бойынша
+BTN_CAPTION_REFRESH = Жаңарту
+MENU_TOOLTIP_START_PAGE = Басты бет
+MENU_TOOLTIP_MOUSE = Қимыл
+MENU_TOOLTIP_CALIBRATION = Калибрлеу
+MENU_TOOLTIP_SENSOR_SETTING = Сенсордың реттеулері
+MENU_TOOLTIP_GENERAL_SETTING = Жалпы реттеулер
+MENU_TOOLTIP_SOFTKEY_SETTING = Сенсорлық пернелердің реттеулері
+MSGBOX_TITLE_DEFAULT = Бастапқы қалпына өзгерту
+MSGBOX_TEXT_DEFAULT = Бастапқы реттеулерді қалпына келтіру керек пе?
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = Бұл бағдарлама v%1 аппараттық-бағдарламалық жабдықтамамен сәйкес келмейді. \nҚазіргісі: %1\nСәйкес келетіні %2 ~ %3
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = [Қателік] Жарамсыз аппараттық-бағдарламалық жабдықтама
+TITLE_CAPTION_INFORMATION = Бағдарлама туралы ақпарат
+TITLE_CAPTION_FIRMWARE = Аппараттық-бағдарламалық жабдықтама туралы ақпарат
+TEXT_DEVICE_NOT_CONNECTED = Құрылғы қосулы емес.
+TEXT_FIRMWARE_DOWNLOAD = Аппараттық-бағдарламалық жабдықтама жүктелді
+
+TITLE_CAPTION_LICENSE = Туралы
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Құрылғыны таңдау
+TITLE_CAPTION_DEVICE_LIST = Құрылғылар тізімі
+TEXT_DEV_PATH = Құрылғыға сілтеме
+TEXT_MODEL = Моделі
+TEXT_NUMBER = №
+BTN_CAPTION_PLAY_BUZZER = Қоңырауды ойнату
+BTN_CAPTION_SELECT = Таңдау
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = ОК
+BTN_CAPTION_CANCEL = Болдырмау
+BTN_CAPTION_YES = Иә
+BTN_CAPTION_NO = Жоқ
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Қимыл
+BTN_CAPTION_MOUSE_SUB1 = Қимыл реттеулері
+BTN_CAPTION_MOUSE_SUB2 = Қимыл профильдері
+BTN_CAPTION_CALIBRATION = Калибрлеу
+BTN_CAPTION_CALIBRATION_SUB1 = Сенсорлық экранды калибрлеу
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Сенсордың реттеулері
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Қимылды қосу/сөндіру
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Сигнал, Жылдам қосу пернесі
+BTN_CAPTION_GENERAL_SETTING = Негізгі реттеулер
+BTN_CAPTION_GENERAL_SETTING_SUB1 = ТІл, Енгізу режимі
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Экранның бағдары
+BTN_CAPTION_REMOTE_ASSISTANCE = Қашықтықтан басқару
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Сенсорлы перне
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Сенсорлы қимыл
+BTN_CAPTION_TOUCH_SETTING = Сенсор реттеулері
+
+;TEXT_SINGLE = Жалғыз
+;TEXT_FINGERS = Саусақ
+;TEXT_PALM = Алақан
+;TEXT_PUTNTAP = Енгізу және тиію
+;TEXT_DRAG = Жылжыту
+;TEXT_TAP = Тиію
+;TEXT_DOUBLE_TAP = Екі рет тиію
+;TEXT_LONG_TAP = Ұстап тұру
+;TEXT_ROTATE = Бұру
+;TEXT_ZOOM = Үлкейту
+TEXT_MOVE_WITH_ZOOM = Үлкейтіп жылжыту
+TEXT_INERTIAL_WHEEL = Инерциалды дөңгелек
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Жеке қою және тиію, Қою және екі рет тиію
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Гибридті мульти-сенсор
+TEXT_MAC_OS_MARGIN = Mac OS X Margin
+TEXT_INVERT_WHEEL = Инвертті дөңгелек
+
+TEXT_LEFT = Солға
+TEXT_RIGHT = Оңға
+TEXT_MIDDLE = Орта
+TEXT_DOUBLE_CLICK = Екі шерту
+TEXT_CLICK = Шерту
+
+TEXT_PROFILE_LEGEND_MODE1 = Тінтуір
+TEXT_PROFILE_LEGEND_MODE2 = Windows 7
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Түзету
+TEXT_PROFILE_ITEM = Профиль
+TEXT_ACTION = Әрекет
+TEXT_USER_DEFINE_KEY = Пайдаланушымен белгіленген перне
+TEXT_KEY = Перне
+TEXT_FUNCTION_KEY = Функционалды перне
+TEXT_NONE = Ешқандай
+TEXT_NOT_DEFINED = анықталмаған
+BTN_CAPTION_APPLY = қолдану
+BTN_CAPTION_CANCEL = болдырмау
+
+TEXT_PROFILE_ITEM_DISABLED = (өшірілген)
+TEXT_PROFILE_ITEM_USER_DEFINED = (Пайдалануышмен белгіленген)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Функционалды перне)
+TEXT_PROFILE_ITEM_MOUSE = (Тінтуір)
+TEXT_PROFILE_ITEM_ESCAPE = Шығу
+TEXT_PROFILE_ITEM_FORWARD = Алға
+TEXT_PROFILE_ITEM_BACK = Артқа
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Тапсырмаларды ауыстырғыш
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Тапсырмаларды ауыстырғыш (Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Тапсырмалар диспетчері
+TEXT_PROFILE_ITEM_EXPLORER = Шолушы
+TEXT_PROFILE_ITEM_DESKTOP = Жұмыс үстелі
+TEXT_PROFILE_ITEM_VKBOARD = Виртуалды пернетақта
+TEXT_PROFILE_ITEM_T3KCFG = T3k Сериялы Реттеу Бағдарламасы
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Сол жақ шертпе
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Оң жақ шертпе
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Орталық шертпе
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Сол жақ батырма
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Оң жақ батырма
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Ортаңғы батырма
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Калибрлеу
+TEXT_SCREEN_MARGIN = Экранның шеті
+TEXT_SCREEN_PERCENT_OF_SCREEN = экранның %
+TEXT_CALIBRATE = Калибрлеу
+BTN_CAPTION_CALIBRATE = Калибрлеу…
+
+TITLE_AREA_SETTING = Жанасу бетінің реттеулері (экран %)
+TEXT_SINGLE_CLICK = Бір рет шерту
+TEXT_DOUBLE_CLICK = Екі рет шерту
+;TEXT_TWO_TOUCH = Қою және тиію
+TEXT_PALM = Алақан
+
+TEXT_CALIBRATION_WARNING = Mac OS X Margin' "Қимылдар" мәзірінде тексермеңіз. Калибрлеу дұрыс жұмыс істемеуі мүмкін
+TEXT_CALIBRATION_WARNING2 = Mac OS X Margin' "Қимылдар" мәзірінде тексеріңіз. Калибрлеу дұрыс жұмыс істемеуі мүмкін
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Сенсорлы экранды қосу/сөндіру
+TEXT_TOUCH_ENABLE = Сенсорлы экран
+TEXT_RADIO_TOUCH_ENABLE = Қосу
+TEXT_RADIO_TOUCH_DISABLE = Сөндіру
+
+TITLE_CAPTION_BUZZER = Қоңырау
+TEXT_CLICK = Шерту
+TEXT_CALIBRATION = Калибрлеу
+TEXT_ERROR = Қате
+TEXT_KEYTONE = Перне қоңырауы
+TEXT_SENSOR_ATTACH = Сенсорды қосу
+TEXT_PEN_PAIRING = Қолмен жанасу
+TEXT_USB_ATTACH = USB қосу
+
+TITLE_SHORTCUT_KEY = Жылдам қосу батырмасы
+TEXT_CALIBRATION_KEY = Калибрлеу батырмасы
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Батырманы басу сану
+TEXT_TOUCH_ENABLE_KEY = Сенсорды қосу батырмасы
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Батырманы басу сану
+TEXT_NOT_USED = Қолданылмайтын
+TEXT_ON = Қосу
+TEXT_OFF = Сөндіру
+
+TITLE_TRAY_ICON = Планшет белгішесі
+TEXT_CHECK_TRAYICON = Пайдаланушы планшетінің белгішесі
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Сенсорлы енгізу амалы
+TEXT_INPUT_MODE = Енгізу амалы
+TEXT_INPUT_MODE_MOUSE = Тінтуір
+TEXT_INPUT_MODE_SINGLE_TOUCH = Бір рет тиію
+TEXT_INPUT_MODE_MULTI_TOUCH = Мультисенсор
+TEXT_INPUT_MODE_AUTO_SELECT = Авто таңдау
+TEXT_INPUT_MODE_WARNING_MSG = Сенсор бұл ОЖ-да дұрыс жұмыс істемеуі мүмкін. Жалғастыру?
+
+TITLE_MULTI_MONITOR = Көпэкранды дисплейді реттеу
+TEXT_MULTI_MONITOR = Экранды реттеу
+TEXT_MULTI_MONITOR_SETTING = Экран дисплейін таңдау....
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Қолдану
+TEXT_BTN_MULTI_MONITOR_CANCEL = Қайтару
+TEXT_BTN_MULTI_MONITOR_CLOSE = Жабу
+TEXT_PRIMARY_MONITOR = Негізгі экран
+TEXT_NON_MULTI_MONITOR = Көпэкранты режимінде жұмыс істемейді
+
+BTN_TOOLTIP_PLAY = Қосу
+
+BTN_CAMERA_DIAGNOSTICS = Сенсорды тексеру
+
+TITLE_LANGUAGE = Тіл
+TEXT_LANGUAGE = Тілді таңдау
+TEXT_LANGUAGE_NOT_FOUND = Тілдік файл жоқ
+
+TITLE_DISPLAY_ORIENTATION = Дисплей бағыты
+TEXT_DISPLAY_ORIENTATION = Бағыт
+TEXT_DISPLAY_ORIENTATION_1 = 0' - Пейзаж
+TEXT_DISPLAY_ORIENTATION_2 = 90' - Портрет
+TEXT_DISPLAY_ORIENTATION_3 = 180' - Пейзаж (аударылған)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - Портрет (аударылған)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - Қалыпты
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Солға
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Оңға
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Айналдыру
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
+
+TITLE_DISPLAY_WARNING = Ескерту
+TEXT_DISPLAY_WARNING = Қолданылған дисплей бағыты мен калибрлеу шамасы сәйкес келмейді
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Сенсор реттеулері
+TITLE_TIME_SETTING = Уақыт реттеулері (мс)
+TEXT_TAP = Тиію
+TEXT_LONG_TAP = Ұзақ тиію
+TEXT_SLOW = Баяу
+TEXT_FAST = Жылдам
+TITLE_WHEEL_SENSITIVITY_SETTING = Дөңгелектің/үлкейтудің сезімталдығын реттеу
+TEXT_WHEEL = Дөңгелек
+TEXT_ZOOM = Үлкейту
+
+BTN_CAPTION_DEFAULT = Үнсіздік бойынша
+BTN_CAPTION_REFRESH = Жаңарту
+BTN_CAPTION_CLOSE = Жабу
+MSGBOX_TEXT_DEFAULT = Шығарушы реттеулерін қайта орнату ма?
+MSGBOX_TITLE_DEFAULT = Үнсіздік бойынша
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Сенсорды сөндіру -ді таңдау
+TEXT_MESSAGE = Сенсорды сөндіру үшін, таймерге шертіңіз
+BTN_TIMER_TEXT = %1 сек
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Ескерту
+TEXT_MESSAGE = Ескерту! Келесі экранның реттеулері сенсорлы экранның жұмысымен сәйкес келмейді. Бұл деректерді өзгерту сенсорлы экранның дұрыс емес жұмыс істеуіне әкеледі.
+BTN_CAPTION_CONTINUE = Жалғастыру
+BTN_CAPTION_CLOSE = Жабу
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = Келісім
+TEXT_MESSAGE = Келесі терезеде сенсор және пайдаланушы туралы деректер жинақталады (ОЖ нұсқасы, Планшеттің MS Windows-ке енгізу қызметі, Экран мүмкіндіктері)
+BTN_CAPTION_CONTINUE = Келісу
+BTN_CAPTION_CLOSE = Қайтару
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Сенсордың диагностикасы
+BTN_CAPTION_DEFAULT = Үнсіздік бойынша
+BTN_CAPTION_REFRESH = Жаңарту
+BTN_CAPTION_CLOSE = Жабу
+BTN_CAPTION_SAVELOG = Сенсордың күйін сақтау
+BTN_CAPTION_MAIN = Басты
+BTN_CAPTION_SUB = Қосымша
+TAB_CAPTION_SIDEVIEW = Бүйірдегі байқау
+TAB_CAPTION_DETECTION = Анықтау бағанасы
+
+LOG_CAPTION_ERROR = Қате! Қалыпты сақтау мүмкін емес
+LOG_SIDEVIEW = Бүйірдегі байқау
+LOG_DETECTION = Анықтау
+LOG_DATA = Деректерді реттеу
+LOG_SAVING = Сақтау
+LOG_LOADING = Жүктеу
+LOG_COMPLETE = Аяқталды
+LOG_OK = ОК
+LOG_FAIL = Қате
+LOG_PROGRESS = PRG
+LOG_START = Бастау
+LOG_CAMERA = Камера
+
+TITLE_SENSOR1 = Сенсор 1
+TITLE_SENSOR2 = Сенсор 2
+TITLE_SENSOR1_1 = Сенсор 1-1
+TITLE_SENSOR2_1 = Сенсор 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Үлкейту
+BTN_TOOLTIP_ZOOM_OUT = Кішірейту
+BTN_TOOLTIP_RESET_ZOOM = Экранды дұрыстау
+TEXT_SENSOR1_GRAPH_LEFT = Астындағы сол жақ
+TEXT_SENSOR1_GRAPH_RIGHT = Үстіндегі оң жақ
+TEXT_SENSOR2_GRAPH_LEFT = Үстіндегі сол жақ
+TEXT_SENSOR2_GRAPH_RIGHT = Астындағы оң жақ
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = Сурет жоқ
+BTN_CAPTION_SNAPSHOT = Сурет
+
+[SOFTKEY SETTING]
+TEXT_TITLE = Функционалды батырмалар
+TEXT_HEADER_NUMBER = №
+TEXT_HEADER_TYPE = Түр
+TEXT_HEADER_ACTION = Әрекет
+TEXT_ITEM_KEY = Батырма
+TEXT_ITEM_STATE = Қалып
+TEXT_ITEM_NOT_USED = (қолданылмайтын)
+TEXT_ITEM_CALIBRATION = Сенсорды калибрлеуге кіру/шығу
+TEXT_ITEM_TOUCH = Сенсорлы экранды қосу/сөндіру
+
+[TRAYICON]
+TEXT_MENU_OPEN = ашу….
+TEXT_MENU_EXIT = Шығу
+TEXT_BALLOONTIP_TITLE = T3k конфигурациясы
+TEXT_BALLOONTIP_MSG = ("T3kCfgFE.exe") T3k зауыттық нұсқасы жүктеліп қосылды
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = Сенсор қалпы
+TITLE_REMOTE = Қашықтықтан басқару
+TEXT_SELECT_SERVER = Серверді таңдау
+TEXT_PORT = Порт
+TEXT_USERNAME = Пайдаланушы аты
+BTN_REQUEST = Сұраныс
+TEXT_RECONNECTING = %1 Сервермен қайта байланысу...
+BTN_CANCEL = Болдырмау
+TEXT_CONNECTING = Қосылу….
+TEXT_REMOTE_CONTROL = Қашықтықтан басқару…
+BTN_DISCONNECT = Ажырату
+TEXT_WAIT_MSG = Әкімшінің қосылуын күту
+TEXT_REPAIRCONNECTION = Қашықтықтан басқару сессияны ажыратады. Әкімшінің қосылуын күту
+TEXT_ID = ID: %1
+TEXT_SERV_NOT_RES = Сервер жауап бермейді
+TITLE_CHAT = Чат
+BTN_SEND = Жіберу
+MSG_CHAT_DISCONNECTED = Ажыратылған
+TITLE_REMOTE_MSG = Қашықтықтан басқаруды жабу
+MSG_REMOTE_DISCONNECT = Сіз шынымен де ажыратқыңыз келе ме?
+TEXT_HELP_MSG = Айқыштың ортасына тиіңіз
+TEXT_HELP_ARROW = Белгіше таңбасына тиіңіз

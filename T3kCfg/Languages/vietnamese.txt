@@ -1,0 +1,330 @@
+﻿
+[MAIN]
+APP_ERROR_MSG1 = Không thể thực hiện điều khiển thiết bị ngoài
+TITLE_GENERAL_ERROR = Lỗi
+
+BTN_CAPTION_EXIT = Thoát
+BTN_CAPTION_CLOSE = Đóng
+BTN_CAPTION_DEFAULT = Mặc địch
+BTN_CAPTION_REFRESH = Làm mới
+MENU_TOOLTIP_START_PAGE = Trang khởi động
+MENU_TOOLTIP_MOUSE = Chuyển động
+MENU_TOOLTIP_CALIBRATION = Định vị
+MENU_TOOLTIP_SENSOR_SETTING = Cài đặt cảm biến
+MENU_TOOLTIP_GENERAL_SETTING = Cài đặt chung
+MENU_TOOLTIP_SOFTKEY_SETTING = Cài đặt phím mềm
+MSGBOX_TITLE_DEFAULT = Thay đổi về mặc định
+MSGBOX_TEXT_DEFAULT = Bạn có muốn khôi phục về thiết lập ban đầu ?
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = Chương trình này không được hỗ trợ
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = Trình điều khiển phần cứng không hợp lệ
+TITLE_CAPTION_INFORMATION = Thông tin chương trình
+TITLE_CAPTION_FIRMWARE = Thông tin trình điều khiển phần cứng
+TEXT_DEVICE_NOT_CONNECTED = Không thể kết nối thiết bị
+TEXT_FIRMWARE_DOWNLOAD = Trình điều khiển phần cứng đang được tải về
+
+TITLE_CAPTION_LICENSE = Giới thiệu
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Chọn thiết bị
+TITLE_CAPTION_DEVICE_LIST = Danh sách thiết bị
+TEXT_DEV_PATH = Đường dẫn thiết bị
+TEXT_MODEL = Model
+TEXT_NUMBER = Số
+BTN_CAPTION_PLAY_BUZZER = Chơi còi
+BTN_CAPTION_SELECT = Chọn
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = Đồng ý/chấp nhận
+BTN_CAPTION_CANCEL = Hủy
+BTN_CAPTION_YES = Đồng ý
+BTN_CAPTION_NO = Không đồng ý
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Chuyển động
+BTN_CAPTION_MOUSE_SUB1 = Thiết đặt cảm ứng chuyển động
+BTN_CAPTION_MOUSE_SUB2 = Hồ sơ chuyển động
+BTN_CAPTION_CALIBRATION = Định vị
+BTN_CAPTION_CALIBRATION_SUB1 = Định vị màn hình cảm ứng
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Cài đặt cảm biến
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Bật/Tắt cảm ứng
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Kêu, phím tắt
+BTN_CAPTION_GENERAL_SETTING = Cài đặt chung
+BTN_CAPTION_GENERAL_SETTING_SUB1 = Ngôn ngữ, chế độ nhập
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Định hướng hiển thị
+BTN_CAPTION_REMOTE_ASSISTANCE = Hỗ trợ từ xa
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Phím mềm
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Cảm ứng chuyển động
+BTN_CAPTION_TOUCH_SETTING = Cài đặt cảm ứng
+
+;TEXT_SINGLE = Đơn
+;TEXT_FINGERS = Vân tay
+;TEXT_PALM = Bàn tay
+;TEXT_PUTNTAP = Đặt và chạm
+;TEXT_DRAG = Kéo thả
+;TEXT_TAP = Chạm
+;TEXT_DOUBLE_TAP = Chạm đúp
+;TEXT_LONG_TAP = Chạm liên tục
+;TEXT_ROTATE = Xoay
+;TEXT_ZOOM = Zoom
+TEXT_MOVE_WITH_ZOOM = Di chuyển kết hợp Zoom
+TEXT_INERTIAL_WHEEL = Quán tính bánh lăn
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Đặt và chạm, đặt và chạm đúp
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Đa điểm kết hợp
+TEXT_MAC_OS_MARGIN = Mac OS X Margin
+TEXT_INVERT_WHEEL = Đảo ngược bánh
+
+TEXT_LEFT = Bên trái
+TEXT_RIGHT = Bên phải
+TEXT_MIDDLE = Ở giữa
+TEXT_DOUBLE_CLICK = Click đúp
+TEXT_CLICK = Click
+
+TEXT_PROFILE_LEGEND_MODE1 = Chuột
+TEXT_PROFILE_LEGEND_MODE2 = HĐH Windows 7
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Hành động chỉnh sửa
+TEXT_PROFILE_ITEM = Danh mục hồ sơ
+TEXT_ACTION = Hành động
+TEXT_USER_DEFINE_KEY = Định nghĩa phím sử dụng
+TEXT_KEY = Phím chính
+TEXT_FUNCTION_KEY = Phím chức năng
+TEXT_NONE = Không có gì
+TEXT_NOT_DEFINED = Không được định nghĩa
+BTN_CAPTION_APPLY = Áp dụng
+BTN_CAPTION_CANCEL = Hủy bỏ
+
+TEXT_PROFILE_ITEM_DISABLED = Vô hiệu hóa
+TEXT_PROFILE_ITEM_USER_DEFINED = Xác định người dùng
+TEXT_PROFILE_ITEM_FUNCTION_KEY = Phím chức năng
+TEXT_PROFILE_ITEM_MOUSE = Chuột
+TEXT_PROFILE_ITEM_ESCAPE = Để thoát (Ấn phím Esc)
+TEXT_PROFILE_ITEM_FORWARD = Chuyển tiếp
+TEXT_PROFILE_ITEM_BACK = Quay lại
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Chuyển tác vụ
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Chuyển tác vị (Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Quản lý tác vụ
+TEXT_PROFILE_ITEM_EXPLORER = Trình duyệt
+TEXT_PROFILE_ITEM_DESKTOP = Màn hình chính
+TEXT_PROFILE_ITEM_VKBOARD = Bàn phím ảo
+TEXT_PROFILE_ITEM_T3KCFG = Cấu hình chương trình cho dòng T3k
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Click trái
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Click phải
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Click giữa
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Nút bấn bên trái
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Nút bấm bên phải
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Nút bấm giữa
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Định vị
+TEXT_SCREEN_MARGIN = Căn lề hiển thị
+TEXT_SCREEN_PERCENT_OF_SCREEN = Phần trăm của hiển thị
+TEXT_CALIBRATE = Căn chỉnh
+BTN_CAPTION_CALIBRATE = Định vị
+
+TITLE_AREA_SETTING = Thiết đặt vùng (phần trăm của hiển thị)
+TEXT_SINGLE_CLICK = Click đơn
+TEXT_DOUBLE_CLICK = Click đúp
+;TEXT_TWO_TOUCH = Đặt và chạm
+TEXT_PALM = Bàn tay
+
+TEXT_CALIBRATION_WARNING = Không kiểm tra 'Mac OS X Margin' ở thanh công cụ 'Gesture' bởi vì hiệu chuẩn có thể hoạt động không chính xác
+TEXT_CALIBRATION_WARNING2 = Kiểm tra 'Mac OS X Margin' ở thanh công cụ 'Gesture' bởi vì hiệu chuẩn có thể hoạt động không chính xác
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Bật/tắt màn hình cảm ứng
+TEXT_TOUCH_ENABLE = Màn hình cảm ứng
+TEXT_RADIO_TOUCH_ENABLE = Kích hoạt
+TEXT_RADIO_TOUCH_DISABLE = Vo hiệu hóa
+
+TITLE_CAPTION_BUZZER = Tiếng bíp
+TEXT_CLICK = Click chuột
+TEXT_CALIBRATION = Định vị
+TEXT_ERROR = Lỗi
+TEXT_KEYTONE = Phím tiếng
+TEXT_SENSOR_ATTACH = Kèm theo cảm biến
+TEXT_PEN_PAIRING = Ghép bút
+TEXT_USB_ATTACH = Kèm theo USB
+
+TITLE_SHORTCUT_KEY = Phím tắt
+TEXT_CALIBRATION_KEY = Phím định vị
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Số lần bấm phím
+TEXT_TOUCH_ENABLE_KEY = Kích hoạt phím cảm ứng
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Số lần bấm phím
+TEXT_NOT_USED = Không sử dụng
+TEXT_ON = Bật
+TEXT_OFF = Tắt
+
+TITLE_TRAY_ICON = Khay biểu tượng
+TEXT_CHECK_TRAYICON = Sử dụng khay biểu tượng
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Chế độ nhập cảm ứng
+TEXT_INPUT_MODE = Chế độ nhập
+TEXT_INPUT_MODE_MOUSE = Chuột
+TEXT_INPUT_MODE_SINGLE_TOUCH = Cảm ứng đơn (một bút trên bảng)
+TEXT_INPUT_MODE_MULTI_TOUCH = Cảm ứng đa điểm
+TEXT_INPUT_MODE_AUTO_SELECT = Chọn tự động
+TEXT_INPUT_MODE_WARNING_MSG = Cảm ứng có thể không hoạt động chính xác trên hệ điều hành. Bạn có muốn tiếp tục?
+
+TITLE_MULTI_MONITOR = Cài đặt nhiều màn hình hiển thị
+TEXT_MULTI_MONITOR = Cài đặt màn hình
+TEXT_MULTI_MONITOR_SETTING = Chọn màn hình hiển thị
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Áp dụng
+TEXT_BTN_MULTI_MONITOR_CANCEL = Hủy bỏ
+TEXT_BTN_MULTI_MONITOR_CLOSE = Đóng lại
+TEXT_PRIMARY_MONITOR = Màn hình chính : %d
+TEXT_NON_MULTI_MONITOR = Không hỗ trợ nhiều màn hình
+
+BTN_TOOLTIP_PLAY = Chơi
+
+BTN_CAMERA_DIAGNOSTICS = Chuẩn đoán cảm biến
+
+TITLE_LANGUAGE = Ngôn ngữ
+TEXT_LANGUAGE = Lựa chọn ngôn ngữ
+TEXT_LANGUAGE_NOT_FOUND = Tập tin ngôn ngữ không tồn tại
+
+TITLE_DISPLAY_ORIENTATION = Xác định hướng hiển thị
+TEXT_DISPLAY_ORIENTATION = Xác định hướng
+TEXT_DISPLAY_ORIENTATION_1 = 0'  Cảnh quan
+TEXT_DISPLAY_ORIENTATION_2 = 90'  Chân dung
+TEXT_DISPLAY_ORIENTATION_3 = Cảnh quan (xoay)
+TEXT_DISPLAY_ORIENTATION_4 = Chân dung (xoay)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - Thông thường
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Trái
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Phải
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Quay ngược
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
+
+TITLE_DISPLAY_WARNING = Cảnh báo
+TEXT_DISPLAY_WARNING = Hướng xác định hiện tại và vùng xác định không tương ứng
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Thiết đặt cảm ứng
+TITLE_TIME_SETTING = Thời gian thiết đặt (Ms)
+TEXT_TAP = Chạm
+TEXT_LONG_TAP = Tap dài
+TEXT_SLOW = Chậm
+TEXT_FAST = Nhanh
+TITLE_WHEEL_SENSITIVITY_SETTING = Cài đặt độ nhạnh khi xoay hoặc Zoom
+TEXT_WHEEL = Xoay
+TEXT_ZOOM = Zoom
+
+BTN_CAPTION_DEFAULT = Mặc định
+BTN_CAPTION_REFRESH = Làm mới
+BTN_CAPTION_CLOSE = Đóng lại
+MSGBOX_TEXT_DEFAULT = Khôi phục cài đặt gốc
+MSGBOX_TITLE_DEFAULT = Mặc định
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Chọn tắt cảm ứng
+TEXT_MESSAGE = Vui lòng click vào nút thời gian để tắt cảm biến
+BTN_TIMER_TEXT = 1% Giây
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Cảnh báo
+TEXT_MESSAGE = Cảnh báo! Màn hình sau đây có chứa nội dung quan trọng để thiết lập các hoạt động của cảm biến cảm ứng. Nạp những dữ liệu cài đặt có thể làm cho màn hình cảm ứng của bạn không ổn định.
+BTN_CAPTION_CONTINUE = Tiếp tục
+BTN_CAPTION_CLOSE = Đóng lại
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = Thỏa thuận
+TEXT_MESSAGE = Thông tin cảm biến và môi trường người dùng (hệ điều hành phiên bản, Tablet Input Service trên MS Windows, phân giải màn hình) sẽ được thu thập trên màn hình kế tiếp.
+BTN_CAPTION_CONTINUE = Đồng ý
+BTN_CAPTION_CLOSE = Từ chối
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Chuẩn đoán cảm biến
+BTN_CAPTION_DEFAULT = Mặc định
+BTN_CAPTION_REFRESH = Làm mới
+BTN_CAPTION_CLOSE = Đóng lại
+BTN_CAPTION_SAVELOG = Lưu trạng thái cảm biến
+BTN_CAPTION_MAIN = Chính
+BTN_CAPTION_SUB = Phụ
+TAB_CAPTION_SIDEVIEW = Nhìn từ các bên
+TAB_CAPTION_DETECTION = Dò tìm biểu đồ
+
+LOG_CAPTION_ERROR = Lỗi ! Không hoàn thành lưu trạng thái cảm biến
+LOG_SIDEVIEW = Nhìn từ các bên
+LOG_DETECTION = Dò tìm
+LOG_DATA = Thiết đặt dữ liệu
+LOG_SAVING = Đang lưu
+LOG_LOADING = Đang đọc
+LOG_COMPLETE = Hoàn thành
+LOG_OK = Chấp nhận
+LOG_FAIL = Hỏng
+LOG_PROGRESS = PRG
+LOG_START = Bắt đầu
+LOG_CAMERA = Camera
+
+TITLE_SENSOR1 = Cảm biến 1
+TITLE_SENSOR2 = Cảm biến 2
+TITLE_SENSOR1_1 = Cảm biến 1-1
+TITLE_SENSOR2_1 = Cảm biến 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Thu nhỏ
+BTN_TOOLTIP_ZOOM_OUT = Phóng to
+BTN_TOOLTIP_RESET_ZOOM = Phù hợp với màn hình
+TEXT_SENSOR1_GRAPH_LEFT = Giảm bên trái
+TEXT_SENSOR1_GRAPH_RIGHT = Tăng bên phải
+TEXT_SENSOR2_GRAPH_LEFT = Tăng bên trái
+TEXT_SENSOR2_GRAPH_RIGHT = Giảm bên phải
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = Không có ảnh
+BTN_CAPTION_SNAPSHOT = Chụp nhanh
+
+[SOFTKEY SETTING]
+TEXT_TITLE = Cài đặt phím mềm
+TEXT_HEADER_NUMBER = Số
+TEXT_HEADER_TYPE = Kiểu
+TEXT_HEADER_ACTION = Hành động
+TEXT_ITEM_KEY = Chính
+TEXT_ITEM_STATE = Trạng thái
+TEXT_ITEM_NOT_USED = Không sử dụng
+TEXT_ITEM_CALIBRATION = Vào hoặc thoát khỏi hiệu chỉnh cảm biến
+TEXT_ITEM_TOUCH = Kịch hoạt hoặc vô hiệu hóa màn hình cảm ứng
+
+[TRAYICON]
+TEXT_MENU_OPEN = Mở ra
+TEXT_MENU_EXIT = Thoát
+TEXT_BALLOONTIP_TITLE = Cấu hình T3K
+TEXT_BALLOONTIP_MSG = Phiên bản nhà máy cấu hình ("T3kCfgFE.exe") là đang chạy
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = Trạng thái cảm biến
+TITLE_REMOTE = Điều khiển từ xa
+TEXT_SELECT_SERVER = Chọn máy chủ
+TEXT_PORT = Cổng giao tiếp
+TEXT_USERNAME = Tên người dùng
+BTN_REQUEST = Yêu cầu
+TEXT_RECONNECTING = Kết nối lại với máy chủ … %1
+BTN_CANCEL = Hủy bỏ
+TEXT_CONNECTING = Đang kết nối
+TEXT_REMOTE_CONTROL = Điều khiển từ xa …
+BTN_DISCONNECT = Ngắt kết nối
+TEXT_WAIT_MSG = Đang đợi kết nối đến quản trị viên
+TEXT_REPAIRCONNECTION = Ngắt phiên điều khiển từ xa. Đang đợi kết nối đến quản trị viên.
+TEXT_ID = ID: %1
+TEXT_SERV_NOT_RES = Máy chủ không đáp ứng.
+TITLE_CHAT = Chát
+BTN_SEND = Gửi
+MSG_CHAT_DISCONNECTED = Ngắt kết nối
+TITLE_REMOTE_MSG = Đóng phiên điều khiển từ xa
+MSG_REMOTE_DISCONNECT = Bạn có chắc muốn ngắt kết nối ?
+TEXT_HELP_MSG = Vui lòng chạm vào giữa để đánh dấu
+TEXT_HELP_ARROW = Vui lòng chạm vào mũi tên để đánh dấu

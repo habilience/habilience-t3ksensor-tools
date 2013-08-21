@@ -136,8 +136,8 @@ TEXT_DOUBLE_CLICK = Dubbelklikken
 ;TEXT_TWO_TOUCH = Put & Tap
 TEXT_PALM = Palm
 
-TEXT_CALIBRATION_WARNING = 'Mac OS X Marge' niet aangevinkt in menu 'Gebaren'. Kalibratie werkt mogelijk niet naar behoren.
-TEXT_CALIBRATION_WARNING2 = 
+TEXT_CALIBRATION_WARNING = ''Mac OS X Marge' niet aangevinkt in menu 'Gebaren'. Kalibratie werkt mogelijk niet naar behoren.
+TEXT_CALIBRATION_WARNING2 = Mac OS X Marge' aangevinkt in menu 'Gebaren'. Kalibratie werkt mogelijk niet naar behoren..
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Touch aan/uit
@@ -290,7 +290,7 @@ BTN_CAPTION_SNAPSHOT = Snapshot
 
 [SOFTKEY SETTING]
 TEXT_TITLE = Instellingen softkey
-TEXT_HEADER_NUMBER = Nummer
+TEXT_HEADER_NUMBER = Nr.
 TEXT_HEADER_TYPE = Type
 TEXT_HEADER_ACTION = Actie
 TEXT_ITEM_KEY = Toets
@@ -306,25 +306,25 @@ TEXT_BALLOONTIP_TITLE = T3k configuratie
 TEXT_BALLOONTIP_MSG = T3k configuratie bedrijfseditie ("T3kCfgFE.exe") in werking
 
 [ASSISTANCE]
-TITLE_SENSOR_STATUS = 
-TITLE_REMOTE = 
-TEXT_SELECT_SERVER = 
-TEXT_PORT = 
-TEXT_USERNAME = 
-BTN_REQUEST = 
-TEXT_RECONNECTING = 
-BTN_CANCEL = 
-TEXT_CONNECTING = 
-TEXT_REMOTE_CONTROL = 
-BTN_DISCONNECT = 
-TEXT_WAIT_MSG = 
-TEXT_REPAIRCONNECTION = 
-TEXT_ID = 
-TEXT_SERV_NOT_RES = 
-TITLE_CHAT = 
-BTN_SEND = 
-MSG_CHAT_DISCONNECTED = 
-TITLE_REMOTE_MSG = 
-MSG_REMOTE_DISCONNECT = 
-TEXT_HELP_MSG = 
-TEXT_HELP_ARROW = 
+TITLE_SENSOR_STATUS = Sensorstatus
+TITLE_REMOTE = Afstandsbediening
+TEXT_SELECT_SERVER = Server selecteren
+TEXT_PORT = Poort
+TEXT_USERNAME = Gebruikersnaam
+BTN_REQUEST = Verzoek
+TEXT_RECONNECTING = Opnieuw verbinding met server maken ... %1
+BTN_CANCEL = Annuleren
+TEXT_CONNECTING = Verbinding maken ...
+TEXT_REMOTE_CONTROL = Afstandsbediening …
+BTN_DISCONNECT = Afsluiten
+TEXT_WAIT_MSG = Wachten op verbinding met admin.
+TEXT_REPAIRCONNECTION = Afstandsbediening sluit sessie af.\r\nWachten op verbinding met admin.
+TEXT_ID = ID: %1
+TEXT_SERV_NOT_RES = Server reageert niet.
+TITLE_CHAT = Chatten
+BTN_SEND = Verzenden
+MSG_CHAT_DISCONNECTED = Afgesloten.
+TITLE_REMOTE_MSG = Remote sessie afsluiten
+MSG_REMOTE_DISCONNECT = Weet u het zeker dat u wilt afsluiten?
+TEXT_HELP_MSG = Raak het midden van het kruis aan.
+TEXT_HELP_ARROW = Raak de pijl aan.

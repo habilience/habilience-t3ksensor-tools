@@ -22,16 +22,16 @@ TITLE_CAPTION_FIRMWARE = معلومات البرامج الثابتة
 TEXT_DEVICE_NOT_CONNECTED = لم يتم توصيل الجهاز
 TEXT_FIRMWARE_DOWNLOAD = تحميل البرامج الثابتة
 
-TITLE_CAPTION_LICENSE = 
+TITLE_CAPTION_LICENSE = حول
 
 [SELECT DEVICE]
 WINDOW_CAPTION = اختيار جهاز
 TITLE_CAPTION_DEVICE_LIST = قائمة جهاز
 TEXT_DEV_PATH = مسار
 TEXT_MODEL = نموذج
-TEXT_NUMBER = رقم
+TEXT_NUMBER = عدد
 BTN_CAPTION_PLAY_BUZZER = لعب الطنان
-BTN_CAPTION_SELECT = اختيار جهاز
+BTN_CAPTION_SELECT = اختيار
 
 [MESSAGEBOX]
 BTN_CAPTION_OK = تأكيد
@@ -55,7 +55,7 @@ BTN_CAPTION_GENERAL_SETTING_SUB2 = دوران الشاشة
 BTN_CAPTION_REMOTE_ASSISTANCE = دعم  بعيد
 BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
 BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
-BTN_CAPTION_SOFTKEY_SETTING = Softkey
+BTN_CAPTION_SOFTKEY_SETTING = الأزرار الوظيفية
 BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
 BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
 
@@ -66,7 +66,7 @@ BTN_CAPTION_TOUCH_SETTING = تحديد اللمس
 ;TEXT_SINGLE = إصبع
 ;TEXT_FINGERS = الأصابع  المتعددة
 ;TEXT_PALM = كف
-;TEXT_PUTNTAP = Put & Tap
+;TEXT_PUTNTAP = ضع وانقر
 ;TEXT_DRAG = سحب
 ;TEXT_TAP = النقر
 ;TEXT_DOUBLE_TAP = النقر مرتين
@@ -116,9 +116,9 @@ TEXT_PROFILE_ITEM_DESKTOP = تظهر على سطح المكتب
 TEXT_PROFILE_ITEM_VKBOARD = لوحة المفاتيح الافتراضية
 TEXT_PROFILE_ITEM_T3KCFG = T3k برنامج التحديد السلسلة
 
-TEXT_PROFILE_ITEM_MLEFT_CLICK = Left Click
-TEXT_PROFILE_ITEM_MRIGHT_CLICK = Right Click
-TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Middle Click
+TEXT_PROFILE_ITEM_MLEFT_CLICK = انقر على اليسار
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = انقر على اليمين
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = انقر فى الوسط
 TEXT_PROFILE_ITEM_MLEFT_DOWN = الزراليسار
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = الزر اليمين
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = الزر الأوسط
@@ -126,18 +126,18 @@ TEXT_PROFILE_ITEM_MMIDDLE_DOWN = الزر الأوسط
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = تصحيح  التنسيق اللمس
 TEXT_SCREEN_MARGIN = هوامش الشاشة
-TEXT_SCREEN_PERCENT_OF_SCREEN = %
+TEXT_SCREEN_PERCENT_OF_SCREEN = " من الشاشة %
 TEXT_CALIBRATE = تصحيح
 BTN_CAPTION_CALIBRATE = تصحيح
 
 TITLE_AREA_SETTING = (%)تقسيم المناطق
 TEXT_SINGLE_CLICK = نقر
 TEXT_DOUBLE_CLICK = نقرا مزدوجا
-;TEXT_TWO_TOUCH = Put & Tap
+;TEXT_TWO_TOUCH = ضع وانقر
 TEXT_PALM = كف
 
 TEXT_CALIBRATION_WARNING = قد لا تعمل التصحيح. بشكل صحيح  .   "Mac OS X لم يتم تعيين من القائمة "بادرة"  "هامش الشاشة .
-TEXT_CALIBRATION_WARNING2 = 
+TEXT_CALIBRATION_WARNING2 = هل تصفح 'Mac OS X Margin' في القائمة 'Gesture'. لأنه هذة المعايرة قد لا تعمل بشكل صحيح
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = وجود الاستخدام اللمس
@@ -151,8 +151,8 @@ TEXT_CALIBRATION = تصحيح  التنسيق اللمس
 TEXT_ERROR = تحذيرالخطأ
 TEXT_KEYTONE = الكيتونات(Keytone)
 TEXT_SENSOR_ATTACH = إعلام  الاتصال الاستشعار
-TEXT_PEN_PAIRING = Pen pairing
-TEXT_USB_ATTACH = USB  إعلام  الاتصال
+TEXT_PEN_PAIRING = اقتران القلم
+TEXT_USB_ATTACH = ارفاق USB
 
 TITLE_SHORTCUT_KEY = اختصارات
 TEXT_CALIBRATION_KEY = مفتاح لتصحيح  التنسيق اللمس
@@ -204,10 +204,10 @@ TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - الجانب الأيسر
 TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - الجانب الأيمن
 TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - استبدال أعلى وأسفل
 
-TEXT_DISPLAY_MAC_ORIENTATION_1 = 
-TEXT_DISPLAY_MAC_ORIENTATION_2 = 
-TEXT_DISPLAY_MAC_ORIENTATION_3 = 
-TEXT_DISPLAY_MAC_ORIENTATION_4 = 
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
 
 TITLE_DISPLAY_WARNING = تحذير
 TEXT_DISPLAY_WARNING = الاتجاه الحالي والتصحيح لا تتطابق مع الشاشة
@@ -252,8 +252,8 @@ BTN_CAPTION_DEFAULT = الافتراضي
 BTN_CAPTION_REFRESH = تحديث
 BTN_CAPTION_CLOSE = أغلق
 BTN_CAPTION_SAVELOG = مخزن حالة الاستشعار
-BTN_CAPTION_MAIN = 
-BTN_CAPTION_SUB = 
+BTN_CAPTION_MAIN = رئيسي
+BTN_CAPTION_SUB = فرعى
 TAB_CAPTION_SIDEVIEW = مظهرة جانبية
 TAB_CAPTION_DETECTION = رسم البياني الكشف
 
@@ -261,8 +261,8 @@ LOG_CAPTION_ERROR = خطأ! فشلت في مخزن
 LOG_SIDEVIEW = مظهرة جانبية
 LOG_DETECTION = كشف
 LOG_DATA = البيانات الإعدادات
-LOG_SAVING = أثناء التخزين
-LOG_LOADING = أثناء القراءة
+LOG_SAVING = حفظ
+LOG_LOADING = تحميل
 LOG_COMPLETE = إنتهاء
 LOG_OK = تأكيد
 LOG_FAIL = فشل
@@ -306,25 +306,25 @@ TEXT_BALLOONTIP_TITLE = T3k Configurator
 TEXT_BALLOONTIP_MSG = T3k Configurator Factory Edition ("T3kCfgFE.exe")   يعمل البرنامج بنظام التشغيل
 
 [ASSISTANCE]
-TITLE_SENSOR_STATUS = 
-TITLE_REMOTE = 
-TEXT_SELECT_SERVER = 
-TEXT_PORT = 
-TEXT_USERNAME = 
-BTN_REQUEST = 
-TEXT_RECONNECTING = 
-BTN_CANCEL = 
-TEXT_CONNECTING = 
-TEXT_REMOTE_CONTROL = 
-BTN_DISCONNECT = 
-TEXT_WAIT_MSG = 
-TEXT_REPAIRCONNECTION = 
-TEXT_ID = 
-TEXT_SERV_NOT_RES = 
-TITLE_CHAT = 
-BTN_SEND = 
-MSG_CHAT_DISCONNECTED = 
-TITLE_REMOTE_MSG = 
-MSG_REMOTE_DISCONNECT = 
-TEXT_HELP_MSG = 
-TEXT_HELP_ARROW = 
+TITLE_SENSOR_STATUS = وصغ الحساس
+TITLE_REMOTE = تحكم عن بعد
+TEXT_SELECT_SERVER = اختيار الخادم
+TEXT_PORT = المنفذ
+TEXT_USERNAME = اسم الدخول
+BTN_REQUEST = الطلب
+TEXT_RECONNECTING = اعادة محاولة الاتصال بالخادم .....1%
+BTN_CANCEL = الغاء
+TEXT_CONNECTING = أتصال
+TEXT_REMOTE_CONTROL = تحكم عن بعد
+BTN_DISCONNECT = قطع الاتصال
+TEXT_WAIT_MSG = فى انتظار الاتصال من مدير النظام
+TEXT_REPAIRCONNECTION = تم قطع الاتصال فترة التحكم عن بعد ، فى انتظار الاتصال مع مدير النظام
+TEXT_ID = بطاقة المعرف
+TEXT_SERV_NOT_RES = لايوجد استجابة من الخادم
+TITLE_CHAT = دردشة
+BTN_SEND = ارسال
+MSG_CHAT_DISCONNECTED = قطع الاتصال
+TITLE_REMOTE_MSG = اغلاق فترة التكم عن بعد
+MSG_REMOTE_DISCONNECT = هل انت متاكد من قطع الأتصال ؟
+TEXT_HELP_MSG = الرجاء الضغط فى منتصف علامة الصليب
+TEXT_HELP_ARROW = يرجى لمس علامة السهم.

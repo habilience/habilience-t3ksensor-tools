@@ -137,7 +137,7 @@ TEXT_DOUBLE_CLICK = Přesnost dvojkliku
 TEXT_PALM = Dlaň
 
 TEXT_CALIBRATION_WARNING = Nazaškrtávejte 'Mac OS X Margin' v menu 'Gesta'. Kalibrace nemusí fungovat správně.
-TEXT_CALIBRATION_WARNING2 = 
+TEXT_CALIBRATION_WARNING2 = Zaškrtněte 'Mac OS X Margin' v menu 'Gesta'. Kalibrace nemusí fungovat správně.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Zapnout / vypnout dotykové ovládání
@@ -290,7 +290,7 @@ BTN_CAPTION_SNAPSHOT = Uložit snímek
 
 [SOFTKEY SETTING]
 TEXT_TITLE = Nastavení SW tlačítek
-TEXT_HEADER_NUMBER = číslice
+TEXT_HEADER_NUMBER = č.
 TEXT_HEADER_TYPE = Typ
 TEXT_HEADER_ACTION = Akce
 TEXT_ITEM_KEY = Klávesa
@@ -306,25 +306,25 @@ TEXT_BALLOONTIP_TITLE = T3k Konfigurace
 TEXT_BALLOONTIP_MSG = T3k Configuration Factory Edition ("T3kCfgFE.exe") je spuštěna.
 
 [ASSISTANCE]
-TITLE_SENSOR_STATUS = 
-TITLE_REMOTE = 
-TEXT_SELECT_SERVER = 
-TEXT_PORT = 
-TEXT_USERNAME = 
-BTN_REQUEST = 
-TEXT_RECONNECTING = 
-BTN_CANCEL = 
-TEXT_CONNECTING = 
-TEXT_REMOTE_CONTROL = 
-BTN_DISCONNECT = 
-TEXT_WAIT_MSG = 
-TEXT_REPAIRCONNECTION = 
-TEXT_ID = 
-TEXT_SERV_NOT_RES = 
-TITLE_CHAT = 
-BTN_SEND = 
-MSG_CHAT_DISCONNECTED = 
-TITLE_REMOTE_MSG = 
-MSG_REMOTE_DISCONNECT = 
-TEXT_HELP_MSG = 
-TEXT_HELP_ARROW = 
+TITLE_SENSOR_STATUS = Stav senzoru
+TITLE_REMOTE = Dálkové ovládání
+TEXT_SELECT_SERVER = Vybrat server
+TEXT_PORT = Port
+TEXT_USERNAME = Uživatelské jméno
+BTN_REQUEST = Žádost
+TEXT_RECONNECTING = Zkusit znovu připojení k serveru... %1
+BTN_CANCEL = Zrušit
+TEXT_CONNECTING = Připojuje se...
+TEXT_REMOTE_CONTROL = Dálkové ovládání...
+BTN_DISCONNECT = Odpojit
+TEXT_WAIT_MSG = Čeká se na připojení admin.
+TEXT_REPAIRCONNECTION = Dálkové ovládání odpojuje vzdálenou relaci.\r\nČeká se na připojení admin.
+TEXT_ID = ID: %1
+TEXT_SERV_NOT_RES = Server neodpovídá.
+TITLE_CHAT = Chatovat
+BTN_SEND = Odeslat
+MSG_CHAT_DISCONNECTED = Odpojeno.
+TITLE_REMOTE_MSG = Ukončit vzdálenou relaci
+MSG_REMOTE_DISCONNECT = Chcete se skutečně odpojit?
+TEXT_HELP_MSG = Dotkněte se středu křížku.
+TEXT_HELP_ARROW = Dotkněte se šipky.

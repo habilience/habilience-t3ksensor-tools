@@ -137,7 +137,7 @@ TEXT_DOUBLE_CLICK = Çift klik
 TEXT_PALM = Avuç
 
 TEXT_CALIBRATION_WARNING = Mac OS X marjalrını işaret menüsünde kontrol etmediniz. Bu Sebeple kalibrasyon düzgün çalışmaya bilir.
-TEXT_CALIBRATION_WARNING2 = 
+TEXT_CALIBRATION_WARNING2 = Mac OS X marjalrını işaret menüsünde kontrol etmediniz. Bu Sebeple kalibrasyon düzgün çalışmaya bilir.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Dokunmatik Ekran Aç/Kapa
@@ -252,8 +252,8 @@ BTN_CAPTION_DEFAULT = Varsayılan
 BTN_CAPTION_REFRESH = Yenile
 BTN_CAPTION_CLOSE = Kapat
 BTN_CAPTION_SAVELOG = Sensör Durumunu kaydet
-BTN_CAPTION_MAIN = 
-BTN_CAPTION_SUB = 
+BTN_CAPTION_MAIN = Main
+BTN_CAPTION_SUB = Sub
 TAB_CAPTION_SIDEVIEW = Yan Bakış
 TAB_CAPTION_DETECTION = Hasasiyet diagramı
 
@@ -306,25 +306,25 @@ TEXT_BALLOONTIP_TITLE = T3k Konfigürasyonu
 TEXT_BALLOONTIP_MSG = T3k Konfigürasyonu Fabrika Yayını çalışıyor.
 
 [ASSISTANCE]
-TITLE_SENSOR_STATUS = 
-TITLE_REMOTE = 
-TEXT_SELECT_SERVER = 
-TEXT_PORT = 
-TEXT_USERNAME = 
-BTN_REQUEST = 
-TEXT_RECONNECTING = 
-BTN_CANCEL = 
-TEXT_CONNECTING = 
-TEXT_REMOTE_CONTROL = 
-BTN_DISCONNECT = 
-TEXT_WAIT_MSG = 
-TEXT_REPAIRCONNECTION = 
-TEXT_ID = 
-TEXT_SERV_NOT_RES = 
-TITLE_CHAT = 
-BTN_SEND = 
-MSG_CHAT_DISCONNECTED = 
-TITLE_REMOTE_MSG = 
-MSG_REMOTE_DISCONNECT = 
-TEXT_HELP_MSG = 
-TEXT_HELP_ARROW = 
+TITLE_SENSOR_STATUS = Sensör Durum
+TITLE_REMOTE = Uzaktan Kumanda
+TEXT_SELECT_SERVER = Select Server
+TEXT_PORT = Liman
+TEXT_USERNAME = Kullanıcı adı
+BTN_REQUEST = istek
+TEXT_RECONNECTING = Sunucuya bağlantı yeniden deneme ... % 1
+BTN_CANCEL = İptal ...
+TEXT_CONNECTING = Bağlama ...
+TEXT_REMOTE_CONTROL = Uzaktan Kumanda…
+BTN_DISCONNECT = kesmek
+TEXT_WAIT_MSG = Yönetici bağlantısı bekliyor
+TEXT_REPAIRCONNECTION = Uzaktan ontrol oturumu bağlantısını keser.\r\nConnectionof yöneticisi bekliyorum
+TEXT_ID = ID: %1
+TEXT_SERV_NOT_RES = Sunucu yanıt vermiyor.
+TITLE_CHAT = Chat
+BTN_SEND = Göndermek
+MSG_CHAT_DISCONNECTED = Bağlantı kesildi.
+TITLE_REMOTE_MSG = Uzak Oturum kapatın
+MSG_REMOTE_DISCONNECT = Eğer kesmek istediğinizden emin misiniz?
+TEXT_HELP_MSG = Çapraz işaretinin merkezine dokunun lütfen.
+TEXT_HELP_ARROW = Ok işareti dokunma lütfen.

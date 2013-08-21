@@ -1,0 +1,330 @@
+﻿
+[MAIN]
+APP_ERROR_MSG1 = Невозможно запустить на съемных носителях!
+TITLE_GENERAL_ERROR = Ошибка
+
+BTN_CAPTION_EXIT = Выход
+BTN_CAPTION_CLOSE = Закрыть
+BTN_CAPTION_DEFAULT = По умолчанию
+BTN_CAPTION_REFRESH = Обновить
+MENU_TOOLTIP_START_PAGE = Главная страница
+MENU_TOOLTIP_MOUSE = Жест
+MENU_TOOLTIP_CALIBRATION = Калибровка
+MENU_TOOLTIP_SENSOR_SETTING = Настройки сенсора
+MENU_TOOLTIP_GENERAL_SETTING = Главные настройки
+MENU_TOOLTIP_SOFTKEY_SETTING = Настройки экранных клавиш
+MSGBOX_TITLE_DEFAULT = Изменить по умолчанию
+MSGBOX_TEXT_DEFAULT = Восстановить заводские настройки
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = Данная программа не поддерживает драйвера
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = Недействительное программируемое оборудование
+TITLE_CAPTION_INFORMATION = Информация о программе
+TITLE_CAPTION_FIRMWARE = Информация о драйверах
+TEXT_DEVICE_NOT_CONNECTED = Устройство не подключено
+TEXT_FIRMWARE_DOWNLOAD = Драйвера загружены
+
+TITLE_CAPTION_LICENSE = О
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Выберите оборудование
+TITLE_CAPTION_DEVICE_LIST = Перечень оборудований
+TEXT_DEV_PATH = Путь доступа к оборудованию
+TEXT_MODEL = Модель
+TEXT_NUMBER = Номер
+BTN_CAPTION_PLAY_BUZZER = Сигнал запуска
+BTN_CAPTION_SELECT = Выбрать
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = Ок
+BTN_CAPTION_CANCEL = Отмена
+BTN_CAPTION_YES = Да
+BTN_CAPTION_NO = Нет
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Жест
+BTN_CAPTION_MOUSE_SUB1 = Настройки сенсорного жеста
+BTN_CAPTION_MOUSE_SUB2 = Профили жестов
+BTN_CAPTION_CALIBRATION = Калибровка
+BTN_CAPTION_CALIBRATION_SUB1 = Колибровка сенсорного экрана
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Настройки сенсора
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Активировать/дезактивировать сенсорное восприятие
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Звуковое устройство, Клавиши быстрого доступа
+BTN_CAPTION_GENERAL_SETTING = Главные настройки
+BTN_CAPTION_GENERAL_SETTING_SUB1 = Язык, Тип ввода
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Ориентация экрана
+BTN_CAPTION_REMOTE_ASSISTANCE = Удаленный доступ
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Сенсорная клавиша
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Сенсорный жест
+BTN_CAPTION_TOUCH_SETTING = Настройки сенсора
+
+;TEXT_SINGLE = Одиночный
+;TEXT_FINGERS = Пальцы
+;TEXT_PALM = Ладонь
+;TEXT_PUTNTAP = Вставить и коснуться
+;TEXT_DRAG = Перемещать
+;TEXT_TAP = Коснуться
+;TEXT_DOUBLE_TAP = Двойное прикосновение
+;TEXT_LONG_TAP = Удержание
+;TEXT_ROTATE = Поворот
+;TEXT_ZOOM = Увеличить
+TEXT_MOVE_WITH_ZOOM = Передвигать с увеличением
+TEXT_INERTIAL_WHEEL = Инерциальное колесо
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Индивидуальная вставка и прикосновение, Вставка и двойное прикосновение
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Гибридниый мульти-сенсор
+TEXT_MAC_OS_MARGIN = Mac OS X Margin
+TEXT_INVERT_WHEEL = Инвертное колесо
+
+TEXT_LEFT = Лево
+TEXT_RIGHT = Право
+TEXT_MIDDLE = Центр
+TEXT_DOUBLE_CLICK = Двойной щелчок
+TEXT_CLICK = Щелчок
+
+TEXT_PROFILE_LEGEND_MODE1 = Мышь
+TEXT_PROFILE_LEGEND_MODE2 = Windows 7
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Редактирование
+TEXT_PROFILE_ITEM = Профиль
+TEXT_ACTION = Действие
+TEXT_USER_DEFINE_KEY = Определенная пользователем клавиша
+TEXT_KEY = Клавиша
+TEXT_FUNCTION_KEY = Функциональная клавиша
+TEXT_NONE = Никакой
+TEXT_NOT_DEFINED = Не определен
+BTN_CAPTION_APPLY = Применить
+BTN_CAPTION_CANCEL = Отменить
+
+TEXT_PROFILE_ITEM_DISABLED = (Отключен)
+TEXT_PROFILE_ITEM_USER_DEFINED = (Определенный пользователем)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Функциональная клавиша)
+TEXT_PROFILE_ITEM_MOUSE = (Мышь)
+TEXT_PROFILE_ITEM_ESCAPE = Выход
+TEXT_PROFILE_ITEM_FORWARD = Вперед
+TEXT_PROFILE_ITEM_BACK = Назад
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Переключатель задач
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Переключатель задач (Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Диспетчер задач
+TEXT_PROFILE_ITEM_EXPLORER = Обозреватель
+TEXT_PROFILE_ITEM_DESKTOP = Рабочий стол
+TEXT_PROFILE_ITEM_VKBOARD = Виртуальная клавиатура
+TEXT_PROFILE_ITEM_T3KCFG = Программа настройки Серии T3k
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Левый щелчок
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Правый щелчок
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Центральный щелчок
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Левая кнопка
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Правая кнопка
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Центральная кнопка
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Калибровка
+TEXT_SCREEN_MARGIN = Край экрана
+TEXT_SCREEN_PERCENT_OF_SCREEN = % экрана
+TEXT_CALIBRATE = Калибровка
+BTN_CAPTION_CALIBRATE = Калибровка…
+
+TITLE_AREA_SETTING = Настройки контактной поверхности (% экрана)
+TEXT_SINGLE_CLICK = Одинарный щелчок
+TEXT_DOUBLE_CLICK = Двойной щелчок
+;TEXT_TWO_TOUCH = Вставить и коснуться
+TEXT_PALM = Ладонь
+
+TEXT_CALIBRATION_WARNING = Не проверяйте 'Mac OS X Margin' в меню "Жесты". Так как калибровка может работать неисправно
+TEXT_CALIBRATION_WARNING2 = Проверьте 'Mac OS X Margin' в меню "Жесты". Так как калибровка может работать неисправно
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Включить/выключить сенсорный экран
+TEXT_TOUCH_ENABLE = Сенсорный экран
+TEXT_RADIO_TOUCH_ENABLE = Включить
+TEXT_RADIO_TOUCH_DISABLE = Выключить
+
+TITLE_CAPTION_BUZZER = Сигнал
+TEXT_CLICK = Щелчок
+TEXT_CALIBRATION = Калибровка
+TEXT_ERROR = Ошибка
+TEXT_KEYTONE = Сигнал клавиш
+TEXT_SENSOR_ATTACH = Подключение сенсора
+TEXT_PEN_PAIRING = Сопряжение с ручкой
+TEXT_USB_ATTACH = Подключение USB
+
+TITLE_SHORTCUT_KEY = Клавиша быстрого доступа
+TEXT_CALIBRATION_KEY = Клавиша калибровки
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Количество нажатия клавиш
+TEXT_TOUCH_ENABLE_KEY = Клавиша включения сенсора
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Количество нажатия клавиш
+TEXT_NOT_USED = Не используемый
+TEXT_ON = Вкл
+TEXT_OFF = Выкл
+
+TITLE_TRAY_ICON = Иконка планшета
+TEXT_CHECK_TRAYICON = Иконка планшета пользователя
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Режим сенсорного ввода
+TEXT_INPUT_MODE = Режим ввода
+TEXT_INPUT_MODE_MOUSE = Мышь
+TEXT_INPUT_MODE_SINGLE_TOUCH = Одиночное прикосновение
+TEXT_INPUT_MODE_MULTI_TOUCH = Мультисенсор
+TEXT_INPUT_MODE_AUTO_SELECT = Авто выбор
+TEXT_INPUT_MODE_WARNING_MSG = Сенсор может работать неправильно под данной ОС. Продолжить?
+
+TITLE_MULTI_MONITOR = Настройка многоэкранного дисплея
+TEXT_MULTI_MONITOR = Настройка экрана
+TEXT_MULTI_MONITOR_SETTING = Выбрать дисплей экрана
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Применить
+TEXT_BTN_MULTI_MONITOR_CANCEL = Отмена
+TEXT_BTN_MULTI_MONITOR_CLOSE = Закрыть
+TEXT_PRIMARY_MONITOR = Основной экран
+TEXT_NON_MULTI_MONITOR = Не поддерживает многоэкранный режим
+
+BTN_TOOLTIP_PLAY = Включить
+
+BTN_CAMERA_DIAGNOSTICS = Диагностика сенсора
+
+TITLE_LANGUAGE = Язык
+TEXT_LANGUAGE = Выбор яызка
+TEXT_LANGUAGE_NOT_FOUND = Языковой файл не существует
+
+TITLE_DISPLAY_ORIENTATION = Ориентация дисплея
+TEXT_DISPLAY_ORIENTATION = Ориентация
+TEXT_DISPLAY_ORIENTATION_1 = 0' - Пейзаж
+TEXT_DISPLAY_ORIENTATION_2 = 90' - Портрет
+TEXT_DISPLAY_ORIENTATION_3 = 180' - Пейзаж (перевернутый)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - Портрет (перевернутый)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - Нормальный
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Влево
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Вправо
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Перевернуть
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
+
+TITLE_DISPLAY_WARNING = Предупреждение
+TEXT_DISPLAY_WARNING = Действующая ориентация дисплея и значение калибровки не соотвесттвуют
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Настройка сенсора
+TITLE_TIME_SETTING = Настройки времени (мс)
+TEXT_TAP = Коснуться
+TEXT_LONG_TAP = Долгое прикосновение
+TEXT_SLOW = Медленно
+TEXT_FAST = Быстро
+TITLE_WHEEL_SENSITIVITY_SETTING = Настройки чувствительности колеса/увеличение
+TEXT_WHEEL = Колесе
+TEXT_ZOOM = Увеличение
+
+BTN_CAPTION_DEFAULT = По умолчанию
+BTN_CAPTION_REFRESH = Обновить
+BTN_CAPTION_CLOSE = Закрыть
+MSGBOX_TEXT_DEFAULT = Восстановить заводские настройки
+MSGBOX_TITLE_DEFAULT = По умолчанию
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Выбрать "Отключить сенсор"
+TEXT_MESSAGE = Пожалуйста, щелкните на кнопку таймера, для выключения сенсора
+BTN_TIMER_TEXT = %1 сек
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Предупреждение
+TEXT_MESSAGE = Предупреждение! Следующий экран имеет настройки данных, несовместимых с работой сенсорного экрана. Изменение этих данных приведет к нестабильной работе сенсорного экрана.
+BTN_CAPTION_CONTINUE = Продолжать
+BTN_CAPTION_CLOSE = Закрыть
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = Соглашение
+TEXT_MESSAGE = В следующем окне будет собрана информация о сенсоре и пользовательских данных (Версия ОС, Сервис ввода планшета на MS Windows, Разрешения экрана)
+BTN_CAPTION_CONTINUE = Согласиться
+BTN_CAPTION_CLOSE = Отклонить
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Диагностика сенсора
+BTN_CAPTION_DEFAULT = ПО умолчанию
+BTN_CAPTION_REFRESH = Обновить
+BTN_CAPTION_CLOSE = Закрыть
+BTN_CAPTION_SAVELOG = Сохранить положение сенсора
+BTN_CAPTION_MAIN = Главный
+BTN_CAPTION_SUB = Вспомогательный
+TAB_CAPTION_SIDEVIEW = Боковой обзор
+TAB_CAPTION_DETECTION = Графа обнаружения
+
+LOG_CAPTION_ERROR = Ошибка! Не удалось сохранить положение
+LOG_SIDEVIEW = Боковой обзор
+LOG_DETECTION = Обнаружение
+LOG_DATA = Данные настройки
+LOG_SAVING = Сохранение
+LOG_LOADING = Загрузка
+LOG_COMPLETE = Завершено
+LOG_OK = ОК
+LOG_FAIL = Ошибка
+LOG_PROGRESS = PRG
+LOG_START = Начать
+LOG_CAMERA = Камера
+
+TITLE_SENSOR1 = Сенсор 1
+TITLE_SENSOR2 = Сенсор 2
+TITLE_SENSOR1_1 = Сенсор 1-1
+TITLE_SENSOR2_1 = Сенсор 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Увеличить
+BTN_TOOLTIP_ZOOM_OUT = Уменьшить
+BTN_TOOLTIP_RESET_ZOOM = Подбо экрана
+TEXT_SENSOR1_GRAPH_LEFT = Нижний левый
+TEXT_SENSOR1_GRAPH_RIGHT = Верхний правый
+TEXT_SENSOR2_GRAPH_LEFT = Верхний левый
+TEXT_SENSOR2_GRAPH_RIGHT = Нижний правый
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = Нет картинки
+BTN_CAPTION_SNAPSHOT = Снимок
+
+[SOFTKEY SETTING]
+TEXT_TITLE = Настройки функциональной клавиши
+TEXT_HEADER_NUMBER = число
+TEXT_HEADER_TYPE = Тип
+TEXT_HEADER_ACTION = Действие
+TEXT_ITEM_KEY = Клавиша
+TEXT_ITEM_STATE = Положение
+TEXT_ITEM_NOT_USED = (не используемый)
+TEXT_ITEM_CALIBRATION = Вход/выход Калибровки сенсора
+TEXT_ITEM_TOUCH = Включить/выключить Сенсорный Экран
+
+[TRAYICON]
+TEXT_MENU_OPEN = Открыть….
+TEXT_MENU_EXIT = Выход
+TEXT_BALLOONTIP_TITLE = Конфигурации T3k
+TEXT_BALLOONTIP_MSG = ("T3kCfgFE.exe") Запущены Конфигурации T3k Заводская версия
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = Положение сенсора
+TITLE_REMOTE = Дистанционное управление
+TEXT_SELECT_SERVER = Выбрать сервер
+TEXT_PORT = Порт
+TEXT_USERNAME = Имя пользователя
+BTN_REQUEST = Запрос
+TEXT_RECONNECTING = Повторное соединение с сервером ... %1
+BTN_CANCEL = Отмена
+TEXT_CONNECTING = Подключение….
+TEXT_REMOTE_CONTROL = Удаленное управление…
+BTN_DISCONNECT = Отсоединить
+TEXT_WAIT_MSG = Ожидание подключение администратора
+TEXT_REPAIRCONNECTION = Дистанционное управление разъединяет сессию. Ожидание подключение администратора
+TEXT_ID = ID: %1
+TEXT_SERV_NOT_RES = Сервер не отвечает
+TITLE_CHAT = Чат
+BTN_SEND = Отправить
+MSG_CHAT_DISCONNECTED = Отсоединен
+TITLE_REMOTE_MSG = Закрыть дистанционное управление
+MSG_REMOTE_DISCONNECT = Вы действительно хотите отсоединиться?
+TEXT_HELP_MSG = Пожалуйста коснитесь центра крестика
+TEXT_HELP_ARROW = Пожалуйста коснитесь знак стрелки

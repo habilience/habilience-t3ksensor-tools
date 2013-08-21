@@ -22,7 +22,7 @@ TITLE_CAPTION_FIRMWARE = ファームウエア情報
 TEXT_DEVICE_NOT_CONNECTED = 装置が繋がれていません。
 TEXT_FIRMWARE_DOWNLOAD = ファームウエアダウンロード
 
-TITLE_CAPTION_LICENSE = 
+TITLE_CAPTION_LICENSE = について
 
 [SELECT DEVICE]
 WINDOW_CAPTION = 装置選択
@@ -136,8 +136,8 @@ TEXT_DOUBLE_CLICK = ダブルクリック
 ;TEXT_TWO_TOUCH = Put & Tap
 TEXT_PALM = 手の平
 
-TEXT_CALIBRATION_WARNING = "ジェスチャー"メニューから"Mac OS X Margin"が設定されていません。キャリブレーションが正常に動作しないことがあります。
-TEXT_CALIBRATION_WARNING2 = "ジェスチャー"メニューから"Mac OS X Margin"が設定されました。キャリブレーションが正常に動作しないことがあります。
+TEXT_CALIBRATION_WARNING = ジェスチャーメニューから"Mac OS X Margin"が設定されていません。キャリブレーションが正常に動作しないことがあります。
+TEXT_CALIBRATION_WARNING2 = ジェスチャーメニューから"Mac OS X Margin"が設定されました。キャリブレーションが正常に動作しないことがあります。
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = タッチ使用の有無

@@ -15,21 +15,21 @@ MENU_TOOLTIP_GENERAL_SETTING = Ajuste general
 MENU_TOOLTIP_SOFTKEY_SETTING = 
 MSGBOX_TITLE_DEFAULT = Modificar el valor por omisión
 MSGBOX_TEXT_DEFAULT = ¿Quiere volver al ajuste inicial?
-MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = 
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = Este programa no soporta v%1 firmware.\nCurrent: %1\nSupports %2 ~ %3
 MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = Verificación de error
 TITLE_CAPTION_INFORMATION = Información del programa
 TITLE_CAPTION_FIRMWARE = Información del firmware
 TEXT_DEVICE_NOT_CONNECTED = El dispositivo no está conectado
 TEXT_FIRMWARE_DOWNLOAD = Bajar el firmware
 
-TITLE_CAPTION_LICENSE = 
+TITLE_CAPTION_LICENSE = Acerca de
 
 [SELECT DEVICE]
 WINDOW_CAPTION = Seleccionar el dispositivo
 TITLE_CAPTION_DEVICE_LIST = Lista de dispositivos
 TEXT_DEV_PATH = Ruta
-TEXT_MODEL = 
-TEXT_NUMBER = 
+TEXT_MODEL = Modelo
+TEXT_NUMBER = No.
 BTN_CAPTION_PLAY_BUZZER = Hacer sonar el timbre
 BTN_CAPTION_SELECT = Seleccionar
 
@@ -76,8 +76,8 @@ BTN_CAPTION_TOUCH_SETTING = Ajuste del tacto…
 TEXT_MOVE_WITH_ZOOM = Ampliar/Reducir al arrastrar
 TEXT_INERTIAL_WHEEL = Rueda de inercia
 TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Put & Tap y Put & Double-Tap (Conversión de imagen)
-TEXT_PUTAND_ON_MULTITOUCHDEVICE = 
-TEXT_MAC_OS_MARGIN = 
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Multi-Tacto Hibrido
+TEXT_MAC_OS_MARGIN = Margen Mac OS X
 TEXT_INVERT_WHEEL = Invertir rueda
 
 TEXT_LEFT = Izquierda
@@ -86,8 +86,8 @@ TEXT_MIDDLE = Medio
 TEXT_DOUBLE_CLICK = Clic doble
 TEXT_CLICK = Clic
 
-TEXT_PROFILE_LEGEND_MODE1 = 
-TEXT_PROFILE_LEGEND_MODE2 = 
+TEXT_PROFILE_LEGEND_MODE1 = Puntero
+TEXT_PROFILE_LEGEND_MODE2 = Windows 7
 
 [EDIT PROFILE ITEM]
 TITLE_CAPTION_EDIT_PROFILE_ITEM = Redacción del ítem
@@ -104,8 +104,8 @@ BTN_CAPTION_CANCEL = Cancelar
 TEXT_PROFILE_ITEM_DISABLED = (Sin uso)
 TEXT_PROFILE_ITEM_USER_DEFINED = (Definido por el usuario)
 TEXT_PROFILE_ITEM_FUNCTION_KEY = (Teclas de función)
-TEXT_PROFILE_ITEM_MOUSE = 
-TEXT_PROFILE_ITEM_ESCAPE = 
+TEXT_PROFILE_ITEM_MOUSE = (Puntero)
+TEXT_PROFILE_ITEM_ESCAPE = Salir (Esc)
 TEXT_PROFILE_ITEM_FORWARD = Hacia adelante
 TEXT_PROFILE_ITEM_BACK = Hacia atrás
 TEXT_PROFILE_ITEM_TASK_SWITCH1 = Cambio de la ventana de tareas 1
@@ -113,15 +113,15 @@ TEXT_PROFILE_ITEM_TASK_SWITCH2 = Cambio de la ventana de tareas 2
 TEXT_PROFILE_ITEM_TASK_MANAGER = Administrador de tareas
 TEXT_PROFILE_ITEM_EXPLORER = Explorador
 TEXT_PROFILE_ITEM_DESKTOP = Ver el escritorio
-TEXT_PROFILE_ITEM_VKBOARD = 
-TEXT_PROFILE_ITEM_T3KCFG = 
+TEXT_PROFILE_ITEM_VKBOARD = Teclado Virtual
+TEXT_PROFILE_ITEM_T3KCFG = T3k Series Programa de Configuracion
 
-TEXT_PROFILE_ITEM_MLEFT_CLICK = 
-TEXT_PROFILE_ITEM_MRIGHT_CLICK = 
-TEXT_PROFILE_ITEM_MMIDDLE_CLICK = 
-TEXT_PROFILE_ITEM_MLEFT_DOWN = 
-TEXT_PROFILE_ITEM_MRIGHT_DOWN = 
-TEXT_PROFILE_ITEM_MMIDDLE_DOWN = 
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Click Izquierdo
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Click Derecho
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Click Medio
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Boton Izquierdo
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Boton Derecho
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Boton Medio
 
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = Calibración
@@ -136,8 +136,8 @@ TEXT_DOUBLE_CLICK = Clic doble
 ;TEXT_TWO_TOUCH = Put & &Tap (Conversión de imagen)
 TEXT_PALM = Palma de la mano
 
-TEXT_CALIBRATION_WARNING = 
-TEXT_CALIBRATION_WARNING2 = 
+TEXT_CALIBRATION_WARNING = No seleccionaron ‘Mac OS X Margin’ en el menu ‘Gesture’. Porque la calibracion no funciona apropiadamente.
+TEXT_CALIBRATION_WARNING2 = No seleccionaron ‘Mac OS X Margin’ en el menu ‘Gesture’. Porque la calibracion no funciona apropiadamente.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Táctil o no táctil
@@ -199,15 +199,15 @@ TEXT_DISPLAY_ORIENTATION_2 = 90' - retrato
 TEXT_DISPLAY_ORIENTATION_3 = 180' - paisaje (volcó)
 TEXT_DISPLAY_ORIENTATION_4 = 270' - retrato (volcó)
 
-TEXT_DISPLAY_X11_ORIENTATION_1 = 
-TEXT_DISPLAY_X11_ORIENTATION_2 = 
-TEXT_DISPLAY_X11_ORIENTATION_3 = 
-TEXT_DISPLAY_X11_ORIENTATION_4 = 
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - Normal
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Izquierdo
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Derecho
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Volteado
 
-TEXT_DISPLAY_MAC_ORIENTATION_1 = 
-TEXT_DISPLAY_MAC_ORIENTATION_2 = 
-TEXT_DISPLAY_MAC_ORIENTATION_3 = 
-TEXT_DISPLAY_MAC_ORIENTATION_4 = 
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
 
 TITLE_DISPLAY_WARNING = advertencia
 TEXT_DISPLAY_WARNING = Orientación de la pantalla actual y el valor de calibración no se corresponde
@@ -241,34 +241,34 @@ BTN_CAPTION_CONTINUE = Continuar
 BTN_CAPTION_CLOSE = Cerrar
 
 [INFORMATION GATHERING]
-TITLE_CAPTION = 
-TEXT_MESSAGE = 
-BTN_CAPTION_CONTINUE = 
-BTN_CAPTION_CLOSE = 
+TITLE_CAPTION = Convenio
+TEXT_MESSAGE = En la proxima pantalla sera recolectada la informacion del sensor y del ambiente operativo del usuario (Version OS, Servicio de entrada del Tablet en MS Windows y la resolucion de la pantalla)
+BTN_CAPTION_CONTINUE = Si, de Acuerdo
+BTN_CAPTION_CLOSE = No Acepto
 
 [SENSOR DIAGNOSIS]
 TITLE_CAPTION = Herramienta para diagnosticar el sensor
 BTN_CAPTION_DEFAULT = Valor por omisión
 BTN_CAPTION_REFRESH = Renovar
 BTN_CAPTION_CLOSE = Cerrar
-BTN_CAPTION_SAVELOG = 
-BTN_CAPTION_MAIN = 
-BTN_CAPTION_SUB = 
+BTN_CAPTION_SAVELOG = Guardar el Estado del Sensor
+BTN_CAPTION_MAIN = Principal
+BTN_CAPTION_SUB = Sub
 TAB_CAPTION_SIDEVIEW = Perfil
 TAB_CAPTION_DETECTION = Gráfico de detección
 
-LOG_CAPTION_ERROR = 
-LOG_SIDEVIEW = 
-LOG_DETECTION = 
-LOG_DATA = 
-LOG_SAVING = 
-LOG_LOADING = 
-LOG_COMPLETE = 
-LOG_OK = 
-LOG_FAIL = 
-LOG_PROGRESS = 
-LOG_START = 
-LOG_CAMERA = 
+LOG_CAPTION_ERROR = Error! Fallo al guardar el estado actual
+LOG_SIDEVIEW = Vista Lateral
+LOG_DETECTION = Deteccion
+LOG_DATA = Establecer Data
+LOG_SAVING = Grabando
+LOG_LOADING = Cargando
+LOG_COMPLETE = Completo
+LOG_OK = OK
+LOG_FAIL = ERROR
+LOG_PROGRESS = PRG
+LOG_START = Comenzar
+LOG_CAMERA = Camara
 
 TITLE_SENSOR1 = Sensor 1
 TITLE_SENSOR2 = Sensor 2
@@ -289,42 +289,42 @@ TEXT_NO_IMAGE = Sin imagen
 BTN_CAPTION_SNAPSHOT = Vistazo
 
 [SOFTKEY SETTING]
-TEXT_TITLE = 
-TEXT_HEADER_NUMBER = 
-TEXT_HEADER_TYPE = 
-TEXT_HEADER_ACTION = 
-TEXT_ITEM_KEY = 
-TEXT_ITEM_STATE = 
-TEXT_ITEM_NOT_USED = 
-TEXT_ITEM_CALIBRATION = 
-TEXT_ITEM_TOUCH = 
+TEXT_TITLE = Ajustar Softkey
+TEXT_HEADER_NUMBER = No.
+TEXT_HEADER_TYPE = Tipo
+TEXT_HEADER_ACTION = Accion
+TEXT_ITEM_KEY = Tecla
+TEXT_ITEM_STATE = Estado
+TEXT_ITEM_NOT_USED = (No Usado)
+TEXT_ITEM_CALIBRATION = Entrar/Salir de la Calibracion del Sensor
+TEXT_ITEM_TOUCH = Habilitar/Deshabilitar Pantalla Sensible al Tacto
 
 [TRAYICON]
 TEXT_MENU_OPEN = Abrir…
 TEXT_MENU_EXIT = Salida
-TEXT_BALLOONTIP_TITLE = 
-TEXT_BALLOONTIP_MSG = 
+TEXT_BALLOONTIP_TITLE = Configuracion T3k
+TEXT_BALLOONTIP_MSG = Configuracion T3k 'Factory Edition' ("T3kCfgFE.exe") esta corriendo.
 
 [ASSISTANCE]
-TITLE_SENSOR_STATUS = 
-TITLE_REMOTE = 
-TEXT_SELECT_SERVER = 
-TEXT_PORT = 
-TEXT_USERNAME = 
-BTN_REQUEST = 
-TEXT_RECONNECTING = 
-BTN_CANCEL = 
-TEXT_CONNECTING = 
-TEXT_REMOTE_CONTROL = 
-BTN_DISCONNECT = 
-TEXT_WAIT_MSG = 
-TEXT_REPAIRCONNECTION = 
-TEXT_ID = 
-TEXT_SERV_NOT_RES = 
-TITLE_CHAT = 
-BTN_SEND = 
-MSG_CHAT_DISCONNECTED = 
-TITLE_REMOTE_MSG = 
-MSG_REMOTE_DISCONNECT = 
-TEXT_HELP_MSG = 
-TEXT_HELP_ARROW = 
+TITLE_SENSOR_STATUS = Estado del Sensor
+TITLE_REMOTE = Control Remoto
+TEXT_SELECT_SERVER = Seleccionar Servidor
+TEXT_PORT = Puerto
+TEXT_USERNAME = Nombre del Usuario
+BTN_REQUEST = Solicitud
+TEXT_RECONNECTING = Reintentar connexion con el servidor… %1
+BTN_CANCEL = Cancelar
+TEXT_CONNECTING = Conectando…
+TEXT_REMOTE_CONTROL = Control Remoto…
+BTN_DISCONNECT = Desconectar
+TEXT_WAIT_MSG = Esperando coneccion del administrador
+TEXT_REPAIRCONNECTION = Control remoto se desconecta. \r\nEsperando conexion del administrador
+TEXT_ID = ID: %1
+TEXT_SERV_NOT_RES = Servidor no responde
+TITLE_CHAT = Chat
+BTN_SEND = Enviar
+MSG_CHAT_DISCONNECTED = Desconectar.
+TITLE_REMOTE_MSG = Cerrar Sesion Remota
+MSG_REMOTE_DISCONNECT = Esta seguro que se quiere desconectar?
+TEXT_HELP_MSG = Por favor toque el centro de la marca de la cruz
+TEXT_HELP_ARROW = Por favor toque en la marca de la flecha
