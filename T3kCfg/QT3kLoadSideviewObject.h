@@ -26,7 +26,7 @@ protected:
 
     void FillEmptySideview(QImage *pImg, int nWidth, int nHeight);
 
-    // QTPDPEventMultiCaster::ITPDPEventListener
+    // TPDPEventMultiCaster::ITPDPEventListener
 protected:
     virtual void OnPRV(ResponsePart, ushort, const char *, int, int, int, unsigned char *);
     virtual void OnRSE(ResponsePart, ushort, const char *, long, bool, const char *);

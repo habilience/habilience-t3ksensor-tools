@@ -16,7 +16,7 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 #Define
-DEFINES += _QT_COMPILER_ QUAZIP_STATIC _T3KHANDLE_REMOVE_PRV USE_T3K_STATIC_LIBS
+DEFINES += _QT_COMPILER_ QUAZIP_STATIC USE_T3K_STATIC_LIBS _T3KHANDLE_REMOVE_PRV
 
 linux-g++|linux-g++-64:DEFINES += OS_LINUX
 
@@ -98,15 +98,15 @@ macx: {
 
 SOURCES += main.cpp \
     ../common/T3kHandle.cpp \
+    ../common/TPDPEventMultiCaster.cpp \
     HIDCmdThread.cpp \
-    T3kHIDNotify.cpp \
     QExFuncThread.cpp
 
 HEADERS += \
     ../common/T3kHandle.h \
+    ../common/TPDPEventMultiCaster.h \
     HIDCmdThread.h \
     DefineString.h \
-    T3kHIDNotify.h \
     QExFuncThread.h
 
 

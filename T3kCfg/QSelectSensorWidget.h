@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QToolButton>
 #include <QTimer>
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 namespace Ui {

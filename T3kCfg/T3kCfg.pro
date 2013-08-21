@@ -16,14 +16,14 @@ TEMPLATE = app
 CONFIG += static staticlib
 
 #Define
-DEFINES += _QT_COMPILER_ QUAZIP_STATIC USE_T3K_STATIC_LIBS
+DEFINES += _QT_COMPILER_ QUAZIP_STATIC USE_T3K_STATIC_LIBS _T3KHANDLE_INCLUDE_REMOTE
 
 linux-g++|linux-g++-64:DEFINES += OS_LINUX
 
 macx:DEFINES += OS_MAC
 
 CONFIG(debug, debug|release):DEFINES += _DEBUG
-CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
+CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_DEBUG
 
 #Library
 INCLUDEPATH += $$PWD/../external/quazip \
@@ -127,18 +127,20 @@ macx: {
 #Socoures
 SOURCES += main.cpp\
     ../common/T3kHandle.cpp \
+    ../common/IncludeRemoteNotify.cpp \
+    ../common/TPDPEventMultiCaster.cpp \
+    ../common/ui/QUnderlineLabel.cpp \
+    ../common/ui/QHoverComboBox.cpp \
     QMouseSettingWidget.cpp \
     QCalibrationSettingWidget.cpp \
     QGeneralSettingWidget.cpp \
     QMenuStripWidget.cpp \
     QMainMenuWidget.cpp \
-    QUnderlineLabel.cpp \
     QCheckableButton.cpp \
     QMouseMappingTable.cpp \
     KeyMapStr.cpp \
     QTouchSettingWidget.cpp \
     QProfileLabel.cpp \
-    QTPDPEventMultiCaster.cpp \
     QCalibrationWidget.cpp \
     QWarningWidget.cpp \
     QDiableTouchWidget.cpp \
@@ -153,6 +155,7 @@ SOURCES += main.cpp\
     QSensorSensGaugeWidget.cpp \
     QSideViewImageWidget.cpp \
     QSideViewGraphWidget.cpp \
+    QSideViewWidget.cpp \
     QSimpleProgressWidget.cpp \
     QFlatTextButton.cpp \
     QSensorSettingWidget.cpp \
@@ -164,7 +167,6 @@ SOURCES += main.cpp\
     QRequestHIDManager.cpp \
     QSoftKeySettingWidget.cpp \
     QSoftkey.cpp \
-    QHoverComboBox.cpp \
     QSoftkeyTableWidget.cpp \
     QSoftkeyActionKeyWidget.cpp \
     QSoftkeyActionCellWidget.cpp \
@@ -190,7 +192,6 @@ SOURCES += main.cpp\
     QRDisableScreenWidget.cpp \
     QRemoteGuideWidget.cpp \
     QTimeoutChecker.cpp \
-    QSideviewWidget.cpp \
     QOrderTouchWidget.cpp \
     QCustomDefaultSensor.cpp \
     QTabSensorStatus.cpp \
@@ -199,22 +200,23 @@ SOURCES += main.cpp\
     QColorTabWidget.cpp \
     QColorTabBar.cpp \
     QSimpleLed.cpp \
-    ../common/IncludeRemoteNotify.cpp
 
 HEADERS  += \
     ../common/T3kHandle.h \
+    ../common/IncludeRemoteNotify.h \
+    ../common/TPDPEventMultiCaster.h \
+    ../common/ui/QUnderlineLabel.h \
+    ../common/ui/QHoverComboBox.h \
     QMouseSettingWidget.h \
     QCalibrationSettingWidget.h \
     QGeneralSettingWidget.h \
     QMenuStripWidget.h \
     QMainMenuWidget.h \
-    QUnderlineLabel.h \
     QCheckableButton.h \
     QMouseMappingTable.h \
     KeyMapStr.h \
     QTouchSettingWidget.h \
     QProfileLabel.h \
-    QTPDPEventMultiCaster.h \
     stdInclude.h \
     QCalibrationWidget.h \
     QWarningWidget.h \
@@ -231,6 +233,7 @@ HEADERS  += \
     QSensorSensGaugeWidget.h \
     QSideViewImageWidget.h \
     QSideViewGraphWidget.h \
+    QSideViewWidget.h \
     QSimpleProgressWidget.h \
     QFlatTextButton.h \
     QSensorSettingWidget.h \
@@ -242,7 +245,6 @@ HEADERS  += \
     QRequestHIDManager.h \
     QSoftKeySettingWidget.h \
     QSoftkey.h \
-    QHoverComboBox.h \
     QSoftkeyTableWidget.h \
     QSoftkeyActionKeyWidget.h \
     QSoftkeyActionCellWidget.h \
@@ -272,7 +274,6 @@ HEADERS  += \
     QRDisableScreenWidget.h \
     QRemoteGuideWidget.h \
     QTimeoutChecker.h \
-    QSideviewWidget.h \
     QOrderTouchWidget.h \
     QCustomDefaultSensor.h \
     QTabSensorStatus.h \
@@ -281,7 +282,6 @@ HEADERS  += \
     QColorTabWidget.h \
     QColorTabBar.h \
     QSimpleLed.h \
-    ../common/IncludeRemoteNotify.h
 
 FORMS    += \
     QMouseSettingWidget.ui \
@@ -297,13 +297,13 @@ FORMS    += \
     QEditAction4WDWnd.ui \
     QEditActionEDWnd.ui \
     QSensorSettingWidget.ui \
+    QSideViewWidget.ui \
     QSoftKeySettingWidget.ui \
     T3kCfgWnd.ui \
     QLoadSensorDataWidget.ui \
     QLicenseWidget.ui \
     QSelectSensorWidget.ui \
     QMenuStripWidget.ui \
-    QSideviewWidget.ui \
     QTabSensorStatus.ui \
     QTabRemoteAssistance.ui \
     QTabChat.ui

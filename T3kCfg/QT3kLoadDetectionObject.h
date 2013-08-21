@@ -17,7 +17,7 @@ public:
     // QT3kHIDObject
     virtual bool Start(SensorLogData *pStorage);
 
-    // QTPDPEventMultiCaster::ITPDPEventListener
+    // TPDPEventMultiCaster::ITPDPEventListener
 protected:
     virtual void OnIRD(ResponsePart, ushort, const char *, int, int, unsigned char *);
     virtual void OnITD(ResponsePart, ushort, const char *, int, int, unsigned char *);

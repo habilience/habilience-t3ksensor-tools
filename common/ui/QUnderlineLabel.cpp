@@ -1,4 +1,4 @@
-#include "QUnderlineLabel.h"
+#include "./QUnderlineLabel.h"
 
 #include <QPainter>
 #include <QApplication>

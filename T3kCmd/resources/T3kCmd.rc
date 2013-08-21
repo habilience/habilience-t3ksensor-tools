@@ -12,12 +12,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "Habilience"
-            VALUE "FileDescription", "T3k Series Configurator"
+            VALUE "FileDescription", "T3k Series Interpreter Program"
             VALUE "FileVersion", T3000_VERSION
-            VALUE "InternalName", "T3kCfg.exe"
+            VALUE "InternalName", "T3kCmd.exe"
             VALUE "LegalCopyright", "(c) Habilience.  All rights reserved."
-            VALUE "OriginalFilename", "T3kCfg.exe"
-            VALUE "ProductName", "T3kCfg"
+            VALUE "OriginalFilename", "T3kCmd.exe"
+            VALUE "ProductName", "T3k Console"
             VALUE "ProductVersion", T3000_VERSION
         END
     END

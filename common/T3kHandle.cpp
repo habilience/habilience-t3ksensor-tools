@@ -9,6 +9,53 @@
 
 //static int g_nRawDataCount = 0;
 
+static const char cstrCam1[] = "cam1/";
+static const char cstrCam2[] = "cam2/";
+
+ResponsePart GetResponsePartFromPartId( const char* sPartId, const char* cmd )
+{
+    ResponsePart Part = MM;
+
+    const char* szCmd = cmd;
+
+    QString strPartID( sPartId );
+    int nPartIdIdx = (int)strlen( sPartId )-1;
+    if( strPartID.contains( '-' ) )
+        nPartIdIdx -= 2;
+
+    switch( sPartId[nPartIdIdx] )
+    {
+    default:
+        if( szCmd != NULL )
+        {
+            if ( strstr(szCmd, cstrCam1) == szCmd )
+            {
+                szCmd += (sizeof(cstrCam1)-1);
+                Part = CM1;
+            }
+
+            if ( strstr(szCmd, cstrCam2) == szCmd )
+            {
+                szCmd += (sizeof(cstrCam2)-1);
+                Part = CM2;
+            }
+        }
+        else
+        {
+            Part = MM;
+        }
+        break;
+    case '1':
+        Part = strPartID.contains( '-' ) ? CM1_1 : CM1;
+        break;
+    case '2':
+        Part = strPartID.contains( '-' ) ? CM2_1 : CM2;
+        break;
+    }
+
+    return Part;
+}
+
 T3kHandle::T3kHandle()
 {
     m_pT3kDevice = NULL;
@@ -1074,7 +1121,7 @@ void ITPDPT3kNotify::onPacket(void* pContext)
             DVC.keyboard_modifier = packet->body.dvc.keyboard_modifier;
             DVC.keyboard_reserved = packet->body.dvc.keyboard_reserved;
             DVC.keyboard_key = packet->body.dvc.keyboard_key;
-            OnDVC( packet->ticktime, DVC );
+            OnDVC( packet->ticktime, packet->partid, DVC );
         }
         break;
     case t3ktype_tpt:   // touch point data

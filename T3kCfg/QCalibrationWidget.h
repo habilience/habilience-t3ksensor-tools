@@ -2,14 +2,14 @@
 #define QCALIBRATIONWIDGET_H
 
 #include <QWidget>
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 #define QCALI_POINTS                (9)
 #define UNDER_VER_CALI_PNTS         (9)
 #define SUPPORT_VER_CALI_PNTS       (4)
 
-class QCalibrationWidget : public QWidget, public QLangManager::LangChangeNotify, public QTPDPEventMultiCaster::ITPDPEventListener
+class QCalibrationWidget : public QWidget, public QLangManager::LangChangeNotify, public TPDPEventMultiCaster::ITPDPEventListener
 {
     Q_OBJECT
 public:

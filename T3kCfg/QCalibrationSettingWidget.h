@@ -2,7 +2,7 @@
 #define QCALIBRATIONSETTINGWIDGET_H
 
 #include <QWidget>
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 #include "QCalibrationWidget.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
@@ -14,7 +14,7 @@ namespace Ui {
     class QCalibrationSettingWidget;
 }
 
-class QCalibrationSettingWidget : public QWidget, public QTPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QCalibrationSettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
 {
     Q_OBJECT
 

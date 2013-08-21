@@ -1,25 +1,32 @@
-#ifndef QTPDPEVENTMULTICASTER_H
-#define QTPDPEVENTMULTICASTER_H
+#ifndef TPDPEVENTMULTICASTER_H
+#define TPDPEVENTMULTICASTER_H
 
-#include "../common/IncludeRemoteNotify.h"
+#ifndef _T3KHANDLE_INCLUDE_REMOTE
+#include "./T3kHandle.h"
+#else
+#include "./IncludeRemoteNotify.h"
+#endif
 
 #include <QVector>
 
-enum ResponsePart { MM = 0, CM1, CM2, CM1_1, CM2_1 };
-
-class QTPDPEventMultiCaster : public IncludeRemoteNotify
+class TPDPEventMultiCaster :
+        #ifndef _T3KHANDLE_INCLUDE_REMOTE
+        public ITPDPT3kNotify
+        #else
+        public IncludeRemoteNotify
+        #endif
 {
 public:
-    QTPDPEventMultiCaster();
-    ~QTPDPEventMultiCaster();
+    TPDPEventMultiCaster();
+    ~TPDPEventMultiCaster();
 
     class ITPDPEventListener
     {
     public:
-        ITPDPEventListener() { QTPDPEventMultiCaster::GetPtr()->AddListener(this); }
-        ~ITPDPEventListener() { QTPDPEventMultiCaster::GetPtr()->RemoveListener(this); }
-        virtual void OnOpenT3kDevice() {}
-        virtual void OnCloseT3kDevice() {}
+        ITPDPEventListener() { TPDPEventMultiCaster::GetPtr()->AddListener(this); }
+        ~ITPDPEventListener() { TPDPEventMultiCaster::GetPtr()->RemoveListener(this); }
+        virtual void OnOpenT3kDevice(T3K_HANDLE) {}
+        virtual void OnCloseT3kDevice(T3K_HANDLE) {}
         virtual void OnFirmwareDownload( bool /*bDownload*/ ) {}
 
         virtual void OnMSG( ResponsePart /*Part*/, ushort /*nTickTime*/, const char* /*sPartId*/, const char* /*sTxt*/ ) {}
@@ -47,7 +54,7 @@ public:
     };
     friend class _GC;
 
-    static QTPDPEventMultiCaster* GetPtr();
+    static TPDPEventMultiCaster* GetPtr();
 
     void AddListener( ITPDPEventListener* pListener );
     void RemoveListener( ITPDPEventListener* pListener );
@@ -71,17 +78,22 @@ protected:
     virtual void OnRSP( ushort nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd );
     virtual void OnRSE( ushort nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd );
     virtual void OnSTT( ushort nTickTime, const char* sPartId, const char *pStatus );
-    //virtual void OnDVC( ushort nTickTime, T3kDVC& DVC );
+    virtual void OnDVC( ushort nTickTime, const char* sPartId, T3kDVC& DVC );
     virtual void OnTPT( ushort nTickTime, short nActualTouch, short nTouchCount, t3ktouchpoint* points );
     virtual void OnGST( ushort nTickTime, T3kGST& GST );
     virtual void OnVER( ushort nTickTime, const char* sPartId, T3kVER& Ver );
+
+#ifndef _T3KHANDLE_INCLUDE_REMOTE
+    virtual int onReceiveRawData(void* /*pContext*/) { return 0; }
+    virtual void onReceiveRawDataFlag( bool /*bReceive*/ ) {}
+#endif
 
 protected:
     QVector<ITPDPEventListener*>	m_vEventListener;
     ITPDPEventListener*             m_pSingleListener;
 
 private:
-    static QTPDPEventMultiCaster*   s_pThis;
+    static TPDPEventMultiCaster*   s_pThis;
 };
 
-#endif // QTPDPEVENTMULTICASTER_H
+#endif // TPDPEVENTMULTICASTER_H

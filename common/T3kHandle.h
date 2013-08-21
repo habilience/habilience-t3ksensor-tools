@@ -73,6 +73,10 @@ typedef struct _T3kRangeF
     } FeatureCheckConnection;
 #pragma pack(pop)
 
+enum ResponsePart { MM = 0, CM1, CM2, CM1_1, CM2_1 };
+
+ResponsePart GetResponsePartFromPartId( const char* sPartId, const char* cmd );
+
 class ITPDPT3kNotify;
 class T3kHandle : public QObject
 {
@@ -233,7 +237,7 @@ protected:
     virtual void OnRSP( ushort /*nTickTime*/, const char* /*sPartId*/, long /*lId*/, bool /*bFinal*/, const char* /*sCmd*/ ) {}
     virtual void OnRSE( ushort /*nTickTime*/, const char* /*sPartId*/, long /*lId*/, bool /*bFinal*/, const char* /*sCmd*/ ) {}
     virtual void OnSTT( ushort /*nTickTime*/, const char* /*sPartId*/, const char* /*pStatus*/ ) {}
-    virtual void OnDVC( ushort /*nTickTime*/, T3kDVC& /*DVC*/ ) {}
+    virtual void OnDVC( ushort /*nTickTime*/, const char* /*sPartId*/, T3kDVC& /*DVC*/ ) {}
     virtual void OnTPT( ushort /*nTickTime*/, short /*nActualTouch*/, short /*nTouchCount*/, t3ktouchpoint* /*points*/ ) {}
     virtual void OnGST( ushort /*nTickTime*/, T3kGST& /*GST*/ ) {}
     virtual void OnVER( ushort /*nTickTime*/, const char* /*sPartId*/, T3kVER& /*Ver*/ ) {}

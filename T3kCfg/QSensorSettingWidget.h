@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QToolButton>
 
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 #include "QWarningWidget.h"
 #include "QDiableTouchWidget.h"
 #include "QLangManager.h"
@@ -14,7 +14,7 @@ namespace Ui {
     class QSensorSettingWidget;
 }
 
-class QSensorSettingWidget : public QWidget, public QTPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QSensorSettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
 {
     Q_OBJECT
 

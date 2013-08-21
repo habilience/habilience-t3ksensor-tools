@@ -2,7 +2,7 @@
 #define QASSISTANCEWIDGET_H
 
 #include <QDialog>
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 
 #include "QLangManager.h"
 
@@ -14,7 +14,7 @@ namespace Ui{
     class QAssistanceWidget;
 }
 
-class QAssistanceWidget : public QDialog, public QTPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QAssistanceWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
 {
     Q_OBJECT
 

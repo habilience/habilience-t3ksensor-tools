@@ -2,7 +2,7 @@
 #define QTOUCHSETTINGWIDGET_H
 
 #include <QDialog>
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 
@@ -10,7 +10,7 @@ namespace Ui{
     class QTouchSettingWidget;
 }
 
-class QTouchSettingWidget : public QDialog, public QTPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QTouchSettingWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
 {
     Q_OBJECT
 

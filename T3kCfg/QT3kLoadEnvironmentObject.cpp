@@ -82,7 +82,7 @@ QString QT3kLoadEnvironmentObject::GetOSDisplayString()
    SYSTEM_INFO si;
    PGNSI pGNSI;
    PGPI pGPI;
-   BOOL bOsVersionInfoEx;
+   bool bOsVersionInfoEx;
    DWORD dwType;
 
    QString strOS;
@@ -356,19 +356,19 @@ bool QT3kLoadEnvironmentObject::IsServiceRunning( QString strServiceName )
 
     if ( ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"system\\currentcontrolset\\services", 0, KEY_READ, &hKey) != ERROR_SUCCESS )
     {
-       return FALSE;
+       return false;
     }
 
     SC_HANDLE hScm = ::OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_CONNECT);
     if ( hScm == NULL )
     {
-       return FALSE;
+       return false;
     }
 
     LONG lResult = ERROR_SUCCESS;
     for ( int n=0; lResult==ERROR_SUCCESS; n++ )
     {
-       TCHAR chSubKey[MAX_PATH];
+       wchar_t chSubKey[MAX_PATH];
        DWORD dwSize = MAX_PATH;
        FILETIME ftFileTime;
        lResult = ::RegEnumKeyEx(hKey, n, chSubKey, &dwSize, NULL, NULL, NULL, &ftFileTime);
@@ -390,13 +390,13 @@ bool QT3kLoadEnvironmentObject::IsServiceRunning( QString strServiceName )
 
            SERVICE_STATUS_PROCESS srvStatusProgress;
            DWORD dwNeeded;
-           BOOL bRet = ::QueryServiceStatusEx( hSrv, SC_STATUS_PROCESS_INFO, (LPBYTE)&srvStatusProgress, sizeof(srvStatusProgress), &dwNeeded );
+           bool bRet = ::QueryServiceStatusEx( hSrv, SC_STATUS_PROCESS_INFO, (LPBYTE)&srvStatusProgress, sizeof(srvStatusProgress), &dwNeeded );
            if ( bRet && (srvStatusProgress.dwCurrentState == SERVICE_RUNNING) )
            {
               ::CloseServiceHandle(hSrv);
               ::RegCloseKey(hKey);
               ::CloseServiceHandle(hScm);
-              return TRUE;
+              return true;
            }
 
            ::CloseServiceHandle(hSrv);
@@ -406,7 +406,7 @@ bool QT3kLoadEnvironmentObject::IsServiceRunning( QString strServiceName )
     ::RegCloseKey(hKey);
     ::CloseServiceHandle(hScm);
 
-    return FALSE;
+    return false;
 }
 
 QVector<PairRSP> QT3kLoadEnvironmentObject::GetHIDState()
@@ -469,7 +469,7 @@ QVector<PairRSP> QT3kLoadEnvironmentObject::GetHIDState()
                                                &deviceInferfaceData) )
             {
                 ULONG requiredLength;
-                BOOL bRet = ::SetupDiGetDeviceInterfaceDetail( hDevInfo, &deviceInferfaceData, NULL, 0, &requiredLength, NULL );
+                bool bRet = ::SetupDiGetDeviceInterfaceDetail( hDevInfo, &deviceInferfaceData, NULL, 0, &requiredLength, NULL );
 
                 if( !bRet && ::GetLastError() != ERROR_INSUFFICIENT_BUFFER )
                 {

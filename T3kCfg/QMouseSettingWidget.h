@@ -4,7 +4,7 @@
 #include <QWidget>
 
 #include "QProfileLabel.h"
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 #include "QMouseMappingTable.h"
 #include "QTouchSettingWidget.h"
 
@@ -16,7 +16,7 @@ namespace Ui {
     class QMouseSettingWidget;
 }
 
-class QMouseSettingWidget : public QWidget, public QTPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QMouseSettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
 {
     Q_OBJECT
 

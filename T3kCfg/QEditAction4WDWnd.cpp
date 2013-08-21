@@ -87,7 +87,7 @@ void QEditAction4WDWnd::Init()
     OnChangeLanguage();
 }
 
-void QEditAction4WDWnd::SetPredefineProfileTypes( QComboBox& pWndComboAction, bool bAlter/*=FALSE*/ )
+void QEditAction4WDWnd::SetPredefineProfileTypes( QComboBox& pWndComboAction, bool bAlter/*=false*/ )
 {
     QLangRes& Res = QLangManager::GetPtr()->GetResource();
 

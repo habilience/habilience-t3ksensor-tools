@@ -10,7 +10,7 @@
 
 #include "T3kCfgWnd.h"
 
-#include "QUnderlineLabel.h"
+#include "../common/ui/QUnderlineLabel.h"
 #include "QLangManager.h"
 #include "QSoftkey.h"
 #include "QT3kUserData.h"

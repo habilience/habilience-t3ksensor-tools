@@ -44,8 +44,8 @@ void QFlatTextButton::paintEvent(QPaintEvent */*evt*/)
 
     dc.fillRect( rcBody, Qt::white );
 
-//    bool bEnabled = lpDrawItemStruct->itemState & ODS_DISABLED ? FALSE : TRUE;
-//    bool bFocused = lpDrawItemStruct->itemState & ODS_FOCUS ? TRUE : FALSE;
+//    bool bEnabled = lpDrawItemStruct->itemState & ODS_DISABLED ? false : true;
+//    bool bFocused = lpDrawItemStruct->itemState & ODS_FOCUS ? true : false;
 
     DrawButton( &dc, rcBody );
 

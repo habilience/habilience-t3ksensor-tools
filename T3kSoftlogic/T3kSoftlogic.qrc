@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/T3kSoftlogic">
+        <file>resources/PNG_ICON_KEY_ALT.png</file>
+        <file>resources/PNG_ICON_KEY_CLEAR.png</file>
+        <file>resources/PNG_ICON_KEY_CTRL.png</file>
+        <file>resources/PNG_ICON_KEY_SHIFT.png</file>
+        <file>resources/PNG_ICON_KEY_WIN.png</file>
+        <file>resources/T3kSoftlogic.ico</file>
+        <file>resources/T3kSoftlogic.png</file>
+    </qresource>
+</RCC>

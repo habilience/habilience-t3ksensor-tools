@@ -448,7 +448,7 @@ void QCalibrationSettingWidget::ChildClose()
 
 void QCalibrationSettingWidget::on_BtnCalibration_clicked()
 {
-    //ShowCalibrationWindow( TRUE ); return;
+    //ShowCalibrationWindow( true ); return;
     if( !m_pT3kHandle ) return;
 
     QT3kUserData* pUD = QT3kUserData::GetInstance();

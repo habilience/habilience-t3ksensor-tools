@@ -620,7 +620,7 @@ void QDetectionGraphView::mousePressEvent(QMouseEvent *evt)
         //int nSWW, nSWH;
         //GetScrollBarDimension( nSWW, nSWH );
         //if( nSWW != 0 || nSWH != 0 )
-        //	m_bStopUpdate = TRUE;
+        //	m_bStopUpdate = true;
     }
     QScrollArea::mousePressEvent(evt);
 }
@@ -689,7 +689,7 @@ void QDetectionGraphView::mouseReleaseEvent(QMouseEvent *evt)
         m_ptViewLastMouse.setX( -1 );
         m_ptViewLastMouse.setY( -1 );
 
-        //m_bStopUpdate = FALSE;
+        //m_bStopUpdate = false;
     }
 }
 
@@ -863,7 +863,7 @@ void QDetectionGraphView::MoveTo( QPoint ptGraph )
     verticalScrollBar()->setValue( nScrollY );
 }
 
-void QDetectionGraphView::SetZoomRatio( float fZoomW, float fZoomH, bool bInvalidate/*=TRUE*/ )
+void QDetectionGraphView::SetZoomRatio( float fZoomW, float fZoomH, bool bInvalidate/*=true*/ )
 {
 //    ASSERT( fZoomH == 1.f );
     if( fZoomW > 1.f )
@@ -879,7 +879,7 @@ void QDetectionGraphView::SetZoomRatio( float fZoomW, float fZoomH, bool bInvali
         //CRect rc;
         //GetClientRect( rc );
 
-        //SetRedraw( FALSE );
+        //SetRedraw( false );
         QSize sizeTotal( int(m_nBaseWidth * fZoomW + .5f), int(m_nBaseHeight * fZoomH + .5f) );
         qDebug( "Scroll Size: (%dx%d) %dx%d\r\n", m_nBaseWidth, m_nBaseHeight, sizeTotal.width(), sizeTotal.height() );
 
@@ -889,7 +889,7 @@ void QDetectionGraphView::SetZoomRatio( float fZoomW, float fZoomH, bool bInvali
         if( fZoomW == 1.f && fZoomH == 1.f )
             horizontalScrollBar()->setRange( 0, 0 );
 
-        //SetRedraw( TRUE );
+        //SetRedraw( true );
     }
 
     int nSWW, nSWH;

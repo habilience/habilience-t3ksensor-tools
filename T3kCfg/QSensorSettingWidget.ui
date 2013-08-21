@@ -1938,7 +1938,7 @@
   <customwidget>
    <class>QUnderlineLabel</class>
    <extends>QLabel</extends>
-   <header>QUnderlineLabel.h</header>
+   <header>../common/ui/QUnderlineLabel.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

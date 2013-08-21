@@ -95,6 +95,7 @@ int T3kLoop(void* pContext)
     return 0;
 }
 
+#ifndef Q_OS_WIN
 int posix_kbhit(void)
 {
     struct termios oldt, newt;
@@ -111,7 +112,7 @@ int posix_kbhit(void)
 
     return ch;
 }
-
+#endif
 
 
 int GetCommandPolling(void* pContext)
@@ -176,7 +177,7 @@ int GetCommandPolling(void* pContext)
 //    case CTRL_LOGOFF_EVENT:
 //    case CTRL_SHUTDOWN_EVENT:
 //    case CTRL_CLOSE_EVENT:
-//        SetConsoleCtrlHandler(NULL, TRUE);
+//        SetConsoleCtrlHandler(NULL, true);
 //        g_HIDCmdThread.Stop();
 //        exit( 0 );
 //        break;

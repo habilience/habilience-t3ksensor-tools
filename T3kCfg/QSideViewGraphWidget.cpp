@@ -64,7 +64,7 @@ void QSideViewGraphWidget::paintEvent(QPaintEvent */*evt*/)
         m_pBitmap = new CBitmap;
         ASSERT( m_pBitmap );
         VERIFY( m_pBitmap->CreateCompatibleBitmap( &dc, rcClient.Width(), rcClient.Height() ) );
-        bInit = TRUE;
+        bInit = true;
     }
 
     ASSERT( m_pBitmap );

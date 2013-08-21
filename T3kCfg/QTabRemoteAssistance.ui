@@ -438,7 +438,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="StandardPage">
     <widget class="QWidget" name="horizontalLayoutWidget">
@@ -995,7 +995,7 @@
   <customwidget>
    <class>QUnderlineLabel</class>
    <extends>QLabel</extends>
-   <header>QUnderlineLabel.h</header>
+   <header>../common/ui/QUnderlineLabel.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

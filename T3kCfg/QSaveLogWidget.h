@@ -2,7 +2,7 @@
 #define QSAVELOGWIDGET_H
 
 #include <QDialog>
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 
 class QSaveLogWidget : public QDialog
 {

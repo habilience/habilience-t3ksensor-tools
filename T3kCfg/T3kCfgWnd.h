@@ -16,7 +16,7 @@ class QSettings;
 #include <QTimer>
 
 #include "stdInclude.h"
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 
 #include "QMySystemTrayIcon.h"
 #include "QLangManager.h"
@@ -28,7 +28,7 @@ namespace Ui {
     class T3kCfgWnd;
 }
 
-class T3kCfgWnd : public QMainWindow, public QTPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class T3kCfgWnd : public QMainWindow, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
 {
     Q_OBJECT
 
@@ -72,8 +72,8 @@ protected:
 
     void ExceptionFirmwareVer( QString str );
 
-    virtual void OnOpenT3kDevice();
-    virtual void OnCloseT3kDevice();
+    virtual void OnOpenT3kDevice(T3K_HANDLE);
+    virtual void OnCloseT3kDevice(T3K_HANDLE);
     virtual void OnFirmwareDownload( bool bDownload );
     virtual void OnRSP( ResponsePart Part, ushort nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd );
 

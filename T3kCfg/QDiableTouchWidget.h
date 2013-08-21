@@ -5,14 +5,14 @@
 #include <QPushButton>
 #include <QTimer>
 
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 namespace Ui{
     class QDiableTouchWidget;
 }
 
-class QDiableTouchWidget : public QDialog, public QTPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QDiableTouchWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
 {
     Q_OBJECT
 

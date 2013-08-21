@@ -1,0 +1,222 @@
+#ifndef QKEYDESIGNWIDGET_H
+#define QKEYDESIGNWIDGET_H
+
+#include "SoftKeyDesignToolWidget.h"
+
+#include "Softkey.h"
+#include "GraphicsButtonItem.h"
+#include "ResizingGraphicsItem.h"
+#include "KeyTracker.h"
+
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QVector>
+#include <QToolButton>
+
+
+class QKeyDesignWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+	enum KeyAlign { KeyAlignLeft, KeyAlignCenter, KeyAlignRight, KeyAlignTop, KeyAlignMiddle, KeyAlignBottom };
+	enum KeyArrange { KeyArrangeHorizontal, KeyArrangeVertical };
+	enum AdjustSize { AdjustSizeSameWidth, AdjustSizeSameHeight, AdjustSizeSameBoth };
+	enum Distrib { DistribHorzEqualGap, DistribVertEqualGap };
+	enum ScreenSize { ScreenSizeFull, ScreenSizeFit };
+	enum ScreenMode { ScreenModeKeyDesign, ScreenModePreview, ScreenModeTest };
+
+    QKeyDesignWidget(QWidget* parent = 0);
+    virtual ~QKeyDesignWidget();
+
+    void updateKeys();
+
+    void selectKey( int nIndex );
+
+    QVector<CSoftkey*>& getSelectKeys() { return m_SelectKeys; }
+    QRect getFirstSelectKey();
+
+    void alignSelectKeys( KeyAlign eAlign );
+    void adjustSizeSelectKeys( AdjustSize eAdjust );
+    void distribSelectKeys( Distrib eDistrib );
+
+    void arrangeSelectKeys( KeyArrange eArrange, int nKeyWidth, int nKeyHeight, int nKeyInterval );
+    void makeArrangedKeys( KeyArrange eArrange, int nKeyCount, int nKeyWidth, int nKeyHeight, int nKeyInterval );
+
+    void keySelectAll();
+    void keyCopyToClipboard();
+    void keyPaste();
+
+    void pushHistory();
+    void popHistory();
+    void redo();
+    void undo();
+
+    void setScreenSize( ScreenSize eScrnSize );
+    ScreenSize getScreenSize() { return m_eScrnSize; }
+
+    void setScreenMode( ScreenMode eMode ) { m_eScreenMode = eMode; }
+
+    void viewTouchPoint( long lX, long lY, bool bDown );
+
+    void setBlinkKey( GroupKey* group, int nCalPos, bool bSet );
+    void setBlinkKey( CSoftkey* key, int nCalPos, bool bSet );
+    void cancelBlink();
+
+    void setOnOff( int nSKNum, bool bIsOn );
+
+    void setInvertDrawing( bool bInvert );
+
+    void updateTouchCount( int nTouchCount );
+
+protected:
+    virtual void paintEvent(QPaintEvent *);
+    virtual void timerEvent(QTimerEvent *);
+    virtual void resizeEvent(QResizeEvent *);
+    virtual void showEvent(QShowEvent *);
+    virtual void closeEvent(QCloseEvent *);
+    virtual void keyPressEvent(QKeyEvent *);
+
+    virtual void mousePressEvent(QMouseEvent *);
+    virtual void mouseReleaseEvent(QMouseEvent *);
+    virtual void mouseMoveEvent(QMouseEvent *);
+
+    void init();
+
+    void draw( QPainter* painter );
+
+    void mouseLButtonDown(QMouseEvent* evt);
+
+protected:
+    int					m_nOldTouchCount;
+
+    QRgb			m_clrBackground;
+    QRgb			m_clrKeyBorder;
+    QRgb			m_clrGridMajor;
+    QRgb			m_clrGridMinor;
+    QRgb			m_clrCloseBtnBg;
+    QRgb			m_clrCloseBtnFg;
+
+    QVector<QString>	m_aryUndoHistoryKey;
+    QVector<QString>	m_aryRedoHistoryKey;
+    QVector<QString>	m_aryUndoHistoryExtra;
+    QVector<QString>	m_aryRedoHistoryExtra;
+    bool				m_bBlink;
+    bool				m_bBlinkOnOff;
+    GroupKey*			m_pBlinkGroup;
+    CSoftkey*			m_pBlinkKey;
+
+    bool				m_bBlinkKeySet;
+
+    CSoftkey*			m_pFocusKey;
+    bool				m_bFocusKeyOn;
+
+    int					m_nCalPos;
+
+    QSoftKeyDesignToolWidget*	m_pSoftKeyDesignTool;
+
+    QPixmap*					m_pImageCanvas;
+
+    QRect				m_rcScreen;
+    QRect				m_rcScreenOrg;
+
+    bool				m_bMoveScreen;
+    QPoint				m_ptMouseLast;
+
+    float				m_fGridStep;
+
+    QKeyTracker			m_KeyTracker;
+    QRect				m_rcDevTracker;
+
+    QVector<CSoftkey*>	m_SelectKeys;
+
+    QVector<CSoftkey*>	m_ClipboardKeys;
+
+    int					m_nPasteCount;
+
+    bool				m_bMenuGroup;
+
+    ScreenSize			m_eScrnSize;
+
+    ScreenMode			m_eScreenMode;
+
+    bool				m_bViewTouchPoint;
+    QPoint				m_ptTouchPoint;
+
+    QRect				m_rcCloseButton;
+    bool				m_bDownCloseButton;
+
+    QRect				m_rcTouchCount;
+
+    int                 m_nTimerBlink;
+
+    enum InputButton { btnLeft, btnRight, btnMiddle };
+
+    typedef struct _MouseState
+    {
+        InputButton             eInput;
+        bool                    bPress;
+        Qt::KeyboardModifier    keyModifier;
+    } MouseState;
+
+    bool                    m_bCheckRubberBand;
+
+    bool                    m_bMouseLeftPress;
+    Qt::KeyboardModifier    m_keyModifier;
+
+    bool                    m_bShiftDown;
+    bool                    m_bCtrlDown;
+
+    QRect                   m_rcOldTracker;
+    QRect                   m_rcOld;
+
+    bool isSelectKey( CSoftkey* key );
+
+    void updateCanvas( QPoint& ptScrnOffset );
+    void updateArea( QRect& rc, QPoint& ptScrnOffset, bool bUpdateAll=false );
+
+    void drawKeys( QPainter* pDC );
+    void drawGrid( QPainter* pDC );
+    void drawCalPos( QPainter* pDC );
+    void drawTouchPoint( QPainter* pDC );
+    void drawCloseButton( QPainter* pDC, QRect rcClose );
+    void drawTouchCount( QPainter* pDC, QRect rcClose );
+
+    QRect deviceToScreen( const QRect& rcDevice, bool bTranslate=true );
+    QRect screenToDevice( const QRect& rcScreen, bool bTranslate=true );
+
+    QPoint deviceToScreen( const QPoint& ptDevice, bool bTranslate=true );
+    QPoint screenToDevice( const QPoint& ptScreen, bool bTranslate=true );
+
+    void drawOutlineText( QPainter* painter, QRgb dwTextColor, QRgb dwOutlineColor, QString strText, QRect rc, QTextOption nFormat );
+
+    int getGroupIndex( const GroupKey* pGroup );
+
+    void ungroup( const GroupKey* pGroup );
+
+    GroupStatus checkGroupStatus();
+
+    void resizeScreen();
+
+signals:
+    void updateEnable(bool bShow);
+    void updateResize(int nW, int nH, int nFontHeight);
+    void invertDrawing(bool bInvert);
+
+    void keyStateCount(bool bAdd);
+
+public slots:
+    int onAddNewKey();
+    void onRemoveSelectKeys();
+    void onGroupSelectKeys();
+    void onUngroupSelectKeys( bool bPushHistory );
+    void onReorderKeys();
+    void onInvalidateKey( CSoftkey* key );
+    void onRecalcSelectionKeys( QRect rcOld, QRect rcNew );
+    void onUpdateScreen();
+    void onResetKeys();
+
+    void onRubberBandFinish(bool bChanged);
+};
+
+#endif // QKEYDESIGNWIDGET_H

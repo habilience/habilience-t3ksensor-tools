@@ -2,7 +2,7 @@
 #define QWARNINGWIDGET_H
 
 #include <QDialog>
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 namespace Ui {

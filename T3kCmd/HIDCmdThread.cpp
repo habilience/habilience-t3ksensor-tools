@@ -73,7 +73,8 @@ bool CHIDCmd::OpenT3kHandle()
     bool bRet = false;
 
     // setnotify
-    m_pT3kHandle->SetNotify( T3kHIDNotify::Instance() );
+    m_pT3kHandle->SetNotify( TPDPEventMultiCaster::GetPtr() );
+    TPDPEventMultiCaster::GetPtr()->SetSingleListener( this );
 
 	do
 	{
@@ -543,12 +544,12 @@ void CHIDCmd::OnCloseT3kDevice(T3K_HANDLE hDevice)
     ::memset( m_szInstantMode, 0, sizeof(char)*100 );
 }
 
-void CHIDCmd::OnMSG(ushort nTickTime, const char *sPardID, const char *sTxt)
+void CHIDCmd::OnMSG(ResponsePart, ushort nTickTime, const char *sPardID, const char *sTxt)
 {
     TextOutConsole(nTickTime, "%s: %s\r\n", sPardID, sTxt);
 }
 
-void CHIDCmd::OnVER(ushort nTickTime, const char *sPartID, T3kVER &ver)
+void CHIDCmd::OnVER(ResponsePart, ushort nTickTime, const char *sPartID, T3kVER &ver)
 {
 	char szVersion[128] = { 0, };
 	char date[T3K_VER_DATE_LEN + 1];
@@ -578,12 +579,12 @@ void CHIDCmd::OnVER(ushort nTickTime, const char *sPartID, T3kVER &ver)
     TextOutConsole(nTickTime, "%s: %s\r\n", sPartID, szVersion);
 }
 
-void CHIDCmd::OnSTT(ushort nTickTime, const char *sPartID, const char *sStatus)
+void CHIDCmd::OnSTT(ResponsePart, ushort nTickTime, const char *sPartID, const char *sStatus)
 {
     TextOutConsole(nTickTime, "%s: %s\r\n", sPartID, sStatus);
 }
 
-void CHIDCmd::OnRSP(ushort nTickTime, const char * sPartID, long lID, bool, const char *sCmd)
+void CHIDCmd::OnRSP(ResponsePart, ushort nTickTime, const char * sPartID, long lID, bool, const char *sCmd)
 {
     bool bSend = false;
 
@@ -729,9 +730,9 @@ void CHIDCmd::OnRSP(ushort nTickTime, const char * sPartID, long lID, bool, cons
 	}
 }
 
-void CHIDCmd::OnRSE(ushort ticktime, const char *partid, long id, bool finish, const char *cmd)
+void CHIDCmd::OnRSE(ResponsePart Part, ushort ticktime, const char *partid, long id, bool finish, const char *cmd)
 {
-    OnRSP(ticktime, partid, id, finish, cmd);
+    OnRSP(Part, ticktime, partid, id, finish, cmd);
 }
 
 void CHIDCmd::FlushPreCommand()

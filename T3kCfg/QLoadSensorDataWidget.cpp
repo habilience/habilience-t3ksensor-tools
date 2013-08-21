@@ -114,7 +114,7 @@ void QLoadSensorDataWidget::ResetStorage()
 
 void QLoadSensorDataWidget::Start()
 {
-    QTPDPEventMultiCaster::GetPtr()->SetSingleListener( this );
+    TPDPEventMultiCaster::GetPtr()->SetSingleListener( this );
 
     ResetStorage();
 
@@ -299,7 +299,7 @@ void QLoadSensorDataWidget::LoadSideView()
     QT3kLoadSideviewObject* pTempObj = (QT3kLoadSideviewObject*)m_pHIDObject;
     pTempObj->SetSavePath( m_strSavePath + "/data" );
 
-    QTPDPEventMultiCaster::GetPtr()->SetSingleListener( m_pHIDObject );
+    TPDPEventMultiCaster::GetPtr()->SetSingleListener( m_pHIDObject );
     m_pHIDObject->Start( m_pSensorLogData );
 }
 
@@ -314,7 +314,7 @@ void QLoadSensorDataWidget::LoadDetection()
     connect( m_pHIDObject, SIGNAL(Complete(int)), this, SLOT(onLoadComplete(int)), Qt::QueuedConnection );
     connect( m_pHIDObject, SIGNAL(PrintProgreeLog(QString,bool)), this, SLOT(on_InsertProgressLog(QString,bool)), Qt::QueuedConnection );
 
-    QTPDPEventMultiCaster::GetPtr()->SetSingleListener( m_pHIDObject );
+    TPDPEventMultiCaster::GetPtr()->SetSingleListener( m_pHIDObject );
     m_pHIDObject->Start( m_pSensorLogData );
 }
 
@@ -329,7 +329,7 @@ void QLoadSensorDataWidget::LoadData()
     connect( m_pHIDObject, SIGNAL(Complete(int)), this, SLOT(onLoadComplete(int)), Qt::QueuedConnection );
     connect( m_pHIDObject, SIGNAL(PrintProgreeLog(QString,bool)), this, SLOT(on_InsertProgressLog(QString,bool)), Qt::QueuedConnection );
 
-    QTPDPEventMultiCaster::GetPtr()->SetSingleListener( m_pHIDObject );
+    TPDPEventMultiCaster::GetPtr()->SetSingleListener( m_pHIDObject );
     m_pHIDObject->Start( m_pSensorLogData );
 }
 
@@ -351,7 +351,7 @@ void QLoadSensorDataWidget::onLoadComplete(int nStep)
 {
     if( nStep > LDS_SAVE ) return;
 
-    QTPDPEventMultiCaster::GetPtr()->SetSingleListener( this );
+    TPDPEventMultiCaster::GetPtr()->SetSingleListener( this );
     if( m_pHIDObject )
     {
         delete m_pHIDObject;
@@ -505,7 +505,7 @@ bool QLoadSensorDataWidget::ExportReportFiles(QString strOutPutPath)
 void QLoadSensorDataWidget::on_BTOK_clicked()
 {
     CloseWidget();
-    QTPDPEventMultiCaster::GetPtr()->ClearSingleListener();
+    TPDPEventMultiCaster::GetPtr()->ClearSingleListener();
 
     if( ui->BTOK->text() == QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("EDIT PROFILE ITEM"),QString::fromUtf8("BTN_CAPTION_CANCEL")) )
     {

@@ -52,6 +52,8 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setWindowFlags(Qt::MSWindowsFixedSizeDialogHint);
+
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     genAdjustButtonWidgetForWinAndX11( this );
 #endif
@@ -316,9 +318,9 @@ bool T3kCfgWnd::OpenT30xHandle()
 {
     if( !m_pT3kHandle ) return false;
 
-    m_pT3kHandle->SetNotify( QTPDPEventMultiCaster::GetPtr() );
+    m_pT3kHandle->SetNotify( TPDPEventMultiCaster::GetPtr() );
 
-    QTPDPEventMultiCaster::GetPtr()->SetSocket( QT3kUserData::GetInstance()->GetRemoteSocket() );
+    TPDPEventMultiCaster::GetPtr()->SetSocket( QT3kUserData::GetInstance()->GetRemoteSocket() );
 
     int nTotalSensorCount = 0;
     char pszPath[MAX_PATH];
@@ -1107,7 +1109,7 @@ void T3kCfgWnd::HideContentsMenu()
     m_pMainWidget->hide();
 }
 
-void T3kCfgWnd::OnOpenT3kDevice()
+void T3kCfgWnd::OnOpenT3kDevice(T3K_HANDLE)
 {
     if( !m_pT3kHandle->GetReportCommand() )
         m_pT3kHandle->SetReportCommand( true );
@@ -1120,7 +1122,7 @@ void T3kCfgWnd::OnOpenT3kDevice()
     EnableTrayProfile( true );
 }
 
-void T3kCfgWnd::OnCloseT3kDevice()
+void T3kCfgWnd::OnCloseT3kDevice(T3K_HANDLE)
 {
     if( m_pT3kHandle )
     {

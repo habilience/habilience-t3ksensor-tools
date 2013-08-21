@@ -3,11 +3,11 @@
 
 #include "ui_QGeneralSettingWidget.h"
 
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 
-class QGeneralSettingWidget : public QWidget, private Ui::QGeneralSettingWidget, public QTPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QGeneralSettingWidget : public QWidget, private Ui::QGeneralSettingWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
 {
     Q_OBJECT
 

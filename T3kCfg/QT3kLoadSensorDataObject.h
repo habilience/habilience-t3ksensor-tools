@@ -24,7 +24,7 @@ protected:
 
     void Push_Data(ResponsePart Part, PairRSP &stRSP, const char* sCmd);
 
-    // QTPDPEventMultiCaster::ITPDPEventListener
+    // TPDPEventMultiCaster::ITPDPEventListener
 protected:
     virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
     virtual void OnRSE(ResponsePart, ushort, const char *, long, bool, const char *);

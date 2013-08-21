@@ -1,7 +1,7 @@
 #ifndef CHIDCMD_H
 #define CHIDCMD_H
 
-#include "T3kHIDNotify.h"
+#include "../common/TPDPEventMultiCaster.h"
 
 #include <QObject>
 #include <QMutex>
@@ -11,7 +11,7 @@
 #define PROMPT_MAX  3
 
 
-class CHIDCmd : public QObject, public T3kHIDNotify::IT3kEventListener
+class CHIDCmd : public QObject, public TPDPEventMultiCaster::ITPDPEventListener
 {
     Q_OBJECT
 
@@ -75,11 +75,11 @@ protected:
     // T3kHIDNotify::IT3kEventListener
     virtual void OnOpenT3kDevice(T3K_HANDLE hDevice);
     virtual void OnCloseT3kDevice(T3K_HANDLE hDevice);
-    virtual void OnMSG(ushort, const char *, const char *);
-    virtual void OnRSP(ushort, const char *, long, bool, const char *);
-    virtual void OnRSE(ushort, const char *, long, bool, const char *);
-    virtual void OnSTT(ushort, const char *, const char *);
-    virtual void OnVER(ushort, const char *, T3kVER &);
+    virtual void OnMSG(ResponsePart, ushort, const char *, const char *);
+    virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
+    virtual void OnRSE(ResponsePart, ushort, const char *, long, bool, const char *);
+    virtual void OnSTT(ResponsePart, ushort, const char *, const char *);
+    virtual void OnVER(ResponsePart, ushort, const char *, T3kVER &);
 
 protected:
     T3kHandle*          m_pT3kHandle;

@@ -1,7 +1,7 @@
 #ifndef QT3KHIDOBJECT_H
 #define QT3KHIDOBJECT_H
 
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 #include "LogDataDef.h"
@@ -17,7 +17,7 @@
 #define LDS_ENVIRONMENT     3
 #define LDS_SAVE            4
 
-class QT3kHIDObject : public QObject, public QLangManager::LangChangeNotify, public QTPDPEventMultiCaster::ITPDPEventListener
+class QT3kHIDObject : public QObject, public QLangManager::LangChangeNotify, public TPDPEventMultiCaster::ITPDPEventListener
 {
     Q_OBJECT
 public:

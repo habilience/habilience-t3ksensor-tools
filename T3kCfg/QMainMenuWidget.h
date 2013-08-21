@@ -2,7 +2,7 @@
 #define QMAINMENUWIDGET_H
 
 #include <QWidget>
-#include "QTPDPEventMultiCaster.h"
+#include "../common/TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 
@@ -12,7 +12,7 @@ namespace Ui {
     class QMainMenuWidget;
 }
 
-class QMainMenuWidget : public QWidget, public QTPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QMainMenuWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
 {
     Q_OBJECT
 
