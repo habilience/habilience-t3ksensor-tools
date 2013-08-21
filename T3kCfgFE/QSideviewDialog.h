@@ -119,6 +119,8 @@ private slots:
     void on_btnLight3Dec_clicked();
     void on_btnLight3Inc_clicked();
 
+    void on_btnRemoteSideview_clicked();
+
 private:
     Dialog*     m_pMainDlg;
     Ui::QSideviewDialog *ui;

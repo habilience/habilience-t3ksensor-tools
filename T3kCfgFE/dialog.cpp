@@ -698,10 +698,12 @@ void Dialog::onDeviceConnected()
         if (!ui->btnTouchMark->isVisible())
         {
             ui->btnTouchMark->setVisible(true);
+            ui->btnReset->setCaptionFontHeight(15);
         }
         else
         {
             ui->btnTouchMark->setVisible(false);
+            ui->btnReset->setCaptionFontHeight(19);
         }
     }
 

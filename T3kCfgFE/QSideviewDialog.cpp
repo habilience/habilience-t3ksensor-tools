@@ -1526,3 +1526,18 @@ void QSideviewDialog::on_btnLight3Inc_clicked()
 
     m_bIsModified = true;
 }
+
+void QSideviewDialog::on_btnRemoteSideview_clicked()
+{
+    bool bRemoteShareSideview = ui->btnRemoteSideview->isChecked();
+    LOG_B( "[Remote] Share Sideview: %s", bRemoteShareSideview ? "true" : "false" );
+
+    QT3kDevice* pDevice = QT3kDevice::instance();
+    if ( pDevice->isVirtualDevice() )
+    {
+        FeatureScreenMode feature;
+        feature.ReportID = REPORTID_FEATURE_SCREEN_MODE;
+        feature.ScreenMode = bRemoteShareSideview ? 1 : 0;
+        pDevice->setFeature( &feature, sizeof(FeatureScreenMode) );
+    }
+}
