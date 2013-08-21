@@ -6,6 +6,7 @@
 #include "../common/T3kConstStr.h"
 #include "QSensorInitDataCfg.h"
 #include "QT3kDevice.h"
+#include <QPainter>
 
 #include "QLogSystem.h"
 
@@ -92,6 +93,13 @@ void QGestureProfileDialog::onChangeLanguage()
     }
 
     s_bIsR2L = bIsR2L;
+}
+
+void QGestureProfileDialog::paintEvent(QPaintEvent *)
+{
+    QPainter p(this);
+    QRect rcBody(0, 0, width(), height());
+    p.fillRect( rcBody, Qt::white );
 }
 
 void QGestureProfileDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *szCmd)

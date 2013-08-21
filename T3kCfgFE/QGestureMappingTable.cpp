@@ -599,7 +599,6 @@ goto_FontRecalc:
 
 void QGestureMappingTable::popEditActionWnd( const CellInfo& ci )
 {
-    // TODO:
     switch (ci.keyType)
     {
     default:

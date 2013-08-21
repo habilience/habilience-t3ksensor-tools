@@ -288,9 +288,14 @@ bool QLangRes::loadLanguageFile( int nIndex )
                     // load from resource
                     if( !m_LanguageFile.load( ":/T3kCfgFERes/Languages/english.txt" ) )
                     {
+                        delete[] pResBuffer;
                         return false;
                     }
                 }
+            }
+            else
+            {
+
             }
             delete[] pResBuffer;
         }
@@ -350,7 +355,7 @@ bool QLangRes::loadDefaultLanguageFile()
         if ( !m_DefLanguageFile.load(strFullPathName) )
         {
             // load from resource
-            if( !m_LanguageFile.load( ":/T3kCfgFERes/Languages/english.txt" ) )
+            if( !m_DefLanguageFile.load( ":/T3kCfgFERes/Languages/english.txt" ) )
             {
                 return false;
             }

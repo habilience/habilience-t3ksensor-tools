@@ -341,8 +341,10 @@ void Dialog::onInitDialog()
     {
         QLangManager::instance()->setRootPath( strLangPath );
     }
-    QLangManager::instance()->setLanguage( QInitDataIni::instance()->getActiveLanguageIndex() );
-    //onChangeLanguage();   // call by setLanguage
+    if (!QLangManager::instance()->setLanguage(QInitDataIni::instance()->getActiveLanguageIndex()))
+    {
+        onChangeLanguage();
+    }
 
     if (m_bIsConnected)
     {

@@ -21,6 +21,8 @@ protected:
     // override QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
+    virtual void paintEvent(QPaintEvent *);
+
     void sensorReset();
     void sensorRefresh( bool bTabOnly=false );
 
