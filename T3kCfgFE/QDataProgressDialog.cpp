@@ -67,6 +67,11 @@ void QDataProgressDialog::onChangeLanguage()
 
     ui->btnCancel->setText( res.getResString(MAIN_TAG, "BTN_CAPTION_CANCEL") );
 
+    if (bIsR2L != s_bIsR2L)
+    {
+        // TODO: adjust ui
+    }
+
     s_bIsR2L = bIsR2L;
 }
 

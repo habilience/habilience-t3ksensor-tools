@@ -118,6 +118,7 @@ QFont::Weight weightFromInteger(long weight)
 }
 #endif
 
+#include <QApplication>
 QFont getSystemFont(QWidget* widget)
 {
     QFont fontSystem;
@@ -136,11 +137,21 @@ QFont getSystemFont(QWidget* widget)
     const int clearTypeEnum = 2;
     if ( clearTypeEnum == s.value("FontSmoothingType",1) )
     {
-          fontSystem.setStyleStrategy(QFont::PreferAntialias);
+        fontSystem.setStyleStrategy(QFont::PreferAntialias);
     }
-    fontSystem.setPointSizeF( widget->font().pointSizeF() );
+    if (widget == NULL)
+    {
+        fontSystem.setPointSizeF( qApp->font().pointSizeF() );
+    }
+    else
+    {
+        fontSystem.setPointSizeF( widget->font().pointSizeF() );
+    }
 #else
-    fontSystem = widget->font();
+    if (widget == NULL)
+        fontSystem = qApp->font();
+    else
+        fontSystem = widget->font();
 #endif
     return fontSystem;
 }

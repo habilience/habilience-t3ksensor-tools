@@ -27,6 +27,8 @@ QSelectDeviceDialog::QSelectDeviceDialog(QWidget *parent) :
     ui->tblDeviceList->setColumnWidth( 0, 40 );
     ui->tblDeviceList->setColumnWidth( 1, 100 );
     ui->tblDeviceList->setColumnWidth( 2, 200 );
+
+    ui->btnSelect->setFocus();
 }
 
 QSelectDeviceDialog::~QSelectDeviceDialog()

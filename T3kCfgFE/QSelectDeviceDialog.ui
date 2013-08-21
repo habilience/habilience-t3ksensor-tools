@@ -125,30 +125,6 @@
          <height>34</height>
         </size>
        </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-	border: 2px solid #8f8f91;
-	border-radius: 6px;
-	background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f6f7fa, stop: 1 #dadbde);
-	min-width: 80px;
-}
-
-QPushButton:pressed {
-	background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa);
-}
-
-QPushButton:flat {
-	border: none;
-}
-
-QPushButton:focus {
-	outline: none;
-}
-
-QPushButton:default {
-	border-color: rgb(90, 129, 129);
-}</string>
-       </property>
        <property name="text">
         <string>Play Buzzer</string>
        </property>
@@ -180,30 +156,6 @@ QPushButton:default {
          <width>84</width>
          <height>34</height>
         </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-	border: 2px solid #8f8f91;
-	border-radius: 6px;
-	background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f6f7fa, stop: 1 #dadbde);
-	min-width: 80px;
-}
-
-QPushButton:pressed {
-	background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa);
-}
-
-QPushButton:flat {
-	border: none;
-}
-
-QPushButton:focus {
-	outline: none;
-}
-
-QPushButton:default {
-	border-color: rgb(90, 129, 129);
-}</string>
        </property>
        <property name="text">
         <string>Select</string>

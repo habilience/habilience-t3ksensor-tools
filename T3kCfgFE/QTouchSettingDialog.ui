@@ -179,6 +179,12 @@
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
             </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
             <property name="tabChangesFocus">
              <bool>true</bool>
             </property>
@@ -213,6 +219,12 @@
             </property>
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
             </property>
             <property name="tabChangesFocus">
              <bool>true</bool>
@@ -265,6 +277,12 @@
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
             </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
             <property name="tabChangesFocus">
              <bool>true</bool>
             </property>
@@ -299,6 +317,12 @@
             </property>
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
             </property>
             <property name="tabChangesFocus">
              <bool>true</bool>
@@ -433,6 +457,12 @@
              <property name="focusPolicy">
               <enum>Qt::StrongFocus</enum>
              </property>
+             <property name="verticalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
              <property name="tabChangesFocus">
               <bool>true</bool>
              </property>
@@ -499,6 +529,12 @@
              </property>
              <property name="focusPolicy">
               <enum>Qt::StrongFocus</enum>
+             </property>
+             <property name="verticalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
              </property>
              <property name="tabChangesFocus">
               <bool>true</bool>
@@ -599,6 +635,12 @@
              <property name="focusPolicy">
               <enum>Qt::StrongFocus</enum>
              </property>
+             <property name="verticalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
              <property name="tabChangesFocus">
               <bool>true</bool>
              </property>
@@ -662,6 +704,12 @@
              </property>
              <property name="focusPolicy">
               <enum>Qt::StrongFocus</enum>
+             </property>
+             <property name="verticalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
              </property>
              <property name="tabChangesFocus">
               <bool>true</bool>
@@ -1031,15 +1079,15 @@
    <header>QBorderStyleEdit.h</header>
   </customwidget>
   <customwidget>
+   <class>QUnderlineTitle</class>
+   <extends>QLabel</extends>
+   <header>QUnderlineTitle.h</header>
+  </customwidget>
+  <customwidget>
    <class>QAreaSettingForm</class>
    <extends>QWidget</extends>
    <header>QAreaSettingForm.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QUnderlineTitle</class>
-   <extends>QLabel</extends>
-   <header>QUnderlineTitle.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

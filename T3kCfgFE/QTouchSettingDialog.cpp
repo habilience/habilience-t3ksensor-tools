@@ -160,6 +160,8 @@ QTouchSettingDialog::QTouchSettingDialog(Dialog *parent) :
     ui->btnMultitouch->setEnabled(true);
 
     m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_TOUCHPNT );
+
+    ui->btnClose->setFocus();
 }
 
 QTouchSettingDialog::~QTouchSettingDialog()

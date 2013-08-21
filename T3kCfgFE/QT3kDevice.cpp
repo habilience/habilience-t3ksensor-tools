@@ -49,6 +49,11 @@ bool QT3kDevice::getFeature(void *pFeature, int nFeatureSize)
     return true;
 }
 
+bool QT3kDevice::isVirtualDevice()
+{
+    return m_bIsVirtualDevice;
+}
+
 void QT3kDevice::timerEvent(QTimerEvent *evt)
 {
     if (evt->type() == QEvent::Timer)

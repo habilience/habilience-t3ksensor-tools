@@ -2,10 +2,14 @@
 
 #include <QTimerEvent>
 #include <QKeyEvent>
+#include <QFont>
+#include "../common/QUtils.h"
 
 QMyApplication::QMyApplication(int &argc, char **argv) :
     QApplication(argc, argv)
 {
+    QFont newFont = getSystemFont(NULL);
+    setFont(newFont);
     installEventFilter(this);
 }
 

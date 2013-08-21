@@ -171,7 +171,14 @@ SOURCES += main.cpp\
     QGestureProfileDialog.cpp \
     QColorTabWidget.cpp \
     QGestureMappingTable.cpp \
-    QKeyMapStr.cpp
+    QKeyMapStr.cpp \
+    QEditActionEnableDialog.cpp \
+    QEditActionKey4WayDialog.cpp \
+    QEditActionKey2WayDialog.cpp \
+    QEditActionKey1Dialog.cpp \
+    QUserDefinedKeyCtrl.cpp \
+    QKeyEdit.cpp \
+    QRemoteTouchMarkDialog.cpp
 
 HEADERS  += dialog.h \
     ../common/QUtils.h \
@@ -217,7 +224,14 @@ HEADERS  += dialog.h \
     QGestureProfileDialog.h \
     QColorTabWidget.h \
     QGestureMappingTable.h \
-    QKeyMapStr.h
+    QKeyMapStr.h \
+    QEditActionEnableDialog.h \
+    QEditActionKey4WayDialog.h \
+    QEditActionKey2WayDialog.h \
+    QEditActionKey1Dialog.h \
+    QUserDefinedKeyCtrl.h \
+    QKeyEdit.h \
+    QRemoteTouchMarkDialog.h
 
 FORMS    += dialog.ui \
     QSelectSensorDataDialog.ui \
@@ -232,7 +246,12 @@ FORMS    += dialog.ui \
     QDetectionGraphForm.ui \
     QBentProgressDialog.ui \
     QAutoRangeCompleteDialog.ui \
-    QGestureProfileDialog.ui
+    QGestureProfileDialog.ui \
+    QEditActionEnableDialog.ui \
+    QEditActionKey4WayDialog.ui \
+    QEditActionKey2WayDialog.ui \
+    QEditActionKey1Dialog.ui \
+    QRemoteTouchMarkDialog.ui
 
 RESOURCES += \
     T3kCfgFE.qrc

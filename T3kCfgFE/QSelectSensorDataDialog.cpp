@@ -30,6 +30,8 @@ QSelectSensorDataDialog::QSelectSensorDataDialog(QWidget *parent) :
     ui->tblDataList->verticalHeader()->setSectionResizeMode( QHeaderView::Fixed );
     ui->tblDataList->setColumnWidth( 0, 200 );
     ui->tblDataList->setColumnWidth( 1, 200 );
+
+    ui->btnCancel->setFocus();
 }
 
 QSelectSensorDataDialog::~QSelectSensorDataDialog()

@@ -67,6 +67,11 @@ inline bool extract2Word( QString& str, unsigned char& cV )
 
 QGestureMappingTable::QGestureMappingTable(QWidget *parent) :
     QWidget(parent)
+  , m_editActionEnableDialog(this)
+  , m_editActionKey1Dialog(this)
+  , m_editActionKey2WayDialog(this)
+  , m_editActionKey4WayDialog(this)
+
 {
     m_nProfileIndex = 0;
     m_wProfileFlags = 0x00;
@@ -76,8 +81,11 @@ QGestureMappingTable::QGestureMappingTable(QWidget *parent) :
     m_bIsHovered = false;
 
     m_pHoverCell = NULL;
+    m_nHoverExtProperty = -1;
 
     m_fntSystem = getSystemFont(this);
+
+    setMinimumSize( 400, 300 );
 
     initControl();
 
@@ -445,20 +453,21 @@ void QGestureMappingTable::drawExtProperty( QPainter& p, int nExtIndex, QRectF &
 {
     p.setRenderHint( QPainter::Antialiasing );
     QRectF rectCheck;
-    float fCheckWH = 8.f;
 
     QRectF rectBounds;
     m_rectExtProperty[nExtIndex] = rectExtProperty;
-    m_rectExtProperty[nExtIndex].setWidth(rectExtProperty.width()/2.f);
     m_rectExtProperty[nExtIndex].setY( m_rectExtProperty[nExtIndex].y() + (rectExtProperty.height()/5.f)*nExtIndex );
     m_rectExtProperty[nExtIndex].setHeight(rectExtProperty.height()/5.f);
 
     QString& strExt = m_strExtProperty[nExtIndex];
 
+    QFontMetricsF fmFont(fntCellNormal);
+    QRectF rectFont = fmFont.boundingRect(strExt);
+
     rectCheck = m_rectExtProperty[nExtIndex];
-    rectCheck.setWidth(m_rectExtProperty[nExtIndex].height());
-    float fAdj = (rectCheck.width()-fCheckWH)/3.f;
-    rectCheck.adjust(fAdj, fAdj, -fAdj, -fAdj);
+    rectCheck.setWidth(rectFont.height());
+    rectCheck.setTop( m_rectExtProperty[nExtIndex].top() + (m_rectExtProperty[nExtIndex].height() - rectFont.height()) / 2.0f );
+    rectCheck.setHeight(rectFont.height());
 
     QRectF rectInner = rectCheck;
     rectInner.adjust( 2.f, 2.f, -2.f, -2.f );
@@ -471,16 +480,20 @@ void QGestureMappingTable::drawExtProperty( QPainter& p, int nExtIndex, QRectF &
         rectInner.adjust( 1.f, 1.f, -1.f, -1.f );
         p.fillRect( rectInner, QColor(80,80,80) );
     }
+
     const int nOffsetX = 5;
-    m_rectExtProperty[nExtIndex].translate( rectCheck.width() + fCheckWH + nOffsetX, 1 );
-    m_rectExtProperty[nExtIndex].setWidth( m_rectExtProperty[nExtIndex].width() - (rectCheck.width() + fCheckWH + nOffsetX) );
+    m_rectExtProperty[nExtIndex].translate( rectCheck.width() + nOffsetX, 0 );
+    m_rectExtProperty[nExtIndex].setWidth( m_rectExtProperty[nExtIndex].width() - (rectCheck.width() + nOffsetX) );
     p.setFont( fntCellNormal );
-    p.setPen( cellFontColor );
+    p.setPen( m_nHoverExtProperty == nExtIndex ? QColor(55,100,160) : cellFontColor);
+    strExt = fmFont.elidedText( strExt, Qt::ElideRight, m_rectExtProperty[nExtIndex].width() );
     p.drawText( m_rectExtProperty[nExtIndex], flags, strExt );
 
     p.drawText( m_rectExtProperty[nExtIndex], flags, strExt, &rectBounds );
-    m_rectExtProperty[nExtIndex].translate( -(rectCheck.width() + fCheckWH + nOffsetX), 0 );
-    m_rectExtProperty[nExtIndex].setWidth( rectBounds.width() + rectCheck.width() + fCheckWH + nOffsetX);
+    m_rectExtProperty[nExtIndex].translate( -(rectCheck.width() + nOffsetX), 0 );
+    m_rectExtProperty[nExtIndex].setWidth( rectBounds.width() + rectCheck.width() + nOffsetX);
+    m_rectExtProperty[nExtIndex].setTop( rectBounds.top() );
+    m_rectExtProperty[nExtIndex].setHeight( rectBounds.height() );
 }
 
 void QGestureMappingTable::drawCellInfo(QPainter& p, const CellInfo& ci, QFont& fntCellNormal, QFont& fntCellBold, const QColor &cellFontColor, int& flags, const QString& strFontFamily )
@@ -529,15 +542,56 @@ goto_FontRecalc:
                     goto goto_FontRecalc;
                 p.setPen( cellFontColor );
                 QFontMetricsF fm(fntVariable);
-                QString strText = fm.elidedText(ci.strText, Qt::ElideRight, rectText.width());
-                p.drawText( rectText, flags, strText );
+                rectBB = fm.boundingRect( rectText, flags, ci.strText );
+                if (rectBB.width() >= rectText.width()-2.0f)
+                {
+                    QString strOrg = ci.strText;
+                    QString strText;
+                    if (strOrg.indexOf('\n') >= 0)
+                    {
+                        QString strLeft = extractLeft(strOrg, '\n');
+                        QString strRight = strOrg;
+                        strLeft = fm.elidedText(strLeft, Qt::ElideRight, rectText.width());
+                        strRight = fm.elidedText(strRight, Qt::ElideRight, rectText.width());
+                        strText = strLeft + '\n' + strRight;
+                    }
+                    else
+                    {
+                        strText = fm.elidedText(ci.strText, Qt::ElideRight, rectText.width());
+                    }
+                    p.drawText( rectText, flags, strText );
+                }
+                else
+                {
+                    p.drawText( rectText, flags, ci.strText );
+                }
             }
             else
             {
                 p.setFont( fntCellNormal );
-                QString strText = ftMetrics.elidedText(ci.strText, Qt::ElideRight, rectText.width());
                 p.setPen( cellFontColor );
-                p.drawText( rectText, flags, strText );
+                if (rectBB.width() >= rectText.width()-2.0f)
+                {
+                    QString strOrg = ci.strText;
+                    QString strText;
+                    if (strOrg.indexOf('\n') >= 0)
+                    {
+                        QString strLeft = extractLeft(strOrg, '\n');
+                        QString strRight = strOrg;
+                        strLeft = ftMetrics.elidedText(strLeft, Qt::ElideRight, rectText.width());
+                        strRight = ftMetrics.elidedText(strRight, Qt::ElideRight, rectText.width());
+                        strText = strLeft + '\n' + strRight;
+                    }
+                    else
+                    {
+                        strText = ftMetrics.elidedText(ci.strText, Qt::ElideRight, rectText.width());
+                    }
+                    p.drawText( rectText, flags, strText );
+                }
+                else
+                {
+                    p.drawText( rectText, flags, ci.strText );
+                }
             }
         }
     }
@@ -546,27 +600,29 @@ goto_FontRecalc:
 void QGestureMappingTable::popEditActionWnd( const CellInfo& ci )
 {
     // TODO:
-    /*
-    switch( ci.KeyType )
+    switch (ci.keyType)
     {
-    case KeyType1Key:
-        m_wndEditAction.setProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0] );
-        m_wndEditAction.show();
+    default:
         break;
     case KeyTypeEnable:
-        m_wndEditActionED.setProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], m_wProfileFlags );
-        m_wndEditActionED.show();
+        m_editActionEnableDialog.setProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], m_wProfileFlags );
+        m_editActionEnableDialog.exec();
         break;
-    case KeyType4Way:
-        m_wndEditAction4WD.setProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], ci.wKeyValue[1], ci.wKeyValue[2], ci.wKeyValue[3] );
-        m_wndEditAction4WD.show();
+    case KeyType1Key:
+        m_editActionKey1Dialog.setProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0] );
+        m_editActionKey1Dialog.exec();
         break;
     case KeyType2Way:
-        m_wndEditAction2WD.setProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], ci.wKeyValue[1] );
-        m_wndEditAction2WD.show();
+        m_editActionKey2WayDialog.setProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], ci.wKeyValue[1] );
+        m_editActionKey2WayDialog.exec();
+        break;
+    case KeyType4Way:
+        m_editActionKey4WayDialog.setProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], ci.wKeyValue[1], ci.wKeyValue[2], ci.wKeyValue[3] );
+        m_editActionKey4WayDialog.exec();
         break;
     }
-    */
+
+    resetSelect();
 }
 
 void QGestureMappingTable::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *szCmd)
@@ -617,7 +673,7 @@ void QGestureMappingTable::paintEvent(QPaintEvent *)
 
     QRect rectTable = rectBody;
     rectTable.setHeight( rectTable.height() - rectTable.height()/(ROW_COUNT-2) );
-    QRectF rectExtProperty( rectTable.x(), rectTable.bottom(), rectTable.width(), rectBody.height() - rectTable.height() );
+    QRectF rectExtProperty( rectTable.left(), rectTable.bottom(), rectTable.width(), rectBody.height() - rectTable.height() );
 
     float fTableIntervalV = (float)rectTable.height() / (ROW_COUNT*2 - 1);
     float fTableIntervalH = (float)rectTable.width() / (COL_COUNT*2);
@@ -797,8 +853,12 @@ void QGestureMappingTable::paintEvent(QPaintEvent *)
 
     // draw ext-property
 
+    rectExtProperty.setRight( rectZoomRotate.left()-3 );
+
     rectExtProperty.adjust(0, 3, 0, -3);
     flags = Qt::AlignLeft|Qt::AlignVCenter;
+
+    //p.drawRect( rectExtProperty );
 
     drawExtProperty( p, EXTP_INERTIAL_WHEEL, rectExtProperty, fntCellNormal, flags, cellFontColor );
     drawExtProperty( p, EXTP_INDIVIDUAL_PUTNTAP, rectExtProperty, fntCellNormal, flags, cellFontColor );
@@ -824,15 +884,6 @@ void QGestureMappingTable::resizeEvent(QResizeEvent *e)
 
 void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
 {
-    // TODO:
-    /*
-    if ( m_wndEditAction.isVisible()
-        || m_wndEditActionED.isVisible()
-        || m_wndEditAction2WD.isVisible()
-        || m_wndEditAction4WD.isVisible() )
-        return;
-    */
-
     for ( int j=1 ; j<ROW_COUNT ; j++ )
     {
         for ( int i=1 ; i<COL_COUNT ; i++ )
@@ -843,9 +894,10 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
             {
                 if ( ci.rectCell.contains( e->pos() ) )
                 {
-                    popEditActionWnd( ci );
                     m_pSelectCell = const_cast<CellInfo*>(&ci);
                     update();
+                    popEditActionWnd( ci );
+                    return;
                 }
             }
         }
@@ -853,16 +905,18 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
 
     if ( m_ciZoom.rectCell.contains( e->pos() ) )
     {
-        popEditActionWnd( m_ciZoom );
         m_pSelectCell = &m_ciZoom;
         update();
+        popEditActionWnd( m_ciZoom );
+        return;
     }
 #ifdef SUPPORT_ROTATE
     if ( m_ciRotate.rectCell.contains( e->pos() ) )
     {
-        popEditActionWnd( m_ciRotate );
         m_pSelectCell = &m_ciRotate;
         update();
+        popEditActionWnd( m_ciRotate );
+        return;
     }
 #endif
 
@@ -875,7 +929,7 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
             m_wProfileFlags |= MM_MOUSEPROFILE_INERTIAL_WHEEL;
         bExtSet = true;
     }
-    if ( m_rectExtProperty[EXTP_INDIVIDUAL_PUTNTAP].contains( e->pos() ) )
+    else if ( m_rectExtProperty[EXTP_INDIVIDUAL_PUTNTAP].contains( e->pos() ) )
     {
         if ( m_bCheckExtProperty[EXTP_INDIVIDUAL_PUTNTAP] )
             m_wProfileFlags &= ~MM_MOUSEPROFILE_PUTAND_TAP_OR_DOUBLETAP_ONLY;
@@ -883,7 +937,7 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
             m_wProfileFlags |= MM_MOUSEPROFILE_PUTAND_TAP_OR_DOUBLETAP_ONLY;
         bExtSet = true;
     }
-    if ( m_rectExtProperty[EXTP_PUTAND_ON_MULTITOUCHDEVICE].contains( e->pos() ) )
+    else if ( m_rectExtProperty[EXTP_PUTAND_ON_MULTITOUCHDEVICE].contains( e->pos() ) )
     {
         if ( m_bCheckExtProperty[EXTP_PUTAND_ON_MULTITOUCHDEVICE] )
             m_wProfileFlags &= ~MM_MOUSEPROFILE_HYBRID_MULTITOUCHDEVICE;
@@ -891,7 +945,7 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
             m_wProfileFlags |= MM_MOUSEPROFILE_HYBRID_MULTITOUCHDEVICE;
         bExtSet = true;
     }
-    if ( m_rectExtProperty[EXTP_INVERT_WHEEL].contains( e->pos() ) )
+    else if ( m_rectExtProperty[EXTP_INVERT_WHEEL].contains( e->pos() ) )
     {
         if ( m_bCheckExtProperty[EXTP_INVERT_WHEEL] )
             m_wProfileFlags &= ~MM_MOUSEPROFILE_INVERT_WHEEL;
@@ -899,7 +953,7 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
             m_wProfileFlags |= MM_MOUSEPROFILE_INVERT_WHEEL;
         bExtSet = true;
     }
-    if ( m_rectExtProperty[EXTP_MAC_OS_MARGIN].contains( e->pos() ) )
+    else if ( m_rectExtProperty[EXTP_MAC_OS_MARGIN].contains( e->pos() ) )
     {
         if ( m_bCheckExtProperty[EXTP_MAC_OS_MARGIN] )
             m_wProfileFlags &= ~MM_MOUSEPROFILE_MAC_OS_MARGIN;
@@ -931,8 +985,6 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
         }
         QT3kDevice::instance()->sendCommand( szCmd, true );
     }
-
-    QWidget::mousePressEvent(e);
 }
 
 void QGestureMappingTable::mouseReleaseEvent(QMouseEvent *e)
@@ -942,15 +994,7 @@ void QGestureMappingTable::mouseReleaseEvent(QMouseEvent *e)
 
 void QGestureMappingTable::mouseMoveEvent(QMouseEvent *e)
 {
-    // TODO:
-    /*
-    if ( m_wndEditAction.isVisible()
-        || m_wndEditActionED.isVisible()
-        || m_wndEditAction2WD.isVisible()
-        || m_wndEditAction4WD.isVisible() )
-        return;
-    */
-
+    int nHoverExtProperty = -1;
     if (m_bIsHovered)
     {
         bool bIsTitleOver = false;
@@ -992,26 +1036,31 @@ void QGestureMappingTable::mouseMoveEvent(QMouseEvent *e)
             if ( m_rectExtProperty[EXTP_INVERT_WHEEL].contains( e->pos() ) )
             {
                 bIsTitleOver = true;
+                nHoverExtProperty = EXTP_INVERT_WHEEL;
                 break;
             }
             if ( m_rectExtProperty[EXTP_INDIVIDUAL_PUTNTAP].contains( e->pos() ) )
             {
                 bIsTitleOver = true;
+                nHoverExtProperty = EXTP_INDIVIDUAL_PUTNTAP;
                 break;
             }
             if ( m_rectExtProperty[EXTP_INERTIAL_WHEEL].contains( e->pos() ) )
             {
                 bIsTitleOver = true;
+                nHoverExtProperty = EXTP_INERTIAL_WHEEL;
                 break;
             }
             if ( m_rectExtProperty[EXTP_PUTAND_ON_MULTITOUCHDEVICE].contains( e->pos() ) )
             {
                 bIsTitleOver = true;
+                nHoverExtProperty = EXTP_PUTAND_ON_MULTITOUCHDEVICE;
                 break;
             }
             if ( m_rectExtProperty[EXTP_MAC_OS_MARGIN].contains( e->pos() ) )
             {
                 bIsTitleOver = true;
+                nHoverExtProperty = EXTP_MAC_OS_MARGIN;
                 break;
             }
 
@@ -1065,6 +1114,12 @@ void QGestureMappingTable::mouseMoveEvent(QMouseEvent *e)
         update();
     }
 
+    if (m_nHoverExtProperty != nHoverExtProperty)
+    {
+        m_nHoverExtProperty = nHoverExtProperty;
+        update();
+    }
+
     QWidget::mouseMoveEvent(e);
 }
 
@@ -1077,14 +1132,12 @@ bool QGestureMappingTable::event(QEvent *e)
         case QEvent::DragEnter:
         case QEvent::Enter:
         case QEvent::HoverEnter:
-            qDebug( "hover enter" );
             m_bIsHovered = true;
             update();
             break;
         case QEvent::DragLeave:
         case QEvent::Leave:
         case QEvent::HoverLeave:
-            qDebug( "hover leave" );
             m_bIsHovered = false;
             m_bIsTitleOver = false;
             if (!m_pHoverCell)

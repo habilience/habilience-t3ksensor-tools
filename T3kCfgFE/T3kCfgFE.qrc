@@ -4,5 +4,20 @@
         <file>resources/zoom_fit.png</file>
         <file>resources/zoom_in.png</file>
         <file>resources/zoom_out.png</file>
+        <file>resources/actionedit_4way.png</file>
+        <file>resources/actionedit_4way_horz_linked.png</file>
+        <file>resources/actionedit_4way_linked.png</file>
+        <file>resources/actionedit_4way_locked.png</file>
+        <file>resources/actionedit_4way_vert_linked.png</file>
+        <file>resources/actionedit_horz_linked.png</file>
+        <file>resources/actionedit_vert_linked.png</file>
+        <file>resources/actionedit_zoom.png</file>
+        <file>resources/actionedit_zoom_linked.png</file>
+        <file>resources/keyicon_alt.png</file>
+        <file>resources/keyicon_clear.png</file>
+        <file>resources/keyicon_cmd.png</file>
+        <file>resources/keyicon_ctrl.png</file>
+        <file>resources/keyicon_shift.png</file>
+        <file>resources/keyicon_win.png</file>
     </qresource>
 </RCC>

@@ -1694,6 +1694,7 @@ void QBentAdjustmentDialog::onAdjustmentFinish()
 
     removeEventFilter( &keyWatcher );
 
+    const char* szNaN = "-1.#IND00";
     QString strBaLog;
     for ( int i = 0; i < m_BentItemArray.size(); i++ )
     {
@@ -1748,9 +1749,34 @@ void QBentAdjustmentDialog::onAdjustmentFinish()
         bufC += sprintf( bufC, "@Cam%d:", nCamNumber+1 );
         for ( int ni = 0; ni < ADJUSTMENT_STEP; ni++ )
         {
-            bufC += sprintf( bufC, "%f,%f|", item.fObcS[ni], item.fObcE[ni]);
+            if (qIsNaN(item.fObcS[ni]))
+                bufC += sprintf(bufC, "%s,", szNaN);
+            else
+                bufC += sprintf(bufC, "%f,", item.fObcS[ni]);
+            if (qIsNaN(item.fObcE[ni]))
+                bufC += sprintf(bufC, "%s|", szNaN);
+            else
+                bufC += sprintf(bufC, "%f|", item.fObcE[ni]);
+            //bufC += sprintf( bufC, "%f,%f|", item.fObcS[ni], item.fObcE[ni]);
         }
-        bufC += sprintf(bufC, "%f,%f,%f,%f|", item.fCamX, item.fCamY, item.fCamS, item.fCamR);
+        if (qIsNaN(item.fCamX))
+            bufC += sprintf(bufC, "%s,", szNaN);
+        else
+            bufC += sprintf(bufC, "%f,", item.fCamX);
+        if (qIsNaN(item.fCamY))
+            bufC += sprintf(bufC, "%s,", szNaN);
+        else
+            bufC += sprintf(bufC, "%f,", item.fCamY);
+        if (qIsNaN(item.fCamS))
+            bufC += sprintf(bufC, "%s,", szNaN);
+        else
+            bufC += sprintf(bufC, "%f,", item.fCamS);
+        if (qIsNaN(item.fCamR))
+            bufC += sprintf(bufC, "%s|", szNaN);
+        else
+            bufC += sprintf(bufC, "%f|", item.fCamR);
+
+        //bufC += sprintf(bufC, "%f,%f,%f,%f|", item.fCamX, item.fCamY, item.fCamS, item.fCamR);
         LOG_I(buf);
 
         QDateTime curDate = QDateTime::currentDateTime();

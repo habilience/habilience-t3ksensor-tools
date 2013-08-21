@@ -49,7 +49,7 @@ void QColorTabWidget::paintEvent(QPaintEvent *)
     p.setRenderHint(QPainter::Antialiasing);
 
     QRect rcBody(0, 0, width()-1, height()-1);
-    rcBody.adjust( 2, 2, -2, -2 );
+    rcBody.adjust( 1, 1, -1, -1 );
 
     drawTabs(p, rcBody);
 
@@ -77,14 +77,12 @@ bool QColorTabWidget::event(QEvent *evt)
         case QEvent::DragEnter:
         case QEvent::Enter:
         case QEvent::HoverEnter:
-            qDebug( "hover enter" );
             m_bIsHovered = true;
             update();
             break;
         case QEvent::DragLeave:
         case QEvent::Leave:
         case QEvent::HoverLeave:
-            qDebug( "hover leave" );
             m_bIsHovered = false;
             m_nHoverTabIndex = -1;
             setCursor(Qt::ArrowCursor);
@@ -212,7 +210,7 @@ void QColorTabWidget::resizeEvent(QResizeEvent *evt)
     if ( evt->size().width() <= 0 || evt->size().height() <= 0 ) return;
 
     QRect rc(0, 0, evt->size().width()-1, evt->size().height()-1);
-    rc.adjust( 2, 2, -2, -2 );
+    rc.adjust( 1, 1, -1, -1 );
 
     if ( isHorzTab() )
     {
@@ -518,6 +516,8 @@ void QColorTabWidget::drawTab( QPainter& p, QRect& rectTab, const TabInfo& ti, b
         rectText.setHeight((float)rectTab.height());
     }
 
+    m_fntTab.setBold(bActive);
+
     p.setFont( m_fntTab );
 
     if (ti.pIconImage)
@@ -592,6 +592,21 @@ int QColorTabWidget::addTab( const QString& strCaption, QWidget* pChildWidget, Q
     ti.pIconImage = NULL;
     ti.clrTab = clrTab;
     m_aryTabInfo.push_back(ti);
+
+    if (pChildWidget)
+    {
+        QSize sizeChild = pChildWidget->minimumSize();
+        sizeChild.setWidth( sizeChild.width() + (!isHorzTab() ? m_sizeTabHeader.width() : 0) + 4 + 1 + 2 );
+        sizeChild.setHeight( sizeChild.height() + (isHorzTab() ? m_sizeTabHeader.height() : 0) + 4 + 1 + 2 );
+        QSize sizeParent = minimumSize();
+
+        QSize sizeNewMinimum;
+        sizeNewMinimum.setWidth( sizeParent.width() < sizeChild.width() ? sizeChild.width() : sizeParent.width() );
+        sizeNewMinimum.setHeight( sizeParent.height() < sizeChild.height() ? sizeChild.height() : sizeParent.height() );
+
+        setMinimumSize( sizeNewMinimum );
+    }
+
     return m_aryTabInfo.size();
 }
 

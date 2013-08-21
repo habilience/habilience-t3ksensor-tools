@@ -93,6 +93,8 @@ QDetectionDialog::QDetectionDialog(Dialog *parent) :
     ui->widgetDetection2->installEventFilterForEventRedirect(&m_EventRedirect);
 
     m_TimerUpdateGraph = startTimer( 350 );
+
+    ui->btnClose->setFocus();
 }
 
 QDetectionDialog::~QDetectionDialog()

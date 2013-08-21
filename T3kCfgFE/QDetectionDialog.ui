@@ -38,32 +38,6 @@
          <height>50</height>
         </size>
        </property>
-       <property name="styleSheet">
-        <string notr="true"> QPushButton {
-     border: 2px solid #8f8f91;
-     border-radius: 6px;
-     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                       stop: 0 #f6f7fa, stop: 1 #dadbde);
- }
-
- QPushButton:pressed {
-     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                       stop: 0 #dadbde, stop: 1 #f6f7fa);
- }
-
- QPushButton:checked {
-     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                       stop: 0 rgb(112,146,190), stop: 1 rgb(197,210,228));
- }
-
- QPushButton:flat {
-     border: none; /* no border for a flat push button */
- }
-
- QPushButton:default {
-     border-color: rgb(90, 129, 129); /* make the default button prominent */
- }</string>
-       </property>
        <property name="text">
         <string>Main</string>
        </property>
@@ -88,32 +62,6 @@
          <width>140</width>
          <height>50</height>
         </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"> QPushButton {
-     border: 2px solid #8f8f91;
-     border-radius: 6px;
-     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                       stop: 0 #f6f7fa, stop: 1 #dadbde);
- }
-
- QPushButton:pressed {
-     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                       stop: 0 #dadbde, stop: 1 #f6f7fa);
- }
-
- QPushButton:checked {
-     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                       stop: 0 rgb(112,146,190), stop: 1 rgb(197,210,228));
- }
-
- QPushButton:flat {
-     border: none; /* no border for a flat push button */
- }
-
- QPushButton:default {
-     border-color: rgb(90, 129, 129); /* make the default button prominent */
- }</string>
        </property>
        <property name="text">
         <string>Sub</string>

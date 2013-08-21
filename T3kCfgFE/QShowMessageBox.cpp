@@ -55,7 +55,7 @@ int showMessageBox( QWidget* parent, const QString& strMessage, const QString& s
     msgBox.setButtonText(QMessageBox::No, res.getResString(MAIN, "BTN_CAPTION_NO"));
 
     QFont fnt(msgBox.font());
-    fnt.setPointSize(fnt.pointSize()+2);
+    fnt.setPointSize(fnt.pointSize()+1);
     msgBox.setFont(fnt);
     s_pShowedMessageBox = &msgBox;
     int nRet = msgBox.exec();

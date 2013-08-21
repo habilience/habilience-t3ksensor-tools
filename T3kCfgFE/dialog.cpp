@@ -32,6 +32,7 @@
 #include "QDetectionDialog.h"
 #include "QBentAdjustmentDialog.h"
 #include "QTouchSettingDialog.h"
+#include "QRemoteTouchMarkDialog.h"
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -53,6 +54,7 @@ Dialog::Dialog(QWidget *parent) :
     m_pDlgDetection = NULL;
     m_pDlgBentAdjustment = NULL;
     m_pDlgTouchSetting = NULL;
+    m_pDlgRemoteTouchMark = NULL;
 
     m_oldMenu = MenuNone;
 
@@ -397,7 +399,7 @@ void Dialog::onInitDialog()
     if (!bInScreen)
     {
         const QRect rcPrimaryMon = desktopWidget.screenGeometry( desktopWidget.primaryScreen() );
-        move( (rcPrimaryMon.width()-width())/2, (rcPrimaryMon.height()-height())/2 );
+        move( rcPrimaryMon.left()+(rcPrimaryMon.width()-width())/2, rcPrimaryMon.top()+(rcPrimaryMon.height()-height())/2 );
     }
 
     QString strFileName = "";
@@ -726,6 +728,10 @@ void Dialog::onDeviceDisconnected()
     m_bIsConnected = false;
 
     closeAllSubMenuDialogs();
+    if (m_pDlgRemoteTouchMark)
+    {
+        delete m_pDlgRemoteTouchMark;
+    }
 
     ui->btnSideview->setVisible(false);
     ui->btnDetection->setVisible(false);
@@ -838,6 +844,10 @@ void Dialog::TPDP_OnDownloadingFirmware( T3K_DEVICE_INFO /*devInfo*/, bool bIsDo
     if (bIsDownload)
     {
         closeAllSubMenuDialogs();
+        if (m_pDlgRemoteTouchMark)
+        {
+            delete m_pDlgRemoteTouchMark;
+        }
 
         QCmdAsyncManagerCtrl& cmd = *ui->cmdAsyncMngr;
         if ( cmd.isStarted() )
@@ -857,6 +867,13 @@ void Dialog::TPDP_OnDownloadingFirmware( T3K_DEVICE_INFO /*devInfo*/, bool bIsDo
         ui->btnBentAdjustment->setVisible(false);
         ui->btnTouchSetting->setVisible(false);
 
+        if (!ui->chkSafeMode->isVisible())
+        {
+            ui->layoutMid->addItem(ui->spacerBody);
+            ui->layoutMid->addWidget(ui->chkSafeMode);
+            ui->chkSafeMode->setVisible(true);
+        }
+
         ui->btnReset->setEnabled(false);
         ui->btnTouchMark->setEnabled(false);
 
@@ -874,6 +891,13 @@ void Dialog::TPDP_OnDownloadingFirmware( T3K_DEVICE_INFO /*devInfo*/, bool bIsDo
         ui->btnDetection->setVisible(true);
         ui->btnBentAdjustment->setVisible(true);
         ui->btnTouchSetting->setVisible(true);
+
+        if (ui->chkSafeMode->isVisible())
+        {
+            ui->chkSafeMode->setVisible(false);
+            ui->layoutMid->removeWidget(ui->chkSafeMode);
+            ui->layoutMid->removeItem(ui->spacerBody);
+        }
 
         ui->btnReset->setEnabled(true);
         ui->btnTouchMark->setEnabled(true);
@@ -974,13 +998,14 @@ void Dialog::updateVersionInformation()
 
     QString strVersionInfoHTML;
     QString strHead = "<html><body><b>"
+            "<font color=\"#303030\">"
             "<table border=\"0\" width=\"100%\">"
                 "<tr>"
                     "<td colspan=\"3\" bgcolor=\"#999999\">"
                         "<font color=\"white\">Firmware Version</font>"
                     "</td>"
                 "</tr>";
-    QString strTail = "</table></b></body></html>";
+    QString strTail = "</table></font></b></body></html>";
     QString strDummyVersion = "x.xx";
     QString strDummyModel = "T3xxx";
 
@@ -1295,6 +1320,14 @@ MM_LOG:
             }
             m_bEnterTurnOffCheck = false;
         }
+    }
+}
+
+void Dialog::onCloseTouchMarkDialog()
+{
+    if (m_pDlgRemoteTouchMark)
+    {
+        m_pDlgRemoteTouchMark = NULL;
     }
 }
 
@@ -1892,6 +1925,47 @@ void Dialog::on_btnTouchMark_clicked()
 {
     LOG_B( "Touch Mark Window..." );
 
+    if (m_pDlgRemoteTouchMark)
+    {
+        delete m_pDlgRemoteTouchMark;
+    }
+    else
+    {
+        m_pDlgRemoteTouchMark = new QRemoteTouchMarkDialog(this);
+
+        // restore window position
+        QSettings winPosSettings( "Habilience", qApp->applicationName() );
+        winPosSettings.beginGroup("TouchMarkWindow");
+        int nX = winPosSettings.value("x", -1).toInt();
+        int nY = winPosSettings.value("y", -1).toInt();
+        int nW = winPosSettings.value("w", -1).toInt();
+        int nH = winPosSettings.value("h", -1).toInt();
+        if (nW < 0) nW = 640;
+        if (nH < 0) nH = 480;
+        winPosSettings.endGroup();
+
+        QDesktopWidget desktopWidget;
+        bool bInScreen = false;
+        QRect rcMove( nX, nY, nW, nH );
+        for ( int i=0; i<desktopWidget.screenCount(); i++ )
+        {
+            if ( desktopWidget.screenGeometry(i).contains( rcMove ) )
+            {
+                m_pDlgRemoteTouchMark->move( rcMove.topLeft() );
+                m_pDlgRemoteTouchMark->resize( rcMove.size() );
+                bInScreen = true;
+                break;
+            }
+        }
+        if (!bInScreen)
+        {
+            const QRect rcPrimaryMon = desktopWidget.screenGeometry( desktopWidget.primaryScreen() );
+            m_pDlgRemoteTouchMark->move( rcPrimaryMon.left() + (rcPrimaryMon.width()-rcMove.width())/2, rcPrimaryMon.top() + (rcPrimaryMon.height()-rcMove.height())/2 );
+            m_pDlgRemoteTouchMark->resize( rcMove.size() );
+
+        }
+        m_pDlgRemoteTouchMark->show();
+    }
 }
 
 void Dialog::on_btnExit_clicked()

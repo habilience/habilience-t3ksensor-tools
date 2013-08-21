@@ -144,6 +144,8 @@ QSideviewDialog::QSideviewDialog(Dialog *parent) :
 
     m_EventRedirect.installEventListener(this);
     installEventFilter(&m_EventRedirect);
+
+    ui->btnClose->setFocus();
 }
 
 QSideviewDialog::~QSideviewDialog()

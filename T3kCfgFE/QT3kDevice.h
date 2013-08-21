@@ -101,7 +101,7 @@ public:
     bool setFeature( void *pFeature, int nFeatureSize );
     bool getFeature( void *pFeature, int nFeatureSize );
 
-    bool isVirtualDevice() { return m_bIsVirtualDevice; }
+    bool isVirtualDevice();
     virtual void timerEvent(QTimerEvent *evt);
 #else
     bool isVirtualDevice() { return false; }

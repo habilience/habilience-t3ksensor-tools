@@ -43,6 +43,8 @@ QGestureProfileDialog::QGestureProfileDialog(QWidget *parent) :
     ui->widgetProfileTab->selectTab(0);
 
     sensorRefresh();
+
+    ui->btnClose->setFocus();
 }
 
 QGestureProfileDialog::~QGestureProfileDialog()
@@ -64,7 +66,7 @@ void QGestureProfileDialog::onChangeLanguage()
     setWindowTitle( res.getResString( RES_TAG, "TITLE") );
 
     ui->lblSelectProfile->setText( res.getResString(RES_TAG, "TEXT_SELECT_PROFILE") );
-    ui->lblInputMode->setText( res.getResString(RES_TAG, "TEXT_INPUT_MODE") );
+    //ui->lblInputMode->setText( res.getResString(RES_TAG, "TEXT_INPUT_MODE") );
     ui->lblInputModeMouse->setText( res.getResString(RES_TAG, "TEXT_INPUT_MODE_MOUSE") );
     ui->lblInputModeMT->setText( res.getResString(RES_TAG, "TEXT_INPUT_MODE_MULTITOUCH") );
 

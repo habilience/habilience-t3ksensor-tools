@@ -47,6 +47,10 @@
 #include "QT3kDeviceEventHandler.h"
 #include <QVector>
 #include <QRegion>
+#include "QEditActionEnableDialog.h"
+#include "QEditActionKey1Dialog.h"
+#include "QEditActionKey2WayDialog.h"
+#include "QEditActionKey4WayDialog.h"
 
 class QGestureMappingTable : public QWidget
         , public QT3kDeviceEventHandler::IListener
@@ -86,6 +90,7 @@ protected:
     QRectF      m_rectExtProperty[EXTP_COUNT];
     QString     m_strExtProperty[EXTP_COUNT];
     bool        m_bCheckExtProperty[EXTP_COUNT+3];
+    int         m_nHoverExtProperty;
 
     unsigned short  m_wProfileFlags;
 
@@ -96,13 +101,10 @@ protected:
 
     QFont   m_fntSystem;
 
-    // TODO:
-    /*
-    QEditActionEDWnd		m_wndEditActionED;	// Single Touch
-    QEditAction2WDWnd		m_wndEditAction2WD;	// Zoom
-    QEditAction4WDWnd		m_wndEditAction4WD;	// Drag
-    QEditActionWnd			m_wndEditAction;	// Etc
-    */
+    QEditActionEnableDialog     m_editActionEnableDialog;
+    QEditActionKey1Dialog       m_editActionKey1Dialog;
+    QEditActionKey2WayDialog    m_editActionKey2WayDialog;
+    QEditActionKey4WayDialog    m_editActionKey4WayDialog;
 
     void setCellInfo( int nCol, int nRow,
                       unsigned char cV00, unsigned char cV01,

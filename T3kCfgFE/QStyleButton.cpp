@@ -171,7 +171,7 @@ void QStyleButton::paintEvent(QPaintEvent */*evt*/)
         break;
     }
 
-    flags |= Qt::TextSingleLine;
+    //flags |= Qt::TextSingleLine;
 
     QFontMetricsF ftMetrics( m_fntCaption );
     QRectF rectTopBBF = ftMetrics.boundingRect(rectCaptionF, flags, strCaption);
@@ -213,7 +213,20 @@ void QStyleButton::paintEvent(QPaintEvent */*evt*/)
 
     p.setPen( m_clrText );
     p.setFont(m_fntCaption);
-    strCaption = ftMetrics.elidedText( strCaption, Qt::ElideRight, rectTopTextF.width() );
+
+    QString strOrg = strCaption;
+    if (strOrg.indexOf('\n') >= 0)
+    {
+        QString strLeft = extractLeft(strOrg, '\n');
+        QString strRight = strOrg;
+        strLeft = ftMetrics.elidedText(strLeft, Qt::ElideRight, rectTopTextF.width());
+        strRight = ftMetrics.elidedText(strRight, Qt::ElideRight, rectTopTextF.width());
+        strCaption = strLeft + '\n' + strRight;
+    }
+    else
+    {
+        strCaption = ftMetrics.elidedText(strOrg, Qt::ElideRight, rectTopTextF.width());
+    }
     p.drawText( rectTopTextF, flags, strCaption );
 
     if (bAdditionalText)
