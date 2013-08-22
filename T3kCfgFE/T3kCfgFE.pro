@@ -13,8 +13,8 @@ CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
 
 TEMPLATE = app
 
-#CONFIG += static staticlib
-#QMAKE_LFLAGS += -static
+CONFIG += static staticlib
+QMAKE_LFLAGS += -static
 
 DEFINES += USE_T3K_STATIC_LIBS QUAZIP_STATIC
 
