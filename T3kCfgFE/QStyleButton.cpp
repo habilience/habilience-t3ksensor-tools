@@ -241,7 +241,7 @@ void QStyleButton::paintEvent(QPaintEvent */*evt*/)
         }
         QRectF rectBtmTextF;
         rectBtmTextF = rectCaptionF;
-        rectBtmTextF.setTop( rectTopTextF.bottom() );
+        rectBtmTextF.setTop( rectTopTextF.bottom() + 2 );
         rectBtmTextF.setHeight(rectBtmBBF.height());
         p.setFont(m_fntAdditionalText);
         QString strAdditionalText = ftMetricsAdditional.elidedText( m_strAdditionalText, Qt::ElideRight, rectBtmTextF.width() );
