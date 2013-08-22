@@ -207,6 +207,8 @@ protected:
     void sensorLoadFactoryDefault();
     void sensorRefresh();
     void sensorWriteToFactoryDefault();
+
+    void setViewMode( bool bViewMode ); // instant_mode 'O'
 public:
     explicit QBentAdjustmentDialog(Dialog *parent = 0);
     ~QBentAdjustmentDialog();
@@ -219,6 +221,7 @@ private slots:
     virtual void accept();
 
     void onEditModified(QBorderStyleEdit* pEdit, int nValue, double dValue);
+    void onCmdAsyncMngrFinished(bool, int);
 
     void on_btnClose_clicked();
     void on_btnSave_clicked();

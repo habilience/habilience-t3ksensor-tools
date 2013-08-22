@@ -237,8 +237,10 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog *parent) :
     ui->btnRight->setDirection(QArrowButton::DirectionRight);
     ui->btnDown->setDirection(QArrowButton::DirectionDown);
 
-    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_OBJECT );
     ui->cmdAsyncMngr->setT3kDevice(QT3kDevice::instance());
+    connect( ui->cmdAsyncMngr, SIGNAL(asyncFinished(bool,int)), SLOT(onCmdAsyncMngrFinished(bool,int)));
+
+    setViewMode( true );
 
     requestSensorData( cmdLoadFactoryDefault, false );
 
@@ -255,6 +257,18 @@ QBentAdjustmentDialog::~QBentAdjustmentDialog()
     LOG_I( "Exit [Bent Adjustment]" );
 }
 
+void QBentAdjustmentDialog::setViewMode( bool bViewMode )
+{
+    qDebug( "setViewMode: %s", bViewMode ? "true" : "false" );
+    int nMode = T3K_HID_MODE_COMMAND;
+
+    if (bViewMode)
+        nMode |= T3K_HID_MODE_OBJECT;
+
+    qDebug( "setViewMode: %x", nMode );
+
+    m_pMainDlg->setInstantMode( nMode );
+}
 
 bool QBentAdjustmentDialog::canClose()
 {
@@ -2515,6 +2529,7 @@ void QBentAdjustmentDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
 
 bool QBentAdjustmentDialog::requestSensorData( RequestCmd cmd, bool bWait )
 {
+    setViewMode( false );
     if (ui->cmdAsyncMngr->isStarted())
     {
         ui->cmdAsyncMngr->stop();
@@ -2536,6 +2551,7 @@ bool QBentAdjustmentDialog::requestSensorData( RequestCmd cmd, bool bWait )
         sensorWriteToFactoryDefault();
         break;
     default:
+        setViewMode( true );
         return false;
     }
 
@@ -2560,6 +2576,12 @@ bool QBentAdjustmentDialog::requestSensorData( RequestCmd cmd, bool bWait )
     }
 
     return bResult;
+}
+
+void QBentAdjustmentDialog::onCmdAsyncMngrFinished(bool, int)
+{
+    qDebug( "onCmdAsyncMngrFinished" );
+    setViewMode(true);
 }
 
 void QBentAdjustmentDialog::sensorReset()

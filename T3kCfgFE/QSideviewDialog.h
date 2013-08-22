@@ -88,6 +88,8 @@ protected:
     virtual void TPDP_OnPRV(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int total, int offset, const unsigned char *data, int cnt);
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
     virtual void TPDP_OnMSG(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, const char *txt);
+
+    void setViewMode( bool bViewMode );     // instant_mode 'V'
 public:
     explicit QSideviewDialog(Dialog *parent);
     ~QSideviewDialog();
@@ -101,6 +103,7 @@ private slots:
 
     void onGlobalMouseMoved();
     void onEditModified(QBorderStyleEdit* pEdit, int nValue, double dValue);
+    void onCmdAsyncMngrFinished(bool, int);
 
     void on_btnClose_clicked();
     void on_btnReset_clicked();

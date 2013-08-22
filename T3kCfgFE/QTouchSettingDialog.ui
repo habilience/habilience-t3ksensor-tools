@@ -93,7 +93,16 @@
          <string notr="true">QWidget#scrollAreaWidgetContents { background: transparent; }</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -1076,15 +1085,15 @@
    <header>QBorderStyleEdit.h</header>
   </customwidget>
   <customwidget>
+   <class>QUnderlineTitle</class>
+   <extends>QLabel</extends>
+   <header>QUnderlineTitle.h</header>
+  </customwidget>
+  <customwidget>
    <class>QCmdAsyncManagerCtrl</class>
    <extends>QWidget</extends>
    <header>QCmdAsyncManagerCtrl.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QUnderlineTitle</class>
-   <extends>QLabel</extends>
-   <header>QUnderlineTitle.h</header>
   </customwidget>
   <customwidget>
    <class>QAreaSettingForm</class>

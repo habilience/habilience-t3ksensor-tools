@@ -98,11 +98,9 @@ QSideviewDialog::QSideviewDialog(Dialog *parent) :
         ui->txtEdtLight1->setVisible(true);
     }
 
-#ifdef MONITORING_EXPIRED_MODE
-    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW|T3K_HID_MODE_MESSAGE );
-#else
-    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW );
-#endif
+    connect( ui->cmdAsyncMngr, SIGNAL(asyncFinished(bool,int)), SLOT(onCmdAsyncMngrFinished(bool,int)));
+
+    setViewMode( true );
     pDevice->sendCommand("cam1/mode=sideview", true);
     m_nCurrentCameraIndex = IDX_CM1;
 
@@ -165,6 +163,22 @@ QSideviewDialog::~QSideviewDialog()
     delete ui;
 
     LOG_I( "Exit [Sideview]" );
+}
+
+void QSideviewDialog::setViewMode( bool bViewMode )
+{
+    qDebug( "setViewMode: %s", bViewMode ? "true" : "false" );
+    int nMode = T3K_HID_MODE_COMMAND;
+#ifdef MONITORING_EXPIRED_MODE
+    nMode |= T3K_HID_MODE_MESSAGE;
+#endif
+
+    if (bViewMode)
+        nMode |= T3K_HID_MODE_VIEW;
+
+    qDebug( "setViewMode: %x", nMode );
+
+    m_pMainDlg->setInstantMode( nMode );
 }
 
 void QSideviewDialog::onChangeLanguage()
@@ -771,6 +785,7 @@ void QSideviewDialog::accept()
 
 bool QSideviewDialog::requestSensorData( RequestCmd cmd, bool bWait )
 {
+    setViewMode( false );
     if (ui->cmdAsyncMngr->isStarted())
     {
         ui->cmdAsyncMngr->stop();
@@ -792,6 +807,7 @@ bool QSideviewDialog::requestSensorData( RequestCmd cmd, bool bWait )
         sensorWriteToFactoryDefault();
         break;
     default:
+        setViewMode( true );
         return false;
     }
 
@@ -817,6 +833,12 @@ bool QSideviewDialog::requestSensorData( RequestCmd cmd, bool bWait )
     }
 
     return bResult;
+}
+
+void QSideviewDialog::onCmdAsyncMngrFinished(bool, int)
+{
+    qDebug( "onCmdAsyncMngrFinished" );
+    setViewMode(true);
 }
 
 void QSideviewDialog::sensorReset()

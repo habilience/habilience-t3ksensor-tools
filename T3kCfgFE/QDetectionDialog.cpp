@@ -62,12 +62,11 @@ QDetectionDialog::QDetectionDialog(Dialog *parent) :
     LOG_I( "Enter [Detection]" );
     onChangeLanguage();
 
-#ifdef MONITORING_EXPIRED_MODE
-    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_MESSAGE|T3K_HID_MODE_VIEW );
-#else
-    m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW );
-#endif
     ui->cmdAsyncMngr->setT3kDevice(QT3kDevice::instance());
+
+    connect( ui->cmdAsyncMngr, SIGNAL(asyncFinished(bool,int)), SLOT(onCmdAsyncMngrFinished(bool,int)));
+
+    setViewMode( true );
 
     if (g_AppData.bIsSubCameraExist)
     {
@@ -103,6 +102,22 @@ QDetectionDialog::~QDetectionDialog()
     delete ui;
 
     LOG_I( "Exit [Detection]" );
+}
+
+void QDetectionDialog::setViewMode( bool bViewMode )
+{
+    qDebug( "setViewMode: %s", bViewMode ? "true" : "false" );
+    int nMode = T3K_HID_MODE_COMMAND;
+#ifdef MONITORING_EXPIRED_MODE
+    nMode |= T3K_HID_MODE_MESSAGE;
+#endif
+
+    if (bViewMode)
+        nMode |= T3K_HID_MODE_VIEW;
+
+    qDebug( "setViewMode: %x", nMode );
+
+    m_pMainDlg->setInstantMode( nMode );
 }
 
 #define MAIN_TAG    "MAIN"
@@ -372,6 +387,7 @@ void QDetectionDialog::accept()
 
 bool QDetectionDialog::requestSensorData( RequestCmd cmd, bool bWait )
 {
+    setViewMode( false );
     if (ui->cmdAsyncMngr->isStarted())
     {
         ui->cmdAsyncMngr->stop();
@@ -393,6 +409,7 @@ bool QDetectionDialog::requestSensorData( RequestCmd cmd, bool bWait )
         sensorWriteToFactoryDefault();
         break;
     default:
+        setViewMode( true );
         return false;
     }
 
@@ -418,6 +435,12 @@ bool QDetectionDialog::requestSensorData( RequestCmd cmd, bool bWait )
     }
 
     return bResult;
+}
+
+void QDetectionDialog::onCmdAsyncMngrFinished(bool, int)
+{
+    qDebug( "onCmdAsyncMngrFinished" );
+    setViewMode(true);
 }
 
 void QDetectionDialog::sensorReset()
@@ -649,6 +672,7 @@ void QDetectionDialog::enterAutoRangeSetting()
     m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW );
 #endif
 
+    setViewMode( false );
     if ( ui->cmdAsyncMngr->isStarted() )
     {
         ui->cmdAsyncMngr->stop();
@@ -747,6 +771,7 @@ void QDetectionDialog::leaveAutoRangeSetting()
 
     playBuzzer( BuzzerCancelCalibration );
 
+    setViewMode( false );
     if (ui->cmdAsyncMngr->isStarted())
     {
         ui->cmdAsyncMngr->stop();
@@ -788,6 +813,7 @@ void QDetectionDialog::setDetectionMode( DetectionMode mode )
 
     m_detectionMode = mode;
 
+    setViewMode( false );
     if (ui->cmdAsyncMngr->isStarted())
     {
         ui->cmdAsyncMngr->stop();
@@ -912,6 +938,7 @@ void QDetectionDialog::onFinishAutoRange()
         m_pMainDlg->setInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_VIEW );
 #endif
 
+        setViewMode( false );
         if (ui->cmdAsyncMngr->isStarted())
         {
             ui->cmdAsyncMngr->stop();

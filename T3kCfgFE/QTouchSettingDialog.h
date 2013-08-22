@@ -59,6 +59,8 @@ protected:
     void drawHorzArrow( QPainter& p, QPoint pt1, QPoint pt2, QPoint pt3, QPoint pt4 );
     void drawVertArrow( QPainter& p, QPoint pt1, QPoint pt2, QPoint pt3, QPoint pt4 );
 
+    void setViewMode( bool bViewMode ); // instant_mode 'T'
+
 public:
     explicit QTouchSettingDialog(Dialog *parent = 0);
     ~QTouchSettingDialog();
@@ -70,6 +72,7 @@ private slots:
     virtual void accept();
 
     void onEditModified(QBorderStyleEdit* pEdit, int nValue, double dValue);
+    void onCmdAsyncMngrFinished(bool, int);
 
     void on_btnClose_clicked();
     void on_btnReset_clicked();

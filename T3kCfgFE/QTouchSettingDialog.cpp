@@ -121,6 +121,10 @@ QTouchSettingDialog::QTouchSettingDialog(Dialog *parent) :
 
     ui->cmdAsyncMngr->setT3kDevice( pDevice );
 
+    connect( ui->cmdAsyncMngr, SIGNAL(asyncFinished(bool,int)), SLOT(onCmdAsyncMngrFinished(bool,int)));
+
+    setViewMode( true );
+
     requestSensorData( cmdLoadFactoryDefault, false );
 
     QBorderStyleEdit* edits[] = {
@@ -169,6 +173,19 @@ QTouchSettingDialog::~QTouchSettingDialog()
     m_pMainDlg->onCloseMenu();
     LOG_I( "Exit [Touch Settings]" );
     delete ui;
+}
+
+void QTouchSettingDialog::setViewMode( bool bViewMode )
+{
+    qDebug( "setViewMode: %s", bViewMode ? "true" : "false" );
+    int nMode = T3K_HID_MODE_COMMAND;
+
+    if (bViewMode)
+        nMode |= T3K_HID_MODE_TOUCHPNT;
+
+    qDebug( "setViewMode: %x", nMode );
+
+    m_pMainDlg->setInstantMode( nMode );
 }
 
 #define MAIN_TAG    "MAIN"
@@ -481,6 +498,7 @@ void QTouchSettingDialog::onEditModified(QBorderStyleEdit* pEdit, int /*nValue*/
 
 bool QTouchSettingDialog::requestSensorData( RequestCmd cmd, bool bWait )
 {
+    setViewMode( false );
     if (ui->cmdAsyncMngr->isStarted())
     {
         ui->cmdAsyncMngr->stop();
@@ -502,6 +520,7 @@ bool QTouchSettingDialog::requestSensorData( RequestCmd cmd, bool bWait )
         sensorWriteToFactoryDefault();
         break;
     default:
+        setViewMode( true );
         return false;
     }
 
@@ -527,6 +546,12 @@ bool QTouchSettingDialog::requestSensorData( RequestCmd cmd, bool bWait )
     }
 
     return bResult;
+}
+
+void QTouchSettingDialog::onCmdAsyncMngrFinished(bool, int)
+{
+    qDebug( "onCmdAsyncMngrFinished" );
+    setViewMode(true);
 }
 
 void QTouchSettingDialog::sensorReset()
@@ -1006,8 +1031,10 @@ void QTouchSettingDialog::on_btnSave_clicked()
 
 void QTouchSettingDialog::on_btnGestureProfile_clicked()
 {
+    setViewMode(false);
     QGestureProfileDialog gestureProfileDlg(this);
     gestureProfileDlg.exec();
+    setViewMode(true);
 }
 
 void QTouchSettingDialog::sendEditValue( QBorderStyleEdit* txtEdit, float step, float fMin, float fMax, const QString& strCmd )

@@ -95,6 +95,8 @@ protected:
 
     void analysisTouchObj();
 
+    void setViewMode( bool bViewMode );     // instant_mode 'V'
+
 public:
     explicit QDetectionDialog(Dialog *parent = 0);
     ~QDetectionDialog();
@@ -105,6 +107,8 @@ public:
 private slots:
     virtual void reject();
     virtual void accept();
+
+    void onCmdAsyncMngrFinished(bool, int);
 
     void on_btnClose_clicked();
     void on_btnMain_clicked();
