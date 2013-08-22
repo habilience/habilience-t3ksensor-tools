@@ -104,6 +104,8 @@ public:
     bool isVirtualDevice();
     virtual void timerEvent(QTimerEvent *evt);
 #else
+    bool setFeature( void */*pFeature*/, int /*nFeatureSize*/ ) { return false; }
+    bool getFeature( void */*pFeature*/, int /*nFeatureSize*/ ) { return false; }
     bool isVirtualDevice() { return false; }
 #endif
 

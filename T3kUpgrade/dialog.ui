@@ -435,7 +435,7 @@ QScrollBar:vertical {
   <customwidget>
    <class>QSlidingStackedWidget</class>
    <extends>QStackedWidget</extends>
-   <header>qslidingstackedwidget.h</header>
+   <header>QSlidingStackedWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

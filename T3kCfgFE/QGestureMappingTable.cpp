@@ -289,20 +289,20 @@ void QGestureMappingTable::parseMouseProfile( const char* szProfile )
             if ( !extract2Word( strProfile, cV[0][1] ) ) break;
             wFlags = (unsigned short)cV[0][0] << 8 | cV[0][1];
 
-            m_bCheckExtProperty[EXTP_ENABLE_SINGLE_DBLTAP]	= MM_MOUSEPROFILE_SINGLE_DOUBLE_TAP & wFlags ? TRUE : FALSE;
-            m_bCheckExtProperty[EXTP_ENABLE_SINGLE_TAP]		= MM_MOUSEPROFILE_SINGLE_TAP & wFlags ? TRUE : FALSE;
-            m_bCheckExtProperty[EXTP_ENABLE_SINGLE_MOVE]	= MM_MOUSEPROFILE_SINGLE_MOVE & wFlags ? TRUE : FALSE;
+            m_bCheckExtProperty[EXTP_ENABLE_SINGLE_DBLTAP]	= MM_MOUSEPROFILE_SINGLE_DOUBLE_TAP & wFlags ? true : false;
+            m_bCheckExtProperty[EXTP_ENABLE_SINGLE_TAP]		= MM_MOUSEPROFILE_SINGLE_TAP & wFlags ? true : false;
+            m_bCheckExtProperty[EXTP_ENABLE_SINGLE_MOVE]	= MM_MOUSEPROFILE_SINGLE_MOVE & wFlags ? true : false;
 
             m_aryCell[TABLE(COL_MOVE, ROW_SINGLE)].strText		= mouseKeyToString(m_bCheckExtProperty[EXTP_ENABLE_SINGLE_MOVE] ? MM_MOUSE_KEY1_MOUSE_L_MOVE : 0);
             m_aryCell[TABLE(COL_TAP, ROW_SINGLE)].strText		= mouseKeyToString(m_bCheckExtProperty[EXTP_ENABLE_SINGLE_TAP] ? MM_MOUSE_KEY1_MOUSE_L_CLICK : 0);
             m_aryCell[TABLE(COL_DBLTAP, ROW_SINGLE)].strText	= mouseKeyToString(m_bCheckExtProperty[EXTP_ENABLE_SINGLE_DBLTAP] ? MM_MOUSE_KEY1_MOUSE_L_DOUBLECLICK : 0);
 
-            m_bCheckExtProperty[EXTP_INVERT_WHEEL]					= MM_MOUSEPROFILE_INVERT_WHEEL & wFlags ? TRUE : FALSE;
-            m_bCheckExtProperty[EXTP_INDIVIDUAL_PUTNTAP]			= MM_MOUSEPROFILE_PUTAND_TAP_OR_DOUBLETAP_ONLY & wFlags ? TRUE : FALSE;
-            m_bCheckExtProperty[EXTP_INERTIAL_WHEEL]				= MM_MOUSEPROFILE_INERTIAL_WHEEL & wFlags ? TRUE : FALSE;
-            m_bCheckExtProperty[EXTP_INVERT_WHEEL]					= MM_MOUSEPROFILE_INVERT_WHEEL & wFlags ? TRUE : FALSE;
-            m_bCheckExtProperty[EXTP_PUTAND_ON_MULTITOUCHDEVICE]	= MM_MOUSEPROFILE_HYBRID_MULTITOUCHDEVICE & wFlags ? TRUE : FALSE;
-            m_bCheckExtProperty[EXTP_MAC_OS_MARGIN]					= MM_MOUSEPROFILE_MAC_OS_MARGIN & wFlags ? TRUE : FALSE;
+            m_bCheckExtProperty[EXTP_INVERT_WHEEL]					= MM_MOUSEPROFILE_INVERT_WHEEL & wFlags ? true : false;
+            m_bCheckExtProperty[EXTP_INDIVIDUAL_PUTNTAP]			= MM_MOUSEPROFILE_PUTAND_TAP_OR_DOUBLETAP_ONLY & wFlags ? true : false;
+            m_bCheckExtProperty[EXTP_INERTIAL_WHEEL]				= MM_MOUSEPROFILE_INERTIAL_WHEEL & wFlags ? true : false;
+            m_bCheckExtProperty[EXTP_INVERT_WHEEL]					= MM_MOUSEPROFILE_INVERT_WHEEL & wFlags ? true : false;
+            m_bCheckExtProperty[EXTP_PUTAND_ON_MULTITOUCHDEVICE]	= MM_MOUSEPROFILE_HYBRID_MULTITOUCHDEVICE & wFlags ? true : false;
+            m_bCheckExtProperty[EXTP_MAC_OS_MARGIN]					= MM_MOUSEPROFILE_MAC_OS_MARGIN & wFlags ? true : false;
 
             m_wProfileFlags = wFlags;
             update();
@@ -648,7 +648,7 @@ void QGestureMappingTable::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart 
         break;
     case 4:
         if ( strstr(szCmd, cstrMouseProfile5) == szCmd )
-            bParseProfile = TRUE;
+            bParseProfile = true;
         break;
     default:
         if ( strstr(szCmd, cstrMouseProfile2) == szCmd )

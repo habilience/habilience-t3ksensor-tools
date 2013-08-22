@@ -2,6 +2,8 @@
 #include "QMyApplication.h"
 #include "AppData.h"
 
+#include <QString>
+
 AppData g_AppData;
 QMyApplication* g_pApp = NULL;
 
@@ -27,11 +29,22 @@ int main(int argc, char *argv[])
 
     if (argc > 1)
     {
+        QString strArg;
         for (int c = 1; c < argc; c++)
         {
-            if (strcmpi( argv[c], "/screenshot" ) == 0)
+            strArg = argv[c];
+            if (strArg.compare("/screenshot", Qt::CaseInsensitive) == 0)
                 g_AppData.bScreenShotMode = true;
-            if (strcmpi( argv[c], "/virtualscreen" ) == 0)
+            if (strArg.compare("-screenshot", Qt::CaseInsensitive) == 0)
+                g_AppData.bScreenShotMode = true;
+            if (strArg.compare("--screenshot", Qt::CaseInsensitive) == 0)
+                g_AppData.bScreenShotMode = true;
+
+            if (strArg.compare("/virtualscreen", Qt::CaseInsensitive) == 0)
+                g_AppData.bMaximizeToVirtualScreen = true;
+            if (strArg.compare("-virtualscreen", Qt::CaseInsensitive) == 0)
+                g_AppData.bMaximizeToVirtualScreen = true;
+            if (strArg.compare("--virtualscreen", Qt::CaseInsensitive) == 0)
                 g_AppData.bMaximizeToVirtualScreen = true;
         }
     }

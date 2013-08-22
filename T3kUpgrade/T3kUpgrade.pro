@@ -13,24 +13,25 @@ CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
 
 TEMPLATE = app
 
-CONFIG += static staticlib
+#CONFIG += static staticlib
+#QMAKE_LFLAGS += -static
 
 DEFINES += USE_T3K_STATIC_LIBS QUAZIP_STATIC
 
-linux-g++|linux-g++-64:DEFINES += OS_LINUX
+linux-g++:DEFINES += OS_LINUX
 macx:DEFINES += OS_MAC
 
 CONFIG(debug, debug|release):DEFINES += _DEBUG
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 #Library
-INCLUDEPATH += $$PWD/../external/quazip \
+INCLUDEPATH +=  $$PWD/../external/quazip \
                 $$PWD/../external/T3kHIDLibrary/include \
-                $$PWD../external/quazip/zlib/ \
+                $$PWD/../external/quazip/zlib/ \
 
-DEPENDPATH += $$PWD/../external/quazip \
+DEPENDPATH +=   $$PWD/../external/quazip \
                 $$PWD/../external/T3kHIDLibrary/include \
-                $$PWD../external/quazip/zlib/ \
+                $$PWD/../external/quazip/zlib/ \
 
 
 win32 {
@@ -56,50 +57,15 @@ win32 {
 }
 
 linux-g++ {
-    LIBS += #-L/usr/lib -lusb-1.0 \
-
-    QMAKE_RPATH += ./
+    LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
+    QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
 
     CONFIG(release, debug|release) {
-        LIBS += -L$$OUT_PWD/../external/quazip/ -lquazip \
-                #-L$$PWD/../external/T3kHIDLibrary/linux/32bit/ -lT3kHIDLib-1.0.so.0.0.0
-                $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
-
-        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/libquazip.a \
-                           $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
+        LIBS += -L$$PWD/../external/quazip/ -lquazip \
     }
 
     CONFIG(debug, debug|release) {
-        LIBS += -L$$OUT_PWD/../external/quazip/ -lquazipd \
-                #-L$$PWD/../external/T3kHIDLibrary/linux/32bit/ -lT3kHIDLibStatic
-                $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
-
-        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/libquazipd.a \
-                            $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
-    }
-}
-
-linux-g++-64 {
-    LIBS += #-L/usr/lib -lusb-1.0 \
-
-    QMAKE_RPATHDIR  += ./
-
-    CONFIG(release, debug|release) {
-        LIBS += -L$$OUT_PWD/../external/quazip/ -lquazip \
-                #-L$$PWD/../external/T3kHIDLibrary/linux/64bit/ -lT3kHIDLib-1.0.so.0.0.0
-                $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
-
-        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/libquazip.a \
-                           $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
-    }
-
-    CONFIG(debug, debug|release) {
-        LIBS += -L$$OUT_PWD/../external/quazip/ -lquazipd \
-                #-L$$PWD/../external/T3kHIDLibrary/linux/64bit/ -lT3kHIDLib-1.0.so.0.0.0
-                $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
-
-        PRE_TARGETDEPS += $$OUT_PWD/../external/quazip/libquazipd.a \
-                            $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
+        LIBS += -L$$PWD/../external/quazip/ -lquazipd \
     }
 }
 

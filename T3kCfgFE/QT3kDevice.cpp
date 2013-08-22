@@ -4,6 +4,7 @@
 #include "QT3kDeviceEventHandler.h"
 #include "../common/QUtils.h"
 #include "../common/T3kConstStr.h"
+#include <stdio.h>
 
 QT3kDevice::QT3kDevice(QObject *parent) :
     QObject(parent)

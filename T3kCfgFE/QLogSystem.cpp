@@ -25,7 +25,7 @@ QLogSystem::QLogSystem() : m_nExpire(15)
     m_strRootPath = strDocuments;
     m_strRootPath += "/T3kCfgFE/Logs";
 
-    makeDirectory(m_strRootPath.toLatin1());
+    makeDirectory(m_strRootPath);
 
     QString strLogPathName;
     getLogPathName( m_Time, strLogPathName );
@@ -145,8 +145,8 @@ void QLogSystem::getLogPathName( QDateTime& time, QString& strLogPathName )
     int nDay = date.day();
 
     char szBuffer[512];
-    snprintf( szBuffer, 512, "%s\\%04d_%02d_%02d.txt", (const char*)m_strRootPath.toLatin1(), nYear, nMonth, nDay );
-    strLogPathName = szBuffer;
+    snprintf( szBuffer, 512, "/%04d_%02d_%02d.txt", nYear, nMonth, nDay );
+    strLogPathName = m_strRootPath + szBuffer;
 }
 
 bool QLogSystem::openLogFile( QString& strLogPathName )
