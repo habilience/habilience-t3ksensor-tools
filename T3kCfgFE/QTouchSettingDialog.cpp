@@ -873,7 +873,7 @@ void QTouchSettingDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /
         case 0x04:      // digitizer only
             ui->btnFull->setChecked(false);
             ui->btnDigitizerOnly->setChecked(true);
-            for ( int i=0 ; i<(int)(sizeof(controls)/sizeof(int)) ; i++ )
+            for ( int i=0 ; i<(int)(sizeof(controls)/sizeof(QWidget*)) ; i++ )
             {
                 controls[i]->setEnabled(false);
             }
@@ -882,7 +882,7 @@ void QTouchSettingDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /
         case 0x07:      // full
             ui->btnFull->setChecked(true);
             ui->btnDigitizerOnly->setChecked(false);
-            for ( int i=0 ; i<(int)(sizeof(controls)/sizeof(int)) ; i++ )
+            for ( int i=0 ; i<(int)(sizeof(controls)/sizeof(QWidget*)) ; i++ )
             {
                 controls[i]->setEnabled(true);
             }
