@@ -249,6 +249,20 @@
    <header>QBorderStyleEdit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>btnAreaClickLeft</tabstop>
+  <tabstop>txtEdtAreaClick</tabstop>
+  <tabstop>btnAreaClickRight</tabstop>
+  <tabstop>btnAreaDblClickLeft</tabstop>
+  <tabstop>txtEdtAreaDblClick</tabstop>
+  <tabstop>btnAreaDblClickRight</tabstop>
+  <tabstop>btnAreaPalmLeft</tabstop>
+  <tabstop>txtEdtAreaPalm</tabstop>
+  <tabstop>btnAreaPalmRight</tabstop>
+  <tabstop>btnAreaPnTLeft</tabstop>
+  <tabstop>txtEdtAreaPnT</tabstop>
+  <tabstop>btnAreaPnTRight</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
