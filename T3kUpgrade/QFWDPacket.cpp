@@ -373,7 +373,7 @@ int QFWDPacket::write(unsigned short which, unsigned long address, unsigned shor
 
     pkt_type write_pkt;
     write_pkt.hdr.pkt_id = IAP_PKT_WRITE | which;
-    write_pkt.body.write.addr = address;
+    write_pkt.body.write.addr = (quint32)address;
     write_pkt.body.write.len = length;
     memcpy( write_pkt.body.write.data, data, length );
     unsigned short pkt_length = T3kCalculateCRC( (unsigned char*)&write_pkt, sizeof(pkt_hdr_type)+sizeof(iap_pkt_write_type) );

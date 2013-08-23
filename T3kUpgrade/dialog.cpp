@@ -295,7 +295,8 @@ void Dialog::onDisconnected()
         m_Packet.close();
     }
 
-    connectDevice();
+    //connectDevice();
+    m_TimerConnectDevice = startTimer(RETRY_CONNECTION_INTERVAL);
 }
 
 inline int getIndex(unsigned short which)
@@ -499,7 +500,9 @@ void Dialog::firmwareDownload()
     {
         for ( int i=IDX_MAX-1 ; i>=0 ; i-- )
         {
-            if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
+            if (m_SensorInfo[i].nMode == MODE_UNKNOWN
+                    || (m_SensorInfo[i].nMode == MODE_CM_IAP
+                        || m_SensorInfo[i].nMode == MODE_MM_IAP))
                 continue;
             job.type = JOBF_MARK_IAP;
             job.subStep = SUB_QUERY_FINISH;
@@ -518,7 +521,6 @@ void Dialog::firmwareDownload()
         m_JobListForFirmwareDownload.append( job );
     }
 
-#if 0
     for ( int i=IDX_MAX-1 ; i>=0 ; i-- )
     {
         if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
@@ -540,23 +542,6 @@ void Dialog::firmwareDownload()
         job.which = m_SensorInfo[i].nWhich;
         m_JobListForFirmwareDownload.append( job );
     }
-#else
-    job.type = JOBF_ERASE;
-    job.subStep = SUB_QUERY_FINISH;
-    job.which = m_SensorInfo[IDX_MM].nWhich;
-    m_JobListForFirmwareDownload.append( job );
-
-    job.type = JOBF_WRITE;
-    job.subStep = SUB_QUERY_WRITE_PROGRESS;
-    job.firmwareBinaryPos = 0;
-    job.which = m_SensorInfo[IDX_MM].nWhich;
-    m_JobListForFirmwareDownload.append( job );
-
-    job.type = JOBF_MARK_APP;
-    job.subStep = SUB_QUERY_FINISH;
-    job.which = m_SensorInfo[IDX_MM].nWhich;
-    m_JobListForFirmwareDownload.append( job );
-#endif
 
     job.type = JOBF_RESET;
     job.subStep = SUB_QUERY_FINISH;
@@ -663,7 +648,7 @@ void Dialog::queryInformation()
 
 void Dialog::onResponseFromSensor(unsigned short nPacketId)
 {
-    //qDebug( "responseFromSensor: %x", nPacketId );
+    qDebug( "responseFromSensor: %x", nPacketId );
 
     if ( nPacketId != m_nPacketId )
     {
@@ -881,20 +866,20 @@ void Dialog::executeNextJob( bool bRetry/*=false*/ )
             case JOBF_MARK_IAP:
                 strMessage = QString("[%1] Mark IAP...").arg(PartName[getIndex(m_CurrentJob.which)]);
                 addProgressText(strMessage, TM_NORMAL);
-                qDebug( "mark Iap: %x", m_CurrentJob.which );
                 m_nPacketId = m_Packet.markIap(m_CurrentJob.which);
+                qDebug( "mark Iap[%x]: %x", m_nPacketId, m_CurrentJob.which );
                 break;
             case JOBF_MARK_APP:
                 strMessage = QString("[%1] Mark APP...").arg(PartName[getIndex(m_CurrentJob.which)]);
                 addProgressText(strMessage, TM_NORMAL);
-                qDebug( "mark App: %x", m_CurrentJob.which );
                 m_nPacketId = m_Packet.markApp(m_CurrentJob.which);
+                qDebug( "mark App[%x]: %x", m_nPacketId, m_CurrentJob.which );
                 break;
             case JOBF_RESET:
                 strMessage = QString("[%1] Reset...").arg(PartName[getIndex(m_CurrentJob.which)]);
                 addProgressText(strMessage, TM_NORMAL);
-                qDebug( "reset: %x", m_CurrentJob.which );
                 m_nPacketId = m_Packet.reset(m_CurrentJob.which);
+                qDebug( "reset[%x]: %x", m_nPacketId, m_CurrentJob.which );
                 break;
             case JOBF_WAIT_IAP_ALL:
                 strMessage = QString("Wait IAP Mode...");
@@ -915,8 +900,8 @@ void Dialog::executeNextJob( bool bRetry/*=false*/ )
             case JOBF_ERASE:
                 strMessage = QString("[%1] Erase...").arg(PartName[getIndex(m_CurrentJob.which)]);
                 addProgressText(strMessage, TM_NORMAL);
-                qDebug( "erase: %x", m_CurrentJob.which );
                 m_nPacketId = m_Packet.erase(m_CurrentJob.which);
+                qDebug( "erase[%x]: %x", m_nPacketId, m_CurrentJob.which );
                 break;
             case JOBF_WRITE:
                 if (m_CurrentJob.firmwareBinaryPos == 0)
@@ -939,9 +924,8 @@ void Dialog::executeNextJob( bool bRetry/*=false*/ )
                     nWriteBytes = (unsigned short)(pFI->dwFirmwareSize - m_CurrentJob.firmwareBinaryPos);
                 }
 
-                qDebug( "write %d bytes", nWriteBytes );
-
                 m_nPacketId = m_Packet.write( m_CurrentJob.which, m_CurrentJob.firmwareBinaryPos, nWriteBytes, (unsigned char*)(pFI->pFirmwareBinary+m_CurrentJob.firmwareBinaryPos));
+                qDebug( "write[%x] %d bytes", m_nPacketId, nWriteBytes );
                 if (m_nPacketId != (unsigned short)-1)
                     m_CurrentJob.firmwareBinaryPos += nWriteBytes;
                 break;
@@ -1268,11 +1252,13 @@ void Dialog::connectDevice()
         qDebug( "connection ok" );
         displayInformation("Connected.");
         m_strSensorInformation = "";
-        startQueryInformation(false);
+        startQueryInformation(true);
     }
     else
     {
         qDebug( "connection fail" );
+        if (m_TimerConnectDevice)
+            killTimer(m_TimerConnectDevice);
         m_TimerConnectDevice = startTimer(RETRY_CONNECTION_INTERVAL);
     }
 }

@@ -3,6 +3,7 @@
 
 #include <T3kHIDLib.h>
 #include <QObject>
+#include <qglobal.h>
 
 #pragma pack(push, 1)
 
@@ -56,17 +57,17 @@ enum
 
 typedef struct
 {
-    unsigned char id;
-    unsigned char type;
-    unsigned char size;
-    unsigned char data[HID_DATA_SIZE];
+    quint8 id;
+    quint8 type;
+    quint8 size;
+    quint8 data[HID_DATA_SIZE];
 } hid_pkt_type;
 
 #define TX_BUF_LEN 256
 
 typedef struct
 {
-    unsigned short pkt_id;
+    quint16 pkt_id;
 } pkt_hdr_type;
 
 
@@ -74,18 +75,18 @@ typedef struct
 #define VER_TIME_LEN 8
 typedef struct
 {
-    unsigned short ts;
-    unsigned short nv;
-    unsigned short min;
-    unsigned short maj;
-    unsigned short model;
+    quint16 ts;
+    quint16 nv;
+    quint16 min;
+    quint16 maj;
+    quint16 model;
     char date[VER_DATE_LEN];
     char time[VER_TIME_LEN];
 } mm_pkt_ver_type;
 
 typedef struct
 {
-    unsigned short mode;
+    quint16 mode;
 } iap_pkt_mode_type;
 
 typedef struct
@@ -98,7 +99,7 @@ typedef struct
 
 typedef struct
 {
-    unsigned short ack;
+    quint16 ack;
 } iap_pkt_ack_type;
 
 typedef struct
@@ -107,7 +108,7 @@ typedef struct
 
 typedef struct
 {
-    unsigned short model;
+    quint16 model;
 } iap_pkt_ver_type;
 
 typedef struct
@@ -116,32 +117,32 @@ typedef struct
 
 typedef struct
 {
-    unsigned long   addr;
-    unsigned short  len;
+    quint32     addr;
+    quint16     len;
     unsigned char   data[256];
 } iap_pkt_write_type;
 
 typedef struct
 {
-    unsigned short off;
-    unsigned short which_cm;
+    quint16 off;
+    quint16 which_cm;
 } iap_pkt_cm_off_type;
 
 
 typedef struct
 {
-    unsigned short model;
+    quint16 model;
 } iap_pkt_model_type;
 
 typedef struct
 {
-    unsigned short which_cm;
-    unsigned short pin_low;
+    quint16 which_cm;
+    quint16 pin_low;
 } iap_pkt_usart_tx_pin_low_type;
 
 typedef struct
 {
-    unsigned short bad_pkt_id;
+    quint16 bad_pkt_id;
 } iap_pkt_bad_type;
 
 typedef struct
@@ -150,24 +151,24 @@ typedef struct
 
 typedef struct
 {
-    unsigned long   addr;
-    unsigned short  len;
+    quint32         addr;
+    quint16         len;
     unsigned char   data[512];
 } iap_pkt_iap_write_type;
 
 typedef struct
 {
-    unsigned short capability;
+    quint16 capability;
 } iap_pkt_capability_type;
 
 typedef struct
 {
-    unsigned short rev;          // hw revsion
+    quint16 rev;          // hw revsion
 } iap_pkt_rev_type;
 
 typedef struct
 {
-    unsigned short number;         //page_number;
+    quint16 number;         //page_number;
 } iap_pkt_page_erase_type;
 
 typedef union {
@@ -214,12 +215,12 @@ private:
 
     typedef struct tagSensorResponse
     {
-        unsigned short nFirwareMode;
-        unsigned short nModelNumber;
-        unsigned short nRevision;
-        unsigned short nNV;
-        unsigned short nMinor;
-        unsigned short nMajor;
+        quint16 nFirwareMode;
+        quint16 nModelNumber;
+        quint16 nRevision;
+        quint16 nNV;
+        quint16 nMinor;
+        quint16 nMajor;
         char szDate[VER_DATE_LEN+1];
         char szTime[VER_TIME_LEN+1];
     } SensorResponse;

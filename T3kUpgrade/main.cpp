@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
     {
         return 0; // Exit already a process running
     }
-
     QApplication a(argc, argv);
     Dialog w;
     w.show();
