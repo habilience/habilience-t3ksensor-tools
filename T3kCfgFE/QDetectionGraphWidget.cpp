@@ -563,7 +563,7 @@ void QDetectionGraphWidget::drawScrollBar( QPainter& p, QRect rcBody )
 
 void QDetectionGraphWidget::mouseMoveEvent(QMouseEvent *evt)
 {
-    if (evt->button() == Qt::LeftButton)
+    //if (evt->button() == Qt::LeftButton)
     {
         int nCurX = evt->pos().x();
         if (m_bControlScrollBar)

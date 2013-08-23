@@ -135,8 +135,8 @@ QTextEdit:disabled {
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>resources/zoom_in.png</normaloff>resources/zoom_in.png</iconset>
+        <iconset resource="T3kCfgFE.qrc">
+         <normaloff>:/T3kCfgFERes/resources/zoom_in.png</normaloff>:/T3kCfgFERes/resources/zoom_in.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -202,8 +202,8 @@ QTextEdit:disabled {
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>resources/zoom_out.png</normaloff>resources/zoom_out.png</iconset>
+        <iconset resource="T3kCfgFE.qrc">
+         <normaloff>:/T3kCfgFERes/resources/zoom_out.png</normaloff>:/T3kCfgFERes/resources/zoom_out.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -269,8 +269,8 @@ QTextEdit:disabled {
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>resources/zoom_fit.png</normaloff>resources/zoom_fit.png</iconset>
+        <iconset resource="T3kCfgFE.qrc">
+         <normaloff>:/T3kCfgFERes/resources/zoom_fit.png</normaloff>:/T3kCfgFERes/resources/zoom_fit.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -1468,6 +1468,8 @@ QTextEdit:disabled {
   <tabstop>btnRightRangeInc100</tabstop>
   <tabstop>btnRightRangeInc500</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="T3kCfgFE.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -1563,14 +1563,6 @@ void QBentAdjustmentDialog::showArrowButtons( bool bShow )
     ui->widgetBentDirMargin->setVisible(bShow);
 }
 
-void QBentAdjustmentDialog::showAllButtonsWithoutClose( bool bShow )
-{
-    showArrowButtons(bShow);
-    ui->btnReset->setVisible(bShow);
-    ui->btnSave->setVisible(bShow);
-    ui->cmdAsyncMngr->setVisible(bShow);
-}
-
 void QBentAdjustmentDialog::showAllButtons( bool bShow )
 {
     showArrowButtons(bShow);
@@ -1578,6 +1570,7 @@ void QBentAdjustmentDialog::showAllButtons( bool bShow )
     ui->btnSave->setVisible(bShow);
     ui->btnClose->setVisible(bShow);
     ui->cmdAsyncMngr->setVisible(bShow);
+    if (bShow) update();
 }
 
 QCalcCamPosThread::QCalcCamPosThread(BentItem &item) : m_item(item)
@@ -1673,7 +1666,7 @@ void QBentAdjustmentDialog::onAdjustmentFinish()
         memset(item.fDistortion, 0, sizeof(item.fDistortion));
         item.fDistortionMax = 0.f;
         item.nCalcPosProg = 0;
-        item.pCalcPosWnd = new QBentProgressDialog(item);
+        item.pCalcPosWnd = new QBentProgressDialog(item, this);
         QRect rcProg;
         rcProg.setTop(rcBody.top() + (rcBody.height() - PROG_SIZE) / 2);
         rcProg.setBottom(rcProg.top()+ PROG_SIZE);

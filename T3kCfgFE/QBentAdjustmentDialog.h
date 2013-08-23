@@ -186,7 +186,6 @@ protected:
 
     void showArrowButtons( bool bShow );
     void showAllButtons( bool bShow );
-    void showAllButtonsWithoutClose( bool bShow );
 
     void onAdjustmentFinish();
 

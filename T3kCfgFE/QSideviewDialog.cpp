@@ -1077,7 +1077,10 @@ void QSideviewDialog::TPDP_OnPRV(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part,
     }
 
     bool bUpdate = false;
+
+#ifndef Q_OS_LINUX
     if (offset == 0)
+#endif
         bUpdate = true;
 
     offset += total/2;
