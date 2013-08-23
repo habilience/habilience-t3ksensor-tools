@@ -56,8 +56,10 @@ unix:!symbian {
     target.path=$$PREFIX/lib
     INSTALLS += headers target
 
-    OBJECTS_DIR=.obj
-    MOC_DIR=.moc
+    CONFIG(debug, debug|release): OBJECTS_DIR=.obj/debug
+    CONFIG(debug, debug|release): MOC_DIR=.moc/debug
+    CONFIG(release, debug|release): OBJECTS_DIR=.obj/release
+    CONFIG(release, debug|release): MOC_DIR=.moc/release
 
     #LIBS += -lz
 }
