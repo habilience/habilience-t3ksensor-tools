@@ -6,17 +6,17 @@
 #include <QApplication>
 
 #include "stdInclude.h"
-#include "KeyMapStr.h"
+#include "../common/QKeyMapStr.h"
 #include "QLangManager.h"
 
-#define CTRL                    0
+#define CTRL        0
 #define ALT			1
-#define SHIFT                   2
+#define SHIFT       2
 #define WIN			3
-#define CLEAR                   4
+#define CLEAR       4
 
 #define UP			0
-#define DOWN                    1
+#define DOWN        1
 
 QUserDefinedKeyWidget::QUserDefinedKeyWidget(QWidget *parent) :
     QLabel(parent), m_KeyEditWidget(this), m_cbFuncKeyWidget(this, false)
@@ -63,18 +63,18 @@ void QUserDefinedKeyWidget::Init()
 {
     m_pIconBtn[CTRL][UP]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CTRL_U" );
     m_pIconBtn[CTRL][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CTRL_S" );
-    m_pIconBtn[ALT][UP]                 = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_ALT_U" );
+    m_pIconBtn[ALT][UP]         = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_ALT_U" );
     m_pIconBtn[ALT][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_ALT_S" );
     m_pIconBtn[SHIFT][UP]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_SHIFT_U" );
     m_pIconBtn[SHIFT][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_SHIFT_S" );
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
-    m_pIconBtn[WIN][UP]                 = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_WIN_U" );
+    m_pIconBtn[WIN][UP]         = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_WIN_U" );
     m_pIconBtn[WIN][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_WIN_S" );
 #elif defined(Q_OS_MAC)
-    m_pIconBtn[WIN][UP]                 = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_MAC_U" );
+    m_pIconBtn[WIN][UP]         = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_MAC_U" );
     m_pIconBtn[WIN][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_MAC_S" );
 #endif
-    m_pIconBtn[CLEAR][UP]               = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CLEAR_U" );
+    m_pIconBtn[CLEAR][UP]       = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CLEAR_U" );
     m_pIconBtn[CLEAR][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CLEAR_S" );
 
     m_nIconTotalWidth = 0;
@@ -94,9 +94,9 @@ void QUserDefinedKeyWidget::Init()
         strFn.sprintf( "F%d", i );
         m_cbFuncKeyWidget.addItem( strFn );
         nIdx = m_cbFuncKeyWidget.count()-1;
-        ulong nScanCode = FindScanCodeFromVK( Qt::Key_F1+i-1 );
+        ulong nScanCode = virtualKeyToScanCode( Qt::Key_F1+i-1 );
         uchar cUsageId;
-        if( FindUsageId( nScanCode, cUsageId ) )
+        if( findUsageId( nScanCode, cUsageId ) )
         {
             m_cbFuncKeyWidget.setItemData( nIdx, cUsageId );
         }

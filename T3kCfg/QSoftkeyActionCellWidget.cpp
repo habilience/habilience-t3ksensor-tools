@@ -1,7 +1,7 @@
 #include "stdInclude.h"
 #include "QSoftkeyActionCellWidget.h"
 
-#include "KeyMapStr.h"
+#include "../common/QKeyMapStr.h"
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -348,7 +348,7 @@ void QSoftkeyActionCellWidget::on_m_cbFuncKeyWidget_activated(int nIndex)
 {
     if( nIndex < 0 ) return;
     uchar cKey = 0;
-    if( FindUsageId( FindScanCodeFromVK( Qt::Key_F1+nIndex ), cKey ) )
+    if( findUsageId( virtualKeyToScanCode( Qt::Key_F1+nIndex ), cKey ) )
     {
         m_editKeyActionWidget.SetKeyValue( cKey );
         KeyPressSignal( this, m_editKeyActionWidget.GetKeyValue() );
@@ -436,9 +436,9 @@ int QSoftkeyActionCellWidget::SetKeyAction(const char cConditionKey, const char 
         if( !(nValue >> 8 & 0x80) )
         {
             int nScanCode;
-            if( FindScanCode( nValue & 0xFF, nScanCode ) )
+            if( findScanCode( nValue & 0xFF, nScanCode ) )
             {
-                nVk = FromMapVirtualKey( nScanCode );
+                nVk = scanCodeToVirtualKey( nScanCode );
                 if( nVk >= Qt::Key_F1 && nVk <= Qt::Key_F24 )
                 {
                     bFunctionKey = true;

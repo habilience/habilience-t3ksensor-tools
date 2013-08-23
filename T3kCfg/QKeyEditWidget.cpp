@@ -1,6 +1,6 @@
 #include "QKeyEditWidget.h"
 
-#include "KeyMapStr.h"
+#include "../common/QKeyMapStr.h"
 #include <QKeyEvent>
 
 #include <QCoreApplication>
@@ -83,12 +83,12 @@ void QKeyEditWidget::SetKeyValue( ushort wKeyValue )
         strKey += "+";
 
     int nScanCode;
-    if( FindScanCode(cV1, nScanCode) )
+    if( findScanCode(cV1, nScanCode) )
     {
-        int nVKey = FromMapVirtualKey(nScanCode);
+        int nVKey = scanCodeToVirtualKey(nScanCode);
 
         QString strK;
-        strK = VirtualKeyToString( nVKey );
+        strK = virtualKeyToString( nVKey );
 
         strKey += strK;
     }
@@ -197,7 +197,7 @@ void QKeyEditWidget::keyPressEvent(QKeyEvent *evt)
 
         int nVKey = evt->key();
         qDebug( "VKEY: %d\r\n", nVKey );
-        int nScanCode = FindScanCodeFromVK(nVKey);
+        int nScanCode = virtualKeyToScanCode(nVKey);
 
         if( nVKey == Qt::Key_Hangul )
         {
@@ -209,7 +209,7 @@ void QKeyEditWidget::keyPressEvent(QKeyEvent *evt)
         }
         else
         {
-            if( !FindUsageId( nScanCode, cV1 ) )
+            if( !findUsageId( nScanCode, cV1 ) )
             {
                 cV1 = 0x00;
             }
@@ -250,7 +250,7 @@ void QKeyEditWidget::keyPressEvent(QKeyEvent *evt)
         }
 
         QString strK;
-        strK = VirtualKeyToString( nVKey );
+        strK = virtualKeyToString( nVKey );
         if( strK.isEmpty() )
         {
             cV1 = 0x00;

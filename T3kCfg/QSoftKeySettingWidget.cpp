@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include "QKeyEditWidget.h"
 
-#include "KeyMapStr.h"
+#include "../common/QKeyMapStr.h"
 #include <QPalette>
 #include <QPixmap>
 

@@ -129,6 +129,7 @@ SOURCES += main.cpp\
     ../common/T3kHandle.cpp \
     ../common/IncludeRemoteNotify.cpp \
     ../common/TPDPEventMultiCaster.cpp \
+    ../common/QKeyMapStr.cpp \
     ../common/ui/QUnderlineLabel.cpp \
     ../common/ui/QHoverComboBox.cpp \
     QMouseSettingWidget.cpp \
@@ -138,7 +139,6 @@ SOURCES += main.cpp\
     QMainMenuWidget.cpp \
     QCheckableButton.cpp \
     QMouseMappingTable.cpp \
-    KeyMapStr.cpp \
     QTouchSettingWidget.cpp \
     QProfileLabel.cpp \
     QCalibrationWidget.cpp \
@@ -205,6 +205,7 @@ HEADERS  += \
     ../common/T3kHandle.h \
     ../common/IncludeRemoteNotify.h \
     ../common/TPDPEventMultiCaster.h \
+    ../common/QKeyMapStr.h \
     ../common/ui/QUnderlineLabel.h \
     ../common/ui/QHoverComboBox.h \
     QMouseSettingWidget.h \
@@ -214,7 +215,6 @@ HEADERS  += \
     QMainMenuWidget.h \
     QCheckableButton.h \
     QMouseMappingTable.h \
-    KeyMapStr.h \
     QTouchSettingWidget.h \
     QProfileLabel.h \
     stdInclude.h \

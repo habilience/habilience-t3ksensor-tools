@@ -5,7 +5,7 @@
 #include "../common/T3kHandle.h"
 #include "QMouseMappingTable.h"
 
-#include "KeyMapStr.h"
+#include "../common/QKeyMapStr.h"
 #include "Common/nv.h"
 
 #include "T3kPacketDef.h"
@@ -208,7 +208,7 @@ void QEditAction4WDWnd::SetActionWithProfileInfo( QComboBox& pWndComboAction, QL
     pWndComboAction.setCurrentIndex(-1);
     pDetailLabel.setText( "" );
 
-    QString strDetail = GetMappingStr(wKeyValue>>8, wKeyValue&0xFF);
+    QString strDetail = getMappingStr(wKeyValue>>8, wKeyValue&0xFF);
     strDetail.replace( "\r\n", " " );
     strDetail.replace( "Click", "Button Click" );
     strDetail.replace( "Drag", "Button Drag" );
@@ -233,9 +233,9 @@ void QEditAction4WDWnd::SetActionWithProfileInfo( QComboBox& pWndComboAction, QL
         if( !(wKeyValue >> 8 & 0x80) )
         {
             int nScanCode;
-            if( FindScanCode( wKeyValue & 0xFF, nScanCode ) )
+            if( findScanCode( wKeyValue & 0xFF, nScanCode ) )
             {
-                int nVk = FromMapVirtualKey( nScanCode );
+                int nVk = scanCodeToVirtualKey( nScanCode );
                 if( nVk >= Qt::Key_F1 && nVk <= Qt::Key_F24 )
                 {
                     bFunctionKey = true;
@@ -687,7 +687,7 @@ void QEditAction4WDWnd::OnCbnSelchangeComboAction( QComboBox* pWndComboAction )
         return;
     }
 
-    QString strDetail( GetMappingStr(wKeyValue>>8, wKeyValue&0xFF) );
+    QString strDetail( getMappingStr(wKeyValue>>8, wKeyValue&0xFF) );
     strDetail.replace( "\r\n", " " );
     strDetail.replace( "Click", "Button Click" );
     strDetail.replace( "Drag", "Button Drag" );

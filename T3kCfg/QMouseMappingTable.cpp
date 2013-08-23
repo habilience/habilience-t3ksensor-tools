@@ -2,7 +2,7 @@
 
 #include "QMouseMappingTable.h"
 
-#include "KeyMapStr.h"
+#include "../common/QKeyMapStr.h"
 #include "QT3kUserData.h"
 
 #include "T3kPacketDef.h"
@@ -137,9 +137,9 @@ void QMouseMappingTable::Init()
     //GetAt( TABLE(0, 3) )->pIconImage = GdipLoadImageFromRes( AfxGetInstanceHandle(), _T("PNG"), PNG_GST_PALM );
     //GetAt( TABLE(0, 4) )->pIconImage = GdipLoadImageFromRes( AfxGetInstanceHandle(), _T("PNG"), PNG_GST_PUTNTAP );
 
-    GetAt( TABLE(COL_MOVE, ROW_SINGLE) )->strText		= MouseKeyToString(MM_MOUSE_KEY1_MOUSE_L_MOVE);
-    GetAt( TABLE(COL_TAP, ROW_SINGLE) )->strText		= MouseKeyToString(MM_MOUSE_KEY1_MOUSE_L_CLICK);
-    GetAt( TABLE(COL_DBLTAP, ROW_SINGLE) )->strText             = MouseKeyToString(MM_MOUSE_KEY1_MOUSE_L_DOUBLECLICK);
+    GetAt( TABLE(COL_MOVE, ROW_SINGLE) )->strText		= mouseKeyToString(MM_MOUSE_KEY1_MOUSE_L_MOVE);
+    GetAt( TABLE(COL_TAP, ROW_SINGLE) )->strText		= mouseKeyToString(MM_MOUSE_KEY1_MOUSE_L_CLICK);
+    GetAt( TABLE(COL_DBLTAP, ROW_SINGLE) )->strText             = mouseKeyToString(MM_MOUSE_KEY1_MOUSE_L_DOUBLECLICK);
 
     GetAt( TABLE(COL_MOVE, ROW_SINGLE) )->bDefault		= true;
     GetAt( TABLE(COL_TAP, ROW_SINGLE) )->bDefault		= true;
@@ -669,7 +669,7 @@ void QMouseMappingTable::SetCellInfo( int nCol, int nRow, uchar cV0, uchar cV1 )
     CellInfo* ci = GetAt(TABLE(nCol, nRow));
 
     ci->wKeyValue[0] = (short)cV0 << 8 | cV1;
-    ci->strText = GetMappingStr( cV0, cV1 );
+    ci->strText = getMappingStr( cV0, cV1 );
 }
 
 void QMouseMappingTable::SetCellInfo( int nCol, int nRow, uchar cV00, uchar cV01, uchar cV10, uchar cV11, uchar cV20, uchar cV21, uchar cV30, uchar cV31 )
@@ -682,13 +682,13 @@ void QMouseMappingTable::SetCellInfo( int nCol, int nRow, uchar cV00, uchar cV01
     ci->wKeyValue[3] = (short)cV30 << 8 | cV31;
 
     QString strKey1, strKey2, strKey3, strKey4;
-    strKey1 = GetMappingStr( cV00, cV01 );
+    strKey1 = getMappingStr( cV00, cV01 );
     strKey1.replace( ("\r\n"), (" ") );
-    strKey2 = GetMappingStr( cV10, cV11 );
+    strKey2 = getMappingStr( cV10, cV11 );
     strKey2.replace( ("\r\n"), (" ") );
-    strKey3 = GetMappingStr( cV20, cV21 );
+    strKey3 = getMappingStr( cV20, cV21 );
     strKey3.replace( ("\r\n"), (" ") );
-    strKey4 = GetMappingStr( cV30, cV31 );
+    strKey4 = getMappingStr( cV30, cV31 );
     strKey4.replace( ("\r\n"), (" ") );
     QString strLR, strUD;
     if( strKey1 == strKey2 )
@@ -747,9 +747,9 @@ void QMouseMappingTable::ParseMouseProfile( const char* szProfile )
             m_bCheckExtProperty[EXTP_ENABLE_SINGLE_TAP]                         = MM_MOUSEPROFILE_SINGLE_TAP & wFlags ? true : false;
             m_bCheckExtProperty[EXTP_ENABLE_SINGLE_MOVE]                        = MM_MOUSEPROFILE_SINGLE_MOVE & wFlags ? true : false;
 
-            GetAt( TABLE(COL_MOVE, ROW_SINGLE) )->strText                       = MouseKeyToString(m_bCheckExtProperty[EXTP_ENABLE_SINGLE_MOVE] ? MM_MOUSE_KEY1_MOUSE_L_MOVE : 0);
-            GetAt( TABLE(COL_TAP, ROW_SINGLE) )->strText                        = MouseKeyToString(m_bCheckExtProperty[EXTP_ENABLE_SINGLE_TAP] ? MM_MOUSE_KEY1_MOUSE_L_CLICK : 0);
-            GetAt( TABLE(COL_DBLTAP, ROW_SINGLE) )->strText                     = MouseKeyToString(m_bCheckExtProperty[EXTP_ENABLE_SINGLE_DBLTAP] ? MM_MOUSE_KEY1_MOUSE_L_DOUBLECLICK : 0);
+            GetAt( TABLE(COL_MOVE, ROW_SINGLE) )->strText                       = mouseKeyToString(m_bCheckExtProperty[EXTP_ENABLE_SINGLE_MOVE] ? MM_MOUSE_KEY1_MOUSE_L_MOVE : 0);
+            GetAt( TABLE(COL_TAP, ROW_SINGLE) )->strText                        = mouseKeyToString(m_bCheckExtProperty[EXTP_ENABLE_SINGLE_TAP] ? MM_MOUSE_KEY1_MOUSE_L_CLICK : 0);
+            GetAt( TABLE(COL_DBLTAP, ROW_SINGLE) )->strText                     = mouseKeyToString(m_bCheckExtProperty[EXTP_ENABLE_SINGLE_DBLTAP] ? MM_MOUSE_KEY1_MOUSE_L_DOUBLECLICK : 0);
 
             m_bCheckExtProperty[EXTP_INVERT_WHEEL]                              = MM_MOUSEPROFILE_INVERT_WHEEL & wFlags ? true : false;
             m_bCheckExtProperty[EXTP_INDIVIDUAL_PUTNTAP]                        = MM_MOUSEPROFILE_PUTAND_TAP_OR_DOUBLETAP_ONLY & wFlags ? true : false;
@@ -934,9 +934,9 @@ void QMouseMappingTable::ParseMouseProfile( const char* szProfile )
 
             {
                 QString strKey1, strKey2;
-                strKey1 = GetMappingStr( cV[0][0], cV[0][1] );
+                strKey1 = getMappingStr( cV[0][0], cV[0][1] );
                 strKey1.replace( ("\r\n"), (" ") );
-                strKey2 = GetMappingStr( cV[1][0], cV[1][1] );
+                strKey2 = getMappingStr( cV[1][0], cV[1][1] );
                 strKey2.replace( ("\r\n"), (" ") );
                 QString strZoom;
                 if( strKey1 == strKey2 )

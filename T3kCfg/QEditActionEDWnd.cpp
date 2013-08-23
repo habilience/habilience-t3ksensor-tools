@@ -1,7 +1,7 @@
 #include "QEditActionEDWnd.h"
 #include "ui_QEditActionEDWnd.h"
 
-#include "KeyMapStr.h"
+#include "../common/QKeyMapStr.h"
 #include "../common/T3kHandle.h"
 #include "QMouseMappingTable.h"
 
@@ -94,7 +94,7 @@ void QEditActionEDWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wKe
     ui->CBAction->clear();
     ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DISABLED") ) );
 
-    QString strCap = MouseKeyToString(cMouseKey);
+    QString strCap = mouseKeyToString(cMouseKey);
     strCap.replace( "\r\n", " " );
     ui->CBAction->addItem( strCap );
 
@@ -104,7 +104,7 @@ void QEditActionEDWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wKe
 
     if( m_wProfileFlags & m_wProfileValue )
     {
-        QString strDetail = MouseKeyToString(cMouseKey);
+        QString strDetail = mouseKeyToString(cMouseKey);
         strDetail.replace( "\r\n", " " );
         strDetail.replace( "Click", "Button Click" );
         strDetail.replace( "Drag", "Button Drag" );
@@ -147,7 +147,7 @@ void QEditActionEDWnd::on_CBAction_currentIndexChanged(int /*index*/)
         default:
             break;
         }
-        QString strDetail = MouseKeyToString(cMouseKey);
+        QString strDetail = mouseKeyToString(cMouseKey);
         strDetail.replace( "\r\n", " " );
         strDetail.replace( "Click", "Button Click" );
         strDetail.replace( "Drag", "Button Drag" );

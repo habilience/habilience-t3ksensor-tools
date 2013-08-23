@@ -4,7 +4,7 @@
 #include "../common/T3kHandle.h"
 #include "QMouseMappingTable.h"
 
-#include "KeyMapStr.h"
+#include "../common/QKeyMapStr.h"
 #include "stdInclude.h"
 
 #include "Common/nv.h"
@@ -221,7 +221,7 @@ void QEditActionWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wKeyV
     ui->CBAction->setCurrentIndex(0);
     ui->LBDetail->setText( ("") );
 
-    QString strDetail = GetMappingStr(wKeyValue>>8, wKeyValue&0xFF);
+    QString strDetail = getMappingStr(wKeyValue>>8, wKeyValue&0xFF);
     strDetail.replace( "\r\n", " " );
     strDetail.replace( "Click", "Button Click" );
     strDetail.replace( "Drag", "Button Drag" );
@@ -248,9 +248,9 @@ void QEditActionWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wKeyV
         if( !(wKeyValue >> 8 & 0x80) )
         {
             int nScanCode;
-            if( FindScanCode( wKeyValue & 0xFF, nScanCode ) )
+            if( findScanCode( wKeyValue & 0xFF, nScanCode ) )
             {
-                int nVk = FromMapVirtualKey( nScanCode );
+                int nVk = scanCodeToVirtualKey( nScanCode );
                 if( nVk >= Qt::Key_F1 && nVk <= Qt::Key_F24 )
                 {
                     bFunctionKey = true;
@@ -324,7 +324,7 @@ void QEditActionWnd::SetEditMode( EditMode Mode, ushort wKeyValue )
         ui->LBUserDefKey->Reset();
         if( wKeyValue == 0xFFFF )
         {
-            ui->LBDetail->setText( GetMappingStr(58, 00) );
+            ui->LBDetail->setText( getMappingStr(58, 00) );
             break;
         }
         ui->LBUserDefKey->SetKeyValue( wKeyValue );
@@ -375,7 +375,7 @@ void QEditActionWnd::on_CBAction_currentIndexChanged(int /*index*/)
         return;
     }
 
-    QString strDetail( GetMappingStr(wKeyValue>>8, wKeyValue&0xFF) );
+    QString strDetail( getMappingStr(wKeyValue>>8, wKeyValue&0xFF) );
     strDetail.replace( "\r\n", " " );
     strDetail.replace( "Click", "Button Click" );
     strDetail.replace( "Drag", "Button Drag" );
@@ -392,7 +392,7 @@ void QEditActionWnd::showEvent(QShowEvent *evt)
         if( ui->CBAction->currentIndex() == 1 || ui->CBAction->currentIndex() == 2 )
         {
             ushort wKeyValue = ui->LBUserDefKey->GetKeyValue();
-            ui->LBDetail->setText( GetMappingStr(wKeyValue>>8, wKeyValue&0xFF) );
+            ui->LBDetail->setText( getMappingStr(wKeyValue>>8, wKeyValue&0xFF) );
         }
         ui->LBUserDefKey->update();
     }
@@ -465,7 +465,7 @@ void QEditActionWnd::onFunctionKeyActivated(int /*index*/)
     ushort wKeyValue = (ushort)ui->LBUserDefKey->GetKeyValue();//itemData( nFuncSelIndex ).toInt();
     ui->CBAction->setItemData( 2, wKeyValue );
 
-    QString strDetail( GetMappingStr(wKeyValue>>8, wKeyValue&0xFF) );
+    QString strDetail( getMappingStr(wKeyValue>>8, wKeyValue&0xFF) );
     strDetail.replace( "\r\n", " " );
     strDetail.replace( "Click", "Button Click" );
     strDetail.replace( "Drag", "Button Drag" );
