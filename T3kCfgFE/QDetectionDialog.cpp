@@ -1225,15 +1225,18 @@ bool QDetectionDialog::onKeyRelease(QKeyEvent *evt)
 
 void QDetectionDialog::onRButtonClicked()
 {
+#ifdef SUPPORT_RBUTTON_SHORTCUT
     if (!m_bEnterAutoRangeSetting)
     {
         LOG_I( "From Mouse Shortcut(RBUTTON CLICK)" );
         on_btnAutoRangeSetting_clicked();
     }
+#endif
 }
 
 bool QDetectionDialog::onRButtonDblClicked()
 {
+#ifdef SUPPORT_RBUTTON_SHORTCUT
     LOG_I( "From Mouse Shortcut(RBUTTON DOUBLE CLICK)" );
     if (m_bEnterAutoRangeSetting)
     {
@@ -1245,6 +1248,7 @@ bool QDetectionDialog::onRButtonDblClicked()
         on_btnSave_clicked();
         return true;
     }
+#endif
     return false;
 }
 

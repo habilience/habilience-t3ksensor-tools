@@ -2086,17 +2086,21 @@ bool Dialog::onKeyPress(QKeyEvent *evt)
 
 bool Dialog::onMouseWheel(QWheelEvent *evt)
 {
+#ifdef SUPPORT_RBUTTON_SHORTCUT
     int nDelta = evt->delta();
 
     qDebug( "wheel" );
 
     focusChangeToNextShortcutWidget( nDelta < 0 );
-
+#else
+    evt=evt;
+#endif
     return true;
 }
 
 void Dialog::onRButtonClicked()
 {
+#ifdef SUPPORT_RBUTTON_SHORTCUT
     QWidget* focus = focusWidget();
     if (isShortcutWidget(focus))
     {
@@ -2104,4 +2108,5 @@ void Dialog::onRButtonClicked()
         QPushButton* btnWidget = (QPushButton*)focus;
         btnWidget->click();
     }
+#endif
 }

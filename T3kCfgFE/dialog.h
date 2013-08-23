@@ -6,6 +6,8 @@
 #include "QLangManager.h"
 #include "QEventRedirection.h"
 
+//#define SUPPORT_RBUTTON_SHORTCUT
+
 namespace Ui {
 class Dialog;
 }

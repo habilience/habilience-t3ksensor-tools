@@ -951,9 +951,11 @@ bool QTouchSettingDialog::onKeyRelease(QKeyEvent *evt)
 
 bool QTouchSettingDialog::onRButtonDblClicked()
 {
+#ifdef SUPPORT_RBUTTON_SHORTCUT
     LOG_I( "From Mouse Shortcut(RBUTTON DOUBLE CLICK)" );
 
     on_btnSave_clicked();
+#endif
     return true;
 }
 

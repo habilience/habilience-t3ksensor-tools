@@ -373,17 +373,22 @@ bool QBentAdjustmentDialog::onKeyRelease(QKeyEvent *evt)
 
 bool QBentAdjustmentDialog::onMouseWheel(QWheelEvent *evt)
 {
+#ifdef SUPPORT_RBUTTON_SHORTCUT
     int nDelta = evt->delta();
 
     qDebug( "wheel" );
 
     focusChangeToNextShortcutWidget( nDelta < 0 );
+#else
+    evt=evt;
+#endif
 
     return true;
 }
 
 void QBentAdjustmentDialog::onRButtonClicked()
 {
+#ifdef SUPPORT_RBUTTON_SHORTCUT
     if (!m_bEnterAdjustmentMode)
     {
         QWidget* focus = focusWidget();
@@ -394,10 +399,12 @@ void QBentAdjustmentDialog::onRButtonClicked()
             btnWidget->click();
         }
     }
+#endif
 }
 
 bool QBentAdjustmentDialog::onRButtonDblClicked()
 {
+#ifdef SUPPORT_RBUTTON_SHORTCUT
     LOG_I( "From Mouse Shortcut(RBUTTON DOUBLE CLICK)" );
     if (m_bEnterAdjustmentMode)
     {
@@ -410,6 +417,7 @@ bool QBentAdjustmentDialog::onRButtonDblClicked()
         on_btnSave_clicked();
         return true;
     }
+#endif
     return false;
 }
 
