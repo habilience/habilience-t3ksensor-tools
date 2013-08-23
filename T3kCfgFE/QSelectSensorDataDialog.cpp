@@ -174,7 +174,7 @@ void QSelectSensorDataDialog::closeEvent(QCloseEvent *evt)
 
 void QSelectSensorDataDialog::on_btnNewData_clicked()
 {
-    QEnterFileNameDialog enterFileNameDlg;
+    QEnterFileNameDialog enterFileNameDlg(this);
     if ( enterFileNameDlg.exec() != QDialog::Accepted )
         return;
 

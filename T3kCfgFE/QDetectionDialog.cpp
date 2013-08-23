@@ -934,7 +934,7 @@ void QDetectionDialog::onFinishAutoRange()
 
         m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND);
 
-        QAutoRangeCompleteDialog AutoRangeCompleteDialog;
+        QAutoRangeCompleteDialog AutoRangeCompleteDialog(this);
         AutoRangeCompleteDialog.exec();
 
 #ifdef MONITORING_EXPIRED_MODE
