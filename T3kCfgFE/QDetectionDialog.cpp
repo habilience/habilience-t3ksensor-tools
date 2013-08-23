@@ -375,6 +375,11 @@ void QDetectionDialog::onClose()
     QT3kDevice* pDevice = QT3kDevice::instance();
     pDevice->sendCommand( "cam1/mode=detection", true );
     pDevice->sendCommand( "cam2/mode=detection", true );
+    if (g_AppData.bIsSubCameraExist)
+    {
+        pDevice->sendCommand( "cam1/sub/mode=detection", true );
+        pDevice->sendCommand( "cam2/sub/mode=detection", true );
+    }
     m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND);
 }
 
