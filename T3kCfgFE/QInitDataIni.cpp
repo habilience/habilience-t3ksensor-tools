@@ -103,6 +103,7 @@ int QInitDataIni::getDTCGraphLightThresholdWarning() const
 bool QInitDataIni::load()
 {
     QString strFile = QCoreApplication::applicationFilePath();
+#ifdef Q_OS_WIN
     int nPos = strFile.lastIndexOf('.');
     if ( nPos >= 0 )
     {
@@ -112,6 +113,9 @@ bool QInitDataIni::load()
     {
         return false;
     }
+#else
+    strFile += ".ini";
+#endif
 
     QIni ini;
 
@@ -248,6 +252,7 @@ bool QInitDataIni::load()
 bool QInitDataIni::save()
 {
     QString strFile = QCoreApplication::applicationFilePath();
+#ifdef Q_OS_WIN
     int nPos = strFile.lastIndexOf('.');
     if ( nPos >= 0 )
     {
@@ -257,6 +262,9 @@ bool QInitDataIni::save()
     {
         return false;
     }
+#else
+    strFile += ".ini";
+#endif
 
     QIni ini;
     QString strData;

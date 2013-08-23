@@ -39,6 +39,11 @@ QDetectionDialog::QDetectionDialog(Dialog *parent) :
         flags |= Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint;
     }
 
+    if (g_AppData.bScreenShotMode)
+    {
+        flags &= ~Qt::WindowStaysOnTopHint;
+    }
+
     setWindowFlags(flags);
     setAttribute(Qt::WA_DeleteOnClose);
 

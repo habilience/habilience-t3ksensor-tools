@@ -13,8 +13,28 @@ CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
 
 TEMPLATE = app
 
-CONFIG += static staticlib
-QMAKE_LFLAGS += -static
+#CONFIG += static staticlib
+#QMAKE_LFLAGS += -static
+
+CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs/debug/
+CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs/debug/
+CONFIG(release, debug|release): OBJECTS_DIR = $$PWD/.objs/release/
+CONFIG(release, debug|release): MOC_DIR = $$PWD/.objs/release/
+CONFIG(debug, debug|release): DESTDIR = $$PWD/debug
+CONFIG(release, debug|release): DESTDIR = $$PWD/release
+
+linux-g++:QMAKE_TARGET.arch = $$QMAKE_HOST.arch
+linux-g++-32:QMAKE_TARGET.arch = x86
+linux-g++-64:QMAKE_TARGET.arch = x86_64
+
+linux-g++ {
+    contains(QMAKE_TARGET.arch, x86_64):{
+        message( "building for 64bit" );
+    }
+    !contains(QMAKE_TARGET.arch, x86_64):{
+        message( "building for 32bit" );
+    }
+}
 
 DEFINES += USE_T3K_STATIC_LIBS QUAZIP_STATIC
 
@@ -35,7 +55,6 @@ DEPENDPATH +=   $$PWD/../external/quazip \
 
 
 win32 {
-
     QMAKE_CFLAGS_RELEASE = -Os
     QMAKE_LFLAGS += -static -flto
 
@@ -57,8 +76,14 @@ win32 {
 }
 
 linux-g++ {
-    LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
-    QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
+    contains(QMAKE_TARGET.arch, x86_64):{
+        LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
+        QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
+    }
+    !contains(QMAKE_TARGET.arch, x86_64):{
+        LIBS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
+        QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/32bit
+    }
 
     CONFIG(release, debug|release) {
         LIBS += -L$$PWD/../external/quazip/ -lquazip \
@@ -69,7 +94,7 @@ linux-g++ {
     }
 }
 
-macx: {
+macx {
     LIBS += -framework CoreFoundation \
             -framework IOKit \
             -framework CoreServices \
