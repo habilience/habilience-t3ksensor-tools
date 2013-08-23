@@ -283,11 +283,6 @@ void Dialog::onDisconnected()
     {
         stopAllFirmwareDownloadJobs();
         ui->stackedWidget->setCurrentIndex(0);
-
-        Qt::WindowFlags flags = windowFlags();
-        flags |= Qt::WindowCloseButtonHint;
-        setWindowFlags(flags);
-        show();
     }
 
     if (m_Packet.isOpen())
@@ -576,6 +571,7 @@ void Dialog::killRequestTimeoutTimer()
 
 void Dialog::startWaitModeChangeTimer()
 {
+    ui->labelMessage->setText(CAUTION);
     if (m_TimerWaitModeChange !=0)
         killTimer(m_TimerWaitModeChange);
     m_nCountDownTimeout = WAIT_MODECHANGE_TIMEOUT/1000;
@@ -584,6 +580,7 @@ void Dialog::startWaitModeChangeTimer()
 
 void Dialog::killWaitModeChangeTimer()
 {
+    ui->labelMessage->setText(CAUTION);
     if (m_TimerWaitModeChange !=0)
     {
         killTimer(m_TimerWaitModeChange);
@@ -1056,11 +1053,6 @@ void Dialog::onFinishAllFirmwareDownloadJobs()
 
     ui->pushButtonCancel->setText("OK");
     ui->pushButtonCancel->setEnabled(true);
-
-    Qt::WindowFlags flags = windowFlags();
-    flags |= Qt::WindowCloseButtonHint;
-    setWindowFlags(flags);
-    show();
 }
 
 void Dialog::onFirmwareUpdateFailed()
@@ -1278,6 +1270,11 @@ void Dialog::closeEvent(QCloseEvent *evt)
 {
     if ( evt->type() == QEvent::Close )
     {
+        if (m_bIsStartFirmwareDownload)
+        {
+            evt->ignore();
+            return;
+        }
         qDebug( "closeEvent" );
         stopQueryInformation();
 
@@ -1450,11 +1447,6 @@ void Dialog::on_pushButtonUpgrade_clicked()
 
     if (nResult == QDialog::Accepted)
     {
-        Qt::WindowFlags flags = windowFlags();
-        flags &= ~Qt::WindowCloseButtonHint;
-        setWindowFlags(flags);
-        show();
-
         emit ui->stackedWidget->slideInNext();
         startFirmwareDownload();
     }
@@ -1470,10 +1462,6 @@ void Dialog::on_pushButtonCancel_clicked()
     {
         // TODO: confirm cancel
     }
-    Qt::WindowFlags flags = windowFlags();
-    flags |= Qt::WindowCloseButtonHint;
-    setWindowFlags(flags);
-    show();
 
     emit ui->stackedWidget->slideInPrev();
     stopFirmwareDownload();
