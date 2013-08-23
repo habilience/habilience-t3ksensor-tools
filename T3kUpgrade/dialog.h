@@ -42,6 +42,7 @@ private:
     int         m_TimerRequestTimeout;
     int         m_TimerRequestInformation;
     int         m_TimerWaitModeChange;
+    int         m_nCountDownTimeout;
 
     enum QueryInfoStep {
         SUB_QUERY_MODE = 0,
@@ -111,6 +112,7 @@ protected:
     virtual void timerEvent(QTimerEvent *evt);
     virtual void showEvent(QShowEvent *evt);
     virtual void closeEvent(QCloseEvent *evt);
+    virtual void paintEvent(QPaintEvent *);
 
     void connectDevice();
 

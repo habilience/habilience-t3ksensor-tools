@@ -6,11 +6,13 @@
 #include <quazipfile.h>
 #include <QBriefingDialog.h>
 #include "../common/QUtils.h"
+#include <QPainter>
 
 #define RETRY_CONNECTION_INTERVAL       (3000)
 #define WAIT_MODECHANGE_TIMEOUT         (60000)     // 60 secs
 
 static const QString PartName[] = { "MM", "CM1", "CM2", "CM1-1", "CM2-1" };
+const QString CAUTION = "CAUTION: Do not unplug the device until the process is completed.";
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -21,6 +23,7 @@ Dialog::Dialog(QWidget *parent) :
     m_TimerRequestInformation = 0;
     m_TimerWaitModeChange = 0;
     m_nPacketId = -1;
+    m_nCountDownTimeout = 0;
 
     m_bWaitIAP = false;
     m_bWaitIAPCheckOK = false;
@@ -280,12 +283,18 @@ void Dialog::onDisconnected()
     {
         stopAllFirmwareDownloadJobs();
         ui->stackedWidget->setCurrentIndex(0);
+
+        Qt::WindowFlags flags = windowFlags();
+        flags |= Qt::WindowCloseButtonHint;
+        setWindowFlags(flags);
+        show();
     }
 
     if (m_Packet.isOpen())
     {
         m_Packet.close();
     }
+
     connectDevice();
 }
 
@@ -375,11 +384,20 @@ void Dialog::timerEvent(QTimerEvent *evt)
         }
         else if (evt->timerId() == m_TimerWaitModeChange)
         {
-            killWaitModeChangeTimer();
-            qDebug( "Wait IAP/APP timeout!!!" );
-            QString strMessage = QString("[%1] Wait timeout!").arg(PartName[getIndex(m_CurrentJob.which)]);
-            addProgressText(strMessage, TM_NG);
-            onFirmwareUpdateFailed();
+            m_nCountDownTimeout--;
+            if (m_nCountDownTimeout < 0)
+            {
+                killWaitModeChangeTimer();
+                qDebug( "Wait IAP/APP timeout!!!" );
+                QString strMessage = QString("[%1] Wait timeout!").arg(PartName[getIndex(m_CurrentJob.which)]);
+                addProgressText(strMessage, TM_NG);
+                onFirmwareUpdateFailed();
+            }
+            else
+            {
+                QString strCAUTION = CAUTION + "(" + QString::number(m_nCountDownTimeout) + ")";
+                ui->labelMessage->setText(strCAUTION);
+            }
         }
     }
 }
@@ -426,7 +444,7 @@ void Dialog::startFirmwareDownload()
     ui->labelPart->setText("");
 
     ui->labelMessage->setStyleSheet("color: rgb(203, 45, 5); font-weight: bold;");
-    ui->labelMessage->setText("CAUTION: Do not unplug the device until the process is completed.");
+    ui->labelMessage->setText(CAUTION);
 
     if (m_TimerRequestInformation)
     {
@@ -500,6 +518,7 @@ void Dialog::firmwareDownload()
         m_JobListForFirmwareDownload.append( job );
     }
 
+#if 0
     for ( int i=IDX_MAX-1 ; i>=0 ; i-- )
     {
         if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
@@ -521,6 +540,23 @@ void Dialog::firmwareDownload()
         job.which = m_SensorInfo[i].nWhich;
         m_JobListForFirmwareDownload.append( job );
     }
+#else
+    job.type = JOBF_ERASE;
+    job.subStep = SUB_QUERY_FINISH;
+    job.which = m_SensorInfo[IDX_MM].nWhich;
+    m_JobListForFirmwareDownload.append( job );
+
+    job.type = JOBF_WRITE;
+    job.subStep = SUB_QUERY_WRITE_PROGRESS;
+    job.firmwareBinaryPos = 0;
+    job.which = m_SensorInfo[IDX_MM].nWhich;
+    m_JobListForFirmwareDownload.append( job );
+
+    job.type = JOBF_MARK_APP;
+    job.subStep = SUB_QUERY_FINISH;
+    job.which = m_SensorInfo[IDX_MM].nWhich;
+    m_JobListForFirmwareDownload.append( job );
+#endif
 
     job.type = JOBF_RESET;
     job.subStep = SUB_QUERY_FINISH;
@@ -557,7 +593,8 @@ void Dialog::startWaitModeChangeTimer()
 {
     if (m_TimerWaitModeChange !=0)
         killTimer(m_TimerWaitModeChange);
-    m_TimerWaitModeChange = startTimer(WAIT_MODECHANGE_TIMEOUT);
+    m_nCountDownTimeout = WAIT_MODECHANGE_TIMEOUT/1000;
+    m_TimerWaitModeChange = startTimer(1000);
 }
 
 void Dialog::killWaitModeChangeTimer()
@@ -642,7 +679,7 @@ void Dialog::onResponseFromSensor(unsigned short nPacketId)
     switch (m_CurrentJob.type)
     {
     default:
-        qDebug( "invalid job type" );
+        qDebug( "invalid job type: %d", m_CurrentJob.type );
         break;
     case JOBF_QUERY_INFO:
         nIndex = getIndex(m_CurrentJob.which);
@@ -780,7 +817,7 @@ void Dialog::executeNextJob( bool bRetry/*=false*/ )
             switch (m_CurrentJob.type)
             {
             default:
-                qDebug( "invalid job type" );
+                qDebug( "invalid job type: %d", m_CurrentJob.type );
                 break;
             case JOBF_QUERY_INFO:
                 switch (m_CurrentJob.subStep)
@@ -839,7 +876,7 @@ void Dialog::executeNextJob( bool bRetry/*=false*/ )
             {
             default:
                 if ( m_CurrentJob.type != JOBF_QUERY_INFO )
-                    qDebug( "invalid job type" );
+                    qDebug( "invalid job type: %d", m_CurrentJob.type );
                 break;
             case JOBF_MARK_IAP:
                 strMessage = QString("[%1] Mark IAP...").arg(PartName[getIndex(m_CurrentJob.which)]);
@@ -1055,10 +1092,13 @@ void Dialog::displayInformation( const QString& strText )
 {
     QString strInformation;
     strInformation = "<html><body>"
+            "<br><br>"
             "<table width=\"100%\" height=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
             "<tr>"
             "<td><div align=\"center\"><font size=\"3\" color=#880015>"
+            "<b>"
             + strText +
+            "</b>"
             "</font></div></td>"
             "</tr>"
             "</table>"
@@ -1073,10 +1113,10 @@ void Dialog::updateSensorInformation()
     QString strInformationHTML;
     QString strTableHeader =
         "<table width=\"100%\" cellspacing=\"0\" style=\"border-collapse:collapse;\"><tr>"
-        "<td width=\"30%\" style=\"border-width:1px; border-color:black; border-style:solid;\" bgcolor=\"#d5dffb\">"
+        "<td width=\"20%\" style=\"border-width:1px; border-color:black; border-style:solid;\" bgcolor=\"#d5dffb\">"
             "<p><font size=\"3\" color=#3f3f3f><b>Part</b></font></p>"
         "</td>"
-        "<td width=\"30%\" style=\"border-width:1px; border-color:black; border-style:solid;\" bgcolor=\"#d5dffb\">"
+        "<td width=\"40%\" style=\"border-width:1px; border-color:black; border-style:solid;\" bgcolor=\"#d5dffb\">"
             "<p><font size=\"3\" color=#3f3f3f><b>Version</b></font></p>"
         "</td>"
         "<td width=\"40%\" style=\"border-width:1px; border-color:black; border-style:solid;\" bgcolor=\"#d5dffb\">"
@@ -1085,9 +1125,9 @@ void Dialog::updateSensorInformation()
     QString strTableTail = "</table>";
     QString strRowStart = "<tr>";
     QString strRowEnd = "</tr>";
-    QString strColumn1Start = "<td width=\"30%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#000000>";
-    QString strColumn2Start = "<td width=\"30%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#000000>";
-    QString strColumn2RedStart = "<td width=\"30%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#880015>";
+    QString strColumn1Start = "<td width=\"20%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#000000>";
+    QString strColumn2Start = "<td width=\"40%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#000000>";
+    QString strColumn2RedStart = "<td width=\"40%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#880015>";
     QString strColumn3Start = "<td width=\"40%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#000000>";
     QString strColumnEnd = "</font></p></td>";
 
@@ -1241,7 +1281,8 @@ void Dialog::showEvent(QShowEvent *evt)
 {
     if ( evt->type() == QEvent::Show )
     {
-        connectDevice();
+        if (!m_Packet.isOpen())
+            connectDevice();
     }
 
     QDialog::showEvent(evt);
@@ -1266,6 +1307,14 @@ void Dialog::closeEvent(QCloseEvent *evt)
     }
 
     QDialog::closeEvent(evt);
+}
+
+void Dialog::paintEvent(QPaintEvent *)
+{
+    QColor clrBackground(242, 247, 251);
+
+    QPainter p(this);
+    p.fillRect( QRect(0,0,width(),height()), clrBackground );
 }
 
 bool Dialog::verifyFirmware(QString& strMsg)

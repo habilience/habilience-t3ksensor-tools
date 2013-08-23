@@ -13,8 +13,28 @@ CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
 
 TEMPLATE = app
 
-CONFIG += static staticlib
-QMAKE_LFLAGS += -static
+#CONFIG += static staticlib
+#QMAKE_LFLAGS += -static
+
+CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs/debug/
+CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs/debug/
+CONFIG(release, debug|release): OBJECTS_DIR = $$PWD/.objs/release/
+CONFIG(release, debug|release): MOC_DIR = $$PWD/.objs/release/
+CONFIG(debug, debug|release): DESTDIR = $$PWD/debug
+CONFIG(release, debug|release): DESTDIR = $$PWD/release
+
+linux-g++:QMAKE_TARGET.arch = $$QMAKE_HOST.arch
+linux-g++-32:QMAKE_TARGET.arch = x86
+linux-g++-64:QMAKE_TARGET.arch = x86_64
+
+linux-g++ {
+    contains(QMAKE_TARGET.arch, x86_64):{
+        message( "building for 64bit" );
+    }
+    !contains(QMAKE_TARGET.arch, x86_64):{
+        message( "building for 32bit" );
+    }
+}
 
 DEFINES += USE_T3K_STATIC_LIBS QUAZIP_STATIC
 
@@ -35,7 +55,6 @@ DEPENDPATH +=   $$PWD/../external/quazip \
 
 
 win32 {
-
     QMAKE_CFLAGS_RELEASE = -Os
     QMAKE_LFLAGS += -static -flto
 
@@ -69,7 +88,7 @@ linux-g++ {
     }
 }
 
-macx: {
+macx {
     LIBS += -framework CoreFoundation \
             -framework IOKit \
             -framework CoreServices \

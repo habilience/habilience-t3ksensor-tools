@@ -29,6 +29,7 @@ bool QFWDPacket::open()
 {
     if (m_hDevice != NULL)
     {
+        qDebug( "already connected." );
         return false;
     }
 
