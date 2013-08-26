@@ -148,7 +148,8 @@ QSideviewDialog::QSideviewDialog(Dialog *parent) :
     m_EventRedirect.installEventListener(this);
     installEventFilter(&m_EventRedirect);
 
-    ui->btnClose->setFocus();
+    //ui->btnClose->setFocus();
+    ui->btnCam1->setFocus();
 }
 
 QSideviewDialog::~QSideviewDialog()

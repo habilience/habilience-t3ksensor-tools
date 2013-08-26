@@ -14,6 +14,32 @@ CONFIG(staticlib): DEFINES += QUAZIP_STATIC
 QMAKE_CFLAGS_RELEASE = -Os
 QMAKE_LFLAGS += -static -flto
 
+#################################################################################################
+## linux-g++
+linux-g++:QMAKE_TARGET.arch = $$QMAKE_HOST.arch
+linux-g++-32:QMAKE_TARGET.arch = x86
+linux-g++-64:QMAKE_TARGET.arch = x86_64
+
+linux-g++ {
+    contains(QMAKE_TARGET.arch, x86_64):{
+        message( "building for 64bit" );
+        TARGET = $$join(TARGET,,,_x64)
+    }
+    !contains(QMAKE_TARGET.arch, x86_64):{
+        message( "building for 32bit" );
+    }
+}
+
+linux-g++-32{
+    message( "building for 32bit" );
+}
+linux-g++-64{
+    message( "building for 64bit" );
+    TARGET = $$join(TARGET,,,_x64)
+}
+##
+#################################################################################################
+
 #macx:QMAKE_LFLAGS_SONAME  = -Wl,-install_name,@executable_path/../Frameworks/
 
 #macx:QMAKE_POST_LINK += install_name_tool -change QtCore.framework/Versions/4/QtCore \
@@ -56,10 +82,19 @@ unix:!symbian {
     target.path=$$PREFIX/lib
     INSTALLS += headers target
 
-    CONFIG(debug, debug|release): OBJECTS_DIR=.obj/debug
-    CONFIG(debug, debug|release): MOC_DIR=.moc/debug
-    CONFIG(release, debug|release): OBJECTS_DIR=.obj/release
-    CONFIG(release, debug|release): MOC_DIR=.moc/release
+    contains(QMAKE_TARGET.arch, x86_64):{
+        CONFIG(debug, debug|release): OBJECTS_DIR=.obj_x64/debug
+        CONFIG(debug, debug|release): MOC_DIR=.moc_x64/debug
+        CONFIG(release, debug|release): OBJECTS_DIR=.obj_x64/release
+        CONFIG(release, debug|release): MOC_DIR=.moc_x64/release
+    }
+
+    !contains(QMAKE_TARGET.arch, x86_64):{
+        CONFIG(debug, debug|release): OBJECTS_DIR=.obj/debug
+        CONFIG(debug, debug|release): MOC_DIR=.moc/debug
+        CONFIG(release, debug|release): OBJECTS_DIR=.obj/release
+        CONFIG(release, debug|release): MOC_DIR=.moc/release
+    }
 
     #LIBS += -lz
 }

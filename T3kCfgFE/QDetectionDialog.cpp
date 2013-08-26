@@ -98,7 +98,8 @@ QDetectionDialog::QDetectionDialog(Dialog *parent) :
 
     m_TimerUpdateGraph = startTimer( 350 );
 
-    ui->btnClose->setFocus();
+    //ui->btnClose->setFocus();
+    ui->btnMain->setFocus();
 }
 
 QDetectionDialog::~QDetectionDialog()
