@@ -17,7 +17,7 @@
 
 #include "QMyApplication.h"
 
-#define MONITORING_EXPIRED_MODE
+#include "conf.h"
 
 #define MAIN_TAG "MAIN"
 #define RES_TAG "SIDEVIEW"

@@ -12,6 +12,8 @@
 #include "QSensorInitDataCfg.h"
 #include "QGestureProfileDialog.h"
 
+#include "conf.h"
+
 #define NV_DEF_TIME_A              400
 #define NV_DEF_TIME_A_RANGE_START  100
 #define NV_DEF_TIME_A_RANGE_END    800

@@ -271,7 +271,8 @@ HEADERS  += dialog.h \
     QEditActionKey1Dialog.h \
     QUserDefinedKeyCtrl.h \
     QKeyEdit.h \
-    QRemoteTouchMarkDialog.h
+    QRemoteTouchMarkDialog.h \
+    conf.h
 
 FORMS    += dialog.ui \
     QSelectSensorDataDialog.ui \

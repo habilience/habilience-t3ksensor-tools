@@ -34,7 +34,7 @@ QLogSystem::QLogSystem() : m_nExpire(15)
     deleteExpiredLogFiles();
 
     write( "INFO", ("==== T3kCfgFE Start! ====") );
-    write( "INFO", "Exec Path: %s", (const char*)qApp->applicationFilePath().toLatin1() );
+    write( "INFO", "Exec Path: %s", (const char*)qApp->applicationFilePath().toUtf8() );
 }
 
 QLogSystem::~QLogSystem()

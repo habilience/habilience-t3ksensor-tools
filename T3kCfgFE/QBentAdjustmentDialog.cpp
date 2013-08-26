@@ -27,6 +27,8 @@
 #include <QEvent>
 #include "QCalcCamValue.h"
 
+#include "conf.h"
+
 #define NaN ((float)qQNaN())
 #define WAIT_ANIMATION_FRAME	(10)
 #define WAIT_TOUCH_TIME			(30*WAIT_ANIMATION_FRAME)
@@ -1805,10 +1807,18 @@ void QBentAdjustmentDialog::onAdjustmentFinish()
         strBaLog += curDate.toString("yyyy-MM-dd hh-mm-ss ") + buf;
     }
 
+#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
     QString strPath = QCoreApplication::applicationDirPath();
     strPath = rstrip(strPath, "/\\");
-    strPath += "/";
-    strPath += "bent_adjustment.txt";
+    strPath += "/bent_adjustment.txt";
+#else
+    QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    strDocuments = rstrip( strDocuments, "/\\" );
+    QString strPath = strDocuments;
+    strPath += "/T3kCfgFE/";
+    makeDirectory(strPath);
+    strPath += "/bent_adjustment.txt";
+#endif
 
     QFile file(strPath);
     if (file.open(QIODevice::WriteOnly))

@@ -6,6 +6,7 @@
 #include <QTextStream>
 #include <QCoreApplication>
 #include "../common/QUtils.h"
+#include "conf.h"
 
 QSensorInitDataCfg::_gc::_gc() {}
 QSensorInitDataCfg::_gc::~_gc()
@@ -20,9 +21,16 @@ void QSensorInitDataCfg::Enumerator::enumCfgData()
 {
     m_aryCfgData.clear();
 
+#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
     QString strDir = QCoreApplication::applicationDirPath();
     strDir = rstrip(strDir, "/\\");
     QString strPath = strDir + "/SensorData";
+#else
+    QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    strDocuments = rstrip( strDocuments, "/\\" );
+    QString strPath = strDocuments;
+    strPath += "/T3kCfgFE/SensorData/";
+#endif
 
     QDir currentDir(strPath);
     QStringList files;
@@ -146,8 +154,15 @@ bool QSensorInitDataCfg::load(const QString &strDataFileName )
     m_strPrevFileName = "";
     m_strFileName = "";
 
+#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
     QString strDir = QCoreApplication::applicationDirPath();
     strDir = rstrip(strDir, "/\\");
+#else
+    QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    strDocuments = rstrip( strDocuments, "/\\" );
+    QString strDir = strDocuments;
+    strDir += "/T3kCfgFE";
+#endif
 
     QString strSoftkeyPath;
     QString strFile = strDir;
@@ -211,12 +226,20 @@ bool QSensorInitDataCfg::load(const QString &strDataFileName )
 
 bool QSensorInitDataCfg::save(const QString &strDataFileName )
 {
+#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
     QString strDir = QCoreApplication::applicationDirPath();
     strDir = rstrip(strDir, "/\\");
 
     QString strFile = strDir;
     strFile += "/SensorData/";
     makeDirectory( strFile );
+#else
+    QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    strDocuments = rstrip( strDocuments, "/\\" );
+    QString strFile = strDocuments;
+    strFile += "/T3kCfgFE/SensorData/";
+    makeDirectory( strFile );
+#endif
     strFile += strDataFileName;
     strFile += ".cfg";
 

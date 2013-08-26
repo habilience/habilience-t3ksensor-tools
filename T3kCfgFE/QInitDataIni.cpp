@@ -4,6 +4,7 @@
 #include "../common/QUtils.h"
 
 #include "QBentCfgParam.h"
+#include "conf.h"
 
 #define DTC_GRAPH_INIT_SHARP_WIDTH					(50)
 #define DTC_GRAPH_INIT_CRACK_THRESHOLD_ERROR		(0.6f)
@@ -102,6 +103,7 @@ int QInitDataIni::getDTCGraphLightThresholdWarning() const
 
 bool QInitDataIni::load()
 {
+#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
     QString strFile = QCoreApplication::applicationFilePath();
 #ifdef Q_OS_WIN
     int nPos = strFile.lastIndexOf('.');
@@ -115,6 +117,13 @@ bool QInitDataIni::load()
     }
 #else
     strFile += ".ini";
+#endif
+#else
+    QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    strDocuments = rstrip( strDocuments, "/\\" );
+    QString strFile = strDocuments;
+    strFile += "/T3kCfgFE/";
+    strFile += QCoreApplication::applicationName() + ".ini";
 #endif
 
     QIni ini;
@@ -251,6 +260,7 @@ bool QInitDataIni::load()
 
 bool QInitDataIni::save()
 {
+#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
     QString strFile = QCoreApplication::applicationFilePath();
 #ifdef Q_OS_WIN
     int nPos = strFile.lastIndexOf('.');
@@ -264,6 +274,14 @@ bool QInitDataIni::save()
     }
 #else
     strFile += ".ini";
+#endif
+#else
+    QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    strDocuments = rstrip( strDocuments, "/\\" );
+    QString strFile = strDocuments;
+    strFile += "/T3kCfgFE/";
+    makeDirectory(strFile);
+    strFile += QCoreApplication::applicationName() + ".ini";
 #endif
 
     QIni ini;

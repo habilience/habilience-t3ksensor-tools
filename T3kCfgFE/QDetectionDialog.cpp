@@ -16,7 +16,7 @@
 #include "QMyApplication.h"
 #include "QAutoRangeCompleteDialog.h"
 
-#define MONITORING_EXPIRED_MODE
+#include "conf.h"
 
 #define MAX_TICK_COUNT      (400)
 

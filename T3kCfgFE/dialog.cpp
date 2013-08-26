@@ -34,6 +34,8 @@
 #include "QTouchSettingDialog.h"
 #include "QRemoteTouchMarkDialog.h"
 
+#include "conf.h"
+
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     m_EventRedirect(this),
