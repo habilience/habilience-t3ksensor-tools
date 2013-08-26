@@ -14,11 +14,8 @@ CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
 TEMPLATE = app
 
 #CONFIG += static staticlib
-#QMAKE_LFLAGS += -static
 
 DEFINES += USE_T3K_STATIC_LIBS QUAZIP_STATIC
-
-macx:DEFINES += OS_MAC
 
 CONFIG(debug, debug|release):DEFINES += _DEBUG
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
@@ -32,8 +29,10 @@ DEPENDPATH +=   $$PWD/../external/quazip \
                 $$PWD/../external/T3kHIDLibrary/include \
                 $$PWD/../external/quazip/zlib/ \
 
-
+#################################################################################################
+## win32
 win32 {
+    CONFIG += static staticlib
     QMAKE_CFLAGS_RELEASE = -Os
     QMAKE_LFLAGS += -static -flto
 
@@ -53,6 +52,10 @@ win32 {
 
     LIBS += -lsetupapi
 }
+##
+#################################################################################################
+
+
 
 #################################################################################################
 ## linux-g++
@@ -145,7 +148,13 @@ linux-g++-64{
 ##
 #################################################################################################
 
+
+
+#################################################################################################
+## macx
 macx {
+    DEFINES += OS_MAC
+    CONFIG += static staticlib
     LIBS += -framework CoreFoundation \
             -framework IOKit \
             -framework CoreServices \
@@ -166,6 +175,9 @@ macx {
                             $$PWD/../external/T3kHIDLibrary/mac/libT3kHIDLibStaticd.a
     }
 }
+##
+#################################################################################################
+
 
 SOURCES += main.cpp \
     QSlidingStackedWidget.cpp \

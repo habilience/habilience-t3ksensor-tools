@@ -21,7 +21,7 @@ class QSettings;
 #include "QMySystemTrayIcon.h"
 #include "QLangManager.h"
 
-#include "../Common/PacketStructure.h"
+#include "../common/PacketStructure.h"
 
 
 namespace Ui {

@@ -20,7 +20,7 @@
 #include "QWidgetCloseEventManager.h"
 
 #include "Common/nv.h"
-#include "../Common/T3k_ver.h"
+#include "../common/T3k_ver.h"
 
 #include <QMenu>
 #include <QSettings>

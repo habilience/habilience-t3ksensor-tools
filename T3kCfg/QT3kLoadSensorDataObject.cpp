@@ -1,6 +1,6 @@
 #include "QT3kLoadSensorDataObject.h"
 
-#include "../Common/T3kConstStr.h"
+#include "../common/T3kConstStr.h"
 
 #include "CfgCustomCmdDef.h"
 #include "QT3kUserData.h"

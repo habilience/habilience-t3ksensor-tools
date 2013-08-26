@@ -4,7 +4,7 @@
 #include <QFile>
 #include <QDir>
 
-#include "../Common/T3kConstStr.h"
+#include "../common/T3kConstStr.h"
 
 
 QCustomDefaultSensor* QCustomDefaultSensor::s_pInstance = NULL;

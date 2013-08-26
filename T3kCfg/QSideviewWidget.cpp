@@ -1,7 +1,7 @@
 #include "QSideviewWidget.h"
 #include "ui_QSideviewWidget.h"
 
-#include "../Common/T3kConstStr.h"
+#include "../common/T3kConstStr.h"
 #include "Common/nv.h"
 
 #include <QtEvents>

@@ -5,7 +5,7 @@
 #include "stdInclude.h"
 
 // Tag
-#include "../Common/T3k_ver.h"
+#include "../common/T3k_ver.h"
 
 #include "QLangManager.h"
 #include "QT3kUserData.h"

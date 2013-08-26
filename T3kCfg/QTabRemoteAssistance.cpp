@@ -9,7 +9,7 @@
 #include <QDir>
 #include <QStandardPaths>
 
-#include "../Common/PacketStructure.h"
+#include "../common/PacketStructure.h"
 
 #include "QSideviewWidget.h"
 #include "QOrderTouchWidget.h"

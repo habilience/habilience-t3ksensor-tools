@@ -1,7 +1,7 @@
 #include "QPrintLogData.h"
 
 #include <QApplication>
-#include "../Common/T3kConstStr.h"
+#include "../common/T3kConstStr.h"
 
 QPrintLogData::QPrintLogData(QObject* parent) :
         QFile(parent)

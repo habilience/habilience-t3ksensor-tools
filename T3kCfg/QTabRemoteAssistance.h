@@ -7,7 +7,7 @@
 #include "QTimeoutChecker.h"
 
 #include "QT3kUserData.h"
-#include "../Common/PacketStructure.h"
+#include "../common/PacketStructure.h"
 
 #include "../common/TPDPEventMultiCaster.h"
 

@@ -3,7 +3,7 @@
 
 #include "QT3kUserData.h"
 
-#include "../Common/PacketStructure.h"
+#include "../common/PacketStructure.h"
 
 #include <QScrollBar>
 #include <QTime>
