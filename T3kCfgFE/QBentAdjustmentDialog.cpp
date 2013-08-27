@@ -26,6 +26,8 @@
 #include "QBentProgressDialog.h"
 #include <QEvent>
 #include "QCalcCamValue.h"
+#include <QDir>
+#include <QStandardPaths>
 
 #include "conf.h"
 
@@ -1810,14 +1812,14 @@ void QBentAdjustmentDialog::onAdjustmentFinish()
 #ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
     QString strPath = QCoreApplication::applicationDirPath();
     strPath = rstrip(strPath, "/\\");
-    strPath += "/bent_adjustment.txt";
+    strPath += QDir::separator();
+    strPath += "bent_adjustment.txt";
 #else
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
-    QString strPath = strDocuments;
-    strPath += "/T3kCfgFE/";
+    QString strPath = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator();
     makeDirectory(strPath);
-    strPath += "/bent_adjustment.txt";
+    strPath += "bent_adjustment.txt";
 #endif
 
     QFile file(strPath);

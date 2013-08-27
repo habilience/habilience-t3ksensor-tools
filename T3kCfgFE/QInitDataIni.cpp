@@ -5,6 +5,8 @@
 
 #include "QBentCfgParam.h"
 #include "conf.h"
+#include <QDir>
+#include <QStandardPaths>
 
 #define DTC_GRAPH_INIT_SHARP_WIDTH					(50)
 #define DTC_GRAPH_INIT_CRACK_THRESHOLD_ERROR		(0.6f)
@@ -121,8 +123,7 @@ bool QInitDataIni::load()
 #else
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
-    QString strFile = strDocuments;
-    strFile += "/T3kCfgFE/";
+    QString strFile = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator();
     strFile += QCoreApplication::applicationName() + ".ini";
 #endif
 
@@ -278,8 +279,7 @@ bool QInitDataIni::save()
 #else
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
-    QString strFile = strDocuments;
-    strFile += "/T3kCfgFE/";
+    QString strFile = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator();
     makeDirectory(strFile);
     strFile += QCoreApplication::applicationName() + ".ini";
 #endif

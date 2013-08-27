@@ -7,6 +7,7 @@
 #include <QCoreApplication>
 #include "../common/QUtils.h"
 #include "conf.h"
+#include <QStandardPaths>
 
 QSensorInitDataCfg::_gc::_gc() {}
 QSensorInitDataCfg::_gc::~_gc()
@@ -24,12 +25,11 @@ void QSensorInitDataCfg::Enumerator::enumCfgData()
 #ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
     QString strDir = QCoreApplication::applicationDirPath();
     strDir = rstrip(strDir, "/\\");
-    QString strPath = strDir + "/SensorData";
+    QString strPath = strDir + QDir::separator() +"SensorData" + QDir::separator();
 #else
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    strDocuments = rstrip( strDocuments, "/\\" );
-    QString strPath = strDocuments;
-    strPath += "/T3kCfgFE/SensorData/";
+    QString strDir = rstrip( strDocuments, "/\\" );
+    QString strPath = strDir + QDir::separator() + "T3kCfgFE" + QDir::separator() + "SensorData" + QDir::separator();
 #endif
 
     QDir currentDir(strPath);
@@ -48,10 +48,10 @@ void QSensorInitDataCfg::Enumerator::enumCfgData()
         nPos = strFileName.lastIndexOf( '.' );
         if ( nPos < 0 ) continue;
         strFileName = strFileName.left( nPos );
-        qDebug( "%s", (const char*)strFileName.toLatin1() );
+        qDebug( "%s", (const char*)strFileName.toUtf8() );
         cfgData.strFileName = strFileName;
 
-        strPathName = strDir + "/SensorData/" + strFileName + ".cfg";
+        strPathName = strPath + strFileName + ".cfg";
         QFileInfo fileInfo(strPathName);
         cfgData.tmDate = fileInfo.lastModified();
 
@@ -160,13 +160,11 @@ bool QSensorInitDataCfg::load(const QString &strDataFileName )
 #else
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
-    QString strDir = strDocuments;
-    strDir += "/T3kCfgFE";
+    QString strDir = strDocuments + QDir::separator() + "T3kCfgFE";
 #endif
 
     QString strSoftkeyPath;
-    QString strFile = strDir;
-    strFile += "/SensorData/";
+    QString strFile = strDir + QDir::separator() + "SensorData" + QDir::separator();
     strFile += strDataFileName;
     strSoftkeyPath = strFile;
     strFile += ".cfg";
@@ -230,14 +228,12 @@ bool QSensorInitDataCfg::save(const QString &strDataFileName )
     QString strDir = QCoreApplication::applicationDirPath();
     strDir = rstrip(strDir, "/\\");
 
-    QString strFile = strDir;
-    strFile += "/SensorData/";
+    QString strFile = strDir + QDir::separator() + "SensorData" + QDir::separator();
     makeDirectory( strFile );
 #else
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
-    QString strFile = strDocuments;
-    strFile += "/T3kCfgFE/SensorData/";
+    QString strFile = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator() + "SensorData" + QDir::separator();
     makeDirectory( strFile );
 #endif
     strFile += strDataFileName;

@@ -91,7 +91,7 @@ bool Dialog::loadFirmwareFile()
 {
     QString strPath = QCoreApplication::applicationDirPath();
     strPath = rstrip(strPath, "/\\");
-    strPath += "/";
+    strPath += QDir::separator();
 
     QDir currentDir(strPath);
     QStringList files;

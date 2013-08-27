@@ -34,6 +34,8 @@
 #include "QTouchSettingDialog.h"
 #include "QRemoteTouchMarkDialog.h"
 
+#include <QDir>
+
 #include "conf.h"
 
 Dialog::Dialog(QWidget *parent) :
@@ -332,7 +334,7 @@ void Dialog::onInitDialog()
 
     QString strExecPath = QCoreApplication::applicationDirPath();
     strExecPath = rstrip(strExecPath, "/\\");
-    strExecPath += "/";
+    strExecPath += QDir::separator();
 
     QString strLangPath = strExecPath;
     strLangPath += "Languages";
