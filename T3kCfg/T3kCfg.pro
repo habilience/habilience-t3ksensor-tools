@@ -121,13 +121,13 @@ linux-g++-32{
 }
 linux-g++-64{
     DEFINES += OS_LINUX
-    message( "building for 32bit" );
-    CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs/debug/
-    CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs/debug/
-    CONFIG(release, debug|release): OBJECTS_DIR = $$PWD/.objs/release/
-    CONFIG(release, debug|release): MOC_DIR = $$PWD/.objs/release/
-    CONFIG(debug, debug|release): DESTDIR = $$PWD/debug
-    CONFIG(release, debug|release): DESTDIR = $$PWD/release
+    message( "building for 64bit" );
+    CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs_x64/debug/
+    CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs_x64/debug/
+    CONFIG(release, debug|release): OBJECTS_DIR = $$PWD/.objs_x64/release/
+    CONFIG(release, debug|release): MOC_DIR = $$PWD/.objs_x64/release/
+    CONFIG(debug, debug|release): DESTDIR = $$PWD/debug_x64
+    CONFIG(release, debug|release): DESTDIR = $$PWD/release_x64
 
     LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
     QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit

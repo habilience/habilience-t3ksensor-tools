@@ -20,7 +20,7 @@ linux-g++:QMAKE_TARGET.arch = $$QMAKE_HOST.arch
 linux-g++-32:QMAKE_TARGET.arch = x86
 linux-g++-64:QMAKE_TARGET.arch = x86_64
 
-linux-g++ {
+linux-g++ { # depend on Qt Creator's setting
     contains(QMAKE_TARGET.arch, x86_64):{
         message( "building for 64bit" );
         TARGET = $$join(TARGET,,,_x64)
@@ -30,10 +30,10 @@ linux-g++ {
     }
 }
 
-linux-g++-32{
+linux-g++-32 { # generic g++ 32bit compiler
     message( "building for 32bit" );
 }
-linux-g++-64{
+linux-g++-64 { # generic g++ 64bit compiler
     message( "building for 64bit" );
     TARGET = $$join(TARGET,,,_x64)
 }
