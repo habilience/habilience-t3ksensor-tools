@@ -147,17 +147,44 @@ bool QArrowButton::event(QEvent *evt)
     {
         switch (evt->type())
         {
-        case QEvent::DragEnter:
-        case QEvent::Enter:
         case QEvent::HoverEnter:
-            m_bIsHovered = true;
-            update();
+            {
+                QHoverEvent* hoverEvt = (QHoverEvent*)evt;
+                if (!m_bIsHovered && m_polygonArrow.containsPoint(hoverEvt->pos(), Qt::WindingFill))
+                {
+                    m_bIsHovered = true;
+                    update();
+                }
+            }
             break;
-        case QEvent::DragLeave:
-        case QEvent::Leave:
         case QEvent::HoverLeave:
-            m_bIsHovered = false;
-            update();
+            {
+                QHoverEvent* hoverEvt = (QHoverEvent*)evt;
+                if (m_bIsHovered && !m_polygonArrow.containsPoint(hoverEvt->pos(), Qt::WindingFill))
+                {
+                    m_bIsHovered = false;
+                    update();
+                }
+            }
+            break;
+        case QEvent::HoverMove:
+            {
+                QHoverEvent* hoverEvt = (QHoverEvent*)evt;
+                bool bIsHovered;
+                if (!m_polygonArrow.containsPoint(hoverEvt->pos(), Qt::WindingFill))
+                {
+                    bIsHovered = false;
+                }
+                else
+                {
+                    bIsHovered = true;
+                }
+                if (m_bIsHovered != bIsHovered)
+                {
+                    m_bIsHovered = bIsHovered;
+                    update();
+                }
+            }
             break;
         case QEvent::FocusIn:
             m_bIsFocused = true;
