@@ -1,13 +1,11 @@
 #ifndef QSOFTKEYDESIGNTOOLWIDGET_H
 #define QSOFTKEYDESIGNTOOLWIDGET_H
 
-//#include "LayoutToolBar.h"
+#include "LayoutToolWidget.h"
 #include "Softkey.h"
 //#include "BorderStyleEdit.h"
 
 #include <QDialog>
-
-enum ScreenUnit { UnitRes, UnitMM };
 
 namespace Ui {
 class SoftKeyDesignToolWidget;
@@ -21,11 +19,11 @@ class QSoftKeyDesignToolWidget : public QDialog
     Q_OBJECT
 
 public:
-    QSoftKeyDesignToolWidget(QWidget* parent = 0);
+    QSoftKeyDesignToolWidget(QVector<CSoftkey*>* pSelectedKeys, QWidget* parent = 0);
     virtual ~QSoftKeyDesignToolWidget();
 
     void updateUIButtonState( int nSelectKeyCount, GroupStatus eGroupStatus, QVector<CSoftkey*>& SelectKeys );
-    void updateLayoutButton();
+    void updateLayoutButton(bool bVisible);
 
     void setScaleFactor( double dScaleWidth, double dScaleHeight );
 
@@ -33,6 +31,7 @@ public:
 
 protected:
     //
+    virtual void showEvent(QShowEvent *);
     virtual void closeEvent(QCloseEvent *);
 
     void updateUnit();
@@ -40,11 +39,16 @@ protected:
 
 protected:
     ScreenUnit              m_eUnit;
-    //DLayoutToolBar          m_wndLayoutToolBar;
-
-    QGraphicsItemGroup*     m_pSelectedKeys;
+    QLayoutToolWidget*      m_pLayoutToolWidget;
 
     QRect                   m_rcOld;
+
+    QVector<CSoftkey*>*     m_pvSelectedKeys;
+
+    QString                 m_strPosX;
+    QString                 m_strPosY;
+    QString                 m_strWidth;
+    QString                 m_strHeight;
 
 protected:
     double                  m_dD2PScaleWidth;
@@ -60,11 +64,18 @@ signals:
     void screenSize(int eSize);
     void groupSelectedKeys();
     void ungroupSelectedKeys(bool bPushHistory);
-    void reorderKeys();
-    void invalidateKey(QGraphicsKeyItem* key);
+    void invalidateKey(CSoftkey* key);
     void recalcSelectionKeys(QRect rcOld, QRect rcNew );
     void updateScreen();
     void resetKeys();
+
+    void reorderKeys();
+
+    // LayoutToolBar
+    void generateKeys(KeyArrange eArrange, int nCount, int nW, int nH, int nInterval);
+    void alignSelectedKeys(KeyAlign eAlign);
+    void adjustSizeSelectedKeys(AdjustSize eSize);
+    void distribSelectKeys(Distrib eDistrib);
 
 private slots:
     void on_BtnFitScreen_clicked();
@@ -74,10 +85,10 @@ private slots:
     void on_BtnGroup_clicked();
     void on_BtnUngroup_clicked();
     void on_BtnReorder_clicked();
-    void on_CBUnit_currentIndexChanged(int index);
+    void on_CBUnit_activated(int index);
     void on_EditPosX_textChanged(const QString &arg1);
     void on_EditName_editingFinished();
-    void on_CBVisible_currentIndexChanged(int index);
+    void on_CBVisible_activated(int index);
     void on_EditPosX_editingFinished();
     void on_EditPosY_textChanged(const QString &arg1);
     void on_EditPosY_editingFinished();
@@ -92,6 +103,10 @@ private slots:
 public slots:
     void onKeyStateCount(bool bAdd);
     void onSelectedKeys(bool bGroup, int nSelectedCount);
+
+    // LayoutToolWidget
+    void onUpdateLayoutButton(bool bVisible);
+    void onEnableDesignTool(bool bEnable);
 };
 
 #endif // QSOFTKEYDESIGNTOOLWIDGET_H

@@ -43,7 +43,17 @@ bool QIniFormat::open(const QString &fileName)
 
 bool QIniFormat::save(const QString &fileName)
 {
+    if( m_mapIniData.count() == 0 ) return false;
 
+    if( !m_pFile )
+        m_pFile = new QFile();
+
+    m_pFile->setFileName( fileName );
+    if( !m_pFile->open(QIODevice::WriteOnly) ) return false;
+
+    syncMapData();
+
+    m_pFile->close();
 
     return true;
 }
@@ -107,6 +117,36 @@ void QIniFormat::syncIniFile()
         pGroup->insert( strKey, strValue );
     }
 }
+#include <QDebug>
+void QIniFormat::syncMapData()
+{
+    if( !isOpen() ) return;
+
+    IniDataMap::iterator iterNoGroup = m_mapIniData.find( "" );
+    if( iterNoGroup != m_mapIniData.end() )
+    {
+        IniDataGroup* pNoGroup = m_mapIniData.value( "", NULL );
+        for( IniDataGroup::iterator iter = pNoGroup->begin(); iter != pNoGroup->end(); ++iter )
+        {
+            m_pFile->write( QString(iter.key() + "=" + iter.value() + "\r\n").toUtf8() );
+        }
+
+        m_pFile->write( "\r\n" );
+    }
+
+    for( IniDataMap::iterator iter = m_mapIniData.begin(); iter != m_mapIniData.end(); ++iter )
+    {
+        if( iter.key() == "" ) continue;
+
+        IniDataGroup* pGroup = iter.value();
+        m_pFile->write( QString("[" + iter.key() + "]\r\n").toUtf8() );
+        for( IniDataGroup::iterator iter = pGroup->begin(); iter != pGroup->end(); ++iter )
+        {
+            m_pFile->write( QString(iter.key() + "=" + iter.value() + "\r\n").toUtf8() );
+
+        }
+    }
+}
 
 void QIniFormat::beginGroup(const QString strGroup)
 {
@@ -146,6 +186,11 @@ bool QIniFormat::setValue(const QString strKey, const QString strValue)
         if( m_strNewGroup.isEmpty() )
         {
             pGroup = m_mapIniData.value( "", NULL );
+            if( !pGroup )
+            {
+                m_mapIniData.insert( "", new IniDataGroup() );
+                pGroup = m_mapIniData.value( "", NULL );
+            }
         }
         else
         {
@@ -160,6 +205,8 @@ bool QIniFormat::setValue(const QString strKey, const QString strValue)
     Q_ASSERT( pGroup );
 
     pGroup->insert( strKey, strValue );
+
+    qDebug() << strKey + "=" + strValue;
 
     return true;
 }

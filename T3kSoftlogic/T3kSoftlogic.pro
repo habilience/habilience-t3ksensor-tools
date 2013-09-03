@@ -16,7 +16,8 @@ CONFIG += static staticlib
 TEMPLATE = app
 
 #Define
-DEFINES += _QT_COMPILER_ QUAZIP_STATIC _T3KHANDLE_REMOVE_PRV USE_T3K_STATIC_LIBS
+DEFINES += _QT_COMPILER_ QUAZIP_STATIC _T3KHANDLE_REMOVE_PRV USE_T3K_STATIC_LIBS \
+            USE_SOFTLOGIC_OUTPUT_MOUSE USE_SOFTLOGIC_OUTPUT_AUDIO_CONTROL
 
 linux-g++|linux-g++-64:DEFINES += OS_LINUX
 
@@ -106,6 +107,7 @@ SOURCES += main.cpp\
     ../common/T3kHandle.cpp \
     ../common/TPDPEventMultiCaster.cpp \
     ../common/QIniFormat.cpp \
+    ../common/QKeyMapStr.cpp \
     ../common/ui/QUnderlineLabel.cpp \
     ../common/ui/QHoverComboBox.cpp \
     T3kSoftlogicDlg.cpp \
@@ -115,22 +117,6 @@ SOURCES += main.cpp\
     TabCalibrationWidget.cpp \
     Softkey.cpp \
     T3kCommonData.cpp \
-#    KeyTracker.cpp \
-#    UserDefinedKeyCtrl.cpp \
-#    LogicDesignerWnd.cpp \
-#    LayoutToolBar.cpp \
-#    KeyMapStr.cpp \
-#    KeyEdit.cpp \
-#    GPIOListCtrl.cpp \
-#    GdipWndExt.cpp \
-#    GdipTabWnd.cpp \
-#    GdiPlusInitializer.cpp \
-#    GdiplusExt.cpp \
-#    DSelectModel.cpp \
-#    DLogicGallery.cpp \
-#    DEditGate.cpp \
-#    DArrangeHelper.cpp \
-#    BorderStyleEdit.cpp
     SoftKeyDesignToolWidget.cpp \
     KeyDesignWidget.cpp \
     SelectDeviceWidget.cpp \
@@ -138,7 +124,14 @@ SOURCES += main.cpp\
     ResizingGraphicsItem.cpp \
     GraphicsKeyItem.cpp \
     GraphicsButtonItem.cpp \
-    EdgeResizeGrabber.cpp
+    EdgeResizeGrabber.cpp \
+    LayoutToolWidget.cpp \
+    ArrangeHelperWidget.cpp \
+    LogicDesignWidget.cpp \
+    EditGateWidget.cpp \
+    UserDefinedKeyWidget.cpp \
+    KeyLineEditWidget.cpp \
+    LogicGalleryWidget.cpp \
 
 
 HEADERS  += \
@@ -149,6 +142,7 @@ HEADERS  += \
     ../common/T3kHandle.h \
     ../common/TPDPEventMultiCaster.h \
     ../common/QIniFormat.h \
+    ../common/QKeyMapStr.h \
     ../common/ui/QUnderlineLabel.h \
     ../common/ui/QHoverComboBox.h \
     T3kSoftlogicDlg.h \
@@ -159,22 +153,6 @@ HEADERS  += \
     SoftkeyDef.h \
     SoftKey.h \
     T3kCommonData.h \
-#    KeyTracker.h \
-#    UserDefinedKeyCtrl.h \
-#    LogicDesignerWnd.h \
-#    LayoutToolBar.h \
-#    KeyMapStr.h \
-#    KeyEdit.h \
-#    GPIOListCtrl.h \
-#    GdipWndExt.h \
-#    GdipTabWnd.h \
-#    GdiPlusInitializer.h \
-#    GdiplusExt.h \
-#    DSelectModel.h \
-#    DLogicGallery.h \
-#    DEditGate.h \
-#    DArrangeHelper.h \
-#    BorderStyleEdit.h
     SoftKeyDesignToolWidget.h \
     KeyDesignWidget.h \
     SelectDeviceWidget.h \
@@ -182,7 +160,14 @@ HEADERS  += \
     ResizingGraphicsItem.h \
     GraphicsKeyItem.h \
     GraphicsButtonItem.h \
-    EdgeResizeGrabber.h
+    EdgeResizeGrabber.h \
+    LayoutToolWidget.h \
+    ArrangeHelperWidget.h \
+    LogicDesignWidget.h \
+    EditGateWidget.h \
+    UserDefinedKeyWidget.h \
+    KeyLineEditWidget.h \
+    LogicGalleryWidget.h \
 
 FORMS    += \
     T3kSoftlogicDlg.ui \
@@ -191,7 +176,11 @@ FORMS    += \
     TabKeyDesignWidget.ui \
     TabLogicDesignWidget.ui \
     SoftKeyDesignToolWidget.ui \
-    SelectDeviceWidget.ui
+    SelectDeviceWidget.ui \
+    LayoutToolWidget.ui \
+    ArrangeHelperWidget.ui \
+    EditGateWidget.ui \
+    LogicGalleryWidget.ui
 
 win32:RC_FILE = ./resources/T3kSoftlogic.rc
 

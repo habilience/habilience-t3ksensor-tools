@@ -510,10 +510,17 @@
           </spacer>
          </item>
          <item>
-          <widget class="QKeyDesignWidget" name="PreviewKey"/>
+          <widget class="QLogicDesignWidget" name="PreviewLogic" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QKeyDesignWidget" name="PreviewLogic"/>
+          <widget class="QKeyDesignWidget" name="PreviewKey" native="true"/>
          </item>
         </layout>
        </item>
@@ -652,8 +659,15 @@
  <customwidgets>
   <customwidget>
    <class>QKeyDesignWidget</class>
-   <extends>QGraphicsView</extends>
+   <extends>QWidget</extends>
    <header>KeyDesignWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QLogicDesignWidget</class>
+   <extends>QWidget</extends>
+   <header>LogicDesignWidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

@@ -92,6 +92,29 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
     ui->TabMainMenu->addTab( m_pTabLogicDesignWidget, "Logic" );
     ui->TabMainMenu->addTab( m_pTabCalibrationWidget, "Calibration" );
 
+    connect( m_pTabPanelWidget, &TabPanelWidget::updatePreview, this, &T3kSoftlogicDlg::onUpdatePrewview );
+    connect( m_pTabPanelWidget, &TabPanelWidget::isValidT3kSensorState, this, &T3kSoftlogicDlg::onIsValidT3kSensorState, Qt::DirectConnection );
+    connect( m_pTabPanelWidget, &TabPanelWidget::getT3kHandle, this, &T3kSoftlogicDlg::onGetT3kHandle, Qt::DirectConnection );
+    connect( m_pTabPanelWidget, &TabPanelWidget::notifyTab, this, &T3kSoftlogicDlg::onNotifyTab );
+
+    connect( m_pTabKeyDesignWidget, &TabKeyDesignWidget::updatePreview, this, &T3kSoftlogicDlg::onUpdatePrewview );
+    connect( m_pTabLogicDesignWidget, &TabLogicDesignWidget::updatePreview, this, &T3kSoftlogicDlg::onUpdatePrewview );
+    connect( m_pTabLogicDesignWidget, &TabLogicDesignWidget::getT3kHandle, this, &T3kSoftlogicDlg::onGetT3kHandle, Qt::DirectConnection );
+    connect( m_pTabLogicDesignWidget, &TabLogicDesignWidget::isValidT3kSensorState, this, &T3kSoftlogicDlg::onIsValidT3kSensorState, Qt::DirectConnection );
+
+    connect( m_pTabCalibrationWidget, &TabCalibrationWidget::updatePreview, this, &T3kSoftlogicDlg::onUpdatePrewview );
+    connect( m_pTabCalibrationWidget, &TabCalibrationWidget::updateCalibrationStep, this, &T3kSoftlogicDlg::onUpdateCalibrationStep );
+    connect( m_pTabCalibrationWidget, &TabCalibrationWidget::displayPreviewTouchCount, this, &T3kSoftlogicDlg::onDisplayPreviewTouchCount );
+    connect( m_pTabCalibrationWidget, &TabCalibrationWidget::isT3kConnected, this, &T3kSoftlogicDlg::onIsT3kConnected, Qt::DirectConnection );
+    connect( m_pTabCalibrationWidget, &TabCalibrationWidget::isT3kInvalidFirmware, this, &T3kSoftlogicDlg::onIsT3kInvalidFirmware, Qt::DirectConnection );
+    connect( m_pTabCalibrationWidget, &TabCalibrationWidget::enableControls, this, &T3kSoftlogicDlg::onEnableControls );
+    connect( m_pTabCalibrationWidget, &TabCalibrationWidget::isAssociateFileExt, this, &T3kSoftlogicDlg::onIsAssociateFileExt, Qt::DirectConnection );
+    connect( m_pTabCalibrationWidget, &TabCalibrationWidget::doAssociateFileExt, this, &T3kSoftlogicDlg::onDoAssociateFileExt );
+    connect( m_pTabCalibrationWidget, &TabCalibrationWidget::doRemoveFileExtAssociation, this, &T3kSoftlogicDlg::onDoRemoveFileExtAssociation );
+    connect( m_pTabCalibrationWidget, &TabCalibrationWidget::invertDrawing, this, &T3kSoftlogicDlg::onInvertDrawing );
+
+    connect( m_pTabCalibrationWidget, &TabCalibrationWidget::getT3kHandle, this, &T3kSoftlogicDlg::onGetT3kHandle, Qt::DirectConnection );
+
     installEventFilter( m_pTabCalibrationWidget );
 
     ui->PreviewLayout->addLayout( &m_StackedPreviewLayout );
@@ -109,7 +132,7 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
     ui->PreviewKey->setVisible( true );
 
     ui->PreviewLogic->setFont( font() );
-    ui->PreviewLogic->setScreenMode( QKeyDesignWidget::ScreenModePreview );
+    ui->PreviewLogic->setScreenMode( QLogicDesignWidget::ScreenModePreview );
 //m_pPrevKeyDesignWidget.ModifyStyle( 0, WS_BORDER );
 
     if( !bLoadOK )
@@ -119,7 +142,7 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
     else
     {
         m_pTabPanelWidget->updateUIFromData();
-        updatePreviewCanvas();
+        onUpdatePrewview();
     }
 
 //    DEV_BROADCAST_DEVICEINTERFACE NotificationFilter;
@@ -174,7 +197,7 @@ void T3kSoftlogicDlg::onHandleMessage(const QString &msg)
     {
         m_pTabPanelWidget->updateUIFromData();
         T3kCommonData::instance()->resetCalibrationData();
-        updatePreviewCanvas();
+        onUpdatePrewview();
 
         //m_wndTab.ResetNotify();
     }
@@ -186,7 +209,7 @@ void T3kSoftlogicDlg::init()
     settings.beginGroup( "APP_SETTING" );
     bool bCheckInvertDrawing = settings.value( "INVERT_DRAWING", false ).toBool();
     settings.endGroup();
-    setInvertDrawing( bCheckInvertDrawing );
+    onInvertDrawing( bCheckInvertDrawing );
 
     settings.beginGroup( "Windows" );
     QString strPos = settings.value( "Main_Pos" ).toString();
@@ -402,25 +425,6 @@ bool T3kSoftlogicDlg::openT3kHandle()
     return bRet;
 }
 
-void T3kSoftlogicDlg::setInvertDrawing( bool bInvert )
-{
-    ui->PreviewKey->setInvertDrawing( bInvert );
-    if ( ui->PreviewKey->isVisible() )
-        ui->PreviewKey->update();
-//    m_wndPrevLogicDesign.SetInvertDrawing( bInvert );
-//    if ( m_wndPrevLogicDesign && m_wndPrevLogicDesign.IsWindowVisible() )
-//        m_wndPrevLogicDesign.Invalidate();
-//    m_pTabKeyDesignWidget.m_wndDesignCanvas.SetInvertDrawing( bInvert );
-//    if ( m_pTabKeyDesignWidget.m_wndDesignCanvas && m_pTabKeyDesignWidget.m_wndDesignCanvas.IsWindowVisible() )
-//        m_pTabKeyDesignWidget.m_wndDesignCanvas.Invalidate();
-//    m_pTabLogicDesignWidget.m_LogicDesigner.SetInvertDrawing( bInvert );
-//    if ( m_pTabLogicDesignWidget.m_LogicDesigner && m_pTabLogicDesignWidget.m_LogicDesigner.IsWindowVisible() )
-//        m_pTabLogicDesignWidget.m_LogicDesigner.Invalidate();
-//    m_pTabCalibrationWidget.m_wndTestCanvas.SetInvertDrawing( bInvert );
-//    if ( m_pTabCalibrationWidget.m_wndTestCanvas && m_pTabCalibrationWidget.m_wndTestCanvas.IsWindowVisible() )
-//        m_pTabCalibrationWidget.m_wndTestCanvas.Invalidate();
-}
-
 void T3kSoftlogicDlg::OnOpenT3kDevice(T3K_HANDLE)
 {
     if( !isVisible() ) return;
@@ -476,53 +480,6 @@ void T3kSoftlogicDlg::OnRSP(ResponsePart Part, ushort, const char *, long, bool,
     }
 }
 
-void T3kSoftlogicDlg::enableControls( bool bEnable )
-{
-    ui->TabMainMenu->tabBar()->setEnabled( bEnable );
-    ui->BtnNew->setEnabled( bEnable );
-    ui->BtnLoad->setEnabled( bEnable );
-    ui->BtnSave->setEnabled( bEnable );
-    ui->BtnExit->setEnabled( bEnable );
-}
-
-void T3kSoftlogicDlg::updateCalibrationStep( GroupKey* pGroup, CSoftkey* key, int nCalPos, bool bSet )
-{
-    if( !pGroup && !key )
-    {
-//        ui->PreviewKey->cancelBlink();
-        return;
-    }
-
-    if( pGroup )
-    {
-//        ui->PreviewKey->setBlinkKey( pGroup, nCalPos, bSet );
-    }
-    if( key )
-    {
-//        ui->PreviewKey->setBlinkKey( key, nCalPos, bSet );
-    }
-}
-
-void T3kSoftlogicDlg::updatePreviewCanvas()
-{
-    switch( m_StackedPreviewLayout.currentIndex() )
-    {
-    case 0:
-    case 1:
-    case 3:
-        ui->PreviewKey->updateKeys();
-        ui->PreviewKey->update();
-        break;
-    case 2:
-        ui->PreviewLogic->update();
-    }
-}
-
-void T3kSoftlogicDlg::displayPreviewTouchCount( int nTouchCount )
-{
-    ui->PreviewKey->updateTouchCount( nTouchCount );
-}
-
 void T3kSoftlogicDlg::setFocusPanelName()
 {
     int nTabIdx = ui->TabMainMenu->currentIndex();
@@ -532,16 +489,6 @@ void T3kSoftlogicDlg::setFocusPanelName()
     }
 
     m_pTabPanelWidget->setFocusPaname();
-}
-
-void T3kSoftlogicDlg::onCloseCanvasWnd()
-{
-    updatePreviewCanvas();
-
-    if( ui->TabMainMenu->currentIndex() == 3 )		// download tab
-    {
-        m_pTabCalibrationWidget->onCloseTestWnd();
-    }
 }
 
 bool T3kSoftlogicDlg::loadModel( QString lpszPathName )
@@ -617,13 +564,12 @@ bool T3kSoftlogicDlg::loadModel( QString lpszPathName )
     T3kCommonData::instance()->resetCalibrationData();
 
     strData.clear(), strExtra.clear();
-    QVariant v = ini.getValue( "softlogic" );
     strData = ini.getValue( "softlogic" );
     ini.beginGroup( "softlogic_ext" );
     T3kCommonData::instance()->getLogics().load(strData, &ini);
     ini.endGroup();
 
-    //m_pTabKeyDesignWidget.m_wndDesignCanvas.UpdateKeys();
+    m_pTabKeyDesignWidget->updateDesignWidget();
 
     m_strLoadedModelPathName = lpszPathName;
     T3kCommonData::instance()->setLoadedModelPathName( m_strLoadedModelPathName );
@@ -634,7 +580,6 @@ bool T3kSoftlogicDlg::loadModel( QString lpszPathName )
 bool T3kSoftlogicDlg::saveModel( QString lpszPathName )
 {
     QIniFormat ini("hsk");
-    if( !ini.open( lpszPathName ) ) return false;
 
     QString strData, strExtra;
 
@@ -677,7 +622,7 @@ bool T3kSoftlogicDlg::saveModel( QString lpszPathName )
 
     m_strLoadedModelPathName = lpszPathName;
 
-    return true;
+    return ini.save( m_strLoadedModelPathName );
 }
 
 bool T3kSoftlogicDlg::isModified()
@@ -795,7 +740,7 @@ void T3kSoftlogicDlg::on_BtnNew_clicked()
 
     T3kCommonData::instance()->resetCalibrationData();
 
-    updatePreviewCanvas();
+    onUpdatePrewview();
 }
 
 void T3kSoftlogicDlg::on_BtnLoad_clicked()
@@ -818,7 +763,7 @@ void T3kSoftlogicDlg::on_BtnLoad_clicked()
 
         m_pTabPanelWidget->updateUIFromData();
         T3kCommonData::instance()->resetCalibrationData();
-        updatePreviewCanvas();
+        onUpdatePrewview();
 
         //m_wndTab.ResetNotify();
     }
@@ -865,7 +810,7 @@ void T3kSoftlogicDlg::on_BtnSave_clicked()
     loadModel( strLoad );
 
     m_pTabPanelWidget->updateUIFromData();
-    updatePreviewCanvas();
+    onUpdatePrewview();
 
     T3kCommonData::instance()->resetCalibrationData();
 
@@ -1003,7 +948,7 @@ void T3kSoftlogicDlg::dropEvent(QDropEvent *evt)
 
     m_pTabPanelWidget->updateUIFromData();
     T3kCommonData::instance()->resetCalibrationData();
-    updatePreviewCanvas();
+    onUpdatePrewview();
 
     //m_wndTab.ResetNotify();
     m_pTabKeyDesignWidget->refresh();
@@ -1085,44 +1030,15 @@ static void registerShellFileTypes( QString strFileExt, QString strFileTypeName,
     }
 }
 
-bool T3kSoftlogicDlg::isAssociateFileExt()
-{
-    QSettings settings( "HKEY_CLASSES_ROOT", QSettings::NativeFormat );
-    settings.beginGroup( Softlogic_TypStr );
-    bool bRet = !settings.value( Default_Key ).toString().isEmpty();
-    settings.endGroup();
-    return bRet;
-}
-
-void T3kSoftlogicDlg::doAssociateFileExt()
-{
-    // register ext
-    QString strRegShellFileName( QApplication::applicationFilePath() );
-#ifdef Q_OS_WIN
-    strRegShellFileName.replace( QChar('/'), QChar('\\') );
-#endif
-    registerShellFileTypes( Softlogic_ExtStr, Softlogic_TypStr, strRegShellFileName, strRegShellFileName, 1 );
-}
-
-void T3kSoftlogicDlg::doRemoveFileExtAssociation()
-{
-    unregisterShellFileTypes( Softlogic_ExtStr, Softlogic_TypStr );
-}
-
 void T3kSoftlogicDlg::doExecute( QString str )
 {
     if ( !str.isEmpty() )
     {
         if ( str.compare( "assoc_file_ext" ) == 0 )
-            doAssociateFileExt();
+            onDoAssociateFileExt();
         else if ( str.compare( "remove_file_ext" ) == 0 )
-            doRemoveFileExtAssociation();
+            onDoRemoveFileExtAssociation();
     }
-}
-
-void T3kSoftlogicDlg::notifyTab(int nIdx)
-{
-
 }
 
 void T3kSoftlogicDlg::on_TabMainMenu_currentChanged(int index)
@@ -1155,5 +1071,90 @@ void T3kSoftlogicDlg::on_TabMainMenu_currentChanged(int index)
 
     setUpdatesEnabled( true );
 
-    updatePreviewCanvas();
+    onUpdatePrewview();
+}
+
+void T3kSoftlogicDlg::onUpdatePrewview()
+{
+    switch( m_StackedPreviewLayout.currentIndex() )
+    {
+    case 0:
+        ui->PreviewKey->update();
+        break;
+    case 1:
+        ui->PreviewLogic->update();
+        break;
+    default:
+        break;
+    }
+}
+
+void T3kSoftlogicDlg::onUpdateCalibrationStep( GroupKey* pGroup, CSoftkey* key, int nCalPos, bool bSet )
+{
+    if( !pGroup && !key )
+    {
+        ui->PreviewKey->cancelBlink();
+        return;
+    }
+
+    if( pGroup )
+    {
+        ui->PreviewKey->setBlinkKey( pGroup, nCalPos, bSet );
+    }
+    if( key )
+    {
+        ui->PreviewKey->setBlinkKey( key, nCalPos, bSet );
+    }
+}
+
+void T3kSoftlogicDlg::onDisplayPreviewTouchCount( int nTouchCount )
+{
+    ui->PreviewKey->updateTouchCount( nTouchCount );
+}
+
+void T3kSoftlogicDlg::onEnableControls( bool bEnable )
+{
+    ui->TabMainMenu->tabBar()->setEnabled( bEnable );
+    ui->BtnNew->setEnabled( bEnable );
+    ui->BtnLoad->setEnabled( bEnable );
+    ui->BtnSave->setEnabled( bEnable );
+    ui->BtnExit->setEnabled( bEnable );
+}
+
+void T3kSoftlogicDlg::onNotifyTab(int index)
+{
+
+}
+
+void T3kSoftlogicDlg::onInvertDrawing( bool bInvert )
+{
+    ui->PreviewKey->setInvertDrawing( bInvert );
+    ui->PreviewLogic->setInvertDrawing( bInvert );
+    m_pTabKeyDesignWidget->setInvertDrawing( bInvert );
+    m_pTabLogicDesignWidget->setInvertDrawing( bInvert );
+    m_pTabCalibrationWidget->setInvertDrawing( bInvert );
+}
+
+bool T3kSoftlogicDlg::onIsAssociateFileExt()
+{
+    QSettings settings( "HKEY_CLASSES_ROOT", QSettings::NativeFormat );
+    settings.beginGroup( Softlogic_TypStr );
+    bool bRet = !settings.value( Default_Key ).toString().isEmpty();
+    settings.endGroup();
+    return bRet;
+}
+
+void T3kSoftlogicDlg::onDoAssociateFileExt()
+{
+    // register ext
+    QString strRegShellFileName( QApplication::applicationFilePath() );
+#ifdef Q_OS_WIN
+    strRegShellFileName.replace( QChar('/'), QChar('\\') );
+#endif
+    registerShellFileTypes( Softlogic_ExtStr, Softlogic_TypStr, strRegShellFileName, strRegShellFileName, 1 );
+}
+
+void T3kSoftlogicDlg::onDoRemoveFileExtAssociation()
+{
+    unregisterShellFileTypes( Softlogic_ExtStr, Softlogic_TypStr );
 }

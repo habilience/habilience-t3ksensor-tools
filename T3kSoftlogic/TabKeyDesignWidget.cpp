@@ -30,6 +30,8 @@ TabKeyDesignWidget::TabKeyDesignWidget(QWidget* parent /*=NULL*/) :
 
     ui->TableGPIO->setColumnWidth( 0, 100 );
     ui->TableGPIO->setColumnWidth( 1, 120 );
+
+    connect( &m_DesignCanvasWidget, &QKeyDesignWidget::closeWidget, this, &TabKeyDesignWidget::updatePreview );
 }
 
 TabKeyDesignWidget::~TabKeyDesignWidget()
@@ -108,10 +110,10 @@ void TabKeyDesignWidget::refresh()
                 GPIOInfo* pInfo = Keys.getGPIOInfo(i);
 				if ( pInfo )
 				{
-                    QHoverComboBox* cbEnable = new QHoverComboBox( ui->TableGPIO );
+                    QHoverComboBox* cbEnable = new QHoverComboBox( ui->TableGPIO, true, i, 0 );
                     cbEnable->addItem( "True" ); cbEnable->addItem( "False" );
-                    cbEnable->setCurrentIndex( pInfo->bEnable ? 1 : 0 );
-                    QHoverComboBox* cbIO = new QHoverComboBox( ui->TableGPIO );
+                    cbEnable->setCurrentIndex( pInfo->bEnable ? 0 : 1 );
+                    QHoverComboBox* cbIO = new QHoverComboBox( ui->TableGPIO, true, i, 1 );
                     cbIO->addItem( "Input" ); cbIO->addItem( "Output" );
                     cbIO->setCurrentIndex( pInfo->bOutput ? 1 : 0 );
 
@@ -129,7 +131,7 @@ void TabKeyDesignWidget::refresh()
 				{
                     Q_ASSERT( ui->TableGPIO->cellWidget( i, 0 )->inherits( "QHoverComboBox" ) );
                     QHoverComboBox* cbEnable = (QHoverComboBox*)ui->TableGPIO->cellWidget( i, 0 );
-                    cbEnable->setCurrentIndex( pInfo->bEnable ? 1 : 0 );
+                    cbEnable->setCurrentIndex( pInfo->bEnable ? 0 : 1 );
                     Q_ASSERT( ui->TableGPIO->cellWidget( i, 1 )->inherits( "QHoverComboBox" ) );
                     QHoverComboBox* cbIO = (QHoverComboBox*)ui->TableGPIO->cellWidget( i, 1 );
                     cbIO->setCurrentIndex( pInfo->bOutput ? 1 : 0 );
@@ -185,10 +187,12 @@ void TabKeyDesignWidget::on_BtnSet_clicked()
         GPIOInfo* pInfo = Keys.getGPIOInfo(i);
         if ( pInfo )
         {
-            QHoverComboBox* cbEnable = new QHoverComboBox( ui->TableGPIO );
+            QHoverComboBox* cbEnable = new QHoverComboBox( ui->TableGPIO, true, i, 0 );
+            connect( cbEnable, &QHoverComboBox::ItemChanged, this, &TabKeyDesignWidget::onTableGPIOcellChanged );
             cbEnable->addItem( "True" ); cbEnable->addItem( "False" );
-            cbEnable->setCurrentIndex( pInfo->bEnable ? 1 : 0 );
-            QHoverComboBox* cbIO = new QHoverComboBox( ui->TableGPIO );
+            cbEnable->setCurrentIndex( pInfo->bEnable ? 0 : 1 );
+            QHoverComboBox* cbIO = new QHoverComboBox( ui->TableGPIO, true, i, 1 );
+            connect( cbIO, &QHoverComboBox::ItemChanged, this, &TabKeyDesignWidget::onTableGPIOcellChanged );
             cbIO->addItem( "Input" ); cbIO->addItem( "Output" );
             cbIO->setCurrentIndex( pInfo->bOutput ? 1 : 0 );
 
@@ -198,19 +202,22 @@ void TabKeyDesignWidget::on_BtnSet_clicked()
     }
 }
 
-void TabKeyDesignWidget::on_TableGPIO_cellChanged(int row, int column)
+void TabKeyDesignWidget::onTableGPIOcellChanged(QObject* obj, int index)
 {
+    if( !obj->inherits( "QHoverComboBox" ) ) return;
+
     CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
+
+    QHoverComboBox* cb = (QHoverComboBox*)obj;
+    int row = cb->GetRowIndex();
+    int column = cb->GetColumnIndex();
 
     GPIOInfo* pInfo = Keys.getGPIOInfo( row );
     if ( pInfo )
     {
-        Q_ASSERT( ui->TableGPIO->cellWidget( row, column )->inherits( "QHoverComboBox" ) );
-
-        QHoverComboBox* cb = (QHoverComboBox*) ui->TableGPIO->cellWidget( row, column );
-        if( cb->currentIndex() == 0 )
-            pInfo->bEnable = (column == 0 ? true : false);
-        else if( cb->currentIndex() == 1 )
-            pInfo->bOutput = (column == 0 ? true : false);
+        if( column == 0 )
+            pInfo->bEnable = (index == 0 ? true : false);
+        else if( column == 1 )
+            pInfo->bOutput = (index ? true : false);
     }
 }

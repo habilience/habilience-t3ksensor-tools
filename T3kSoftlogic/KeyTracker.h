@@ -11,11 +11,13 @@ class QKeyTracker : public QObject
     Q_OBJECT
 
 public:
-    enum StyleFlags
+    enum StyleType
     {
         solidLine = 1, dottedLine = 2, hatchedBorder = 4,
         resizeInside = 8, resizeOutside = 16, hatchInside = 32
     };
+
+    Q_DECLARE_FLAGS(StyleFlags, StyleType)
     enum TrackerHit
     {
         hitNothing = -1,
@@ -32,7 +34,7 @@ public:
 //    bool trackRubberBand(QWidget* pWidget, QPoint point, bool bAllowInvert = true);
 
 	
-    void draw(QPainter* pDC);
+    void draw(QPainter* painter);
 
     int hitTest(QPoint point);
 
@@ -64,6 +66,8 @@ public:
     } Rectangle;
 
     Rectangle   m_rectCalc;
+    bool        m_bTracking;
+    bool        m_bRubberBand;
 
 protected:
     virtual bool eventFilter(QObject *, QEvent *);
@@ -90,7 +94,7 @@ protected:
 
     int         m_nHandleSize;
 
-    bool        m_bTracking;
+
 
     TrackerHit  m_eTrackerHit;
 

@@ -443,7 +443,7 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>20</height>
+        <height>18</height>
        </size>
       </property>
       <property name="text">
@@ -534,11 +534,11 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>20</height>
+        <height>18</height>
        </size>
       </property>
       <property name="text">
-       <string>GPIO design</string>
+       <string>Optional Function</string>
       </property>
      </widget>
     </item>

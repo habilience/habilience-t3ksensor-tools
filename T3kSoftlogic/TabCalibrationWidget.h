@@ -1,7 +1,7 @@
 #ifndef TABCALIBRATIONWIDGET_H
 #define TABCALIBRATIONWIDGET_H
 
-//#include "DesignCanvasWnd.h"
+#include "KeyDesignWidget.h"
 #include "../common/TPDPEventMultiCaster.h"
 #include "SoftKey.h"
 
@@ -25,11 +25,12 @@ public:
 
     void onCloseTestWnd();
 
-    //CDesignCanvasWnd	m_wndTestCanvas;
+    void setInvertDrawing(bool bInvert) { m_wndTestCanvas.setInvertDrawing( bInvert ); if( isVisible() ) update(); }
 
     virtual void keyPressEvent(QKeyEvent *);
 
 protected:
+
     bool prepareKeyCalibration();
     void keyCalibration();
     void cancelKeyCalibration();
@@ -44,7 +45,7 @@ protected:
 
     bool verifyGPIO( int &nSensorGPIOCount );
 
-    void forceMouseEvent( uchar cButtons, char cWheel, ushort wX, ushort wY );
+    void forceMouseEvent( uchar cButtons, char cWheel, int wX, int wY );
 
     // TPDPEventMulticaster::ITPDPEventListener
     virtual void OnOpenT3kDevice(T3K_HANDLE);
@@ -60,15 +61,13 @@ protected:
     virtual void timerEvent(QTimerEvent *);
 
     void onCalibrationPoint( QPoint ptCal );
-    void onCalibrationFinish();
+    bool onCalibrationFinish();
 
     void updateDesignCanvas( bool bCalibrate, int nCalPos=0, bool bSet=false );
 
     bool writeToSensor( bool bLogicOnly );
 
     void changeFileAssociateBtnTitle();
-
-    QObject* findWantToParent(QObject *target, const char* strObjectName);
 
 protected:
     bool			m_bCalibrationMode;
@@ -80,7 +79,7 @@ protected:
 
     long			m_lAreaC;
     bool			m_bPointOK;
-    //ulong			m_dwTickPoint;
+    ulong			m_dwTickPoint;
     QTime           m_TickPoint;
     QPoint			m_ptTouch;
     QPoint			m_ptTickPos;
@@ -112,13 +111,25 @@ protected:
     int             m_nTimerCheckPoint;
     int             m_nTimerRecheckPoint;
 
+    QKeyDesignWidget	m_wndTestCanvas;
+
 private:
     Ui::TabCalibrationWidget* ui;
 
 signals:
+    T3kHandle* getT3kHandle();
+    bool isT3kConnected();
+    bool isT3kInvalidFirmware();
+    void updatePreview();
+    void updateCalibrationStep(GroupKey* pGroup, CSoftkey* key, int nCalPos, bool bSet);
+    void displayPreviewTouchCount(int nTouchCount);
+    void enableControls(bool bEnable);
+    bool isAssociateFileExt();
+    void doAssociateFileExt();
+    void doRemoveFileExtAssociation();
+    void invertDrawing(bool bInvert);
 
 private slots:
-
     void on_BtnCalibration_clicked();
     void on_BtnCancel_clicked();
     void on_BtnWriteNoCali_clicked();
@@ -127,6 +138,7 @@ private slots:
     void on_BtnEraseAll_clicked();
     void on_BtnHSK_clicked();
     void on_ChkBackground_toggled(bool checked);
+    void onCloseTestWidget();
 };
 
 #endif // TABCALIBRATIONWIDGET_H

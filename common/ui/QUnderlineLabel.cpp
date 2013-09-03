@@ -29,13 +29,13 @@ void QUnderlineLabel::paintEvent(QPaintEvent */*event*/)
 {
     QPainter dc(this);
 
-    int nW = width()-1;
-    int nH = height()-1;
+    int nW = width();
+    int nH = height();
 
     QFont ftText;
     ftText.setFamily( font().family() );
     ftText.setBold( true );
-    ftText.setPixelSize( nH-5 );
+    ftText.setPixelSize( nH-6 );
     dc.setFont( ftText );
 
     bool bR2L = QApplication::layoutDirection() == Qt::RightToLeft;
@@ -44,14 +44,14 @@ void QUnderlineLabel::paintEvent(QPaintEvent */*event*/)
     if( bR2L ) nW -= 5;
     dc.setPen( QColor(55, 100, 160) );
     dc.setRenderHint( QPainter::TextAntialiasing );
-    dc.drawText( nTitleSP, 0, nW, nH-2, Qt::AlignLeft | Qt::AlignBottom, text() );
+    dc.drawText( nTitleSP, 0, nW, nH-6, Qt::AlignLeft | Qt::AlignBottom, text() );
 
     QPen underLine( Qt::SolidLine );
     underLine.setWidth( 2 );
     underLine.setColor( QColor(153,187,232) );
     dc.setPen( underLine );
 
-    dc.drawLine( QPoint( nTitleSP, nH ), QPoint( nW+nTitleSP, nH ) );
+    dc.drawLine( QPoint( nTitleSP, nH-1 ), QPoint( nW+nTitleSP, nH-1 ) );
 
     if( !m_nMargin ) return;
 

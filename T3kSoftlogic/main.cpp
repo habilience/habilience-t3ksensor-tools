@@ -51,6 +51,8 @@ int main(int argc, char *argv[])
             g_bScreenShotMode = true;
     }
 
+    QApplication::setQuitOnLastWindowClosed( true );
+
     T3kSoftlogicDlg dlg( NULL, strCmdLine.isEmpty() ? "" : strCmdLine );
 
     QFont ft( a.font() );

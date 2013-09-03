@@ -12,7 +12,6 @@
 
 #define TRACK_OFFSETXY		(1)
 #define MAX_GROUP			(13)
-#define ID_TIMER_BLINK		(100)
 
 QRgb s_dwNormalColor = qRgb(180, 180, 180);
 
@@ -86,11 +85,13 @@ QKeyDesignWidget::QKeyDesignWidget(QWidget *parent) :
 
     m_bCheckRubberBand = false;
 
-    m_bMouseLeftPress = false;
     m_keyModifier = Qt::NoModifier;
 
     m_bCtrlDown = false;
     m_bShiftDown = false;
+    m_bCapture = false;
+
+    m_nTimerBlink = 0;
 
     if( parent == NULL )
     {
@@ -99,7 +100,7 @@ QKeyDesignWidget::QKeyDesignWidget(QWidget *parent) :
 
         m_eScreenMode = ScreenModeKeyDesign;
 
-        m_pSoftKeyDesignTool = new QSoftKeyDesignToolWidget( this );
+        m_pSoftKeyDesignTool = new QSoftKeyDesignToolWidget( &m_SelectKeys, this );
 
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::closeWidget, this, &QKeyDesignWidget::close );
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::addNewKey, this, &QKeyDesignWidget::onAddNewKey );
@@ -107,7 +108,7 @@ QKeyDesignWidget::QKeyDesignWidget(QWidget *parent) :
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::groupSelectedKeys, this, &QKeyDesignWidget::onGroupSelectKeys );
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::ungroupSelectedKeys, this, &QKeyDesignWidget::onUngroupSelectKeys );
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::reorderKeys, this, &QKeyDesignWidget::onReorderKeys );
-        //connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::invalidateKey, this, &QKeyDesignWidget::onInvalidateKey );
+        connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::invalidateKey, this, &QKeyDesignWidget::onInvalidateKey );
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::recalcSelectionKeys, this, &QKeyDesignWidget::onRecalcSelectionKeys );
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::updateScreen, this, &QKeyDesignWidget::onUpdateScreen );
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::resetKeys, this, &QKeyDesignWidget::onResetKeys );
@@ -115,6 +116,11 @@ QKeyDesignWidget::QKeyDesignWidget(QWidget *parent) :
         connect( this, &QKeyDesignWidget::keyStateCount, m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::onKeyStateCount );
 
         connect( &m_KeyTracker, &QKeyTracker::finish, this, &QKeyDesignWidget::onRubberBandFinish );
+
+        connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::generateKeys, this, &QKeyDesignWidget::onGenerateKeys );
+        connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::alignSelectedKeys, this, &QKeyDesignWidget::onAlignSelectedKeys );
+        connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::adjustSizeSelectedKeys, this, &QKeyDesignWidget::onAdjustSizeSelectedKeys );
+        connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::distribSelectKeys, this, &QKeyDesignWidget::onDistribSelectKeys );
     }
 
     m_rcScreen.setRect( 0, 0, width(), height() );
@@ -138,8 +144,6 @@ QKeyDesignWidget::QKeyDesignWidget(QWidget *parent) :
     m_nCalPos = 0;
 
     m_nOldTouchCount = 0;
-
-    setMouseTracking( true );
 
     setInvertDrawing( false );
 
@@ -217,6 +221,9 @@ void QKeyDesignWidget::setInvertDrawing( bool bInvert )
 
         s_dwGroupColor = s_dwGroupColor1;
     }
+
+    if( isVisible() )
+        update();
 }
 
 void QKeyDesignWidget::selectKey( int nIndex )
@@ -272,7 +279,11 @@ void QKeyDesignWidget::updateKeys()
     {
         resizeScreen();
 
-//        KillTimer( ID_TIMER_BLINK );
+        if( m_nTimerBlink )
+        {
+            killTimer( m_nTimerBlink );
+            m_nTimerBlink = 0;
+        }
 
         update();
     }
@@ -399,8 +410,6 @@ void QKeyDesignWidget::makeArrangedKeys( KeyArrange eArrange, int nKeyCount, int
 void QKeyDesignWidget::alignSelectKeys( KeyAlign eAlign )
 {
     if ( m_SelectKeys.count() <= 1 ) return;
-
-    CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
 
     QRect rcBase;
     CSoftkey *key, *keyNext;
@@ -545,8 +554,6 @@ void QKeyDesignWidget::distribSelectKeys( Distrib eDistrib )
 {
     if ( m_SelectKeys.count() <= 1 ) return;
 
-    CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
-
     CSoftkey* key;
     QRect rcKey;
 
@@ -684,8 +691,6 @@ void QKeyDesignWidget::setScreenSize( ScreenSize eScrnSize )
 void QKeyDesignWidget::adjustSizeSelectKeys( AdjustSize eAdjust )
 {
     if ( m_SelectKeys.count() <= 1 ) return;
-
-    CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
 
     CSoftkey* key = m_SelectKeys.at(0);
     QRect rcBase = key->getPosition();
@@ -832,9 +837,9 @@ int QKeyDesignWidget::getGroupIndex( const GroupKey* pGroup )
     return -1;
 }
 
-void QKeyDesignWidget::draw( QPainter* pDC )
+void QKeyDesignWidget::draw( QPainter* painter )
 {
-    pDC->save();
+    painter->save();
 
     QPen ScreenPen;
     ScreenPen.setColor( qRgb(77, 109, 243) );
@@ -850,38 +855,38 @@ void QKeyDesignWidget::draw( QPainter* pDC )
         ScreenPen.setWidth( 1 );
     }
 
-    pDC->setPen( ScreenPen );
-    pDC->setBrush( Qt::NoBrush );
+    painter->setPen( ScreenPen );
+    painter->setBrush( Qt::NoBrush );
 
     QRect rcScreen = m_rcScreen;
     rcScreen.adjust( TRACK_OFFSETXY, TRACK_OFFSETXY, -TRACK_OFFSETXY, -TRACK_OFFSETXY );
 
-    pDC->drawRect( rcScreen );
+    painter->drawRect( rcScreen );
 
-    pDC->drawLine( rcScreen.center().x(), rcScreen.top(), rcScreen.center().x(), rcScreen.top()+5 );
-    pDC->drawLine( rcScreen.center().x(), rcScreen.bottom(), rcScreen.center().x(), rcScreen.bottom()-5 );
-    pDC->drawLine( rcScreen.left(), rcScreen.center().y(), rcScreen.left()+5, rcScreen.center().y() );
-    pDC->drawLine( rcScreen.right(), rcScreen.center().y(), rcScreen.right()-5, rcScreen.center().y() );
+    painter->drawLine( rcScreen.center().x(), rcScreen.top(), rcScreen.center().x(), rcScreen.top()+5 );
+    painter->drawLine( rcScreen.center().x(), rcScreen.bottom(), rcScreen.center().x(), rcScreen.bottom()-5 );
+    painter->drawLine( rcScreen.left(), rcScreen.center().y(), rcScreen.left()+5, rcScreen.center().y() );
+    painter->drawLine( rcScreen.right(), rcScreen.center().y(), rcScreen.right()-5, rcScreen.center().y() );
 
     if ( !m_bMoveScreen )
     {
-        drawKeys( pDC );
+        drawKeys( painter );
     }
 
-    drawCalPos( pDC );
+    drawCalPos( painter );
 
     if ( m_bViewTouchPoint )
     {
-        drawTouchPoint( pDC );
+        drawTouchPoint( painter );
     }
 
-    pDC->restore();
+    painter->restore();
 
     if ( !m_bMoveScreen )
     {
-        //if ( !m_KeyTracker.m_rect.isEmpty() )
+        if ( m_eScreenMode == ScreenModeKeyDesign )
         {
-            m_KeyTracker.draw( pDC );
+            m_KeyTracker.draw( painter );
         }
     }
 
@@ -897,7 +902,7 @@ void QKeyDesignWidget::draw( QPainter* pDC )
     rcClose.adjust( -20, 20, -20, 20 );
 
     m_rcCloseButton = rcClose;
-    drawCloseButton( pDC, rcClose );
+    drawCloseButton( painter, rcClose );
 
     QRect rcTouchCount = rcClient;
     rcTouchCount.setLeft( rcClient.center().x() - 40 );
@@ -905,21 +910,21 @@ void QKeyDesignWidget::draw( QPainter* pDC )
     rcTouchCount.setTop( rcClient.center().x() - 40 );
     rcTouchCount.setBottom( rcClient.center().y() + 40 );
     m_rcTouchCount = rcTouchCount;
-    drawTouchCount( pDC, m_rcTouchCount );
+    drawTouchCount( painter, m_rcTouchCount );
 }
 
-void QKeyDesignWidget::drawGrid( QPainter* pDC )
+void QKeyDesignWidget::drawGrid( QPainter* painter )
 {
-    pDC->save();
+    painter->save();
 
-    QRect rc( 0, 0, width()-1, height()-1 );
+    QRect rc( 0, 0, width(), height() );
     QPen GridMajorPen( Qt::SolidLine );
     GridMajorPen.setWidth( 1 );
     GridMajorPen.setColor( m_clrGridMajor );
     QPen GridMinorPen( Qt::SolidLine );
     GridMinorPen.setWidth( 1 );
     GridMinorPen.setColor( m_clrGridMinor );
-    pDC->setPen( GridMinorPen );
+    painter->setPen( GridMinorPen );
 
     float fGridStep = m_rcScreen.width() / 100.0f;
 
@@ -928,34 +933,34 @@ void QKeyDesignWidget::drawGrid( QPainter* pDC )
     float fX = ptOffset.x() - ((int)(ptOffset.x()  / fGridStep)) * fGridStep;
     for ( float i=fX ; i<(float)rc.width() ; i+=fGridStep )
     {
-        pDC->drawLine( (int)(i+0.5f), 0, (int)(i+0.5f), rc.height() );
+        painter->drawLine( (int)(i+0.5f), 0, (int)(i+0.5f), rc.height() );
     }
 
     float fY = ptOffset.y() - ((int)(ptOffset.y()  / fGridStep)) * fGridStep;
     for ( float i=fY ; i<rc.height() ; i+=fGridStep )
     {
-        pDC->drawLine( 0, (int)(i+0.5f), rc.width(), (int)(i+0.5f) );
+        painter->drawLine( 0, (int)(i+0.5f), rc.width(), (int)(i+0.5f) );
     }
 
     // draw major grid
     {
-        pDC->setPen( GridMajorPen );
+        painter->setPen( GridMajorPen );
 
         float fMajorGridStep = fGridStep * 5.0f;
         float fX = ptOffset.x() - ((int)(ptOffset.x()  / fMajorGridStep)) * fMajorGridStep;
         for ( float i=fX ; i<(float)rc.width() ; i+=fMajorGridStep )
         {
-            pDC->drawLine( (int)(i+0.5f), 0, (int)(i+0.5f), rc.height() );
+            painter->drawLine( (int)(i+0.5f), 0, (int)(i+0.5f), rc.height() );
         }
 
         float fY = ptOffset.y() - ((int)(ptOffset.y()  / fMajorGridStep)) * fMajorGridStep;
         for ( float i=fY ; i<(float)rc.height() ; i+=fMajorGridStep )
         {
-            pDC->drawLine( 0, (int)(i+0.5f), rc.width(), (int)(i+0.5f) );
+            painter->drawLine( 0, (int)(i+0.5f), rc.width(), (int)(i+0.5f) );
         }
     }
 
-    pDC->restore();
+    painter->restore();
 }
 
 void QKeyDesignWidget::drawOutlineText( QPainter* painter, QRgb dwTextColor, QRgb dwOutlineColor, QString strText, QRect rc, QTextOption nFormat )
@@ -992,7 +997,7 @@ void QKeyDesignWidget::drawKeys( QPainter* painter )
     KeyPen.setColor( m_clrKeyBorder );
     painter->setPen( KeyPen );
 
-    QRect rcClient( 0, 0, width()-1, height()-1 );
+    QRect rcClient( 0, 0, width(), height() );
     QRect rcClip( 0, 0, rcClient.width(), rcClient.height() );
     QRect rcInter;
 
@@ -1208,9 +1213,9 @@ void QKeyDesignWidget::drawCloseButton( QPainter* painter, QRect rcClose )
     painter->drawPath( path );
 }
 
-void QKeyDesignWidget::drawTouchPoint( QPainter* pDC )
+void QKeyDesignWidget::drawTouchPoint( QPainter* painter )
 {
-    pDC->save();
+    painter->save();
 
     QBrush brushTouch( qRgb(0, 255, 0) );
     QPen penTouch;
@@ -1218,48 +1223,47 @@ void QKeyDesignWidget::drawTouchPoint( QPainter* pDC )
     penTouch.setWidth( 1 );
     penTouch.setColor( qRgb(0, 0, 0) );
 
-    pDC->setPen( penTouch );
-    pDC->setBrush( brushTouch );
+    painter->setPen( penTouch );
+    painter->setBrush( brushTouch );
 
-    pDC->drawEllipse( m_ptTouchPoint.x(), m_ptTouchPoint.y(), 5, 5 );
+    painter->drawEllipse( m_ptTouchPoint.x(), m_ptTouchPoint.y(), 5, 5 );
 }
 
-void QKeyDesignWidget::drawTouchCount( QPainter* pDC, QRect rcTouchCount )
+void QKeyDesignWidget::drawTouchCount( QPainter* painter, QRect rcTouchCount )
 {
     if ( m_eScreenMode != ScreenModePreview || !m_bBlink )
         return;
 
-    pDC->save();
+    painter->save();
 
     QPen penTouchCount( Qt::SolidLine );
     penTouchCount.setWidth( 1 );
     penTouchCount.setColor( qRgb(200, 200, 200) );
     QBrush brushTouchCount ( m_bBlinkKeySet ? qRgb(237, 28, 28) : m_clrCloseBtnBg );//qRgb(28, 28, 237) );
-    pDC->setPen( penTouchCount );
-    pDC->setBrush( brushTouchCount );
+    painter->setPen( penTouchCount );
+    painter->setBrush( brushTouchCount );
 
-    pDC->drawRoundRect( rcTouchCount, rcTouchCount.width()/10, rcTouchCount.height()/10 );
+    painter->drawRoundRect( rcTouchCount, rcTouchCount.width()/10, rcTouchCount.height()/10 );
 
     // draw text
     int nTextHeight = rcTouchCount.height() * 2 / 3;
     QFont fntText( "Arial" ); // size ?
     fntText.setPixelSize( nTextHeight );
-    pDC->setFont( fntText );
+    painter->setFont( fntText );
 
-    QString strText = QString("%d").arg(m_nOldTouchCount);
-    pDC->setPen( m_bBlinkKeySet ? qRgb(255, 255, 255) : m_clrCloseBtnFg );//qRgb(128, 128, 128) );
+    QString strText = QString("%1").arg(m_nOldTouchCount);
+    painter->setPen( m_bBlinkKeySet ? qRgb(255, 255, 255) : m_clrCloseBtnFg );//qRgb(128, 128, 128) );
 
-    pDC->drawText( rcTouchCount, strText, Qt::AlignHCenter|Qt::AlignVCenter );
+    painter->drawText( rcTouchCount, strText, Qt::AlignHCenter|Qt::AlignVCenter );
 
-    pDC->restore();
+    painter->restore();
 }
 
 
-void QKeyDesignWidget::drawCalPos( QPainter* pDC )
+void QKeyDesignWidget::drawCalPos( QPainter* painter )
 {
     if ( !m_bBlink ) return;
 
-    m_nCalPos;
     QRect rcCalKey;
 
     if ( m_pBlinkKey )
@@ -1296,7 +1300,7 @@ void QKeyDesignWidget::drawCalPos( QPainter* pDC )
             break;
         }
 
-        QRect rcFocus( ptCal.x()-2, ptCal.y()-2, ptCal.x()+3, ptCal.y()+3 );
+        QRect rcFocus( ptCal.x()-2, ptCal.y()-2, 5, 5 );
         QPen penCal( Qt::SolidLine );
         penCal.setColor( qRgb(0, 255, 0) );
         if ( m_bBlinkKeySet )
@@ -1304,20 +1308,20 @@ void QKeyDesignWidget::drawCalPos( QPainter* pDC )
         else
             penCal.setWidth( 1 );
 
-        pDC->setBrush( Qt::NoBrush );
-        pDC->setPen( penCal );
+        painter->setBrush( Qt::NoBrush );
+        painter->setPen( penCal );
 
         if ( m_bBlinkKeySet )
         {
-            pDC->drawLine( ptCal.x() - 15, ptCal.y(), ptCal.x() + 16, ptCal.y() );
-            pDC->drawLine( ptCal.x(), ptCal.y() - 15, ptCal.x(), ptCal.y() + 16 );
+            painter->drawLine( ptCal.x() - 15, ptCal.y(), ptCal.x() + 16, ptCal.y() );
+            painter->drawLine( ptCal.x(), ptCal.y() - 15, ptCal.x(), ptCal.y() + 16 );
         }
         else
         {
-            pDC->drawLine( ptCal.x() - 9, ptCal.y(), ptCal.x() + 10, ptCal.y() );
-            pDC->drawLine( ptCal.x(), ptCal.y() - 9, ptCal.x(), ptCal.y() + 10 );
+            painter->drawLine( ptCal.x() - 9, ptCal.y(), ptCal.x() + 10, ptCal.y() );
+            painter->drawLine( ptCal.x(), ptCal.y() - 9, ptCal.x(), ptCal.y() + 10 );
         }
-        pDC->drawRect( rcFocus );
+        painter->drawRect( rcFocus );
     }
 }
 
@@ -1549,108 +1553,6 @@ void QKeyDesignWidget::keyPaste()
     }
 }
 
-//void QKeyDesignWidget::updateArea( QRect& rc, QPoint& ptScrnOffset, bool bUpdateAll/*=false*/ )
-//{
-//	const int nOffset = 5;
-
-//	if ( bUpdateAll )
-//	{
-//        QRect rcUpdate = rc;
-//        if ( !rcUpdate.isEmpty() )
-//		{
-//            rcUpdate.adjust( -nOffset, -nOffset, nOffset, nOffset );
-//            update( rcUpdate );
-//		}
-//		rcUpdate = rc;
-//        rcUpdate.adjust( -ptScrnOffset.x, -ptScrnOffset.y, -ptScrnOffset.x, -ptScrnOffset.y );
-//        if ( !rcUpdate.isEmpty() )
-//		{
-//            rcUpdate.adjust( -nOffset, -nOffset, nOffset, nOffset );
-//            update( rcUpdate );
-//		}
-//	}
-//	else
-//	{
-//        QRect rcUpdate;
-
-//        rcUpdate.setLeft( rc.left() - ptScrnOffset.x() );
-//        rcUpdate.setTop( rc.top() - ptScrnOffset.y() );
-//        rcUpdate.setRight( rc.left() + m_rcScreen.width() );
-//        rcUpdate.setBottom( rc.top() + ptScrnOffset.y() );
-
-//        rcUpdate = rcUpdate.normalized();
-
-//        if ( !rcUpdate.isEmpty() )
-//		{
-//            rcUpdate.adjust( -nOffset, -nOffset, nOffset, nOffset );
-//            update( rcUpdate );
-//		}
-
-//        rcUpdate.setLeft( rc.left() - ptScrnOffset.x() );
-//        rcUpdate.setTop( rc.top() );
-//        rcUpdate.setRight( rc.left() );
-//        rcUpdate.setBottom( rc.bottom() - ptScrnOffset.y() );
-
-//        rcUpdate = rcUpdate.normalized();
-
-//        if ( !rcUpdate.isEmpty() )
-//		{
-//            rcUpdate.adjust( -nOffset, -nOffset, nOffset, nOffset );
-//            update( rcUpdate );
-//		}
-
-//        rcUpdate.setLeft( rc.left() );
-//        rcUpdate.setTop( rc.bottom() - ptScrnOffset.y() );
-//        rcUpdate.setRight( rcUpdate.left() + rc.width() );
-//        rcUpdate.setBottom( rcUpdate.top() + ptScrnOffset.y() );
-
-//        rcUpdate = rcUpdate.normalized();
-
-//        if ( !rcUpdate.isEmpty() )
-//		{
-//            rcUpdate.adjust( -nOffset, -nOffset, nOffset, nOffset );
-//            update( rcUpdate );
-//		}
-
-//        rcUpdate.setLeft( rc.right() - ptScrnOffset.x() );
-//        rcUpdate.setTop( rc.top() );
-//        rcUpdate.setRight( rc.right() );
-//        rcUpdate.setBottom( rc.bottom() - ptScrnOffset.y() );
-
-//        rcUpdate = rcUpdate.normalized();
-
-//        if ( !rcUpdate.isEmpty() )
-//		{
-//            rcUpdate.adjust( -nOffset, -nOffset, nOffset, nOffset );
-//            update( rcUpdate );
-//		}
-//	}
-//}
-
-//void QKeyDesignWidget::updateCanvas( QPoint& ptScrnOffset )
-//{
-//    updateArea( m_rcScreen, ptScrnOffset );
-
-//    CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
-
-//    QRect rcKey;
-//    for ( int i=0 ; i<Keys.getSize() ; i++ )
-//	{
-//		CSoftkey* key = Keys[i];
-//        rcKey = deviceToScreen(key->getPosition());
-
-//        updateArea( rcKey, ptScrnOffset, true );
-//	}
-
-////    if ( !m_KeyTracker.m_rect.isEmpty() )
-////	{
-////        QPoint ptDevScrnOffset = screenToDevice(ptScrnOffset, false );
-////		m_rcDevTracker.adjust( ptDevScrnOffset.x(), ptDevScrnOffset.y(), ptDevScrnOffset.x(), ptDevScrnOffset.y() );
-////		m_KeyTracker.m_rect.adjust( ptScrnOffset.x(), ptScrnOffset.y(), ptScrnOffset.x(), ptScrnOffset.y() );
-////		updateArea( m_KeyTracker.m_rect, ptScrnOffset );
-////	}
-//}
-
 bool QKeyDesignWidget::isSelectKey( CSoftkey* key )
 {
     for ( int nI=0 ; nI<m_SelectKeys.count() ; nI++ )
@@ -1659,8 +1561,6 @@ bool QKeyDesignWidget::isSelectKey( CSoftkey* key )
     }
     return false;
 }
-
-
 
 GroupStatus QKeyDesignWidget::checkGroupStatus()
 {
@@ -1700,8 +1600,10 @@ GroupStatus QKeyDesignWidget::checkGroupStatus()
             return EnableGroup;
         }
     default:
-        return DisableGroup;
+        break;
     }
+
+    return DisableGroup;
 }
 
 //void QKeyDesignWidget::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
@@ -1861,13 +1763,13 @@ void QKeyDesignWidget::paintEvent(QPaintEvent *)
     if ( m_pSoftKeyDesignTool )
         m_pSoftKeyDesignTool->updateUIButtonState( (int)m_SelectKeys.count(), checkGroupStatus(), m_SelectKeys );
 
-    QRect rcClient( 0, 0, width()-1, height()-1 );
+    QRect rcClient( 0, 0, width(), height() );
 
-    bool bInit = false;
+    //bool bInit = false;
     if( m_pImageCanvas == NULL )
     {
         m_pImageCanvas = new QPixmap( rcClient.width(), rcClient.height() );
-        bInit = true;
+      //  bInit = true;
     }
     Q_ASSERT( m_pImageCanvas );
 
@@ -1906,9 +1808,9 @@ void QKeyDesignWidget::resizeEvent(QResizeEvent *evt)
     onUpdateScreen();
 }
 
-void QKeyDesignWidget::showEvent(QShowEvent *event)
+void QKeyDesignWidget::showEvent(QShowEvent *)
 {
-    if( m_pSoftKeyDesignTool && !m_pSoftKeyDesignTool->isVisible() )
+    if( m_eScreenMode == ScreenModeKeyDesign && m_pSoftKeyDesignTool && !m_pSoftKeyDesignTool->isVisible() )
         m_pSoftKeyDesignTool->show();
 }
 
@@ -1916,8 +1818,7 @@ void QKeyDesignWidget::closeEvent(QCloseEvent *)
 {
     updateKeys();
 
-    //T3kSoftlogicDlg* pDlg = (T3kSoftlogicDlg*)findWantToParent( parent(), "T3kSoftlogicDlg" );
-    //pDlg->onCloseCanvasWnd();
+    emit closeWidget();
 
     if( m_pSoftKeyDesignTool )
         m_pSoftKeyDesignTool->close();
@@ -1962,12 +1863,11 @@ void QKeyDesignWidget::mouseReleaseEvent(QMouseEvent *evt)
     {
     case Qt::LeftButton:
     {
-        m_bMouseLeftPress = false;
-
-        if( m_bDownCloseButton )
+        if( m_bCapture )
         {
             m_bDownCloseButton = false;
             update( m_rcCloseButton );
+            m_bCapture = false;
             if ( m_rcCloseButton.contains(evt->pos()) )
             {
                 close();
@@ -2043,190 +1943,16 @@ void QKeyDesignWidget::mouseMoveEvent(QMouseEvent *evt)
         }
         update();
     }
-    else
-    {
-//        if( m_bMouseLeftPress )
-//        {
-//            if( m_bCheckRubberBand )
-//            {
-//                QRect oldRect( m_KeyTracker.m_oldRect );
-//                QRect rect( m_KeyTracker.m_rect );
-//                QPoint pt( evt->pos() );
-
-//                if( m_KeyTracker.m_eTrackerHit == QKeyTracker::hitMiddle )
-//                {
-//                    m_KeyTracker.m_rect.setRight( rect.left() + oldRect.width() );
-//                    m_KeyTracker.m_rect.setBottom( rect.top() + oldRect.height() );
-//                }
-
-//                if( (rect != m_KeyTracker.m_rect) || m_KeyTracker.m_bFinalErase )
-//                {
-//                    if( m_KeyTracker.m_bMove )
-//                    {
-//                        m_KeyTracker.m_bErase = true;
-//                        update( oldRect );
-//                        update( m_KeyTracker.m_rect );
-//                    }
-//                }
-//            }
-//        }
-    }
 
     m_ptMouseLast = evt->pos();
 }
-
-//        if ( m_KeyTracker.trackRubberBand( this, point, true ) )
-//        {
-//            if ( !bIsShiftDown )
-//                m_SelectKeys.clear();
-
-//            QRect rcMergedTrack;
-//            QRect rcInter;
-
-//            for ( int nI=0 ; nI<m_SelectKeys.count() ; nI++ )
-//            {
-//                CSoftkey* key = m_SelectKeys.at(nI);
-//                rcKey = key->getPosition();
-//                rcMergedTrack = rcMergedTrack.united( rcKey );
-//            }
-
-//            QRect rcTrackerScrn;
-//            //rcTrackerScrn = m_KeyTracker.m_rect;
-//            rcTrackerScrn = rcTrackerScrn.normalized();
-//            rcTrackerScrn.adjust( TRACK_OFFSETXY, TRACK_OFFSETXY, -TRACK_OFFSETXY, -TRACK_OFFSETXY );
-
-//            // group check
-//            QVector<const GroupKey*> TempGroupArray;
-//            for ( int nI=GroupKeys.count()-1 ; nI>=0 ; nI-- )
-//            {
-//                GroupKey* pGroup = GroupKeys.at(nI);
-//                for ( int nG=pGroup->getCount()-1 ; nG>=0 ; nG-- )
-//                {
-//                    CSoftkey* key = pGroup->getAt(nG);
-//                    rcKeyScrn = deviceToScreen( key->getPosition() );
-//                    rcInter = rcKeyScrn;
-//                    if ( rcInter.intersects( rcTrackerScrn ) )
-//                    {
-//                        if ( !isContainGroup( TempGroupArray, key->getGroup() ) )
-//                        {
-//                            TempGroupArray.push_back(key->getGroup());
-//                        }
-//                        break;
-//                    }
-//                }
-//            }
-
-//            for ( int nI=0; nI<TempGroupArray.count() ; nI++ )
-//            {
-//                const GroupKey* pGroup = TempGroupArray.at(nI);
-//                //for ( INT_PTR nG=pGroup->GetCount()-1 ; nG>=0 ; nG-- )
-//                for ( int nG=0 ; nG<pGroup->getCount() ; nG++ )
-//                {
-//                    CSoftkey* key = pGroup->getAt(nG);
-//                    rcKey = key->getPosition();
-
-//                    rcMergedTrack = rcMergedTrack.united( rcKey );
-
-//                    if ( !isSelectKey(key) )
-//                        m_SelectKeys.push_back( key );
-//                }
-//            }
-
-
-//            //for ( int i=Keys.GetSize()-1 ; i>=0 ; i-- )
-//            for ( int i=0 ; i<Keys.getSize() ; i++ )
-//            {
-//                CSoftkey* key = Keys[i];
-//                rcKeyScrn = deviceToScreen(key->getPosition());
-//                rcKey = key->getPosition();
-
-//                rcInter = rcKeyScrn;
-//                if ( rcInter.intersects( rcTrackerScrn ) )
-//                {
-//                    rcMergedTrack = rcMergedTrack.united( rcKey );
-
-//                    if ( !isSelectKey(key) )
-//                        m_SelectKeys.push_back( key );
-//                }
-//            }
-
-//            if ( !rcMergedTrack.isEmpty() )
-//            {
-//                m_rcDevTracker = rcMergedTrack;
-//                m_KeyTracker.m_rect = deviceToScreen(rcMergedTrack);
-//                m_KeyTracker.m_rect.adjust( -TRACK_OFFSETXY, -TRACK_OFFSETXY, TRACK_OFFSETXY, TRACK_OFFSETXY );
-//            }
-//            else
-//            {
-//                QApplication::beep();
-//                m_rcDevTracker.setRect( 0,0,0,0 );
-////                m_KeyTracker.m_rect.setRect( 0,0,0,0 );
-//            }
-//            update();
-//        }
-//        else
-//        {
-//            bool bCheckKey = false;
-
-//            if ( !bIsCtrlDown )
-//                m_SelectKeys.clear();
-
-//            QRect rcMergedTrack;
-//            QRect rcInter;
-
-//            for ( int nI=0 ; nI<m_SelectKeys.count() ; nI++ )
-//            {
-//                CSoftkey* key = m_SelectKeys.at(nI);
-//                rcKey = key->getPosition();
-//                rcMergedTrack = rcMergedTrack.united( rcKey );
-//            }
-
-//            for ( int i=0 ; i<Keys.getSize() ; i++ )
-//            {
-//                CSoftkey* key = Keys[i];
-//                rcKeyScrn = deviceToScreen(key->getPosition());
-//                rcKey = key->getPosition();
-
-//                if ( rcKeyScrn.contains( evt->pos() ) )
-//                {
-//                    bCheckKey = true;
-//                    rcMergedTrack = rcMergedTrack.united( rcKey );
-//                    if ( !isSelectKey(key) )
-//                        m_SelectKeys.push_back( key );
-//                    break;
-//                }
-//            }
-//            if ( bCheckKey )
-//            {
-//                if ( !rcMergedTrack.isEmpty() )
-//                {
-//                    m_rcDevTracker = rcMergedTrack;
-//                    m_KeyTracker.m_rect = deviceToScreen(rcMergedTrack);
-//                    m_KeyTracker.m_rect.adjust( -TRACK_OFFSETXY, -TRACK_OFFSETXY, TRACK_OFFSETXY, TRACK_OFFSETXY );
-//                }
-//                else
-//                {
-////                    m_KeyTracker.m_rect.setRect( 0,0,0,0 );
-//                    m_rcDevTracker.setRect( 0,0,0,0 );
-//                }
-//            }
-//            else
-//            {
-//                m_SelectKeys.clear();
-//                QApplication::beep();
-////                m_KeyTracker.m_rect.setRect( 0,0,0,0 );
-//                m_rcDevTracker.setRect( 0,0,0,0 );
-//            }
-//            update();
-//        }
 
 void QKeyDesignWidget::mouseLButtonDown(QMouseEvent* evt)
 {
     if( m_rcCloseButton.contains( evt->pos() ) )
     {
         m_bDownCloseButton = true;
-//		if ( GetCapture() != this )
-//			SetCapture();
+        m_bCapture = true;
         update( m_rcCloseButton );
         return;
     }
@@ -2331,7 +2057,6 @@ goto_ReCheck:
 
         // rubberband
 
-//        m_bMouseLeftPress = true;
         m_bCheckRubberBand = true;
         m_KeyTracker.m_rect.setRect( evt->pos().x(), evt->pos().y(), 0, 0 );
 
@@ -2344,31 +2069,12 @@ goto_ReCheck:
         m_rcOldTracker.adjust( TRACK_OFFSETXY, TRACK_OFFSETXY, -TRACK_OFFSETXY, -TRACK_OFFSETXY );
 
         m_rcOld = m_rcDevTracker;
+        qDebug() << QString("mouse down tracker : %1,%2,%3,%4").arg(m_KeyTracker.m_rect.x()).arg(m_KeyTracker.m_rect.y()).arg(m_KeyTracker.m_rect.width()).arg(m_KeyTracker.m_rect.height());
+        qDebug() << QString("tracker old : %1,%2,%3,%4").arg(m_rcOld.x()).arg(m_rcOld.y()).arg(m_rcOld.width()).arg(m_rcOld.height());
 
         if ( m_KeyTracker.track( this, m_pImageCanvas, evt->pos(), true )  )
         {
             m_bCheckRubberBand = false;
-//            QRect rcNewTracker;
-//            QRect rcNew;
-//            rcNewTracker = m_KeyTracker.m_rect;
-//            rcNewTracker = rcNewTracker.normalized();
-//            rcNewTracker.adjust( TRACK_OFFSETXY, TRACK_OFFSETXY, -TRACK_OFFSETXY, -TRACK_OFFSETXY );
-
-//            double dX = (double)rcOldTracker.width() / rcNewTracker.width();
-//            double dY = (double)rcOldTracker.height() / rcNewTracker.height();
-//            rcNew = m_rcDevTracker;
-//            long lNewWidth = (long)(m_rcDevTracker.width() / dX + 0.5);
-//            long lNewHeight = (long)(m_rcDevTracker.height() / dY + 0.5);
-//            rcNew.setRight( rcNew.left() + lNewWidth );
-//            rcNew.setBottom( rcNew.top() + lNewHeight );
-//            if ( rcNewTracker.topLeft() != rcOldTracker.topLeft() )
-//            {
-//                QPoint ptOffset = rcNewTracker.topLeft() - rcOldTracker.topLeft();
-//                ptOffset = screenToDevice( ptOffset, false );
-//                rcNew.adjust( ptOffset.x(), ptOffset.y(), ptOffset.x(), ptOffset.y() );
-//            }
-
-//            recalcSelectionKeys( rcOld, rcNew );
         }
     }
 }
@@ -2749,7 +2455,7 @@ void QKeyDesignWidget::onRecalcSelectionKeys( QRect rcOld, QRect rcNew )
 void QKeyDesignWidget::onUpdateScreen()
 {
     int cx, cy;
-    QRect rc( 0, 0, width()-1, height()-1 );
+    QRect rc( 0, 0, width(), height() );
     cx = rc.width();
     cy = rc.height();
 
@@ -2952,6 +2658,7 @@ void QKeyDesignWidget::onRubberBandFinish(bool bChanged)
     }
     else
     {
+        qDebug() << QString("mouse up tracker : %1,%2,%3,%4").arg(m_KeyTracker.m_rect.x()).arg(m_KeyTracker.m_rect.y()).arg(m_KeyTracker.m_rect.width()).arg(m_KeyTracker.m_rect.height());
         QRect rcNewTracker;
         QRect rcNew;
         rcNewTracker = m_KeyTracker.m_rect;
@@ -2974,4 +2681,27 @@ void QKeyDesignWidget::onRubberBandFinish(bool bChanged)
 
         onRecalcSelectionKeys( m_rcOld, rcNew );
     }
+}
+
+void QKeyDesignWidget::onGenerateKeys(KeyArrange eArrange, int nCount, int nW, int nH, int nInterval)
+{
+    if( m_SelectKeys.count() == 0 )
+        makeArrangedKeys( eArrange, nCount, nW, nH, nInterval );
+    else
+        arrangeSelectKeys( eArrange, nW, nH, nInterval );
+}
+
+void QKeyDesignWidget::onAlignSelectedKeys(KeyAlign eAlign)
+{
+    alignSelectKeys( eAlign );
+}
+
+void QKeyDesignWidget::onAdjustSizeSelectedKeys(AdjustSize eSize)
+{
+    adjustSizeSelectKeys( eSize );
+}
+
+void QKeyDesignWidget::onDistribSelectKeys(Distrib eDistrib)
+{
+    distribSelectKeys( eDistrib );
 }

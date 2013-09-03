@@ -12,6 +12,7 @@ public:
     ~QIniFormat();
 
     bool isOpen() { return (m_pFile != NULL) && m_pFile->isOpen(); }
+
     bool open(const QString &fileName);
     bool save(const QString &fileName);
 
@@ -24,11 +25,12 @@ public:
 protected:
 
     void syncIniFile();
+    void syncMapData();
     void clearDatamap();
 
 protected:
-    typedef QMap<QString, QString>          IniDataGroup;
-    typedef QMap<QString, IniDataGroup*>     IniDataMap;
+    typedef QMap<QString, QString>             IniDataGroup;
+    typedef QMap<QString, IniDataGroup*>       IniDataMap;
     QFile*      m_pFile;
 
     IniDataMap      m_mapIniData;

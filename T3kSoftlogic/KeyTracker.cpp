@@ -162,6 +162,7 @@ QKeyTracker::QKeyTracker(QObject *parent) :
     m_bMove = false;
 
     m_bAllowInvert = false;
+    m_bRubberBand = false;
 
     ::memset( &m_rectCalc, 0, sizeof(Rectangle) );
 }
@@ -174,7 +175,7 @@ void QKeyTracker::draw(QPainter* painter)
 {
     painter->save();
 
-    if( !m_bTracking )
+    if( !m_bRubberBand )
     {
         if( m_rect.isEmpty() ) return;
 
@@ -216,7 +217,7 @@ void QKeyTracker::draw(QPainter* painter)
             painter->setPen( Qt::NoPen );
             painter->setBrush( Qt::Dense3Pattern );
             //nOldROP = pDC->SetROP2(R2_MASKNOTPEN);
-            painter->drawRect( rect.left()+1, rect.top()+1, rect.right(), rect.bottom() );
+            //painter->drawRect( rect.left()+1, rect.top()+1, rect.right(), rect.bottom() );
 
             painter->restore();
         }
@@ -227,17 +228,18 @@ void QKeyTracker::draw(QPainter* painter)
             painter->save();
 
             painter->setPen( Qt::NoPen );
-            painter->setBrush( Qt::white );
+            painter->setBrush( QBrush( Qt::black, Qt::Dense3Pattern ) );
+            painter->setBackgroundMode( Qt::OpaqueMode );
             QRect rectTrue( getTrueRect() );
 
-    //        painter->drawRect( rectTrue.left(), rectTrue.top(), rectTrue.width(),
-    //                           rect.top()-rectTrue.top() );
-    //        painter->drawRect( rectTrue.left(), rect.bottom(),
-    //                           rectTrue.width(), rectTrue.bottom()-rect.bottom() );
-    //        painter->drawRect( rectTrue.left(), rect.top(), rect.left()-rectTrue.left(),
-    //                           rect.height() );
-    //        painter->drawRect( rect.right(), rect.top(), rectTrue.right()-rect.right(),
-    //                           rect.height() );
+            painter->drawRect( rectTrue.left(), rectTrue.top(), rectTrue.width(),
+                               rect.top()-rectTrue.top() );
+            painter->drawRect( rectTrue.left(), rect.bottom(),
+                               rectTrue.width(), rectTrue.bottom()-rect.bottom() );
+            painter->drawRect( rectTrue.left(), rect.top(), rect.left()-rectTrue.left(),
+                               rect.height() );
+            painter->drawRect( rect.right(), rect.top(), rectTrue.right()-rect.right(),
+                               rect.height() );
 
             painter->restore();
         }
@@ -250,6 +252,7 @@ void QKeyTracker::draw(QPainter* painter)
             {
                 if (mask & (1<<i))
                 {
+                    QRect rect( m_rect.normalized() );
                     rect = getHandleRect((TrackerHit)i);
                     rect.adjust( -1, -1, 1, 1 );
                     painter->fillRect( rect, Qt::white );
@@ -264,14 +267,17 @@ void QKeyTracker::draw(QPainter* painter)
         if( m_rcTracking.isEmpty() ) return;
 
         painter->setPen( Qt::NoPen );
-        painter->setCompositionMode( QPainter::RasterOp_NotDestination );
+//        painter->setCompositionMode( QPainter::RasterOp_NotDestination );
 
 //        qDebug() << QString("rect : %1,%2,%3,%4").arg(m_rcTracking.left()).arg(m_rcTracking.top())
 //                    .arg(m_rcTracking.width()).arg(m_rcTracking.height());
-        painter->fillRect( m_rcTracking.left(), m_rcTracking.top(), m_rcTracking.width(), 5, Qt::Dense3Pattern );
-        painter->fillRect( m_rcTracking.right()-5, m_rcTracking.top(), 5, m_rcTracking.height(), Qt::Dense3Pattern );
-        painter->fillRect( m_rcTracking.left(), m_rcTracking.bottom()-5, m_rcTracking.width(), 5, Qt::Dense3Pattern );
-        painter->fillRect( m_rcTracking.left(), m_rcTracking.top(), 5, m_rcTracking.height(), Qt::Dense3Pattern );
+        QBrush brh( Qt::Dense3Pattern );
+        brh.setColor( Qt::white );
+        painter->fillRect( m_rcTracking.left(), m_rcTracking.top(), m_rcTracking.width()-1, 5, brh );
+        painter->fillRect( m_rcTracking.right()-5, m_rcTracking.top(), 5, m_rcTracking.height()-1, brh );
+        painter->fillRect( m_rcTracking.left(), m_rcTracking.bottom()-5, m_rcTracking.width()-1, 5, brh );
+        painter->fillRect( m_rcTracking.left(), m_rcTracking.top(), 5, m_rcTracking.height()-1, brh );
+
     }
 
 	// cleanup pDC state
@@ -281,8 +287,7 @@ void QKeyTracker::draw(QPainter* painter)
 void QKeyTracker::drawTrackerRect(QRect rc, QWidget* target, QPixmap* pm)
 {
     // first, normalize the rectangle for drawing
-    QRect rect( rc );
-    rect = rect.normalized();
+    QRect rect( rc.normalized() );
 
     QSize size;
     if (!m_bFinalErase)
@@ -352,6 +357,8 @@ bool QKeyTracker::eventFilter(QObject *target, QEvent *evt)
                 m_rcTracking.setRect( 0,0,0,0 );
 
                 m_pTargetWidget->removeEventFilter( this );
+                m_bTracking = false;
+                m_bRubberBand = false;
 
                 emit finish(!(m_rcSave == m_rect));
 
@@ -377,13 +384,13 @@ bool QKeyTracker::eventFilter(QObject *target, QEvent *evt)
             if (py != NULL)
                 *py = pEvt->pos().y() - yDiff;
 
-            m_rect.setRect( m_rectCalc.nL, m_rectCalc.nT, m_rectCalc.nR-m_rectCalc.nL, m_rectCalc.nB-m_rectCalc.nT );
+            m_rect.setRect( m_rectCalc.nL, m_rectCalc.nT, m_rectCalc.nR-m_rectCalc.nL+1, m_rectCalc.nB-m_rectCalc.nT );
 
             // handle move case
             if (m_eTrackerHit == hitMiddle)
             {
-                m_rect.setRight( m_rect.left() + m_rcSave.width() );
-                m_rect.setBottom( m_rect.top() + m_rcSave.height() );
+                m_rect.setRight( m_rect.left() + m_rcSave.width() - 1 );
+                m_rect.setBottom( m_rect.top() + m_rcSave.height() - 1 );
             }
 
             adjustRect(m_eTrackerHit);
@@ -411,6 +418,8 @@ bool QKeyTracker::eventFilter(QObject *target, QEvent *evt)
                 m_rcTracking.setRect( 0,0,0,0 );
 
                 m_pTargetWidget->removeEventFilter( this );
+                m_bTracking = false;
+                m_bRubberBand = false;
 
                 m_pTargetWidget->update();
 
@@ -425,6 +434,8 @@ bool QKeyTracker::eventFilter(QObject *target, QEvent *evt)
 
             bProcess = true;
         }
+            break;
+        default:
             break;
         }
 
@@ -472,6 +483,7 @@ bool QKeyTracker::track(QWidget* target, QPixmap* pm, QPoint ptStart, bool bAllo
 
     Q_ASSERT( !m_bFinalErase );
 
+    qDebug() << QString("rect %1,%2,%3,%4").arg(m_rect.x()).arg(m_rect.y()).arg(m_rect.width()).arg(m_rect.height());
     m_rcSave = m_rect;
 
     m_bTracking = true;
@@ -484,8 +496,8 @@ bool QKeyTracker::track(QWidget* target, QPixmap* pm, QPoint ptStart, bool bAllo
     xDiff = ptStart.x() - xDiff;
     yDiff = ptStart.y() - yDiff;
 
-    qDebug() << QString("rect %1,%2,%3,%4").arg(m_rect.x()).arg(m_rect.y()).arg(m_rect.width()).arg(m_rect.height());
-    qDebug() << QString("diff %1,%2 : %3,%4").arg(ptStart.x()).arg(ptStart.y()).arg(xDiff).arg(yDiff);
+//    qDebug() << QString("rect %1,%2,%3,%4").arg(m_rect.x()).arg(m_rect.y()).arg(m_rect.width()).arg(m_rect.height());
+    //qDebug() << QString("diff %1,%2 : %3,%4").arg(ptStart.x()).arg(ptStart.y()).arg(xDiff).arg(yDiff);
 
     m_pTargetWidget = target;
     m_pixmap = pm;
@@ -506,6 +518,7 @@ void QKeyTracker::trackRubberBand(QWidget* target, QPixmap* pm, QPoint ptStart, 
     m_rcSave = m_rect;
 
     m_bTracking = true;
+    m_bRubberBand = true;
 
     m_eTrackerHit = hitBottomRight;
 
@@ -693,8 +706,8 @@ void QKeyTracker::getModifyPointers(int nHandle, int** ppx, int** ppy, int* px, 
     //   axis is inverted don't modify the value on that axis)
     m_rectCalc.nL = m_rect.left();
     m_rectCalc.nT = m_rect.top();
-    m_rectCalc.nR = m_rect.right() + 1;
-    m_rectCalc.nB = m_rect.bottom() + 1;
+    m_rectCalc.nR = m_rect.right();
+    m_rectCalc.nB = m_rect.bottom();
 
     const AFX_HANDLEINFO_ORI* pHandleInfo = &_afxHandleInfoOri[nHandle];
     if (pHandleInfo->nInvertX != nHandle)
@@ -722,7 +735,7 @@ void QKeyTracker::getModifyPointers(int nHandle, int** ppx, int** ppy, int* px, 
             *py = m_rectCalc.nT + abs(m_rectCalc.nB-m_rectCalc.nT) / 2;
     }
 
-    m_rect.setRect( m_rectCalc.nL, m_rectCalc.nT, m_rectCalc.nR-m_rectCalc.nL, m_rectCalc.nB-m_rectCalc.nT );
+    m_rect.setRect( m_rectCalc.nL, m_rectCalc.nT, m_rectCalc.nR-m_rectCalc.nL + 1, m_rectCalc.nB-m_rectCalc.nT + 1 );
 }
 
 void QKeyTracker::adjustRect(int nHandle)
@@ -736,8 +749,8 @@ void QKeyTracker::adjustRect(int nHandle)
 
     m_rectCalc.nL = m_rect.left();
     m_rectCalc.nT = m_rect.top();
-    m_rectCalc.nR = m_rect.right() + 1;
-    m_rectCalc.nB = m_rect.bottom() + 1;
+    m_rectCalc.nR = m_rect.right();
+    m_rectCalc.nB = m_rect.bottom();
 
     // enforce minimum width
     int nNewWidth = m_rect.width();
@@ -766,5 +779,5 @@ void QKeyTracker::adjustRect(int nHandle)
             nNewHeight * m_sizeMin.height() * -pRectInfo->nSignAcross;
     }
 
-    m_rect.setRect( m_rectCalc.nL, m_rectCalc.nT, m_rectCalc.nR-m_rectCalc.nL, m_rectCalc.nB-m_rectCalc.nT );
+    m_rect.setRect( m_rectCalc.nL, m_rectCalc.nT, m_rectCalc.nR-m_rectCalc.nL + 1, m_rectCalc.nB-m_rectCalc.nT + 1 );
 }

@@ -174,6 +174,8 @@ TabCalibrationWidget::TabCalibrationWidget(QWidget* parent /*=NULL*/) :
     }
 #endif
     changeFileAssociateBtnTitle();
+
+    connect( &m_wndTestCanvas, &QKeyDesignWidget::closeWidget, this, &TabCalibrationWidget::onCloseTestWidget );
 }
 
 TabCalibrationWidget::~TabCalibrationWidget()
@@ -193,39 +195,6 @@ TabCalibrationWidget::~TabCalibrationWidget()
     }
 }
 
-//HBRUSH TabCalibrationWidget::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
-//{
-//	HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
-//	CT3kSoftlogicDlg* pDlg = (CT3kSoftlogicDlg*)AfxGetMainWnd();
-
-//	switch( (short)pWnd->GetDlgCtrlID() )
-//	{
-//	case IDC_STATIC:
-//	case IDC_CHECK_INVERT_DRAWING:
-//		pDC->SetBkColor( RGB(255, 255, 255) );
-//		return (HBRUSH)GetStockObject(WHITE_BRUSH);
-//		break;
-//	case IDC_STATIC_STATUS:
-//		pDC->SetBkColor( RGB(255, 255, 255) );
-//		CT30xHandle* pT30xHandle = pDlg->GetT30xHandle();
-
-//		if( pDlg->IsConnected() )
-//		{
-//			if( m_bFirmwareDownload || pDlg->IsInvalidFirmware() )
-//				pDC->SetTextColor( RGB(255, 0, 0) );
-//			else
-//				pDC->SetTextColor( RGB(0, 0, 0) );
-//		}
-//		else
-//		{
-//			pDC->SetTextColor( RGB(255, 0, 0) );
-//		}
-//		return (HBRUSH)GetStockObject(WHITE_BRUSH);
-//		break;
-//	}
-//	return hbr;
-//}
-
 void TabCalibrationWidget::OnOpenT3kDevice(T3K_HANDLE)
 {
     if( !isVisible() ) return;
@@ -238,8 +207,7 @@ void TabCalibrationWidget::OnOpenT3kDevice(T3K_HANDLE)
     ui->BtnEraseAll->setEnabled( true );
     ui->BtnCancel->setEnabled( false );
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
 	char szCmd[256];
 	sprintf( szCmd, "%s?", cstrFirmwareVersion );
@@ -255,8 +223,7 @@ void TabCalibrationWidget::OnFirmwareDownload(bool bDownload)
 
     if( !isVisible() ) return;
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
 	if( bDownload )
 	{
@@ -273,11 +240,11 @@ void TabCalibrationWidget::OnFirmwareDownload(bool bDownload)
             ui->EditFWVer->setText( "" );
 		}
 
-        ui->LBState->setText( "Firmware is being downloaded." );
+        ui->LBState->setText( "<font color='red'>Firmware is being downloaded.</font>" );
 	}
 	else
 	{
-        ui->LBState->setText( "Connected" );
+        ui->LBState->setText( "<font color='black'>Connected</font>" );
 
         ui->BtnCalibration->setEnabled( true );
         ui->BtnTest->setEnabled( true );
@@ -306,8 +273,7 @@ void TabCalibrationWidget::OnCloseT3kDevice(T3K_HANDLE)
     ui->BtnWriteLogic->setEnabled( false );
     ui->BtnEraseAll->setEnabled( false );
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
     if( pT3kHandle )
 	{
@@ -315,7 +281,7 @@ void TabCalibrationWidget::OnCloseT3kDevice(T3K_HANDLE)
         ui->EditFWVer->setText( "" );
 	}
 
-    ui->LBState->setText( "The device is not connected." );
+    ui->LBState->setText( "<font color='red'>The device is not connected.</font>" );
 
     update();
 }
@@ -333,10 +299,7 @@ void TabCalibrationWidget::OnMSG(ResponsePart, ushort, const char *partid, const
         int nSKNum = strMsg.left( nPos ).toInt();
         int nOnOff = strMsg.right( strMsg.length() - nPos - 1 ).toInt();
 
-//		if( m_wndTestCanvas )
-//		{
-//			m_wndTestCanvas.SetOnOff( nSKNum, nOnOff == 1 ? TRUE : FALSE );
-//		}
+        m_wndTestCanvas.setOnOff( nSKNum, nOnOff == 1 ? true : false );
 	}
 }
 
@@ -360,9 +323,7 @@ void TabCalibrationWidget::OnRSP(ResponsePart Part, ushort, const char *, long, 
 
             T3kCommonData::instance()->getGroupKeys().clear();
 
-            T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-
-            pDlg->updatePreviewCanvas();
+            emit updatePreview();
 		}
 	}
 
@@ -380,9 +341,7 @@ void TabCalibrationWidget::OnRSP(ResponsePart Part, ushort, const char *, long, 
 
             T3kCommonData::instance()->getGroupKeys().clear();
 
-            T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-
-            pDlg->updatePreviewCanvas();
+            emit updatePreview();
 		}
 	}
 
@@ -475,7 +434,7 @@ void TabCalibrationWidget::OnRSP(ResponsePart Part, ushort, const char *, long, 
 	}
 }
 
-void TabCalibrationWidget::forceMouseEvent( uchar cButtons, char cWheel, ushort wX, ushort wY )
+void TabCalibrationWidget::forceMouseEvent( uchar cButtons, char /*cWheel*/, int wX, int wY )
 {
     QRect rcWnd( geometry() );
     rcWnd.adjust( 10,10,10,10 );
@@ -488,15 +447,15 @@ void TabCalibrationWidget::forceMouseEvent( uchar cButtons, char cWheel, ushort 
     rcWnd.setRight( rcWnd.right() * DEV_COORD / rcScreen.width() );
     rcWnd.setBottom( rcWnd.bottom() * DEV_COORD / rcScreen.height() );
 
-//	if( m_wndTestCanvas && m_wndTestCanvas.IsWindowVisible() )
-//	{
-//	}
-//	else
-//	{
+    if( m_wndTestCanvas.isVisible() )
+    {
+    }
+    else
+    {
 
-//		if( !rcWnd.PtInRect(CPoint(wX, wY)) )
-//			return;
-//	}
+        if( !rcWnd.contains(QPoint(wX, wY)) )
+            return;
+    }
 
 #if defined(Q_OS_WIN)
 	INPUT input;
@@ -563,19 +522,18 @@ void TabCalibrationWidget::OnDVC(ResponsePart, ushort, T3kDVC &device)
 
 	if( !(device.flag & T3K_DEVICE_TOUCH) ) return;
 
-	if( device.touch_obj_cnt != 0 )
-	{
-		//TRACE( _T("DVC: touch%d, (%f, %f)\r\n"), device->touch_obj_cnt, device->touch_x, device->touch_y );
-	}
+//	if( device.touch_obj_cnt != 0 )
+//	{
+//		//TRACE( _T("DVC: touch%d, (%f, %f)\r\n"), device->touch_obj_cnt, device->touch_x, device->touch_y );
+//	}
 
 	bool bTestMode = false;
-//	if( m_wndTestCanvas && m_wndTestCanvas.IsWindowVisible() )
-//		bTestMode = true;
+    if( m_wndTestCanvas.isVisible() )
+        bTestMode = true;
 
 	if ( !bTestMode )
 	{
-        T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-		pDlg->displayPreviewTouchCount( device.touch_obj_cnt );
+        emit displayPreviewTouchCount( device.touch_obj_cnt );
 	}
 
 	if( device.touch_obj_cnt > 1 )
@@ -616,7 +574,7 @@ void TabCalibrationWidget::OnDVC(ResponsePart, ushort, T3kDVC &device)
 			m_ptTouch.setX( lX );
 			m_ptTouch.setY( lY );
 		}
-        forceMouseEvent( LBUTTON, 0, (ushort)m_ptTouch.x(), (WORD)m_ptTouch.y() );
+        forceMouseEvent( LBUTTON, 0, m_ptTouch.x(), m_ptTouch.y() );
 	}
 	else
 	{
@@ -631,7 +589,7 @@ void TabCalibrationWidget::OnDVC(ResponsePart, ushort, T3kDVC &device)
 		m_ptTouch.setX( lX );
 		m_ptTouch.setY( lY );
 
-        forceMouseEvent( LBUTTON, 0, (WORD)m_ptTouch.x(), (WORD)m_ptTouch.y() );
+        forceMouseEvent( LBUTTON, 0, m_ptTouch.x(), m_ptTouch.y() );
 	}	
 
 	if( bTestMode )
@@ -644,11 +602,10 @@ void TabCalibrationWidget::OnDVC(ResponsePart, ushort, T3kDVC &device)
 		long lX = (long)(fX * DEV_COORD);
 		long lY = (long)(fY * DEV_COORD);
 
-//		if ( device.touch_obj_cnt > 0 )
-//			m_wndTestCanvas.ViewTouchPoint( lX, lY, TRUE );
+        if ( device.touch_obj_cnt > 0 )
+            m_wndTestCanvas.viewTouchPoint( lX, lY, TRUE );
 	}
 
-    //m_dwTickPoint = QTime::currentTime().elapsed();
     m_TickPoint.start();
 }
 
@@ -657,8 +614,7 @@ bool TabCalibrationWidget::writeToSensor( bool bLogicOnly )
 	CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
 	CSoftlogicArray& Logics = T3kCommonData::instance()->getLogics();
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-	T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
 	bool bOK = false;
 
@@ -728,8 +684,7 @@ bool TabCalibrationWidget::writeToSensor( bool bLogicOnly )
 
 void TabCalibrationWidget::showEvent(QShowEvent *)
 {
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
     CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
 
@@ -745,7 +700,7 @@ void TabCalibrationWidget::showEvent(QShowEvent *)
         ui->BtnWriteNoCali->setEnabled( false );
     }
 
-    if ( pDlg->isConnected() )
+    if ( isT3kConnected() )
     {
 
         if ( m_bFirmwareDownload )
@@ -761,13 +716,13 @@ void TabCalibrationWidget::showEvent(QShowEvent *)
                 ui->EditFWVer->setText( "" );
             }
 
-            ui->LBState->setText( "Firmware is being Downloaded." );
+            ui->LBState->setText( "<font color='red'>Firmware is being Downloaded.</font>" );
         }
         else
         {
-            if ( pDlg->isInvalidFirmware() )
+            if ( isT3kInvalidFirmware() )
             {
-                ui->LBState->setText( "Invalid firmware" );
+                ui->LBState->setText( "<font color='red'>Invalid firmware</font>" );
 
                 ui->BtnCalibration->setEnabled( false );
                 ui->BtnTest->setEnabled( false );
@@ -781,7 +736,7 @@ void TabCalibrationWidget::showEvent(QShowEvent *)
             }
             else
             {
-                ui->LBState->setText( "Connected" );
+                ui->LBState->setText( "<font color='black'>Connected</font>" );
 
                 ui->BtnCalibration->setEnabled( true );
                 ui->BtnTest->setEnabled( true );
@@ -810,7 +765,8 @@ void TabCalibrationWidget::showEvent(QShowEvent *)
             ui->EditModelName->setText( "" );
             ui->EditFWVer->setText( "" );
         }
-        ui->LBState->setText( "The device is not connected." );
+
+        ui->LBState->setText( "<font color='red'>The device is not connected.</font>" );
     }
 }
 
@@ -818,10 +774,10 @@ void TabCalibrationWidget::closeEvent(QCloseEvent *)
 {
     cancelKeyCalibration();
 
-//    if ( m_wndTestCanvas && m_wndTestCanvas.IsWindowVisible() )
-//    {
-//        m_wndTestCanvas.DestroyWindow();
-//    }
+    if ( m_wndTestCanvas.isVisible() )
+    {
+        close();
+    }
 }
 
 void TabCalibrationWidget::playBuzzer( BuzzerType eType )
@@ -848,8 +804,7 @@ void TabCalibrationWidget::playBuzzer( BuzzerType eType )
 		break;
 	}
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
     if( pT3kHandle )
 	{
@@ -868,7 +823,14 @@ void TabCalibrationWidget::keyCalibration()
 
     if( Keys.getSize() == 0 )
 	{
-        onCalibrationFinish();
+        if( onCalibrationFinish() )
+        {
+            QMessageBox::information( this, "Information", "Save Complete", QMessageBox::Ok );
+        }
+        else
+        {
+            QMessageBox::critical( this, "Error", "Save Failure", QMessageBox::Ok );
+        }
 		return;
 	}
 
@@ -886,8 +848,7 @@ void TabCalibrationWidget::keyCalibration()
 
     m_bCalibrationMode = true;
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
     if( pT3kHandle )
 	{
@@ -909,7 +870,7 @@ void TabCalibrationWidget::keyCalibration()
 
     ui->BtnHSK->setEnabled( false );
 
-    pDlg->enableControls( false );
+    emit enableControls( false );
 
     updateDesignCanvas( true, m_nCalibrationCheckPoint );
 
@@ -929,8 +890,7 @@ void TabCalibrationWidget::cancelKeyCalibration()
 
     playBuzzer( BuzzerCancelCalibration );
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
     if( pT3kHandle )
 	{
@@ -945,7 +905,7 @@ void TabCalibrationWidget::cancelKeyCalibration()
 
     ui->BtnHSK->setEnabled( true );
 
-    pDlg->enableControls( true );
+    emit enableControls( true );
 
     if( m_nTimerCheckPoint )
     {
@@ -954,15 +914,14 @@ void TabCalibrationWidget::cancelKeyCalibration()
     }
 
     T3kCommonData::instance()->resetCalibrationData();
-    pDlg->updatePreviewCanvas();
+    emit updatePreview();
 
     updateDesignCanvas( false );
 }
 
 bool TabCalibrationWidget::prepareKeyCalibration()
 {
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
     bool bOK = false;
 
@@ -1010,8 +969,7 @@ bool TabCalibrationWidget::prepareKeyCalibration()
 
 bool TabCalibrationWidget::verifyGPIO( int &nSensorGPIOCount )
 {
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
     CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
 
 	m_nSensorGPIOCount = 0;
@@ -1101,7 +1059,7 @@ bool TabCalibrationWidget::doCalibration( GroupKey* pGroup )
     for( int nG=0 ; nG<pGroup->getCount() ; nG++ )
 	{
         CSoftkey* key = pGroup->getAt(nG);
-        rcOld.united( key->getPosition() );
+        rcOld = rcOld.united( key->getPosition() );
 	}
 
     QPoint& ptA = m_ptCalibration[0];
@@ -1138,14 +1096,12 @@ bool TabCalibrationWidget::doCalibration( GroupKey* pGroup )
         fU = (float)(ptRightBottom.x() - rcOld.left()) / rcOld.width();
         ptRB = getPoint( ptE, ptF, fU );
 
-        rcKey = QRect( (long)(ptLT.x+.5f), (long)(ptLT.y+.5f), (long)(ptRB.x+.5f), (long)(ptRB.y+.5f) );
+        rcKey = QRect( (int)(ptLT.x+.5f), (int)(ptLT.y+.5f), (int)((ptRB.x+.5f)-(ptLT.x+.5f)), (int)((ptRB.y+.5f)-(ptLT.y+.5f)) );
 
 		pKey->setPosition( rcKey );
 	}
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-
-    pDlg->updatePreviewCanvas();
+    emit updatePreview();
 
     return true;
 }
@@ -1161,34 +1117,30 @@ bool TabCalibrationWidget::doCalibration( CSoftkey* key )
 
 	key->setPosition( rcNew );
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-
-    pDlg->updatePreviewCanvas();
+    emit updatePreview();
 
     return true;
 }
 
 void TabCalibrationWidget::updateDesignCanvas( bool bCalibrate, int nCalPos/*=0*/, bool bSet/*=false*/ )
 {
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-
 	if( bCalibrate )
 	{
         GroupKeyArray& GroupKeys = T3kCommonData::instance()->getGroupKeys();
 
         if( m_nCalibrationStep < GroupKeys.count() )
 		{
-            pDlg->updateCalibrationStep( GroupKeys[m_nCalibrationStep], NULL, nCalPos, bSet );
+            emit updateCalibrationStep( GroupKeys[m_nCalibrationStep], NULL, nCalPos, bSet );
 		}
 		else
 		{
             CSoftkey* key = m_NoGroupKeys.at( m_nCalibrationStep - GroupKeys.count() );
-            pDlg->updateCalibrationStep( NULL, key, nCalPos, bSet );
+            emit updateCalibrationStep( NULL, key, nCalPos, bSet );
 		}
 	}
 	else
 	{
-        pDlg->updateCalibrationStep( NULL, NULL, 0, bSet );
+        emit updateCalibrationStep( NULL, NULL, 0, bSet );
 	}
 }
 
@@ -1233,8 +1185,16 @@ void TabCalibrationWidget::onCalibrationPoint( QPoint ptCal )
 		if( (m_nCalibrationStep == m_nCalibrationMaxStep-1) )
 		{
 			// Finish
-            onCalibrationFinish();
-            updateDesignCanvas( false );
+            if( onCalibrationFinish() )
+            {
+                updateDesignCanvas( false );
+                QMessageBox::information( this, "Information", "Save Complete", QMessageBox::Ok );
+            }
+            else
+            {
+                updateDesignCanvas( false );
+                QMessageBox::critical( this, "Error", "Save Failure", QMessageBox::Ok );
+            }
 			return;
 		}
 
@@ -1249,7 +1209,7 @@ void TabCalibrationWidget::onCalibrationPoint( QPoint ptCal )
     updateDesignCanvas( true, m_nCalibrationCheckPoint );
 }
 
-void TabCalibrationWidget::onCalibrationFinish()
+bool TabCalibrationWidget::onCalibrationFinish()
 {
     if( m_nTimerCheckPoint )
     {
@@ -1263,21 +1223,11 @@ void TabCalibrationWidget::onCalibrationFinish()
 
     playBuzzer( BuzzerCalibrationSucces );
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
     if( pT3kHandle )
 	{
         pT3kHandle->SetInstantMode( T3K_HID_MODE_COMMAND, 5000, 0 );
-	}
-
-    if( writeToSensor( false ) )
-	{
-        QMessageBox::information( this, "Information", "Save Complete", QMessageBox::Ok );
-	}
-	else
-	{
-        QMessageBox::critical( this, "Error", "Save Failure", QMessageBox::Ok );
 	}
 
     ui->BtnCalibration->setEnabled( true );
@@ -1288,7 +1238,9 @@ void TabCalibrationWidget::onCalibrationFinish()
     ui->BtnEraseAll->setEnabled( true );
     ui->BtnHSK->setEnabled( true );
 
-    pDlg->enableControls( true );
+    emit enableControls( true );
+
+    return writeToSensor( false );
 }
 
 void TabCalibrationWidget::timerEvent(QTimerEvent *evt)
@@ -1370,10 +1322,9 @@ void TabCalibrationWidget::timerEvent(QTimerEvent *evt)
                 m_bTouchCheck = false;
                 //TRACE( _T("UP!!!!!!!!!!\r\n") );
 
-                T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-                pDlg->displayPreviewTouchCount( 0 );
+                emit displayPreviewTouchCount( 0 );
 
-                forceMouseEvent( 0, 0, (WORD)m_ptTouch.x(), (WORD)m_ptTouch.y() );
+                forceMouseEvent( 0, 0, m_ptTouch.x(), m_ptTouch.y() );
 
                 if( m_bPointOK )
                 {
@@ -1397,79 +1348,22 @@ void TabCalibrationWidget::timerEvent(QTimerEvent *evt)
                 m_bTouchCheck = false;
                 //TRACE( _T("UP!!!!!!!!!!\r\n") );
 
-                T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-                pDlg->displayPreviewTouchCount( 0 );
+                emit displayPreviewTouchCount( 0 );
 
-                forceMouseEvent( 0, 0, (WORD)m_ptTouch.x(), (WORD)m_ptTouch.y() );
+                forceMouseEvent( 0, 0, m_ptTouch.x(), m_ptTouch.y() );
 
-//                if( m_wndTestCanvas && m_wndTestCanvas.IsWindowVisible() )
-//                {
-//                    m_wndTestCanvas.ViewTouchPoint( m_ptTouch.x(), m_ptTouch.y(),false );
-//                }
+                if( m_wndTestCanvas.isVisible() )
+                {
+                    m_wndTestCanvas.viewTouchPoint( m_ptTouch.x(), m_ptTouch.y(),false );
+                }
             }
         }
     }
 }
 
-void TabCalibrationWidget::onCloseTestWnd()
-{
-    if( m_nTimerCheckPoint )
-    {
-        killTimer( m_nTimerCheckPoint );
-        m_nTimerCheckPoint = 0;
-    }
-
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeCalibration );
-    pDlg->updatePreviewCanvas();
-
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
-    if( pT3kHandle )
-	{
-        pT3kHandle->SetInstantMode( T3K_HID_MODE_COMMAND, 5000, 0 );
-
-		int nRetry = 0;
-		char szCmd[1024];
-        if ( !m_strBackupSoftlogic.isEmpty() )
-		{
-            sprintf( szCmd, "%s%s", cstrFactorialSoftlogic, m_strBackupSoftlogic.toUtf8().data() );
-
-			do
-			{
-                if( pT3kHandle->SendCommand( szCmd, false ) )
-				{
-					break;
-				}
-			} while ( nRetry < 3 );
-
-			if ( nRetry >= 3 )
-			{
-                QMessageBox::critical( this, "Error", "Cannot write the Softlogic information to the sensor.", QMessageBox::Ok );
-			}
-
-			sprintf( szCmd, "%s*", cstrSoftlogic );
-			nRetry = 0;
-			do
-			{
-                if( pT3kHandle->SendCommand( szCmd, false ) )
-				{
-					break;
-				}
-			} while ( nRetry < 3 );
-
-			if ( nRetry >= 3 )
-			{
-                QMessageBox::critical( this, "Error", "Cannot write the Softlogic information to the sensor.", QMessageBox::Ok );
-			}
-		}
-	}
-}
-
 void TabCalibrationWidget::changeFileAssociateBtnTitle()
 {
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-
-    if ( pDlg->isAssociateFileExt() )
+    if ( isAssociateFileExt() )
 	{
         ui->BtnHSK->setText( "Remove associated file extension(\".hsk\")" );
 	}
@@ -1477,23 +1371,6 @@ void TabCalibrationWidget::changeFileAssociateBtnTitle()
 	{
         ui->BtnHSK->setText( "Associate T3kSoftlogic with \".hsk\"" );
 	}
-}
-
-QObject* TabCalibrationWidget::findWantToParent(QObject *target, const char* strObjectName)
-{
-    Q_ASSERT( target );
-    QObject* p = target;
-    while( p )
-    {
-        if( p->inherits( strObjectName ) )
-            break;
-
-        p = p->parent();
-    }
-
-    Q_ASSERT( p );
-
-    return p;
 }
 
 void TabCalibrationWidget::on_BtnCalibration_clicked()
@@ -1512,9 +1389,8 @@ void TabCalibrationWidget::on_BtnCalibration_clicked()
         return;
     }
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
     T3kCommonData::instance()->resetCalibrationData();
-    pDlg->updatePreviewCanvas();
+    emit updatePreview();
     keyCalibration();
 }
 
@@ -1527,8 +1403,7 @@ void TabCalibrationWidget::on_BtnWriteNoCali_clicked()
 {
     playBuzzer( BuzzerCalibrationSucces );
 
-   T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
     if( pT3kHandle )
     {
@@ -1547,8 +1422,7 @@ void TabCalibrationWidget::on_BtnWriteNoCali_clicked()
 
 void TabCalibrationWidget::on_BtnTest_clicked()
 {
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
     T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeTest );
 
@@ -1592,19 +1466,15 @@ void TabCalibrationWidget::on_BtnTest_clicked()
     QDesktopWidget desktop;
     QRect rcSelMonitor( desktop.screenGeometry( desktop.primaryScreen() ) );
 
-//    m_wndTestCanvas.SetScreenMode( CDesignCanvasWnd::ScreenModeTest );
-//    if( !m_wndTestCanvas )
-//    {
-//        m_wndTestCanvas.Create( rcSelMonitor, NULL );
-//        m_wndTestCanvas.SetFont( GetFont() );
+    m_wndTestCanvas.setGeometry( rcSelMonitor );
+    m_wndTestCanvas.setScreenMode( QKeyDesignWidget::ScreenModeTest );
+    m_wndTestCanvas.setFont( font() );
+    m_wndTestCanvas.show();
 
-//        T3kSoftlogicDlg* pDlg = (T3kSoftlogicDlg*)findWantToParent( parent(), "T3kSoftlogicDlg" );
-//        T3kHandle* pT3kHandle = pDlg->getT3kHandle();
-//        if( pT3kHandle )
-//        {
-//            pT3kHandle->SetInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_MESSAGE|T3K_HID_MODE_DEVICE, 5000, 0 );
-//        }
-//    }
+    if( pT3kHandle )
+    {
+        pT3kHandle->SetInstantMode( T3K_HID_MODE_COMMAND|T3K_HID_MODE_MESSAGE|T3K_HID_MODE_DEVICE, 5000, 0 );
+    }
 
     if( !m_nTimerCheckPoint )
         m_nTimerCheckPoint = startTimer( 10 );
@@ -1634,8 +1504,7 @@ void TabCalibrationWidget::on_BtnEraseAll_clicked()
         return;
     }
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
     bool bOK = false;
 
@@ -1680,13 +1549,12 @@ void TabCalibrationWidget::on_BtnEraseAll_clicked()
 
 void TabCalibrationWidget::on_BtnHSK_clicked()
 {
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
     if( isProcessElevated() ) // cross platform
     {
-        if ( pDlg->isAssociateFileExt() )
-            pDlg->doRemoveFileExtAssociation();
+        if ( isAssociateFileExt() )
+            emit doRemoveFileExtAssociation();
         else
-            pDlg->doAssociateFileExt();
+            emit doAssociateFileExt();
 
         changeFileAssociateBtnTitle();
     }
@@ -1700,7 +1568,7 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
         ui->BtnEraseAll->setEnabled( false );
         ui->BtnHSK->setEnabled( false );
 
-        pDlg->enableControls( false );
+        emit enableControls( false );
 #if defined(Q_OS_WIN)
         do
         {
@@ -1714,7 +1582,7 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
                 sei.hwnd = (HWND)winId();
                 sei.fMask = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_FLAG_DDEWAIT;
                 sei.nShow = SW_HIDE;
-                if ( !pDlg->isAssociateFileExt() )
+                if ( !isAssociateFileExt() )
                     sei.lpParameters = L"/e /exe:assoc_file_ext";
                 else
                     sei.lpParameters = L"/e /exe:remove_file_ext";
@@ -1760,19 +1628,71 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
         ui->BtnEraseAll->setEnabled( true );
         ui->BtnHSK->setEnabled( true );
 
-        pDlg->enableControls( true );
+        emit enableControls( true );
 
         changeFileAssociateBtnTitle();
     }
 }
 
-void TabCalibrationWidget::on_ChkBackground_toggled(bool checked)
+void TabCalibrationWidget::on_ChkBackground_toggled(bool /*checked*/)
 {
     QSettings settings( "Habilience", "T3kSoftlogic" );
     settings.beginGroup( "APP_SETTING" );
     settings.setValue( "INVERT_DRAWING", m_bCheckInvertDrawing );
     settings.endGroup();
 
-    T3kSoftlogicDlg* pDlg = dynamic_cast<T3kSoftlogicDlg*>(findWantToParent( parent(), "T3kSoftlogicDlg" ));
-    pDlg->setInvertDrawing( m_bCheckInvertDrawing );
+    emit invertDrawing( m_bCheckInvertDrawing );
+}
+
+void TabCalibrationWidget::onCloseTestWidget()
+{
+    if( m_nTimerCheckPoint )
+    {
+        killTimer( m_nTimerCheckPoint );
+        m_nTimerCheckPoint = 0;
+    }
+
+    T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeCalibration );
+    emit updatePreview();
+
+    T3kHandle* pT3kHandle = getT3kHandle();
+    if( pT3kHandle )
+    {
+        pT3kHandle->SetInstantMode( T3K_HID_MODE_COMMAND, 5000, 0 );
+
+        int nRetry = 0;
+        char szCmd[1024];
+        if ( !m_strBackupSoftlogic.isEmpty() )
+        {
+            sprintf( szCmd, "%s%s", cstrFactorialSoftlogic, m_strBackupSoftlogic.toUtf8().data() );
+
+            do
+            {
+                if( pT3kHandle->SendCommand( szCmd, false ) )
+                {
+                    break;
+                }
+            } while ( nRetry < 3 );
+
+            if ( nRetry >= 3 )
+            {
+                QMessageBox::critical( this, "Error", "Cannot write the Softlogic information to the sensor.", QMessageBox::Ok );
+            }
+
+            sprintf( szCmd, "%s*", cstrSoftlogic );
+            nRetry = 0;
+            do
+            {
+                if( pT3kHandle->SendCommand( szCmd, false ) )
+                {
+                    break;
+                }
+            } while ( nRetry < 3 );
+
+            if ( nRetry >= 3 )
+            {
+                QMessageBox::critical( this, "Error", "Cannot write the Softlogic information to the sensor.", QMessageBox::Ok );
+            }
+        }
+    }
 }

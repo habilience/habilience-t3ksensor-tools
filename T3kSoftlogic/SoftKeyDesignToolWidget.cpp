@@ -70,7 +70,7 @@
 //	}
 //}
 
-QSoftKeyDesignToolWidget::QSoftKeyDesignToolWidget(QWidget *parent) :
+QSoftKeyDesignToolWidget::QSoftKeyDesignToolWidget(QVector<CSoftkey*>* pSelectedKeys, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SoftKeyDesignToolWidget)
 {
@@ -84,7 +84,7 @@ QSoftKeyDesignToolWidget::QSoftKeyDesignToolWidget(QWidget *parent) :
 
 	m_eUnit = UnitRes;
 
-    m_pSelectedKeys = NULL;
+    m_pvSelectedKeys = pSelectedKeys;
 
     ui->BtnRemove->setEnabled( false );
     ui->BtnGroup->setEnabled( false );
@@ -97,12 +97,23 @@ QSoftKeyDesignToolWidget::QSoftKeyDesignToolWidget(QWidget *parent) :
     ui->EditWidth->setEnabled( false );
     ui->EditHeight->setEnabled( false );
 
-//	if( !m_wndLayoutToolBar.Create( m_pWndDesignCanvas, this ) )
-//		return -1;
+    m_pLayoutToolWidget = new QLayoutToolWidget( pSelectedKeys, this );
+    m_pLayoutToolWidget->hide();
+    connect( m_pLayoutToolWidget, &QLayoutToolWidget::generateKeys, this, &QSoftKeyDesignToolWidget::generateKeys );
+
+    connect( m_pLayoutToolWidget, &QLayoutToolWidget::alignSelectedKeys, this, &QSoftKeyDesignToolWidget::alignSelectedKeys );
+    connect( m_pLayoutToolWidget, &QLayoutToolWidget::adjustSizeSelectedKeys, this, &QSoftKeyDesignToolWidget::adjustSizeSelectedKeys );
+    connect( m_pLayoutToolWidget, &QLayoutToolWidget::distribSelectKeys, this, &QSoftKeyDesignToolWidget::distribSelectKeys );
+    connect( m_pLayoutToolWidget, &QLayoutToolWidget::reorderKeys, this, &QSoftKeyDesignToolWidget::reorderKeys );
+
+    connect( m_pLayoutToolWidget, &QLayoutToolWidget::enableDesignTool, this, &QSoftKeyDesignToolWidget::onEnableDesignTool );
+    connect( m_pLayoutToolWidget, &QLayoutToolWidget::updateLayoutButton, this, &QSoftKeyDesignToolWidget::onUpdateLayoutButton );
+    connect( this, &QSoftKeyDesignToolWidget::closeWidget, m_pLayoutToolWidget, &QLayoutToolWidget::close );
 
     QSettings settings( "Habilience", "T3kSoftlogic" );
     settings.beginGroup( "Windows" );
     QString strPos = settings.value( "SoftkeyDesignTool_Pos" ).toString();
+    settings.endGroup();
 
     QDesktopWidget desktop;
     QRect rcScreen( desktop.screenGeometry( desktop.primaryScreen() ) );
@@ -129,26 +140,17 @@ QSoftKeyDesignToolWidget::QSoftKeyDesignToolWidget(QWidget *parent) :
             rcWin.setBottom( strPos.toLong() );
             rcWin = rcWin.normalized();
 
-            QRect rcCaption = rcWin;
-            int nTitleH = window()->style()->pixelMetric(QStyle::PM_TitleBarHeight);
-            int nFrameW = window()->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-            rcCaption.adjust( nFrameW, nFrameW, -nFrameW, -nFrameW );
-            rcCaption.setBottom( rcCaption.top() + nTitleH );
-            rcCaption.setLeft( rcCaption.left() + rcCaption.height() );
-            rcCaption.setRight( rcCaption.right() - rcCaption.height() * 4 );
-
-            if ( rcScreen.intersects( rcCaption ) )
+            if ( rcScreen.intersects( rcWin ) )
                 move( rcWin.left(), rcWin.top() );
             else
-                move( rcScreen.center() - QRect(0,0,width()-1,height()-1).center() );
+                move( rcScreen.center() - QRect(0,0,width(),height()).center() );
         }
         while ( false );
     }
     else
     {
-        move( rcScreen.center() - QRect(0,0,width()-1,height()-1).center() );
+        move( rcScreen.center() - QRect(0,0,width(),height()).center() );
     }
-//
 
     ui->CBUnit->clear();
 
@@ -167,22 +169,14 @@ QSoftKeyDesignToolWidget::QSoftKeyDesignToolWidget(QWidget *parent) :
         m_eUnit = UnitRes;
     }
 
-//	m_wndLayoutToolBar.SetUnit( m_eUnit, m_dD2PScaleWidth, m_dD2PScaleHeight );
+    m_pLayoutToolWidget->setUnit( m_eUnit, m_dD2PScaleWidth, m_dD2PScaleHeight );
 
     ui->CBVisible->addItem( "True" );
     ui->CBVisible->addItem( "False" );
     ui->CBVisible->setEnabled( false );
     ui->EditName->setEnabled( false );
 
-    settings.beginGroup( "Settings" );
-    bool bShow = settings.value( "ShowLayoutToolBar" ).toBool();
-    settings.endGroup();
-
-//	if ( m_wndLayoutToolBar )
-//	{
-//		m_wndLayoutToolBar.ShowWindow( bShow ? SW_SHOW : SW_HIDE );
-//		SetDlgItemText( IDC_BTN_SHOW_LAYOUT_TOOLBAR, m_wndLayoutToolBar.IsWindowVisible() ? _T("Hide Layout ToolBar") : _T("Show Layout ToolBar") );
-//	}
+    ui->BtnShowToolbar->setText( m_pLayoutToolWidget->isVisible() ? "Hide Layout ToolBar" : "Show Layout ToolBar" );
 
     ui->EditPosX->setInputMethodHints( Qt::ImhDialableCharactersOnly );
     ui->EditPosY->setInputMethodHints( Qt::ImhDialableCharactersOnly );
@@ -201,17 +195,16 @@ void QSoftKeyDesignToolWidget::updateUnit()
 	switch ( m_eUnit )
 	{
 	case UnitRes:
-
-//		m_edtPosX.SetFloatStyle( FALSE );
-//		m_edtPosY.SetFloatStyle( FALSE );
-//		m_edtWidth.SetFloatStyle( FALSE, FALSE );
-//		m_edtHeight.SetFloatStyle( FALSE, FALSE );
+//		m_edtPosX.SetFloatStyle( false );
+//		m_edtPosY.SetFloatStyle( false );
+//		m_edtWidth.SetFloatStyle( false, false );
+//		m_edtHeight.SetFloatStyle( false, false );
 		break;
 	case UnitMM:
-//		m_edtPosX.SetFloatStyle( TRUE );
-//		m_edtPosY.SetFloatStyle( TRUE );
-//		m_edtWidth.SetFloatStyle( TRUE, FALSE );
-//		m_edtHeight.SetFloatStyle( TRUE, FALSE );
+//		m_edtPosX.SetFloatStyle( true );
+//		m_edtPosY.SetFloatStyle( true );
+//		m_edtWidth.SetFloatStyle( true, false );
+//		m_edtHeight.SetFloatStyle( true, false );
 		break;
 	}
 }
@@ -233,7 +226,7 @@ void QSoftKeyDesignToolWidget::setScaleFactor(double dScaleWidth, double dScaleH
         m_eUnit = UnitRes;
     }
 
-    //m_wndLayoutToolBar.SetUnit( m_eUnit, m_dD2PScaleWidth, m_dD2PScaleHeight );
+    m_pLayoutToolWidget->setUnit( m_eUnit, m_dD2PScaleWidth, m_dD2PScaleHeight );
 
     updateUnit();
 }
@@ -253,10 +246,7 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
         s_bEnableRemove = bEnableRemove;
     }
 
-//	if ( m_wndLayoutToolBar )
-//	{
-//		m_wndLayoutToolBar.UpdateUIButtonState( nSelectKeyCount );
-//	}
+    m_pLayoutToolWidget->updateUIButtonState( nSelectKeyCount );
 
     switch ( eGroupStatus )
     {
@@ -291,12 +281,12 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
     {
         CSoftkey* key = SelectKeys.at(0);
         ui->EditName->setText( key->getName() );
-        ui->CBVisible->setCurrentIndex( key->getShow() ? 1 : 0 );
+        ui->CBVisible->setCurrentIndex( key->getShow() ? 0 : 1 );
         QRect rc( key->getPosition() );
         ui->EditPosX->setText( QString::number( rc.left() ) );
         ui->EditPosY->setText( QString::number( rc.top() ) );
-        ui->EditWidth->setText( QString::number( rc.width()-1 ) );
-        ui->EditHeight->setText( QString::number( rc.height()-1 ) );
+        ui->EditWidth->setText( QString::number( rc.width() ) );
+        ui->EditHeight->setText( QString::number( rc.height() ) );
 
         m_rcOld.setRect( ui->EditPosX->text().toDouble()+.5, ui->EditPosY->text().toDouble()+.5,
                          ui->EditWidth->text().toDouble()+.5, ui->EditHeight->text().toDouble()+.5 );
@@ -329,8 +319,8 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
 
         ui->EditPosX->setText( QString::number( rcMerge.left() ) );
         ui->EditPosY->setText( QString::number( rcMerge.top() ) );
-        ui->EditWidth->setText( QString::number( rcMerge.width()-1 ) );
-        ui->EditHeight->setText( QString::number( rcMerge.height()-1 ) );
+        ui->EditWidth->setText( QString::number( rcMerge.width() ) );
+        ui->EditHeight->setText( QString::number( rcMerge.height() ) );
 
         m_rcOld.setRect( ui->EditPosX->text().toDouble()+.5, ui->EditPosY->text().toDouble()+.5,
                          ui->EditWidth->text().toDouble()+.5, ui->EditHeight->text().toDouble()+.5 );
@@ -360,9 +350,9 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
     }
 }
 
-void QSoftKeyDesignToolWidget::updateLayoutButton()
+void QSoftKeyDesignToolWidget::updateLayoutButton(bool bVisible)
 {
-    //ui->BtnShowToolbar->setText( m_wndLayoutToolBar.isVisible() ? "Hide Layout ToolBar" : "Show Layout ToolBar" );
+    ui->BtnShowToolbar->setText( bVisible ? "Hide Layout ToolBar" : "Show Layout ToolBar" );
 }
 
 void QSoftKeyDesignToolWidget::EditModified()
@@ -376,10 +366,26 @@ void QSoftKeyDesignToolWidget::EditModified()
     emit recalcSelectionKeys( m_rcOld, rcNew );
 }
 
+void QSoftKeyDesignToolWidget::showEvent(QShowEvent *)
+{
+    QSettings settings( "Habilience", "T3kSoftlogic" );
+    settings.beginGroup( "Settings" );
+    bool bShow = settings.value( "ShowLayoutToolBar" ).toBool();
+    settings.endGroup();
+
+    if( bShow )
+        m_pLayoutToolWidget->show();
+    else
+        m_pLayoutToolWidget->hide();
+
+    updateLayoutButton( bShow );
+}
+
 void QSoftKeyDesignToolWidget::closeEvent(QCloseEvent *)
 {
-    QRect rc( geometry() );
+    QRect rc( x(), y(), width(), height() );
     QString str = QString("%1,%2,%3,%4").arg(rc.left()).arg(rc.top()).arg(rc.right()).arg(rc.bottom());
+    qDebug() << str;
     QSettings settings( "Habilience", "T3kSoftlogic" );
     settings.beginGroup( "Windows" );
     settings.setValue( "SoftkeyDesignTool_Pos", str );
@@ -403,11 +409,12 @@ void QSoftKeyDesignToolWidget::on_BtnFitScreen_clicked()
 
 void QSoftKeyDesignToolWidget::on_BtnShowToolbar_clicked()
 {
-//	if ( m_wndLayoutToolBar )
-//	{
-//		m_wndLayoutToolBar.ShowWindow( m_wndLayoutToolBar.IsWindowVisible() ? SW_HIDE : SW_SHOW );
-//        updateLayoutButton();
-//	}
+    if( m_pLayoutToolWidget->isVisible() )
+        m_pLayoutToolWidget->hide();
+    else
+        m_pLayoutToolWidget->show();
+
+    updateLayoutButton( m_pLayoutToolWidget->isVisible() );
 }
 
 void QSoftKeyDesignToolWidget::on_BtnAdd_clicked()
@@ -435,7 +442,7 @@ void QSoftKeyDesignToolWidget::on_BtnReorder_clicked()
     emit reorderKeys();
 }
 
-void QSoftKeyDesignToolWidget::on_CBUnit_currentIndexChanged(int index)
+void QSoftKeyDesignToolWidget::on_CBUnit_activated(int index)
 {
     if ( index < 0 ) return;
 
@@ -447,41 +454,36 @@ void QSoftKeyDesignToolWidget::on_CBUnit_currentIndexChanged(int index)
 
     emit updateScreen();
 
-    //m_wndLayoutToolBar.SetUnit( m_eUnit, m_dD2PScaleWidth, m_dD2PScaleHeight );
+    m_pLayoutToolWidget->setUnit( m_eUnit, m_dD2PScaleWidth, m_dD2PScaleHeight );
 }
 
 void QSoftKeyDesignToolWidget::on_EditName_editingFinished()
 {
-    if( !m_pSelectedKeys && m_pSelectedKeys->childItems().size() != 1 ) return;
+    if( !m_pvSelectedKeys || m_pvSelectedKeys->count() != 1 ) return;
 
-    QGraphicsKeyItem* pKey = (QGraphicsKeyItem*) m_pSelectedKeys->childItems().at(0);
+    CSoftkey* pKey = m_pvSelectedKeys->at(0);
     pKey->setName( ui->EditName->text() );
-    pKey->update();
 
-    CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
-    Keys[pKey->getID()]->setName( ui->EditName->text() );
+    emit invalidateKey( pKey );
 }
 
-void QSoftKeyDesignToolWidget::on_CBVisible_currentIndexChanged(int index)
+void QSoftKeyDesignToolWidget::on_CBVisible_activated(int index)
 {
     if( index < 0 ) return;
 
     bool bVisible = (index == 0) ? true : false;
 
-    if( !m_pSelectedKeys ) return;
+    if( !m_pvSelectedKeys ) return;
 
-    CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
-
-    for ( int nI=0 ; nI<m_pSelectedKeys->childItems().size() ; nI++ )
+    for ( int nI=0 ; nI<m_pvSelectedKeys->count() ; nI++ )
     {
-        QGraphicsKeyItem* pKey = (QGraphicsKeyItem*) m_pSelectedKeys->childItems().at(nI);
-//        pKey->onUpdateEnable( bVisible );
-
-        Keys[pKey->getID()]->setShow( bVisible );
+        CSoftkey* pKey = m_pvSelectedKeys->at(nI);
+        pKey->setShow( bVisible );
+        emit invalidateKey( pKey );
     }
 }
 
-void QSoftKeyDesignToolWidget::on_EditPosX_textChanged(const QString &arg1)
+void QSoftKeyDesignToolWidget::on_EditPosX_textChanged(const QString &/*arg1*/)
 {
     QPalette plt( ui->EditPosX->palette() );
     plt.setColor( QPalette::Text, Qt::red );
@@ -497,7 +499,7 @@ void QSoftKeyDesignToolWidget::on_EditPosX_editingFinished()
     EditModified();
 }
 
-void QSoftKeyDesignToolWidget::on_EditPosY_textChanged(const QString &arg1)
+void QSoftKeyDesignToolWidget::on_EditPosY_textChanged(const QString &/*arg1*/)
 {
     QPalette plt( ui->EditPosX->palette() );
     plt.setColor( QPalette::Text, Qt::red );
@@ -513,7 +515,7 @@ void QSoftKeyDesignToolWidget::on_EditPosY_editingFinished()
     EditModified();
 }
 
-void QSoftKeyDesignToolWidget::on_EditWidth_textChanged(const QString &arg1)
+void QSoftKeyDesignToolWidget::on_EditWidth_textChanged(const QString &/*arg1*/)
 {
     QPalette plt( ui->EditPosX->palette() );
     plt.setColor( QPalette::Text, Qt::red );
@@ -529,7 +531,7 @@ void QSoftKeyDesignToolWidget::on_EditWidth_editingFinished()
     EditModified();
 }
 
-void QSoftKeyDesignToolWidget::on_EditHeight_textChanged(const QString &arg1)
+void QSoftKeyDesignToolWidget::on_EditHeight_textChanged(const QString &/*arg1*/)
 {
     QPalette plt( ui->EditPosX->palette() );
     plt.setColor( QPalette::Text, Qt::red );
@@ -588,4 +590,14 @@ void QSoftKeyDesignToolWidget::onSelectedKeys(bool bGroup, int nSelectedCount)
     ui->BtnGroup->setEnabled( true );
 
     ui->BtnUngroup->setEnabled( bGroup );
+}
+
+void QSoftKeyDesignToolWidget::onUpdateLayoutButton(bool bVisible)
+{
+    updateLayoutButton(bVisible);
+}
+
+void QSoftKeyDesignToolWidget::onEnableDesignTool(bool bEnable)
+{
+    setVisible( bEnable );
 }

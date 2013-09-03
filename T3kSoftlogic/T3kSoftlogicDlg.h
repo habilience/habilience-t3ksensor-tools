@@ -27,33 +27,16 @@ public:
     explicit T3kSoftlogicDlg(QWidget *parent = 0, QString strLoadMoel = "");
     ~T3kSoftlogicDlg();
 
-    void updatePreviewCanvas();
-    void displayPreviewTouchCount( int nTouchCount );
-
-    void updateCalibrationStep( GroupKey* pGroup, CSoftkey* key, int nCalPos, bool bSet );
-
-    void enableControls( bool bEnable );
-
-    bool isConnected() { return m_bIsConnected; }
-    bool isInvalidFirmware() { return m_bIsInvalidFirmware; }
-    bool isFirmwareDownload() { return m_bFirmwareDownload; }
-    T3kHandle* getT3kHandle() { return m_pT3kHandle; }
-
-    void onCloseCanvasWnd();
+//    bool isConnected() { return m_bIsConnected; }
+//    bool isInvalidFirmware() { return m_bIsInvalidFirmware; }
+//    bool isFirmwareDownload() { return m_bFirmwareDownload; }
 
     void setFocusPanelName();
 
     void setActiveTab( int nActiveTab ) { m_nFirstActiveTab = nActiveTab; }
-    void notifyTab( int nIdx );
     void doExecute( QString str );
 
-    void setInvertDrawing( bool bInvert );
-
     bool checkModified();
-
-    bool isAssociateFileExt();
-    void doAssociateFileExt();
-    void doRemoveFileExtAssociation();
 
 protected:
     T3kHandle*              m_pT3kHandle;
@@ -128,6 +111,20 @@ private slots:
     void on_BtnSave_clicked();
     void on_BtnExit_clicked();
     void on_TabMainMenu_currentChanged(int index);
+    void onUpdatePrewview();
+    T3kHandle* onGetT3kHandle() { return m_pT3kHandle; }
+    void onUpdateCalibrationStep(GroupKey* pGroup, CSoftkey* key, int nCalPos, bool bSet);
+    void onDisplayPreviewTouchCount(int nTouchCount);
+    bool onIsValidT3kSensorState() { return m_bIsConnected && !m_bIsInvalidFirmware && !m_bFirmwareDownload; }
+    bool onIsT3kConnected() { return m_bIsConnected; }
+    bool onIsT3kInvalidFirmware() { return m_bIsInvalidFirmware; }
+    void onEnableControls(bool bEnable);
+    void onNotifyTab(int index);
+
+    bool onIsAssociateFileExt();
+    void onDoAssociateFileExt();
+    void onDoRemoveFileExtAssociation();
+    void onInvertDrawing(bool bInvert);
 };
 
 #endif // T3KSOFTLOGICDLG_H

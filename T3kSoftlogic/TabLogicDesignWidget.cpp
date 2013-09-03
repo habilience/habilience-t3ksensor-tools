@@ -14,20 +14,23 @@ TabLogicDesignWidget::TabLogicDesignWidget(QWidget* parent /*=NULL*/) :
     ui(new Ui::TabLogicDesignWidget)
 {
     ui->setupUi(this);
+
+    connect( &m_LogicDesigner, &QLogicDesignWidget::closeWidget, this, &TabLogicDesignWidget::updatePreview );
 }
 
 TabLogicDesignWidget::~TabLogicDesignWidget()
 {
     delete ui;
+
+    if( m_LogicDesigner.isVisible() )
+        m_LogicDesigner.close();
 }
 
 void TabLogicDesignWidget::OnFirmwareDownload(bool)
 {
     if( !isVisible() ) return;
 
-    T3kSoftlogicDlg* pDlg = (T3kSoftlogicDlg*)findWantToParent( parent(), "T3kSoftlogicDlg" );
-
-    if( pDlg->isConnected() && !pDlg->isInvalidFirmware() && !pDlg->isFirmwareDownload() )
+    if( isValidT3kSensorState() )
         ui->BtnApply->setEnabled( true );
 	else
         ui->BtnApply->setEnabled( false );
@@ -35,9 +38,7 @@ void TabLogicDesignWidget::OnFirmwareDownload(bool)
 
 void TabLogicDesignWidget::showEvent(QShowEvent *)
 {
-    T3kSoftlogicDlg* pDlg = (T3kSoftlogicDlg*)findWantToParent( parent(), "T3kSoftlogicDlg" );
-
-    if( pDlg->isConnected() && !pDlg->isInvalidFirmware() && !pDlg->isFirmwareDownload() )
+    if( isValidT3kSensorState() )
         ui->BtnApply->setEnabled( true );
     else
         ui->BtnApply->setEnabled( false );
@@ -45,18 +46,15 @@ void TabLogicDesignWidget::showEvent(QShowEvent *)
 
 void TabLogicDesignWidget::closeEvent(QCloseEvent *)
 {
-//    if( m_LogicDesigner && m_LogicDesigner.IsWindowVisible() )
-//    {
-//        m_LogicDesigner.DestroyWindow();
-//    }
+    if( m_LogicDesigner.isVisible() )
+        m_LogicDesigner.close();
 }
 
 bool TabLogicDesignWidget::verifyGPIO( int &nSensorGPIOCount )
 {
     CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
 
-    T3kSoftlogicDlg* pDlg = (T3kSoftlogicDlg*)findWantToParent( parent(), "T3kSoftlogicDlg" );
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
 	m_nSensorGPIOCount = 0;
 	char szCmd[256];
@@ -76,23 +74,6 @@ bool TabLogicDesignWidget::verifyGPIO( int &nSensorGPIOCount )
 	}
 
     return true;
-}
-
-QObject* TabLogicDesignWidget::findWantToParent(QObject *target, const char* strObjectName)
-{
-    Q_ASSERT( target );
-    QObject* p = target;
-    while( p )
-    {
-        if( p->inherits( strObjectName ) )
-            break;
-
-        p = p->parent();
-    }
-
-    Q_ASSERT( p );
-
-    return p;
 }
 
 void TabLogicDesignWidget::OnOpenT3kDevice(T3K_HANDLE)
@@ -143,8 +124,7 @@ bool TabLogicDesignWidget::writeToSensor( bool bLogicOnly )
     CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
     CSoftlogicArray& Logics = T3kCommonData::instance()->getLogics();
 
-    T3kSoftlogicDlg* pDlg = (T3kSoftlogicDlg*)findWantToParent( parent(), "T3kSoftlogicDlg" );
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
     bool bOK = false;
 
@@ -217,14 +197,8 @@ void TabLogicDesignWidget::on_BtnLogicdesign_clicked()
     QDesktopWidget desktop;
     QRect rcSelMonitor( desktop.screenGeometry(desktop.primaryScreen()) );
 
-    //rcSelMonitor.right = rcSelMonitor.left + 1024;
-    //rcSelMonitor.bottom = rcSelMonitor.top + 768;
-
-//	if ( !m_LogicDesigner )
-//	{
-//		m_LogicDesigner.Create( rcSelMonitor, NULL );
-//		m_LogicDesigner.ShowWindow( SW_SHOW );
-//	}
+    m_LogicDesigner.setGeometry( rcSelMonitor );
+    m_LogicDesigner.show();
 }
 
 void TabLogicDesignWidget::on_BtnApply_clicked()

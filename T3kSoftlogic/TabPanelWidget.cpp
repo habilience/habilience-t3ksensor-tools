@@ -88,7 +88,8 @@ void TabPanelWidget::OnRSP(ResponsePart, ushort, const char *, long, bool, const
             Keys.load(strData, "", NULL);
 
             T3kCommonData::instance()->getGroupKeys().clear();
-            ((T3kSoftlogicDlg*)parent())->updatePreviewCanvas();
+
+            emit updatePreview();
         }
     }
     else if ( strstr(szCmd, cstrFactorialSoftkeyBind) == szCmd )
@@ -104,7 +105,7 @@ void TabPanelWidget::OnRSP(ResponsePart, ushort, const char *, long, bool, const
 
             Keys.loadBindInfo( strData );
 
-            ((T3kSoftlogicDlg*)parent())->updatePreviewCanvas();
+            emit updatePreview();
         }
     }
     else if ( strstr(szCmd, cstrFactorialSoftlogic) == szCmd )
@@ -137,28 +138,10 @@ void TabPanelWidget::OnRSP(ResponsePart, ushort, const char *, long, bool, const
 
 void TabPanelWidget::showEvent(QShowEvent *)
 {
-    T3kSoftlogicDlg* pDlg = (T3kSoftlogicDlg*)findWantToParent( parent(), "T3kSoftlogicDlg" );
-    if( pDlg->isConnected() && !pDlg->isInvalidFirmware() && !pDlg->isFirmwareDownload() )
+    if( isValidT3kSensorState() )// pDlg->isConnected() && !pDlg->isInvalidFirmware() && !pDlg->isFirmwareDownload() )
         ui->BtnLoad->setEnabled( true );
     else
         ui->BtnLoad->setEnabled( false );
-}
-
-QObject* TabPanelWidget::findWantToParent(QObject *target, const char* strObjectName)
-{
-    Q_ASSERT( target );
-    QObject* p = target;
-    while( p )
-    {
-        if( p->inherits( strObjectName ) )
-            break;
-
-        p = p->parent();
-    }
-
-    Q_ASSERT( p );
-
-    return p;
 }
 
 void TabPanelWidget::on_EditInfoName_editingFinished()
@@ -209,9 +192,7 @@ void TabPanelWidget::on_BtnLoad_clicked()
     if( msg.exec() == QMessageBox::No )
         return;
 
-    T3kSoftlogicDlg* pDlg = (T3kSoftlogicDlg*)findWantToParent( parent(), "T3kSoftlogicDlg" );
-    //CGdipTabWnd* pTabWnd = (CGdipTabWnd*)GetParent();
-    T3kHandle* pT3kHandle = pDlg->getT3kHandle();
+    T3kHandle* pT3kHandle = getT3kHandle();
 
     char szCmd[256];
     if( pT3kHandle->IsOpen() )
@@ -224,7 +205,7 @@ void TabPanelWidget::on_BtnLoad_clicked()
             m_bLoadFromSensor = false;
             return;
         }
-        pDlg->notifyTab( 1 );
+        emit notifyTab( 1 );
 
         m_bLoadFromSensor = true;
         sprintf( szCmd, "%s?", cstrFactorialSoftkeyBind );
@@ -250,7 +231,7 @@ void TabPanelWidget::on_BtnLoad_clicked()
             return;
         }
 
-        pDlg->notifyTab( 2 );
+        emit notifyTab( 2 );
     }
 
     ui->EditInfoName->setText("");

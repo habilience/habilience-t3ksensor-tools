@@ -7,5 +7,13 @@
         <file>resources/PNG_ICON_KEY_WIN.png</file>
         <file>resources/T3kSoftlogic.ico</file>
         <file>resources/T3kSoftlogic.png</file>
+        <file>resources/PNG_PICTURE_AUTO_ARRANGE.png</file>
+        <file>resources/PNG_ICON_CONSUMER_BTN.png</file>
+        <file>resources/PNG_GALLERY_CALIBRATION.png</file>
+        <file>resources/PNG_GALLERY_CALIBRATION_GPIO.png</file>
+        <file>resources/PNG_GALLERY_IRPEN_MODE_GPIO.png</file>
+        <file>resources/PNG_GALLERY_TASK_SWITCH.png</file>
+        <file>resources/PNG_GALLERY_TOUCH_ONOFF.png</file>
+        <file>resources/PNG_GALLERY_TOUCHONOFF_GPIO.png</file>
     </qresource>
 </RCC>

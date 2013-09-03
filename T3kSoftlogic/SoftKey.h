@@ -207,9 +207,9 @@ public:
     enum Trigger
 	{
 		etNoTrigger = 0,
-		etTrigger_U100_D100, etTrigger_U250_D250, etTrigger_U500_D500, etTrigger_U1000_D1000, etTrigger_U2000_D2000,
-		etTrigger_U250_D0,   etTrigger_U500_D0,   etTrigger_U1000_D0,  etTrigger_U2000_D0,    etTrigger_U3000_D0,
-        etTrigger_U200_D50,  etTrigger_U400_D100, etTrigger_U750_D250, etTrigger_U1500_D500,  etTrigger_U2000_D1000
+        etTrigger_U128_D128, etTrigger_U256_D256, etTrigger_U512_D512, etTrigger_U1024_D1024, etTrigger_U2048_D2048,
+        etTrigger_U256_D0,   etTrigger_U512_D0,   etTrigger_U1024_D0,  etTrigger_U2048_D0,    etTrigger_U3072_D0,
+        etTrigger_U192_D64,  etTrigger_U384_D128, etTrigger_U768_D256, etTrigger_U1536_D512,  etTrigger_U2048_D1024
 	};
 
 protected:

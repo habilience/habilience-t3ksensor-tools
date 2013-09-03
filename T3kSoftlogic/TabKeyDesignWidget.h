@@ -20,6 +20,8 @@ public:
     virtual ~TabKeyDesignWidget();
 
     void refresh();
+    void updateDesignWidget() { m_DesignCanvasWidget.updateKeys(); }
+    void setInvertDrawing(bool bInvert) { m_DesignCanvasWidget.setInvertDrawing(bInvert); if( isVisible() ) update(); }
 
 protected:
     //
@@ -35,11 +37,12 @@ private:
     Ui::TabKeyDesignWidget* ui;
 
 signals:
+    void updatePreview();
 
 private slots:
     void on_BtnKeydesign_clicked();
     void on_BtnSet_clicked();
-    void on_TableGPIO_cellChanged(int row, int column);
+    void onTableGPIOcellChanged(QObject* row, int index);
 };
 
 #endif // TABKEYDESIGNWIDGET_H

@@ -19,10 +19,6 @@ class QKeyDesignWidget : public QWidget
     Q_OBJECT
 
 public:
-	enum KeyAlign { KeyAlignLeft, KeyAlignCenter, KeyAlignRight, KeyAlignTop, KeyAlignMiddle, KeyAlignBottom };
-	enum KeyArrange { KeyArrangeHorizontal, KeyArrangeVertical };
-	enum AdjustSize { AdjustSizeSameWidth, AdjustSizeSameHeight, AdjustSizeSameBoth };
-	enum Distrib { DistribHorzEqualGap, DistribVertEqualGap };
 	enum ScreenSize { ScreenSizeFull, ScreenSizeFit };
 	enum ScreenMode { ScreenModeKeyDesign, ScreenModePreview, ScreenModeTest };
 
@@ -170,17 +166,19 @@ protected:
     QRect                   m_rcOldTracker;
     QRect                   m_rcOld;
 
+    bool                    m_bCapture;
+
     bool isSelectKey( CSoftkey* key );
 
     void updateCanvas( QPoint& ptScrnOffset );
     void updateArea( QRect& rc, QPoint& ptScrnOffset, bool bUpdateAll=false );
 
-    void drawKeys( QPainter* pDC );
-    void drawGrid( QPainter* pDC );
-    void drawCalPos( QPainter* pDC );
-    void drawTouchPoint( QPainter* pDC );
-    void drawCloseButton( QPainter* pDC, QRect rcClose );
-    void drawTouchCount( QPainter* pDC, QRect rcClose );
+    void drawKeys( QPainter* painter );
+    void drawGrid( QPainter* painter );
+    void drawCalPos( QPainter* painter );
+    void drawTouchPoint( QPainter* painter );
+    void drawCloseButton( QPainter* painter, QRect rcClose );
+    void drawTouchCount( QPainter* painter, QRect rcClose );
 
     QRect deviceToScreen( const QRect& rcDevice, bool bTranslate=true );
     QRect screenToDevice( const QRect& rcScreen, bool bTranslate=true );
@@ -205,18 +203,28 @@ signals:
 
     void keyStateCount(bool bAdd);
 
+    void closeWidget();
+
 public slots:
     int onAddNewKey();
     void onRemoveSelectKeys();
     void onGroupSelectKeys();
     void onUngroupSelectKeys( bool bPushHistory );
-    void onReorderKeys();
     void onInvalidateKey( CSoftkey* key );
     void onRecalcSelectionKeys( QRect rcOld, QRect rcNew );
     void onUpdateScreen();
+
+    // QKeyTracker
+    void onRubberBandFinish(bool bChanged);
+
+    // SoftkeyDesignToolWidget
+    void onReorderKeys();
     void onResetKeys();
 
-    void onRubberBandFinish(bool bChanged);
+    void onGenerateKeys(KeyArrange eArrange, int nCount, int nW, int nH, int nInterval);
+    void onAlignSelectedKeys(KeyAlign eAlign);
+    void onAdjustSizeSelectedKeys(AdjustSize eSize);
+    void onDistribSelectKeys(Distrib eDistrib);
 };
 
 #endif // QKEYDESIGNWIDGET_H

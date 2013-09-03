@@ -1,6 +1,7 @@
-#pragma once
+#ifndef TABLOGICDESIGNWIDGET_H
+#define TABLOGICDESIGNWIDGET_H
 
-//#include "LogicDesignerWnd.h"
+#include "LogicDesignWidget.h"
 #include "../common/TPDPEventMultiCaster.h"
 
 #include <QWidget>
@@ -18,9 +19,7 @@ public:
     TabLogicDesignWidget(QWidget* parent = NULL);
     virtual ~TabLogicDesignWidget();
 
-//	CLogicDesignerWnd m_LogicDesigner;
-
-	int		m_nSensorGPIOCount;
+    void setInvertDrawing(bool bInvert) { m_LogicDesigner.setInvertDrawing( bInvert ); if( isVisible() ) update(); }
 
 protected:
 	// CTPDPEventMulticaster::ITPDPEventListener
@@ -35,17 +34,23 @@ protected:
     bool writeToSensor( bool bLogicOnly );
     bool verifyGPIO( int &nSensorGPIOCount );
 
-    QObject* findWantToParent(QObject *target, const char* strObjectName);
-
 protected:
 
 private:
     Ui::TabLogicDesignWidget* ui;
+    QLogicDesignWidget          m_LogicDesigner;
+
+    int                         m_nSensorGPIOCount;
 
 signals:
+    T3kHandle* getT3kHandle();
+    bool isValidT3kSensorState();
+    void updatePreview();
 
 private slots:
 
     void on_BtnLogicdesign_clicked();
     void on_BtnApply_clicked();
 };
+
+#endif // TABLOGICDESIGNWIDGET_H

@@ -972,7 +972,7 @@ bool CSoftlogic::setLogicTrigger( Trigger trigger )
 	if ( m_eLogicType == eltAND || m_eLogicType == eltOR || m_eLogicType == eltXOR ||
 		m_eLogicType == eltAND_RISINGEDGE )
 	{
-		if ( trigger < etNoTrigger || trigger > etTrigger_U2000_D1000 )
+        if ( trigger < etNoTrigger || trigger > etTrigger_U2048_D1024 )
             return false;
 
 		m_eTrigger = trigger;

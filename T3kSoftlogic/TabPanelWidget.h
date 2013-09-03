@@ -34,8 +34,6 @@ protected:
     virtual void OnCloseT3kDevice(T3K_HANDLE);
     virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
 
-    QObject* findWantToParent( QObject* target, const char* strObjectName );
-
 protected:
     bool				m_bLoadFromSensor;
 
@@ -43,6 +41,10 @@ private:
     Ui::TabPanelWidget* ui;
 
 signals:
+    T3kHandle* getT3kHandle();
+    void updatePreview();
+    bool isValidT3kSensorState();
+    void notifyTab(int index);
 
 private slots:
     void on_EditInfoName_editingFinished();
