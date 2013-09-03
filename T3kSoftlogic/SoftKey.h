@@ -268,7 +268,7 @@ public:
 
 	// extra info
 public:
-    QPoint m_ptPosition;
+    QPointF m_ptPosition;
 	float  m_fLines[2];
 
 friend class CSoftlogicArray;

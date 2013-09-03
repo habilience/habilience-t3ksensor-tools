@@ -175,35 +175,34 @@ void QKeyTracker::draw(QPainter* painter)
 {
     painter->save();
 
-    if( !m_bRubberBand )
+    if( !m_bMove && !m_bRubberBand )
     {
         if( m_rect.isEmpty() ) return;
 
         // get normalized rectangle
-        QRect rect = m_rect;
-        rect = rect.normalized();
+        QRect rect( m_rect.normalized() );
 
         // draw lines
-        if ((m_nStyle & (dottedLine|solidLine)) != 0)
-        {
-            painter->save();
+//        if ((m_nStyle & (dottedLine|solidLine)) != 0)
+//        {
+//            painter->save();
 
-            rect.adjust( -1, -1, 1, 1 );
-            painter->setBrush( Qt::NoBrush );
-            //pDC->SetROP2(R2_COPYPEN);
-            painter->setCompositionMode( QPainter::RasterOp_NotDestination );
+//            rect.adjust( -1, -1, 1, 1 );
+//            painter->setBrush( Qt::NoBrush );
+//            //pDC->SetROP2(R2_COPYPEN);
+//            painter->setCompositionMode( QPainter::RasterOp_NotDestination );
 
-            painter->setPen( m_TrackerPen );
-            painter-> drawRect( rect );
+//            painter->setPen( m_TrackerPen );
+//            painter-> drawRect( rect );
 
-            if( m_nStyle & dottedLine )
-                painter->setPen( Qt::DotLine );
-            else
-                painter->setPen( Qt::black );
-            painter->drawRect( rect );
+//            if( m_nStyle & dottedLine )
+//                painter->setPen( Qt::DotLine );
+//            else
+//                painter->setPen( Qt::black );
+//            painter->drawRect( rect );
 
-            painter->restore();
-        }
+//            painter->restore();
+//        }
 
         // if hatchBrush is going to be used, need to unrealize it
     //	if ((m_nStyle & (hatchInside|hatchedBorder)) != 0)
@@ -222,30 +221,42 @@ void QKeyTracker::draw(QPainter* painter)
             painter->restore();
         }
 
+        painter->save();
+
+        painter->setPen( Qt::black );
+        painter->setBrush( Qt::white );
+//        painter->setBrush( QBrush( Qt::black, Qt::Dense3Pattern ) );
+        //painter->setCompositionMode( QPainter::RasterOp_NotDestination );
+
+        QRect rectTrue( getTrueRect() );
+
+        painter->drawRect( rectTrue.left(), rectTrue.top(), rectTrue.width()-1, getHandleSize() );
+        painter->drawRect( rectTrue.left(), rect.bottom(), rectTrue.width()-1, getHandleSize() );
+        painter->drawRect( rectTrue.left(), rect.top(), getHandleSize(), rect.height()-1 );
+        painter->drawRect( rect.right(), rect.top(), getHandleSize(), rect.height()-1 );
+
+        painter->restore();
+
         // draw hatched border
-        if ((m_nStyle & hatchedBorder) != 0)
-        {
-            painter->save();
+//        if ((m_nStyle & hatchedBorder) != 0)
+//        {
+//            painter->save();
 
-            painter->setPen( Qt::NoPen );
-            painter->setBrush( QBrush( Qt::black, Qt::Dense3Pattern ) );
-            painter->setBackgroundMode( Qt::OpaqueMode );
-            QRect rectTrue( getTrueRect() );
+//            painter->setPen( Qt::NoPen );
+//            painter->setBrush( QBrush( Qt::black, Qt::Dense3Pattern ) );
+//            painter->setBackgroundMode( Qt::OpaqueMode );
+//            QRect rectTrue( getTrueRect() );
 
-            painter->drawRect( rectTrue.left(), rectTrue.top(), rectTrue.width(),
-                               rect.top()-rectTrue.top() );
-            painter->drawRect( rectTrue.left(), rect.bottom(),
-                               rectTrue.width(), rectTrue.bottom()-rect.bottom() );
-            painter->drawRect( rectTrue.left(), rect.top(), rect.left()-rectTrue.left(),
-                               rect.height() );
-            painter->drawRect( rect.right(), rect.top(), rectTrue.right()-rect.right(),
-                               rect.height() );
+//            painter->drawRect( rectTrue.left(), rectTrue.top(), rectTrue.width()-1, getHandleSize() );
+//            painter->drawRect( rectTrue.left(), rect.bottom(), rectTrue.width()-1, getHandleSize() );
+//            painter->drawRect( rectTrue.left(), rect.top(), getHandleSize(), rect.height()-1 );
+//            painter->drawRect( rect.right(), rect.top(), getHandleSize(), rect.height()-1 );
 
-            painter->restore();
-        }
+//            painter->restore();
+//        }
 
         // draw resize handles
-        if ((m_nStyle & (resizeInside|resizeOutside)) != 0)
+        if (!m_bMove &&  (m_nStyle & (resizeInside|resizeOutside)) != 0)
         {
             uint mask = getHandleMask();
             for (int i = 0; i < 8; ++i)
@@ -310,7 +321,10 @@ void QKeyTracker::drawTrackerRect(QRect rc, QWidget* target, QPixmap* pm)
 
     if (m_bFinalErase || !m_bErase)
     {
-        target->update( m_rcTracking.adjusted( -10,-10,10,10 ) );
+        if( m_rcTracking.isEmpty() )
+            target->update( m_rcTracking.adjusted( -10,-10,10,10 ) );
+        else
+            target->update();
         m_rcTracking = rect;
         target->update( rect.adjusted( -10,-10,10,10 ) );
     }
@@ -359,6 +373,7 @@ bool QKeyTracker::eventFilter(QObject *target, QEvent *evt)
                 m_pTargetWidget->removeEventFilter( this );
                 m_bTracking = false;
                 m_bRubberBand = false;
+                m_bMove = false;
 
                 emit finish(!(m_rcSave == m_rect));
 
@@ -420,6 +435,7 @@ bool QKeyTracker::eventFilter(QObject *target, QEvent *evt)
                 m_pTargetWidget->removeEventFilter( this );
                 m_bTracking = false;
                 m_bRubberBand = false;
+                m_bMove = false;
 
                 m_pTargetWidget->update();
 
@@ -541,8 +557,8 @@ QRect QKeyTracker::getTrueRect() const
 {
     //ASSERT(AfxIsValidAddress(lpTrueRect, sizeof(RECT)));
 
-    QRect rect = m_rect;
-    rect = rect.normalized();
+    QRect rect( m_rect.normalized() );
+
     int nInflateBy = 0;
     if ((m_nStyle & (resizeOutside|hatchedBorder)) != 0)
         nInflateBy += getHandleSize() - 1;

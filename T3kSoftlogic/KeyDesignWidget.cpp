@@ -1944,6 +1944,32 @@ void QKeyDesignWidget::mouseMoveEvent(QMouseEvent *evt)
         update();
     }
 
+    switch( m_KeyTracker.hitTest( evt->pos() ) )
+    {
+    case QKeyTracker::hitNothing:
+        setCursor( Qt::ArrowCursor );
+        break;
+    case QKeyTracker::hitTopLeft:
+    case QKeyTracker::hitBottomRight:
+        setCursor( Qt::SizeFDiagCursor );
+        break;
+    case QKeyTracker::hitTopRight:
+    case QKeyTracker::hitBottomLeft:
+        setCursor( Qt::SizeBDiagCursor );
+        break;
+    case QKeyTracker::hitTop:
+    case QKeyTracker::hitBottom:
+        setCursor( Qt::SizeVerCursor );
+        break;
+    case QKeyTracker::hitLeft:
+    case QKeyTracker::hitRight:
+        setCursor( Qt::SizeHorCursor );
+        break;
+    case QKeyTracker::hitMiddle:
+        setCursor( Qt::SizeAllCursor );
+        break;
+    }
+
     m_ptMouseLast = evt->pos();
 }
 
@@ -2658,7 +2684,7 @@ void QKeyDesignWidget::onRubberBandFinish(bool bChanged)
     }
     else
     {
-        qDebug() << QString("mouse up tracker : %1,%2,%3,%4").arg(m_KeyTracker.m_rect.x()).arg(m_KeyTracker.m_rect.y()).arg(m_KeyTracker.m_rect.width()).arg(m_KeyTracker.m_rect.height());
+//        qDebug() << QString("mouse up tracker : %1,%2,%3,%4").arg(m_KeyTracker.m_rect.x()).arg(m_KeyTracker.m_rect.y()).arg(m_KeyTracker.m_rect.width()).arg(m_KeyTracker.m_rect.height());
         QRect rcNewTracker;
         QRect rcNew;
         rcNewTracker = m_KeyTracker.m_rect;

@@ -1,5 +1,4 @@
-
-#include "./SoftKey.h"
+#include "SoftKey.h"
 
 #include <QMap>
 #include <QPoint>
@@ -430,8 +429,9 @@ bool CSoftkeyArray::load( QString lpctszCmd, QString lpctszExtra, QIniFormat * i
 			}
 			else
 			{
-                fLogicF[0] = strLogicInfo.toFloat();
                 int nD = strLogicInfo.indexOf(',');
+                fLogicF[0] = strLogicInfo.left(nD).toFloat();
+                nD = strLogicInfo.indexOf(',');
                 if ( nD > 0 ) strLogicInfo = strLogicInfo.mid(nD + 1);
                 fLogicF[1] = strLogicInfo.toFloat();
 			}
@@ -531,7 +531,7 @@ QString CSoftkeyArray::save( QString & strExtra, QIniFormat * ini, bool bCheck/*
 		if ( ini != NULL && pSoftkey != NULL )
 		{
             strKeyEntry = QString("key%1").arg(ni);
-            strKeyData = QString("%1,%1").arg(pSoftkey->m_ptPosition.x()).arg(pSoftkey->m_ptPosition.y());
+            strKeyData = QString("%1,%1").arg(pSoftkey->m_ptPosition.x(), 8, 'f', -1, '0').arg(pSoftkey->m_ptPosition.y(), 8, 'f', -1, '0');
             ini->setValue( strKeyEntry, strKeyData );
 		}
 	}
@@ -638,7 +638,8 @@ void CSoftkeyArray::loadBindInfo( QString lpctszCmd )
 	{
 		if ( buf[0] == 0 || buf[1] == 0 )
 			break;
-        strcpy_s( szBind, 2, buf );
+        szBind[0] = buf[0];
+        szBind[1] = buf[1];
 
         uchar cBind = (uchar)strtol( szBind, NULL, 16 );
 
@@ -1333,13 +1334,14 @@ void CSoftlogicArray::_setLogicPosFromIni( QIniFormat * ini, int idx_logic )
 	}
 	else
 	{
-        fLogicF[0] = strLogicInfo.toFloat();
         int nD = strLogicInfo.indexOf(',');
+        fLogicF[0] = strLogicInfo.left(nD).toFloat();
         if ( nD > 0 ) strLogicInfo = strLogicInfo.mid(nD + 1);
-        fLogicF[1] = strLogicInfo.toFloat();
+        nD = strLogicInfo.indexOf(',');
+        fLogicF[1] = strLogicInfo.left(nD).toFloat();
         nD = strLogicInfo.indexOf(',');
         if ( nD > 0 ) strLogicInfo = strLogicInfo.mid(nD + 1);
-        fLogicF[2] = strLogicInfo.toFloat();
+        fLogicF[2] = strLogicInfo.left(nD).toFloat();
         nD = strLogicInfo.indexOf(',');
         if ( nD > 0 ) strLogicInfo = strLogicInfo.mid(nD + 1);
         fLogicF[3] = strLogicInfo.toFloat();
@@ -1372,13 +1374,14 @@ void CSoftlogicArray::_getLogicPosFromIni( QIniFormat * ini, int idx_logic, floa
 	}
 	else
 	{
-        fLogicF[0] = strLogicInfo.toFloat();
         int nD = strLogicInfo.indexOf(',');
-        if ( nD > 0 ) strLogicInfo = strLogicInfo.mid(nD + 1);
-        fLogicF[1] = strLogicInfo.toFloat();
+        fLogicF[0] = strLogicInfo.left(nD).toFloat();
         nD = strLogicInfo.indexOf(',');
         if ( nD > 0 ) strLogicInfo = strLogicInfo.mid(nD + 1);
-        fLogicF[2] = strLogicInfo.toFloat();
+        fLogicF[1] = strLogicInfo.left(nD).toFloat();
+        nD = strLogicInfo.indexOf(',');
+        if ( nD > 0 ) strLogicInfo = strLogicInfo.mid(nD + 1);
+        fLogicF[2] = strLogicInfo.left(nD).toFloat();
         nD = strLogicInfo.indexOf(',');
         if ( nD > 0 ) strLogicInfo = strLogicInfo.mid(nD + 1);
         fLogicF[3] = strLogicInfo.toFloat();
@@ -1809,7 +1812,7 @@ QString CSoftlogicArray::save( QIniFormat * ini )
 		if ( ini && pSoftlogic != NULL )
 		{
             strLogicInfo = QString("logic%1").arg(ni);
-            strLogicData = QString("%1,%2,%3,%4").arg(pSoftlogic->m_ptPosition.x(), 10).arg(pSoftlogic->m_ptPosition.y(), 10).arg(pSoftlogic->m_fLines[0], 10).arg(pSoftlogic->m_fLines[1], 10);
+            strLogicData = QString("%1,%2,%3,%4").arg(pSoftlogic->m_ptPosition.x(), 8, 'f', -1, '0').arg(pSoftlogic->m_ptPosition.y(), 8, 'f', -1, '0').arg(pSoftlogic->m_fLines[0], 8, 'f', -1, '0').arg(pSoftlogic->m_fLines[1], 8, 'f', -1, '0');
             ini->setValue( strLogicInfo, strLogicData );
 		}
 	}
@@ -1974,7 +1977,7 @@ QString CSoftlogicArray::save( QIniFormat * ini )
 		if ( ini && pSoftlogic != NULL )
 		{
             strLogicInfo = QString("logic%1").arg(SOFT_LOGIC_MAX - ni - 1);
-            strLogicData = QString("%1,%2,%3,%4").arg(pSoftlogic->m_ptPosition.x()).arg(pSoftlogic->m_ptPosition.y()).arg(pSoftlogic->m_fLines[0]).arg(pSoftlogic->m_fLines[1]);
+            strLogicData = QString("%1,%2,%3,%4").arg(pSoftlogic->m_ptPosition.x(), 8, 'f', -1, '0').arg(pSoftlogic->m_ptPosition.y(), 8, 'f', -1, '0').arg(pSoftlogic->m_fLines[0], 8, 'f', -1, '0').arg(pSoftlogic->m_fLines[1], 8, 'f', -1, '0');
             ini->setValue( strLogicInfo, strLogicData );
 		}
 	}

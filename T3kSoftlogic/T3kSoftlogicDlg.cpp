@@ -7,6 +7,8 @@
 
 #include "../common/QIniFormat.h"
 
+#include "../common/ui/ColorTabBar.h"
+
 #include <QDesktopWidget>
 #include <QSettings>
 #include <QFile>
@@ -91,6 +93,8 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
     ui->TabMainMenu->addTab( m_pTabKeyDesignWidget, "Key" );
     ui->TabMainMenu->addTab( m_pTabLogicDesignWidget, "Logic" );
     ui->TabMainMenu->addTab( m_pTabCalibrationWidget, "Calibration" );
+
+    ui->TabMainMenu->setStyleSheet("QTabBar::tab { height: 28px; }");
 
     connect( m_pTabPanelWidget, &TabPanelWidget::updatePreview, this, &T3kSoftlogicDlg::onUpdatePrewview );
     connect( m_pTabPanelWidget, &TabPanelWidget::isValidT3kSensorState, this, &T3kSoftlogicDlg::onIsValidT3kSensorState, Qt::DirectConnection );
@@ -1079,6 +1083,7 @@ void T3kSoftlogicDlg::onUpdatePrewview()
     switch( m_StackedPreviewLayout.currentIndex() )
     {
     case 0:
+        ui->PreviewKey->updateKeys();
         ui->PreviewKey->update();
         break;
     case 1:

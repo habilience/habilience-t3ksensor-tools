@@ -870,6 +870,8 @@ void QEditGateWidget::updateOutputPort( CSoftlogic::PortType type )
 		}
         ui->CBEnablePort->setEnabled( true );
 		break;
+    default:
+        break;
 	}
 
  //   m_nOutputPortIndex = -1;

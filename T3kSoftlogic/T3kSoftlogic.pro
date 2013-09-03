@@ -110,6 +110,8 @@ SOURCES += main.cpp\
     ../common/QKeyMapStr.cpp \
     ../common/ui/QUnderlineLabel.cpp \
     ../common/ui/QHoverComboBox.cpp \
+    ../common/ui/ColorTabBar.cpp \
+    ../common/ui/ColorTabWidget.cpp \
     T3kSoftlogicDlg.cpp \
     TabPanelWidget.cpp \
     TabKeyDesignWidget.cpp \
@@ -145,6 +147,8 @@ HEADERS  += \
     ../common/QKeyMapStr.h \
     ../common/ui/QUnderlineLabel.h \
     ../common/ui/QHoverComboBox.h \
+    ../common/ui/ColorTabBar.h \
+    ../common/ui/ColorTabWidget.h \
     T3kSoftlogicDlg.h \
     TabPanelWidget.h \
     TabKeyDesignWidget.h \
@@ -168,6 +172,7 @@ HEADERS  += \
     UserDefinedKeyWidget.h \
     KeyLineEditWidget.h \
     LogicGalleryWidget.h \
+
 
 FORMS    += \
     T3kSoftlogicDlg.ui \
