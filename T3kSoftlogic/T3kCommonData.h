@@ -15,6 +15,7 @@ public:
     enum KeyDataMode { KeyDataModeNormal, KeyDataModeCalibration, KeyDataModeTest };
 
     void setKeyDataMode( KeyDataMode eMode ) { m_eKeyDataMode = eMode; }
+    KeyDataMode getKeyDataMode() { return m_eKeyDataMode; }
 
     CSoftkeyArray& getKeys();
     CSoftlogicArray& getLogics() { return m_SoftLogic; }

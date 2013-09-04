@@ -11,6 +11,8 @@ QLayoutToolWidget::QLayoutToolWidget(QVector<CSoftkey*>* pSelectedKeys, QWidget*
 {
     ui->setupUi(this);
 
+    ui->BtnReorder->setVisible( false );
+
     setWindowFlags( Qt::Tool|Qt::WindowStaysOnTopHint );
     setWindowModality(Qt::NonModal);
 
@@ -120,11 +122,6 @@ void QLayoutToolWidget::setUnit( ScreenUnit eUnit, double dScaleWidth, double dS
 void QLayoutToolWidget::closeEvent(QCloseEvent *)
 {
     emit updateLayoutButton( false );
-
-//    if( m_wnDArrangeHelperDlg && m_wnDArrangeHelperDlg.IsWindowVisible() )
-//	{
-//		m_wnDArrangeHelperDlg.SendMessage( WM_CLOSE );
-//	}
 
     QRect rc( x(), y(), width(), height() );
     QString str = QString("%1,%2,%3,%4").arg(rc.left()).arg(rc.top()).arg(rc.right()).arg(rc.bottom());

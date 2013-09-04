@@ -14,7 +14,7 @@ QHoverComboBox::QHoverComboBox(QWidget *parent, bool bHover, int nRowIndex, int 
 
     m_nCurIndex = -1;
 
-    connect( this, SIGNAL(currentIndexChanged(int)), this, SLOT(onCurrentIndexChanged(int)) );
+    connect( this, SIGNAL(activated(int)), this, SLOT(onCurrentIndexChanged(int)) );
 
     installEventFilter( this );
 

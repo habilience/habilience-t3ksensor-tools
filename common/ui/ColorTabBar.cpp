@@ -74,7 +74,7 @@ void QColorTabBar::paintEvent(QPaintEvent *)
             tabPath.arcTo( arcRect, 90, -90 );
             tabS.arcTo( arcRect, 90, -90 );
             tabPath.lineTo( rectTab.bottomRight() );
-            tabS.closeSubpath();
+            //tabS.closeSubpath();
         }
         else
         {
@@ -90,7 +90,7 @@ void QColorTabBar::paintEvent(QPaintEvent *)
             tabS.arcTo( arcRect, -180, 90 );
             tabPath.moveTo( rectTab.left()+nDiameter, rectTab.bottom() );
             tabPath.lineTo( rectTab.right(), rectTab.bottom() );
-            tabS.closeSubpath();
+            //tabS.closeSubpath();
         }
 
 

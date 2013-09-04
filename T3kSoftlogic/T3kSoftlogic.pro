@@ -123,10 +123,6 @@ SOURCES += main.cpp\
     KeyDesignWidget.cpp \
     SelectDeviceWidget.cpp \
     KeyTracker.cpp \
-    ResizingGraphicsItem.cpp \
-    GraphicsKeyItem.cpp \
-    GraphicsButtonItem.cpp \
-    EdgeResizeGrabber.cpp \
     LayoutToolWidget.cpp \
     ArrangeHelperWidget.cpp \
     LogicDesignWidget.cpp \
@@ -161,10 +157,6 @@ HEADERS  += \
     KeyDesignWidget.h \
     SelectDeviceWidget.h \
     KeyTracker.h \
-    ResizingGraphicsItem.h \
-    GraphicsKeyItem.h \
-    GraphicsButtonItem.h \
-    EdgeResizeGrabber.h \
     LayoutToolWidget.h \
     ArrangeHelperWidget.h \
     LogicDesignWidget.h \

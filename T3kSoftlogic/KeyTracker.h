@@ -38,8 +38,8 @@ public:
 
     int hitTest(QPoint point);
 
-    void trackRubberBand(QWidget* target, QPixmap* pm, QPoint ptStart, bool bAllowInvert = false);
-    bool track(QWidget* target, QPixmap* pm, QPoint ptStart, bool bAllowInvert = false);
+    void trackRubberBand(QWidget* target, QPoint ptStart, bool bAllowInvert = false);
+    bool track(QWidget* target, QPoint ptStart, bool bAllowInvert = false);
 
     QRect       m_oldRect;
     QRect       m_rect;
@@ -75,7 +75,7 @@ protected:
     //bool TrackHandle(int nHandle, QWidget* pWidget, QPoint point, QWidget* pWndClipTo);
     void getModifyPointers(int nHandle, int** ppx, int** ppy, int* px, int* py);
 
-    void drawTrackerRect(QRect rc, QWidget* target, QPixmap* pm);
+    void drawTrackerRect(QRect rc, QWidget* target);
 
     QRect getTrueRect() const;
     int getHandleSize(QRect* lpRect=NULL) const;
@@ -90,7 +90,6 @@ protected:
     QPen		m_TrackerPen;
 
     QWidget*    m_pTargetWidget;
-    QPixmap*    m_pixmap;
 
     int         m_nHandleSize;
 

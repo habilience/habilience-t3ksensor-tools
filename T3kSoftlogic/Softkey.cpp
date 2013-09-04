@@ -558,7 +558,8 @@ void CSoftkeyArray::loadGPIOInfo( QString lpctszCmd )
 	int ni;
     for ( ni = 0 ; *buf != '\0' ; ni++, buf += 2 )
 	{
-        strcpy_s( szGPIO, 2, buf );
+        szGPIO[0] = buf[0];
+        szGPIO[1] = buf[1];
 
         uchar cGPIO = (uchar)strtol( szGPIO, NULL, 16 );
 		GPIOInfo info;
@@ -585,11 +586,17 @@ QString CSoftkeyArray::saveGPIOInfo()
     for ( ni = 0 ; ni < m_aryGPIOInfo.count() ; ni++ )
 	{
         GPIOInfo gpio = m_aryGPIOInfo.at(ni);
-        uchar cGPIO = 0x00;
-        if ( gpio.bEnable ) cGPIO |= 0x80;
-		if ( gpio.bOutput ) cGPIO |= 0x01;
+        QString strGPIO;
+        if ( gpio.bEnable )
+            strGPIO = "8";
+        else
+            strGPIO = "0";
+        if ( gpio.bOutput )
+            strGPIO += "1";
+        else
+            strGPIO += "0";
 
-        strRet += QString("%1").arg(cGPIO, 2, 16);
+        strRet += strGPIO;
 	}
 	return strRet;
 }
@@ -686,7 +693,7 @@ QString CSoftkeyArray::saveBindInfo()
                 int nBindIndex = indexFromSoftkey( toBindKey );
                 Q_ASSERT( nBindIndex >= 0 );
                 uchar cBind = 0x80 | (uchar)nBindIndex;
-                strRet += QString("%1").arg(cBind, 2, 16);
+                strRet += QString("%1").arg(cBind, 2, 16, '0');
 			}
 			else
 			{

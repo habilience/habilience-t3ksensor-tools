@@ -295,7 +295,7 @@ void QKeyTracker::draw(QPainter* painter)
     painter->restore();
 }
 
-void QKeyTracker::drawTrackerRect(QRect rc, QWidget* target, QPixmap* pm)
+void QKeyTracker::drawTrackerRect(QRect rc, QWidget* target)
 {
     // first, normalize the rectangle for drawing
     QRect rect( rc.normalized() );
@@ -361,7 +361,7 @@ bool QKeyTracker::eventFilter(QObject *target, QEvent *evt)
                 if (m_bMove)
                 {
                     m_bErase = m_bFinalErase = true;
-                    drawTrackerRect(m_rect, m_pTargetWidget, m_pixmap);
+                    drawTrackerRect(m_rect, m_pTargetWidget);
                 }
                 m_rect = m_rcSave;
 
@@ -417,7 +417,7 @@ bool QKeyTracker::eventFilter(QObject *target, QEvent *evt)
                 if (m_bMove)
                 {
                     m_bErase = true;
-                    drawTrackerRect(m_oldRect, m_pTargetWidget, m_pixmap);
+                    drawTrackerRect(m_oldRect, m_pTargetWidget);
                 }
 
                 if (!bMLBRelease)
@@ -445,7 +445,7 @@ bool QKeyTracker::eventFilter(QObject *target, QEvent *evt)
             if (!(m_oldRect == m_rect))
             {
                 m_bErase = false;
-                drawTrackerRect(m_rect, m_pTargetWidget, m_pixmap);
+                drawTrackerRect(m_rect, m_pTargetWidget);
             }
 
             bProcess = true;
@@ -485,7 +485,7 @@ bool QKeyTracker::eventFilter(QObject *target, QEvent *evt)
 //    return trackHandle(hitBottomRight, pWidget, point, NULL);
 //}
 
-bool QKeyTracker::track(QWidget* target, QPixmap* pm, QPoint ptStart, bool bAllowInvert)
+bool QKeyTracker::track(QWidget* target, QPoint ptStart, bool bAllowInvert)
 {
     int nHandle = hitTestHandles(ptStart);
     if( nHandle < 0 )
@@ -499,24 +499,18 @@ bool QKeyTracker::track(QWidget* target, QPixmap* pm, QPoint ptStart, bool bAllo
 
     Q_ASSERT( !m_bFinalErase );
 
-    qDebug() << QString("rect %1,%2,%3,%4").arg(m_rect.x()).arg(m_rect.y()).arg(m_rect.width()).arg(m_rect.height());
     m_rcSave = m_rect;
 
     m_bTracking = true;
 
     m_bAllowInvert = bAllowInvert;
 
-    qDebug() << QString("rect %1,%2,%3,%4").arg(m_rect.x()).arg(m_rect.y()).arg(m_rect.width()).arg(m_rect.height());
     getModifyPointers(m_eTrackerHit, &px, &py, &xDiff, &yDiff);
 
     xDiff = ptStart.x() - xDiff;
     yDiff = ptStart.y() - yDiff;
 
-//    qDebug() << QString("rect %1,%2,%3,%4").arg(m_rect.x()).arg(m_rect.y()).arg(m_rect.width()).arg(m_rect.height());
-    //qDebug() << QString("diff %1,%2 : %3,%4").arg(ptStart.x()).arg(ptStart.y()).arg(xDiff).arg(yDiff);
-
     m_pTargetWidget = target;
-    m_pixmap = pm;
 
     m_ptStart = ptStart;
 
@@ -525,7 +519,7 @@ bool QKeyTracker::track(QWidget* target, QPixmap* pm, QPoint ptStart, bool bAllo
     return true;
 }
 
-void QKeyTracker::trackRubberBand(QWidget* target, QPixmap* pm, QPoint ptStart, bool bAllowInvert)
+void QKeyTracker::trackRubberBand(QWidget* target, QPoint ptStart, bool bAllowInvert)
 {
     Q_ASSERT( target != NULL );
 
@@ -546,7 +540,6 @@ void QKeyTracker::trackRubberBand(QWidget* target, QPixmap* pm, QPoint ptStart, 
     yDiff = ptStart.y() - yDiff;
 
     m_pTargetWidget = target;
-    m_pixmap = pm;
 
     m_ptStart = ptStart;
 

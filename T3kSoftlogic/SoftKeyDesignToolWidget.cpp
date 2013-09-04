@@ -2,7 +2,6 @@
 #include "ui_SoftKeyDesignToolWidget.h"
 
 #include "T3kSoftlogicDlg.h"
-#include "GraphicsKeyItem.h"
 
 #include <QSettings>
 #include <QDesktopWidget>
@@ -276,6 +275,8 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
         ui->EditPosY->setEnabled( false );
         ui->EditWidth->setEnabled( false );
         ui->EditHeight->setEnabled( false );
+
+        ui->BtnReorder->setEnabled( false );
     }
     else if ( SelectKeys.count() == 1 )
     {
@@ -347,6 +348,8 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
         ui->EditPosY->setEnabled( true );
         ui->EditWidth->setEnabled( true );
         ui->EditHeight->setEnabled( true );
+
+        ui->BtnReorder->setEnabled( true );
     }
 }
 
@@ -370,7 +373,7 @@ void QSoftKeyDesignToolWidget::showEvent(QShowEvent *)
 {
     QSettings settings( "Habilience", "T3kSoftlogic" );
     settings.beginGroup( "Settings" );
-    bool bShow = settings.value( "ShowLayoutToolBar" ).toBool();
+    bool bShow = settings.value( "ShowLayoutToolBar", false ).toBool();
     settings.endGroup();
 
     if( bShow )
@@ -483,7 +486,7 @@ void QSoftKeyDesignToolWidget::on_CBVisible_activated(int index)
     }
 }
 
-void QSoftKeyDesignToolWidget::on_EditPosX_textChanged(const QString &/*arg1*/)
+void QSoftKeyDesignToolWidget::on_EditPosX_textEdited(const QString &/*arg1*/)
 {
     QPalette plt( ui->EditPosX->palette() );
     plt.setColor( QPalette::Text, Qt::red );
@@ -499,7 +502,7 @@ void QSoftKeyDesignToolWidget::on_EditPosX_editingFinished()
     EditModified();
 }
 
-void QSoftKeyDesignToolWidget::on_EditPosY_textChanged(const QString &/*arg1*/)
+void QSoftKeyDesignToolWidget::on_EditPosY_textEdited(const QString &/*arg1*/)
 {
     QPalette plt( ui->EditPosX->palette() );
     plt.setColor( QPalette::Text, Qt::red );
@@ -515,7 +518,7 @@ void QSoftKeyDesignToolWidget::on_EditPosY_editingFinished()
     EditModified();
 }
 
-void QSoftKeyDesignToolWidget::on_EditWidth_textChanged(const QString &/*arg1*/)
+void QSoftKeyDesignToolWidget::on_EditWidth_textEdited(const QString &/*arg1*/)
 {
     QPalette plt( ui->EditPosX->palette() );
     plt.setColor( QPalette::Text, Qt::red );
@@ -531,7 +534,7 @@ void QSoftKeyDesignToolWidget::on_EditWidth_editingFinished()
     EditModified();
 }
 
-void QSoftKeyDesignToolWidget::on_EditHeight_textChanged(const QString &/*arg1*/)
+void QSoftKeyDesignToolWidget::on_EditHeight_textEdited(const QString &/*arg1*/)
 {
     QPalette plt( ui->EditPosX->palette() );
     plt.setColor( QPalette::Text, Qt::red );

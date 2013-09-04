@@ -4,8 +4,6 @@
 #include "SoftKeyDesignToolWidget.h"
 
 #include "Softkey.h"
-#include "GraphicsButtonItem.h"
-#include "ResizingGraphicsItem.h"
 #include "KeyTracker.h"
 
 #include <QGraphicsView>
@@ -76,6 +74,7 @@ protected:
     virtual void mousePressEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
     virtual void mouseMoveEvent(QMouseEvent *);
+    virtual void mouseDoubleClickEvent(QMouseEvent *);
 
     void init();
 
@@ -110,8 +109,6 @@ protected:
     int					m_nCalPos;
 
     QSoftKeyDesignToolWidget*	m_pSoftKeyDesignTool;
-
-    QPixmap*					m_pImageCanvas;
 
     QRect				m_rcScreen;
     QRect				m_rcScreenOrg;
@@ -206,6 +203,10 @@ signals:
     void closeWidget();
 
 public slots:
+    void onCustomContextMenuRequested(const QPoint& pos);
+    void onContextMenuGrouping();
+    void onContextMenuRemove();
+
     int onAddNewKey();
     void onRemoveSelectKeys();
     void onGroupSelectKeys();

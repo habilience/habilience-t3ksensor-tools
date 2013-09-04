@@ -119,8 +119,6 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
 
     connect( m_pTabCalibrationWidget, &TabCalibrationWidget::getT3kHandle, this, &T3kSoftlogicDlg::onGetT3kHandle, Qt::DirectConnection );
 
-    installEventFilter( m_pTabCalibrationWidget );
-
     ui->PreviewLayout->addLayout( &m_StackedPreviewLayout );
 
     m_StackedPreviewLayout.setObjectName( "StackedPrewviewLayout" );
@@ -137,7 +135,6 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
 
     ui->PreviewLogic->setFont( font() );
     ui->PreviewLogic->setScreenMode( QLogicDesignWidget::ScreenModePreview );
-//m_pPrevKeyDesignWidget.ModifyStyle( 0, WS_BORDER );
 
     if( !bLoadOK )
     {
@@ -504,6 +501,10 @@ bool T3kSoftlogicDlg::loadModel( QString lpszPathName )
     QIniFormat ini("hsk");
     if( !ini.open( lpszPathName ) ) return false;
 
+
+    T3kCommonData::KeyDataMode eMode = T3kCommonData::instance()->getKeyDataMode();
+    T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeNormal );
+
     double x, y;
     int nSP;
     QString strData, strExtra;
@@ -577,6 +578,8 @@ bool T3kSoftlogicDlg::loadModel( QString lpszPathName )
 
     m_strLoadedModelPathName = lpszPathName;
     T3kCommonData::instance()->setLoadedModelPathName( m_strLoadedModelPathName );
+
+    T3kCommonData::instance()->setKeyDataMode( eMode );
 
     return true;
 }
@@ -730,6 +733,9 @@ void T3kSoftlogicDlg::on_BtnNew_clicked()
         }
     }
 
+    T3kCommonData::KeyDataMode eMode = T3kCommonData::instance()->getKeyDataMode();
+    T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeNormal );
+
     CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
     Keys.clear();
     T3kCommonData::instance()->getLogics().clear();
@@ -741,6 +747,9 @@ void T3kSoftlogicDlg::on_BtnNew_clicked()
     m_strLoadedModelPathName.clear();
 
     m_pTabPanelWidget->updateUIFromData();
+    m_pTabKeyDesignWidget->refresh();
+
+    T3kCommonData::instance()->setKeyDataMode( eMode );
 
     T3kCommonData::instance()->resetCalibrationData();
 
@@ -769,6 +778,7 @@ void T3kSoftlogicDlg::on_BtnLoad_clicked()
         T3kCommonData::instance()->resetCalibrationData();
         onUpdatePrewview();
 
+        m_pTabKeyDesignWidget->refresh();
         //m_wndTab.ResetNotify();
     }
 }
@@ -777,7 +787,12 @@ void T3kSoftlogicDlg::on_BtnSave_clicked()
 {
     m_pTabPanelWidget->updateDataFromUI();
 
+    T3kCommonData::KeyDataMode eMode = T3kCommonData::instance()->getKeyDataMode();
+    T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeNormal );
+
     QString strPanelName = T3kCommonData::instance()->getKeys().getPanelName();
+
+    T3kCommonData::instance()->setKeyDataMode( eMode );
     if( strPanelName.isEmpty() )
     {
         QMessageBox msg( QMessageBox::Critical, "Error", "Panel Name is required.", QMessageBox::Ok, this );

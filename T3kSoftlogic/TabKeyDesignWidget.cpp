@@ -111,9 +111,11 @@ void TabKeyDesignWidget::refresh()
 				if ( pInfo )
 				{
                     QHoverComboBox* cbEnable = new QHoverComboBox( ui->TableGPIO, true, i, 0 );
+                    connect( cbEnable, &QHoverComboBox::ItemChanged, this, &TabKeyDesignWidget::onTableGPIOcellChanged );
                     cbEnable->addItem( "True" ); cbEnable->addItem( "False" );
                     cbEnable->setCurrentIndex( pInfo->bEnable ? 0 : 1 );
                     QHoverComboBox* cbIO = new QHoverComboBox( ui->TableGPIO, true, i, 1 );
+                    connect( cbIO, &QHoverComboBox::ItemChanged, this, &TabKeyDesignWidget::onTableGPIOcellChanged );
                     cbIO->addItem( "Input" ); cbIO->addItem( "Output" );
                     cbIO->setCurrentIndex( pInfo->bOutput ? 1 : 0 );
 
@@ -131,9 +133,11 @@ void TabKeyDesignWidget::refresh()
 				{
                     Q_ASSERT( ui->TableGPIO->cellWidget( i, 0 )->inherits( "QHoverComboBox" ) );
                     QHoverComboBox* cbEnable = (QHoverComboBox*)ui->TableGPIO->cellWidget( i, 0 );
+                    connect( cbEnable, &QHoverComboBox::ItemChanged, this, &TabKeyDesignWidget::onTableGPIOcellChanged );
                     cbEnable->setCurrentIndex( pInfo->bEnable ? 0 : 1 );
                     Q_ASSERT( ui->TableGPIO->cellWidget( i, 1 )->inherits( "QHoverComboBox" ) );
                     QHoverComboBox* cbIO = (QHoverComboBox*)ui->TableGPIO->cellWidget( i, 1 );
+                    connect( cbIO, &QHoverComboBox::ItemChanged, this, &TabKeyDesignWidget::onTableGPIOcellChanged );
                     cbIO->setCurrentIndex( pInfo->bOutput ? 1 : 0 );
 				}
 			}
@@ -142,6 +146,8 @@ void TabKeyDesignWidget::refresh()
 	else
 	{
         ui->EditGPIOCount->setText( "0" );
+        ui->TableGPIO->clear();
+        ui->TableGPIO->setRowCount( 0 );
 	}
 }
 
@@ -218,6 +224,6 @@ void TabKeyDesignWidget::onTableGPIOcellChanged(QObject* obj, int index)
         if( column == 0 )
             pInfo->bEnable = (index == 0 ? true : false);
         else if( column == 1 )
-            pInfo->bOutput = (index ? true : false);
+            pInfo->bOutput = (index == 1 ? true : false);
     }
 }

@@ -2,13 +2,13 @@
 
 #include "T3kSoftlogicDlg.h"
 #include "T3kCommonData.h"
-#include "GraphicsKeyItem.h"
 
 #include <QDebug>
 #include <QPainter>
 #include <QtEvents>
 #include <QApplication>
 #include <QStackedLayout>
+#include <QMenu>
 
 #define TRACK_OFFSETXY		(1)
 #define MAX_GROUP			(13)
@@ -121,11 +121,13 @@ QKeyDesignWidget::QKeyDesignWidget(QWidget *parent) :
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::alignSelectedKeys, this, &QKeyDesignWidget::onAlignSelectedKeys );
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::adjustSizeSelectedKeys, this, &QKeyDesignWidget::onAdjustSizeSelectedKeys );
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::distribSelectKeys, this, &QKeyDesignWidget::onDistribSelectKeys );
+
+        setContextMenuPolicy( Qt::CustomContextMenu );
+        connect( this, &QWidget::customContextMenuRequested, this, &QKeyDesignWidget::onCustomContextMenuRequested );
     }
 
     m_rcScreen.setRect( 0, 0, width(), height() );
     m_rcScreenOrg = m_rcScreen;
-    m_pImageCanvas = NULL;
     m_bMoveScreen = false;
     m_eScrnSize = ScreenSizeFit;
 
@@ -265,6 +267,9 @@ void QKeyDesignWidget::viewTouchPoint( long lX, long lY, bool bDown )
 
 void QKeyDesignWidget::updateKeys()
 {
+    m_KeyTracker.m_rect.setRect( 0,0,0,0 );
+    m_rcDevTracker.setRect( 0,0,0,0 );
+
     m_SelectKeys.clear();
     m_ClipboardKeys.clear();
 
@@ -333,7 +338,6 @@ void QKeyDesignWidget::arrangeSelectKeys( KeyArrange eArrange, int nKeyWidth, in
     CSoftkey* pFirstKey = SortKeys.at(0);
 
     QRect rcFirst = pFirstKey->getPosition();
-    //rcFirst = DeviceToScreen( rcFirst, false );
     QPoint ptFirst = rcFirst.topLeft();
 
     QRect rcMergedTrack;
@@ -1136,7 +1140,6 @@ void QKeyDesignWidget::drawKeys( QPainter* painter )
     QPen SelectPen( Qt::DashLine );
     SelectPen.setWidth( 2 );
     SelectPen.setColor( qRgb(77, 243, 109) );
-    //CBrush SelectBrush( RGB(112, 154, 209) );
 
     if ( m_SelectKeys.count() > 0 )
     {
@@ -1606,60 +1609,6 @@ GroupStatus QKeyDesignWidget::checkGroupStatus()
     return DisableGroup;
 }
 
-//void QKeyDesignWidget::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
-//{
-//    if ( m_KeyTracker.m_rect.isEmpty() )
-//		return;
-
-//	CPoint pt = point;
-//	ScreenToClient( &pt );
-//	if ( !m_KeyTracker.m_rect.PtInRect(pt) )
-//	{
-//		return;
-//	}
-
-//	CMenu menu;
-//	menu.LoadMenu( IDR_TRACKER_POPUP );
-
-//	CMenu* pMenu = menu.GetSubMenu( 0 );
-
-//	CString strCaption;
-//	MENUITEMINFO	MenuItemInfo;
-//	MenuItemInfo.cbSize = sizeof(MENUITEMINFO);
-//	MenuItemInfo.fMask = MIIM_STATE | MIIM_STRING;
-
-//	switch ( CheckGroupStatus() )
-//	{
-//	case EnableGroup:
-//		// Group
-//		strCaption = _T("Group");
-//        m_bMenuGroup = true;
-//		MenuItemInfo.fState = MFS_ENABLED;
-//		break;
-//	case EnableUngroup:
-//			// Ungroup
-//			strCaption = _T("Ungroup");
-//            m_bMenuGroup = false;
-//			MenuItemInfo.fState = MFS_ENABLED;
-//		break;
-//	case DisableGroup:
-//		// Disable
-//		strCaption = _T("Group");
-//        m_bMenuGroup = true;
-//		MenuItemInfo.fState = MFS_GRAYED;
-//		break;
-//	}
-
-//	MenuItemInfo.wID = ID_TRACKER_GROUP;
-//	MenuItemInfo.cch = strCaption.GetLength();
-//	MenuItemInfo.dwTypeData = (LPTSTR)(LPCTSTR)strCaption;
-//	pMenu->SetMenuItemInfo(ID_TRACKER_GROUP, &MenuItemInfo);
-
-
-
-//	pMenu->TrackPopupMenu( TPM_LEFTALIGN|TPM_TOPALIGN, point.x, point.y, this );
-//}
-
 void QKeyDesignWidget::ungroup( const GroupKey* pGroup )
 {
     GroupKeyArray& GroupKeys = T3kCommonData::instance()->getGroupKeys();
@@ -1671,26 +1620,6 @@ void QKeyDesignWidget::ungroup( const GroupKey* pGroup )
     }
     removeGroup( GroupKeys, pGroup );
 }
-
-//void QKeyDesignWidget::onTrackerGroupUngroup()
-//{
-//    if ( m_SelectKeys.count() <= 0 )
-//        return;
-
-//    if ( m_bMenuGroup )
-//    {
-//        groupSelectKeys();
-//    }
-//    else
-//    {
-//        ungroupSelectKeys( true );
-//    }
-//}
-
-//void QKeyDesignWidget::onTrackerRemove()
-//{
-//    removeSelectKeys();
-//}
 
 void QKeyDesignWidget::setBlinkKey( GroupKey* group, int nCalPos, bool bSet )
 {
@@ -1763,19 +1692,11 @@ void QKeyDesignWidget::paintEvent(QPaintEvent *)
     if ( m_pSoftKeyDesignTool )
         m_pSoftKeyDesignTool->updateUIButtonState( (int)m_SelectKeys.count(), checkGroupStatus(), m_SelectKeys );
 
-    QRect rcClient( 0, 0, width(), height() );
+    QRect rcClient( 0, 0, width()-1, height()-1 );
 
-    //bool bInit = false;
-    if( m_pImageCanvas == NULL )
-    {
-        m_pImageCanvas = new QPixmap( rcClient.width(), rcClient.height() );
-      //  bInit = true;
-    }
-    Q_ASSERT( m_pImageCanvas );
+    QPainter painterCanvas;
 
-    QPainter painterCanvas;//( m_pImageCanvas );
-
-    painterCanvas.begin( m_pImageCanvas );
+    painterCanvas.begin( this );
 
     //if( bInit )
     {
@@ -1786,14 +1707,14 @@ void QKeyDesignWidget::paintEvent(QPaintEvent *)
 
     draw( &painterCanvas );
 
+    if( m_eScreenMode == ScreenModePreview )
+    {
+        painterCanvas.setPen( Qt::black );
+        painterCanvas.setBrush( Qt::NoBrush );
+        painterCanvas.drawRect( rcClient.adjusted(1,1,-1,-1) );
+    }
+
     painterCanvas.end();
-
-    QPainter dc;
-    dc.begin( this );
-
-    dc.drawPixmap( rcClient, *m_pImageCanvas );
-
-    dc.end();
 }
 
 void QKeyDesignWidget::resizeEvent(QResizeEvent *evt)
@@ -1801,9 +1722,6 @@ void QKeyDesignWidget::resizeEvent(QResizeEvent *evt)
     if( evt->size().isNull() || evt->size().isEmpty() ) return;
 
 //    if( evt->size().width() <= 0 || evt->size().height() <= 0 ) return;
-
-    if( m_pImageCanvas != NULL ) delete m_pImageCanvas;
-    m_pImageCanvas = NULL;
 
     onUpdateScreen();
 }
@@ -1824,9 +1742,136 @@ void QKeyDesignWidget::closeEvent(QCloseEvent *)
         m_pSoftKeyDesignTool->close();
 }
 
-void QKeyDesignWidget::keyPressEvent(QKeyEvent *)
+void QKeyDesignWidget::keyPressEvent(QKeyEvent *evt)
 {
+    if ( m_eScreenMode == ScreenModePreview || m_eScreenMode == ScreenModeTest )
+        return;
 
+    if ( evt->key() == Qt::Key_Escape )
+    {
+        if ( m_SelectKeys.count() > 0 )
+        {
+            m_SelectKeys.clear();
+
+            QApplication::beep();
+            m_KeyTracker.m_rect.setRect( 0,0,0,0 );
+            m_rcDevTracker.setRect( 0,0,0,0 );
+            update();
+        }
+        else
+        {
+            close();
+            return;
+        }
+    }
+    else
+    {
+        CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
+
+        bool bIsCtrlDown = evt->modifiers() & Qt::ControlModifier;
+        bool bIsShiftDown = evt->modifiers() & Qt::ShiftModifier;
+
+        int nVk = evt->key();
+
+        if ( nVk == Qt::Key_Left || nVk == Qt::Key_Right ||
+            nVk == Qt::Key_Up || nVk == Qt::Key_Down )
+        {
+            int nOffsetXY = bIsShiftDown ? 1 : 10;
+
+            QPoint ptScrnOffset(0, 0);
+            switch ( nVk )
+            {
+            case Qt::Key_Left:
+                ptScrnOffset.setX( ptScrnOffset.x() - nOffsetXY );
+                break;
+            case Qt::Key_Right:
+                ptScrnOffset.setX( ptScrnOffset.x() + nOffsetXY );
+                break;
+            case Qt::Key_Up:
+                ptScrnOffset.setY( ptScrnOffset.y() - nOffsetXY );
+                break;
+            case Qt::Key_Down:
+                ptScrnOffset.setY( ptScrnOffset.y() + nOffsetXY );
+                break;
+            }
+
+            if ( m_SelectKeys.count() > 0 )
+            {
+                pushHistory();
+
+                QRect rcMergedTrack;
+
+                for ( int nI=0 ; nI<m_SelectKeys.count() ; nI++ )
+                {
+                    CSoftkey* key = m_SelectKeys.at(nI);
+
+                    QRect rcKey;
+                    QPoint ptDev = screenToDevice(ptScrnOffset, false);
+
+                    rcKey = key->getPosition();
+                    rcKey.adjust( ptDev.x(), ptDev.y(), ptDev.x(), ptDev.y() );
+
+                    rcMergedTrack = rcMergedTrack.united( rcKey );
+
+                    key->setPosition( rcKey );
+                }
+
+                if ( !rcMergedTrack.isEmpty() )
+                {
+                    m_rcDevTracker = rcMergedTrack;
+                    m_KeyTracker.m_rect = deviceToScreen(rcMergedTrack);
+                    m_KeyTracker.m_rect.adjust( -TRACK_OFFSETXY, -TRACK_OFFSETXY, TRACK_OFFSETXY, TRACK_OFFSETXY );
+                }
+                else
+                {
+                    m_rcDevTracker.setRect( 0,0,0,0 );
+                    m_KeyTracker.m_rect.setRect( 0,0,0,0 );
+                }
+                update();
+            }
+            else
+            {
+                m_rcScreen.adjust( ptScrnOffset.x(), ptScrnOffset.y(), ptScrnOffset.x(), ptScrnOffset.y() );
+                update();
+            }
+        }
+        else if ( nVk == Qt::Key_Home )
+        {
+            resizeScreen();
+            update();
+        }
+        else if ( nVk == Qt::Key_Delete )
+        {
+            onRemoveSelectKeys();
+        }
+        else if ( bIsCtrlDown )
+        {
+            switch ( nVk )
+            {
+            case 'C':
+                keyCopyToClipboard();
+                break;
+            case 'A':
+                keySelectAll();
+                break;
+            case 'Z':
+                undo();
+                break;
+            case 'Y':
+                redo();
+                break;
+            case 'V':
+                keyPaste();
+                break;
+            case 'G':
+                onGroupSelectKeys();
+                break;
+            case 'U':
+                onUngroupSelectKeys(true);
+                break;
+            }
+        }
+    }
 }
 
 void QKeyDesignWidget::mousePressEvent(QMouseEvent *evt)
@@ -1842,9 +1887,13 @@ void QKeyDesignWidget::mousePressEvent(QMouseEvent *evt)
     case Qt::LeftButton:
         mouseLButtonDown(evt);
         break;
-    case Qt::RightButton:
     case Qt::MiddleButton:
-        evt->ignore();
+        if ( !m_bCapture )
+        {
+            m_bCapture = true;
+            m_bMoveScreen = true;
+            m_ptMouseLast = evt->pos();
+        }
         break;
     default:
         break;
@@ -1897,9 +1946,27 @@ void QKeyDesignWidget::mouseReleaseEvent(QMouseEvent *evt)
         }
     }
         break;
-    case Qt::RightButton:
     case Qt::MidButton:
-        evt->ignore();
+        if ( m_bCapture )
+        {
+            m_bCapture = false;
+            m_bMoveScreen = false;
+            update();
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+void QKeyDesignWidget::mouseDoubleClickEvent(QMouseEvent *evt)
+{
+    switch( evt->type() )
+    {
+    case Qt::MidButton:
+        updateKeys();
+        resizeScreen();
+        update();
         break;
     default:
         break;
@@ -1909,7 +1976,7 @@ void QKeyDesignWidget::mouseReleaseEvent(QMouseEvent *evt)
 void QKeyDesignWidget::mouseMoveEvent(QMouseEvent *evt)
 {
     if ( m_eScreenMode == ScreenModePreview || m_eScreenMode == ScreenModeTest )
-        evt->ignore();
+        return;
 
     if ( m_bMoveScreen )
     {
@@ -2086,7 +2153,7 @@ goto_ReCheck:
         m_bCheckRubberBand = true;
         m_KeyTracker.m_rect.setRect( evt->pos().x(), evt->pos().y(), 0, 0 );
 
-        m_KeyTracker.trackRubberBand( this, m_pImageCanvas, evt->pos(), true );
+        m_KeyTracker.trackRubberBand( this, evt->pos(), true );
     }
     else
     {
@@ -2095,188 +2162,13 @@ goto_ReCheck:
         m_rcOldTracker.adjust( TRACK_OFFSETXY, TRACK_OFFSETXY, -TRACK_OFFSETXY, -TRACK_OFFSETXY );
 
         m_rcOld = m_rcDevTracker;
-        qDebug() << QString("mouse down tracker : %1,%2,%3,%4").arg(m_KeyTracker.m_rect.x()).arg(m_KeyTracker.m_rect.y()).arg(m_KeyTracker.m_rect.width()).arg(m_KeyTracker.m_rect.height());
-        qDebug() << QString("tracker old : %1,%2,%3,%4").arg(m_rcOld.x()).arg(m_rcOld.y()).arg(m_rcOld.width()).arg(m_rcOld.height());
 
-        if ( m_KeyTracker.track( this, m_pImageCanvas, evt->pos(), true )  )
+        if ( m_KeyTracker.track( this, evt->pos(), true )  )
         {
             m_bCheckRubberBand = false;
         }
     }
 }
-
-//void QKeyDesignWidget::OnMButtonDown(UINT nFlags, CPoint point)
-//{
-//	if ( GetCapture() != this )
-//	{
-//		SetCapture();
-
-//        m_bMoveScreen = true;
-
-//		m_ptMouseLast = point;
-//	}
-
-//	CFullScrnWnd::OnMButtonDown(nFlags, point);
-//}
-
-//void QKeyDesignWidget::OnMButtonDblClk(UINT nFlags, CPoint point)
-//{
-//	UpdateKeys();
-
-//	ResizeScreen();
-
-//    update();
-
-//	CFullScrnWnd::OnMButtonDblClk(nFlags, point);
-//}
-
-//void QKeyDesignWidget::OnMButtonUp(UINT nFlags, CPoint point)
-//{
-//	if ( GetCapture() == this )
-//	{
-//		ReleaseCapture();
-
-//        m_bMoveScreen = false;
-//        update();
-//	}
-
-//	CFullScrnWnd::OnMButtonUp(nFlags, point);
-//}
-
-//void QKeyDesignWidget::keyPressEvent(QKeyEvent *evt)
-//{
-//    if ( m_eScreenMode == ScreenModePreview || m_eScreenMode == ScreenModeTest )
-//        return;
-
-//    if ( evt->key() == Qt::Key_Escape )
-//    {
-//        if ( m_SelectKeys.count() > 0 )
-//        {
-//            m_SelectKeys.clear();
-
-//            QApplication::beep();
-//            //m_KeyTracker.m_rect.setRect( 0,0,0,0 );
-//            m_rcDevTracker.setRect( 0,0,0,0 );
-//            update();
-//        }
-//        else
-//        {
-//            close();
-//            return true;
-//        }
-//    }
-//    else
-//    {
-//        CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
-
-//        bool bIsCtrlDown = evt->modifiers() & Qt::ControlModifier;
-//        bool bIsShiftDown = evt->modifiers() & Qt::ShiftModifier;
-
-//        int nVk = evt->key();
-
-//        if ( nVk == Qt::Key_Left || nVk == Qt::Key_Right ||
-//            nVk == Qt::Key_Up || nVk == Qt::Key_Down )
-//        {
-//            int nOffsetXY = bIsShiftDown ? 1 : 10;
-
-//            QPoint ptScrnOffset(0, 0);
-//            switch ( nVk )
-//            {
-//            case Qt::Key_Left:
-//                ptScrnOffset.setX( ptScrnOffset.x() - nOffsetXY );
-//                break;
-//            case Qt::Key_Right:
-//                ptScrnOffset.setX( ptScrnOffset.x() + nOffsetXY );
-//                break;
-//            case Qt::Key_Up:
-//                ptScrnOffset.setY( ptScrnOffset.y() - nOffsetXY );
-//                break;
-//            case Qt::Key_Down:
-//                ptScrnOffset.setY( ptScrnOffset.y() + nOffsetXY );
-//                break;
-//            }
-
-//            if ( m_SelectKeys.count() > 0 )
-//            {
-//                pushHistory();
-
-//                QRect rcMergedTrack;
-
-//                for ( int nI=0 ; nI<m_SelectKeys.count() ; nI++ )
-//                {
-//                    CSoftkey* key = m_SelectKeys.at(nI);
-
-//                    //CRect rcKey = DeviceToScreen(key->getPosition());
-//                    //rcKey.OffsetRect( ptScrnOffset );
-//                    QRect rcKey;
-//                    QPoint ptDev = screenToDevice(ptScrnOffset, false);
-
-//                    rcKey = key->getPosition();
-//                    rcKey.adjust( ptDev.x(), ptDev.y(), ptDev.x(), ptDev.y() );
-
-//                    rcMergedTrack = rcMergedTrack.united( rcKey );
-
-//                    key->setPosition( rcKey );
-//                }
-
-//                if ( !rcMergedTrack.isEmpty() )
-//                {
-//                    m_rcDevTracker = rcMergedTrack;
-////                    m_KeyTracker.m_rect = deviceToScreen(rcMergedTrack);
-////                    m_KeyTracker.m_rect.InflateRect( TRACK_OFFSETXY, TRACK_OFFSETXY, TRACK_OFFSETXY, TRACK_OFFSETXY );
-//                }
-//                else
-//                {
-//                    m_rcDevTracker.setRect( 0,0,0,0 );
-//                    //m_KeyTracker.m_rect.setRect( 0,0,0,0 );
-//                }
-//                update();
-//            }
-//            else
-//            {
-//                m_rcScreen.adjust( ptScrnOffset.x(), ptScrnOffset.y(), ptScrnOffset.x(), ptScrnOffset.y() );
-//                //UpdateCanvas( ptScrnOffset );
-//                update();
-//            }
-//        }
-//        else if ( nVk == Qt::Key_Home )
-//        {
-//            resizeScreen();
-//            update();
-//        }
-//        else if ( nVk == Qt::Key_Delete )
-//        {
-//            removeSelectKeys();
-//        }
-//        else if ( bIsCtrlDown )
-//        {
-//            switch ( nVk )
-//            {
-//            case 'C':
-//                keyCopyToClipboard();
-//                break;
-//            case 'A':
-//                keySelectAll();
-//                break;
-//            case 'Z':
-//                undo();
-//                break;
-//            case 'Y':
-//                redo();
-//                break;
-//            case 'V':
-//                keyPaste();
-//                break;
-//            case 'G':
-//                groupSelectKeys();
-//                break;
-//            case 'U':
-//                ungroupSelectKeys(true);
-//                break;
-//            }
-//        }
-//    }
-//}
 
 void QKeyDesignWidget::timerEvent(QTimerEvent *evt)
 {
@@ -2303,6 +2195,56 @@ void QKeyDesignWidget::timerEvent(QTimerEvent *evt)
             update( rcKey );
         }
     }
+}
+
+void QKeyDesignWidget::onCustomContextMenuRequested(const QPoint& pos)
+{
+    if ( m_KeyTracker.m_rect.isEmpty() ) return;
+    if ( !m_KeyTracker.m_rect.contains( pos ) ) return;
+
+    QMenu myMenu;
+    QString strCaption;
+
+    switch ( checkGroupStatus() )
+    {
+    case EnableGroup:
+        // Group
+        strCaption = "Group";
+        m_bMenuGroup = true;
+        break;
+    case EnableUngroup:
+        // Ungroup
+        strCaption = "Ungroup";
+        m_bMenuGroup = false;
+        break;
+    case DisableGroup:
+        // Disable
+        strCaption = "Group";
+        m_bMenuGroup = true;
+        break;
+    }
+
+    myMenu.addAction( strCaption, this, SLOT(onContextMenuGrouping()) );
+    myMenu.addSeparator();
+    myMenu.addAction( "Remove", this, SLOT(onContextMenuRemove()) );
+
+    myMenu.exec(pos);
+}
+
+void QKeyDesignWidget::onContextMenuGrouping()
+{
+    if ( m_SelectKeys.count() <= 0 )
+        return;
+
+    if ( m_bMenuGroup )
+        onGroupSelectKeys();
+    else
+        onUngroupSelectKeys( true );
+}
+
+void QKeyDesignWidget::onContextMenuRemove()
+{
+    onRemoveSelectKeys();
 }
 
 int QKeyDesignWidget::onAddNewKey()
@@ -2529,7 +2471,6 @@ void QKeyDesignWidget::onResetKeys()
     updateKeys();
 }
 
-
 void QKeyDesignWidget::onRubberBandFinish(bool bChanged)
 {
     if( m_bCheckRubberBand )
@@ -2684,7 +2625,6 @@ void QKeyDesignWidget::onRubberBandFinish(bool bChanged)
     }
     else
     {
-//        qDebug() << QString("mouse up tracker : %1,%2,%3,%4").arg(m_KeyTracker.m_rect.x()).arg(m_KeyTracker.m_rect.y()).arg(m_KeyTracker.m_rect.width()).arg(m_KeyTracker.m_rect.height());
         QRect rcNewTracker;
         QRect rcNew;
         rcNewTracker = m_KeyTracker.m_rect;

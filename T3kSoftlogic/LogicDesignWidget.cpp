@@ -152,6 +152,13 @@ void QLogicDesignWidget::paintEvent(QPaintEvent *)
 
     draw( &painter );
 
+    if( m_eScreenMode == ScreenModePreview )
+    {
+        painter.setPen( Qt::black );
+        painter.setBrush( Qt::NoBrush );
+        painter.drawRect( rcClient.adjusted(1,1,-1,-1) );
+    }
+
     painter.end();
 }
 
@@ -2626,7 +2633,7 @@ void QLogicDesignWidget::onAddLogicFromGallery( int nGalleryItemType, CSoftlogic
         switch ( nGalleryItemType )
         {
         case 0:
-            // 1초 딜레이 터치 ON/OFF
+            // 1sec delay touch ON/OFF
             nLogicIndex = Logics.addSoftlogic_State(
                 CSoftlogic::eltAND_RISINGEDGE,
                 true, CSoftlogic::epStateCalibration,
@@ -2640,7 +2647,7 @@ void QLogicDesignWidget::onAddLogicFromGallery( int nGalleryItemType, CSoftlogic
             pLogic->m_ptPosition.setY( (float)rcKey.center().y() / rcClient.height() );
             break;
         case 1:
-            // 3초 딜레이 좌표보정 진입,
+            // 3sec delay enter coord calibration
             nLogicIndex = Logics.addSoftlogic_State( CSoftlogic::eltAND_RISINGEDGE,
                 true, CSoftlogic::epStateCalibration,
                 false, portKey,

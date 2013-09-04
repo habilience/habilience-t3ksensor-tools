@@ -160,8 +160,9 @@ TabCalibrationWidget::TabCalibrationWidget(QWidget* parent /*=NULL*/) :
     m_bCheckInvertDrawing = settings.value( "INVERT_DRAWING", false ).toBool();
     settings.endGroup();
 
-#ifdef Q_OS_WIN
+    ui->ChkBackground->setChecked( m_bCheckInvertDrawing );
 
+#ifdef Q_OS_WIN
     OSVERSIONINFO stOSVerInfo;
     ZeroMemory( &stOSVerInfo, sizeof(OSVERSIONINFO) );
     stOSVerInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
@@ -590,7 +591,7 @@ void TabCalibrationWidget::OnDVC(ResponsePart, ushort, T3kDVC &device)
 		m_ptTouch.setY( lY );
 
         forceMouseEvent( LBUTTON, 0, m_ptTouch.x(), m_ptTouch.y() );
-	}	
+    }
 
 	if( bTestMode )
 	{
@@ -1324,7 +1325,7 @@ void TabCalibrationWidget::timerEvent(QTimerEvent *evt)
 
                 emit displayPreviewTouchCount( 0 );
 
-                forceMouseEvent( 0, 0, m_ptTouch.x(), m_ptTouch.y() );
+                //forceMouseEvent( 0, 0, m_ptTouch.x(), m_ptTouch.y() );
 
                 if( m_bPointOK )
                 {
@@ -1350,7 +1351,7 @@ void TabCalibrationWidget::timerEvent(QTimerEvent *evt)
 
                 emit displayPreviewTouchCount( 0 );
 
-                forceMouseEvent( 0, 0, m_ptTouch.x(), m_ptTouch.y() );
+                //forceMouseEvent( 0, 0, m_ptTouch.x(), m_ptTouch.y() );
 
                 if( m_wndTestCanvas.isVisible() )
                 {
@@ -1634,8 +1635,9 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
     }
 }
 
-void TabCalibrationWidget::on_ChkBackground_toggled(bool /*checked*/)
+void TabCalibrationWidget::on_ChkBackground_toggled(bool checked)
 {
+    m_bCheckInvertDrawing = checked;
     QSettings settings( "Habilience", "T3kSoftlogic" );
     settings.beginGroup( "APP_SETTING" );
     settings.setValue( "INVERT_DRAWING", m_bCheckInvertDrawing );
