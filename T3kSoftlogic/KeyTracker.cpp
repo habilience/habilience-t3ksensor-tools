@@ -278,10 +278,9 @@ void QKeyTracker::draw(QPainter* painter)
         if( m_rcTracking.isEmpty() ) return;
 
         painter->setPen( Qt::NoPen );
-//        painter->setCompositionMode( QPainter::RasterOp_NotDestination );
+        painter->setBrush( QBrush( Qt::black, Qt::Dense3Pattern ) );
+        painter->setBackgroundMode( Qt::OpaqueMode );
 
-//        qDebug() << QString("rect : %1,%2,%3,%4").arg(m_rcTracking.left()).arg(m_rcTracking.top())
-//                    .arg(m_rcTracking.width()).arg(m_rcTracking.height());
         QBrush brh( Qt::Dense3Pattern );
         brh.setColor( Qt::white );
         painter->fillRect( m_rcTracking.left(), m_rcTracking.top(), m_rcTracking.width()-1, 5, brh );

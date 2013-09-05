@@ -119,7 +119,6 @@ private slots:
     bool onIsT3kConnected() { return m_bIsConnected; }
     bool onIsT3kInvalidFirmware() { return m_bIsInvalidFirmware; }
     void onEnableControls(bool bEnable);
-    void onNotifyTab(int index);
 
     bool onIsAssociateFileExt();
     void onDoAssociateFileExt();

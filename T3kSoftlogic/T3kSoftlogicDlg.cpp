@@ -99,7 +99,7 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
     connect( m_pTabPanelWidget, &TabPanelWidget::updatePreview, this, &T3kSoftlogicDlg::onUpdatePrewview );
     connect( m_pTabPanelWidget, &TabPanelWidget::isValidT3kSensorState, this, &T3kSoftlogicDlg::onIsValidT3kSensorState, Qt::DirectConnection );
     connect( m_pTabPanelWidget, &TabPanelWidget::getT3kHandle, this, &T3kSoftlogicDlg::onGetT3kHandle, Qt::DirectConnection );
-    connect( m_pTabPanelWidget, &TabPanelWidget::notifyTab, this, &T3kSoftlogicDlg::onNotifyTab );
+//    connect( m_pTabPanelWidget, &TabPanelWidget::notifyTab, this, &T3kSoftlogicDlg::onNotifyTab );
 
     connect( m_pTabKeyDesignWidget, &TabKeyDesignWidget::updatePreview, this, &T3kSoftlogicDlg::onUpdatePrewview );
     connect( m_pTabLogicDesignWidget, &TabLogicDesignWidget::updatePreview, this, &T3kSoftlogicDlg::onUpdatePrewview );
@@ -919,8 +919,9 @@ void T3kSoftlogicDlg::closeEvent(QCloseEvent *)
         }
     }
 
-    //m_wndPrevKeyDesign.DestroyWindow();
-    //m_wndPrevLogicDesign.DestroyWindow();
+    m_pTabKeyDesignWidget->close();
+    m_pTabLogicDesignWidget->close();
+    m_pTabCalibrationWidget->close();
 
     QRect rc( geometry() );
     QString str = QString("%1,%2,%3,%4").arg(rc.left()).arg(rc.top()).arg(rc.right()).arg(rc.bottom());
@@ -1139,11 +1140,6 @@ void T3kSoftlogicDlg::onEnableControls( bool bEnable )
     ui->BtnLoad->setEnabled( bEnable );
     ui->BtnSave->setEnabled( bEnable );
     ui->BtnExit->setEnabled( bEnable );
-}
-
-void T3kSoftlogicDlg::onNotifyTab(int index)
-{
-
 }
 
 void T3kSoftlogicDlg::onInvertDrawing( bool bInvert )
