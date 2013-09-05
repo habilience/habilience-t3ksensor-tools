@@ -132,7 +132,7 @@ void QLogicGalleryWidget::paintEvent(QPaintEvent *)
     QRect rect;
     int nDstW = rcPreview.width();
     int nDstH = rcPreview.height();
-    int nIW, nIH;
+    int nIW = 0, nIH = 0;
 
     if ( nDstW > pImage->width() &&
         nDstH > pImage->height() )

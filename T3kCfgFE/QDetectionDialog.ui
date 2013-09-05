@@ -206,9 +206,6 @@
      </item>
      <item>
       <layout class="QVBoxLayout" name="layoutChkBox">
-       <property name="spacing">
-        <number>1</number>
-       </property>
        <item>
         <widget class="QCheckBox" name="chkAutoDetectionLine">
          <property name="text">

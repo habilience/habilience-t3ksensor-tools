@@ -388,7 +388,6 @@ void QSoftKeyDesignToolWidget::closeEvent(QCloseEvent *)
 {
     QRect rc( x(), y(), width(), height() );
     QString str = QString("%1,%2,%3,%4").arg(rc.left()).arg(rc.top()).arg(rc.right()).arg(rc.bottom());
-    qDebug() << str;
     QSettings settings( "Habilience", "T3kSoftlogic" );
     settings.beginGroup( "Windows" );
     settings.setValue( "SoftkeyDesignTool_Pos", str );

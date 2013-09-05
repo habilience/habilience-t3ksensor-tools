@@ -278,16 +278,12 @@ void QKeyTracker::draw(QPainter* painter)
         if( m_rcTracking.isEmpty() ) return;
 
         painter->setPen( Qt::NoPen );
-        painter->setBrush( QBrush( Qt::black, Qt::Dense3Pattern ) );
-        painter->setBackgroundMode( Qt::OpaqueMode );
+        painter->setCompositionMode( QPainter::RasterOp_NotDestination );
 
-        QBrush brh( Qt::Dense3Pattern );
-        brh.setColor( Qt::white );
-        painter->fillRect( m_rcTracking.left(), m_rcTracking.top(), m_rcTracking.width()-1, 5, brh );
-        painter->fillRect( m_rcTracking.right()-5, m_rcTracking.top(), 5, m_rcTracking.height()-1, brh );
-        painter->fillRect( m_rcTracking.left(), m_rcTracking.bottom()-5, m_rcTracking.width()-1, 5, brh );
-        painter->fillRect( m_rcTracking.left(), m_rcTracking.top(), 5, m_rcTracking.height()-1, brh );
-
+        painter->fillRect( m_rcTracking.left(), m_rcTracking.top(), m_rcTracking.width()-1-5, 5, Qt::Dense2Pattern );
+        painter->fillRect( m_rcTracking.right()-5, m_rcTracking.top(), 5, m_rcTracking.height()-1-5, Qt::Dense2Pattern );
+        painter->fillRect( m_rcTracking.left()+5, m_rcTracking.bottom()-5, m_rcTracking.width()-1-5, 5, Qt::Dense2Pattern );
+        painter->fillRect( m_rcTracking.left(), m_rcTracking.top()+5, 5, m_rcTracking.height()-1-5, Qt::Dense2Pattern );
     }
 
 	// cleanup pDC state

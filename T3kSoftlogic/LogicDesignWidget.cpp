@@ -2117,6 +2117,8 @@ void QLogicDesignWidget::mouseRBtnUp(QPoint pos)
 
 void QLogicDesignWidget::mouseMoveEvent(QMouseEvent *evt)
 {
+    if( m_eScreenMode == ScreenModePreview ) return;
+
     if ( m_bCpaute )
     {
         QRect rcClient( 0, 0, width(), height() );

@@ -510,7 +510,7 @@ void TabCalibrationWidget::forceMouseEvent( uchar cButtons, char /*cWheel*/, int
 
 	if( SendInput( 1, &input, sizeof(INPUT) ) == 0 )
 	{
-        qDebug( "Error - SendInput: %d", GetLastError() );
+        qDebug( "Error - SendInput: %d", (int)GetLastError() );
 	}
 #elif defined(Q_OS_LINUX)
 
@@ -787,7 +787,7 @@ void TabCalibrationWidget::closeEvent(QCloseEvent *)
 
 void TabCalibrationWidget::playBuzzer( BuzzerType eType )
 {
-	int nCat, nType;
+    int nCat = 0, nType = 0;
 
 	switch( eType )
 	{

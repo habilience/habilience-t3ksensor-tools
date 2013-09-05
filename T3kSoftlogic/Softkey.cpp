@@ -692,8 +692,7 @@ QString CSoftkeyArray::saveBindInfo()
 			{
                 int nBindIndex = indexFromSoftkey( toBindKey );
                 Q_ASSERT( nBindIndex >= 0 );
-                uchar cBind = 0x80 | (uchar)nBindIndex;
-                strRet += QString("%1").arg(cBind, 2, 16, '0');
+                strRet += QString::number(0x80 | (uchar)nBindIndex, 16);
 			}
 			else
 			{

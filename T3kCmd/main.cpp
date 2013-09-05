@@ -137,7 +137,7 @@ int GetCommandPolling(void* pContext)
 
         char szBuf[2048];
         char* sz = fgets(szBuf, 2048, stdin);
-        size_t len = strlen(sz);
+        long len = strlen(sz);
         for ( len--; len >= 0; len-- )
         {
             if ( isspace(sz[len]) )

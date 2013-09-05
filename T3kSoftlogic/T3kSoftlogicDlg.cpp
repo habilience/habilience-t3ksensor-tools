@@ -841,7 +841,7 @@ void T3kSoftlogicDlg::on_BtnExit_clicked()
     close();
 }
 
-void T3kSoftlogicDlg::onResizedScreen(int nScreen)
+void T3kSoftlogicDlg::onResizedScreen(int /*nScreen*/)
 {
 
 }

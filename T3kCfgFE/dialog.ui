@@ -111,9 +111,6 @@
    </item>
    <item>
     <layout class="QVBoxLayout" name="layoutMid">
-     <property name="spacing">
-      <number>2</number>
-     </property>
      <item>
       <widget class="QStyleButton" name="btnSideview">
        <property name="sizePolicy">
@@ -312,17 +309,11 @@ QCheckBox:checked {
    </item>
    <item>
     <layout class="QHBoxLayout" name="layoutBtm">
-     <property name="spacing">
-      <number>4</number>
-     </property>
      <property name="sizeConstraint">
       <enum>QLayout::SetMinimumSize</enum>
      </property>
      <item>
       <layout class="QVBoxLayout" name="layoutReset">
-       <property name="spacing">
-        <number>1</number>
-       </property>
        <item>
         <widget class="QStyleButton" name="btnReset">
          <property name="sizePolicy">

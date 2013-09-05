@@ -58,9 +58,6 @@
        </property>
        <item>
         <layout class="QVBoxLayout" name="layoutLeftTitleBox">
-         <property name="spacing">
-          <number>2</number>
-         </property>
          <property name="leftMargin">
           <number>10</number>
          </property>
@@ -112,9 +109,6 @@
        </item>
        <item>
         <layout class="QVBoxLayout" name="layoutRightSelectBox">
-         <property name="spacing">
-          <number>2</number>
-         </property>
          <property name="bottomMargin">
           <number>0</number>
          </property>

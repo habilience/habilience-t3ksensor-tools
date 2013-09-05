@@ -21,9 +21,6 @@
      </property>
      <item>
       <layout class="QVBoxLayout" name="layoutLabelBox">
-       <property name="spacing">
-        <number>2</number>
-       </property>
        <item>
         <widget class="QLabel" name="lblProfileItem">
          <property name="sizePolicy">
@@ -82,9 +79,6 @@
      </item>
      <item>
       <layout class="QVBoxLayout" name="layoutEditBox">
-       <property name="spacing">
-        <number>2</number>
-       </property>
        <item>
         <widget class="QLineEdit" name="lineEdtProfileItem">
          <property name="sizePolicy">

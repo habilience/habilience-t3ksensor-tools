@@ -1170,9 +1170,6 @@ void QKeyDesignWidget::drawKeys( QPainter* painter )
 
             painter->drawRect( rcKey );
         }
-
-        painter->setPen( Qt::DashDotLine );
-        painter->drawRect( m_KeyTracker.m_rect );
     }
 
     painter->restore();
@@ -1345,7 +1342,7 @@ void QKeyDesignWidget::resizeScreen()
         rcScreenFit = rcScreenFit.united( rcKey );
     }
 
-    int nOffsetX, nOffsetY;
+    int nOffsetX = 0, nOffsetY = 0;
 
     switch ( m_eScrnSize )
     {

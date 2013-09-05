@@ -86,7 +86,16 @@ QTextEdit:disabled {
           <property name="spacing">
            <number>2</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
            <number>2</number>
           </property>
           <item>
@@ -142,9 +151,6 @@ QTextEdit:disabled {
               </item>
               <item>
                <layout class="QHBoxLayout" name="layoutMarginUp">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
                 <item>
                  <spacer name="spacerUp1">
                   <property name="orientation">
@@ -329,9 +335,6 @@ QTextEdit:disabled {
               </item>
               <item>
                <layout class="QVBoxLayout" name="layoutMarginLeft">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
                 <item>
                  <spacer name="spacerLeft1">
                   <property name="orientation">
@@ -507,9 +510,6 @@ Inverted Landscape</string>
               </property>
               <item>
                <layout class="QVBoxLayout" name="layoutMarginRight">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
                 <item>
                  <spacer name="spacerRight1">
                   <property name="orientation">
@@ -701,9 +701,6 @@ p, li { white-space: pre-wrap; }
               </property>
               <item>
                <layout class="QHBoxLayout" name="layoutMarginDown">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
                 <item>
                  <spacer name="spacerDown1">
                   <property name="orientation">
