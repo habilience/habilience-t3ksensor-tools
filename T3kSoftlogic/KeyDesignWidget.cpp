@@ -614,7 +614,7 @@ void QKeyDesignWidget::distribSelectKeys( Distrib eDistrib )
         key = SortKeys.at(0);
         QRect rcBase = key->getPosition();
 
-        float fBaseXY;
+        float fBaseXY = 0.f;
         switch ( eDistrib )
         {
         case DistribHorzEqualGap:
@@ -1766,8 +1766,6 @@ void QKeyDesignWidget::keyPressEvent(QKeyEvent *evt)
     }
     else
     {
-        CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
-
         bool bIsCtrlDown = evt->modifiers() & Qt::ControlModifier;
         bool bIsShiftDown = evt->modifiers() & Qt::ShiftModifier;
 

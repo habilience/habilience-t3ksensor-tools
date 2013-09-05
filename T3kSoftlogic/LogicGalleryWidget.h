@@ -1,7 +1,7 @@
 #ifndef QLOGICGALLERYWIDGET_H
 #define QLOGICGALLERYWIDGET_H
 
-#include "Softkey.h"
+#include "SoftKey.h"
 
 #include <QDialog>
 

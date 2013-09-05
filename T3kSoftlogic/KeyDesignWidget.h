@@ -3,7 +3,7 @@
 
 #include "SoftKeyDesignToolWidget.h"
 
-#include "Softkey.h"
+#include "SoftKey.h"
 #include "KeyTracker.h"
 
 #include <QGraphicsView>

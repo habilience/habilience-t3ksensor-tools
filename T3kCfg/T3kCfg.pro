@@ -29,6 +29,9 @@ DEPENDPATH += $$PWD/../external/quazip \
                 $$PWD/../external/T3kHIDLibrary/include \
                 $$PWD../external/quazip/zlib/ \
 
+QMAKE_CFLAGS_RELEASE    += -Os
+QMAKE_CXXFLAGS_RELEASE  += -Os
+
 win32 {
     CONFIG += static staticlib
     QMAKE_LFLAGS += -static

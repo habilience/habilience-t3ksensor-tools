@@ -3,7 +3,7 @@
 
 #include "UserDefinedKeyWidget.h"
 
-#include "Softkey.h"
+#include "SoftKey.h"
 //#include "borderstyleedit.h"
 
 #include <QDialog>

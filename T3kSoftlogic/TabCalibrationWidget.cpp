@@ -154,6 +154,10 @@ TabCalibrationWidget::TabCalibrationWidget(QWidget* parent /*=NULL*/) :
     m_nTimerCheckPoint = 0;
     m_nTimerRecheckPoint = 0;
 
+#ifndef Q_OS_WIN
+    ui->BtnHSK->setVisible( false );
+#endif
+
 
     QSettings settings( "habilience", "T3kSoftlogic" );
     settings.beginGroup( "APP_SETTING" );
@@ -604,7 +608,7 @@ void TabCalibrationWidget::OnDVC(ResponsePart, ushort, T3kDVC &device)
 		long lY = (long)(fY * DEV_COORD);
 
         if ( device.touch_obj_cnt > 0 )
-            m_wndTestCanvas.viewTouchPoint( lX, lY, TRUE );
+            m_wndTestCanvas.viewTouchPoint( lX, lY, true );
 	}
 
     m_TickPoint.start();
@@ -1248,7 +1252,7 @@ void TabCalibrationWidget::timerEvent(QTimerEvent *evt)
 {
     if( evt->timerId() == m_nTimerRecheckPoint )
     {
-        m_lAveDiffX = m_lAveDiffX = 0;
+        m_lAveDiffX = m_lAveDiffY = 0;
         m_nPointCount = 0;
         m_bPointOK = false;
 
@@ -1488,7 +1492,7 @@ void TabCalibrationWidget::on_BtnWriteLogic_clicked()
         return;
     }
 
-    if( writeToSensor( TRUE ) )
+    if( writeToSensor( true ) )
     {
         QMessageBox::information( this, "Information", "Save Complete", QMessageBox::Ok );
     }
@@ -1550,6 +1554,7 @@ void TabCalibrationWidget::on_BtnEraseAll_clicked()
 
 void TabCalibrationWidget::on_BtnHSK_clicked()
 {
+#ifdef Q_OS_WIN
     if( isProcessElevated() ) // cross platform
     {
         if ( isAssociateFileExt() )
@@ -1570,7 +1575,7 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
         ui->BtnHSK->setEnabled( false );
 
         emit enableControls( false );
-#if defined(Q_OS_WIN)
+
         do
         {
             TCHAR szPath[_MAX_PATH];
@@ -1619,7 +1624,7 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
                 }
             }
         } while ( false );
-#endif
+
 
         ui->BtnCalibration->setEnabled( true );
         ui->BtnCancel->setEnabled( true );
@@ -1633,6 +1638,7 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
 
         changeFileAssociateBtnTitle();
     }
+#endif
 }
 
 void TabCalibrationWidget::on_ChkBackground_toggled(bool checked)

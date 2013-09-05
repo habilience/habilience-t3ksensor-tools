@@ -1,7 +1,7 @@
 #ifndef QLOGICDESIGNWIDGET_H
 #define QLOGICDESIGNWIDGET_H
 
-#include "Softkey.h"
+#include "SoftKey.h"
 #include "EditGateWidget.h"
 #include "LogicGalleryWidget.h"
 

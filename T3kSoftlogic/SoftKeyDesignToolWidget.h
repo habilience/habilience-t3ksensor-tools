@@ -2,7 +2,7 @@
 #define QSOFTKEYDESIGNTOOLWIDGET_H
 
 #include "LayoutToolWidget.h"
-#include "Softkey.h"
+#include "SoftKey.h"
 //#include "BorderStyleEdit.h"
 
 #include <QDialog>

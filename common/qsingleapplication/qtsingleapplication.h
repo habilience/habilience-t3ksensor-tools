@@ -69,7 +69,7 @@ public:
     QtSingleApplication(int &argc, char **argv, bool GUIenabled = true);
     QtSingleApplication(const QString &id, int &argc, char **argv);
     QtSingleApplication(int &argc, char **argv, int type);
-#if defined(Q_OS_LINUX)
+#if 0//defined(Q_OS_LINUX)
     QtSingleApplication(Display* dpy, Qt::HANDLE visual = 0, Qt::HANDLE colormap = 0);
     QtSingleApplication(Display *dpy, int &argc, char **argv, Qt::HANDLE visual = 0, Qt::HANDLE cmap= 0);
     QtSingleApplication(Display* dpy, const QString &appId, int argc, char **argv, Qt::HANDLE visual = 0, Qt::HANDLE colormap = 0);
