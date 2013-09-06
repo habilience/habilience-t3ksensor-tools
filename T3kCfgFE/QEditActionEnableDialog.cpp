@@ -17,11 +17,14 @@ QEditActionEnableDialog::QEditActionEnableDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    Qt::WindowFlags flags = Qt::Dialog|Qt::WindowTitleHint|Qt::CustomizeWindowHint;
+    Qt::WindowFlags flags = Qt::Popup|Qt::WindowTitleHint|Qt::CustomizeWindowHint;
 #if defined(Q_OS_WIN)
     flags |= Qt::MSWindowsFixedSizeDialogHint;
 #endif
     setWindowFlags(flags);
+    setWindowModality( Qt::WindowModal );
+    setModal( true );
+
     setFixedSize(this->size());
 
     onChangeLanguage();

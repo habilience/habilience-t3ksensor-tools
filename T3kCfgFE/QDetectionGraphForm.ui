@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
+    <width>1059</width>
     <height>400</height>
    </rect>
   </property>
@@ -30,26 +30,11 @@ QTextEdit:disabled {
 </string>
   </property>
   <layout class="QVBoxLayout" name="layoutBody">
-   <property name="spacing">
-    <number>2</number>
-   </property>
-   <property name="leftMargin">
-    <number>2</number>
-   </property>
-   <property name="topMargin">
-    <number>2</number>
-   </property>
-   <property name="rightMargin">
-    <number>2</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>2</number>
    </property>
    <item>
     <layout class="QHBoxLayout" name="layoutTopBox">
-     <property name="spacing">
-      <number>2</number>
-     </property>
      <item>
       <widget class="QUnderlineTitle" name="lblSensorTitle">
        <property name="sizePolicy">
@@ -284,17 +269,11 @@ QTextEdit:disabled {
    </item>
    <item>
     <layout class="QHBoxLayout" name="layoutBodyBox">
-     <property name="spacing">
-      <number>10</number>
-     </property>
      <property name="rightMargin">
       <number>0</number>
      </property>
      <item>
       <layout class="QVBoxLayout" name="layoutCtrlBox">
-       <property name="spacing">
-        <number>2</number>
-       </property>
        <property name="sizeConstraint">
         <enum>QLayout::SetDefaultConstraint</enum>
        </property>
@@ -322,9 +301,6 @@ QTextEdit:disabled {
        </item>
        <item>
         <layout class="QHBoxLayout" name="layoutCtrlGroupBox">
-         <property name="spacing">
-          <number>0</number>
-         </property>
          <property name="rightMargin">
           <number>0</number>
          </property>
@@ -333,9 +309,6 @@ QTextEdit:disabled {
          </property>
          <item>
           <layout class="QVBoxLayout" name="layoutTextGroup">
-           <property name="spacing">
-            <number>2</number>
-           </property>
            <item>
             <widget class="QLabel" name="lblThreshold">
              <property name="minimumSize">
@@ -374,17 +347,11 @@ QTextEdit:disabled {
          </item>
          <item>
           <layout class="QVBoxLayout" name="layoutCtrlGroup">
-           <property name="spacing">
-            <number>2</number>
-           </property>
            <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
             <layout class="QHBoxLayout" name="layoutThreshold">
-             <property name="spacing">
-              <number>0</number>
-             </property>
              <item>
               <widget class="QPushButton" name="btnThresholdDec">
                <property name="sizePolicy">
@@ -500,9 +467,6 @@ QTextEdit:disabled {
            </item>
            <item>
             <layout class="QHBoxLayout" name="layoutGain">
-             <property name="spacing">
-              <number>0</number>
-             </property>
              <item>
               <widget class="QPushButton" name="btnGainDec">
                <property name="sizePolicy">
@@ -618,9 +582,6 @@ QTextEdit:disabled {
            </item>
            <item>
             <layout class="QHBoxLayout" name="layoutAutoOffset">
-             <property name="spacing">
-              <number>0</number>
-             </property>
              <item>
               <spacer name="offsetSpacer1">
                <property name="orientation">
@@ -703,9 +664,6 @@ QTextEdit:disabled {
            </item>
            <item>
             <layout class="QHBoxLayout" name="layoutOffset">
-             <property name="spacing">
-              <number>0</number>
-             </property>
              <item>
               <widget class="QPushButton" name="btnOffsetDec">
                <property name="sizePolicy">
@@ -840,17 +798,11 @@ QTextEdit:disabled {
      </item>
      <item>
       <layout class="QVBoxLayout" name="layoutRightBox">
-       <property name="spacing">
-        <number>4</number>
-       </property>
        <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
         <layout class="QHBoxLayout" name="layoutGraphBox">
-         <property name="spacing">
-          <number>6</number>
-         </property>
          <property name="leftMargin">
           <number>0</number>
          </property>
@@ -902,9 +854,6 @@ QTextEdit:disabled {
        </item>
        <item>
         <layout class="QHBoxLayout" name="layoutRangeBox">
-         <property name="spacing">
-          <number>6</number>
-         </property>
          <property name="leftMargin">
           <number>0</number>
          </property>
@@ -929,20 +878,11 @@ QTextEdit:disabled {
          </item>
          <item>
           <layout class="QVBoxLayout" name="layoutLeftRangeBox">
-           <property name="spacing">
-            <number>1</number>
-           </property>
            <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
             <layout class="QHBoxLayout" name="layoutLeftBtnBox">
-             <property name="spacing">
-              <number>1</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
              <item>
               <widget class="QPushButton" name="btnLeftRangeDec500">
                <property name="sizePolicy">
@@ -1022,35 +962,14 @@ QTextEdit:disabled {
                <property name="minimumSize">
                 <size>
                  <width>70</width>
-                 <height>28</height>
+                 <height>32</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>80</width>
-                 <height>28</height>
+                 <width>70</width>
+                 <height>32</height>
                 </size>
-               </property>
-               <property name="baseSize">
-                <size>
-                 <width>80</width>
-                 <height>28</height>
-                </size>
-               </property>
-               <property name="focusPolicy">
-                <enum>Qt::StrongFocus</enum>
-               </property>
-               <property name="verticalScrollBarPolicy">
-                <enum>Qt::ScrollBarAlwaysOff</enum>
-               </property>
-               <property name="horizontalScrollBarPolicy">
-                <enum>Qt::ScrollBarAlwaysOff</enum>
-               </property>
-               <property name="tabChangesFocus">
-                <bool>true</bool>
-               </property>
-               <property name="lineWrapMode">
-                <enum>QTextEdit::NoWrap</enum>
                </property>
               </widget>
              </item>
@@ -1181,17 +1100,11 @@ QTextEdit:disabled {
          </item>
          <item>
           <layout class="QVBoxLayout" name="layoutRightRangeBox">
-           <property name="spacing">
-            <number>1</number>
-           </property>
            <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
             <layout class="QHBoxLayout" name="layoutRightBtnBox">
-             <property name="spacing">
-              <number>1</number>
-             </property>
              <property name="rightMargin">
               <number>0</number>
              </property>
@@ -1454,12 +1367,9 @@ QTextEdit:disabled {
   <tabstop>btnOffsetDec</tabstop>
   <tabstop>txtEdtOffset</tabstop>
   <tabstop>btnOffsetInc</tabstop>
-  <tabstop>btnZoomIn</tabstop>
-  <tabstop>btnZoomOut</tabstop>
   <tabstop>btnZoomFit</tabstop>
   <tabstop>btnLeftRangeDec500</tabstop>
   <tabstop>btnLeftRangeDec100</tabstop>
-  <tabstop>txtEdtLeftRange</tabstop>
   <tabstop>btnLeftRangeInc100</tabstop>
   <tabstop>btnLeftRangeInc500</tabstop>
   <tabstop>btnRightRangeDec500</tabstop>

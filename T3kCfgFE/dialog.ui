@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>433</width>
-    <height>489</height>
+    <height>509</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -324,7 +324,7 @@ QCheckBox:checked {
          </property>
          <property name="minimumSize">
           <size>
-           <width>126</width>
+           <width>120</width>
            <height>0</height>
           </size>
          </property>
@@ -346,7 +346,7 @@ QCheckBox:checked {
          </property>
          <property name="minimumSize">
           <size>
-           <width>126</width>
+           <width>120</width>
            <height>0</height>
           </size>
          </property>
@@ -377,6 +377,12 @@ Window...</string>
          <width>130</width>
          <height>120</height>
         </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>10</pointsize>
+        </font>
        </property>
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
@@ -415,7 +421,7 @@ Window...</string>
        </property>
        <property name="minimumSize">
         <size>
-         <width>126</width>
+         <width>120</width>
          <height>120</height>
         </size>
        </property>

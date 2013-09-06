@@ -149,6 +149,7 @@ protected:
     bool analysisFirmwareBinary( const char* ver_info, FirmwareInfo* pFI );
 
     bool verifyFirmware(QString& strMsg);
+    bool checkFWVersion(QString& strMsg);
 
     FirmwareInfo* findFirmware( FIRMWARE_TYPE type, unsigned short nModelNumber );
 

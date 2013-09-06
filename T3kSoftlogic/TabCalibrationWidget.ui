@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>350</width>
+    <width>360</width>
     <height>470</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="palette">
    <palette>
@@ -426,18 +432,21 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>10</y>
-     <width>314</width>
+     <width>341</width>
      <height>451</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="MainLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetNoConstraint</enum>
+    </property>
     <item>
      <widget class="QUnderlineLabel" name="TitleConnection">
       <property name="minimumSize">
@@ -477,6 +486,9 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>40</width>
@@ -486,19 +498,6 @@
        </spacer>
       </item>
      </layout>
-    </item>
-    <item>
-     <spacer name="VSpacer1">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
     </item>
     <item>
      <widget class="QUnderlineLabel" name="TitleSensorInfo">
@@ -551,6 +550,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
      </layout>
@@ -593,22 +595,12 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <spacer name="VSpacer2">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
     </item>
     <item>
      <widget class="QUnderlineLabel" name="TitleCalibration">
@@ -659,6 +651,9 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>40</width>
@@ -706,14 +701,14 @@
       <item>
        <widget class="QPushButton" name="BtnWriteNoCali">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="minimumSize">
          <size>
-          <width>200</width>
+          <width>0</width>
           <height>30</height>
          </size>
         </property>
@@ -726,19 +721,6 @@
        </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <spacer name="VSpacer3">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
     </item>
     <item>
      <widget class="QUnderlineLabel" name="TitleMisc">
@@ -755,18 +737,12 @@
     </item>
     <item>
      <layout class="QHBoxLayout" name="MiscBtnLayout">
-      <property name="leftMargin">
-       <number>10</number>
-      </property>
-      <property name="rightMargin">
-       <number>10</number>
-      </property>
       <item>
        <widget class="QPushButton" name="BtnTest">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>35</height>
+          <width>80</width>
+          <height>45</height>
          </size>
         </property>
         <property name="text">
@@ -779,8 +755,8 @@ softkey...</string>
        <widget class="QPushButton" name="BtnWriteLogic">
         <property name="minimumSize">
          <size>
-          <width>100</width>
-          <height>35</height>
+          <width>120</width>
+          <height>45</height>
          </size>
         </property>
         <property name="cursor">
@@ -796,8 +772,8 @@ to sensor</string>
        <widget class="QPushButton" name="BtnEraseAll">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>35</height>
+          <width>110</width>
+          <height>45</height>
          </size>
         </property>
         <property name="text">
@@ -818,6 +794,12 @@ Softkey &amp; Softlogic</string>
       </property>
       <item>
        <widget class="QPushButton" name="BtnHSK">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
          <size>
           <width>0</width>

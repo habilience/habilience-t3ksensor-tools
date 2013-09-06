@@ -7,6 +7,7 @@
 #include <QBriefingDialog.h>
 #include "../common/QUtils.h"
 #include <QPainter>
+#include <QDir>
 
 #define RETRY_CONNECTION_INTERVAL       (3000)
 #define WAIT_MODECHANGE_TIMEOUT         (60000)     // 60 secs
@@ -92,6 +93,11 @@ bool Dialog::loadFirmwareFile()
     QString strPath = QCoreApplication::applicationDirPath();
     strPath = rstrip(strPath, "/\\");
     strPath += QDir::separator();
+#ifdef Q_OS_MAC
+    strPath = strPath.replace( "/Contents/MacOS/", "" );
+    strPath = strPath.left( strPath.lastIndexOf( '/' )+1 );
+#endif
+    qDebug() << strPath;
 
     QDir currentDir(strPath);
     QStringList files;
@@ -735,6 +741,7 @@ void Dialog::onResponseFromSensor(unsigned short nPacketId)
             qDebug( "already finished..." );
             break;
         }
+
         break;
     case JOBF_MARK_IAP:
         strMessage = QString("[%1] Mark IAP OK").arg(PartName[getIndex(m_CurrentJob.which)]);
@@ -1339,6 +1346,70 @@ bool Dialog::verifyFirmware(QString& strMsg)
     return true;
 }
 
+bool Dialog::checkFWVersion(QString& strMsg)
+{
+    QString strSensorVer, strBinVer;
+    // mm
+    strSensorVer = QString::fromUtf8( m_SensorInfo[IDX_MM].szVersion );
+
+    for (int i=0 ; i<m_FirmwareInfo.size() ; i++)
+    {
+        FirmwareInfo* pFI = m_FirmwareInfo.at(i);
+        if (pFI->type == TYPE_MM)
+        {
+            strBinVer = QString::fromUtf8( pFI->szVersion );
+            break;
+        }
+    }
+
+    if( strSensorVer.isEmpty() || strBinVer.isEmpty() )
+    {
+        strMsg = QString("firmware version not found");
+        return false;
+    }
+
+    int nPos = strSensorVer.indexOf( '.' );
+    QString str( strSensorVer.left( nPos ) );
+    int nSensorMajor = str.toInt();
+    strSensorVer = strSensorVer.mid( nPos+1 );
+    str = strSensorVer.size() > 0 ? strSensorVer.left( 1 ) : "0";
+    int nSensorMiner = str.toInt();
+    strSensorVer = strSensorVer.mid( 1 );
+    str = strSensorVer.size() > 0 ? strSensorVer.left( 1 ) : "0";
+    int nSensorExtraVer = str.toInt( 0, 16 );
+
+    nPos = strBinVer.indexOf( '.' );
+    str = strBinVer.left( nPos );
+    int nBinMajor = str.toInt();
+    strBinVer = strBinVer.mid( nPos+1 );
+    str = strBinVer.size() > 0 ? strBinVer.left( 1 ) : "0";
+    int nBinMiner = str.toInt();
+    strBinVer = strBinVer.mid( 1 );
+    str = strBinVer.size() > 0 ? strBinVer.left( 1 ) : "0";
+    int nBinExtraVer = str.toInt( 0, 16 );
+
+    if( nSensorMajor <= nBinMajor )
+    {
+        if( nSensorMiner <= nBinMiner )
+        {
+            if( (nSensorExtraVer >= 0x0A && nSensorExtraVer <= 0x0F) ||
+                    (nBinExtraVer >= 0x0A && nBinExtraVer <= 0x0F) )
+            {
+                if( nSensorExtraVer < nBinExtraVer )
+                    return true;
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
+
+    strMsg = QString("Error! MM Bin version is OLDER than target version.");
+
+    return false;
+}
+
 void Dialog::on_pushButtonUpgrade_clicked()
 {
     ui->pushButtonCancel->setEnabled(false);
@@ -1355,6 +1426,13 @@ void Dialog::on_pushButtonUpgrade_clicked()
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.exec();
+        return;
+    }
+
+    if( !checkFWVersion(strMsg) )
+    {
+        QMessageBox::critical( this, "Error", strMsg, QMessageBox::Ok );
+
         return;
     }
 

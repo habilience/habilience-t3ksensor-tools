@@ -19,11 +19,11 @@ QGestureProfileDialog::QGestureProfileDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    Qt::WindowFlags flags = windowFlags();
-    Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
-    flags &= ~helpFlag;
+    Qt::WindowFlags flags = Qt::Tool;
 
     setWindowFlags(flags);
+    setWindowModality( Qt::WindowModal );
+    setModal( true );
 
     QLangRes& res = QLangManager::getResource();
     ui->widgetProfileTab->setTabDirection( QColorTabWidget::TabDirectionHorzLeftTop, 28, 10 );

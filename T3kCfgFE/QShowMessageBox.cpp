@@ -47,6 +47,9 @@ int showMessageBox( QWidget* parent, const QString& strMessage, const QString& s
     QMessageBox msgBox(icon, strTitle, strMessage, buttons, parent);
     msgBox.setDefaultButton(defButton);
     //msgBox.setStyleSheet(strStyle);
+    msgBox.setWindowModality( Qt::WindowModal );
+    msgBox.setModal( true );
+
 #define MAIN "MAIN"
     QLangRes& res = QLangManager::getResource();
     msgBox.setButtonText(QMessageBox::Ok, res.getResString(MAIN, "BTN_CAPTION_OK"));

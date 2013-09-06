@@ -27,9 +27,7 @@ QDetectionDialog::QDetectionDialog(Dialog *parent) :
 {
     ui->setupUi(this);
 
-    Qt::WindowFlags flags = windowFlags();
-    Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
-    flags &= ~helpFlag;
+    Qt::WindowFlags flags = Qt::Tool;
 
     if (!QT3kDevice::instance()->isVirtualDevice())
     {

@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>382</width>
-    <height>141</height>
+    <height>161</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,14 +19,8 @@
   <layout class="QVBoxLayout" name="layoutBody">
    <item>
     <layout class="QHBoxLayout" name="layoutEditActionBox">
-     <property name="spacing">
-      <number>10</number>
-     </property>
      <item>
       <layout class="QVBoxLayout" name="layoutLabelBox">
-       <property name="spacing">
-        <number>2</number>
-       </property>
        <item>
         <widget class="QLabel" name="lblProfileItem">
          <property name="minimumSize">
@@ -70,9 +64,6 @@
      </item>
      <item>
       <layout class="QVBoxLayout" name="layoutEditBox">
-       <property name="spacing">
-        <number>2</number>
-       </property>
        <item>
         <widget class="QLineEdit" name="lineEdtProfileItem">
          <property name="focusPolicy">

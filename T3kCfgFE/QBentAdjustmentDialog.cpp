@@ -102,9 +102,7 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog *parent) :
     ui->setupUi(this);
     QT3kDevice* pDevice = QT3kDevice::instance();
 
-    Qt::WindowFlags flags = windowFlags();
-    Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
-    flags &= ~helpFlag;
+    Qt::WindowFlags flags = Qt::Tool;
 
     if (!pDevice->isVirtualDevice())
     {
@@ -1402,7 +1400,6 @@ void QBentAdjustmentDialog::drawWaitTime( QPainter& p, QRect rcWait )
     p.setPen(QColor(125,125,125));
     p.drawText( rectWait, flags, str );
 }
-
 
 void QBentAdjustmentDialog::closeEvent(QCloseEvent *evt)
 {

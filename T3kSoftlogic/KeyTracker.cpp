@@ -8,6 +8,10 @@
 
 #include <QApplication>
 
+#ifndef Q_OS_WIN
+#define _countof(a) (sizeof(a)/sizeof(*(a)))
+#endif
+
 //AFX_STATIC_DATA HCURSOR _afxCursors[10] = { 0, };
 //AFX_STATIC_DATA HBRUSH _afxHatchBrush = 0;
 //AFX_STATIC_DATA HPEN _afxBlackDottedPen = 0;
