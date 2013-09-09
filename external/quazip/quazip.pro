@@ -40,12 +40,6 @@ linux-g++-64 { # generic g++ 64bit compiler
 ##
 #################################################################################################
 
-#macx:QMAKE_LFLAGS_SONAME  = -Wl,-install_name,@executable_path/../Frameworks/
-
-#macx:QMAKE_POST_LINK += install_name_tool -change QtCore.framework/Versions/4/QtCore \
-#                        @executable_path/../Frameworks/QtCore.framework/Versions/4/QtCore \
-#                        ../quazip-build-desktop/libquazip.1.0.0.dylib
-
 # Input
 HEADERS += \
     crypt.h\

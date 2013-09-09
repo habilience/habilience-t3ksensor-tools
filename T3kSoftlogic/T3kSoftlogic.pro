@@ -19,7 +19,7 @@ TEMPLATE = app
 DEFINES += _QT_COMPILER_ QUAZIP_STATIC _T3KHANDLE_REMOVE_PRV USE_T3K_STATIC_LIBS \
             USE_SOFTLOGIC_OUTPUT_MOUSE USE_SOFTLOGIC_OUTPUT_AUDIO_CONTROL
 
-linux-g++|linux-g++-64:DEFINES += OS_LINUX
+linux-g++|linux-g++-32|linux-g++-64:DEFINES += OS_LINUX
 
 macx:DEFINES += OS_MAC
 
@@ -47,34 +47,88 @@ win32 {
     LIBS += -lsetupapi -lole32 -luuid -lws2_32 \
 }
 
+linux-g++:QMAKE_TARGET.arch = $$QMAKE_HOST.arch
+linux-g++-32:QMAKE_TARGET.arch = x86
+linux-g++-64:QMAKE_TARGET.arch = x86_64
 linux-g++ {
-    CONFIG(release, debug|release) {
-        LIBS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
+    contains(QMAKE_TARGET.arch, x86_64):{
+        message( "g++ building for 64bit" );
+        CONFIG(debug, debug|release) {
+            OBJECTS_DIR = $$PWD/.objs_x64/debug/
+            MOC_DIR = $$PWD/.objs_x64/debug/
+            DESTDIR = $$PWD/debug_x64
+        }
 
-        PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
+        CONFIG(release, debug|release) {
+            OBJECTS_DIR = $$PWD/.objs_x64/release/
+            MOC_DIR = $$PWD/.objs_x64/release/
+            DESTDIR = $$PWD/release_x64
+        }
+
+        LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
+        QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
+        PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
     }
+    !contains(QMAKE_TARGET.arch, x86_64):{
+        message( "g++ building for 32bit" );
+        CONFIG(debug, debug|release) {
+            OBJECTS_DIR = $$PWD/.objs/debug/
+            MOC_DIR = $$PWD/.objs/debug/
+            DESTDIR = $$PWD/debug
+        }
 
-    CONFIG(debug, debug|release) {
+        CONFIG(release, debug|release) {
+            OBJECTS_DIR = $$PWD/.objs/release/
+            MOC_DIR = $$PWD/.objs/release/
+            DESTDIR = $$PWD/release
+        }
+
         LIBS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
-
+        QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/32bit
         PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
     }
 
     LIBS +=
 }
 
-linux-g++-64 {
-    CONFIG(release, debug|release) {
-        LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
-
-        PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
-    }
-
+linux-g++-32 {
+    message( "building for 32bit" );
     CONFIG(debug, debug|release) {
-        LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
-
-        PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
+        OBJECTS_DIR = $$PWD/.objs/debug/
+        MOC_DIR = $$PWD/.objs/debug/
+        DESTDIR = $$PWD/debug
     }
+
+    CONFIG(release, debug|release) {
+        OBJECTS_DIR = $$PWD/.objs/release/
+        MOC_DIR = $$PWD/.objs/release/
+        DESTDIR = $$PWD/release
+    }
+
+    LIBS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
+    QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/32bit
+    PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
+
+    LIBS +=
+}
+
+linux-g++-64 {
+    message( "building for 64bit" );
+    CONFIG(debug, debug|release) {
+        OBJECTS_DIR = $$PWD/.objs_x64/debug/
+        MOC_DIR = $$PWD/.objs_x64/debug/
+        DESTDIR = $$PWD/debug_x64
+    }
+
+    CONFIG(release, debug|release) {
+        OBJECTS_DIR = $$PWD/.objs_x64/release/
+        MOC_DIR = $$PWD/.objs_x64/release/
+        DESTDIR = $$PWD/release_x64
+    }
+
+    LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
+    QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
+    PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
 
     LIBS +=
 }

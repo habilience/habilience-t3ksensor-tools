@@ -13,8 +13,7 @@ QLayoutToolWidget::QLayoutToolWidget(QVector<CSoftkey*>* pSelectedKeys, QWidget*
 
     ui->BtnReorder->setVisible( false );
 
-    setWindowFlags( Qt::Tool|Qt::WindowStaysOnTopHint );
-    setWindowModality(Qt::NonModal);
+    setWindowFlags( Qt::Tool | Qt::WindowStaysOnTopHint );
 
     m_eUnit = UnitRes;
 

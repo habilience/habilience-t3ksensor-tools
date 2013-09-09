@@ -174,6 +174,8 @@ void TabKeyDesignWidget::on_BtnKeydesign_clicked()
     m_DesignCanvasWidget.setGeometry( rcPrimary );
 
     m_DesignCanvasWidget.show();
+    m_DesignCanvasWidget.raise();
+    m_DesignCanvasWidget.activateWindow();
 }
 
 void TabKeyDesignWidget::on_BtnSet_clicked()

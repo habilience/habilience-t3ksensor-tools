@@ -75,8 +75,7 @@ QSoftKeyDesignToolWidget::QSoftKeyDesignToolWidget(QVector<CSoftkey*>* pSelected
 {
     ui->setupUi(this);
 
-    setWindowFlags( Qt::Tool|Qt::WindowStaysOnTopHint );
-    setWindowModality(Qt::NonModal);
+    setWindowFlags( Qt::Tool | Qt::WindowStaysOnTopHint );
 
     m_dD2PScaleWidth = 0.0;
     m_dD2PScaleHeight = 0.0;

@@ -1,0 +1,6 @@
+export PATH=$PATH:~/qt-everywhere-opensource-src-5.1.1/qtbase/bin
+
+make clean		
+qmake T3k.pro -r -spec linux-g++ CONFIG+=release
+make -j8 
+
