@@ -21,6 +21,7 @@
 
 #include "Common/nv.h"
 #include "../common/T3k_ver.h"
+#include "../common/QUtils.h"
 
 #include <QMenu>
 #include <QSettings>
@@ -58,7 +59,7 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     genAdjustButtonWidgetForWinAndX11( this );
 #endif
 
-    QFont ft( qApp->font() );
+    QFont ft( getSystemFont(NULL) );
     ft.setPointSizeF( ft.pointSizeF()+1.0 );
     setFont( ft );
 

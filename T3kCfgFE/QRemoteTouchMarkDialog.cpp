@@ -38,7 +38,7 @@ QRemoteTouchMarkDialog::QRemoteTouchMarkDialog(Dialog *parent) :
 QRemoteTouchMarkDialog::~QRemoteTouchMarkDialog()
 {
     // save windows position
-    QSettings winPosSettings( "Habilience", qApp->applicationName() );
+    QSettings winPosSettings( "Habilience", "T3kCfgFE" );
     winPosSettings.beginGroup("TouchMarkWindow");
     winPosSettings.setValue( "x", QVariant::fromValue(x()) );
     winPosSettings.setValue( "y", QVariant::fromValue(y()) );

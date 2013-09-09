@@ -108,6 +108,7 @@ SOURCES += main.cpp\
     ../common/TPDPEventMultiCaster.cpp \
     ../common/QIniFormat.cpp \
     ../common/QKeyMapStr.cpp \
+    ../common/QUtils.cpp \
     ../common/ui/QUnderlineLabel.cpp \
     ../common/ui/QHoverComboBox.cpp \
     ../common/ui/ColorTabBar.cpp \
@@ -141,6 +142,7 @@ HEADERS  += \
     ../common/TPDPEventMultiCaster.h \
     ../common/QIniFormat.h \
     ../common/QKeyMapStr.h \
+    ../common/QUtils.h \
     ../common/ui/QUnderlineLabel.h \
     ../common/ui/QHoverComboBox.h \
     ../common/ui/ColorTabBar.h \

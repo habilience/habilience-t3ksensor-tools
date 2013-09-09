@@ -176,7 +176,7 @@ void Dialog::onDestroy()
         pDevice->close();
 
     // save windows position
-    QSettings winPosSettings( "Habilience", qApp->applicationName() );
+    QSettings winPosSettings( "Habilience", "T3kCfgFE" );
     winPosSettings.beginGroup("Window Position");
     winPosSettings.setValue( "x", QVariant::fromValue(x()) );
     winPosSettings.setValue( "y", QVariant::fromValue(y()) );
@@ -384,7 +384,7 @@ void Dialog::onInitDialog()
     }
 
     // restore window position
-    QSettings winPosSettings( "Habilience", qApp->applicationName() );
+    QSettings winPosSettings( "Habilience", "T3kCfgFE" );
     winPosSettings.beginGroup("Window Position");
     int nX = winPosSettings.value("x", -1).toInt();
     int nY = winPosSettings.value("y", -1).toInt();
@@ -433,7 +433,7 @@ void Dialog::onInitDialog()
     if (!strFileName.isEmpty())
     {
         QSensorInitDataCfg::instance()->load(strFileName);
-        QSettings settings( "Habilience", qApp->applicationName() );
+        QSettings settings( "Habilience", "T3kCfgFE" );
         settings.beginGroup("SENSOR_INIT_DATA");
         settings.setValue( "FILENAME", strFileName );
         settings.endGroup();
@@ -1742,7 +1742,7 @@ void Dialog::saveSensorDefaultSettings()
 
     QSensorInitDataCfg::instance()->save( strFileName );
 
-    QSettings settings( "Habilience", qApp->applicationName() );
+    QSettings settings( "Habilience", "T3kCfgFE" );
     settings.beginGroup("SENSOR_INIT_DATA");
     settings.setValue( "FILENAME", strFileName );
     settings.endGroup();
@@ -1942,7 +1942,7 @@ void Dialog::on_btnTouchMark_clicked()
         m_pDlgRemoteTouchMark = new QRemoteTouchMarkDialog(this);
 
         // restore window position
-        QSettings winPosSettings( "Habilience", qApp->applicationName() );
+        QSettings winPosSettings( "Habilience", "T3kCfgFE" );
         winPosSettings.beginGroup("TouchMarkWindow");
         int nX = winPosSettings.value("x", -1).toInt();
         int nY = winPosSettings.value("y", -1).toInt();

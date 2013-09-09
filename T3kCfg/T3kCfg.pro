@@ -177,6 +177,7 @@ SOURCES += main.cpp\
     ../common/IncludeRemoteNotify.cpp \
     ../common/TPDPEventMultiCaster.cpp \
     ../common/QKeyMapStr.cpp \
+    ../common/QUtils.cpp \
     ../common/ui/QUnderlineLabel.cpp \
     ../common/ui/QHoverComboBox.cpp \
     QMouseSettingWidget.cpp \
@@ -253,6 +254,7 @@ HEADERS  += \
     ../common/IncludeRemoteNotify.h \
     ../common/TPDPEventMultiCaster.h \
     ../common/QKeyMapStr.h \
+    ../common/QUtils.h \
     ../common/ui/QUnderlineLabel.h \
     ../common/ui/QHoverComboBox.h \
     QMouseSettingWidget.h \

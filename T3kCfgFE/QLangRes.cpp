@@ -8,7 +8,7 @@
 
 QLangRes::QLangRes()
 {
-    QSettings settings( "Habilience", qApp->applicationName() );
+    QSettings settings( "Habilience", "T3kCfgFE" );
     settings.beginGroup("LANGUAGE");
     m_nDefaultLanguage = settings.value( "DEFAULT", 0 ).toInt();
     m_bIsDefineLanguage = settings.value( "IS_DEFINED", false ).toBool();
@@ -80,7 +80,7 @@ bool QLangRes::setZipResource( const QString& strPathName )
     loadLanguageFile( m_nDefaultLanguage );
     loadDefaultLanguageFile();
 
-    QSettings settings( "Habilience", qApp->applicationName() );
+    QSettings settings( "Habilience", "T3kCfgFE" );
     settings.beginGroup("LANGUAGE");
     settings.setValue( "DEFAULT", m_nDefaultLanguage );
     settings.setValue( "IS_DEFINED", m_bIsDefineLanguage );
@@ -179,7 +179,7 @@ void QLangRes::checkAllLanguageFiles( const QString& strPath )
     loadLanguageFile( m_nDefaultLanguage );
     loadDefaultLanguageFile();
 
-    QSettings settings( "Habilience", qApp->applicationName() );
+    QSettings settings( "Habilience", "T3kCfgFE" );
     settings.beginGroup("LANGUAGE");
     settings.setValue( "DEFAULT", m_nDefaultLanguage );
     settings.setValue( "IS_DEFINED", m_bIsDefineLanguage );
@@ -257,7 +257,7 @@ bool QLangRes::setLanguage( int nIndex )
     m_bIsDefineLanguage = true;
     m_nDefaultLanguage = nIndex;
 
-    QSettings settings( "Habilience", qApp->applicationName() );
+    QSettings settings( "Habilience", "T3kCfgFE" );
     settings.beginGroup("LANGUAGE");
     settings.setValue( "DEFAULT", m_nDefaultLanguage );
     settings.setValue( "IS_DEFINED", m_bIsDefineLanguage );

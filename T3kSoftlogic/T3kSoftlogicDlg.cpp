@@ -590,6 +590,9 @@ bool T3kSoftlogicDlg::saveModel( QString lpszPathName )
 
     QString strData, strExtra;
 
+    T3kCommonData::KeyDataMode eMode = T3kCommonData::instance()->getKeyDataMode();
+    T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeNormal );
+
     CSoftkeyArray& keys = T3kCommonData::instance()->getKeys();
 
     strExtra.clear();
@@ -629,14 +632,21 @@ bool T3kSoftlogicDlg::saveModel( QString lpszPathName )
 
     m_strLoadedModelPathName = lpszPathName;
 
+    T3kCommonData::instance()->setKeyDataMode( eMode );
+
     return ini.save( m_strLoadedModelPathName );
 }
 
 bool T3kSoftlogicDlg::isModified()
 {
-
+    T3kCommonData::KeyDataMode eMode = T3kCommonData::instance()->getKeyDataMode();
+    T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeNormal );
     if( T3kCommonData::instance()->getKeys().isModified() )
+    {
+        T3kCommonData::instance()->setKeyDataMode( eMode );
         return true;
+    }
+    T3kCommonData::instance()->setKeyDataMode( eMode );
 
     if( m_strLoadedModelPathName.isEmpty() )
         return false;
@@ -879,7 +889,10 @@ void T3kSoftlogicDlg::closeEvent(QCloseEvent *)
         {
             m_pTabPanelWidget->updateDataFromUI();
 
+            T3kCommonData::KeyDataMode eMode = T3kCommonData::instance()->getKeyDataMode();
+            T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeNormal );
             QString strPanelName = T3kCommonData::instance()->getKeys().getPanelName();
+            T3kCommonData::instance()->setKeyDataMode( eMode );
             if( strPanelName.isEmpty() )
             {
                 QMessageBox msg( QMessageBox::Critical, "Error", "Panel Name is required.", QMessageBox::Ok, this );

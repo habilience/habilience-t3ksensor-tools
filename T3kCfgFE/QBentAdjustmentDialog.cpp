@@ -1574,6 +1574,7 @@ void QBentAdjustmentDialog::showArrowButtons( bool bShow )
 
 void QBentAdjustmentDialog::showAllButtons( bool bShow )
 {
+    qDebug( "show %d", bShow );
     showArrowButtons(bShow);
     ui->btnReset->setVisible(bShow);
     ui->btnSave->setVisible(bShow);

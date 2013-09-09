@@ -1,6 +1,7 @@
 #include "T3kSoftlogicDlg.h"
 
 #include "../common/qsingleapplication/qtsingleapplication.h"
+#include "../common/QUtils.h"
 #include <QStringList>
 
 #ifdef Q_OS_WIN
@@ -55,9 +56,7 @@ int main(int argc, char *argv[])
 
     T3kSoftlogicDlg dlg( NULL, strCmdLine.isEmpty() ? "" : strCmdLine );
 
-    QFont ft( a.font() );
-    //ft.setPointSize( ft.pointSize() );
-    dlg.setFont( ft );
+    dlg.setFont( getSystemFont(NULL) );
 
     QObject::connect( &a, &QtSingleApplication::messageReceived, &dlg, &T3kSoftlogicDlg::onHandleMessage );
 

@@ -126,7 +126,7 @@ void QSelectSensorDataDialog::onInitDialog()
     }
 
     QString strRegFileName;
-    QSettings settings( "Habilience", qApp->applicationName() );
+    QSettings settings( "Habilience", "T3kCfgFE" );
     settings.beginGroup("SENSOR_INIT_DATA");
     strRegFileName = settings.value("FILENAME").toString();
     settings.endGroup();
