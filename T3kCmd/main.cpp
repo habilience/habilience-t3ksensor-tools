@@ -2,6 +2,8 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QFuture>
 
+#include <QDebug>
+
 #include "HIDCmdThread.h"
 #include "QExFuncThread.h"
 
@@ -119,6 +121,7 @@ int GetCommandPolling(void* pContext)
 {
     QExFuncThread* pSender = (QExFuncThread*)pContext;
 
+    bool bInput = false;
     while ( !pSender->TerminateFlag() )
     {
 #ifdef Q_OS_WIN
@@ -132,11 +135,28 @@ int GetCommandPolling(void* pContext)
             continue;
         }
 
-        g_HIDCmd.LockTextOut();
-        printf(">");
+        if( !bInput )
+        {
+            g_HIDCmd.LockTextOut();
+            printf(">");
+        }
 
         char szBuf[2048];
         char* sz = fgets(szBuf, 2048, stdin);
+        if( sz[0] == 10 )
+        {
+            if( bInput )
+            {
+                bInput = false;
+            }
+            else
+            {
+                bInput = true;
+                printf(">");
+                continue;
+            }
+        }
+
         long len = strlen(sz);
         for ( len--; len >= 0; len-- )
         {
@@ -157,6 +177,7 @@ int GetCommandPolling(void* pContext)
             break;
         }
 
+        bInput = false;
         g_HIDCmd.UnlockTextOut();
 
         bool bRet = g_HIDCmd.OnCommand(sz);
