@@ -22,7 +22,7 @@ TITLE_CAPTION_FIRMWARE = Аппараттық-бағдарламалық жаб�
 TEXT_DEVICE_NOT_CONNECTED = Құрылғы қосулы емес.
 TEXT_FIRMWARE_DOWNLOAD = Аппараттық-бағдарламалық жабдықтама жүктелді
 
-TITLE_CAPTION_LICENSE = Туралы
+TITLE_CAPTION_LICENSE = Лицензия
 
 [SELECT DEVICE]
 WINDOW_CAPTION = Құрылғыны таңдау

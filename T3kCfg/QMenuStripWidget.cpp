@@ -37,7 +37,7 @@ QMenuStripWidget::QMenuStripWidget(T3kHandle*& pHandle, QWidget *parent) :
 
     setGeometry( 0, 0, 620, 50 );
 
-    QPixmap* pIconArray = new QPixmap( ":/T3kCfgRes/Resources/PNG_ICON_MENU_STRIP.png" );
+    QPixmap* pIconArray = new QPixmap( ":/T3kCfgRes/resources/PNG_ICON_MENU_STRIP.png" );
 
     int nCount = pIconArray->width()/40;
     for( int i=0; i<nCount; i++ )
@@ -61,7 +61,7 @@ QMenuStripWidget::QMenuStripWidget(T3kHandle*& pHandle, QWidget *parent) :
     ui->BtnRemote->setVisible( false );
     ui->BtnSoftkey->setVisible( false );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 QMenuStripWidget::~QMenuStripWidget()
@@ -116,19 +116,19 @@ void QMenuStripWidget::showEvent(QShowEvent *evt)
     QWidget::showEvent(evt);
 }
 
-void QMenuStripWidget::OnChangeLanguage()
+void QMenuStripWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    m_arybtnMenu[QMENU_HOME]->setToolTip( Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_START_PAGE") ) );
-    m_arybtnMenu[QMENU_MOUSE]->setToolTip( Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_MOUSE") ) );
-    m_arybtnMenu[QMENU_CALIBRATION]->setToolTip( Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_CALIBRATION") ) );
-    m_arybtnMenu[QMENU_SENSOR]->setToolTip( Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_SENSOR_SETTING") ) );
-    m_arybtnMenu[QMENU_SOFTKEY]->setToolTip( Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_SOFTKEY_SETTING") ) );
-    m_arybtnMenu[QMENU_GENERAL]->setToolTip( Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_GENERAL_SETTING") ) );
-    m_arybtnMenu[QMENU_REMOTE]->setToolTip( Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_REMOTE_SUPPORT") ) );
+    m_arybtnMenu[QMENU_HOME]->setToolTip( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_START_PAGE") ) );
+    m_arybtnMenu[QMENU_MOUSE]->setToolTip( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_MOUSE") ) );
+    m_arybtnMenu[QMENU_CALIBRATION]->setToolTip( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_CALIBRATION") ) );
+    m_arybtnMenu[QMENU_SENSOR]->setToolTip( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_SENSOR_SETTING") ) );
+    m_arybtnMenu[QMENU_SOFTKEY]->setToolTip( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_SOFTKEY_SETTING") ) );
+    m_arybtnMenu[QMENU_GENERAL]->setToolTip( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_GENERAL_SETTING") ) );
+    m_arybtnMenu[QMENU_REMOTE]->setToolTip( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_REMOTE_SUPPORT") ) );
 }
 
 void QMenuStripWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)

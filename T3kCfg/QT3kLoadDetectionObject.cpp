@@ -162,8 +162,8 @@ void QT3kLoadDetectionObject::on_DetectionCheckTimer()
             m_pT3kHandle->SendCommand( (const char*)"cam1/sub/mode=detection", true );
             m_pT3kHandle->SendCommand( (const char*)"cam2/sub/mode=detection", true );
 
-            QString strLog( "[" + QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_COMPLETE")) + "] " );
-            strLog += QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_DETECTION")) + " M";
+            QString strLog( "[" + QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_COMPLETE")) + "] " );
+            strLog += QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_DETECTION")) + " M";
             emit PrintProgreeLog( strLog );
             return;
         }
@@ -188,8 +188,8 @@ void QT3kLoadDetectionObject::on_DetectionCheckTimer()
 
         m_pT3kHandle->SetReportView( false );
 
-        QString strLog( "[" + QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_COMPLETE")) + "] " );
-        strLog += QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_DETECTION")) + (m_bMainCamDetection ? " S" : " M");
+        QString strLog( "[" + QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_COMPLETE")) + "] " );
+        strLog += QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_DETECTION")) + (m_bMainCamDetection ? " S" : " M");
         emit PrintProgreeLog( strLog );
 
         QString str;

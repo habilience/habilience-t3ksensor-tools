@@ -1,13 +1,14 @@
 #include "T3kSoftlogicDlg.h"
 #include "ui_T3kSoftlogicDlg.h"
 
-#include "../common/T3kConstStr.h"
-#include "../common/T3k_ver.h"
+#include "T3kConstStr.h"
+#include "T3k_ver.h"
 //#include "DSelectModel.h"
 
-#include "../common/QIniFormat.h"
+#include "QIniFormat.h"
 
-#include "../common/ui/ColorTabBar.h"
+#include "ui/ColorTabBar.h"
+#include "ui/QLicenseWidget.h"
 
 #include <QDesktopWidget>
 #include <QSettings>
@@ -53,7 +54,7 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
     //m_hDeviceNotify = NULL;
 
     m_pT3kHandle = new T3kHandle();
-    m_pT3kHandle->SetNotify( TPDPEventMultiCaster::GetPtr() );
+    m_pT3kHandle->SetNotify( TPDPEventMultiCaster::instance() );
 
     bool bLoadOK = false;
 
@@ -1186,4 +1187,11 @@ void T3kSoftlogicDlg::onDoAssociateFileExt()
 void T3kSoftlogicDlg::onDoRemoveFileExtAssociation()
 {
     unregisterShellFileTypes( Softlogic_ExtStr, Softlogic_TypStr );
+}
+
+void T3kSoftlogicDlg::on_toolButton_clicked()
+{
+    QLicenseWidget wig( ":/T3kSoftlogicRes/resources/License.html", this );
+    wig.activateWindow();
+    wig.exec();
 }

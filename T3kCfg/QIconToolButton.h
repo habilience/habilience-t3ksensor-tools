@@ -13,14 +13,14 @@ public:
 
     void setIcon(const QIcon &icon);
 
-    void SetHidenBtnAction( bool bHidenAction );
+    void setRaiseAction( bool bAction );
 
 protected:
     virtual void paintEvent(QPaintEvent *);
 
 protected:
     QImage              m_IconImage;
-    bool                m_bHidenAction;
+    bool                m_bAutoRaise;
 
 signals:
 

@@ -38,7 +38,7 @@ QCalibrationWidget::QCalibrationWidget(T3kHandle*& pHandle, QWidget *parent) :
     setMouseTracking( true );
     setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 QCalibrationWidget::~QCalibrationWidget()
@@ -50,11 +50,11 @@ QCalibrationWidget::~QCalibrationWidget()
     }
 }
 
-void QCalibrationWidget::OnChangeLanguage()
+void QCalibrationWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    m_strTitle = QLangManager::GetPtr()->GetResource().GetResString( QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_CALIBRATE") );
+    m_strTitle = QLangManager::instance()->getResource().getResString( QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_CALIBRATE") );
 }
 
 void QCalibrationWidget::OnMSG(ResponsePart Part, ushort /*nTickTime*/, const char *sPartId, const char *sTxt)
@@ -154,12 +154,12 @@ bool QCalibrationWidget::ShowWindow( bool bShow, int nUsbConfigMode, float fScre
         if( fMMVersion >= MM_MIN_SUPPORT_FIRMWARE_VERSION && fMMVersion <= MM_LAST_SUPPORT_FRIMWARE_VERSION )
         {
             m_bUnderVersion = true;
-            QApplication::setOverrideCursor( QCursor(QPixmap(":/T3kCfgRes/Resources/CURSOR_BIG_CROSS.png")) );
+            QApplication::setOverrideCursor( QCursor(QPixmap(":/T3kCfgRes/resources/CURSOR_BIG_CROSS.png")) );
         }
         else
         {
             m_bUnderVersion = false;
-            QApplication::setOverrideCursor(QCursor(QPixmap(":/T3kCfgRes/Resources/PNG_NULL_CURSOR.png")));
+            QApplication::setOverrideCursor(QCursor(QPixmap(":/T3kCfgRes/resources/PNG_NULL_CURSOR.png")));
         }
     }
     else

@@ -13,6 +13,8 @@ QSaveLogWidget::QSaveLogWidget(T3kHandle*& pHandle, QWidget *parent) :
     QDialog(parent), m_pT3kHandle(pHandle)
 {
     setWindowFlags( Qt::Dialog | Qt::FramelessWindowHint );
+
+    // Qt 5.1.1 bug not work
 #ifdef _DEBUG
     setWindowOpacity( 0.0 );
 #else
@@ -44,7 +46,7 @@ void QSaveLogWidget::showEvent(QShowEvent *)
         rcFullScreen.setBottom( rcFullScreen.bottom() > rc.bottom() ? rcFullScreen.bottom() : rc.bottom() );
     }
 
-    setGeometry( rcFullScreen );
+    //setGeometry( rcFullScreen );
 
 #ifdef Q_OS_WIN
     SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );

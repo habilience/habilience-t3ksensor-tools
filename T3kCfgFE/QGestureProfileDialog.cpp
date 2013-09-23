@@ -2,8 +2,8 @@
 #include "ui_QGestureProfileDialog.h"
 #include "QLangManager.h"
 #include <QResizeEvent>
-#include "../common/QUtils.h"
-#include "../common/T3kConstStr.h"
+#include "QUtils.h"
+#include "T3kConstStr.h"
 #include "QSensorInitDataCfg.h"
 #include "QT3kDevice.h"
 #include <QPainter>

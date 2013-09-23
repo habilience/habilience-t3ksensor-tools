@@ -1,7 +1,7 @@
 #include "T3kSoftlogicDlg.h"
 
-#include "../common/qsingleapplication/qtsingleapplication.h"
-#include "../common/QUtils.h"
+#include "qsingleapplication/qtsingleapplication.h"
+#include "QUtils.h"
 #include <QStringList>
 
 #ifdef Q_OS_WIN

@@ -19,5 +19,7 @@
         <file>resources/keyicon_ctrl.png</file>
         <file>resources/keyicon_shift.png</file>
         <file>resources/keyicon_win.png</file>
+        <file>resources/PNG_QUESTION_MARK.png</file>
+        <file>resources/License.html</file>
     </qresource>
 </RCC>

@@ -7,9 +7,9 @@
 #include "QTimeoutChecker.h"
 
 #include "QT3kUserData.h"
-#include "../common/PacketStructure.h"
+#include "PacketStructure.h"
 
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 
 class QSideviewWidget;
 class QOrderTouchWidget;
@@ -18,7 +18,7 @@ namespace Ui {
     class QTabRemoteAssistance;
 }
 
-class QTabRemoteAssistance : public QDialog, public QLangManager::LangChangeNotify
+class QTabRemoteAssistance : public QDialog, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -37,7 +37,7 @@ protected:
 
     // LangChangeNotify
 protected:
-    void OnChangeLanguage();
+    void onChangeLanguage();
 
 protected:
     void ProcessRemoteRawDataPacket( RRawDataPkt* packet );

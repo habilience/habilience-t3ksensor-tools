@@ -1,6 +1,6 @@
 #include "QKeyEditWidget.h"
 
-#include "../common/QKeyMapStr.h"
+#include "QKeyMapStr.h"
 #include <QKeyEvent>
 
 #include <QCoreApplication>
@@ -27,20 +27,20 @@ void QKeyEditWidget::SetNotKeyInputMode(bool bNotInput)
 
 void QKeyEditWidget::Reset()
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
-    setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_NONE") ) );
+    QLangRes& Res = QLangManager::instance()->getResource();
+    setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_NONE") ) );
 }
 
 void QKeyEditWidget::SetKeyValue( ushort wKeyValue )
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     uchar cV0 = (uchar)(wKeyValue >> 8);
     uchar cV1 = (uchar)(wKeyValue & 0xFF);
 
     if( cV0 & MM_MOUSE_KEY0_MOUSE )
     {
-        setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_NONE") ) );
+        setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_NONE") ) );
         return;
     }
 
@@ -264,7 +264,7 @@ void QKeyEditWidget::keyPressEvent(QKeyEvent *evt)
         if( strKey.isEmpty() || m_wKeyValue == 0x0000 )
         {
             KeyPressSignal( 0x0000 );
-            setText( QLangManager::GetPtr()->GetResource().GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_NONE") ) );
+            setText( QLangManager::instance()->getResource().getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_NONE") ) );
         }
         else
         {

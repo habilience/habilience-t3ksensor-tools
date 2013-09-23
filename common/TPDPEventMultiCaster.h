@@ -23,8 +23,8 @@ public:
     class ITPDPEventListener
     {
     public:
-        ITPDPEventListener() { TPDPEventMultiCaster::GetPtr()->AddListener(this); }
-        ~ITPDPEventListener() { TPDPEventMultiCaster::GetPtr()->RemoveListener(this); }
+        ITPDPEventListener() { TPDPEventMultiCaster::instance()->AddListener(this); }
+        ~ITPDPEventListener() { TPDPEventMultiCaster::instance()->RemoveListener(this); }
         virtual void OnOpenT3kDevice(T3K_HANDLE) {}
         virtual void OnCloseT3kDevice(T3K_HANDLE) {}
         virtual void OnFirmwareDownload( bool /*bDownload*/ ) {}
@@ -54,7 +54,7 @@ public:
     };
     friend class _GC;
 
-    static TPDPEventMultiCaster* GetPtr();
+    static TPDPEventMultiCaster* instance();
 
     void AddListener( ITPDPEventListener* pListener );
     void RemoveListener( ITPDPEventListener* pListener );

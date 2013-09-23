@@ -33,7 +33,7 @@ QOrderTouchWidget::QOrderTouchWidget(QWidget *parent) :
     m_nTimerFlickerMark = 0;
     m_bHideCursor = false;
 
-    QPixmap pmpArrow( ":/T3kCfgRes/Resources/PNG_DIAGONAL_ARROW.png" );
+    QPixmap pmpArrow( ":/T3kCfgRes/resources/PNG_DIAGONAL_ARROW.png" );
     int nW = pmpArrow.width()/4;
     int nH = pmpArrow.height();
     for( int i=0; i<4; i++ )
@@ -171,13 +171,13 @@ void QOrderTouchWidget::paintEvent(QPaintEvent *)
     QPen penNomal( Qt::darkGray );
     dc.setPen( penNomal );
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     QString str;
     if( m_bOnScreen )
-        str = Res.GetResString( QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("TEXT_HELP_MSG") );
+        str = Res.getResString( QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("TEXT_HELP_MSG") );
     else
-        str = Res.GetResString( QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("TEXT_HELP_ARROW") );
+        str = Res.getResString( QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("TEXT_HELP_ARROW") );
 
     QFont ft( font() );
     ft.setPointSize( ft.pointSize()*2 );
@@ -249,7 +249,7 @@ void QOrderTouchWidget::onOrderTouch(bool bShowMark, bool bOnScreen, bool bTouch
         if( !m_bHideCursor )
         {
             m_bHideCursor = true;
-            QApplication::setOverrideCursor(QCursor(QPixmap(":/T3kCfgRes/Resources/PNG_NULL_CURSOR.png")));
+            QApplication::setOverrideCursor(QCursor(QPixmap(":/T3kCfgRes/resources/PNG_NULL_CURSOR.png")));
         }
     }
     else

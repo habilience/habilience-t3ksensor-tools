@@ -4,7 +4,7 @@
 #include <QWidget>
 
 #include "QProfileLabel.h"
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QMouseMappingTable.h"
 #include "QTouchSettingWidget.h"
 
@@ -16,7 +16,7 @@ namespace Ui {
     class QMouseSettingWidget;
 }
 
-class QMouseSettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QMouseSettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -33,12 +33,10 @@ public:
 
 protected:
     void RequestSensorData( bool bDefault );
-#ifdef HITACHI_VER
-    bool LoadMPCustomData( QStringList* Out_ListMPData );
-#endif
+
     void ChangeProfile( QCheckableButton* pBtn, int nIndex );
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
     virtual void showEvent(QShowEvent *evt);
     virtual void hideEvent(QHideEvent *evt);
@@ -58,10 +56,6 @@ protected:
     int                     m_nCurInputMode;
 
     QRequestHIDManager      m_RequestSensorData;
-
-#ifdef HITACHI_VER
-    bool                    m_bLoadMPCustomData;
-#endif
 
 signals:
     void ByPassKeyPressEvent(QKeyEvent *evt);

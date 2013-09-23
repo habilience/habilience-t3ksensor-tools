@@ -8,6 +8,7 @@
 #include <QShowEvent>
 #include <QHideEvent>
 #include <QMessageBox>
+#include <QStandardPaths>
 
 #include "QT3kUserData.h"
 #include "QWidgetCloseEventManager.h"
@@ -24,9 +25,9 @@ QAssistanceWidget::QAssistanceWidget(T3kHandle*& pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QAssistanceWidget), m_pT3kHandle(pHandle)
 {
-    setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
-
     ui->setupUi(this);
+
+    setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
 
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     genAdjustButtonWidgetForWinAndX11( this );
@@ -40,25 +41,33 @@ QAssistanceWidget::QAssistanceWidget(T3kHandle*& pHandle, QWidget *parent) :
 
     connect( ui->BtnClose, SIGNAL(clicked()), this, SLOT(close()) );
 
-    ui->TabCamWidget->setParent( this );
+    ui->TabCamWidget->setFont( font() );
 
     m_pTabStatus = new QTabSensorStatus( m_pT3kHandle, this );
     m_pTabStatus->setFont( font() );
-    m_pTabRemote = new QTabRemoteAssistance( m_pT3kHandle, this );
-    m_pTabRemote->setFont( font() );
-    m_pTabChat = new QTabChat( this );
-    m_pTabChat->setFont( font() );
-
-    connect( m_pTabRemote, SIGNAL(StartRemoteMode()), this, SLOT(onStartRemoteMode()) );
-    connect( m_pTabRemote, SIGNAL(EndRemoteMode()), this, SLOT(onEndRemoteMode()) );
-    connect( m_pTabRemote, SIGNAL(InputChatMessage(QString)), m_pTabChat, SLOT(onInputAssistanceMsg(QString)) );
-    connect( m_pTabRemote, SIGNAL(InputChatMessage(QString)), this, SLOT(onBlinkChat(QString)) );
+    m_pTabRemote = NULL;
+    m_pTabChat = NULL;
 
     ui->TabCamWidget->addTab( m_pTabStatus, "Sensor status" );
-    ui->TabCamWidget->addTab( m_pTabRemote, "Remote assistance" );
-    ui->TabCamWidget->addTab( m_pTabChat, "Chat" );
 
-    OnChangeLanguage();
+    QString strPath = QStandardPaths::writableLocation( QStandardPaths::DocumentsLocation );
+    if( QFile::exists( strPath + "/t3kcfg/config/serverlist.txt" ) )
+    {
+        m_pTabRemote = new QTabRemoteAssistance( m_pT3kHandle, this );
+        m_pTabRemote->setFont( font() );
+        m_pTabChat = new QTabChat( this );
+        m_pTabChat->setFont( font() );
+
+        connect( m_pTabRemote, SIGNAL(StartRemoteMode()), this, SLOT(onStartRemoteMode()) );
+        connect( m_pTabRemote, SIGNAL(EndRemoteMode()), this, SLOT(onEndRemoteMode()) );
+        connect( m_pTabRemote, SIGNAL(InputChatMessage(QString)), m_pTabChat, SLOT(onInputAssistanceMsg(QString)) );
+        connect( m_pTabRemote, SIGNAL(InputChatMessage(QString)), this, SLOT(onBlinkChat(QString)) );
+
+        ui->TabCamWidget->addTab( m_pTabRemote, "Remote assistance" );
+        ui->TabCamWidget->addTab( m_pTabChat, "Chat" );
+    }
+
+    onChangeLanguage();
 }
 
 QAssistanceWidget::~QAssistanceWidget()
@@ -82,18 +91,23 @@ QAssistanceWidget::~QAssistanceWidget()
     delete ui;
 }
 
-void QAssistanceWidget::OnChangeLanguage()
+void QAssistanceWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    setWindowTitle( Res.GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_CAPTION")) );
-    ui->BtnClose->setText( Res.GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("BTN_CAPTION_CLOSE")) );
+    setWindowTitle( Res.getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_CAPTION")) );
+    ui->BtnClose->setText( Res.getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("BTN_CAPTION_CLOSE")) );
 
-    ui->TabCamWidget->setTabText( 0, Res.GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("BTN_CAPTION_SAVELOG")) );
-    ui->TabCamWidget->setTabText( 1, Res.GetResString(QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_REMOTE_ASSISTANCE")) );
-    ui->TabCamWidget->setTabText( 2, Res.GetResString(QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("TITLE_CHAT")) );
+    ui->TabCamWidget->setTabText( 0, Res.getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("BTN_CAPTION_SAVELOG")) );
+
+    QString strPath = QStandardPaths::writableLocation( QStandardPaths::DocumentsLocation );
+    if( QFile::exists( strPath + "/t3kcfg/config/serverlist.txt" ) )
+    {
+        ui->TabCamWidget->setTabText( 1, Res.getResString(QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_REMOTE_ASSISTANCE")) );
+        ui->TabCamWidget->setTabText( 2, Res.getResString(QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("TITLE_CHAT")) );
+    }
 }
 
 void QAssistanceWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
@@ -108,7 +122,7 @@ void QAssistanceWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const
         {
             if ( nMode == MODE_CALIBRATION_SELF )
             {
-                QWidgetCloseEventManager::GetPtr()->AddClosedWidget( this, 500 );
+                QWidgetCloseEventManager::instance()->AddClosedWidget( this, 500 );
             }
         }
     }
@@ -126,7 +140,7 @@ void QAssistanceWidget::OnSTT(ResponsePart, ushort, const char *, const char *pS
         {
             if ( nMode == MODE_CALIBRATION_SELF )
             {
-                QWidgetCloseEventManager::GetPtr()->AddClosedWidget( this, 500 );
+                QWidgetCloseEventManager::instance()->AddClosedWidget( this, 500 );
             }
         }
     }
@@ -142,17 +156,17 @@ void QAssistanceWidget::closeEvent(QCloseEvent *evt)
     }
     else if( QT3kUserData::GetInstance()->GetRemoteSocket()->state() == QAbstractSocket::ConnectedState )
     {
-        QLangRes& Res = QLangManager::GetPtr()->GetResource();
-        QString strMessage = Res.GetResString( QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("MSG_REMOTE_DISCONNECT") );
-        QString strMsgTitle = Res.GetResString( QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("TITLE_REMOTE_MSG") );
+        QLangRes& Res = QLangManager::instance()->getResource();
+        QString strMessage = Res.getResString( QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("MSG_REMOTE_DISCONNECT") );
+        QString strMsgTitle = Res.getResString( QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("TITLE_REMOTE_MSG") );
 
         QMessageBox msgBox( this );
         msgBox.setWindowTitle( strMsgTitle );
         msgBox.setText( strMessage );
         msgBox.setStandardButtons( QMessageBox::Yes | QMessageBox::No );
         msgBox.setIcon( QMessageBox::Question );
-        msgBox.setButtonText( QMessageBox::Yes, Res.GetResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_YES") ) );
-        msgBox.setButtonText( QMessageBox::No, Res.GetResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_NO") ) );
+        msgBox.setButtonText( QMessageBox::Yes, Res.getResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_YES") ) );
+        msgBox.setButtonText( QMessageBox::No, Res.getResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_NO") ) );
         msgBox.setFont( font() );
 
         if( msgBox.exec() != QMessageBox::Yes )
@@ -171,10 +185,6 @@ void QAssistanceWidget::closeEvent(QCloseEvent *evt)
 void QAssistanceWidget::showEvent(QShowEvent *evt)
 {
     QDialog::showEvent(evt);
-
-    ui->TabCamWidget->setFont( font() );
-    m_pTabStatus->setFont( font() );
-    m_pTabRemote->setFont( font() );
 }
 
 void QAssistanceWidget::hideEvent(QHideEvent *evt)
@@ -201,17 +211,17 @@ void QAssistanceWidget::on_TabCamWidget_currentChanged(int index)
             QTcpSocket* pSocket = QT3kUserData::GetInstance()->GetRemoteSocket();
             if( pSocket->state() == QAbstractSocket::ConnectedState )
             {
-                QLangRes& Res = QLangManager::GetPtr()->GetResource();
-                QString strMessage = Res.GetResString( QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("MSG_REMOTE_DISCONNECT") );
-                QString strMsgTitle = Res.GetResString( QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("TITLE_REMOTE_MSG") );
+                QLangRes& Res = QLangManager::instance()->getResource();
+                QString strMessage = Res.getResString( QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("MSG_REMOTE_DISCONNECT") );
+                QString strMsgTitle = Res.getResString( QString::fromUtf8("ASSISTANCE"), QString::fromUtf8("TITLE_REMOTE_MSG") );
 
                 QMessageBox msgBox( this );
                 msgBox.setWindowTitle( strMsgTitle );
                 msgBox.setText( strMessage );
                 msgBox.setStandardButtons( QMessageBox::Yes | QMessageBox::No );
                 msgBox.setIcon( QMessageBox::Question );
-                msgBox.setButtonText( QMessageBox::Yes, Res.GetResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_YES") ) );
-                msgBox.setButtonText( QMessageBox::No, Res.GetResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_NO") ) );
+                msgBox.setButtonText( QMessageBox::Yes, Res.getResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_YES") ) );
+                msgBox.setButtonText( QMessageBox::No, Res.getResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_NO") ) );
                 msgBox.setFont( font() );
 
                 if( msgBox.exec() != QMessageBox::Yes )
@@ -240,7 +250,7 @@ void QAssistanceWidget::on_TabCamWidget_currentChanged(int index)
             break;
         }
 
-        ui->TabCamWidget->BlinkTab( -1 );
+        ui->TabCamWidget->blinkTab( -1 );
 
         m_nCurrentTab = index;
         break;
@@ -268,7 +278,7 @@ void QAssistanceWidget::onBlinkChat(QString)
 {
     if( m_nCurrentTab != 2 )
     {
-        ui->TabCamWidget->BlinkTab( 2 );
+        ui->TabCamWidget->blinkTab( 2 );
         activateWindow();
     }
 }

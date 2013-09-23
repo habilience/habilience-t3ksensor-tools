@@ -1,7 +1,7 @@
 #include "SelectDeviceWidget.h"
 #include "ui_SelectDeviceWidget.h"
 
-#include "../common/T3kHandle.h"
+#include "T3kHandle.h"
 
 #include <QScrollBar>
 

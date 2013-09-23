@@ -65,7 +65,7 @@ void QDataProgressDialog::onChangeLanguage()
 
     setWindowTitle( res.getResString(RES_TAG, "TITLE") );
 
-    ui->btnCancel->setText( res.getResString(MAIN_TAG, "BTN_CAPTION_CANCEL") );
+    ui->btnCancel->setText( res.getResString("MESSAGEBOX", "BTN_CAPTION_CANCEL") );
 
     if (bIsR2L != s_bIsR2L)
     {

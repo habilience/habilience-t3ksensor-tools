@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <QCoreApplication>
 
-#include "../common/PacketStructure.h"
+#include "PacketStructure.h"
 #define MAX_RAWBUFFER           4194304     // 4M
 #define DEPTH_FORMAT32          32
 
@@ -213,9 +213,6 @@ bool T3kHandle::IsOpen()
 
 bool T3kHandle::OpenWithVIDPID( unsigned short nVID, unsigned short nPID, unsigned short nMI /*= 1*/, int nDevIndex /*= 0*/ )
 {
-#ifdef HITACHI_VER
-    if( nVID != HITACHI_VID || nPID != HITACHI_PID ) return false;
-#endif
     m_pT3kDevice = ::T3kOpenDevice( nVID, nPID, nMI, nDevIndex );
 
     if( m_pT3kDevice == NULL ) return false;

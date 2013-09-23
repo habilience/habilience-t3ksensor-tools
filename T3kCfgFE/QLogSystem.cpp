@@ -2,7 +2,7 @@
 
 #include <QDir>
 #include <QStandardPaths>
-#include "../common/QUtils.h"
+#include "QUtils.h"
 #include <QCoreApplication>
 
 QLogSystem::_gc::_gc() {}

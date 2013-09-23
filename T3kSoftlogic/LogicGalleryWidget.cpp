@@ -60,12 +60,12 @@ QLogicGalleryWidget::QLogicGalleryWidget(QWidget* parent) :
         move( rcScreen.center() - QRect(0,0,width(),height()).center() );
     }
 
-    m_pGalleryImage[0] = new QPixmap( ":/T3kSoftlogic/resources/PNG_GALLERY_TOUCH_ONOFF.png" );
-    m_pGalleryImage[1] = new QPixmap( ":/T3kSoftlogic/resources/PNG_GALLERY_CALIBRATION.png" );
-    m_pGalleryImage[2] = new QPixmap( ":/T3kSoftlogic/resources/PNG_GALLERY_TASK_SWITCH.png" );
-    m_pGalleryImage[3] = new QPixmap( ":/T3kSoftlogic/resources/PNG_GALLERY_TOUCHONOFF_GPIO.png" );
-    m_pGalleryImage[4] = new QPixmap( ":/T3kSoftlogic/resources/PNG_GALLERY_CALIBRATION_GPIO.png" );
-    m_pGalleryImage[5] = new QPixmap( ":/T3kSoftlogic/resources/PNG_GALLERY_IRPEN_MODE_GPIO.png" );
+    m_pGalleryImage[0] = new QPixmap( ":/T3kSoftlogicRes/resources/PNG_GALLERY_TOUCH_ONOFF.png" );
+    m_pGalleryImage[1] = new QPixmap( ":/T3kSoftlogicRes/resources/PNG_GALLERY_CALIBRATION.png" );
+    m_pGalleryImage[2] = new QPixmap( ":/T3kSoftlogicRes/resources/PNG_GALLERY_TASK_SWITCH.png" );
+    m_pGalleryImage[3] = new QPixmap( ":/T3kSoftlogicRes/resources/PNG_GALLERY_TOUCHONOFF_GPIO.png" );
+    m_pGalleryImage[4] = new QPixmap( ":/T3kSoftlogicRes/resources/PNG_GALLERY_CALIBRATION_GPIO.png" );
+    m_pGalleryImage[5] = new QPixmap( ":/T3kSoftlogicRes/resources/PNG_GALLERY_IRPEN_MODE_GPIO.png" );
 
     m_pRadioButtons[0] = ui->RBTouch;
     m_pRadioButtons[1] = ui->RBCalibration;

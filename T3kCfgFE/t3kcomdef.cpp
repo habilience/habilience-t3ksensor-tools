@@ -2,7 +2,7 @@
 
 #include <QString>
 #include "QT3kDevice.h"
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 
 void playBuzzer( BuzzerType type )
 {

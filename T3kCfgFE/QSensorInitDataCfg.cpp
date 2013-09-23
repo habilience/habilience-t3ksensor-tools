@@ -5,7 +5,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QCoreApplication>
-#include "../common/QUtils.h"
+#include "QUtils.h"
 #include "conf.h"
 #include <QStandardPaths>
 

@@ -24,6 +24,10 @@ QColorTabBar::QColorTabBar(QWidget *parent) :
 
     m_bHorz = true;
 
+    m_nBlinkIndex = -1;
+    m_bBlinkFalg = false;
+    m_nTimerBlink = 0;
+
     setMouseTracking( true );
     setAttribute( Qt::WA_Hover );
 
@@ -34,7 +38,18 @@ QColorTabBar::QColorTabBar(QWidget *parent) :
 
 QColorTabBar::~QColorTabBar()
 {
+    if( m_nTimerBlink )
+        killTimer( m_nTimerBlink );
+}
 
+void QColorTabBar::BlinkTab(int nIndex)
+{
+    m_nBlinkIndex = nIndex;
+
+    if( m_nBlinkIndex < 0 && m_nTimerBlink )
+        killTimer( m_nTimerBlink );
+    else if( !m_nTimerBlink )
+        m_nTimerBlink = startTimer( 500 );
 }
 
 void QColorTabBar::paintEvent(QPaintEvent *)
@@ -172,6 +187,11 @@ void QColorTabBar::paintEvent(QPaintEvent *)
         int flags = Qt::AlignCenter|Qt::AlignVCenter|Qt::TextSingleLine;
         painter.setPen( QColor(80,80,80) );
         painter.drawText( rectText, flags, tabText(i) );
+
+        if( m_nBlinkIndex == i && m_bBlinkFalg )
+        {
+            painter.fillPath( tabPath, QColor(240,240,0,128) );
+        }
     }
 
     painter.end();
@@ -204,6 +224,26 @@ bool QColorTabBar::eventFilter(QObject *target, QEvent *evt)
     }
 
     return QTabBar::eventFilter(target, evt);
+}
+
+void QColorTabBar::timerEvent(QTimerEvent *evt)
+{
+    if( evt->timerId() == m_nTimerBlink )
+    {
+        m_bBlinkFalg = !m_bBlinkFalg;
+
+        if( m_nBlinkIndex < 0)
+        {
+            killTimer( m_nTimerBlink );
+            m_nTimerBlink = 0;
+            m_bBlinkFalg = false;
+        }
+
+        QRect rcTab( tabRect( m_nBlinkIndex ) );
+        update( rcTab );
+    }
+
+    QTabBar::timerEvent(evt);
 }
 
 void QColorTabBar::onNotifyTab(int index)

@@ -1,6 +1,6 @@
 #include "KeyLineEditWidget.h"
 
-#include "../common/QKeyMapStr.h"
+#include "QKeyMapStr.h"
 
 #include <QKeyEvent>
 

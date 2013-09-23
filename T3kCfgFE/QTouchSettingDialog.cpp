@@ -7,8 +7,8 @@
 
 #include "QLogSystem.h"
 #include "QShowMessageBox.h"
-#include "../common/T3kConstStr.h"
-#include "../common/QUtils.h"
+#include "T3kConstStr.h"
+#include "QUtils.h"
 #include "QSensorInitDataCfg.h"
 #include "QGestureProfileDialog.h"
 

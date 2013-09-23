@@ -10,7 +10,7 @@ namespace Ui{
 
 class T3kHandle;
 class QMouseMappingTable;
-class QEditActionEDWnd : public QDialog, public QLangManager::LangChangeNotify
+class QEditActionEDWnd : public QDialog, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -19,7 +19,7 @@ public:
     ~QEditActionEDWnd();
 
     void SetProfileInfo( int nProfileIndex, uchar cKey, ushort wKeyValue, ushort wFlags );
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
 protected:
     virtual void hideEvent(QHideEvent *evt);

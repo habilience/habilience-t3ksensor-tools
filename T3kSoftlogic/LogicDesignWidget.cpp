@@ -1,6 +1,6 @@
 #include "LogicDesignWidget.h"
 
-#include "../common/QKeyMapStr.h"
+#include "QKeyMapStr.h"
 #include "T3kCommonData.h"
 
 #include <QPainter>
@@ -52,7 +52,7 @@ QLogicDesignWidget::QLogicDesignWidget(QWidget *parent) :
     setInvertDrawing( false );
 
     // crate
-    m_pImageConsumerButton = new QPixmap( ":/T3kSoftlogic/resources/PNG_ICON_CONSUMER_BTN.png" );
+    m_pImageConsumerButton = new QPixmap( ":/T3kSoftlogicRes/resources/PNG_ICON_CONSUMER_BTN.png" );
 
     connect( &m_wndEditGate, &QEditGateWidget::updateLogic, this, &QLogicDesignWidget::onUpdate );
 }

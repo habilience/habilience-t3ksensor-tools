@@ -2,7 +2,7 @@
 #define QCALIBRATIONSETTINGWIDGET_H
 
 #include <QWidget>
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QCalibrationWidget.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
@@ -14,7 +14,7 @@ namespace Ui {
     class QCalibrationSettingWidget;
 }
 
-class QCalibrationSettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QCalibrationSettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -28,7 +28,7 @@ public:
     void ChildClose();
 
 protected:
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
     void RequestSensorData( bool bDefault );
     void ShowCalibrationWindow( bool bShow, int nScreenMargin=-1, int nMacMargin=0 );
     float ChangeRangeValue( bool bDecrease, float fCurrentValue );

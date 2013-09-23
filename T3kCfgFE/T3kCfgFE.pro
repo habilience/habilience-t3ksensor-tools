@@ -13,13 +13,14 @@ CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
 
 TEMPLATE = app
 
-DEFINES += USE_T3K_STATIC_LIBS QUAZIP_STATIC
+DEFINES += USE_T3K_STATIC_LIBS QUAZIP_STATIC ZIP_LANGUAGE
 
 CONFIG(debug, debug|release):DEFINES += _DEBUG
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 #Library
-INCLUDEPATH +=  $$PWD/../external/quazip \
+INCLUDEPATH +=  ../common/ \
+                $$PWD/../external/quazip \
                 $$PWD/../external/T3kHIDLibrary/include \
                 $$PWD/../external/quazip/zlib/ \
 
@@ -184,6 +185,12 @@ macx {
 SOURCES += main.cpp\
         dialog.cpp \
     ../common/QUtils.cpp \
+    ../common/QKeyMapStr.cpp \
+    ../common/QIni.cpp \
+    ../common/QLangZipFile.cpp \
+    ../common/QLangManager.cpp \
+    ../common/QZLangRes.cpp \
+    ../common/ui/QLicenseWidget.cpp \
     QStyleButton.cpp \
     QT3kDevice.cpp \
     QT3kDeviceEventHandler.cpp \
@@ -191,10 +198,6 @@ SOURCES += main.cpp\
     QLogSystem.cpp \
     QSensorInitDataCfg.cpp \
     QMultimonSupport.cpp \
-    QLangRes.cpp \
-    QIni.cpp \
-    QLangZipFile.cpp \
-    QLangManager.cpp \
     QInitDataIni.cpp \
     QSelectSensorDataDialog.cpp \
     QShowMessageBox.cpp \
@@ -224,7 +227,6 @@ SOURCES += main.cpp\
     QGestureProfileDialog.cpp \
     QColorTabWidget.cpp \
     QGestureMappingTable.cpp \
-    QKeyMapStr.cpp \
     QEditActionEnableDialog.cpp \
     QEditActionKey4WayDialog.cpp \
     QEditActionKey2WayDialog.cpp \
@@ -235,6 +237,13 @@ SOURCES += main.cpp\
 
 HEADERS  += dialog.h \
     ../common/QUtils.h \
+    ../common/QKeyMapStr.h \
+    ../common/QSingletone.h \
+    ../common/QIni.h \
+    ../common/QLangZipFile.h \
+    ../common/QLangManager.h \
+    ../common/ZLangRes.h \
+    ../common/ui/QLicenseWidget.h \
     QStyleButton.h \
     QT3kDevice.h \
     QT3kDeviceEventHandler.h \
@@ -243,11 +252,6 @@ HEADERS  += dialog.h \
     QLogSystem.h \
     QSensorInitDataCfg.h \
     QMultimonSupport.h \
-    QSingletone.h \
-    QLangRes.h \
-    QIni.h \
-    QLangZipFile.h \
-    QLangManager.h \
     QInitDataIni.h \
     QSelectSensorDataDialog.h \
     QShowMessageBox.h \
@@ -277,7 +281,6 @@ HEADERS  += dialog.h \
     QGestureProfileDialog.h \
     QColorTabWidget.h \
     QGestureMappingTable.h \
-    QKeyMapStr.h \
     QEditActionEnableDialog.h \
     QEditActionKey4WayDialog.h \
     QEditActionKey2WayDialog.h \
@@ -288,6 +291,7 @@ HEADERS  += dialog.h \
     conf.h
 
 FORMS    += dialog.ui \
+    ../common/ui/QLicenseWidget.ui \
     QSelectSensorDataDialog.ui \
     QEnterFileNameDialog.ui \
     QSelectDeviceDialog.ui \

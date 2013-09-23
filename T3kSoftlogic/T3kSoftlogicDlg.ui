@@ -435,7 +435,7 @@
    <string>T3k Series Softlogic Editor</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="T3kSoftlogic.qrc">
+   <iconset>
     <normaloff>:/T3kSoftlogic/resources/T3kSoftlogic.ico</normaloff>:/T3kSoftlogic/resources/T3kSoftlogic.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -942,7 +942,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="HButtonLayout" stretch="1,1,1,3,1">
+      <layout class="QHBoxLayout" name="HButtonLayout" stretch="1,1,1,0,3,1">
        <property name="leftMargin">
         <number>10</number>
        </property>
@@ -1028,6 +1028,26 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="toolButton">
+         <property name="minimumSize">
+          <size>
+           <width>23</width>
+           <height>23</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="T3kSoftlogic.qrc">
+           <normaloff>:/T3kSoftlogicRes/resources/PNG_QUESTION_MAKR.png</normaloff>:/T3kSoftlogicRes/resources/PNG_QUESTION_MAKR.png</iconset>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="HSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -1087,7 +1107,7 @@
   <customwidget>
    <class>QColorTabWidget</class>
    <extends>QTabWidget</extends>
-   <header>../common/ui/ColorTabWidget.h</header>
+   <header>ui/ColorTabWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

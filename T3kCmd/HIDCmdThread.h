@@ -1,7 +1,7 @@
 #ifndef CHIDCMD_H
 #define CHIDCMD_H
 
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 
 #include <QObject>
 #include <QMutex>

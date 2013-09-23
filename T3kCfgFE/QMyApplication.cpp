@@ -3,7 +3,7 @@
 #include <QTimerEvent>
 #include <QKeyEvent>
 #include <QFont>
-#include "../common/QUtils.h"
+#include "QUtils.h"
 
 QMyApplication::QMyApplication(int &argc, char **argv) :
     QApplication(argc, argv)

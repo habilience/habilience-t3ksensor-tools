@@ -109,30 +109,30 @@ void QCheckableButton::paintEvent(QPaintEvent */*event*/)
 
         if( m_nCheckIndex == 1 )
         {
-            dc.drawImage( rcArea, QImage(":/T3kCfgRes/Resources/PNG_PROFILE_MUTI.png") );
-            dc.drawImage( rcArea, QImage(":/T3kCfgRes/Resources/PNG_PROFILE_MOUSE_OVER.png") );
+            dc.drawImage( rcArea, QImage(":/T3kCfgRes/resources/PNG_PROFILE_MUTI.png") );
+            dc.drawImage( rcArea, QImage(":/T3kCfgRes/resources/PNG_PROFILE_MOUSE_OVER.png") );
         }
         else if( m_nCheckIndex == 2 )
         {
-            dc.drawImage( rcArea, QImage(":/T3kCfgRes/Resources/PNG_PROFILE_MOUSE.png") );
-            dc.drawImage( rcArea, QImage(":/T3kCfgRes/Resources/PNG_PROFILE_MUTI_OVER.png") );
+            dc.drawImage( rcArea, QImage(":/T3kCfgRes/resources/PNG_PROFILE_MOUSE.png") );
+            dc.drawImage( rcArea, QImage(":/T3kCfgRes/resources/PNG_PROFILE_MUTI_OVER.png") );
         }
     }
     else if( m_bCheckBox )
     {
         QRect rcMark( rcCheckBox );
         if( m_nCheckIndex == 1 )
-            dc.drawImage( rcMark, QImage(":/T3kCfgRes/Resources/PNG_PROFILE_MOUSE.png") );
+            dc.drawImage( rcMark, QImage(":/T3kCfgRes/resources/PNG_PROFILE_MOUSE.png") );
         else if( m_nCheckIndex == 2 )
-            dc.drawImage( rcMark, QImage(":/T3kCfgRes/Resources/PNG_PROFILE_MUTI") );
+            dc.drawImage( rcMark, QImage(":/T3kCfgRes/resources/PNG_PROFILE_MUTI") );
     }
     else if( m_bSubCheckBox )
     {
         QRect rcMark( rcCheckBox );
         if( m_nCheckIndex == 2 )
-            dc.drawImage( rcMark, QImage(":/T3kCfgRes/Resources/PNG_PROFILE_MOUSE_2ND.png") );
+            dc.drawImage( rcMark, QImage(":/T3kCfgRes/resources/PNG_PROFILE_MOUSE_2ND.png") );
         else if( m_nCheckIndex == 1 )
-            dc.drawImage( rcMark, QImage(":/T3kCfgRes/Resources/PNG_PROFILE_MUTI_2ND.png") );
+            dc.drawImage( rcMark, QImage(":/T3kCfgRes/resources/PNG_PROFILE_MUTI_2ND.png") );
     }
 
     QFont ftText( font() );

@@ -16,34 +16,35 @@ public:
     struct LocalizationDefinition
     {
         const char*	szAbbreviatedName;
+        int         nCodePage;
         const char*	szLocalLangName;
         const char*	szResFileName;
-		bool            bIsR2L;
-        bool            bExistFile;
+        bool        bIsR2L;
+        bool        bExistFile;
     };
 
 public:
-    QString GetResString( QString lpszSection, QString lpszItem );
+    QString getResString( QString lpszSection, QString lpszItem );
 
-    bool SetRootPath( QString lpszPath );
-    bool IsR2L();
+    bool setRootPath( QString lpszPath );
+    bool isR2L();
 protected:
-    bool Load( int nIndex );
+    bool load( int nIndex );
 
-    int GetFirstAvailableLanguage();
-    int GetNextAvailableLanguage( int nPos );
-    QString GetLanguageName( int nPos );
+    int getFirstAvailableLanguage();
+    int getNextAvailableLanguage();
+    QString getLanguageName( int nPos );
 
-    int GetAvailableLanguageCount() { return m_nAvailableLanguageCount; }
+    int getAvailableLanguageCount() { return m_nAvailableLanguageCount; }
 
-    bool SetLanguage( int nIndex );
+    bool setLanguage( int nIndex );
 
-    bool VerifyLanguage( int nIndex );
+    bool verifyLanguage( int nIndex );
 
-    void CheckAllLanguageFiles( QString strPath );
+    void checkAllLanguageFiles( QString strPath );
 
-    int GetActiveLanguage() { return m_nDefaultLanguage; }
-    int GetDefaultLanguage() { return m_nLocalLanguage; }
+    int getActiveLanguage() { return m_nDefaultLanguage; }
+    int getDefaultLanguage() { return m_nLocalLanguage; }
 /*
     void GenerateLanguageSetting();
 
@@ -58,10 +59,10 @@ private:
     int			m_nAvailableLanguageCount;
 
     QString		m_strRootPath;
-    QSettings*		m_pLanguageFile;
-    QSettings*		m_pDefLanguageFile;
+    QSettings*  m_pLanguageFile;
+    QSettings*  m_pDefLanguageFile;
     QString		m_strSystemLangAbbreviatedName;
-    int                 m_nLocalLanguage;
+    int         m_nLocalLanguage;
     int			m_nDefaultLanguage;
     bool		m_bIsDefineLanguage;
 };

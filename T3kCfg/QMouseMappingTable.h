@@ -2,7 +2,7 @@
 #define QMOUSEMAPPINGTABLE_H
 
 #include <QLabel>
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 #define EXTP_COUNT              5
@@ -33,9 +33,9 @@ public:
     bool		bDefault;
     QRectF		rectCell;
     QString		strText;
-    uchar               cKey;
-    ushort              wKeyValue[4];
-    CellKeyType         eKeyType;
+    uchar       cKey;
+    ushort      wKeyValue[4];
+    CellKeyType eKeyType;
     bool		bBold;
     QImage*		pIconImage;
 };
@@ -45,7 +45,7 @@ public:
 #include "QEditAction4WDWnd.h"
 #include "QEditActionWnd.h"
 
-class QMouseMappingTable : public QLabel, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QMouseMappingTable : public QLabel, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 public:
@@ -58,7 +58,7 @@ public:
     void ResetSelect();
     void EnableTable( bool bEnable );
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
 protected:
     virtual void paintEvent(QPaintEvent *);

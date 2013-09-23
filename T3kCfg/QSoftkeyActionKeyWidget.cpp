@@ -74,21 +74,21 @@ QSoftkeyActionKeyWidget::~QSoftkeyActionKeyWidget()
 
 void QSoftkeyActionKeyWidget::Init()
 {
-    m_pIconBtn[CTRL][UP]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CTRL_U" );
-    m_pIconBtn[CTRL][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CTRL_S" );
-    m_pIconBtn[ALT][UP]                 = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_ALT_U" );
-    m_pIconBtn[ALT][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_ALT_S" );
-    m_pIconBtn[SHIFT][UP]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_SHIFT_U" );
-    m_pIconBtn[SHIFT][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_SHIFT_S" );
+    m_pIconBtn[CTRL][UP]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_CTRL_U" );
+    m_pIconBtn[CTRL][DOWN]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_CTRL_S" );
+    m_pIconBtn[ALT][UP]                 = new QImage( ":/T3kCfgRes/resources/PNG_ICON_ALT_U" );
+    m_pIconBtn[ALT][DOWN]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_ALT_S" );
+    m_pIconBtn[SHIFT][UP]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_SHIFT_U" );
+    m_pIconBtn[SHIFT][DOWN]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_SHIFT_S" );
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
-    m_pIconBtn[WIN][UP]                 = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_WIN_U" );
-    m_pIconBtn[WIN][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_WIN_S" );
+    m_pIconBtn[WIN][UP]                 = new QImage( ":/T3kCfgRes/resources/PNG_ICON_WIN_U" );
+    m_pIconBtn[WIN][DOWN]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_WIN_S" );
 #elif defined(Q_OS_MAC)
-    m_pIconBtn[WIN][UP]                 = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_MAC_U" );
-    m_pIconBtn[WIN][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_MAC_S" );
+    m_pIconBtn[WIN][UP]                 = new QImage( ":/T3kCfgRes/resources/PNG_ICON_MAC_U" );
+    m_pIconBtn[WIN][DOWN]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_MAC_S" );
 #endif
-    m_pIconBtn[CLEAR][UP]               = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CLEAR_U" );
-    m_pIconBtn[CLEAR][DOWN]             = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CLEAR_S" );
+    m_pIconBtn[CLEAR][UP]               = new QImage( ":/T3kCfgRes/resources/PNG_ICON_CLEAR_U" );
+    m_pIconBtn[CLEAR][DOWN]             = new QImage( ":/T3kCfgRes/resources/PNG_ICON_CLEAR_S" );
 
     m_nIconTotalWidth = 0;
     m_nIconTotalWidth += m_pIconBtn[CTRL][UP]->width();
@@ -113,7 +113,7 @@ void QSoftkeyActionKeyWidget::Init()
     m_cbFuncKeyWidget.setCurrentIndex( -1 );
     m_cbFuncKeyWidget.hide();
 
-    OnChangeLanguage();
+    onChangeLanguage();
 
     m_KeyEditWidget.Reset();
 }
@@ -127,15 +127,15 @@ QString QSoftkeyActionKeyWidget::text()
 {
     if( m_eInputMode == PIM_MOUSE )
     {
-        QLangRes& Res = QLangManager::GetPtr()->GetResource();
+        QLangRes& Res = QLangManager::instance()->getResource();
 
         QString str( m_KeyEditWidget.text() );
         if( (m_wKeyValue & 0xFF00) == 0x0000 )
             return m_cbMouseWidget.itemText( m_cbMouseWidget.currentIndex() ) +
-                    Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_MOUSE") );
+                    Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_MOUSE") );
         else
             return str + m_cbMouseWidget.itemText( m_cbMouseWidget.currentIndex() ) +
-                    Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_MOUSE") );
+                    Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_MOUSE") );
     }
     return m_KeyEditWidget.text();
 }
@@ -179,7 +179,7 @@ void QSoftkeyActionKeyWidget::SetWidgetInputMode(PartInputMode eMode)
 
 void QSoftkeyActionKeyWidget::SetRealGeometry()
 {
-    bool bR2L = QLangManager::GetPtr()->GetResource().IsR2L();
+    bool bR2L = QLangManager::instance()->getResource().isR2L();
     QRect rc( bR2L ? m_pIconBtn[CLEAR][UP]->width()+4 : m_nIconTotalWidth, 0, width()-m_nIconTotalWidth-m_pIconBtn[CLEAR][UP]->width(), height() );
     m_KeyEditWidget.setGeometry( rc );
     m_cbFuncKeyWidget.setGeometry( rc );
@@ -243,17 +243,17 @@ ushort QSoftkeyActionKeyWidget::GetKeyValue()
     return m_wKeyValue;
 }
 
-void QSoftkeyActionKeyWidget::OnChangeLanguage()
+void QSoftkeyActionKeyWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     m_cbMouseWidget.clear();
 
-    m_cbMouseWidget.addItem( Res.GetResString(QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_MLEFT_DOWN")), MM_SOFTLOGIC_OPEX_MKEY_ACT_LBTN );
-    m_cbMouseWidget.addItem( Res.GetResString(QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_MRIGHT_DOWN")), MM_SOFTLOGIC_OPEX_MKEY_ACT_RBTN );
-    m_cbMouseWidget.addItem( Res.GetResString(QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_MMIDDLE_DOWN")), MM_SOFTLOGIC_OPEX_MKEY_ACT_MBTN );
+    m_cbMouseWidget.addItem( Res.getResString(QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_MLEFT_DOWN")), MM_SOFTLOGIC_OPEX_MKEY_ACT_LBTN );
+    m_cbMouseWidget.addItem( Res.getResString(QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_MRIGHT_DOWN")), MM_SOFTLOGIC_OPEX_MKEY_ACT_RBTN );
+    m_cbMouseWidget.addItem( Res.getResString(QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_MMIDDLE_DOWN")), MM_SOFTLOGIC_OPEX_MKEY_ACT_MBTN );
 
     SetRealGeometry();
 }
@@ -269,7 +269,7 @@ void QSoftkeyActionKeyWidget::paintEvent(QPaintEvent */*evt*/)
 
     uchar cV0 = (uchar)(m_wKeyValue >> 8);
 
-    bool bR2L = QLangManager::GetPtr()->GetResource().IsR2L();
+    bool bR2L = QLangManager::instance()->getResource().isR2L();
     int nIconW = 0;
     int nIconH = rc.height(); //m_pIconBtn[0][0]->height();
     int nIconX = bR2L ? width()-m_pIconBtn[CTRL][UP]->width() : 0;
@@ -342,7 +342,7 @@ void QSoftkeyActionKeyWidget::resizeEvent(QResizeEvent *evt)
 
     m_KeyEditWidget.setGeometry( m_KeyEditWidget.x(), m_KeyEditWidget.y(), nEditW, nNH );
     m_cbFuncKeyWidget.setGeometry( m_KeyEditWidget.x(), m_KeyEditWidget.y(), nEditW, nNH );
-    m_cbMouseWidget.setGeometry( QLangManager::GetPtr()->GetResource().IsR2L() ? 0 : m_cbFuncKeyWidget.x(), m_cbFuncKeyWidget.y(), m_cbFuncKeyWidget.width()+m_pIconBtn[CLEAR][UP]->width(), m_cbFuncKeyWidget.height() );
+    m_cbMouseWidget.setGeometry( QLangManager::instance()->getResource().isR2L() ? 0 : m_cbFuncKeyWidget.x(), m_cbFuncKeyWidget.y(), m_cbFuncKeyWidget.width()+m_pIconBtn[CLEAR][UP]->width(), m_cbFuncKeyWidget.height() );
 
     QLabel::resizeEvent(evt);
 }

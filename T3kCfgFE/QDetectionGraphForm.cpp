@@ -12,7 +12,7 @@
 
 #include <math.h>
 
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 
 #define RES_TAG "DETECTION"
 

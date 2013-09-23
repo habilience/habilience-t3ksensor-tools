@@ -22,7 +22,7 @@ TITLE_CAPTION_FIRMWARE = Thông tin trình điều khiển phần cứng
 TEXT_DEVICE_NOT_CONNECTED = Không thể kết nối thiết bị
 TEXT_FIRMWARE_DOWNLOAD = Trình điều khiển phần cứng đang được tải về
 
-TITLE_CAPTION_LICENSE = Giới thiệu
+TITLE_CAPTION_LICENSE = giấy phép
 
 [SELECT DEVICE]
 WINDOW_CAPTION = Chọn thiết bị

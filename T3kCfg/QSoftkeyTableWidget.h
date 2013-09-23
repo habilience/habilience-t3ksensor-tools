@@ -5,7 +5,7 @@
 
 #include "QLangManager.h"
 
-class QSoftkeyTableWidget : public QTableWidget, public QLangManager::LangChangeNotify
+class QSoftkeyTableWidget : public QTableWidget, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 public:
@@ -15,7 +15,7 @@ public:
     void RemoveAllItem();
 
 protected:
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
 signals:
     void KeyPressSignal(int nRow, int nColumn, ushort nValue);

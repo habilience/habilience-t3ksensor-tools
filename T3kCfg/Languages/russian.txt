@@ -22,7 +22,7 @@ TITLE_CAPTION_FIRMWARE = Информация о драйверах
 TEXT_DEVICE_NOT_CONNECTED = Устройство не подключено
 TEXT_FIRMWARE_DOWNLOAD = Драйвера загружены
 
-TITLE_CAPTION_LICENSE = О
+TITLE_CAPTION_LICENSE = лицензия
 
 [SELECT DEVICE]
 WINDOW_CAPTION = Выберите оборудование

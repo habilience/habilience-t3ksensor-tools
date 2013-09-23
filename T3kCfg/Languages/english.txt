@@ -22,7 +22,7 @@ TITLE_CAPTION_FIRMWARE = Firmware Information
 TEXT_DEVICE_NOT_CONNECTED = The device is not connected.
 TEXT_FIRMWARE_DOWNLOAD = Firmware is being downloaded.
 
-TITLE_CAPTION_LICENSE = About
+TITLE_CAPTION_LICENSE = License
 
 [SELECT DEVICE]
 WINDOW_CAPTION = Select Device

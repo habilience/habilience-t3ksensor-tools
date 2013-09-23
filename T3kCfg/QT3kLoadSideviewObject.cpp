@@ -104,8 +104,8 @@ void QT3kLoadSideviewObject::FinishSideView()
         m_pSideViewImage->save( m_strSavePath + QString("/cam%1.png").arg(nPart), "PNG" );
     }
 
-    QString strLog( "[" + QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_COMPLETE")) + "] " );
-    strLog += QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_SIDEVIEW"));
+    QString strLog( "[" + QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_COMPLETE")) + "] " );
+    strLog += QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_SIDEVIEW"));
     emit PrintProgreeLog( strLog );
 
     emit Complete( LDS_SIDEVIEW );
@@ -140,25 +140,25 @@ void QT3kLoadSideviewObject::OnPRV(ResponsePart Part, ushort, const char *, int 
     pCM->bNoCam = false;
     m_pStorageHandle->CM.insert( Part, pCM );
 
-    QString strLog( "[" + QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_OK")) + "] " );
-    strLog += QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_SIDEVIEW"));
+    QString strLog( "[" + QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_OK")) + "] " );
+    strLog += QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_SIDEVIEW"));
 
     switch(nCamNo)
     {
     case 0:
-        strLog += QString(" - %1").arg( QLangManager::GetPtr()->GetResource().GetResString(
+        strLog += QString(" - %1").arg( QLangManager::instance()->getResource().getResString(
                 QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_SENSOR1")) );
         break;
     case 1:
-        strLog += QString(" - %1").arg( QLangManager::GetPtr()->GetResource().GetResString(
+        strLog += QString(" - %1").arg( QLangManager::instance()->getResource().getResString(
                 QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_SENSOR2")) );
         break;
     case 2:
-        strLog += QString(" - %1").arg( QLangManager::GetPtr()->GetResource().GetResString(
+        strLog += QString(" - %1").arg( QLangManager::instance()->getResource().getResString(
                 QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_SENSOR1_1")) );
         break;
     case 3:
-        strLog += QString(" - %1").arg( QLangManager::GetPtr()->GetResource().GetResString(
+        strLog += QString(" - %1").arg( QLangManager::instance()->getResource().getResString(
                 QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_SENSOR2_1")) );
         break;
     default:
@@ -220,7 +220,7 @@ void QT3kLoadSideviewObject::FillEmptySideview(QImage *pImg, int nWidth, int nHe
 
     dc.fillRect( rcClient, Qt::black );
     dc.setPen( Qt::white );
-    QString str( QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS SIDEVIEW"), QString::fromUtf8("TEXT_NO_IMAGE")) );
+    QString str( QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS SIDEVIEW"), QString::fromUtf8("TEXT_NO_IMAGE")) );
     dc.drawText( rcClient, str, QTextOption( Qt::AlignVCenter | Qt::AlignHCenter ) );
 
     dc.end();

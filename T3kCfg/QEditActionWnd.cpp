@@ -1,10 +1,10 @@
 #include "QEditActionWnd.h"
 #include "ui_QEditActionWnd.h"
 
-#include "../common/T3kHandle.h"
+#include "T3kHandle.h"
 #include "QMouseMappingTable.h"
 
-#include "../common/QKeyMapStr.h"
+#include "QKeyMapStr.h"
 #include "stdInclude.h"
 
 #include "Common/nv.h"
@@ -43,19 +43,19 @@ QEditActionWnd::~QEditActionWnd()
     delete ui;
 }
 
-void QEditActionWnd::OnChangeLanguage()
+void QEditActionWnd::onChangeLanguage()
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    setWindowTitle( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TITLE_CAPTION_EDIT_PROFILE_ITEM") ) );
-    ui->TitleProfileItem->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM") ) );
-    ui->TitleAction->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_ACTION") ) );
-    ui->LBUserDefKey->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_USER_DEFINE_KEY") ) );
-    ui->LBKey->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_KEY") ) );
-    ui->BtnApply->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("BTN_CAPTION_APPLY") ) );
-    ui->BtnCancel->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("BTN_CAPTION_CANCEL") ) );
+    setWindowTitle( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TITLE_CAPTION_EDIT_PROFILE_ITEM") ) );
+    ui->TitleProfileItem->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM") ) );
+    ui->TitleAction->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_ACTION") ) );
+    ui->LBUserDefKey->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_USER_DEFINE_KEY") ) );
+    ui->LBKey->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_KEY") ) );
+    ui->BtnApply->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("BTN_CAPTION_APPLY") ) );
+    ui->BtnCancel->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("BTN_CAPTION_CANCEL") ) );
 
-    if( Res.IsR2L() )
+    if( Res.isR2L() )
         ui->EditProfileItem->setAlignment( Qt::AlignRight );
     else
         ui->EditProfileItem->setAlignment( Qt::AlignLeft );
@@ -65,20 +65,20 @@ void QEditActionWnd::OnChangeLanguage()
 
 void QEditActionWnd::Init()
 {
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 void QEditActionWnd::SetPredefineProfileTypes( ProfileType Type, bool bTaskSwitch )
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     ui->CBAction->clear();
 
-    ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DISABLED") ) );
+    ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DISABLED") ) );
     ui->CBAction->setItemData( ui->CBAction->count()-1, 0x0000 );
-    ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ) );
+    ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ) );
     ui->CBAction->setItemData( ui->CBAction->count()-1, 0xFFFF );
-    ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FUNCTION_KEY") ) );
+    ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FUNCTION_KEY") ) );
     ui->CBAction->setItemData( ui->CBAction->count()-1, 0xFFFF );
 
     switch( Type )
@@ -114,48 +114,48 @@ void QEditActionWnd::SetPredefineProfileTypes( ProfileType Type, bool bTaskSwitc
     default:
         break;
     }
-    ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FORWARD") ) );
+    ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FORWARD") ) );
     ui->CBAction->setItemData( ui->CBAction->count()-1, 0x044F );
-    ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_BACK") ) );
+    ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_BACK") ) );
     ui->CBAction->setItemData( ui->CBAction->count()-1, 0x0450 );
 
 #if defined(Q_OS_MAC)
     if( bTaskSwitch )
     {
-        ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_SWITCH1") ) );
+        ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_SWITCH1") ) );
         ui->CBAction->setItemData( ui->CBAction->count()-1, 0x082B );
     }
-    ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_EXPLORER") ) );
+    ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_EXPLORER") ) );
     ui->CBAction->setItemData( ui->CBAction->count()-1, 0x0811 );
-    ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DESKTOP") ) );
+    ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DESKTOP") ) );
     ui->CBAction->setItemData( ui->CBAction->count()-1, 0x0044 );
 #else
 #if defined(Q_OS_WIN)
-    ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_MANAGER") ) );
+    ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_MANAGER") ) );
     ui->CBAction->setItemData( ui->CBAction->count()-1, 0x0329 );
 #endif
     if( bTaskSwitch )
     {
-        ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_SWITCH1") ) );
+        ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_SWITCH1") ) );
         ui->CBAction->setItemData( ui->CBAction->count()-1, 0x042B );
     }
 #if defined(Q_OS_WIN)
     if( bTaskSwitch )
     {
-        ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_SWITCH2") ) );
+        ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_SWITCH2") ) );
         ui->CBAction->setItemData( ui->CBAction->count()-1, 0x082B );
     }
-    ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_EXPLORER") ) );
+    ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_EXPLORER") ) );
     ui->CBAction->setItemData( ui->CBAction->count()-1, 0x0808 );
 #endif
-    ui->CBAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DESKTOP") ) );
+    ui->CBAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DESKTOP") ) );
     ui->CBAction->setItemData( ui->CBAction->count()-1, 0x0807 );
 #endif
 }
 
 void QEditActionWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wKeyValue, bool bTaskSwitch )
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     m_nProfileIndex = nProfileIndex;
     m_cProfileKey = cKey;
@@ -166,47 +166,47 @@ void QEditActionWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wKeyV
     switch( cKey )
     {
     case MM_GESTURE_SINGLE_LONG_TAP:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_SINGLE") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_LONG_TAP") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_SINGLE") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_LONG_TAP") );
         Type = TypeSingle;
         break;
     case MM_GESTURE_FINGERS_TAP:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_FINGERS") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_TAP") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_FINGERS") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_TAP") );
         Type = TypeSingle;
         break;
     case MM_GESTURE_FINGERS_DOUBLE_TAP:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_FINGERS") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DOUBLE_TAP") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_FINGERS") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DOUBLE_TAP") );
         Type = TypeDouble;
         break;
     case MM_GESTURE_FINGERS_LONG_TAP:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_FINGERS") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_LONG_TAP") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_FINGERS") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_LONG_TAP") );
         Type = TypeSingle;
         break;
     case MM_GESTURE_PALM_MOVE:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PALM") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DRAG") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PALM") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DRAG") );
         Type = TypeMove;
         break;
     case MM_GESTURE_PALM_TAP:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PALM") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_TAP") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PALM") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_TAP") );
         Type = TypeSingle;
         break;
     case MM_GESTURE_PALM_DOUBLE_TAP:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PALM") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DOUBLE_TAP") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PALM") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DOUBLE_TAP") );
         Type = TypeDouble;
         break;
     case MM_GESTURE_PALM_LONG_TAP:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PALM") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_LONG_TAP") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PALM") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_LONG_TAP") );
         Type = TypeSingle;
         break;
     case MM_GESTURE_PUTAND_TAP:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PUTNTAP") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_TAP") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PUTNTAP") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_TAP") );
         Type = TypeSingle;
         break;
     case MM_GESTURE_PUTAND_DOUBLE_TAP:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PUTNTAP") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DOUBLE_TAP") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PUTNTAP") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DOUBLE_TAP") );
         Type = TypeDouble;
         break;
     case MM_GESTURE_PUTAND_LONG_TAP:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PUTNTAP") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_LONG_TAP") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PUTNTAP") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_LONG_TAP") );
         Type = TypeSingle;
         break;
     default:
@@ -289,7 +289,7 @@ void QEditActionWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wKeyV
 
 void QEditActionWnd::SetEditMode( EditMode Mode, ushort wKeyValue )
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     switch( Mode )
     {
@@ -306,7 +306,7 @@ void QEditActionWnd::SetEditMode( EditMode Mode, ushort wKeyValue )
         else
             ui->LBUserDefKey->SetKeyValue( wKeyValue );
 
-        ui->GBUserDefKey->setTitle( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_USER_DEFINE_KEY") ) );
+        ui->GBUserDefKey->setTitle( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_USER_DEFINE_KEY") ) );
         ui->GBUserDefKey->show();
         ui->LBKey->show();
         ui->LBUserDefKey->SetUseFuncKey( false );
@@ -317,7 +317,7 @@ void QEditActionWnd::SetEditMode( EditMode Mode, ushort wKeyValue )
         ui->LBUserDefKey->hide();
         ui->LBUserDefKey->SetUseFuncKey( true );
         ui->LBUserDefKey->show();
-        ui->GBUserDefKey->setTitle( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_FUNCTION_KEY") ) );
+        ui->GBUserDefKey->setTitle( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_FUNCTION_KEY") ) );
         ui->GBUserDefKey->show();
         ui->LBKey->show();
 
@@ -345,7 +345,7 @@ void QEditActionWnd::SetEditMode( EditMode Mode, ushort wKeyValue )
 
 void QEditActionWnd::on_CBAction_currentIndexChanged(int /*index*/)
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     int nSel = ui->CBAction->currentIndex();
     if( nSel < 0 ) return;
@@ -371,7 +371,7 @@ void QEditActionWnd::on_CBAction_currentIndexChanged(int /*index*/)
 
     if( wKeyValue == 0xFFFF )
     {
-        ui->LBDetail->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_NOT_DEFINED") ) );
+        ui->LBDetail->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_NOT_DEFINED") ) );
         return;
     }
 

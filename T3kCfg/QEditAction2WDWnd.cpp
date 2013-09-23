@@ -2,10 +2,10 @@
 #include "ui_QEditAction2WDWnd.h"
 
 #include "stdInclude.h"
-#include "../common/T3kHandle.h"
+#include "T3kHandle.h"
 #include "QMouseMappingTable.h"
 
-#include "../common/QKeyMapStr.h"
+#include "QKeyMapStr.h"
 #include "Common/nv.h"
 
 #include "T3kPacketDef.h"
@@ -47,22 +47,22 @@ QEditAction2WDWnd::~QEditAction2WDWnd()
     delete ui;
 }
 
-void QEditAction2WDWnd::OnChangeLanguage()
+void QEditAction2WDWnd::onChangeLanguage()
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    setWindowTitle( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TITLE_CAPTION_EDIT_PROFILE_ITEM") ) );
-    ui->TitleProfileItem->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM") ) );
-    ui->TitleAction->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_ACTION") ) );
-    ui->LBUserDefKey->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_USER_DEFINE_KEY") ) );
-    ui->LBKey->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_KEY") ) );
-    ui->BtnApply->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("BTN_CAPTION_APPLY") ) );
-    ui->BtnCancel->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("BTN_CAPTION_CANCEL") ) );
+    setWindowTitle( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TITLE_CAPTION_EDIT_PROFILE_ITEM") ) );
+    ui->TitleProfileItem->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM") ) );
+    ui->TitleAction->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_ACTION") ) );
+    ui->LBUserDefKey->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_USER_DEFINE_KEY") ) );
+    ui->LBKey->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_KEY") ) );
+    ui->BtnApply->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("BTN_CAPTION_APPLY") ) );
+    ui->BtnCancel->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("BTN_CAPTION_CANCEL") ) );
 
     SetPredefineProfileTypes( ui->CBActionZoomOut );
     SetPredefineProfileTypes( ui->CBActionZoomIn );
 
-    if( Res.IsR2L() )
+    if( Res.isR2L() )
         ui->EditProfileItem->setAlignment( Qt::AlignRight );
     else
         ui->EditProfileItem->setAlignment( Qt::AlignLeft );
@@ -72,24 +72,24 @@ void QEditAction2WDWnd::OnChangeLanguage()
 
 void QEditAction2WDWnd::Init()
 {
-    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_2WD.png" );
+    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_2WD.png" );
 
-    ui->BtnChkLink->setIcon( QIcon(":/T3kCfgRes/Resources/PNG_ICON_LINK_HORZ.png") );
+    ui->BtnChkLink->setIcon( QIcon(":/T3kCfgRes/resources/PNG_ICON_LINK_HORZ.png") );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 void QEditAction2WDWnd::SetPredefineProfileTypes( QComboBox* pWndComboAction )
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     pWndComboAction->clear();
 
-    pWndComboAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DISABLED") ) );
+    pWndComboAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DISABLED") ) );
     pWndComboAction->setItemData( pWndComboAction->count()-1, 0x0000 );
-    pWndComboAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ) );
+    pWndComboAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ) );
     pWndComboAction->setItemData( pWndComboAction->count()-1, 0xFFFF );
-    pWndComboAction->addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FUNCTION_KEY") ) );
+    pWndComboAction->addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FUNCTION_KEY") ) );
     pWndComboAction->setItemData( pWndComboAction->count()-1, 0xFFFF );
 
     pWndComboAction->addItem( "Wheel" );
@@ -100,7 +100,7 @@ void QEditAction2WDWnd::SetPredefineProfileTypes( QComboBox* pWndComboAction )
 
 void QEditAction2WDWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wKeyValue1, ushort wKeyValue2 )
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     SetPredefineProfileTypes( ui->CBActionZoomOut );
     SetPredefineProfileTypes( ui->CBActionZoomIn );
@@ -114,7 +114,7 @@ void QEditAction2WDWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wK
     switch( cKey )
     {
     case MM_GESTURE_ZOOM:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_ZOOM") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_ZOOM") );
         break;
     default:
         strLoc = "Unknown";
@@ -134,7 +134,7 @@ void QEditAction2WDWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wK
     if( nSel > 2 )
     {
         ui->BtnChkLink->setChecked( true );
-        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_2WD_LINK.png" );
+        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_2WD_LINK.png" );
     }
 }
 
@@ -221,7 +221,7 @@ void QEditAction2WDWnd::SetEditMode( EditMode Mode, ushort wKeyValue )
         Mode = ModeNone;
     }
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     switch( Mode )
     {
@@ -239,7 +239,7 @@ void QEditAction2WDWnd::SetEditMode( EditMode Mode, ushort wKeyValue )
         else
             ui->LBUserDefKey->SetKeyValue( wKeyValue );
 
-        ui->GBUserDefKey->setTitle( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_USER_DEFINE_KEY") ) );
+        ui->GBUserDefKey->setTitle( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_USER_DEFINE_KEY") ) );
         ui->GBUserDefKey->show();
         ui->LBKey->show();
         ui->LBUserDefKey->SetUseFuncKey( false );
@@ -251,7 +251,7 @@ void QEditAction2WDWnd::SetEditMode( EditMode Mode, ushort wKeyValue )
         ui->LBUserDefKey->hide();
         ui->LBUserDefKey->SetUseFuncKey( true );
         ui->LBUserDefKey->show();
-        ui->GBUserDefKey->setTitle( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_FUNCTION_KEY") ) );
+        ui->GBUserDefKey->setTitle( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_FUNCTION_KEY") ) );
         ui->GBUserDefKey->show();
         ui->LBKey->show();
 
@@ -283,7 +283,7 @@ void QEditAction2WDWnd::on_CBActionZoomOut_activated(int /*index*/)
     if( nSel > 2 )
     {
         ui->BtnChkLink->setChecked( true );
-        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_2WD_LINK.png" );
+        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_2WD_LINK.png" );
     }
     else
     {
@@ -292,7 +292,7 @@ void QEditAction2WDWnd::on_CBActionZoomOut_activated(int /*index*/)
             ui->CBActionZoomIn->setCurrentIndex( 0 );
             OnCbnSelchangeComboAction( ui->CBActionZoomIn );
             ui->BtnChkLink->setChecked( false );
-            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_2WD.png" );
+            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_2WD.png" );
         }
     }
 
@@ -313,7 +313,7 @@ void QEditAction2WDWnd::on_CBActionZoomIn_activated(int /*index*/)
     if( nSel > 2 )
     {
         ui->BtnChkLink->setChecked( true );
-        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_2WD_LINK.png" );
+        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_2WD_LINK.png" );
     }
     else
     {
@@ -322,7 +322,7 @@ void QEditAction2WDWnd::on_CBActionZoomIn_activated(int /*index*/)
             ui->CBActionZoomOut->setCurrentIndex( 0 );
             OnCbnSelchangeComboAction( ui->CBActionZoomOut );
             ui->BtnChkLink->setChecked( false );
-            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_2WD.png" );
+            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_2WD.png" );
         }
     }
 
@@ -336,7 +336,7 @@ void QEditAction2WDWnd::on_CBActionZoomIn_activated(int /*index*/)
 
 void QEditAction2WDWnd::OnCbnSelchangeComboAction( QComboBox* pWndComboAction )
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     int nSel = pWndComboAction->currentIndex();
     if( nSel < 0 ) return;
@@ -367,7 +367,7 @@ void QEditAction2WDWnd::OnCbnSelchangeComboAction( QComboBox* pWndComboAction )
 
     if( wKeyValue == 0xFFFF )
     {
-        pDetailLabel->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_NOT_DEFINED") ) );
+        pDetailLabel->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_NOT_DEFINED") ) );
         return;
     }
 
@@ -511,9 +511,9 @@ void QEditAction2WDWnd::onFunctionKeyActivated(int /*index*/)
 void QEditAction2WDWnd::on_BtnChkLink_toggled(bool /*checked*/)
 {
     if( ui->BtnChkLink->isChecked() )
-        ui->LinkIconWidget->SetIconImage( tr(":/T3kCfgRes/Resources/PNG_ICON_2WD.png") );
+        ui->LinkIconWidget->SetIconImage( tr(":/T3kCfgRes/resources/PNG_ICON_2WD.png") );
     else
-        ui->LinkIconWidget->SetIconImage( tr(":/T3kCfgRes/Resources/PNG_ICON_2WD_LINK.png") );
+        ui->LinkIconWidget->SetIconImage( tr(":/T3kCfgRes/resources/PNG_ICON_2WD_LINK.png") );
 }
 
 void QEditAction2WDWnd::onKeyPress_Signal(ushort nValue)

@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QToolButton>
 
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QWarningWidget.h"
 #include "QDiableTouchWidget.h"
 #include "QLangManager.h"
@@ -14,7 +14,7 @@ namespace Ui {
     class QSensorSettingWidget;
 }
 
-class QSensorSettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QSensorSettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -35,7 +35,7 @@ protected:
     void OnBuzzerPlay(unsigned int nIndex);
     void OnBnClickedCheckBuzzer( QToolButton* pBtn, unsigned int nIndex );
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
     virtual void showEvent(QShowEvent *evt);
     virtual void hideEvent(QHideEvent *evt);

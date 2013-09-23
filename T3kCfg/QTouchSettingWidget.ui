@@ -436,6 +436,10 @@
   <property name="windowTitle">
    <string>Touch Setting</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="T3kCfgRes.qrc">
+    <normaloff>:/T3kCfgRes/resources/PNG_ICON_SETTING.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_SETTING.png</iconset>
+  </property>
   <widget class="QUnderlineLabel" name="TitleTimeSetting">
    <property name="geometry">
     <rect>
@@ -1164,7 +1168,7 @@
   <customwidget>
    <class>QUnderlineLabel</class>
    <extends>QLabel</extends>
-   <header>../common/ui/QUnderlineLabel.h</header>
+   <header>ui/UnderlineLabel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -1172,6 +1176,8 @@
   <tabstop>SldWheel</tabstop>
   <tabstop>SldZoom</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="T3kCfgRes.qrc"/>
+ </resources>
  <connections/>
 </ui>

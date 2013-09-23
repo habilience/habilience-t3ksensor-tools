@@ -15,7 +15,7 @@ QT3kHIDObject::~QT3kHIDObject()
 {
 }
 
-void QT3kHIDObject::OnChangeLanguage()
+void QT3kHIDObject::onChangeLanguage()
 {
 
 }

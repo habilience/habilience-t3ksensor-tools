@@ -557,7 +557,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="T3kCfgRes.qrc">:/T3kCfgRes/Resources/PNG_ICON_DLG_WARNING.png</pixmap>
+         <pixmap resource="T3kCfgRes.qrc">:/T3kCfgRes/resources/PNG_ICON_DLG_WARNING.png</pixmap>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>

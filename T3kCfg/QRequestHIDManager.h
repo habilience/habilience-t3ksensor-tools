@@ -4,7 +4,7 @@
 #include <QList>
 #include <QString>
 #include <QObject>
-#include "../common/T3kHandle.h"
+#include "T3kHandle.h"
 #include <QMutex>
 
 class QRequestHIDManager : public QObject

@@ -2,7 +2,7 @@
 #define TABCALIBRATIONWIDGET_H
 
 #include "KeyDesignWidget.h"
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "SoftKey.h"
 
 #include <QWidget>

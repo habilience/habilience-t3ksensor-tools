@@ -22,7 +22,7 @@ TITLE_CAPTION_FIRMWARE = Firmware-informatie
 TEXT_DEVICE_NOT_CONNECTED = Apparaat is niet aangesloten.
 TEXT_FIRMWARE_DOWNLOAD = Firmware wordt gedownload.
 
-TITLE_CAPTION_LICENSE = Over
+TITLE_CAPTION_LICENSE = Licentie
 
 [SELECT DEVICE]
 WINDOW_CAPTION = Selecteer apparaat

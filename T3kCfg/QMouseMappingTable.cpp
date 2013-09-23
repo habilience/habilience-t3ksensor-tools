@@ -2,7 +2,7 @@
 
 #include "QMouseMappingTable.h"
 
-#include "../common/QKeyMapStr.h"
+#include "QKeyMapStr.h"
 #include "QT3kUserData.h"
 
 #include "T3kPacketDef.h"
@@ -208,7 +208,7 @@ void QMouseMappingTable::Init()
     m_pEditAction4WDWnd->setFont( font() );
     m_pEditAction4WDWnd->setModal( true );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 #define EXT_HMARGIN 19
@@ -564,25 +564,25 @@ void QMouseMappingTable::PainterDrawText(QPainter& dc, QRectF &rectangle, int fl
     }
 }
 
-void QMouseMappingTable::OnChangeLanguage()
+void QMouseMappingTable::onChangeLanguage()
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
-    GetAt( TABLE(COL_MOVE, 0) )->strText                        = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DRAG") );
-    GetAt( TABLE(COL_TAP, 0) )->strText                         = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_TAP") );
-    GetAt( TABLE(COL_DBLTAP, 0) )->strText                      = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DOUBLE_TAP") );
-    GetAt( TABLE(COL_LONGTAP, 0) )->strText                     = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_LONG_TAP") );
-    m_ciRotateHead.strText                                      = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_ROTATE") );
-    m_ciZoomHead.strText                                        = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_ZOOM") );
-    GetAt( TABLE(0, 1) )->strText				= Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_SINGLE") );
-    GetAt( TABLE(0, 2) )->strText				= Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_FINGERS") );
-    GetAt( TABLE(0, 3) )->strText				= Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PALM") );
-    GetAt( TABLE(0, 4) )->strText				= Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PUTNTAP") );
+    QLangRes& Res = QLangManager::instance()->getResource();
+    GetAt( TABLE(COL_MOVE, 0) )->strText                        = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DRAG") );
+    GetAt( TABLE(COL_TAP, 0) )->strText                         = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_TAP") );
+    GetAt( TABLE(COL_DBLTAP, 0) )->strText                      = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DOUBLE_TAP") );
+    GetAt( TABLE(COL_LONGTAP, 0) )->strText                     = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_LONG_TAP") );
+    m_ciRotateHead.strText                                      = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_ROTATE") );
+    m_ciZoomHead.strText                                        = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_ZOOM") );
+    GetAt( TABLE(0, 1) )->strText                               = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_SINGLE") );
+    GetAt( TABLE(0, 2) )->strText                               = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_FINGERS") );
+    GetAt( TABLE(0, 3) )->strText                               = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PALM") );
+    GetAt( TABLE(0, 4) )->strText                               = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PUTNTAP") );
 
-    m_strExtProperty[EXTP_INDIVIDUAL_PUTNTAP]			= Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP") );
-    m_strExtProperty[EXTP_INERTIAL_WHEEL]                       = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_INERTIAL_WHEEL") );
-    m_strExtProperty[EXTP_PUTAND_ON_MULTITOUCHDEVICE]           = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PUTAND_ON_MULTITOUCHDEVICE") );
-    m_strExtProperty[EXTP_MAC_OS_MARGIN]                        = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_MAC_OS_MARGIN") );
-    m_strExtProperty[EXTP_INVERT_WHEEL]                         = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_INVERT_WHEEL") );
+    m_strExtProperty[EXTP_INDIVIDUAL_PUTNTAP]                   = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP") );
+    m_strExtProperty[EXTP_INERTIAL_WHEEL]                       = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_INERTIAL_WHEEL") );
+    m_strExtProperty[EXTP_PUTAND_ON_MULTITOUCHDEVICE]           = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PUTAND_ON_MULTITOUCHDEVICE") );
+    m_strExtProperty[EXTP_MAC_OS_MARGIN]                        = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_MAC_OS_MARGIN") );
+    m_strExtProperty[EXTP_INVERT_WHEEL]                         = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_INVERT_WHEEL") );
     //m_strExtProperty[EXTP_ENABLE_DBLTAP]                      = _T("Enable Double-Tap");*/
 }
 

@@ -46,7 +46,7 @@ QLangRes::~QLangRes()
     }
 }
 
-bool QLangRes::SetRootPath( QString lpszPath )
+bool QLangRes::setRootPath( QString lpszPath )
 {
     Q_ASSERT( !m_strRootPath.size() );
 
@@ -56,12 +56,12 @@ bool QLangRes::SetRootPath( QString lpszPath )
     if( m_strRootPath.at( m_strRootPath.length() - 1 ) != '/' )
         m_strRootPath += '/';
 
-    CheckAllLanguageFiles( m_strRootPath );
+    checkAllLanguageFiles( m_strRootPath );
 
     return true;
 }
 
-bool QLangRes::Load( int nIndex )
+bool QLangRes::load( int nIndex )
 {
     bool bRet = false;
 
@@ -93,7 +93,7 @@ bool QLangRes::Load( int nIndex )
     return bRet;
 }
 
-QString QLangRes::GetResString( QString lpszSection, QString lpszItem )
+QString QLangRes::getResString( QString lpszSection, QString lpszItem )
 {
     QString str;
     if( m_pLanguageFile )
@@ -145,14 +145,14 @@ QString QLangRes::GetResString( QString lpszSection, QString lpszItem )
     return str;
 }
 
-bool QLangRes::IsR2L()
+bool QLangRes::isR2L()
 {
     return s_LocalizationDefs[m_nDefaultLanguage].bIsR2L;
 }
 
-bool QLangRes::SetLanguage( int nIndex )
+bool QLangRes::setLanguage( int nIndex )
 {
-    if( !VerifyLanguage(nIndex) )
+    if( !verifyLanguage(nIndex) )
         return false;
 
     m_bIsDefineLanguage = true;
@@ -166,7 +166,7 @@ bool QLangRes::SetLanguage( int nIndex )
     regLanguage.endGroup();
     }
 
-    if( !Load( nIndex ) )
+    if( !load( nIndex ) )
     {
         qDebug( "[CLangRes] Error - Cannot read language-file" );
         return false;
@@ -175,7 +175,7 @@ bool QLangRes::SetLanguage( int nIndex )
     return true;
 }
 
-bool QLangRes::VerifyLanguage( int nIndex )
+bool QLangRes::verifyLanguage( int nIndex )
 {
     int nDefCnt = sizeof(s_LocalizationDefs)/sizeof(LocalizationDefinition);
 
@@ -195,7 +195,7 @@ bool QLangRes::VerifyLanguage( int nIndex )
     return true;
 }
 
-int QLangRes::GetFirstAvailableLanguage()
+int QLangRes::getFirstAvailableLanguage()
 {
     Q_ASSERT( m_nAvailCheckPos < 0 );
 
@@ -212,7 +212,7 @@ int QLangRes::GetFirstAvailableLanguage()
     return -1;
 }
 
-int QLangRes::GetNextAvailableLanguage( int /*nPos*/ )
+int QLangRes::getNextAvailableLanguage()
 {
     Q_ASSERT( m_nAvailCheckPos >= 0 );
 
@@ -229,7 +229,7 @@ int QLangRes::GetNextAvailableLanguage( int /*nPos*/ )
     return -1;
 }
 
-QString QLangRes::GetLanguageName( int nPos )
+QString QLangRes::getLanguageName( int nPos )
 {
     int nDefCnt = sizeof(s_LocalizationDefs)/sizeof(LocalizationDefinition);
 
@@ -240,7 +240,7 @@ QString QLangRes::GetLanguageName( int nPos )
     return "";
 }
 
-void QLangRes::CheckAllLanguageFiles( QString strPath )
+void QLangRes::checkAllLanguageFiles( QString strPath )
 {
     QString strFullPathName;
     int nCnt = 0;
@@ -284,7 +284,7 @@ void QLangRes::CheckAllLanguageFiles( QString strPath )
 
     if( m_bIsDefineLanguage )
     {
-        if( !VerifyLanguage( m_nDefaultLanguage ) )
+        if( !verifyLanguage( m_nDefaultLanguage ) )
         {
             m_nDefaultLanguage = 0;
             m_bIsDefineLanguage = false;
@@ -293,7 +293,7 @@ void QLangRes::CheckAllLanguageFiles( QString strPath )
     else
         m_nLocalLanguage = 0;
 
-    Load( m_nDefaultLanguage );
+    load( m_nDefaultLanguage );
 
     {
     QSettings regLanguage( "Habilience", "T3kCfg" );

@@ -3,7 +3,7 @@
 
 #include "QT3kUserData.h"
 
-#include "../common/PacketStructure.h"
+#include "PacketStructure.h"
 
 #include <QScrollBar>
 #include <QTime>
@@ -19,7 +19,7 @@ QTabChat::QTabChat(QWidget *parent) :
     ui->EditInputMessage->setEnabled( false );
     ui->BtnSend->setEnabled( false );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 QTabChat::~QTabChat()
@@ -27,14 +27,14 @@ QTabChat::~QTabChat()
     delete ui;
 }
 
-void QTabChat::OnChangeLanguage()
+void QTabChat::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    ui->TitleChat->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TITLE_CHAT")) );
-    ui->BtnSend->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_SEND")) );
+    ui->TitleChat->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TITLE_CHAT")) );
+    ui->BtnSend->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_SEND")) );
 }
 
 void QTabChat::StartRemoteMode()
@@ -49,7 +49,7 @@ void QTabChat::EndRemoteMode()
     ui->EditInputMessage->setEnabled( false );
     ui->BtnSend->setEnabled( false );
 
-    QString strMsg( QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("MSG_CHAT_DISCONNECTED")) );
+    QString strMsg( QLangManager::instance()->getResource().getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("MSG_CHAT_DISCONNECTED")) );
     QTime curTime( QTime::currentTime() );
     QString str( "<p><font color=gray>*** %1 (%2h:%3m:%4s) ***</p>\r\n" );
     str = str.arg(strMsg).arg(curTime.hour(), 2).arg(curTime.minute(), 2).arg(curTime.second(), 2);

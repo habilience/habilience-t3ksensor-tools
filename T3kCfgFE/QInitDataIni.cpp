@@ -1,12 +1,13 @@
 #include "QInitDataIni.h"
+
 #include "QIni.h"
-#include <QCoreApplication>
-#include "../common/QUtils.h"
+#include "QUtils.h"
 
 #include "QBentCfgParam.h"
 #include "conf.h"
 #include <QDir>
 #include <QStandardPaths>
+#include <QCoreApplication>
 
 #define DTC_GRAPH_INIT_SHARP_WIDTH					(50)
 #define DTC_GRAPH_INIT_CRACK_THRESHOLD_ERROR		(0.6f)

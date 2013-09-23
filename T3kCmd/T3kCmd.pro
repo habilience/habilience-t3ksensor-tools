@@ -26,7 +26,7 @@ CONFIG(debug, debug|release):DEFINES += _DEBUG
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 #Library
-INCLUDEPATH += $$PWD/../external/T3kHIDLibrary/include \
+INCLUDEPATH += ../common/ $$PWD/../external/T3kHIDLibrary/include \
 
 DEPENDPATH += $$PWD/../external/T3kHIDLibrary/include \
 
@@ -164,4 +164,10 @@ HEADERS += \
     QExFuncThread.h
 
 
-win32:RC_FILE = ./resources/T3kCmd.rc
+win32:RC_FILE = T3kCmd.rc
+
+RESOURCES += \
+    T3kCmd.qrc
+
+OTHER_FILES += \
+    T3kCmd.rc

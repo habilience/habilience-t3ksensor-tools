@@ -2,7 +2,7 @@
 #include "ui_QSelectSensorWidget.h"
 
 #include "QWidgetCloseEventManager.h"
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 #include "T3kCfgWnd.h"
 #include "QT3kUserData.h"
 
@@ -26,7 +26,7 @@ QSelectSensorWidget::QSelectSensorWidget(QWidget *parent) :
     m_nDeviceCount = 0;
     m_nTimerCheckDevice = 0;
 
-    ui->TitleSelectSensor->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_HABILIENCE.png" );
+    ui->TitleSelectSensor->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_HABILIENCE.png" );
 
     m_pT3kHandle = new T3kHandle();
 
@@ -42,7 +42,7 @@ QSelectSensorWidget::QSelectSensorWidget(QWidget *parent) :
     ui->TableSensor->setFocusPolicy( Qt::ClickFocus );
     ui->TableSensor->setAlternatingRowColors( true );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 QSelectSensorWidget::~QSelectSensorWidget()
@@ -164,7 +164,7 @@ void QSelectSensorWidget::showEvent(QShowEvent *evt)
 
     if( m_nDeviceCount <= 0 )
     {
-        QWidgetCloseEventManager::GetPtr()->AddClosedWidget( this, 1000 );
+        QWidgetCloseEventManager::instance()->AddClosedWidget( this, 1000 );
         accept();
         QDialog::showEvent(evt);
         return;
@@ -176,7 +176,7 @@ void QSelectSensorWidget::showEvent(QShowEvent *evt)
             ModelID stID = m_mapDevModelID.value( 0 );
             if( m_pT3kHandle->OpenWithVIDPID( stID.VID, stID.PID, 1, stID.Idx ) )
                 QT3kUserData::GetInstance()->SetModel( stID.PID );
-            QWidgetCloseEventManager::GetPtr()->AddClosedWidget( this, 1000 );
+            QWidgetCloseEventManager::instance()->AddClosedWidget( this, 1000 );
             accept();
             QDialog::showEvent(evt);
             return;
@@ -222,21 +222,21 @@ void QSelectSensorWidget::timerEvent(QTimerEvent *evt)
     QDialog::timerEvent(evt);
 }
 
-void QSelectSensorWidget::OnChangeLanguage()
+void QSelectSensorWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    setWindowTitle( Res.GetResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("WINDOW_CAPTION")) );
+    setWindowTitle( Res.getResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("WINDOW_CAPTION")) );
 
-    ui->BtnOpen->setText( Res.GetResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("BTN_CAPTION_SELECT")) );
-    ui->TitleSelectSensor->setText( Res.GetResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("TITLE_CAPTION_DEVICE_LIST")) );
+    ui->BtnOpen->setText( Res.getResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("BTN_CAPTION_SELECT")) );
+    ui->TitleSelectSensor->setText( Res.getResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("TITLE_CAPTION_DEVICE_LIST")) );
 
-    ui->TableSensor->horizontalHeaderItem( 0 )->setText( Res.GetResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("TEXT_NUMBER")) );
-    ui->TableSensor->horizontalHeaderItem( 1 )->setText( Res.GetResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("TEXT_MODEL")) );
-    ui->TableSensor->horizontalHeaderItem( 2 )->setText( Res.GetResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("TEXT_DEV_PATH")) );
-    ui->TableSensor->horizontalHeaderItem( 3 )->setText( Res.GetResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("BTN_CAPTION_PLAY_BUZZER")) );
+    ui->TableSensor->horizontalHeaderItem( 0 )->setText( Res.getResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("TEXT_NUMBER")) );
+    ui->TableSensor->horizontalHeaderItem( 1 )->setText( Res.getResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("TEXT_MODEL")) );
+    ui->TableSensor->horizontalHeaderItem( 2 )->setText( Res.getResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("TEXT_DEV_PATH")) );
+    ui->TableSensor->horizontalHeaderItem( 3 )->setText( Res.getResString(QString::fromUtf8("SELECT DEVICE"), QString::fromUtf8("BTN_CAPTION_PLAY_BUZZER")) );
 }
 
 void QSelectSensorWidget::AddSensorItem( QString strModel, QString strDevPath )
@@ -259,7 +259,7 @@ void QSelectSensorWidget::AddSensorItem( QString strModel, QString strDevPath )
     btnSound->setAutoRaise( true );
     btnSound->setCheckable( true );
     btnSound->setAttribute( Qt::WA_DeleteOnClose );
-    btnSound->setIcon( QIcon(":/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png") );
+    btnSound->setIcon( QIcon(":/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png") );
     connect( btnSound, SIGNAL(Clicked_Signal(bool,int)), this, SLOT(on_TableButton_PlaySound(bool,int)) );
     ui->TableSensor->setCellWidget( nRowIndex, 3, btnSound );
 }

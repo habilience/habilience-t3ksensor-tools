@@ -4,7 +4,7 @@
 //#include "underlinetitlestatic.h"
 //#include "borderstyleedit.h"
 
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 
 #include <QWidget>
 

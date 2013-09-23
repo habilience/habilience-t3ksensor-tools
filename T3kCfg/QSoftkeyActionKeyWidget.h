@@ -3,7 +3,7 @@
 
 #include <QLabel>
 #include "QKeyEditWidget.h"
-#include "QHoverComboBox.h"
+#include "ui/QHoverComboBox.h"
 #include "QLangManager.h"
 
 #define QICON_COUNT         5
@@ -11,7 +11,7 @@
 
 enum PartInputMode { PIM_KEY, PIM_FUNC, PIM_MOUSE };
 
-class QSoftkeyActionKeyWidget : public QLabel, public QLangManager::LangChangeNotify
+class QSoftkeyActionKeyWidget : public QLabel, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 public:
@@ -36,7 +36,7 @@ public:
 protected:
     void Init();
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
     virtual void paintEvent(QPaintEvent *evt);
     virtual void mousePressEvent(QMouseEvent *ev);

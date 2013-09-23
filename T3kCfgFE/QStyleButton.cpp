@@ -7,7 +7,7 @@
 #include <QSettings>
 #include <QMouseEvent>
 
-#include "../common/QUtils.h"
+#include "QUtils.h"
 
 #define BORDER_ROUND        (3)
 

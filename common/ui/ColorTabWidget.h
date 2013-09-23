@@ -11,6 +11,8 @@ public:
     explicit QColorTabWidget(QWidget *parent = 0);
     virtual ~QColorTabWidget();
 
+    void blinkTab(int index);
+
 protected:
     QColorTabBar*        m_pTabBar;
 

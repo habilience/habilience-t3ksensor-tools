@@ -7,7 +7,7 @@
 #include <QMouseEvent>
 #include <QSettings>
 #include "QT3kDevice.h"
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 #include "t3kcomdef.h"
 #include "dialog.h"
 

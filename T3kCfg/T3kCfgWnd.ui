@@ -445,7 +445,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="T3kCfgRes.qrc">
-    <normaloff>:/T3kCfgRes/Resources/T3kCfg.ico</normaloff>:/T3kCfgRes/Resources/T3kCfg.ico</iconset>
+    <normaloff>:/T3kCfgRes/resources/T3kCfg.ico</normaloff>:/T3kCfgRes/resources/T3kCfg.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="horizontalLayoutWidget">
@@ -935,15 +935,15 @@
      <item>
       <widget class="QIconToolButton" name="BtnLogo">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="minimumSize">
         <size>
-         <width>210</width>
-         <height>34</height>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -1034,10 +1034,26 @@
      </item>
     </layout>
    </widget>
+   <widget class="QSlidingStackedWidget" name="SWMenu">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>50</y>
+      <width>620</width>
+      <height>330</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>QSlidingStackedWidget</class>
+   <extends>QStackedWidget</extends>
+   <header>ui/SlidingStackedWidget.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>QFlatTextButton</class>
    <extends>QPushButton</extends>

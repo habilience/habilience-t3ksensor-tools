@@ -1,7 +1,7 @@
 #include "TabPanelWidget.h"
 #include "ui_TabPanelWidget.h"
 
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 
 #include "T3kCommonData.h"
 #include "T3kSoftlogicDlg.h"

@@ -2,7 +2,7 @@
 #define QMAINMENUWIDGET_H
 
 #include <QWidget>
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 
@@ -12,7 +12,7 @@ namespace Ui {
     class QMainMenuWidget;
 }
 
-class QMainMenuWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QMainMenuWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -29,7 +29,7 @@ protected:
     virtual void hideEvent(QHideEvent *evt);
     virtual void closeEvent(QCloseEvent *evt);
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
     virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
     virtual void OnRSE(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);

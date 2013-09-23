@@ -2,14 +2,14 @@
 #define QWARNINGWIDGET_H
 
 #include <QDialog>
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 namespace Ui {
     class QWarningWidget;
 }
 
-class QWarningWidget : public QDialog, public QLangManager::LangChangeNotify
+class QWarningWidget : public QDialog, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -22,7 +22,7 @@ public:
 
 protected:
     virtual void paintEvent(QPaintEvent *);
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
 private:
     Ui::QWarningWidget *ui;

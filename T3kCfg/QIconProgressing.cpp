@@ -18,7 +18,7 @@ QIconProgressing::QIconProgressing(QWidget *parent) :
     m_nCurrentImageIndex = 0;
     m_nImageCount = 0;
 
-    QPixmap* pIconArray = new QPixmap( ":/T3kCfgRes/Resources/PNG_ICON_PROGRESS.png", "PNG" );
+    QPixmap* pIconArray = new QPixmap( ":/T3kCfgRes/resources/PNG_ICON_PROGRESS.png", "PNG" );
 
     int nC = pIconArray->width()/ICON_WIDTH;
     int nR = pIconArray->height()/ICON_HEIGHT;

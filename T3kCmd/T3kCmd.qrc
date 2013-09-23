@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/T3kCmdRes">
+        <file>resources/T3kCmd.ico</file>
+        <file>resources/T3kCmd.png</file>
+        <file>resources/license.txt</file>
+    </qresource>
+</RCC>

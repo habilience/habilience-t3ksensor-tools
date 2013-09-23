@@ -15,3 +15,8 @@ QColorTabWidget::~QColorTabWidget()
         m_pTabBar = NULL;
     }
 }
+
+void QColorTabWidget::blinkTab(int index)
+{
+    m_pTabBar->BlinkTab( index );
+}

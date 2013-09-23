@@ -4,7 +4,7 @@
 #include <QPainter>
 #include <QCloseEvent>
 
-#include "../common/QUtils.h"
+#include "QUtils.h"
 #include "QT3kDevice.h"
 #include "QShowMessageBox.h"
 #include "QLogSystem.h"
@@ -20,7 +20,7 @@
 #include "AppData.h"
 #include <QtNumeric>
 #include "t3kcomdef.h"
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 #include "QSensorInitDataCfg.h"
 
 #include "QBentProgressDialog.h"

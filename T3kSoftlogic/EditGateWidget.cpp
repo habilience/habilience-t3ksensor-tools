@@ -3,7 +3,7 @@
 
 //#include "LogicDesignerWnd.h"
 #include "T3kCommonData.h"
-#include "../common/QKeyMapStr.h"
+#include "QKeyMapStr.h"
 
 #include <QSettings>
 #include <QPainter>

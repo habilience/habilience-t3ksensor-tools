@@ -2,7 +2,7 @@
 #define QSIDEVIEWWIDGET_H
 
 #include <QDialog>
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 #include <QImage>
@@ -11,7 +11,7 @@ namespace Ui {
     class QSideviewWidget;
 }
 
-class QSideviewWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QSideviewWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -28,7 +28,7 @@ protected:
 
     // QLangManager::LangChangeNotify
 protected:
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
 protected:
     virtual void OnRSP(ResponsePart Part, ushort, const char *, long, bool, const char *sCmd);

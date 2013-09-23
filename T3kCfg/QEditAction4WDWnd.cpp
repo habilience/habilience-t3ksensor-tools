@@ -2,10 +2,10 @@
 #include "ui_QEditAction4WDWnd.h"
 
 #include "stdInclude.h"
-#include "../common/T3kHandle.h"
+#include "T3kHandle.h"
 #include "QMouseMappingTable.h"
 
-#include "../common/QKeyMapStr.h"
+#include "QKeyMapStr.h"
 #include "Common/nv.h"
 
 #include "T3kPacketDef.h"
@@ -51,24 +51,24 @@ QEditAction4WDWnd::~QEditAction4WDWnd()
     delete ui;
 }
 
-void QEditAction4WDWnd::OnChangeLanguage()
+void QEditAction4WDWnd::onChangeLanguage()
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    setWindowTitle( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TITLE_CAPTION_EDIT_PROFILE_ITEM") ) );
-    ui->TitleProfileItem->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM") ) );
-    ui->TitleAction->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_ACTION") ) );
-    ui->GBUserDefKey->setTitle( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_USER_DEFINE_KEY") ) );
-    ui->LBKey->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_KEY") ) );
-    ui->BtnApply->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("BTN_CAPTION_APPLY") ) );
-    ui->BtnCancel->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("BTN_CAPTION_CANCEL") ) );
+    setWindowTitle( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TITLE_CAPTION_EDIT_PROFILE_ITEM") ) );
+    ui->TitleProfileItem->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM") ) );
+    ui->TitleAction->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_ACTION") ) );
+    ui->GBUserDefKey->setTitle( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_USER_DEFINE_KEY") ) );
+    ui->LBKey->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_KEY") ) );
+    ui->BtnApply->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("BTN_CAPTION_APPLY") ) );
+    ui->BtnCancel->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("BTN_CAPTION_CANCEL") ) );
 
     SetPredefineProfileTypes( *ui->CBActionLeft );
     SetPredefineProfileTypes( *ui->CBActionRight, true );
     SetPredefineProfileTypes( *ui->CBActionUp );
     SetPredefineProfileTypes( *ui->CBActionDown, true );
 
-    if( Res.IsR2L() )
+    if( Res.isR2L() )
         ui->EditProfileItem->setAlignment( Qt::AlignRight );
     else
         ui->EditProfileItem->setAlignment( Qt::AlignLeft );
@@ -78,26 +78,26 @@ void QEditAction4WDWnd::OnChangeLanguage()
 
 void QEditAction4WDWnd::Init()
 {
-    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD.png" );
+    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD.png" );
     m_bLinkLock = false;
 
-    ui->ChkLinkHorz->setIcon( QIcon(":/T3kCfgRes/Resources/PNG_ICON_LINK_HORZ.png") );
-    ui->ChkLinkVert->setIcon( QIcon(":/T3kCfgRes/Resources/PNG_ICON_LINK_VERT.png") );
+    ui->ChkLinkHorz->setIcon( QIcon(":/T3kCfgRes/resources/PNG_ICON_LINK_HORZ.png") );
+    ui->ChkLinkVert->setIcon( QIcon(":/T3kCfgRes/resources/PNG_ICON_LINK_VERT.png") );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 void QEditAction4WDWnd::SetPredefineProfileTypes( QComboBox& pWndComboAction, bool bAlter/*=false*/ )
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     pWndComboAction.clear();
 
-    pWndComboAction.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DISABLED") ) );
+    pWndComboAction.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DISABLED") ) );
     pWndComboAction.setItemData( pWndComboAction.count()-1, 0x0000 );
-    pWndComboAction.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ) );
+    pWndComboAction.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ) );
     pWndComboAction.setItemData( pWndComboAction.count()-1, 0xFFFF );
-    pWndComboAction.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FUNCTION_KEY") ) );
+    pWndComboAction.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FUNCTION_KEY") ) );
     pWndComboAction.setItemData( pWndComboAction.count()-1, 0xFFFF );
 
     pWndComboAction.addItem( "Left Drag" );
@@ -113,23 +113,23 @@ void QEditAction4WDWnd::SetPredefineProfileTypes( QComboBox& pWndComboAction, bo
 
     if( !bAlter )
     {
-        pWndComboAction.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FORWARD") ) );
+        pWndComboAction.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FORWARD") ) );
         pWndComboAction.setItemData( pWndComboAction.count()-1, 0x044F );
-        pWndComboAction.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_BACK") ) );
+        pWndComboAction.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_BACK") ) );
         pWndComboAction.setItemData( pWndComboAction.count()-1, 0x0450 );
     }
     else
     {
-        pWndComboAction.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_BACK") ) );
+        pWndComboAction.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_BACK") ) );
         pWndComboAction.setItemData( pWndComboAction.count()-1, 0x0450 );
-        pWndComboAction.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FORWARD") ) );
+        pWndComboAction.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FORWARD") ) );
         pWndComboAction.setItemData( pWndComboAction.count()-1, 0x044F );
     }
 }
 
 void QEditAction4WDWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wKeyValue1, ushort wKeyValue2, ushort wKeyValue3, ushort wKeyValue4 )
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     SetPredefineProfileTypes( *ui->CBActionLeft );
     SetPredefineProfileTypes( *ui->CBActionRight, true );
@@ -147,10 +147,10 @@ void QEditAction4WDWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wK
     switch( cKey )
     {
     case MM_GESTURE_FINGERS_MOVE:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_FINGERS") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DRAG") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_FINGERS") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DRAG") );
         break;
     case MM_GESTURE_PALM_MOVE:
-        strLoc = Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PALM") ) + (Res.IsR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.GetResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DRAG") );
+        strLoc = Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_PALM") ) + (Res.isR2L() ? QString::fromUtf8(" < ") : QString::fromUtf8(" > ")) + Res.getResString( QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TEXT_DRAG") );
         break;
     default:
         strLoc = "Unknown";
@@ -180,9 +180,9 @@ void QEditAction4WDWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wK
         {
             ui->ChkLinkHorz->setChecked( true );
             if( ui->ChkLinkVert->isChecked() )
-                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_ALL.png" );
+                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_ALL.png" );
             else
-                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_LR.png" );
+                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_LR.png" );
         }
 
         nSel = ui->CBActionUp->currentIndex();
@@ -192,14 +192,14 @@ void QEditAction4WDWnd::SetProfileInfo( int nProfileIndex, uchar cKey, ushort wK
         {
             ui->ChkLinkVert->setChecked( true );
             if( ui->ChkLinkHorz->isChecked() )
-                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_ALL.png" );
+                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_ALL.png" );
             else
-                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_UD.png" );
+                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_UD.png" );
         }
     }
     else
     {
-        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_LOCK.png" );
+        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_LOCK.png" );
     }
 }
 
@@ -290,7 +290,7 @@ void QEditAction4WDWnd::SetEditMode( EditMode Mode, ushort wKeyValue )
         Mode = ModeNone;
     }
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     switch( Mode )
     {
@@ -307,7 +307,7 @@ void QEditAction4WDWnd::SetEditMode( EditMode Mode, ushort wKeyValue )
         else
             ui->LBUserDefKey->SetKeyValue( wKeyValue );
 
-        ui->GBUserDefKey->setTitle( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_USER_DEFINE_KEY") ) );
+        ui->GBUserDefKey->setTitle( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_USER_DEFINE_KEY") ) );
         ui->GBUserDefKey->show();
         ui->LBKey->show();
         ui->LBUserDefKey->SetUseFuncKey( false );
@@ -318,7 +318,7 @@ void QEditAction4WDWnd::SetEditMode( EditMode Mode, ushort wKeyValue )
         ui->LBUserDefKey->hide();
         ui->LBUserDefKey->SetUseFuncKey( true );
         ui->LBUserDefKey->show();
-        ui->GBUserDefKey->setTitle( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_FUNCTION_KEY") ) );
+        ui->GBUserDefKey->setTitle( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_FUNCTION_KEY") ) );
         ui->GBUserDefKey->show();
         ui->LBKey->show();
 
@@ -350,7 +350,7 @@ void QEditAction4WDWnd::on_CBActionLeft_currentIndexChanged(int /*index*/)
     if( (nSel > 2) && (nSel < 6) )
         bLinkLock = true;
 
-    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD.png" );
+    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD.png" );
 
     if( !bLinkLock )
     {
@@ -368,9 +368,9 @@ void QEditAction4WDWnd::on_CBActionLeft_currentIndexChanged(int /*index*/)
         {
             ui->ChkLinkHorz->setChecked( true );
             if( ui->ChkLinkVert->isChecked() )
-                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_ALL.png" );
+                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_ALL.png" );
             else
-                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_LR.png" );
+                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_LR.png" );
         }
         else
         {
@@ -381,7 +381,7 @@ void QEditAction4WDWnd::on_CBActionLeft_currentIndexChanged(int /*index*/)
                 OnCbnSelchangeComboAction( ui->CBActionRight );
 
                 if( ui->ChkLinkVert->isChecked() )
-                    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_UD.png" );
+                    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_UD.png" );
             }
         }
     }
@@ -389,7 +389,7 @@ void QEditAction4WDWnd::on_CBActionLeft_currentIndexChanged(int /*index*/)
     {
         ui->ChkLinkHorz->setChecked( false );
         ui->ChkLinkVert->setChecked( false );
-        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_LOCK.png" );
+        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_LOCK.png" );
     }
 
     if( !bLinkLock )
@@ -426,7 +426,7 @@ void QEditAction4WDWnd::on_CBActionRight_currentIndexChanged(int /*index*/)
     if( (nSel > 2) && (nSel < 6) )
         bLinkLock = true;
 
-    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD.png" );
+    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD.png" );
 
     if( !bLinkLock )
     {
@@ -444,9 +444,9 @@ void QEditAction4WDWnd::on_CBActionRight_currentIndexChanged(int /*index*/)
         {
             ui->ChkLinkHorz->setChecked( true );
             if( ui->ChkLinkVert->isChecked() )
-                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_ALL.png" );
+                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_ALL.png" );
             else
-                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_LR.png" );
+                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_LR.png" );
         }
         else
         {
@@ -457,7 +457,7 @@ void QEditAction4WDWnd::on_CBActionRight_currentIndexChanged(int /*index*/)
                 OnCbnSelchangeComboAction( ui->CBActionRight );
 
                 if( ui->ChkLinkVert->isChecked() )
-                    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_UD.png" );
+                    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_UD.png" );
             }
         }
     }
@@ -465,7 +465,7 @@ void QEditAction4WDWnd::on_CBActionRight_currentIndexChanged(int /*index*/)
     {
         ui->ChkLinkHorz->setChecked( false );
         ui->ChkLinkVert->setChecked( false );
-        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_LOCK.png" );
+        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_LOCK.png" );
     }
 
     if( !bLinkLock )
@@ -502,7 +502,7 @@ void QEditAction4WDWnd::on_CBActionUp_currentIndexChanged(int /*index*/)
     if( (nSel > 2) && (nSel < 6) )
         bLinkLock = true;
 
-    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD.png" );
+    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD.png" );
 
     if( !bLinkLock )
     {
@@ -520,9 +520,9 @@ void QEditAction4WDWnd::on_CBActionUp_currentIndexChanged(int /*index*/)
         {
             ui->ChkLinkVert->setChecked( true );
             if( ui->ChkLinkHorz->isChecked() )
-                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_ALL.png" );
+                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_ALL.png" );
             else
-                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_UD.png" );
+                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_UD.png" );
         }
         else
         {
@@ -532,7 +532,7 @@ void QEditAction4WDWnd::on_CBActionUp_currentIndexChanged(int /*index*/)
                 ui->CBActionDown->setCurrentIndex( 0 );
                 OnCbnSelchangeComboAction( ui->CBActionDown );
                 if( ui->ChkLinkHorz->isChecked() )
-                    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_LR.png" );
+                    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_LR.png" );
             }
         }
     }
@@ -540,7 +540,7 @@ void QEditAction4WDWnd::on_CBActionUp_currentIndexChanged(int /*index*/)
     {
         ui->ChkLinkHorz->setChecked( false );
         ui->ChkLinkVert->setChecked( false );
-        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_LOCK.png" );
+        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_LOCK.png" );
     }
 
     if( !bLinkLock )
@@ -577,7 +577,7 @@ void QEditAction4WDWnd::on_CBActionDown_currentIndexChanged(int /*index*/)
     if( (nSel > 2) && (nSel < 6) )
         bLinkLock = true;
 
-    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD.png" );
+    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD.png" );
 
     if( !bLinkLock )
     {
@@ -595,9 +595,9 @@ void QEditAction4WDWnd::on_CBActionDown_currentIndexChanged(int /*index*/)
         {
             ui->ChkLinkVert->setChecked( true );
             if( ui->ChkLinkHorz->isChecked() )
-                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_ALL.png" );
+                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_ALL.png" );
             else
-                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_UD.png" );
+                ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_UD.png" );
         }
         else
         {
@@ -608,7 +608,7 @@ void QEditAction4WDWnd::on_CBActionDown_currentIndexChanged(int /*index*/)
                 OnCbnSelchangeComboAction( ui->CBActionUp );
 
                 if( ui->ChkLinkHorz->isChecked() )
-                    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_LR.png" );
+                    ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_LR.png" );
             }
         }
     }
@@ -616,7 +616,7 @@ void QEditAction4WDWnd::on_CBActionDown_currentIndexChanged(int /*index*/)
     {
         ui->ChkLinkHorz->setChecked( false );
         ui->ChkLinkVert->setChecked( false );
-        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_LOCK.png" );
+        ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_LOCK.png" );
     }
 
     if( !bLinkLock )
@@ -648,7 +648,7 @@ void QEditAction4WDWnd::on_CBActionDown_currentIndexChanged(int /*index*/)
 
 void QEditAction4WDWnd::OnCbnSelchangeComboAction( QComboBox* pWndComboAction )
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     int nSel = pWndComboAction->currentIndex();
     if( nSel < 0 ) return;
@@ -683,7 +683,7 @@ void QEditAction4WDWnd::OnCbnSelchangeComboAction( QComboBox* pWndComboAction )
 
     if( wKeyValue == 0xFFFF )
     {
-        pLabel->setText( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_NOT_DEFINED") ) );
+        pLabel->setText( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_NOT_DEFINED") ) );
         return;
     }
 
@@ -915,16 +915,16 @@ void QEditAction4WDWnd::on_ChkLinkVert_toggled(bool checked)
     if( checked )
     {
         if( ui->ChkLinkHorz->isChecked() )
-            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_LR.png" );
+            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_LR.png" );
         else
-            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD.png" );
+            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD.png" );
     }
     else
     {
         if( ui->ChkLinkHorz->isChecked() )
-            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_ALL.png" );
+            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_ALL.png" );
         else
-            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_UD.png" );
+            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_UD.png" );
     }
 }
 
@@ -933,16 +933,16 @@ void QEditAction4WDWnd::on_ChkLinkHorz_toggled(bool checked)
     if( checked )
     {
         if( ui->ChkLinkVert->isChecked() )
-            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_UD.png" );
+            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_UD.png" );
         else
-            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD.png" );
+            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD.png" );
     }
     else
     {
         if( ui->ChkLinkVert->isChecked() )
-            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_ALL.png" );
+            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_ALL.png" );
         else
-            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_4WD_LINK_LR.png" );
+            ui->LinkIconWidget->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_4WD_LINK_LR.png" );
     }
 }
 

@@ -3,7 +3,7 @@
 #include <QCoreApplication>
 #include <QDesktopWidget>
 
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 
 #ifdef Q_OS_WIN
 #include <windows.h>

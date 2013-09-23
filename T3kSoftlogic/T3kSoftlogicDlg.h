@@ -1,7 +1,7 @@
 #ifndef T3KSOFTLOGICDLG_H
 #define T3KSOFTLOGICDLG_H
 
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "T3kCommonData.h"
 
 #include "TabPanelWidget.h"
@@ -124,6 +124,7 @@ private slots:
     void onDoAssociateFileExt();
     void onDoRemoveFileExtAssociation();
     void onInvertDrawing(bool bInvert);
+    void on_toolButton_clicked();
 };
 
 #endif // T3KSOFTLOGICDLG_H

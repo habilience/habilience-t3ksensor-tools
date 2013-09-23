@@ -3,14 +3,14 @@
 
 #include <QDialog>
 
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 namespace Ui {
     class QTabSensorStatus;
 }
 
-class QTabSensorStatus : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QTabSensorStatus : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -19,7 +19,9 @@ public:
     ~QTabSensorStatus();
 
 protected:
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
+
+    virtual void keyPressEvent(QKeyEvent *);
 
 private:
     Ui::QTabSensorStatus *ui;

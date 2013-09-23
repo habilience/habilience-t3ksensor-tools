@@ -41,8 +41,8 @@ void QEnterFileNameDialog::onChangeLanguage()
 
     ui->lblFileName->setText( res.getResString( RES_TAG, "TEXT_FILENAME") );
     ui->txtEditFileName->setText( "" );
-    ui->btnOK->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_OK") );
-    ui->btnCancel->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_CANCEL") );
+    ui->btnOK->setText( res.getResString( "MESSAGEBOX", "BTN_CAPTION_OK") );
+    ui->btnCancel->setText( res.getResString( "MESSAGEBOX", "BTN_CAPTION_CANCEL") );
 
     if (s_bIsR2L != bIsR2L)
     {

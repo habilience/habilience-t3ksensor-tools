@@ -4,7 +4,7 @@
 #include <QFile>
 #include <QDir>
 
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 
 
 QCustomDefaultSensor* QCustomDefaultSensor::s_pInstance = NULL;
@@ -42,7 +42,7 @@ bool QCustomDefaultSensor::Reload()
     m_bLoaded = false;
     m_vCommandStr.clear();
 
-    QString strFilePath = QApplication::applicationDirPath() + "/Config/";
+    QString strFilePath = QApplication::applicationDirPath() + "/config/";
     QDir dirResStateReport( strFilePath );
     QStringList strUsableExtensionList;
     strUsableExtensionList << "*.cfg";

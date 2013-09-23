@@ -107,6 +107,26 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QToolButton" name="btnLicense">
+       <property name="minimumSize">
+        <size>
+         <width>23</width>
+         <height>23</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="T3kCfgFE.qrc">
+         <normaloff>:/T3kCfgFERes/resources/PNG_QUESTION_MAKR.png</normaloff>:/T3kCfgFERes/resources/PNG_QUESTION_MAKR.png</iconset>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -451,6 +471,8 @@ Window...</string>
    <header>QStyleButton.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="T3kCfgFE.qrc"/>
+ </resources>
  <connections/>
 </ui>

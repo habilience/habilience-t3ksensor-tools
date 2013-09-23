@@ -1,8 +1,8 @@
-#include "QLangRes.h"
+#include "QZLangRes.h"
 #include <QDir>
 #include <QApplication>
 #include <QFile>
-#include "../common/QUtils.h"
+#include "QUtils.h"
 #include "LocalizeDef.h"
 #include <QSettings>
 

@@ -901,7 +901,7 @@
    </property>
    <property name="icon">
     <iconset resource="T3kCfgRes.qrc">
-     <normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</iconset>
+     <normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</iconset>
    </property>
    <property name="checkable">
     <bool>false</bool>
@@ -951,7 +951,7 @@
    </property>
    <property name="icon">
     <iconset resource="T3kCfgRes.qrc">
-     <normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</iconset>
+     <normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</iconset>
    </property>
    <property name="autoRaise">
     <bool>true</bool>
@@ -986,7 +986,7 @@
    </property>
    <property name="icon">
     <iconset resource="T3kCfgRes.qrc">
-     <normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</iconset>
+     <normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</iconset>
    </property>
    <property name="checkable">
     <bool>false</bool>
@@ -1036,7 +1036,7 @@
    </property>
    <property name="icon">
     <iconset resource="T3kCfgRes.qrc">
-     <normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</iconset>
+     <normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</iconset>
    </property>
    <property name="popupMode">
     <enum>QToolButton::DelayedPopup</enum>
@@ -1157,7 +1157,7 @@
    </property>
    <property name="icon">
     <iconset resource="T3kCfgRes.qrc">
-     <normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</iconset>
+     <normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</iconset>
    </property>
    <property name="checkable">
     <bool>false</bool>
@@ -1221,7 +1221,7 @@
       </property>
       <property name="icon">
        <iconset resource="T3kCfgRes.qrc">
-        <normaloff>:/T3kCfgRes/Resources/PNG_ICON_SETTING.png</normaloff>:/T3kCfgRes/Resources/PNG_ICON_SETTING.png</iconset>
+        <normaloff>:/T3kCfgRes/resources/PNG_ICON_SETTING.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_SETTING.png</iconset>
       </property>
       <property name="shortcut">
        <string/>
@@ -1454,6 +1454,9 @@
       </item>
       <item>
        <widget class="QComboBox" name="CBLTouchKeyPresses">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -1536,6 +1539,9 @@
       </item>
       <item>
        <widget class="QComboBox" name="CBLCalibrationKeyPresses">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -1776,7 +1782,7 @@
       </property>
       <property name="icon">
        <iconset resource="T3kCfgRes.qrc">
-        <normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</iconset>
+        <normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</iconset>
       </property>
       <property name="autoRaise">
        <bool>true</bool>
@@ -1894,7 +1900,7 @@
         </property>
         <property name="icon">
          <iconset resource="T3kCfgRes.qrc">
-          <normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/Resources/PNG_ICON_PLAY_BUZZER.png</iconset>
+          <normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_PLAY_BUZZER.png</iconset>
         </property>
         <property name="checkable">
          <bool>false</bool>
@@ -1936,15 +1942,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QUnderlineLabel</class>
-   <extends>QLabel</extends>
-   <header>../common/ui/QUnderlineLabel.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>QFlatTextButton</class>
    <extends>QPushButton</extends>
    <header>QFlatTextButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QUnderlineLabel</class>
+   <extends>QLabel</extends>
+   <header>ui/UnderlineLabel.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -1,6 +1,6 @@
 #include "QColorTabWidget.h"
 #include <QPainter>
-#include "../common/QUtils.h"
+#include "QUtils.h"
 #include <QEvent>
 #include <QMouseEvent>
 #include <QResizeEvent>

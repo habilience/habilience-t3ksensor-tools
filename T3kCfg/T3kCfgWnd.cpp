@@ -9,19 +9,17 @@
 #include "QSoftKeySettingWidget.h"
 #include "QMenuStripWidget.h"
 
-#include "QRDisableScreenWidget.h"
-
 #include "QProfileLabel.h"
 
 #include "QSelectSensorWidget.h"
-#include "QLicenseWidget.h"
+#include "ui/QLicenseWidget.h"
 #include "QT3kUserData.h"
 
 #include "QWidgetCloseEventManager.h"
 
 #include "Common/nv.h"
-#include "../common/T3k_ver.h"
-#include "../common/QUtils.h"
+#include "T3k_ver.h"
+#include "QUtils.h"
 
 #include <QMenu>
 #include <QSettings>
@@ -36,6 +34,7 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QGraphicsOpacityEffect>
+#include <QDir>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -45,7 +44,7 @@
 
 extern bool g_bIsScreenShotMode;
 
-#define CUSTOM_CONFIG_FILENAME  "Config.ini"
+#define CUSTOM_CONFIG_FILENAME  "config.ini"
 
 T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     QMainWindow(parent),
@@ -65,22 +64,12 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 
     setFixedSize( width(), height() );
 
-#ifdef HITACHI_VER
-    ui->BtnLogo->ChangeIcon( ":/T3kCfgRes/Resources/PNG_HABILIENCE_LOGO.png" );
-#else
-    ui->BtnLogo->ChangeIcon( ":/T3kCfgRes/Resources/PNG_HABILIENCE_LOGO.png" );
-#endif
-
+    ui->BtnLogo->ChangeIcon( ":/T3kCfgRes/resources/PNG_QUESTION_MAKR.png" );
     m_strTitle = QString::fromLocal8Bit("T3k Series Configurator");
-    m_strCompanyUrl = "http://www.habilience.com";
+    setWindowTitle( m_strTitle + " Ver " + QCoreApplication::applicationVersion() );
 
     m_pT3kHandle = NULL;
     m_nProfileIndex = -1;
-    m_nCurrentMenu = 0;
-
-    m_bAnimation = false;
-    m_pCurrObj = NULL;
-    m_pNextObj = NULL;
 
     m_pTrayIcon = NULL;
     m_pTrayMenu = NULL;
@@ -94,8 +83,6 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     m_nTimerChkTrayDoubleClk = 0;
 
     m_nTimerChkHIDCom = 0;
-
-    m_eFlatMenuStatus = MenuHome;
 
     m_bSoftkey = false;
 
@@ -191,6 +178,7 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     connect( m_pSoftkeySettingWidget, SIGNAL(ByPassKeyPressEvent(QKeyEvent*)), this ,SLOT(onByPassKeyPressEvent(QKeyEvent*)), Qt::DirectConnection );
 
     m_pMenuWidget = new QMenuStripWidget( m_pT3kHandle, this );
+    m_pMenuWidget->setGeometry( 0, 0, 620, 50 );
     m_pMenuWidget->hide();
     m_pMenuWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pMenuWidget, SIGNAL(ShowMenuEvent(int)), this, SLOT(onShowMenuEvent(int)) );
@@ -198,6 +186,17 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     QTcpSocket* pSocket = QT3kUserData::GetInstance()->GetRemoteSocket();
     connect( pSocket, SIGNAL(connected()), this, SLOT(onConnectedRemote()) );
     connect( pSocket, SIGNAL(disconnected()), this, SLOT(onDisconnectedRemote()) );
+
+    ui->SWMenu->insertWidget( 0, m_pMainWidget );
+    ui->SWMenu->insertWidget( 1, m_pMouseSettingWidget );
+    ui->SWMenu->insertWidget( 2, m_pCaliSettingWidget );
+    ui->SWMenu->insertWidget( 3, m_pSensorSettingWidget );
+    ui->SWMenu->insertWidget( 4, m_pSoftkeySettingWidget );
+    ui->SWMenu->insertWidget( 5, m_pGeneralSettingWidget );
+
+    ui->SWMenu->setCurrentIndex( -1 );
+
+    connect( ui->SWMenu, &QSlidingStackedWidget::animationFinished, this, &T3kCfgWnd::OnFinishAnimationMenu );
 
     Init();
 }
@@ -258,8 +257,6 @@ T3kCfgWnd::~T3kCfgWnd()
 
 void T3kCfgWnd::Init()
 {
-    setWindowIcon( QIcon(":/T3kCfgRes/Resources/T3kCfg.png") );
-
     QSettings WindowPosition( "Habilience", "T3kCfg" );
 
     // Window History Pos
@@ -287,11 +284,12 @@ void T3kCfgWnd::Init()
     WindowPosition.endGroup();
 
     ui->BtnMainDefault->hide();
+    ui->BtnMainLink->hide();
 
     if( !m_nTimerObserver )
         m_nTimerObserver = startTimer( 100 );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 
     m_bShow = false;
     // Open T3k
@@ -319,9 +317,9 @@ bool T3kCfgWnd::OpenT30xHandle()
 {
     if( !m_pT3kHandle ) return false;
 
-    m_pT3kHandle->SetNotify( TPDPEventMultiCaster::GetPtr() );
+    m_pT3kHandle->SetNotify( TPDPEventMultiCaster::instance() );
 
-    TPDPEventMultiCaster::GetPtr()->SetSocket( QT3kUserData::GetInstance()->GetRemoteSocket() );
+    TPDPEventMultiCaster::instance()->SetSocket( QT3kUserData::GetInstance()->GetRemoteSocket() );
 
     int nTotalSensorCount = 0;
     char pszPath[MAX_PATH];
@@ -329,11 +327,6 @@ bool T3kCfgWnd::OpenT30xHandle()
     T3kHandle::TouchSensorModel eModel = T3kHandle::TSM_NONE;
     do
     {
-#ifdef HITACHI_VER
-        nTotalSensorCount = m_pT3kHandle->GetDeviceCount( HITACHI_VID, HITACHI_PID );
-        if( nTotalSensorCount != 0 ) eModel = T3kHandle::TSM_SPEC;
-        break;
-#endif
         int nOldT3000DetectCnt = m_pT3kHandle->GetDeviceCount( 0xFFFF, 0x0000 );
         nTotalSensorCount += nOldT3000DetectCnt;
         if( nTotalSensorCount > 1 ) break;
@@ -414,11 +407,6 @@ bool T3kCfgWnd::OpenT30xHandle()
     case T3kHandle::TSM_T3900:
         nVID = 0x2200;  nPID = 0x3900;
         break;
-#ifdef HITACHI_VER
-    case T3kHandle::TSM_SPEC:
-        nVID = HITACHI_VID;  nPID = HITACHI_PID;
-        break;
-#endif
     case T3kHandle::TSM_NONE:
     default:
         return false;
@@ -435,21 +423,22 @@ bool T3kCfgWnd::OpenT30xHandle()
 void T3kCfgWnd::LoadCompany()
 {
     QString strConfigFolderPath( QCoreApplication::applicationDirPath() + "/config/" );
-
-#ifdef HITACHI_VER
-    if( QFile::exists( QString(strConfigFolderPath + "Logo.png") ) ||
-        QFile::exists( QString(strConfigFolderPath + "Logo.bmp") ) ||
-        QFile::exists( strConfigFolderPath + CUSTOM_CONFIG_FILENAME ) )
-        return;
-#endif
+    if( !QDir(strConfigFolderPath).exists() ) return;
 
     if( QFile::exists( QString(strConfigFolderPath + "logo.png") ) )
     {
         ui->BtnLogo->ChangeIcon( strConfigFolderPath + "logo.png" );
+        ui->BtnLogo->setRaiseAction( true );
     }
     else if( QFile::exists( QString(strConfigFolderPath + "logo.bmp") ) )
     {
         ui->BtnLogo->ChangeIcon( strConfigFolderPath + "logo.bmp" );
+        ui->BtnLogo->setRaiseAction( true );
+    }
+
+    if( QFile::exists( strConfigFolderPath + "icon.png" ) )
+    {
+        setWindowIcon( QIcon( strConfigFolderPath + "icon.png" ) );
     }
 
     QString strConfig( strConfigFolderPath + CUSTOM_CONFIG_FILENAME );
@@ -505,18 +494,10 @@ void T3kCfgWnd::LoadCompany()
             QCoreApplication::setApplicationVersion( strProgramVer );
         }
 
-        if( strCopyright.isEmpty() )
+        if( !strCopyright.isEmpty() )
         {
-            ui->BtnMainLink->setText( QString::fromLocal8Bit("Copyright (c) 2013 Habilience") );
+            ui->BtnMainLink->setText( QString("Copyright (c) %1").arg(strCopyright) );
         }
-        else
-        {
-            ui->BtnMainLink->setText( QString("Copyright (c) 2013 %1").arg(strCopyright) );
-        }
-    }
-    else
-    {
-        ui->BtnMainLink->setText( QString::fromLocal8Bit("Copyright (c) 2013 Habilience") );
     }
 
     if ( g_bIsScreenShotMode )
@@ -541,21 +522,21 @@ void T3kCfgWnd::LoadCompany()
     ui->line->setGeometry( ui->BtnMainLink->x() + ui->BtnMainLink->width() + 5, ui->line->y(), width() - (ui->BtnMainLink->x() + ui->BtnMainLink->width() + 5), ui->line->height() );
 }
 
-void T3kCfgWnd::OnChangeLanguage()
+void T3kCfgWnd::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    ui->BtnMainDefault->setText( Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_DEFAULT") ) );
+    ui->BtnMainDefault->setText( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_DEFAULT") ) );
     if( IsRegisterTrayIcon() )
     {
-        ui->BtnMainExit->setText( Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_CLOSE") ) );
-        m_pOpenQAction->setText( Res.GetResString( QString::fromUtf8("TRAYICON"), QString::fromUtf8("TEXT_MENU_OPEN") ) );
-        m_pExitQAction->setText( Res.GetResString( QString::fromUtf8("TRAYICON"), QString::fromUtf8("TEXT_MENU_EXIT") ) );
+        ui->BtnMainExit->setText( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_CLOSE") ) );
+        m_pOpenQAction->setText( Res.getResString( QString::fromUtf8("TRAYICON"), QString::fromUtf8("TEXT_MENU_OPEN") ) );
+        m_pExitQAction->setText( Res.getResString( QString::fromUtf8("TRAYICON"), QString::fromUtf8("TEXT_MENU_EXIT") ) );
     }
     else
-        ui->BtnMainExit->setText( Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_EXIT") ) );
+        ui->BtnMainExit->setText( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_EXIT") ) );
 }
 
 QString T3kCfgWnd::GetStringFromVariant( QVariant& var )
@@ -602,7 +583,7 @@ bool T3kCfgWnd::CreateTrayIcon()
                 this, SLOT(OnTrayIconActions(QSystemTrayIcon::ActivationReason)));
 
         QIcon TIcon;
-        TIcon.addPixmap(QPixmap(QString::fromUtf8(":/T3kCfgRes/Resources/T3kCfg.png")), QIcon::Normal, QIcon::Off);
+        TIcon.addPixmap(QPixmap(QString::fromUtf8(":/T3kCfgRes/resources/T3kCfg.png")), QIcon::Normal, QIcon::Off);
         m_pTrayIcon->setIcon( TIcon );
         m_pTrayIcon->show();
         m_bRegisterTrayIcon = true;
@@ -619,13 +600,13 @@ void T3kCfgWnd::SetTrayIconIamge( int nProfileIndex )
     QIcon TIcon;
     if( nProfileIndex < 0 )
     {
-        TIcon.addPixmap(QPixmap(":/T3kCfgRes/Resources/TRAY_DISCONNECT.png"), QIcon::Normal, QIcon::Off);
+        TIcon.addPixmap(QPixmap(":/T3kCfgRes/resources/TRAY_DISCONNECT.png"), QIcon::Normal, QIcon::Off);
         m_pTrayIcon->setIcon( TIcon );
         strToolTip = QString("%1\r\nDisconnected").arg(m_strTitle);
     }
     else
     {
-        TIcon.addPixmap(QPixmap(QString(":/T3kCfgRes/Resources/TRAY_PF%1.png").arg(nProfileIndex+1).toStdString().c_str()), QIcon::Normal, QIcon::Off);
+        TIcon.addPixmap(QPixmap(QString(":/T3kCfgRes/resources/TRAY_PF%1.png").arg(nProfileIndex+1).toStdString().c_str()), QIcon::Normal, QIcon::Off);
         m_pTrayIcon->setIcon( TIcon );
 
         QString strAppVer = QCoreApplication::applicationVersion();
@@ -711,11 +692,11 @@ void T3kCfgWnd::CreateAction()
         m_listProfilesQAction.push_back( pAction );
     }
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
-    m_pOpenQAction = new QAction( Res.GetResString( QString::fromUtf8("TRAYICON"), QString::fromUtf8("TEXT_MENU_OPEN") ), this );
+    QLangRes& Res = QLangManager::instance()->getResource();
+    m_pOpenQAction = new QAction( Res.getResString( QString::fromUtf8("TRAYICON"), QString::fromUtf8("TEXT_MENU_OPEN") ), this );
     connect(m_pOpenQAction, SIGNAL(triggered()), this, SLOT(OnTrayOpenT3kCfg()));
 
-    m_pExitQAction = new QAction( Res.GetResString( QString::fromUtf8("TRAYICON"), QString::fromUtf8("TEXT_MENU_EXIT") ), this );
+    m_pExitQAction = new QAction( Res.getResString( QString::fromUtf8("TRAYICON"), QString::fromUtf8("TEXT_MENU_EXIT") ), this );
     connect(m_pExitQAction, SIGNAL(triggered()), this, SLOT(CoercionExit()));
 }
 
@@ -821,9 +802,9 @@ void T3kCfgWnd::paintEvent(QPaintEvent */*evt*/)
         QString str;
 
         if( m_bFirmwareDownloading )
-            str = QLangManager::GetPtr()->GetResource().GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("TEXT_FIRMWARE_DOWNLOAD") );
+            str = QLangManager::instance()->getResource().getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("TEXT_FIRMWARE_DOWNLOAD") );
         if( !m_bIsConnect )
-            str = QLangManager::GetPtr()->GetResource().GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("TEXT_DEVICE_NOT_CONNECTED") );
+            str = QLangManager::instance()->getResource().getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("TEXT_DEVICE_NOT_CONNECTED") );
 
         QPainter dc;
         dc.begin( this );
@@ -863,12 +844,12 @@ void T3kCfgWnd::ShowMainMenu(bool bShow)
 {
     if( bShow )
     {
-        ui->BtnMainLink->show();
+        //ui->BtnMainLink->show();
         ui->BtnMainDefault->hide();
     }
     else
     {
-        ui->BtnMainLink->hide();
+        //ui->BtnMainLink->hide();
         ui->BtnMainDefault->show();
     }
 }
@@ -902,7 +883,7 @@ void T3kCfgWnd::keyPressEvent(QKeyEvent *evt)
 
         if( evt->key() == Qt::Key_Up )
         {
-
+            ShowMainMenu( 0 );
             return;
         }
     }
@@ -912,190 +893,46 @@ void T3kCfgWnd::keyPressEvent(QKeyEvent *evt)
 
 void T3kCfgWnd::FlatMenuToLeft()
 {
-    if( m_eFlatMenuStatus == MenuHome ) return;
+    ShowMainMenu( false );
+    m_pMenuWidget->hide();
 
-    switch( m_eFlatMenuStatus )
-    {
-    case MenuHome:
-    case MenuMouseSetting:
-    case MenuRemote:
-        break;
-    case MenuCalibrationSetting:
-        onShowMenuEvent( (int)MenuMouseSetting );
-        break;
-    case MenuSensorSetting:
-        onShowMenuEvent( (int)MenuCalibrationSetting );
-        break;
-    case MenuSoftkeySetting:
-        onShowMenuEvent( (int)MenuSensorSetting );
-        break;
-    case MenuGeneralSetting:
-        onShowMenuEvent( (int)(m_bSoftkey ? MenuSoftkeySetting : MenuSensorSetting) );
-        break;
-    default:
-        Q_ASSERT( false );
-        break;
-    }
+    if( ui->SWMenu->currentIndex() == 0 ) return;
+
+    if( ui->SWMenu->currentIndex() == 5 )
+        ui->SWMenu->slideInIdx( m_bSoftkey ? 4 : 3 );
+    else
+        ui->SWMenu->slideInPrev();
 }
 
 void T3kCfgWnd::FlatMenuToRight()
 {
-    if( m_eFlatMenuStatus == MenuHome ) return;
+    ShowMainMenu( false );
+    m_pMenuWidget->hide();
 
-    switch( m_eFlatMenuStatus )
-    {
-    case MenuMouseSetting:
-        onShowMenuEvent( (int)MenuCalibrationSetting );
-        break;
-    case MenuCalibrationSetting:
-        onShowMenuEvent( (int)MenuSensorSetting );
-    case MenuSensorSetting:
-        onShowMenuEvent( (int)(m_bSoftkey ? MenuSoftkeySetting : MenuGeneralSetting) );
-        break;
-    case MenuSoftkeySetting:
-        onShowMenuEvent( (int)MenuGeneralSetting );
-        break;
-    case MenuHome:
-    case MenuGeneralSetting:
-    case MenuRemote:
-        break;
-    default:
-        Q_ASSERT( false );
-        break;
-    }
+    if( ui->SWMenu->currentIndex() == 3 )
+        ui->SWMenu->slideInIdx( m_bSoftkey ? 4 : 5 );
+    else
+        ui->SWMenu->slideInNext();
 }
 
 void T3kCfgWnd::onShowMenuEvent( int nMenu )
 {
-    if( m_bAnimation ) return;
-    int nDir = m_nCurrentMenu - nMenu;
-    if( !nDir ) return;
+    ShowMainMenu( false );
+    m_pMenuWidget->hide();
 
-    m_pCurrObj = NULL;
-    m_pNextObj = NULL;
-
-    switch( m_nCurrentMenu )
-    {
-    case MenuHome:
-        m_pCurrObj = m_pMainWidget; break;
-    case MenuMouseSetting:
-        m_pCurrObj = m_pMouseSettingWidget; break;
-    case MenuCalibrationSetting:
-        m_pCurrObj = m_pCaliSettingWidget; break;
-    case MenuSensorSetting:
-        m_pCurrObj = m_pSensorSettingWidget; break;
-    case MenuGeneralSetting:
-        m_pCurrObj = m_pGeneralSettingWidget; break;
-    case MenuSoftkeySetting:
-        m_pCurrObj = m_pSoftkeySettingWidget; break;
-    case MenuRemote:
-        break;
-    default:
-        break;
-    }
-
-    switch( nMenu )
-    {
-    case MenuHome:
-        if( m_pMenuWidget )
-            m_pMenuWidget->hide();
-        m_pNextObj = m_pMainWidget;
-        m_eFlatMenuStatus = MenuHome;
-        break;
-
-    case MenuMouseSetting:
-        if( m_pMenuWidget )
-            m_pMenuWidget->show();
-        m_pNextObj = m_pMouseSettingWidget;
-        m_eFlatMenuStatus = MenuMouseSetting;
-        break;
-
-    case MenuCalibrationSetting:
-        if( m_pMenuWidget )
-            m_pMenuWidget->show();
-        m_pNextObj = m_pCaliSettingWidget;
-        m_eFlatMenuStatus = MenuCalibrationSetting;
-        break;
-
-    case MenuSensorSetting:
-        if( m_pMenuWidget )
-            m_pMenuWidget->show();
-        m_pNextObj = m_pSensorSettingWidget;
-        m_eFlatMenuStatus = MenuSensorSetting;
-        break;
-
-    case MenuGeneralSetting:
-        if( m_pMenuWidget )
-            m_pMenuWidget->show();
-        m_pNextObj = m_pGeneralSettingWidget;
-        m_eFlatMenuStatus = MenuGeneralSetting;
-        break;
-
-    case MenuSoftkeySetting:
-        if( m_pMenuWidget )
-            m_pMenuWidget->show();
-        m_pNextObj = m_pSoftkeySettingWidget;
-        m_eFlatMenuStatus = MenuSoftkeySetting;
-        break;
-
-    case MenuRemote:
-        break;
-
-    default:
-        break;
-    }
-
-    if( !m_pCurrObj || !m_pNextObj ) return;
+    ui->SWMenu->slideInIdx( nMenu );
 
     m_pMenuWidget->SetMenuButton( nMenu );
-    m_nCurrentMenu = nMenu;
-
-    if( m_eFlatMenuStatus != MenuHome )
-        ShowMainMenu( false );
-
-    int n = 1;
-    if( nDir > 0 )
-        n *= -1;
-
-    if( QApplication::layoutDirection() == Qt::RightToLeft )
-        n *= -1;
-
-    QPropertyAnimation *aniCrurent = new QPropertyAnimation(m_pCurrObj, "geometry");
-    aniCrurent->setDuration(200);
-
-    aniCrurent->setStartValue(QRect(m_pCurrObj->geometry().left(), m_pCurrObj->geometry().top(),
-                                   m_pCurrObj->geometry().width(), m_pCurrObj->geometry().height()));
-
-    aniCrurent->setEndValue(QRect(m_pCurrObj->geometry().left()-m_pCurrObj->geometry().width()*n, m_pCurrObj->geometry().top(),
-                                 m_pCurrObj->geometry().width(), m_pCurrObj->geometry().height()));
-
-    QPropertyAnimation *aniNext = new QPropertyAnimation(m_pNextObj, "geometry");
-    aniNext->setDuration(200);
-
-    aniNext->setStartValue(QRect(m_pNextObj->geometry().left()+m_pNextObj->geometry().width()*n, m_pNextObj->geometry().top(),
-                                   m_pNextObj->geometry().width(), m_pNextObj->geometry().height()));
-    aniNext->setEndValue(QRect(m_pNextObj->geometry().left(), m_pNextObj->geometry().top(),
-                                 m_pNextObj->geometry().width(), m_pNextObj->geometry().height()));
-
-    m_bAnimation = true;
-    QParallelAnimationGroup *group = new QParallelAnimationGroup();
-
-    group->addAnimation(aniCrurent);
-    group->addAnimation(aniNext);
-
-    connect( group, SIGNAL(finished()), this, SLOT(OnFinishAnimationMenu()) );
-    group->start(QAbstractAnimation::DeleteWhenStopped);
-    m_pNextObj->show();
 }
 
 void T3kCfgWnd::OnFinishAnimationMenu()
 {
-    m_pCurrObj->setGeometry( 0, 50, m_pCurrObj->width(), m_pCurrObj->height() );
-    m_pCurrObj->hide();
-    m_bAnimation = false;
-
-    if( m_eFlatMenuStatus == MenuHome )
+    if( ui->SWMenu->currentIndex() == 0 )
+    {
         ShowMainMenu( true );
+    }
+    else
+        m_pMenuWidget->show();
 }
 
 void T3kCfgWnd::ShowContentsMenu()
@@ -1249,7 +1086,7 @@ void T3kCfgWnd::OnRSP( ResponsePart /*Part*/, ushort /*nTickTime*/, const char* 
     if( !winId() ) return;
     if( m_nSendCmdID >= 0 && m_nSendCmdID != lId ) return;
     m_nSendCmdID = -1;
-    if( m_nCurrentMenu == 0 && strstr(sCmd, cstrInputMode) == sCmd )
+    if( ui->SWMenu->currentIndex() == 0 && strstr(sCmd, cstrInputMode) == sCmd )
     {
         char* pInputMode = NULL;
         pInputMode = (char*)strchr( sCmd, ',' );
@@ -1359,7 +1196,7 @@ bool T3kCfgWnd::onRegisterTrayIcon(bool bRegister)
 {
     if( bRegister )
     {
-        ui->BtnMainExit->setText( QLangManager::GetPtr()->GetResource().GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_CLOSE") ) );
+        ui->BtnMainExit->setText( QLangManager::instance()->getResource().getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_CLOSE") ) );
         if( !IsRegisterTrayIcon() )
         {
             if( CreateTrayIcon() )
@@ -1383,7 +1220,7 @@ bool T3kCfgWnd::onRegisterTrayIcon(bool bRegister)
     }
     else
     {
-        ui->BtnMainExit->setText( QLangManager::GetPtr()->GetResource().GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_EXIT") ) );
+        ui->BtnMainExit->setText( QLangManager::instance()->getResource().getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_EXIT") ) );
         if( IsRegisterTrayIcon() )
         {
             m_pTrayIcon->hide();
@@ -1408,17 +1245,17 @@ void T3kCfgWnd::on_BtnMainLink_clicked()
 
 void T3kCfgWnd::on_BtnMainDefault_clicked()
 {
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
-    QString strMessage = Res.GetResString( QString::fromUtf8("TOUCH SETTING"), QString::fromUtf8("MSGBOX_TEXT_DEFAULT") );
-    QString strMsgTitle = Res.GetResString( QString::fromUtf8("TOUCH SETTING"), QString::fromUtf8("MSGBOX_TITLE_DEFAULT") );
+    QLangRes& Res = QLangManager::instance()->getResource();
+    QString strMessage = Res.getResString( QString::fromUtf8("TOUCH SETTING"), QString::fromUtf8("MSGBOX_TEXT_DEFAULT") );
+    QString strMsgTitle = Res.getResString( QString::fromUtf8("TOUCH SETTING"), QString::fromUtf8("MSGBOX_TITLE_DEFAULT") );
 
     QMessageBox msgBox( this );
     msgBox.setWindowTitle( strMsgTitle );
     msgBox.setText( strMessage );
     msgBox.setStandardButtons( QMessageBox::Yes | QMessageBox::No );
     msgBox.setIcon( QMessageBox::Question );
-    msgBox.setButtonText( QMessageBox::Yes, Res.GetResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_YES") ) );
-    msgBox.setButtonText( QMessageBox::No, Res.GetResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_NO") ) );
+    msgBox.setButtonText( QMessageBox::Yes, Res.getResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_YES") ) );
+    msgBox.setButtonText( QMessageBox::No, Res.getResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_NO") ) );
     msgBox.setFont( font() );
 
     if( msgBox.exec() != QMessageBox::Yes ) return;
@@ -1566,7 +1403,8 @@ void T3kCfgWnd::timerEvent(QTimerEvent *evt)
 
 void T3kCfgWnd::on_BtnLogo_clicked()
 {
-    QLicenseWidget wig( this );
+    QLicenseWidget wig( ":/T3kCfgRes/resources/License.html", this );
+    wig.activateWindow();
     wig.exec();
 }
 
@@ -1590,9 +1428,9 @@ void T3kCfgWnd::OnShowErrorMsgBox(QString str)
 void T3kCfgWnd::ExceptionFirmwareVer(QString str)
 {
     QString strFirmwareVersion(str);
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
-    QString strErrorText = Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MSGBOX_TEXT_INVALID_FIRMWARE_VERSION") );
-    QString strMsgTitle = Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MSGBOX_TITLE_INVALID_FIRMWARE_VERSION") );
+    QLangRes& Res = QLangManager::instance()->getResource();
+    QString strErrorText = Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MSGBOX_TEXT_INVALID_FIRMWARE_VERSION") );
+    QString strMsgTitle = Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MSGBOX_TITLE_INVALID_FIRMWARE_VERSION") );
     QString strError( strErrorText.arg(strFirmwareVersion).arg(MM_MIN_SUPPORT_FIRMWARE_VERSION).arg(MM_NEXT_FIRMWARE_VERSION-0.1) );
 
     QMessageBox msgBox( this );
@@ -1600,7 +1438,7 @@ void T3kCfgWnd::ExceptionFirmwareVer(QString str)
     msgBox.setInformativeText( strError );
     msgBox.setStandardButtons( QMessageBox::Ok );
     msgBox.setIcon( QMessageBox::Critical );
-    msgBox.setButtonText( QMessageBox::Ok, Res.GetResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_OK") ) );
+    msgBox.setButtonText( QMessageBox::Ok, Res.getResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_OK") ) );
     msgBox.setFont( font() );
     if( msgBox.exec() == QMessageBox::Ok )
         qApp->exit( 0 );

@@ -3,6 +3,9 @@
 
 #include "QSaveLogWidget.h"
 
+#include <QCloseEvent>
+
+
 QTabSensorStatus::QTabSensorStatus(T3kHandle *&pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QTabSensorStatus), m_pT3kHandle(pHandle)
@@ -11,7 +14,7 @@ QTabSensorStatus::QTabSensorStatus(T3kHandle *&pHandle, QWidget *parent) :
     setFont( parent->font() );
     setFixedSize( width(), height() );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 QTabSensorStatus::~QTabSensorStatus()
@@ -19,16 +22,27 @@ QTabSensorStatus::~QTabSensorStatus()
     delete ui;
 }
 
-void QTabSensorStatus::OnChangeLanguage()
+void QTabSensorStatus::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    ui->TitleSensorStatus->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TITLE_SENSOR_STATUS")) );
+    ui->TitleSensorStatus->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TITLE_SENSOR_STATUS")) );
 
-    ui->LBInfoMessage->setText( Res.GetResString(QString::fromUtf8("INFORMATION GATHERING"), QString::fromUtf8("TEXT_MESSAGE")) );
-    ui->BtnInfoSave->setText( Res.GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("BTN_CAPTION_SAVELOG")) );
+    ui->LBInfoMessage->setText( Res.getResString(QString::fromUtf8("INFORMATION GATHERING"), QString::fromUtf8("TEXT_MESSAGE")) );
+    ui->BtnInfoSave->setText( Res.getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("BTN_CAPTION_SAVELOG")) );
+}
+
+void QTabSensorStatus::keyPressEvent(QKeyEvent *evt)
+{
+    if( evt->key() == Qt::Key_Escape )
+    {
+        evt->ignore();
+        return;
+    }
+
+    QDialog::keyPressEvent(evt);
 }
 
 void QTabSensorStatus::on_BtnInfoSave_clicked()

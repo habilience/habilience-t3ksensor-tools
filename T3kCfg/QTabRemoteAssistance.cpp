@@ -9,7 +9,7 @@
 #include <QDir>
 #include <QStandardPaths>
 
-#include "../common/PacketStructure.h"
+#include "PacketStructure.h"
 
 #include "QSideviewWidget.h"
 #include "QOrderTouchWidget.h"
@@ -73,7 +73,7 @@ QTabRemoteAssistance::QTabRemoteAssistance(T3kHandle *&pHandle, QWidget *parent)
     connect( this, SIGNAL(ShowSideviewMode(bool)), this, SLOT(onShowSideviewMode(bool)), Qt::QueuedConnection );
     connect( this, SIGNAL(ShowOrderTouch(bool,bool,bool,short,short,int)), this, SLOT(onShowOrderTouch(bool,bool,bool,short,short,int)), Qt::QueuedConnection );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 QTabRemoteAssistance::~QTabRemoteAssistance()
@@ -284,7 +284,7 @@ void QTabRemoteAssistance::timerEvent(QTimerEvent *evt)
     if( evt->timerId() == m_nTimer )
     {
         m_nWaitTime--;
-        ui->LBState->setText( QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_RECONNECTING")).arg(m_nWaitTime) );
+        ui->LBState->setText( QLangManager::instance()->getResource().getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_RECONNECTING")).arg(m_nWaitTime) );
         if( m_nWaitTime <= 0 )
         {
             killTimer( m_nTimer );
@@ -321,19 +321,19 @@ void QTabRemoteAssistance::timerEvent(QTimerEvent *evt)
     QDialog::timerEvent(evt);
 }
 
-void QTabRemoteAssistance::OnChangeLanguage()
+void QTabRemoteAssistance::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    ui->TitleRemote->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TITLE_REMOTE")) );
-    ui->BtnRequest->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_REQUEST")) );
-    ui->LBSelectServer->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_SELECT_SERVER")) );
-    ui->LBUserName->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_USERNAME")) );
-    ui->LBPort->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_PORT")) );
+    ui->TitleRemote->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TITLE_REMOTE")) );
+    ui->BtnRequest->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_REQUEST")) );
+    ui->LBSelectServer->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_SELECT_SERVER")) );
+    ui->LBUserName->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_USERNAME")) );
+    ui->LBPort->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_PORT")) );
 
-    ui->BtnExit->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_EXIT")) );
+    ui->BtnExit->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_EXIT")) );
 }
 
 void QTabRemoteAssistance::on_BtnRequest_clicked()
@@ -344,11 +344,11 @@ void QTabRemoteAssistance::on_BtnRequest_clicked()
 
     m_nPreviousID = 0;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    ui->BtnExit->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_CANCEL")) );
+    ui->BtnExit->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_CANCEL")) );
     ui->LBWaiting->Start();
-    ui->LBState->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_CONNECTING")) );
+    ui->LBState->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_CONNECTING")) );
     ui->StackedWidget->setCurrentIndex( 1 );
 
     SaveChangedPort();
@@ -390,10 +390,10 @@ void QTabRemoteAssistance::onConnectedRemote()
         m_nTimer = 0;
     }
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    ui->BtnExit->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_DISCONNECT")) );
-    ui->LBState->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_WAIT_MSG")) );
+    ui->BtnExit->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_DISCONNECT")) );
+    ui->LBState->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_WAIT_MSG")) );
 }
 
 void QTabRemoteAssistance::onDisconnectedRemote()
@@ -412,11 +412,11 @@ void QTabRemoteAssistance::onDisconnectedRemote()
 
         m_eConnectState = Connecting;
 
-        QLangRes& Res = QLangManager::GetPtr()->GetResource();
+        QLangRes& Res = QLangManager::instance()->getResource();
 
         ui->LBIdentify->setText( "" );
-        ui->BtnExit->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_CANCEL")) );
-        ui->LBState->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_RECONNECTING")).arg(60) );
+        ui->BtnExit->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_CANCEL")) );
+        ui->LBState->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_RECONNECTING")).arg(60) );
 
         QTcpSocket* pSocket = QT3kUserData::GetInstance()->GetRemoteSocket();
         pSocket->connectToHost( ui->CBSelectServer->currentText(), ui->EditPort->text().toInt() );
@@ -471,10 +471,10 @@ void QTabRemoteAssistance::ProcessRemoteRawDataPacket(RRawDataPkt *packet)
                     m_pT3kHandle->SetExpireTime( 0 );
                     m_pT3kHandle->onReceiveRawDataFlag( true );
 
-                    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+                    QLangRes& Res = QLangManager::instance()->getResource();
 
-                    ui->LBState->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_REMOTE_CONTROL")) );
-                    ui->BtnExit->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_DISCONNECT")) );
+                    ui->LBState->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_REMOTE_CONTROL")) );
+                    ui->BtnExit->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_DISCONNECT")) );
 
                     emit StartRemoteMode();
 
@@ -489,9 +489,9 @@ void QTabRemoteAssistance::ProcessRemoteRawDataPacket(RRawDataPkt *packet)
                     emit ShowSideviewMode( false );
                     emit ShowOrderTouch( false, false, false, 0, 0, 0 );
 
-                    QLangRes& Res = QLangManager::GetPtr()->GetResource();
-                    ui->BtnExit->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_CANCEL")) );
-                    ui->LBState->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_REPAIRCONNECTION")) );
+                    QLangRes& Res = QLangManager::instance()->getResource();
+                    ui->BtnExit->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("BTN_CANCEL")) );
+                    ui->LBState->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_REPAIRCONNECTION")) );
 
                     emit EndRemoteMode();
                 }
@@ -533,8 +533,8 @@ void QTabRemoteAssistance::ProcessRemoteRawDataPacket(RRawDataPkt *packet)
                     RAdditionalPkt* pPacket = (RAdditionalPkt*)packet;
                     m_nPreviousID = pPacket->uoData.RClientID.nID;
 
-                    QLangRes& Res = QLangManager::GetPtr()->GetResource();
-                    ui->LBIdentify->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_ID")).arg(m_nPreviousID) );
+                    QLangRes& Res = QLangManager::instance()->getResource();
+                    ui->LBIdentify->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_ID")).arg(m_nPreviousID) );
 
                     if( !m_nTimerAlive )
                         m_nTimerAlive = startTimer( 4000 );
@@ -648,9 +648,9 @@ void QTabRemoteAssistance::onTimeOutChecker( int nID )
 
             ui->LBWaiting->Complete();
 
-            QLangRes& Res = QLangManager::GetPtr()->GetResource();
+            QLangRes& Res = QLangManager::instance()->getResource();
             ui->LBState->setText( "" );
-            ui->LBMessage->setText( Res.GetResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_SERV_NOT_RES")) );
+            ui->LBMessage->setText( Res.getResString(QString::fromUtf8("ASSISTANCE"),QString::fromUtf8("TEXT_SERV_NOT_RES")) );
             ui->StackedWidget->setCurrentIndex( 0 );
 
             m_eConnectState = Disconnected;

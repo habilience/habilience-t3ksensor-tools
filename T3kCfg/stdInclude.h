@@ -17,7 +17,7 @@
 
 enum FlatMenuStatus { MenuHome = 0, MenuMouseSetting, MenuCalibrationSetting, MenuSensorSetting, MenuSoftkeySetting, MenuGeneralSetting, MenuRemote };
 
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 
 #define RoundP1(A)          (float)((long int) (((A)+.05) * 10))/10;
 

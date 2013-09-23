@@ -2,8 +2,8 @@
 #include "ui_TabCalibrationWidget.h"
 
 #include "T3kSoftlogicDlg.h"
-#include "../common/T3kConstStr.h"
-#include "../common/T3k_ver.h"
+#include "T3kConstStr.h"
+#include "T3k_ver.h"
 
 #include <QDesktopWidget>
 #include <QSettings>
@@ -1583,7 +1583,8 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
             if (GetModuleFileName(NULL, szPath, sizeof(szPath)))
             {
                 // Launch itself as administrator.
-                SHELLEXECUTEINFO sei = { sizeof(sei) };
+                SHELLEXECUTEINFO sei;
+                memset( &sei, 0, sizeof(SHELLEXECUTEINFO) );
                 sei.lpVerb = L"runas";
                 sei.lpFile = szPath;
                 sei.hwnd = (HWND)winId();

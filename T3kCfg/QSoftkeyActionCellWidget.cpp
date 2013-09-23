@@ -1,7 +1,7 @@
 #include "stdInclude.h"
 #include "QSoftkeyActionCellWidget.h"
 
-#include "../common/QKeyMapStr.h"
+#include "QKeyMapStr.h"
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -53,39 +53,39 @@ QSoftkeyActionCellWidget::QSoftkeyActionCellWidget(QWidget *parent, int nRowInde
     installEventFilter( this );
     m_editKeyActionWidget.installEventFilter( this );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
-void QSoftkeyActionCellWidget::OnChangeLanguage()
+void QSoftkeyActionCellWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
     m_cbActionWidget.clear();
 
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DISABLED") ), 0x0000 );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DISABLED") ), 0x0000 );
 
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ), 0xFFFF );
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FUNCTION_KEY") ), 0xFFFF );
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_MOUSE") ), 0xFFFF );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ), 0xFFFF );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_FUNCTION_KEY") ), 0xFFFF );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_MOUSE") ), 0xFFFF );
 
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_ESCAPE") ), 0x0029 );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_ESCAPE") ), 0x0029 );
 
 #if defined(Q_OS_MAC)
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_SWITCH1") ), 0x082B );
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_EXPLORER") ), 0x0811 );
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DESKTOP") ), 0x0044 );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_SWITCH1") ), 0x082B );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_EXPLORER") ), 0x0811 );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DESKTOP") ), 0x0044 );
 #else
 #if defined(Q_OS_WIN)
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_SWITCH2") ), 0x092B );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_SWITCH2") ), 0x092B );
 #endif
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_SWITCH1") ), 0x052B );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_SWITCH1") ), 0x052B );
 #if defined(Q_OS_WIN)
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_MANAGER") ), 0x0329 );
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_EXPLORER") ), 0x0808 );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_TASK_MANAGER") ), 0x0329 );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_EXPLORER") ), 0x0808 );
 #endif
-    m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DESKTOP") ), 0x0807 );
+    m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_DESKTOP") ), 0x0807 );
 #endif
 
 
@@ -99,12 +99,12 @@ void QSoftkeyActionCellWidget::OnChangeLanguage()
     ATOM atm = GlobalAddAtom( wszATM );
     Q_ASSERT( atm );
     if( !RegisterHotKey( NULL, atm, MOD_CONTROL | MOD_ALT | MOD_SHIFT, VK_F10 ) )
-        m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_VKBOARD") ), 0x0743 );
+        m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_VKBOARD") ), 0x0743 );
     else
         UnregisterHotKey( NULL, atm );
 
     if( !RegisterHotKey( NULL, atm, MOD_CONTROL | MOD_ALT | MOD_SHIFT, VK_F12 ) )
-        m_cbActionWidget.addItem( Res.GetResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_T3KCFG") ), 0x0745 );
+        m_cbActionWidget.addItem( Res.getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_T3KCFG") ), 0x0745 );
     else
         UnregisterHotKey( NULL, atm );
 
@@ -173,7 +173,7 @@ void QSoftkeyActionCellWidget::ResizeWidget(QSize szNewSize)
     {
         nKeyComboW = szNewSize.width();
     }
-    bool bR2L = QLangManager::GetPtr()->GetResource().IsR2L();
+    bool bR2L = QLangManager::instance()->getResource().isR2L();
     m_cbActionWidget.setGeometry( bR2L ? szNewSize.width()-nKeyComboW : 0, 0, nKeyComboW, szNewSize.height() );
     m_editKeyActionWidget.setGeometry( bR2L ? 0 : nOffset+1, 0, szNewSize.width()-nOffset-1, szNewSize.height() );
 

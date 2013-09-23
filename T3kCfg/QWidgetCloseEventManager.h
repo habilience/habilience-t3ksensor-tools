@@ -19,7 +19,7 @@ public:
     };
     friend class _GC;
 
-    static QWidgetCloseEventManager* GetPtr();
+    static QWidgetCloseEventManager* instance();
 
     bool AddClosedWidget( QWidget* pWidget, int nTime );
 

@@ -3,7 +3,7 @@
 #include <QMap>
 #include <QPoint>
 
-#include "../common/QIniFormat.h"
+#include "QIniFormat.h"
 
 #ifdef _DEBUG
 #define VERIFY(f)   Q_ASSERT(f)

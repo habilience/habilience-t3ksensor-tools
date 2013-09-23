@@ -26,7 +26,7 @@ QWidgetCloseEventManager::~QWidgetCloseEventManager()
     m_mapClosedWidget.clear();
 }
 
-QWidgetCloseEventManager* QWidgetCloseEventManager::GetPtr()
+QWidgetCloseEventManager* QWidgetCloseEventManager::instance()
 {
     if( !s_pThis )
         s_pThis = new QWidgetCloseEventManager();

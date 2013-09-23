@@ -2,14 +2,14 @@
 #define QCALIBRATIONWIDGET_H
 
 #include <QWidget>
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 #define QCALI_POINTS                (9)
 #define UNDER_VER_CALI_PNTS         (9)
 #define SUPPORT_VER_CALI_PNTS       (4)
 
-class QCalibrationWidget : public QWidget, public QLangManager::LangChangeNotify, public TPDPEventMultiCaster::ITPDPEventListener
+class QCalibrationWidget : public QWidget, public QLangManager::ILangChangeNotify, public TPDPEventMultiCaster::ITPDPEventListener
 {
     Q_OBJECT
 public:
@@ -23,7 +23,7 @@ protected:
 
     virtual void OnMSG(ResponsePart Part, ushort /*nTickTime*/, const char *sPartId, const char *sTxt);
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
     virtual void keyPressEvent(QKeyEvent *evt);
     virtual void showEvent(QShowEvent *);

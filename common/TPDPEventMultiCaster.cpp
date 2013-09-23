@@ -25,7 +25,7 @@ TPDPEventMultiCaster::~TPDPEventMultiCaster()
     m_vEventListener.clear();
 }
 
-TPDPEventMultiCaster* TPDPEventMultiCaster::GetPtr()
+TPDPEventMultiCaster* TPDPEventMultiCaster::instance()
 {
     if( !s_pThis )
     {

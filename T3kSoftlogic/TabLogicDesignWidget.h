@@ -2,7 +2,7 @@
 #define TABLOGICDESIGNWIDGET_H
 
 #include "LogicDesignWidget.h"
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 
 #include <QWidget>
 

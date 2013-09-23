@@ -153,6 +153,8 @@ private slots:
 
     void on_chkSafeMode_clicked(bool checked);
 
+    void on_btnLicense_clicked();
+
 private:
     Ui::Dialog *ui;
 };

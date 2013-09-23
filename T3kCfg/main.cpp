@@ -5,7 +5,7 @@
 #include "stdInclude.h"
 
 // Tag
-#include "../common/T3k_ver.h"
+#include "T3k_ver.h"
 
 #include "QLangManager.h"
 #include "QT3kUserData.h"
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
         return -1;
 
     QApplication::setQuitOnLastWindowClosed( false );
-    QApplication::setWindowIcon( QIcon(":/T3kCfgRes/Resources/T3kCfg.png") );
+    QApplication::setWindowIcon( QIcon(":/T3kCfgRes/resources/T3kCfg.png") );
 
     QString strAppVer( T3000_VERSION );
     int nRPos = -1;
@@ -97,8 +97,8 @@ int main(int argc, char *argv[])
     QString strPath = QCoreApplication::applicationDirPath();
     strPath += "/Languages/";
 
-    QLangManager::GetPtr()->SetRootPath( strPath );
-    QApplication::setLayoutDirection( QLangManager::GetPtr()->GetResource().IsR2L() ? Qt::RightToLeft : Qt::LeftToRight );
+    QLangManager::instance()->setRootPath( strPath );
+    QApplication::setLayoutDirection( QLangManager::instance()->getResource().isR2L() ? Qt::RightToLeft : Qt::LeftToRight );
 
     T3kCfgWnd w;
     if( w.AskShow() )

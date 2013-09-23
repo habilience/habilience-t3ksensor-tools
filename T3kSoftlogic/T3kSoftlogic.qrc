@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/T3kSoftlogic">
+    <qresource prefix="/T3kSoftlogicRes">
         <file>resources/PNG_ICON_KEY_ALT.png</file>
         <file>resources/PNG_ICON_KEY_CLEAR.png</file>
         <file>resources/PNG_ICON_KEY_CTRL.png</file>
@@ -15,5 +15,7 @@
         <file>resources/PNG_GALLERY_TASK_SWITCH.png</file>
         <file>resources/PNG_GALLERY_TOUCH_ONOFF.png</file>
         <file>resources/PNG_GALLERY_TOUCHONOFF_GPIO.png</file>
+        <file>resources/License.html</file>
+        <file>resources/PNG_QUESTION_MARK.png</file>
     </qresource>
 </RCC>

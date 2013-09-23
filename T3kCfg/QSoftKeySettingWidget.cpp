@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include "QKeyEditWidget.h"
 
-#include "../common/QKeyMapStr.h"
+#include "QKeyMapStr.h"
 #include <QPalette>
 #include <QPixmap>
 
@@ -28,7 +28,7 @@ QSoftKeySettingWidget::QSoftKeySettingWidget(T3kHandle*& pHandle, QWidget *paren
 
     setFixedSize( width(), height() );
 
-    ui->TitleSotfKey->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_SOFTKEY" );
+    ui->TitleSotfKey->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_SOFTKEY" );
 
     connect( ui->TableSoftkeyMap, SIGNAL(ActionTypecellChanged(int,int,int)), this, SLOT(onslot_TableSoftkeyMap_cellChanged(int,int,int)) );
     connect( ui->TableSoftkeyMap, SIGNAL(KeyPressSignal(int,int,ushort)), this, SLOT(onTableSoftkeyMap_KeyPress_Signal(int,int,ushort)) );
@@ -49,7 +49,7 @@ QSoftKeySettingWidget::QSoftKeySettingWidget(T3kHandle*& pHandle, QWidget *paren
     ui->TableSoftkeyMap->setColumnWidth( 0, int(double(nW)/16. + .5) );
     ui->TableSoftkeyMap->setColumnWidth( 1, nW - ui->TableSoftkeyMap->columnWidth( 0 ) );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 QSoftKeySettingWidget::~QSoftKeySettingWidget()
@@ -113,13 +113,13 @@ bool QSoftKeySettingWidget::eventFilter(QObject *target, QEvent *evt)
     return QWidget::eventFilter(target, evt);
 }
 
-void QSoftKeySettingWidget::OnChangeLanguage()
+void QSoftKeySettingWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    ui->TitleSotfKey->setText( Res.GetResString( QString::fromUtf8("SOFTKEY SETTING"), QString::fromUtf8("TEXT_TITLE") ) );
+    ui->TitleSotfKey->setText( Res.getResString( QString::fromUtf8("SOFTKEY SETTING"), QString::fromUtf8("TEXT_TITLE") ) );
 }
 
 void QSoftKeySettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)

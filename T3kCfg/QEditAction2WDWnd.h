@@ -15,7 +15,7 @@ class QMouseMappingTable;
 class QComboBox;
 class QLabel;
 
-class QEditAction2WDWnd : public QDialog, public QLangManager::LangChangeNotify
+class QEditAction2WDWnd : public QDialog, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -27,7 +27,7 @@ public:
 
     void SetProfileInfo( int nProfileIndex, uchar cKey, ushort wKeyValue1, ushort wKeyValue2 );
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 protected:
     void Init();
     void OnKeyEditChange(ushort wKeyValue);

@@ -3,11 +3,11 @@
 
 #include "ui_QGeneralSettingWidget.h"
 
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 
-class QGeneralSettingWidget : public QWidget, private Ui::QGeneralSettingWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QGeneralSettingWidget : public QWidget, private Ui::QGeneralSettingWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -18,7 +18,7 @@ public:
     void SetDefault();
     void Refresh();
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
 protected:
     void RequestGeneralSetting( bool bDefault );

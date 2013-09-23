@@ -1,6 +1,8 @@
 #include "QIni.h"
+
 #include <QFile>
-#include "../common/QUtils.h"
+#include "QUtils.h"
+
 
 QIni::QIni()
 {

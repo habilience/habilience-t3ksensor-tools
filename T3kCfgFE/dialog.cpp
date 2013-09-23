@@ -6,17 +6,17 @@
 #include <QCloseEvent>
 #include <QKeyEvent>
 #include <QPainter>
-#include "../common/QUtils.h"
+#include "QUtils.h"
 #include "QInitDataIni.h"
 
-#include "../common/T3k_ver.h"
+#include "T3k_ver.h"
 #include "AppData.h"
 #include <QSettings>
 #include <QDesktopWidget>
 #include "QLogSystem.h"
 #include "QSensorInitDataCfg.h"
 #include "QSelectSensorDataDialog.h"
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 
 #include "QBentCfgParam.h"
 
@@ -33,6 +33,8 @@
 #include "QBentAdjustmentDialog.h"
 #include "QTouchSettingDialog.h"
 #include "QRemoteTouchMarkDialog.h"
+
+#include "ui/QLicenseWidget.h"
 
 #include <QDir>
 
@@ -1991,6 +1993,13 @@ void Dialog::on_chkSafeMode_clicked(bool checked)
     ui->chkSafeMode->setFocus();
 
     update();
+}
+
+void Dialog::on_btnLicense_clicked()
+{
+    QLicenseWidget wig( ":/T3kCfgFERes/resources/License.html", this );
+    wig.activateWindow();
+    wig.exec();
 }
 
 bool Dialog::isShortcutWidget(QWidget* widget)

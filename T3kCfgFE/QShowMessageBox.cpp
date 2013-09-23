@@ -52,10 +52,10 @@ int showMessageBox( QWidget* parent, const QString& strMessage, const QString& s
 
 #define MAIN "MAIN"
     QLangRes& res = QLangManager::getResource();
-    msgBox.setButtonText(QMessageBox::Ok, res.getResString(MAIN, "BTN_CAPTION_OK"));
-    msgBox.setButtonText(QMessageBox::Cancel, res.getResString(MAIN, "BTN_CAPTION_CANCEL"));
-    msgBox.setButtonText(QMessageBox::Yes, res.getResString(MAIN, "BTN_CAPTION_YES"));
-    msgBox.setButtonText(QMessageBox::No, res.getResString(MAIN, "BTN_CAPTION_NO"));
+    msgBox.setButtonText(QMessageBox::Ok, res.getResString("MESSAGEBOX", "BTN_CAPTION_OK"));
+    msgBox.setButtonText(QMessageBox::Cancel, res.getResString("MESSAGEBOX", "BTN_CAPTION_CANCEL"));
+    msgBox.setButtonText(QMessageBox::Yes, res.getResString("MESSAGEBOX", "BTN_CAPTION_YES"));
+    msgBox.setButtonText(QMessageBox::No, res.getResString("MESSAGEBOX", "BTN_CAPTION_NO"));
 
     QFont fnt(msgBox.font());
     fnt.setPointSize(fnt.pointSize()+1);

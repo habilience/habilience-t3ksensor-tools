@@ -1,6 +1,6 @@
 #include "QT3kLoadSensorDataObject.h"
 
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 
 #include "CfgCustomCmdDef.h"
 #include "QT3kUserData.h"
@@ -293,8 +293,8 @@ void QT3kLoadSensorDataObject::OnRSE(ResponsePart Part, ushort, const char * sPa
             {
                 if( m_eDataPart == DP_MM )
                 {
-                    QString strLog( "[" + QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_COMPLETE")) + "] " );
-                    strLog += QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_DATA"));
+                    QString strLog( "[" + QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_COMPLETE")) + "] " );
+                    strLog += QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_DATA"));
                     emit PrintProgreeLog( strLog );
 
                     emit Complete( LDS_SENSORDATA );

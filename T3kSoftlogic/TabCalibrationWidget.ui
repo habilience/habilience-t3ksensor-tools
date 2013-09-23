@@ -864,7 +864,7 @@ Softkey &amp; Softlogic</string>
   <customwidget>
    <class>QUnderlineLabel</class>
    <extends>QLabel</extends>
-   <header>../common/ui/QUnderlineLabel.h</header>
+   <header>ui/UnderlineLabel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

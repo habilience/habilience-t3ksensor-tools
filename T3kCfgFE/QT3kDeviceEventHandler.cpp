@@ -1,5 +1,5 @@
 #include "QT3kDeviceEventHandler.h"
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 
 #define PARTID_LENGTH		(8)
 ResponsePart getResponsePartFromPartId( const char* partid, const char* cmd )

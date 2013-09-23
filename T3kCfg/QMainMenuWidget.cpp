@@ -1,4 +1,4 @@
-#include "../common/T3k_ver.h"
+#include "T3k_ver.h"
 
 #include "QMainMenuWidget.h"
 #include "ui_QMainMenuWidget.h"
@@ -10,7 +10,6 @@
 
 #include "T3kCfgWnd.h"
 
-#include "../common/ui/QUnderlineLabel.h"
 #include "QLangManager.h"
 #include "QSoftkey.h"
 #include "QT3kUserData.h"
@@ -45,10 +44,10 @@ QMainMenuWidget::QMainMenuWidget(T3kHandle*& pHandle, QWidget *parent) :
     m_bSoftkey = false;
     m_bDigitizerMode = false;
 
-    ui->ProgramInfoLabel->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_INFO.png" );
-    ui->FirmwareInfoLabel->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_INFO.png" );
+    ui->ProgramInfoLabel->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_INFO.png" );
+    ui->FirmwareInfoLabel->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_INFO.png" );
 
-    QPixmap* pIconArray = new QPixmap( ":/T3kCfgRes/Resources/PNG_ICON_MENU_STRIP.png" );
+    QPixmap* pIconArray = new QPixmap( ":/T3kCfgRes/resources/PNG_ICON_MENU_STRIP.png" );
     QList<QIcon> listIcon;
     int nCount = pIconArray->width()/40;
     for( int i=0; i<nCount; i++ )
@@ -86,7 +85,7 @@ QMainMenuWidget::QMainMenuWidget(T3kHandle*& pHandle, QWidget *parent) :
     // usbconfigmode
     ui->BtnMainSoftkey->setVisible(false);
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 QMainMenuWidget::~QMainMenuWidget()
@@ -96,36 +95,36 @@ QMainMenuWidget::~QMainMenuWidget()
     delete ui;
 }
 
-void QMainMenuWidget::OnChangeLanguage()
+void QMainMenuWidget::onChangeLanguage()
 {
     if( !winId() )
         return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
-    ui->BtnMainMouse->setText( Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_MOUSE") ) );
-    ui->BtnMainMouse->setDescription( Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_MOUSE_SUB1") ) + "\n" +
-                                      Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_MOUSE_SUB2") ) );
+    QLangRes& Res = QLangManager::instance()->getResource();
+    ui->BtnMainMouse->setText( Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_MOUSE") ) );
+    ui->BtnMainMouse->setDescription( Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_MOUSE_SUB1") ) + "\n" +
+                                      Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_MOUSE_SUB2") ) );
 
-    ui->BtnMainCali->setText( Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_CALIBRATION") ) );
-    ui->BtnMainCali->setDescription( Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_CALIBRATION_SUB1") ) + "\n" +
-                                     Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_CALIBRATION_SUB2") ) );
+    ui->BtnMainCali->setText( Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_CALIBRATION") ) );
+    ui->BtnMainCali->setDescription( Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_CALIBRATION_SUB1") ) + "\n" +
+                                     Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_CALIBRATION_SUB2") ) );
 
-    ui->BtnMainSensor->setText( Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_SENSOR_SETTING") ) );
-    ui->BtnMainSensor->setDescription( Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_SENSOR_SETTING_SUB1") ) + "\n" +
-                                       Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_SENSOR_SETTING_SUB2") ) );
+    ui->BtnMainSensor->setText( Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_SENSOR_SETTING") ) );
+    ui->BtnMainSensor->setDescription( Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_SENSOR_SETTING_SUB1") ) + "\n" +
+                                       Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_SENSOR_SETTING_SUB2") ) );
 
-    ui->BtnMainGeneral->setText( Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_GENERAL_SETTING") ) );
-    ui->BtnMainGeneral->setDescription( Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_GENERAL_SETTING_SUB1") ) + "\n" +
-                                        Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_GENERAL_SETTING_SUB2") ) );
+    ui->BtnMainGeneral->setText( Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_GENERAL_SETTING") ) );
+    ui->BtnMainGeneral->setDescription( Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_GENERAL_SETTING_SUB1") ) + "\n" +
+                                        Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_GENERAL_SETTING_SUB2") ) );
 
-    ui->BtnMainSoftkey->setText( Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_SOFTKEY_SETTING") ) );
-//    ui->BtnMainSoftkey->setDescription( Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_SOFTKEY_SETTING_SUB1") ) + "\n" +
-//                                       Res.GetResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_SOFTKEY_SETTING_SUB2") ) );
+    ui->BtnMainSoftkey->setText( Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_SOFTKEY_SETTING") ) );
+//    ui->BtnMainSoftkey->setDescription( Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_SOFTKEY_SETTING_SUB1") ) + "\n" +
+//                                       Res.getResString( QString::fromUtf8("START PAGE"), QString::fromUtf8("BTN_CAPTION_SOFTKEY_SETTING_SUB2") ) );
 
-    ui->ProgramInfoLabel->setText(Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("TITLE_CAPTION_INFORMATION") ) );
-    ui->FirmwareInfoLabel->setText( Res.GetResString( QString::fromUtf8("MAIN"), QString::fromUtf8("TITLE_CAPTION_FIRMWARE") ) );
+    ui->ProgramInfoLabel->setText(Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("TITLE_CAPTION_INFORMATION") ) );
+    ui->FirmwareInfoLabel->setText( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("TITLE_CAPTION_FIRMWARE") ) );
 
-    if( Res.IsR2L() )
+    if( Res.isR2L() )
     {
         ui->EditProgVer->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
         ui->EditFirmWareVer->setAlignment( Qt::AlignVCenter | Qt::AlignRight );

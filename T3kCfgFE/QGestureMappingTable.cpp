@@ -2,8 +2,8 @@
 #include <QPainter>
 
 #include "QKeyMapStr.h"
-#include "../common/T3kConstStr.h"
-#include "../common/QUtils.h"
+#include "T3kConstStr.h"
+#include "QUtils.h"
 #include "QT3kDevice.h"
 #include "QLangManager.h"
 #include <QMouseEvent>

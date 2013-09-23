@@ -16,19 +16,19 @@ class QSettings;
 #include <QTimer>
 
 #include "stdInclude.h"
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 
 #include "QMySystemTrayIcon.h"
 #include "QLangManager.h"
 
-#include "../common/PacketStructure.h"
+#include "PacketStructure.h"
 
 
 namespace Ui {
     class T3kCfgWnd;
 }
 
-class T3kCfgWnd : public QMainWindow, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class T3kCfgWnd : public QMainWindow, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -50,7 +50,7 @@ protected:
     virtual void timerEvent(QTimerEvent *evt);
     virtual void showEvent(QShowEvent *);
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
     bool CreateTrayIcon();
     void CreateAction();
@@ -103,18 +103,12 @@ private:
 
     T3kHandle*                  m_pT3kHandle;
     int                         m_nProfileIndex;
-    int                         m_nCurrentMenu;
 
     bool                        m_bIsConnect;
     bool                        m_bFirmwareDownloading;
 
-    bool                        m_bAnimation;
-    QWidget*                    m_pCurrObj;
-    QWidget*                    m_pNextObj;
-
     int                         m_nTimerExit;
     int                         m_nTimerObserver;
-    FlatMenuStatus              m_eFlatMenuStatus;
 
     int                         m_nTimerChkTrayDoubleClk;
     QPoint                      m_ptTrayMenu;
@@ -143,6 +137,9 @@ private:
 
     int                         m_nActiveWndTimer;
     QString                     m_strFirmwareVerError;
+
+    bool                        m_bCustomLogo;
+    bool                        m_bCustomLink;
 
     // Custom Define
 protected slots:

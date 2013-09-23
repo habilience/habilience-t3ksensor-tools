@@ -35,9 +35,9 @@ QCalibrationSettingWidget::QCalibrationSettingWidget(T3kHandle*& pHandle, QWidge
 
     m_pwndCalibration = new QCalibrationWidget( m_pT3kHandle );
 
-    ui->TitleCalibration->SetIconImage( tr(":/T3kCfgRes/Resources/PNG_ICON_CALIBRATION.png") );
-    ui->TitleAreaSetting->SetIconImage( tr(":/T3kCfgRes/Resources/PNG_ICON_AREA_SETTING.png") );
-    ui->BtnTouchSetting->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_SETTING.png" );
+    ui->TitleCalibration->SetIconImage( tr(":/T3kCfgRes/resources/PNG_ICON_CALIBRATION.png") );
+    ui->TitleAreaSetting->SetIconImage( tr(":/T3kCfgRes/resources/PNG_ICON_AREA_SETTING.png") );
+    ui->BtnTouchSetting->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_SETTING.png" );
 
     // usbconfigmode
     ui->BtnDoubleClkDec->setEnabled(false);
@@ -51,7 +51,7 @@ QCalibrationSettingWidget::QCalibrationSettingWidget(T3kHandle*& pHandle, QWidge
     ui->EditTwoTouch->setEnabled(false);
     ui->BtnTouchSetting->setEnabled(false);
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 QCalibrationSettingWidget::~QCalibrationSettingWidget()
@@ -70,32 +70,32 @@ QCalibrationSettingWidget::~QCalibrationSettingWidget()
     delete ui;
 }
 
-void QCalibrationSettingWidget::OnChangeLanguage()
+void QCalibrationSettingWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
-    ui->TitleCalibration->setText( Res.GetResString( QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TITLE_CAPTION_CALIBRATION")) );
-    ui->LBScreenMargin->setText( Res.GetResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_SCREEN_MARGIN")) );
-    ui->LBMarginPersent->setText( Res.GetResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_SCREEN_PERCENT_OF_SCREEN")) );
-    ui->LBCalibrate->setText( Res.GetResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_CALIBRATE")) );
-    ui->BtnCalibration->setText( Res.GetResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("BTN_CAPTION_CALIBRATE")) );
+    QLangRes& Res = QLangManager::instance()->getResource();
+    ui->TitleCalibration->setText( Res.getResString( QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TITLE_CAPTION_CALIBRATION")) );
+    ui->LBScreenMargin->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_SCREEN_MARGIN")) );
+    ui->LBMarginPersent->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_SCREEN_PERCENT_OF_SCREEN")) );
+    ui->LBCalibrate->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_CALIBRATE")) );
+    ui->BtnCalibration->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("BTN_CAPTION_CALIBRATE")) );
 
-    ui->TitleAreaSetting->setText( Res.GetResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TITLE_AREA_SETTING")) );
-    ui->LBSingleClk->setText( Res.GetResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_SINGLE_CLICK")) );
-    ui->LBDoubleClk->setText( Res.GetResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_DOUBLE_CLICK")) );
-    ui->LBTwoTouch->setText( Res.GetResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_TWO_TOUCH")) );
-    ui->LBPalm->setText( Res.GetResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_PALM")) );
+    ui->TitleAreaSetting->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TITLE_AREA_SETTING")) );
+    ui->LBSingleClk->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_SINGLE_CLICK")) );
+    ui->LBDoubleClk->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_DOUBLE_CLICK")) );
+    ui->LBTwoTouch->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_TWO_TOUCH")) );
+    ui->LBPalm->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_PALM")) );
 
-    ui->BtnTouchSetting->setText( Res.GetResString(QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("BTN_CAPTION_TOUCH_SETTING")) );
+    ui->BtnTouchSetting->setText( Res.getResString(QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("BTN_CAPTION_TOUCH_SETTING")) );
 
     {
     QFontMetricsF ftMetrics( ui->BtnTouchSetting->font() );
-    ui->BtnTouchSetting->setMinimumWidth( 30+ftMetrics.width( Res.GetResString(QString::fromUtf8("MOUSE SETTING"),
+    ui->BtnTouchSetting->setMinimumWidth( 30+ftMetrics.width( Res.getResString(QString::fromUtf8("MOUSE SETTING"),
                                                                                QString::fromUtf8("BTN_CAPTION_TOUCH_SETTING")) ) );
     }
 
-    ui->BtnTSLayout->setAlignment( ui->BtnTouchSetting, Res.IsR2L() ? Qt::AlignRight : Qt::AlignLeft );
+    ui->BtnTSLayout->setAlignment( ui->BtnTouchSetting, Res.isR2L() ? Qt::AlignRight : Qt::AlignLeft );
 }
 
 void QCalibrationSettingWidget::RequestSensorData( bool bDefault )
@@ -463,13 +463,13 @@ void QCalibrationSettingWidget::on_BtnCalibration_clicked()
 #endif
         if( bShow )
         {
-            QLangRes& Res = QLangManager::GetPtr()->GetResource();
+            QLangRes& Res = QLangManager::instance()->getResource();
 #ifdef Q_OS_MAC
-            QString strMessage = Res.GetResString( QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_CALIBRATION_WARNING") );
-            QString strMsgTitle = Res.GetResString( QString::fromUtf8("WARNING SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_CAPTION") );
+            QString strMessage = Res.getResString( QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_CALIBRATION_WARNING") );
+            QString strMsgTitle = Res.getResString( QString::fromUtf8("WARNING SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_CAPTION") );
 #else
-            QString strMessage = Res.GetResString( QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_CALIBRATION_WARNING2") );
-            QString strMsgTitle = Res.GetResString( QString::fromUtf8("WARNING SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_CAPTION") );
+            QString strMessage = Res.getResString( QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_CALIBRATION_WARNING2") );
+            QString strMsgTitle = Res.getResString( QString::fromUtf8("WARNING SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_CAPTION") );
 #endif
 
             QMessageBox msgBox( this );
@@ -477,7 +477,7 @@ void QCalibrationSettingWidget::on_BtnCalibration_clicked()
             msgBox.setText( strMessage );
             msgBox.setStandardButtons( QMessageBox::Ok );
             msgBox.setIcon( QMessageBox::Warning );
-            msgBox.setButtonText( QMessageBox::Ok, Res.GetResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_OK") ) );
+            msgBox.setButtonText( QMessageBox::Ok, Res.getResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_OK") ) );
             msgBox.setFont( font() );
 
             msgBox.exec();

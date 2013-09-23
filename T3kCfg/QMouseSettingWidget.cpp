@@ -10,9 +10,7 @@
 
 #include <QShowEvent>
 #include <QFile>
-#ifdef HITACHI_VER
-#include <QStringList>
-#endif
+
 
 QMouseSettingWidget::QMouseSettingWidget(T3kHandle*& pHandle, QWidget *parent) :
     QWidget(parent),
@@ -29,7 +27,7 @@ QMouseSettingWidget::QMouseSettingWidget(T3kHandle*& pHandle, QWidget *parent) :
     ui->Profile4->setFont( font() );
     ui->Profile5->setFont( font() );
 
-    ui->TitleMouseMapping->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_MOUSE_MAP.png" );
+    ui->TitleMouseMapping->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_MOUSE_MAP.png" );
 
     ui->Profile1->setText( m_ProfileLabel.GetLabel(0) );
     ui->Profile2->setText( m_ProfileLabel.GetLabel(1) );
@@ -56,7 +54,7 @@ QMouseSettingWidget::QMouseSettingWidget(T3kHandle*& pHandle, QWidget *parent) :
     ui->Profile4->setEnabled(false);
     ui->Profile5->setEnabled(false);
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 QMouseSettingWidget::~QMouseSettingWidget()
@@ -98,13 +96,13 @@ void QMouseSettingWidget::ReplaceLabelName(QCheckableButton *pBtn)
         m_ProfileLabel.SetLabel( 4, str );
 }
 
-void QMouseSettingWidget::OnChangeLanguage()
+void QMouseSettingWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    ui->TitleMouseMapping->setText( Res.GetResString(QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TITLE_CAPTION_MOUSE_BUTTON_MAPPING")) );
+    ui->TitleMouseMapping->setText( Res.getResString(QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TITLE_CAPTION_MOUSE_BUTTON_MAPPING")) );
 }
 
 void QMouseSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
@@ -324,38 +322,6 @@ void QMouseSettingWidget::RequestSensorData( bool bDefault )
     QCustomDefaultSensor* pInstance = QCustomDefaultSensor::Instance();
     if( bDefault )
     {
-#ifdef HITACHI_VER
-        QStringList listMPCustomData;
-        if( LoadMPCustomData( &listMPCustomData ) )
-        {
-            m_RequestSensorData.AddItem( cstrMouseProfile1, listMPCustomData.at(0) );
-            m_RequestSensorData.AddItem( cstrMouseProfile2, listMPCustomData.at(1) );
-            m_RequestSensorData.AddItem( cstrMouseProfile3, listMPCustomData.at(2) );
-            m_RequestSensorData.AddItem( cstrMouseProfile4, listMPCustomData.at(3) );
-            m_RequestSensorData.AddItem( cstrMouseProfile5, listMPCustomData.at(4) );
-
-            m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrMouseProfile1).arg(listMPCustomData.at(0)).toUtf8().data(), false );
-            m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrMouseProfile2).arg(listMPCustomData.at(1)).toUtf8().data(), false );
-            m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrMouseProfile3).arg(listMPCustomData.at(2)).toUtf8().data(), false );
-            m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrMouseProfile4).arg(listMPCustomData.at(3)).toUtf8().data(), false );
-            m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrMouseProfile5).arg(listMPCustomData.at(4)).toUtf8().data(), false );
-        }
-        else
-        {
-            QString str( cQ );
-            m_RequestSensorData.AddItem( cstrMouseProfile1, str );
-            m_RequestSensorData.AddItem( cstrMouseProfile2, str );
-            m_RequestSensorData.AddItem( cstrMouseProfile3, str );
-            m_RequestSensorData.AddItem( cstrMouseProfile4, str );
-            m_RequestSensorData.AddItem( cstrMouseProfile5, str );
-
-            m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrMouseProfile1).arg(cQ).toUtf8().data(), true );
-            m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrMouseProfile2).arg(cQ).toUtf8().data(), false );
-            m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrMouseProfile3).arg(cQ).toUtf8().data(), false );
-            m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrMouseProfile4).arg(cQ).toUtf8().data(), false );
-            m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrMouseProfile5).arg(cQ).toUtf8().data(), false );
-        }
-#else
         if( pInstance->IsLoaded() )
         {
             QString strQ = QString( cQ );
@@ -392,7 +358,6 @@ void QMouseSettingWidget::RequestSensorData( bool bDefault )
             m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrMouseProfile4).arg(cQ).toUtf8().data(), true );
             m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrMouseProfile5).arg(cQ).toUtf8().data(), true );
         }
-#endif
         m_nSelectedProfileIndex = -1;
     }
 
@@ -424,42 +389,7 @@ void QMouseSettingWidget::RequestSensorData( bool bDefault )
 
     m_RequestSensorData.Start( m_pT3kHandle );
 }
-#ifdef HITACHI_VER
-bool QMouseSettingWidget::LoadMPCustomData( QStringList* Out_ListMPData )
-{
-    Out_ListMPData->clear();
-    QString strPathName( QCoreApplication::applicationDirPath() + "/MPCustomData.dat" );
-    if( QFile::exists( strPathName ) )
-    {
-        m_bLoadMPCustomData = true;
 
-        QSettings setMPData( strPathName, QSettings::IniFormat );
-        QString str;
-        str = QString(cstrMouseProfile1); str.remove('=');
-        Out_ListMPData->push_back( setMPData.value( str, "" ).toString() );
-        str = QString(cstrMouseProfile2); str.remove('=');
-        Out_ListMPData->push_back( setMPData.value( str, "" ).toString() );
-        str = QString(cstrMouseProfile3); str.remove('=');
-        Out_ListMPData->push_back( setMPData.value( str, "" ).toString() );
-        str = QString(cstrMouseProfile4); str.remove('=');
-        Out_ListMPData->push_back( setMPData.value( str, "" ).toString() );
-        str = QString(cstrMouseProfile5); str.remove('=');
-        Out_ListMPData->push_back( setMPData.value( str, "" ).toString() );
-
-        if( Out_ListMPData->at(0).isEmpty() ||
-            Out_ListMPData->at(1).isEmpty() ||
-            Out_ListMPData->at(2).isEmpty() ||
-            Out_ListMPData->at(3).isEmpty() ||
-            Out_ListMPData->at(4).isEmpty() )
-        {
-            Out_ListMPData->clear();
-            return false;
-        }
-        return true;
-    }
-    return false;
-}
-#endif
 void QMouseSettingWidget::showEvent(QShowEvent *evt)
 {
     QWidget::showEvent(evt);

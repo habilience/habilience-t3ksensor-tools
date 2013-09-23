@@ -3,7 +3,7 @@
 #include <QScrollBar>
 #include <QHeaderView>
 
-#include "QHoverComboBox.h"
+#include "ui/QHoverComboBox.h"
 #include "QSoftkeyActionCellWidget.h"
 
 QSoftkeyTableWidget::QSoftkeyTableWidget(QWidget *parent) :
@@ -14,22 +14,22 @@ QSoftkeyTableWidget::QSoftkeyTableWidget(QWidget *parent) :
     installEventFilter( this );
 }
 
-void QSoftkeyTableWidget::OnChangeLanguage()
+void QSoftkeyTableWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    horizontalHeaderItem( 0 )->setText( Res.GetResString( QString::fromUtf8("SOFTKEY SETTING"), QString::fromUtf8("TEXT_HEADER_NUMBER") ) );
-    horizontalHeaderItem( 1 )->setText( Res.GetResString( QString::fromUtf8("SOFTKEY SETTING"), QString::fromUtf8("TEXT_HEADER_ACTION") ) );
+    horizontalHeaderItem( 0 )->setText( Res.getResString( QString::fromUtf8("SOFTKEY SETTING"), QString::fromUtf8("TEXT_HEADER_NUMBER") ) );
+    horizontalHeaderItem( 1 )->setText( Res.getResString( QString::fromUtf8("SOFTKEY SETTING"), QString::fromUtf8("TEXT_HEADER_ACTION") ) );
 
     for( int i=0; i<rowCount(); i++ )
     {
         if( cellWidget( i, 1 )->inherits( "QHoverComboBox" ) )
         {
             QHoverComboBox* pHCB = (QHoverComboBox*)cellWidget( i, 1 );
-            pHCB->setItemText( 0, Res.GetResString( QString::fromUtf8("SOFTKEY SETTING"), QString::fromUtf8("TEXT_ITEM_NOT_USED") ) );
-            pHCB->setItemText( 1, Res.GetResString( QString::fromUtf8("SOFTKEY SETTING"), QString::fromUtf8("TEXT_ITEM_STATE") ) );
+            pHCB->setItemText( 0, Res.getResString( QString::fromUtf8("SOFTKEY SETTING"), QString::fromUtf8("TEXT_ITEM_NOT_USED") ) );
+            pHCB->setItemText( 1, Res.getResString( QString::fromUtf8("SOFTKEY SETTING"), QString::fromUtf8("TEXT_ITEM_STATE") ) );
         }
     }
 }
@@ -54,7 +54,7 @@ int QSoftkeyTableWidget::AddSoftkeyItem(int nAddCount)
         connect( ((QSoftkeyActionCellWidget*)cellWidget( nRowIndex, 1 )), SIGNAL(MousekeyPress(QObject*,ushort)), this, SLOT(on_MousekeyPress(QObject*,ushort)) );
     }
 
-    OnChangeLanguage();
+    onChangeLanguage();
 
     show();
     return rowCount();

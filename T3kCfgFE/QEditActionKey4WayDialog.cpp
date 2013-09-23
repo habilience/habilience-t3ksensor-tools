@@ -5,7 +5,7 @@
 #include "QT3kDevice.h"
 #include "QGestureMappingTable.h"
 #include "QLangManager.h"
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 
 #include <QEvent>
 #include <QFocusEvent>
@@ -83,7 +83,7 @@ void QEditActionKey4WayDialog::onChangeLanguage()
     ui->lblKey->setText( res.getResString(RES_TAG, "TEXT_KEY") );
 
     ui->btnApply->setText( res.getResString(MAIN_TAG, "BTN_CAPTION_APPLY") );
-    ui->btnCancel->setText( res.getResString(MAIN_TAG, "BTN_CAPTION_CANCEL") );
+    ui->btnCancel->setText( res.getResString("MESSAGEBOX", "BTN_CAPTION_CANCEL") );
 
     if (bIsR2L != s_bIsR2L)
     {

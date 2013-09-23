@@ -1,6 +1,6 @@
 #include "UserDefinedKeyWidget.h"
 
-#include "../common/QKeyMapStr.h"
+#include "QKeyMapStr.h"
 
 #include <QPixmap>
 #include <QPainter>
@@ -45,11 +45,11 @@ QUserDefinedKeyWidget::QUserDefinedKeyWidget(QWidget *parent) :
 	m_wKeyValue = 0x00;
 
 
-    m_pIconBtn[CTRL]	= new QPixmap( ":/T3kSoftlogic/resources/PNG_ICON_KEY_CTRL.png" );
-    m_pIconBtn[ALT]		= new QPixmap( ":/T3kSoftlogic/resources/PNG_ICON_KEY_ALT" );
-    m_pIconBtn[SHIFT]	= new QPixmap( ":/T3kSoftlogic/resources/PNG_ICON_KEY_SHIFT" );
-    m_pIconBtn[WIN]		= new QPixmap( ":/T3kSoftlogic/resources/PNG_ICON_KEY_WIN" );
-    m_pIconClearBtn		= new QPixmap( ":/T3kSoftlogic/resources/PNG_ICON_KEY_CLEAR" );
+    m_pIconBtn[CTRL]	= new QPixmap( ":/T3kSoftlogicRes/resources/PNG_ICON_KEY_CTRL.png" );
+    m_pIconBtn[ALT]		= new QPixmap( ":/T3kSoftlogicRes/resources/PNG_ICON_KEY_ALT" );
+    m_pIconBtn[SHIFT]	= new QPixmap( ":/T3kSoftlogicRes/resources/PNG_ICON_KEY_SHIFT" );
+    m_pIconBtn[WIN]		= new QPixmap( ":/T3kSoftlogicRes/resources/PNG_ICON_KEY_WIN" );
+    m_pIconClearBtn		= new QPixmap( ":/T3kSoftlogicRes/resources/PNG_ICON_KEY_CLEAR" );
 
     m_nIconTotalWidth = 0;
     m_nIconTotalWidth += m_pIconBtn[CTRL]->width() / 2;

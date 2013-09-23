@@ -2,10 +2,10 @@
 #include "ui_QAreaSettingForm.h"
 
 #include "QBorderStyleEdit.h"
-#include "../common/QUtils.h"
+#include "QUtils.h"
 #include <QPainter>
 #include <QResizeEvent>
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 #include <QScreen>
 #include <QtNumeric>
 #include <math.h>

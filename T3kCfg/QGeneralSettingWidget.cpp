@@ -31,24 +31,24 @@ QGeneralSettingWidget::QGeneralSettingWidget(T3kHandle*& pHandle, QWidget *paren
 
     ChkInputModeAutoSelect->setChecked( false );
 
-    TitleLanguage->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_LANGUAGE.png");
-    TitleInputMode->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_INPUT_MODE.png");
-    TitleDisplayOrientation->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_MULTI_MONITOR.png");
+    TitleLanguage->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_LANGUAGE.png");
+    TitleInputMode->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_INPUT_MODE.png");
+    TitleDisplayOrientation->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_MULTI_MONITOR.png");
 
-    int nSelectLanguage = QLangManager::GetPtr()->GetActiveLanguage();
+    int nSelectLanguage = QLangManager::instance()->getActiveLanguage();
 
     int nSelIdx = -1;
-    int nPos = QLangManager::GetPtr()->GetFirstAvailableLanguage();
+    int nPos = QLangManager::instance()->getFirstAvailableLanguage();
     while( nPos >= 0 )
     {
-        QString strLangName = QLangManager::GetPtr()->GetLanguageName( nPos );
+        QString strLangName = QLangManager::instance()->getLanguageName( nPos );
         CBLLanguage->addItem( strLangName );
         int nIdx = CBLLanguage->count()-1;
         CBLLanguage->setItemData( nIdx, nPos );
         if( nPos == nSelectLanguage )
             nSelIdx = nIdx;
 
-        nPos = QLangManager::GetPtr()->GetNextAvailableLanguage( nPos );
+        nPos = QLangManager::instance()->getNextAvailableLanguage();
     }
 
     CBLLanguage->setCurrentIndex( nSelIdx );
@@ -61,7 +61,7 @@ QGeneralSettingWidget::QGeneralSettingWidget(T3kHandle*& pHandle, QWidget *paren
     RBtnLandscapeF->setVisible( false );
     RBtnPortraitF->setVisible( false );
 
-    OnChangeLanguage();
+    onChangeLanguage();
     GBInputMode->setTitle( "                                        " );
 
     QRect rcL( CBLLanguage->x(), CBLLanguage->y(), CBLLanguage->width()-1, CBLLanguage->height() );
@@ -70,7 +70,7 @@ QGeneralSettingWidget::QGeneralSettingWidget(T3kHandle*& pHandle, QWidget *paren
 
     CBLLanguage->setVisible( false );
 
-    TitleTrayIcon->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_TRAYICON.png" );
+    TitleTrayIcon->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_TRAYICON.png" );
 
     QString strPath = QCoreApplication::applicationDirPath();
     if( strPath.at( strPath.size()-1 ) == '/' )
@@ -90,7 +90,7 @@ QGeneralSettingWidget::QGeneralSettingWidget(T3kHandle*& pHandle, QWidget *paren
         chkTrayIcon->setChecked( false );
     RegOption.endGroup();
 
-    if( QLangManager::GetPtr()->GetAvailableLanguageCount() <= 1 )
+    if( QLangManager::instance()->getAvailableLanguageCount() <= 1 )
     {
         CBLLanguage->hide();
         LBLanguageMsg->show();
@@ -109,46 +109,46 @@ QGeneralSettingWidget::~QGeneralSettingWidget()
     m_RequestSensorData.Stop();
 }
 
-void QGeneralSettingWidget::OnChangeLanguage()
+void QGeneralSettingWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    TitleLanguage->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_LANGUAGE")) );
-    TitleInputMode->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_CAPTION_TOUCH_INPUT_MODE")) );
+    TitleLanguage->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_LANGUAGE")) );
+    TitleInputMode->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_CAPTION_TOUCH_INPUT_MODE")) );
 
-    LBLanguage->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_LANGUAGE")) );
-    LBLanguageMsg->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_LANGUAGE_NOT_FOUND")) );
+    LBLanguage->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_LANGUAGE")) );
+    LBLanguageMsg->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_LANGUAGE_NOT_FOUND")) );
 
-    LBInputMode->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_INPUT_MODE")) );
-    RBMouse->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_INPUT_MODE_MOUSE")) );
-    RBMultiTouchWin7->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_INPUT_MODE_MULTI_TOUCH")) );
+    LBInputMode->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_INPUT_MODE")) );
+    RBMouse->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_INPUT_MODE_MOUSE")) );
+    RBMultiTouchWin7->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_INPUT_MODE_MULTI_TOUCH")) );
 
-    ChkInputModeAutoSelect->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_INPUT_MODE_AUTO_SELECT")) );
+    ChkInputModeAutoSelect->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_INPUT_MODE_AUTO_SELECT")) );
 
-    TitleTrayIcon->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_TRAY_ICON") ) );
-    chkTrayIcon->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_CHECK_TRAYICON") ) );
+    TitleTrayIcon->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_TRAY_ICON") ) );
+    chkTrayIcon->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_CHECK_TRAYICON") ) );
 
-    TitleDisplayOrientation->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_DISPLAY_ORIENTATION") ) );
+    TitleDisplayOrientation->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_DISPLAY_ORIENTATION") ) );
 #ifdef Q_OS_WIN
-    GBOrientation->setTitle( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION") ) );
-    RBtnLandscape->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION_1") ) );
-    RBtnPortrait->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION_2") ) );
-    RBtnLandscapeF->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION_3") ) );
-    RBtnPortraitF->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION_4") ) );
+    GBOrientation->setTitle( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION") ) );
+    RBtnLandscape->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION_1") ) );
+    RBtnPortrait->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION_2") ) );
+    RBtnLandscapeF->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION_3") ) );
+    RBtnPortraitF->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_ORIENTATION_4") ) );
 #elif defined(Q_OS_LINUX)
-    GBOrientation->setTitle( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION") ) );
-    RBtnLandscape->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION_1") ) );
-    RBtnPortrait->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION_2") ) );
-    RBtnLandscapeF->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION_3") ) );
-    RBtnPortraitF->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION_4") ) );
+    GBOrientation->setTitle( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION") ) );
+    RBtnLandscape->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION_1") ) );
+    RBtnPortrait->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION_2") ) );
+    RBtnLandscapeF->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION_3") ) );
+    RBtnPortraitF->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_X11_ORIENTATION_4") ) );
 #elif defined(Q_OS_MAC)
-    GBOrientation->setTitle( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_MAC_ORIENTATION") ) );
-    RBtnLandscape->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_MAC_ORIENTATION_1") ) );
-    RBtnPortrait->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_MAC_ORIENTATION_2") ) );
-    RBtnLandscapeF->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_MAC_ORIENTATION_3") ) );
-    RBtnPortraitF->setText( Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_MAC_ORIENTATION_4") ) );
+    GBOrientation->setTitle( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_MAC_ORIENTATION") ) );
+    RBtnLandscape->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_MAC_ORIENTATION_1") ) );
+    RBtnPortrait->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_MAC_ORIENTATION_2") ) );
+    RBtnLandscapeF->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_MAC_ORIENTATION_3") ) );
+    RBtnPortraitF->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_MAC_ORIENTATION_4") ) );
 #endif
 }
 
@@ -190,7 +190,7 @@ void QGeneralSettingWidget::RequestGeneralSetting( bool bDefault )
 
     if( bDefault )
     {
-        int nDefineIndex = QLangManager::GetPtr()->GetDefaultLanguage();
+        int nDefineIndex = QLangManager::instance()->getDefaultLanguage();
         for( int i=0; i<CBLLanguage->count(); i++ )
         {
             bool bOK = false;
@@ -408,7 +408,7 @@ void QGeneralSettingWidget::on_CBLLanguage_activated(int index)
 
     int nLangIdx = CBLLanguage->itemData( nSelIdx ).toInt();
 
-    QLangManager::GetPtr()->SetLanguage( nLangIdx );
+    QLangManager::instance()->setLanguage( nLangIdx );
 }
 
 void QGeneralSettingWidget::on_chkTrayIcon_toggled(bool checked)
@@ -475,17 +475,17 @@ void QGeneralSettingWidget::on_RBMultiTouchWin7_clicked()
 
             if( bMsg )
             {
-                QLangRes& Res = QLangManager::GetPtr()->GetResource();
-                QString strMessage = Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_INPUT_MODE_WARNING_MSG") );
-                QString strMsgTitle = Res.GetResString( QString::fromUtf8("WARNING SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_CAPTION") );
+                QLangRes& Res = QLangManager::instance()->getResource();
+                QString strMessage = Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_INPUT_MODE_WARNING_MSG") );
+                QString strMsgTitle = Res.getResString( QString::fromUtf8("WARNING SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_CAPTION") );
 
                 QMessageBox msgBox( this );
                 msgBox.setWindowTitle( strMsgTitle );
                 msgBox.setText( strMessage );
                 msgBox.setStandardButtons( QMessageBox::Yes | QMessageBox::No );
                 msgBox.setIcon( QMessageBox::Warning );
-                msgBox.setButtonText( QMessageBox::Yes, Res.GetResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_YES") ) );
-                msgBox.setButtonText( QMessageBox::No, Res.GetResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_NO") ) );
+                msgBox.setButtonText( QMessageBox::Yes, Res.getResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_YES") ) );
+                msgBox.setButtonText( QMessageBox::No, Res.getResString( QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_NO") ) );
                 msgBox.setFont( font() );
 
                 if( msgBox.exec() != QMessageBox::Yes )

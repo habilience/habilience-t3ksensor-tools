@@ -48,7 +48,7 @@ QLoadSensorDataWidget::QLoadSensorDataWidget(T3kHandle*& pHandle, QWidget *paren
 
     setFocusPolicy( Qt::StrongFocus );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 QLoadSensorDataWidget::~QLoadSensorDataWidget()
@@ -114,7 +114,7 @@ void QLoadSensorDataWidget::ResetStorage()
 
 void QLoadSensorDataWidget::Start()
 {
-    TPDPEventMultiCaster::GetPtr()->SetSingleListener( this );
+    TPDPEventMultiCaster::instance()->SetSingleListener( this );
 
     ResetStorage();
 
@@ -124,7 +124,7 @@ void QLoadSensorDataWidget::Start()
     if( !m_pT3kHandle->GetReportCommand() )
         m_pT3kHandle->SetReportCommand( true );
 
-    on_InsertProgressLog( "[" + QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_START")) + "]" );
+    on_InsertProgressLog( "[" + QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_START")) + "]" );
 
     ui->LBProgressingIcon->Start();
 
@@ -155,13 +155,13 @@ void QLoadSensorDataWidget::CloseWidget()
     ResetStorage();
 }
 
-void QLoadSensorDataWidget::OnChangeLanguage()
+void QLoadSensorDataWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
-    setWindowTitle( Res.GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("BTN_CAPTION_SAVELOG")) );
-    ui->BTOK->setText( Res.GetResString(QString::fromUtf8("EDIT PROFILE ITEM"),QString::fromUtf8("BTN_CAPTION_CANCEL")) );
+    QLangRes& Res = QLangManager::instance()->getResource();
+    setWindowTitle( Res.getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("BTN_CAPTION_SAVELOG")) );
+    ui->BTOK->setText( Res.getResString(QString::fromUtf8("EDIT PROFILE ITEM"),QString::fromUtf8("BTN_CAPTION_CANCEL")) );
 }
 
 void QLoadSensorDataWidget::on_InsertProgressLog(QString strMessage, bool bError/*=false*/)
@@ -199,8 +199,8 @@ void QLoadSensorDataWidget::timerEvent(QTimerEvent *evt)
         {
         case LDS_SIDEVIEW:
             {
-                QString strLog( "[" + QLangManager::GetResUTF8String("SENSOR DIAGNOSIS", "LOG_PROGRESS") + "] " );
-                strLog += QLangManager::GetResUTF8String( "SENSOR DIAGNOSIS", "LOG_SIDEVIEW" );
+                QString strLog( "[" + QLangManager::getResUTF8String("SENSOR DIAGNOSIS", "LOG_PROGRESS") + "] " );
+                strLog += QLangManager::getResUTF8String( "SENSOR DIAGNOSIS", "LOG_SIDEVIEW" );
                 on_InsertProgressLog( strLog );
 
                 if( !m_pT3kHandle->GetReportCommand() )
@@ -210,8 +210,8 @@ void QLoadSensorDataWidget::timerEvent(QTimerEvent *evt)
             break;
         case LDS_DETECTION:
             {
-                QString strLog( "[" + QLangManager::GetResUTF8String( "SENSOR DIAGNOSIS", "LOG_PROGRESS" ) + "] " );
-                strLog += QLangManager::GetResUTF8String( "SENSOR DIAGNOSIS", "LOG_DETECTION" );
+                QString strLog( "[" + QLangManager::getResUTF8String( "SENSOR DIAGNOSIS", "LOG_PROGRESS" ) + "] " );
+                strLog += QLangManager::getResUTF8String( "SENSOR DIAGNOSIS", "LOG_DETECTION" );
                 on_InsertProgressLog( strLog );
 
                 if( !m_pT3kHandle->GetReportCommand() )
@@ -221,8 +221,8 @@ void QLoadSensorDataWidget::timerEvent(QTimerEvent *evt)
             break;
         case LDS_SENSORDATA:
             {
-                QString strLog( "[" + QLangManager::GetResUTF8String( "SENSOR DIAGNOSIS", "LOG_PROGRESS" ) + "] " );
-                strLog += QLangManager::GetResUTF8String( "SENSOR DIAGNOSIS", "LOG_DATA" );
+                QString strLog( "[" + QLangManager::getResUTF8String( "SENSOR DIAGNOSIS", "LOG_PROGRESS" ) + "] " );
+                strLog += QLangManager::getResUTF8String( "SENSOR DIAGNOSIS", "LOG_DATA" );
                 on_InsertProgressLog( strLog );
 
                 if( !m_pT3kHandle->GetReportCommand() )
@@ -237,8 +237,8 @@ void QLoadSensorDataWidget::timerEvent(QTimerEvent *evt)
             break;
         case LDS_SAVE:
             {
-                QString strLog( "[" + QLangManager::GetResUTF8String( "SENSOR DIAGNOSIS", "LOG_PROGRESS" ) + "] " );
-                strLog += QLangManager::GetResUTF8String( "SENSOR DIAGNOSIS", "LOG_SAVING" );
+                QString strLog( "[" + QLangManager::getResUTF8String( "SENSOR DIAGNOSIS", "LOG_PROGRESS" ) + "] " );
+                strLog += QLangManager::getResUTF8String( "SENSOR DIAGNOSIS", "LOG_SAVING" );
                 on_InsertProgressLog( strLog );
 
                 if( SaveLogToFile() && !m_bSaveError )
@@ -299,7 +299,7 @@ void QLoadSensorDataWidget::LoadSideView()
     QT3kLoadSideviewObject* pTempObj = (QT3kLoadSideviewObject*)m_pHIDObject;
     pTempObj->SetSavePath( m_strSavePath + "/data" );
 
-    TPDPEventMultiCaster::GetPtr()->SetSingleListener( m_pHIDObject );
+    TPDPEventMultiCaster::instance()->SetSingleListener( m_pHIDObject );
     m_pHIDObject->Start( m_pSensorLogData );
 }
 
@@ -314,7 +314,7 @@ void QLoadSensorDataWidget::LoadDetection()
     connect( m_pHIDObject, SIGNAL(Complete(int)), this, SLOT(onLoadComplete(int)), Qt::QueuedConnection );
     connect( m_pHIDObject, SIGNAL(PrintProgreeLog(QString,bool)), this, SLOT(on_InsertProgressLog(QString,bool)), Qt::QueuedConnection );
 
-    TPDPEventMultiCaster::GetPtr()->SetSingleListener( m_pHIDObject );
+    TPDPEventMultiCaster::instance()->SetSingleListener( m_pHIDObject );
     m_pHIDObject->Start( m_pSensorLogData );
 }
 
@@ -329,7 +329,7 @@ void QLoadSensorDataWidget::LoadData()
     connect( m_pHIDObject, SIGNAL(Complete(int)), this, SLOT(onLoadComplete(int)), Qt::QueuedConnection );
     connect( m_pHIDObject, SIGNAL(PrintProgreeLog(QString,bool)), this, SLOT(on_InsertProgressLog(QString,bool)), Qt::QueuedConnection );
 
-    TPDPEventMultiCaster::GetPtr()->SetSingleListener( m_pHIDObject );
+    TPDPEventMultiCaster::instance()->SetSingleListener( m_pHIDObject );
     m_pHIDObject->Start( m_pSensorLogData );
 }
 
@@ -351,7 +351,7 @@ void QLoadSensorDataWidget::onLoadComplete(int nStep)
 {
     if( nStep > LDS_SAVE ) return;
 
-    TPDPEventMultiCaster::GetPtr()->SetSingleListener( this );
+    TPDPEventMultiCaster::instance()->SetSingleListener( this );
     if( m_pHIDObject )
     {
         delete m_pHIDObject;
@@ -377,7 +377,8 @@ bool QLoadSensorDataWidget::SaveLogToFile()
             //
 
             QString strFELog( GetLastFELogFileNamePath() );
-            QFile::copy( strFELog, m_strSavePath+ "/data/" + strFELog.right( strFELog.length() - strFELog.lastIndexOf('\\') ) );
+            QString strff = m_strSavePath+ "/data/" + strFELog.right( strFELog.length() - strFELog.lastIndexOf('/') );
+            QFile::copy( strFELog, m_strSavePath+ "/data/" + strFELog.right( strFELog.length() - strFELog.lastIndexOf('/') ) );
 
             //m_strSavePath = m_strSavePath.left( m_strSavePath.lastIndexOf( '/' ) );
 
@@ -436,12 +437,12 @@ bool QLoadSensorDataWidget::SaveLogToFile()
 #endif
                 bRet = true;
 
-                QString strLog( "[" + QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_COMPLETE")) + "] " );
+                QString strLog( "[" + QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_COMPLETE")) + "] " );
                 on_InsertProgressLog( strLog );
             }
             else
             {
-                QString strLog( "[" + QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_FAIL")) + "] " );
+                QString strLog( "[" + QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_FAIL")) + "] " );
                 strLog += "2";
                 on_InsertProgressLog( strLog, true );
 
@@ -452,7 +453,7 @@ bool QLoadSensorDataWidget::SaveLogToFile()
         {
             Print.close();
 
-            QString strLog( "[" + QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_FAIL")) + "] " );
+            QString strLog( "[" + QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_FAIL")) + "] " );
             strLog += "1";
             on_InsertProgressLog( strLog, true );
 
@@ -462,7 +463,7 @@ bool QLoadSensorDataWidget::SaveLogToFile()
 
     if( bRet )
     {
-        ui->BTOK->setText( QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_OK")) );
+        ui->BTOK->setText( QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_OK")) );
     }
 
     return bRet;
@@ -505,9 +506,9 @@ bool QLoadSensorDataWidget::ExportReportFiles(QString strOutPutPath)
 void QLoadSensorDataWidget::on_BTOK_clicked()
 {
     CloseWidget();
-    TPDPEventMultiCaster::GetPtr()->ClearSingleListener();
+    TPDPEventMultiCaster::instance()->ClearSingleListener();
 
-    if( ui->BTOK->text() == QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("EDIT PROFILE ITEM"),QString::fromUtf8("BTN_CAPTION_CANCEL")) )
+    if( ui->BTOK->text() == QLangManager::instance()->getResource().getResString(QString::fromUtf8("EDIT PROFILE ITEM"),QString::fromUtf8("BTN_CAPTION_CANCEL")) )
     {
         RemoveDirectoryR( m_strSavePath + "/data" );
     }

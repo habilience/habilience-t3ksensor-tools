@@ -2,7 +2,7 @@
 #include "ui_TabKeyDesignWidget.h"
 
 #include "T3kCommonData.h"
-#include "../common/ui/QHoverComboBox.h"
+#include "ui/QHoverComboBox.h"
 
 #include <QComboBox>
 #include <QDesktopWidget>

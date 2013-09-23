@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 #include "QSoftkey.h"
@@ -14,7 +14,7 @@ namespace Ui {
     class QSoftKeySettingWidget;
 }
 
-class QSoftKeySettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QSoftKeySettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -30,7 +30,7 @@ protected:
     virtual void hideEvent(QHideEvent *evt);
     virtual bool eventFilter(QObject *target, QEvent *evt);
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
     virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
 
 

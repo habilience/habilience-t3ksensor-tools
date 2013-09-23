@@ -5,7 +5,7 @@
 #include "QKeyMapStr.h"
 #include "QGestureMappingTable.h"
 #include "QT3kDevice.h"
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 
 #define RES_TAG "EDIT PROFILE ITEM"
 #define MAIN_TAG "MAIN"
@@ -56,7 +56,7 @@ void QEditActionEnableDialog::onChangeLanguage()
     ui->lblAction->setText( res.getResString(RES_TAG, "TEXT_ACTION") );
 
     ui->btnApply->setText( res.getResString(MAIN_TAG, "BTN_CAPTION_APPLY") );
-    ui->btnCancel->setText( res.getResString(MAIN_TAG, "BTN_CAPTION_CANCEL") );
+    ui->btnCancel->setText( res.getResString("MESSAGEBOX", "BTN_CAPTION_CANCEL") );
 
     if (bIsR2L != s_bIsR2L)
     {

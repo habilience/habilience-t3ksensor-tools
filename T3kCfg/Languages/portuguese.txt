@@ -22,7 +22,7 @@ TITLE_CAPTION_FIRMWARE = Informações sobre o firmware
 TEXT_DEVICE_NOT_CONNECTED = O dispositivo não está conectado.
 TEXT_FIRMWARE_DOWNLOAD = Firmware descarregado
 
-TITLE_CAPTION_LICENSE = Sobre
+TITLE_CAPTION_LICENSE = Licença
 
 [SELECT DEVICE]
 WINDOW_CAPTION = Selecionar dispositivo

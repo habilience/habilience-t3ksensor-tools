@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>QAssistanceWidget</class>
  <widget class="QDialog" name="QAssistanceWidget">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -437,6 +440,10 @@
   <property name="windowTitle">
    <string>Assistance</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="T3kCfgRes.qrc">
+    <normaloff>:/T3kCfgRes/resources/PNG_ICON_SETTING.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_SETTING.png</iconset>
+  </property>
   <widget class="QColorTabWidget" name="TabCamWidget">
    <property name="geometry">
     <rect>
@@ -558,10 +565,12 @@
   <customwidget>
    <class>QColorTabWidget</class>
    <extends>QTabWidget</extends>
-   <header>QColorTabWidget.h</header>
+   <header>ui/ColorTabWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="T3kCfgRes.qrc"/>
+ </resources>
  <connections/>
 </ui>

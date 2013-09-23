@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include <quazipfile.h>
 #include <QBriefingDialog.h>
-#include "../common/QUtils.h"
+#include "QUtils.h"
 #include <QPainter>
 #include <QDir>
 

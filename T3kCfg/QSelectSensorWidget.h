@@ -4,14 +4,14 @@
 #include <QDialog>
 #include <QToolButton>
 #include <QTimer>
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 namespace Ui {
     class QSelectSensorWidget;
 }
 
-class QSelectSensorWidget : public QDialog, public QLangManager::LangChangeNotify
+class QSelectSensorWidget : public QDialog, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -35,7 +35,7 @@ protected:
     virtual void closeEvent(QCloseEvent *evt);
     virtual void timerEvent(QTimerEvent *evt);
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
 private:
     Ui::QSelectSensorWidget *ui;

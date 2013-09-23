@@ -1,4 +1,4 @@
-IDI_ICON1	ICON	DISCARDABLE	"./Resources/T3kCfg.ico"
+IDI_ICON1	ICON	DISCARDABLE	"./resources/T3kCfg.ico"
 
 #include "../common/T3k_ver.h"
 #include <windows.h> 

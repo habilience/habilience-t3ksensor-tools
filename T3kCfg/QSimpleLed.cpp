@@ -7,7 +7,7 @@ QSimpleLed::QSimpleLed(QWidget *parent) :
     QLabel(parent)
 {
     m_eLEDStatus = SDisconnect;
-    m_pixImage.load( ":/T3kCfgRes/Resources/PNG_NETWORK_DISCONNECT.png", "PNG" );
+    m_pixImage.load( ":/T3kCfgRes/resources/PNG_NETWORK_DISCONNECT.png", "PNG" );
 }
 
 void QSimpleLed::SetStatus(eLEDStatus eStatus)
@@ -16,13 +16,13 @@ void QSimpleLed::SetStatus(eLEDStatus eStatus)
     {
     case SDisconnect:
     default:
-        m_pixImage.load( ":/T3kCfgRes/Resources/PNG_NETWORK_DISCONNECT.png", "PNG" );
+        m_pixImage.load( ":/T3kCfgRes/resources/PNG_NETWORK_DISCONNECT.png", "PNG" );
         break;
     case SConnectOFF:
-        m_pixImage.load( ":/T3kCfgRes/Resources/PNG_NETWORK_OFF.png", "PNG" );
+        m_pixImage.load( ":/T3kCfgRes/resources/PNG_NETWORK_OFF.png", "PNG" );
         break;
     case SConnectON:
-        m_pixImage.load( ":/T3kCfgRes/Resources/PNG_NETWORK_ON.png", "PNG" );
+        m_pixImage.load( ":/T3kCfgRes/resources/PNG_NETWORK_ON.png", "PNG" );
         break;
     }
 

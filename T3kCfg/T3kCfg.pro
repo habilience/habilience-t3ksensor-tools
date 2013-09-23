@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = T3kCfg
 CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
 
+CONFIG += static staticlib
+
 TEMPLATE = app
 
 #Define
@@ -21,7 +23,8 @@ CONFIG(debug, debug|release):DEFINES += _DEBUG
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_DEBUG
 
 #Library
-INCLUDEPATH += $$PWD/../external/quazip \
+INCLUDEPATH += ../common/ \
+                $$PWD/../external/quazip \
                 $$PWD/../external/T3kHIDLibrary/include \
                 $$PWD../external/quazip/zlib/ \
 
@@ -33,7 +36,6 @@ QMAKE_CFLAGS_RELEASE    += -Os
 QMAKE_CXXFLAGS_RELEASE  += -Os
 
 win32 {
-    CONFIG += static staticlib
     QMAKE_LFLAGS += -static
 
     CONFIG(release, debug|release) {
@@ -147,7 +149,6 @@ linux-g++-64{
 
 
 macx: {
-    CONFIG += static staticlib
     DEFINES += OS_MAC
 
     CONFIG(release, debug|release): {
@@ -178,8 +179,14 @@ SOURCES += main.cpp\
     ../common/TPDPEventMultiCaster.cpp \
     ../common/QKeyMapStr.cpp \
     ../common/QUtils.cpp \
-    ../common/ui/QUnderlineLabel.cpp \
+    ../common/QLangRes.cpp \
+    ../common/QLangManager.cpp \
+    ../common/ui/UnderlineLabel.cpp \
     ../common/ui/QHoverComboBox.cpp \
+    ../common/ui/SlidingStackedWidget.cpp \
+    ../common/ui/ColorTabBar.cpp \
+    ../common/ui/ColorTabWidget.cpp \
+    ../common/ui/QLicenseWidget.cpp \
     QMouseSettingWidget.cpp \
     QCalibrationSettingWidget.cpp \
     QGeneralSettingWidget.cpp \
@@ -208,8 +215,6 @@ SOURCES += main.cpp\
     QFlatTextButton.cpp \
     QSensorSettingWidget.cpp \
     QMySystemTrayIcon.cpp \
-    QLangRes.cpp \
-    QLangManager.cpp \
     QCustomCmdLinkButton.cpp \
     QWidgetCloseEventManager.cpp \
     QRequestHIDManager.cpp \
@@ -229,7 +234,6 @@ SOURCES += main.cpp\
     QCompressToZip.cpp \
     QT3kUserData.cpp \
     QIconProgressing.cpp \
-    QLicenseWidget.cpp \
     QIconToolButton.cpp \
     QSelectSensorWidget.cpp \
     QT3kLoadSideviewObject.cpp \
@@ -237,7 +241,6 @@ SOURCES += main.cpp\
     QT3kLoadDetectionObject.cpp \
     QT3kLoadSensorDataObject.cpp \
     QT3kLoadEnvironmentObject.cpp \
-    QRDisableScreenWidget.cpp \
     QRemoteGuideWidget.cpp \
     QTimeoutChecker.cpp \
     QOrderTouchWidget.cpp \
@@ -245,8 +248,6 @@ SOURCES += main.cpp\
     QTabSensorStatus.cpp \
     QTabRemoteAssistance.cpp \
     QTabChat.cpp \
-    QColorTabWidget.cpp \
-    QColorTabBar.cpp \
     QSimpleLed.cpp \
 
 HEADERS  += \
@@ -255,8 +256,14 @@ HEADERS  += \
     ../common/TPDPEventMultiCaster.h \
     ../common/QKeyMapStr.h \
     ../common/QUtils.h \
-    ../common/ui/QUnderlineLabel.h \
+    ../common/QLangRes.h \
+    ../common/QLangManager.h \
+    ../common/ui/UnderlineLabel.h \
     ../common/ui/QHoverComboBox.h \
+    ../common/ui/SlidingStackedWidget.h \
+    ../common/ui/ColorTabBar.h \
+    ../common/ui/ColorTabWidget.h \
+    ../common/ui/QLicenseWidget.h \
     QMouseSettingWidget.h \
     QCalibrationSettingWidget.h \
     QGeneralSettingWidget.h \
@@ -287,8 +294,6 @@ HEADERS  += \
     QFlatTextButton.h \
     QSensorSettingWidget.h \
     QMySystemTrayIcon.h \
-    QLangRes.h \
-    QLangManager.h \
     QCustomCmdLinkButton.h \
     QWidgetCloseEventManager.h \
     QRequestHIDManager.h \
@@ -307,7 +312,6 @@ HEADERS  += \
     QCompressToZip.h \
     QT3kUserData.h \
     QIconProgressing.h \
-    QLicenseWidget.h \
     QIconToolButton.h \
     QSelectSensorWidget.h \
     HIDStateUserDef.h \
@@ -320,7 +324,6 @@ HEADERS  += \
     QT3kLoadDetectionObject.h \
     QT3kLoadSensorDataObject.h \
     QT3kLoadEnvironmentObject.h \
-    QRDisableScreenWidget.h \
     QRemoteGuideWidget.h \
     QTimeoutChecker.h \
     QOrderTouchWidget.h \
@@ -328,11 +331,10 @@ HEADERS  += \
     QTabSensorStatus.h \
     QTabRemoteAssistance.h \
     QTabChat.h \
-    QColorTabWidget.h \
-    QColorTabBar.h \
     QSimpleLed.h \
 
 FORMS    += \
+    ../common/ui/QLicenseWidget.ui \
     QMouseSettingWidget.ui \
     QCalibrationSettingWidget.ui \
     QGeneralSettingWidget.ui \
@@ -350,7 +352,6 @@ FORMS    += \
     QSoftKeySettingWidget.ui \
     T3kCfgWnd.ui \
     QLoadSensorDataWidget.ui \
-    QLicenseWidget.ui \
     QSelectSensorWidget.ui \
     QMenuStripWidget.ui \
     QTabSensorStatus.ui \

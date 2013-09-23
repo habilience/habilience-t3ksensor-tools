@@ -10,6 +10,8 @@
 QIconToolButton::QIconToolButton(QWidget *parent) :
     QToolButton(parent)
 {
+    m_bAutoRaise = false;
+    setRaiseAction( m_bAutoRaise );
 }
 
 void QIconToolButton::setIcon(const QIcon &/*icon*/)
@@ -36,27 +38,30 @@ void QIconToolButton::ChangeIcon(QString strFilePahtName)
         nHeight = m_IconImage.height();
     }
 
-    setGeometry( x(), y(), nWidth+10, height() );
+    setGeometry( x(), y()+(height()-nHeight), nWidth+10, nHeight );
     setMinimumWidth( nWidth+10 );
 }
 
-void QIconToolButton::SetHidenBtnAction(bool bHidenAction)
+void QIconToolButton::setRaiseAction(bool bAction)
 {
-    m_bHidenAction = bHidenAction;
-    if( m_bHidenAction )
+    m_bAutoRaise = bAction;
+    setAutoRaise( bAction );
+    if( bAction )
     {
-        setCursor( Qt::ArrowCursor );
+        setCursor( Qt::PointingHandCursor );
     }
     else
     {
-        setCursor( Qt::PointingHandCursor );
+        setCursor( Qt::ArrowCursor );
     }
 }
 
 void QIconToolButton::paintEvent(QPaintEvent *evt)
 {
-    if( !m_bHidenAction )
-        QToolButton::paintEvent(evt);
+    if( m_IconImage.isNull() )
+        return;
+
+    QToolButton::paintEvent(evt);
 
     QPainter dc;
     dc.begin( this );

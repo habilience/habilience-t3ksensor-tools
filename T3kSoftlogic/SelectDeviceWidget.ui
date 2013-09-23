@@ -33,7 +33,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="T3kSoftlogic.qrc">
-    <normaloff>:/T3kSoftlogic/resources/T3kSoftlogic.ico</normaloff>:/T3kSoftlogic/resources/T3kSoftlogic.ico</iconset>
+    <normaloff>:/T3kSoftlogicRes/resources/T3kSoftlogic.ico</normaloff>:/T3kSoftlogicRes/resources/T3kSoftlogic.ico</iconset>
   </property>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
@@ -151,7 +151,7 @@
   <customwidget>
    <class>QUnderlineLabel</class>
    <extends>QLabel</extends>
-   <header>../common/ui/QUnderlineLabel.h</header>
+   <header>ui/UnderlineLabel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

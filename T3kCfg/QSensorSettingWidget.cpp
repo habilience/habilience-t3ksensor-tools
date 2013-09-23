@@ -19,7 +19,7 @@ typedef enum
         buzzeridError         = 3,
         buzzeridSensorAttach  = 4,
         buzzeridPenPairing    = 5,
-        buzzeridUsbAttach     = 6,
+        buzzeridUsbAttach     = 6
 } BuzzerID;
 
 QSensorSettingWidget::QSensorSettingWidget(T3kHandle*& pHandle, QWidget *parent) :
@@ -29,10 +29,10 @@ QSensorSettingWidget::QSensorSettingWidget(T3kHandle*& pHandle, QWidget *parent)
     ui->setupUi(this);
     setFont( parent->font() );
 
-    ui->TitleTouchScreen->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_TOUCHED.png");
-    ui->TitleBuzzer->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_BUZZER.png" );
-    ui->TitleShortcutkey->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_SHORTCUT.png" );
-    ui->BtnDiagnostics->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_SETTING.png" );
+    ui->TitleTouchScreen->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_TOUCHED.png");
+    ui->TitleBuzzer->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_BUZZER.png" );
+    ui->TitleShortcutkey->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_SHORTCUT.png" );
+    ui->BtnDiagnostics->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_SETTING.png" );
 
     ui->LBPenPairing->setVisible(false);
     ui->BtnChkPenPairing->setVisible(false);
@@ -94,45 +94,45 @@ void QSensorSettingWidget::Init()
         ui->CBLTouchKeyPresses->addItem( strNum );
     }
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
-void QSensorSettingWidget::OnChangeLanguage()
+void QSensorSettingWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
 
-    ui->TitleTouchScreen->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_CAPTION_TOUCH_ENABLE")) );
-    ui->TitleBuzzer->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_CAPTION_BUZZER")) );
-    ui->TitleShortcutkey->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_SHORTCUT_KEY")) );
+    ui->TitleTouchScreen->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_CAPTION_TOUCH_ENABLE")) );
+    ui->TitleBuzzer->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_CAPTION_BUZZER")) );
+    ui->TitleShortcutkey->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_SHORTCUT_KEY")) );
 
     int nSel = ui->CBLCalibrationKey->currentIndex();
     ui->CBLCalibrationKey->removeItem(  0 );
-    ui->CBLCalibrationKey->insertItem( 0, Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_NOT_USED")) );
+    ui->CBLCalibrationKey->insertItem( 0, Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_NOT_USED")) );
     ui->CBLCalibrationKey->setCurrentIndex( nSel );
 
     nSel = ui->CBLTouchEnableKey->currentIndex();
     ui->CBLTouchEnableKey->removeItem( 0 );
-    ui->CBLTouchEnableKey->insertItem( 0, Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_NOT_USED")) );
+    ui->CBLTouchEnableKey->insertItem( 0, Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_NOT_USED")) );
     ui->CBLTouchEnableKey->setCurrentIndex( nSel );
 
-    ui->LBTouchScreen->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_TOUCH_ENABLE")) );
-    ui->LBSingleClk->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_CLICK")) );
-    ui->LBCalibration->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_CALIBRATION")) );
-    ui->LBError->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_ERROR")) );
-    ui->LBKeytone->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_KEYTONE")) );
-    ui->LBSensorAttach->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_SENSOR_ATTACH")) );
-    ui->LBPenPairing->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_PEN_PAIRING")) );
-    ui->LBUSBAttach->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_USB_ATTACH")) );
+    ui->LBTouchScreen->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_TOUCH_ENABLE")) );
+    ui->LBSingleClk->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_CLICK")) );
+    ui->LBCalibration->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_CALIBRATION")) );
+    ui->LBError->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_ERROR")) );
+    ui->LBKeytone->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_KEYTONE")) );
+    ui->LBSensorAttach->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_SENSOR_ATTACH")) );
+    ui->LBPenPairing->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_PEN_PAIRING")) );
+    ui->LBUSBAttach->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_USB_ATTACH")) );
 
-    ui->LBCalibrationKey->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_CALIBRATION_KEY")) );
-    ui->LBCalibrationKeyPresses->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_CALIBRATION_NUMBER_OF_PRESS")) );
-    ui->LBTouchEnableKey->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_TOUCH_ENABLE_KEY")) );
-    ui->LBTouchKeyPresses->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS")) );
+    ui->LBCalibrationKey->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_CALIBRATION_KEY")) );
+    ui->LBCalibrationKeyPresses->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_CALIBRATION_NUMBER_OF_PRESS")) );
+    ui->LBTouchEnableKey->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_TOUCH_ENABLE_KEY")) );
+    ui->LBTouchKeyPresses->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS")) );
 
-    m_strCaptionON = Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_ON"));
-    m_strCaptionOFF = Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_OFF"));
+    m_strCaptionON = Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_ON"));
+    m_strCaptionOFF = Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_OFF"));
     ui->BtnChkTouch->setText( ui->BtnChkTouch->isChecked() ? m_strCaptionON : m_strCaptionOFF );
     ui->BtnChkSingleClk->setText( ui->BtnChkSingleClk->isChecked() ? m_strCaptionON : m_strCaptionOFF );
     ui->BtnChkCalibration->setText( ui->BtnChkCalibration->isChecked() ? m_strCaptionON : m_strCaptionOFF );
@@ -142,7 +142,7 @@ void QSensorSettingWidget::OnChangeLanguage()
     ui->BtnChkUSBAttach->setText( ui->BtnChkUSBAttach->isChecked() ? m_strCaptionON : m_strCaptionOFF );
     ui->BtnChkPenPairing->setText( ui->BtnChkPenPairing->isChecked() ? m_strCaptionON : m_strCaptionOFF );
 
-    QString strPlayToolTip = Res.GetResString( QString::fromUtf8("SETTING"), QString::fromUtf8("BTN_TOOLTIP_PLAY"));
+    QString strPlayToolTip = Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("BTN_TOOLTIP_PLAY"));
     ui->BtnSoundSingle->setText( strPlayToolTip );
     ui->BtnSoundCalibration->setText( strPlayToolTip );
     ui->BtnSoundError->setText( strPlayToolTip );
@@ -151,7 +151,7 @@ void QSensorSettingWidget::OnChangeLanguage()
     ui->BtnSoundUSB->setText( strPlayToolTip );
     ui->BtnSoundPenPairing->setText( strPlayToolTip );
 
-    ui->BtnDiagnostics->setText( Res.GetResString(QString::fromUtf8("SETTING"), QString::fromUtf8("BTN_CAMERA_DIAGNOSTICS")) );
+    ui->BtnDiagnostics->setText( Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("BTN_CAMERA_DIAGNOSTICS")) );
 }
 
 void QSensorSettingWidget::SetDefault()
@@ -280,9 +280,9 @@ void QSensorSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, co
             break;
         case 0x07: // full
             ui->CBLCalibrationKey->setEnabled(true);
-            ui->CBLCalibrationKeyPresses->setEnabled(true);
+            ui->CBLCalibrationKeyPresses->setEnabled( ui->CBLCalibrationKey->currentIndex() == 0 ? false : true);
             ui->CBLTouchEnableKey->setEnabled(true);
-            ui->CBLTouchKeyPresses->setEnabled(true);
+            ui->CBLTouchKeyPresses->setEnabled( ui->CBLTouchEnableKey->currentIndex() == 0 ? false : true );
             break;
         default:
             break;
@@ -448,7 +448,7 @@ void QSensorSettingWidget::on_CBLCalibrationKey_activated(int index)
     if( nKey < 0 ) return;
 
     if( nKey == 0 )
-		nKey = 3+1;
+        nKey = 3+1;
 
     m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrCalibrationKey).arg(nKey-1).toUtf8().data(), true );
 }
@@ -508,7 +508,7 @@ void QSensorSettingWidget::on_BtnChkTouch_clicked()
         m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrTouchEnable).arg(1).toUtf8().data(), true );
     else
     {
-        QDiableTouchWidget* pDiableTouchWnd = new QDiableTouchWidget(m_pT3kHandle,this);
+        QDiableTouchWidget* pDiableTouchWnd = new QDiableTouchWidget( m_pT3kHandle, parentWidget()->parentWidget()->parentWidget() );
         pDiableTouchWnd->setAttribute( Qt::WA_DeleteOnClose );
         pDiableTouchWnd->setFont( font() );
 
@@ -524,7 +524,7 @@ void QSensorSettingWidget::on_BtnChkTouch_clicked()
 
 void QSensorSettingWidget::on_BtnDiagnostics_clicked()
 {
-    QAssistanceWidget* SensorDlg = new QAssistanceWidget( m_pT3kHandle, this );
+    QAssistanceWidget* SensorDlg = new QAssistanceWidget( m_pT3kHandle, parentWidget()->parentWidget()->parentWidget() );
     SensorDlg->setFont( font() );
     SensorDlg->setAttribute( Qt::WA_DeleteOnClose );
     SensorDlg->exec();

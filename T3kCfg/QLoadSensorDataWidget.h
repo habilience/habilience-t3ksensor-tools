@@ -2,7 +2,7 @@
 #define QLOADSENSORDATAWIDGET_H
 
 #include <QDialog>
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 #include "QPrintLogData.h"
 #include "LogDataDef.h"
@@ -28,7 +28,7 @@ namespace Ui {
     class QLoadSensorDataWidget;
 }
 
-class QLoadSensorDataWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QLoadSensorDataWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 public:
@@ -69,7 +69,7 @@ protected:
 
 protected:
     // LangChangeNotify
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
 private:
     Ui::QLoadSensorDataWidget   *ui;

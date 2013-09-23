@@ -22,7 +22,7 @@ TITLE_CAPTION_FIRMWARE = معلومات البرامج الثابتة
 TEXT_DEVICE_NOT_CONNECTED = لم يتم توصيل الجهاز
 TEXT_FIRMWARE_DOWNLOAD = تحميل البرامج الثابتة
 
-TITLE_CAPTION_LICENSE = حول
+TITLE_CAPTION_LICENSE = ترخيص
 
 [SELECT DEVICE]
 WINDOW_CAPTION = اختيار جهاز

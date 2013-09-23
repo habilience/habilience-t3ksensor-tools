@@ -59,7 +59,7 @@ void QSelectSensorDataDialog::onChangeLanguage()
 
     ui->btnNewData->setText( res.getResString(RES_TAG, "BTN_CAPTION_NEW_DATA") );
     ui->btnOK->setText( res.getResString(MAIN_TAG, "BTN_CAPTION_SELECT") );
-    ui->btnCancel->setText( res.getResString(MAIN_TAG, "BTN_CAPTION_CANCEL") );
+    ui->btnCancel->setText( res.getResString("MESSAGEBOX", "BTN_CAPTION_CANCEL") );
     ui->lblDataList->setText( res.getResString(RES_TAG, "TEXT_DATA_LIST") );
 
     ui->tblDataList->horizontalHeaderItem(0)->setText( res.getResString(RES_TAG, "TEXT_DATE") );

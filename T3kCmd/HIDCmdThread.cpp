@@ -2,6 +2,7 @@
 
 #include <QCoreApplication>
 #include <QTime>
+#include <QFile>
 
 #include "DefineString.h"
 
@@ -73,8 +74,8 @@ bool CHIDCmd::OpenT3kHandle()
     bool bRet = false;
 
     // setnotify
-    m_pT3kHandle->SetNotify( TPDPEventMultiCaster::GetPtr() );
-    TPDPEventMultiCaster::GetPtr()->SetSingleListener( this );
+    m_pT3kHandle->SetNotify( TPDPEventMultiCaster::instance() );
+    TPDPEventMultiCaster::instance()->SetSingleListener( this );
 
 	do
 	{
@@ -150,6 +151,19 @@ bool CHIDCmd::OnCommand( char * cmd, bool * pbSysCmd )
     else if ( strcmp(cmd, cstrHelp0) == 0 || strcmp(cmd, cstrHelp1) == 0 )
     {
         TextOutRuntime(cstrHelpOut, 0);
+    }
+    else if( strcmp(cmd, cstrLicense) == 0 )
+    {
+        QFile file( ":/T3kCmdRes/resources/license.txt" );
+        if( file.open( QFile::ReadOnly ) )
+        {
+            while( !file.atEnd() )
+            {
+                QByteArray ba( file.readLine() );
+                TextOutRuntime( ba.data() );
+            }
+            file.close();
+        }
     }
     else if( strcmp(cmd, cstrCls) == 0 )
     {

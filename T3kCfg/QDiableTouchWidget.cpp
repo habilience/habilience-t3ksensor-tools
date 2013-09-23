@@ -20,11 +20,11 @@ QDiableTouchWidget::QDiableTouchWidget(T3kHandle*& pHandle, QWidget *parent) :
     m_nTimerRemain = 10;
     m_strTimeout = "%1 secs";
 
-    OnChangeLanguage();
+    onChangeLanguage();
 
     QString strText = m_strTimeout.arg( m_nTimerRemain );
     ui->BtnOK->setText( strText );
-    ui->BtnOK->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_TIME.png" );
+    ui->BtnOK->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_TIME.png" );
     ui->BtnOK->SetBorder( true );
     ui->BtnOK->SetAlignmentText( QFlatTextButton::FBA_CENTER );
 
@@ -46,14 +46,14 @@ QDiableTouchWidget::~QDiableTouchWidget()
         m_TimerCountDown.stop();
 }
 
-void QDiableTouchWidget::OnChangeLanguage()
+void QDiableTouchWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
-    setWindowTitle( Res.GetResString(QString::fromUtf8("CHECK TOUCH DISABLE"), QString::fromUtf8("TITLE_CAPTION")) );
-    ui->LBMessage->setText( Res.GetResString(QString::fromUtf8("CHECK TOUCH DISABLE"), QString::fromUtf8("TEXT_MESSAGE")) );
-    m_strTimeout = Res.GetResString(QString::fromUtf8("CHECK TOUCH DISABLE"), QString::fromUtf8("BTN_TIMER_TEXT"));
+    QLangRes& Res = QLangManager::instance()->getResource();
+    setWindowTitle( Res.getResString(QString::fromUtf8("CHECK TOUCH DISABLE"), QString::fromUtf8("TITLE_CAPTION")) );
+    ui->LBMessage->setText( Res.getResString(QString::fromUtf8("CHECK TOUCH DISABLE"), QString::fromUtf8("TEXT_MESSAGE")) );
+    m_strTimeout = Res.getResString(QString::fromUtf8("CHECK TOUCH DISABLE"), QString::fromUtf8("BTN_TIMER_TEXT"));
 }
 
 void QDiableTouchWidget::OnTimer()
@@ -99,7 +99,7 @@ void QDiableTouchWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, cons
         {
             if ( nMode == MODE_CALIBRATION_SELF )
             {
-                QWidgetCloseEventManager::GetPtr()->AddClosedWidget( this, 1000 );
+                QWidgetCloseEventManager::instance()->AddClosedWidget( this, 1000 );
             }
         }
     }

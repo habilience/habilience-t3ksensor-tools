@@ -547,7 +547,7 @@
       </property>
       <property name="icon">
        <iconset resource="T3kCfgRes.qrc">
-        <normaloff>:/T3kCfgRes/Resources/PNG_ICON_SETTING.png</normaloff>:/T3kCfgRes/Resources/PNG_ICON_SETTING.png</iconset>
+        <normaloff>:/T3kCfgRes/resources/PNG_ICON_SETTING.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_SETTING.png</iconset>
       </property>
       <property name="flat">
        <bool>true</bool>
@@ -1431,15 +1431,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QUnderlineLabel</class>
-   <extends>QLabel</extends>
-   <header>../common/ui/QUnderlineLabel.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>QFlatTextButton</class>
    <extends>QPushButton</extends>
    <header>QFlatTextButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QUnderlineLabel</class>
+   <extends>QLabel</extends>
+   <header>ui/UnderlineLabel.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

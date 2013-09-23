@@ -40,7 +40,7 @@ void QWarningWidget::SetTextFromLanguage(QString strTitleGroup, QString strTitle
     m_strMsgGroup = strMsgGroup;
     m_strMsgText = strMsgText;
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 void QWarningWidget::SetBtnTextFromLanguage(QString strOKGroup, QString strOKText, QString strCancelGroup, QString strCancelText)
@@ -50,7 +50,7 @@ void QWarningWidget::SetBtnTextFromLanguage(QString strOKGroup, QString strOKTex
     m_strCancelGroup = strCancelGroup;
     m_strCancelText = strCancelText;
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 #include <QPainter>
 void QWarningWidget::paintEvent(QPaintEvent *)
@@ -65,18 +65,18 @@ void QWarningWidget::paintEvent(QPaintEvent *)
     dc.end();
 }
 
-void QWarningWidget::OnChangeLanguage()
+void QWarningWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    QLangRes& Res = QLangManager::instance()->getResource();
     if( !m_strTitleGroup.isEmpty() && !m_strTitleText.isEmpty() )
-        setWindowTitle( Res.GetResString(QString::fromUtf8(m_strTitleGroup.toUtf8().data()), QString::fromUtf8(m_strTitleText.toUtf8().data())) );
+        setWindowTitle( Res.getResString(QString::fromUtf8(m_strTitleGroup.toUtf8().data()), QString::fromUtf8(m_strTitleText.toUtf8().data())) );
     if( !m_strMsgGroup.isEmpty() && !m_strMsgText.isEmpty() )
-        ui->LBWarning->setText( Res.GetResString(QString::fromUtf8(m_strMsgGroup.toUtf8().data()), QString::fromUtf8(m_strMsgText.toUtf8().data())) );
-    //m_strTimeout = Res.GetResString(QString::fromUtf8("WARNING SENSOR DIAGNOSIS"), QString::fromUtf8("BTN_TIMER_TEXT"));
+        ui->LBWarning->setText( Res.getResString(QString::fromUtf8(m_strMsgGroup.toUtf8().data()), QString::fromUtf8(m_strMsgText.toUtf8().data())) );
+    //m_strTimeout = Res.getResString(QString::fromUtf8("WARNING SENSOR DIAGNOSIS"), QString::fromUtf8("BTN_TIMER_TEXT"));
     if( !m_strOKGroup.isEmpty() && !m_strOKText.isEmpty() )
-        ui->BtnContinue->setText( Res.GetResString(QString::fromUtf8(m_strOKGroup.toUtf8().data()), QString::fromUtf8(m_strOKText.toUtf8().data())) );
+        ui->BtnContinue->setText( Res.getResString(QString::fromUtf8(m_strOKGroup.toUtf8().data()), QString::fromUtf8(m_strOKText.toUtf8().data())) );
     if( !m_strCancelGroup.isEmpty() && !m_strCancelText.isEmpty() )
-        ui->BtnClose->setText( Res.GetResString(QString::fromUtf8(m_strCancelGroup.toUtf8().data()), QString::fromUtf8(m_strCancelText.toUtf8().data())) );
+        ui->BtnClose->setText( Res.getResString(QString::fromUtf8(m_strCancelGroup.toUtf8().data()), QString::fromUtf8(m_strCancelText.toUtf8().data())) );
 }

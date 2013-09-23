@@ -21,7 +21,8 @@ CONFIG(debug, debug|release):DEFINES += _DEBUG
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 #Library
-INCLUDEPATH +=  $$PWD/../external/quazip \
+INCLUDEPATH +=  ../common/ \
+                $$PWD/../external/quazip \
                 $$PWD/../external/T3kHIDLibrary/include \
                 $$PWD/../external/quazip/zlib/ \
 

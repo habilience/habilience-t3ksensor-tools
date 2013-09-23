@@ -3,7 +3,7 @@
 
 #include <QLabel>
 #include "QKeyEditWidget.h"
-#include "QHoverComboBox.h"
+#include "ui/QHoverComboBox.h"
 
 #define QICON_COUNT         5
 #define QICON_STATE         2

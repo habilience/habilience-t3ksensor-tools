@@ -32,7 +32,7 @@ QArrangeHelperWidget::QArrangeHelperWidget(bool bMake, QWidget* parent /*=NULL*/
 	m_eUnit = UnitRes;
 	m_dD2PScaleWidth = m_dD2PScaleHeight = 0.0;
 
-    m_pImageArrangePicture = new QPixmap( ":/T3kSoftlogic/resources/PNG_PICTURE_AUTO_ARRANGE.png" );
+    m_pImageArrangePicture = new QPixmap( ":/T3kSoftlogicRes/resources/PNG_PICTURE_AUTO_ARRANGE.png" );
 
     if( bMake )
     {

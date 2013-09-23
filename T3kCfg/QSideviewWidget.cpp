@@ -1,7 +1,7 @@
 #include "QSideviewWidget.h"
 #include "ui_QSideviewWidget.h"
 
-#include "../common/T3kConstStr.h"
+#include "T3kConstStr.h"
 #include "Common/nv.h"
 
 #include <QtEvents>
@@ -22,11 +22,11 @@ QSideviewWidget::QSideviewWidget(QWidget *parent) :
     m_nCurrentCamNo = 0;
     m_nAutoLine = -1;
 
-    ui->TitleSideview->SetIconImage( ":/T3kCfgRes/Resources/PNG_ICON_CAMERA.png" );
+    ui->TitleSideview->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_CAMERA.png" );
 
     connect( this, SIGNAL(ChangeCamera(int)), this, SLOT(onChangeCamera(int)), Qt::QueuedConnection );
 
-    OnChangeLanguage();
+    onChangeLanguage();
 }
 
 QSideviewWidget::~QSideviewWidget()
@@ -80,11 +80,11 @@ void QSideviewWidget::keyPressEvent(QKeyEvent *evt)
     QDialog::keyPressEvent(evt);
 }
 
-void QSideviewWidget::OnChangeLanguage()
+void QSideviewWidget::onChangeLanguage()
 {
     if( !winId() ) return;
 
-    //QLangRes& Res = QLangManager::GetPtr()->GetResource();
+    //QLangRes& Res = QLangManager::instance()->getResource();
 
 
 }
@@ -176,7 +176,7 @@ void QSideviewWidget::OnRSE(ResponsePart /*Part*/, ushort, const char *sPartId, 
 
         dc.fillRect( rcClient, Qt::black );
         dc.setPen( Qt::white );
-        QString str( QLangManager::GetPtr()->GetResource().GetResString(QString::fromUtf8("SENSOR DIAGNOSIS SIDEVIEW"), QString::fromUtf8("TEXT_NO_IMAGE")) );
+        QString str( QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS SIDEVIEW"), QString::fromUtf8("TEXT_NO_IMAGE")) );
         dc.drawText( rcClient, str, QTextOption( Qt::AlignVCenter | Qt::AlignHCenter ) );
 
         dc.end();

@@ -1,5 +1,5 @@
-#ifndef QLANGRES_H
-#define QLANGRES_H
+#ifndef QLangRes_H
+#define QLangRes_H
 
 #include <QString>
 #include "QIni.h"
@@ -62,4 +62,4 @@ private:
     ~QLangRes();
 };
 
-#endif // QLANGRES_H
+#endif // QLangRes_H

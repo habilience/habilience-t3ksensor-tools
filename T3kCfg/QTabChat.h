@@ -8,7 +8,7 @@ namespace Ui {
     class QTabChat;
 }
 
-class QTabChat : public QWidget, public QLangManager::LangChangeNotify
+class QTabChat : public QWidget, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -21,7 +21,7 @@ public:
 
     // QLangManager::LangChangeNotify
 protected:
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
 protected:
     void SendChatMessage();

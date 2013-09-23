@@ -6,7 +6,7 @@
 #include <QApplication>
 
 #include "stdInclude.h"
-#include "../common/QKeyMapStr.h"
+#include "QKeyMapStr.h"
 #include "QLangManager.h"
 
 #define CTRL        0
@@ -61,21 +61,21 @@ QUserDefinedKeyWidget::~QUserDefinedKeyWidget()
 
 void QUserDefinedKeyWidget::Init()
 {
-    m_pIconBtn[CTRL][UP]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CTRL_U" );
-    m_pIconBtn[CTRL][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CTRL_S" );
-    m_pIconBtn[ALT][UP]         = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_ALT_U" );
-    m_pIconBtn[ALT][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_ALT_S" );
-    m_pIconBtn[SHIFT][UP]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_SHIFT_U" );
-    m_pIconBtn[SHIFT][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_SHIFT_S" );
+    m_pIconBtn[CTRL][UP]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_CTRL_U" );
+    m_pIconBtn[CTRL][DOWN]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_CTRL_S" );
+    m_pIconBtn[ALT][UP]         = new QImage( ":/T3kCfgRes/resources/PNG_ICON_ALT_U" );
+    m_pIconBtn[ALT][DOWN]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_ALT_S" );
+    m_pIconBtn[SHIFT][UP]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_SHIFT_U" );
+    m_pIconBtn[SHIFT][DOWN]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_SHIFT_S" );
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
-    m_pIconBtn[WIN][UP]         = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_WIN_U" );
-    m_pIconBtn[WIN][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_WIN_S" );
+    m_pIconBtn[WIN][UP]         = new QImage( ":/T3kCfgRes/resources/PNG_ICON_WIN_U" );
+    m_pIconBtn[WIN][DOWN]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_WIN_S" );
 #elif defined(Q_OS_MAC)
-    m_pIconBtn[WIN][UP]         = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_MAC_U" );
-    m_pIconBtn[WIN][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_MAC_S" );
+    m_pIconBtn[WIN][UP]         = new QImage( ":/T3kCfgRes/resources/PNG_ICON_MAC_U" );
+    m_pIconBtn[WIN][DOWN]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_MAC_S" );
 #endif
-    m_pIconBtn[CLEAR][UP]       = new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CLEAR_U" );
-    m_pIconBtn[CLEAR][DOWN]		= new QImage( ":/T3kCfgRes/Resources/PNG_ICON_CLEAR_S" );
+    m_pIconBtn[CLEAR][UP]       = new QImage( ":/T3kCfgRes/resources/PNG_ICON_CLEAR_U" );
+    m_pIconBtn[CLEAR][DOWN]		= new QImage( ":/T3kCfgRes/resources/PNG_ICON_CLEAR_S" );
 
     m_nIconTotalWidth = 0;
     m_nIconTotalWidth += m_pIconBtn[CTRL][UP]->width();
@@ -108,7 +108,7 @@ void QUserDefinedKeyWidget::Init()
 
 void QUserDefinedKeyWidget::SetRealGeometry()
 {
-    bool bR2L = QLangManager::GetPtr()->GetResource().IsR2L();
+    bool bR2L = QLangManager::instance()->getResource().isR2L();
     QRect rc( bR2L ? m_pIconBtn[CLEAR][UP]->width()+6 : m_nIconTotalWidth, 0, width()-m_nIconTotalWidth-m_pIconBtn[CLEAR][UP]->width(), height() );
     m_KeyEditWidget.setGeometry( rc );
     m_KeyEditWidget.setAlignment( bR2L ? Qt::AlignRight : Qt::AlignLeft );
@@ -178,7 +178,7 @@ void QUserDefinedKeyWidget::paintEvent(QPaintEvent */*evt*/)
 
     uchar cV0 = (uchar)(m_wKeyValue >> 8);
 
-    bool bR2L = QLangManager::GetPtr()->GetResource().IsR2L();
+    bool bR2L = QLangManager::instance()->getResource().isR2L();
     int nIconW = 0;
     int nIconH = m_pIconBtn[0][0]->height();
     int nIconX = bR2L ? width()-m_pIconBtn[CTRL][UP]->width() : 0;

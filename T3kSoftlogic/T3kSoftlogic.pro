@@ -17,7 +17,8 @@ TEMPLATE = app
 
 #Define
 DEFINES += _QT_COMPILER_ QUAZIP_STATIC _T3KHANDLE_REMOVE_PRV USE_T3K_STATIC_LIBS \
-            USE_SOFTLOGIC_OUTPUT_MOUSE USE_SOFTLOGIC_OUTPUT_AUDIO_CONTROL
+            USE_SOFTLOGIC_OUTPUT_MOUSE USE_SOFTLOGIC_OUTPUT_AUDIO_CONTROL \
+            NO_LANGUAGE
 
 linux-g++|linux-g++-32|linux-g++-64:DEFINES += OS_LINUX
 
@@ -27,7 +28,7 @@ CONFIG(debug, debug|release):DEFINES += _DEBUG
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_DEBUG
 
 #Library
-INCLUDEPATH += $$PWD/../external/T3kHIDLibrary/include \
+INCLUDEPATH += ../common/ $$PWD/../external/T3kHIDLibrary/include \
 
 DEPENDPATH += $$PWD/../external/T3kHIDLibrary/include \
 
@@ -163,10 +164,11 @@ SOURCES += main.cpp\
     ../common/QIniFormat.cpp \
     ../common/QKeyMapStr.cpp \
     ../common/QUtils.cpp \
-    ../common/ui/QUnderlineLabel.cpp \
+    ../common/ui/UnderlineLabel.cpp \
     ../common/ui/QHoverComboBox.cpp \
     ../common/ui/ColorTabBar.cpp \
     ../common/ui/ColorTabWidget.cpp \
+    ../common/ui/QLicenseWidget.cpp \
     T3kSoftlogicDlg.cpp \
     TabPanelWidget.cpp \
     TabKeyDesignWidget.cpp \
@@ -197,10 +199,11 @@ HEADERS  += \
     ../common/QIniFormat.h \
     ../common/QKeyMapStr.h \
     ../common/QUtils.h \
-    ../common/ui/QUnderlineLabel.h \
+    ../common/ui/UnderlineLabel.h \
     ../common/ui/QHoverComboBox.h \
     ../common/ui/ColorTabBar.h \
     ../common/ui/ColorTabWidget.h \
+    ../common/ui/QLicenseWidget.h \
     T3kSoftlogicDlg.h \
     TabPanelWidget.h \
     TabKeyDesignWidget.h \
@@ -223,6 +226,7 @@ HEADERS  += \
 
 
 FORMS    += \
+    ../common/ui/QLicenseWidget.ui \
     T3kSoftlogicDlg.ui \
     TabPanelWidget.ui \
     TabCalibrationWidget.ui \

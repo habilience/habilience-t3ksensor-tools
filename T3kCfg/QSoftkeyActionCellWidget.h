@@ -4,10 +4,10 @@
 #include <QLabel>
 
 #include "QLangManager.h"
-#include "QHoverComboBox.h"
+#include "ui/QHoverComboBox.h"
 #include "QSoftkeyActionKeyWidget.h"
 
-class QSoftkeyActionCellWidget : public QLabel, public QLangManager::LangChangeNotify
+class QSoftkeyActionCellWidget : public QLabel, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 public:
@@ -37,7 +37,7 @@ protected:
     virtual void timerEvent(QTimerEvent *evt);
     virtual bool eventFilter(QObject *target, QEvent *evt);
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
 
 private:
     void ResizeWidget( QSize szNewSize );

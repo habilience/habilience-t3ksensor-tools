@@ -4,7 +4,7 @@
 #include <QWidget>
 #include "QRaisePushButton.h"
 
-#include "../common/TPDPEventMultiCaster.h"
+#include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 
@@ -22,7 +22,7 @@ namespace Ui {
     class QMenuStripWidget;
 }
 
-class QMenuStripWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::LangChangeNotify
+class QMenuStripWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 public:
@@ -36,7 +36,7 @@ protected:
 
     virtual void showEvent(QShowEvent *evt);
 
-    virtual void OnChangeLanguage();
+    virtual void onChangeLanguage();
     virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
 
 protected:
