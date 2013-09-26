@@ -242,7 +242,7 @@ HEADERS  += dialog.h \
     ../common/QIni.h \
     ../common/QLangZipFile.h \
     ../common/QLangManager.h \
-    ../common/ZLangRes.h \
+    ../common/QZLangRes.h \
     ../common/ui/QLicenseWidget.h \
     QStyleButton.h \
     QT3kDevice.h \
