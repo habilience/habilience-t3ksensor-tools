@@ -1040,7 +1040,7 @@
          </property>
          <property name="icon">
           <iconset resource="T3kSoftlogic.qrc">
-           <normaloff>:/T3kSoftlogicRes/resources/PNG_QUESTION_MAKR.png</normaloff>:/T3kSoftlogicRes/resources/PNG_QUESTION_MAKR.png</iconset>
+           <normaloff>:/T3kSoftlogicRes/resources/PNG_QUESTION_MARK.png</normaloff>:/T3kSoftlogicRes/resources/PNG_QUESTION_MARK.png</iconset>
          </property>
          <property name="autoRaise">
           <bool>true</bool>

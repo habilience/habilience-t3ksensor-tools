@@ -1,6 +1,11 @@
 export PATH=$PATH:~/qt-everywhere-opensource-src-5.1.1/qtbase/bin
 
-make clean		
-qmake T3k.pro -r -spec linux-g++ CONFIG+=release
-make -j8 
+make clean
 
+if [ "$(uname -m)" = "x86_64" ]
+then
+qmake T3k.pro -r -spec linux-g++-64 CONFIG+=release
+else
+qmake T3k.pro -r -spec linux-g++ CONFIG+=release
+fi
+make -j8

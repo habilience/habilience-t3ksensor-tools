@@ -64,7 +64,7 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 
     setFixedSize( width(), height() );
 
-    ui->BtnLogo->ChangeIcon( ":/T3kCfgRes/resources/PNG_QUESTION_MAKR.png" );
+    ui->BtnLogo->ChangeIcon( ":/T3kCfgRes/resources/PNG_QUESTION_MARK.png" );
     m_strTitle = QString::fromLocal8Bit("T3k Series Configurator");
     setWindowTitle( m_strTitle + " Ver " + QCoreApplication::applicationVersion() );
 
@@ -1067,7 +1067,7 @@ int ParseProfileforIsMacMargin( const char* sCmd, int nProfileIndex )
         uchar cKey = 0;
         if( !Extract2Word( strProfile, cKey) ) return -1;
 
-        uchar cV[4][2];
+        uchar cV[4][2] = { 0, };
         ushort wFlags;
 
         if( cKey == 0x00 )

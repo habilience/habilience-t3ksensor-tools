@@ -120,7 +120,7 @@
        </property>
        <property name="icon">
         <iconset resource="T3kCfgFE.qrc">
-         <normaloff>:/T3kCfgFERes/resources/PNG_QUESTION_MAKR.png</normaloff>:/T3kCfgFERes/resources/PNG_QUESTION_MAKR.png</iconset>
+         <normaloff>:/T3kCfgFERes/resources/PNG_QUESTION_MARK.png</normaloff>:/T3kCfgFERes/resources/PNG_QUESTION_MARK.png</iconset>
        </property>
        <property name="autoRaise">
         <bool>true</bool>

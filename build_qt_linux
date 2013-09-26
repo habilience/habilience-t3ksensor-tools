@@ -1,0 +1,17 @@
+#if 11.10
+sudo apt-get build-dep libqt4-dev
+
+sudo apt-get install g++
+
+if [ "$(uname -m)" = "x86_64" ]
+then
+./configure -prefix $PWD/qtbase -static -opensource -confirm-license -debug-and-release -platform linux-g++-64 -nomake tests -nomake examples -opengl desktop -nomake tools -no-openssl -qpa xcb -qt-xcb -qt-libjpeg
+./qtbase/bin/qmake qt.pro
+make -j8
+else
+./configure -prefix $PWD/qtbase -static -opensource -confirm-license -debug-and-release -platform linux-g++-32 -nomake tests -nomake examples -opengl desktop -nomake tools -no-openssl -qpa xcb -qt-xcb -qt-libjpeg
+./qtbase/bin/qmake qt.pro
+make -j8
+fi
+
+
