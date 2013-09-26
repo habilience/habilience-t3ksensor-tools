@@ -479,7 +479,7 @@
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="text">
-        <string>Copyright (c) 2012 Habilience</string>
+        <string>@ Habilience</string>
        </property>
       </widget>
      </item>

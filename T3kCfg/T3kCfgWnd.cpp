@@ -64,7 +64,7 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 
     setFixedSize( width(), height() );
 
-    ui->BtnLogo->ChangeIcon( ":/T3kCfgRes/resources/PNG_QUESTION_MARK.png" );
+    ui->BtnLogo->ChangeIcon( ":/T3kCfgRes/resources/PNG_HABILIENCE_LOGO.png" );
     m_strTitle = QString::fromLocal8Bit("T3k Series Configurator");
     setWindowTitle( m_strTitle + " Ver " + QCoreApplication::applicationVersion() );
 
@@ -496,7 +496,7 @@ void T3kCfgWnd::LoadCompany()
 
         if( !strCopyright.isEmpty() )
         {
-            ui->BtnMainLink->setText( QString("Copyright (c) %1").arg(strCopyright) );
+            ui->BtnMainLink->setText( QString("@ %1").arg(strCopyright) );
         }
     }
 
@@ -844,12 +844,12 @@ void T3kCfgWnd::ShowMainMenu(bool bShow)
 {
     if( bShow )
     {
-        //ui->BtnMainLink->show();
+        ui->BtnMainLink->show();
         ui->BtnMainDefault->hide();
     }
     else
     {
-        //ui->BtnMainLink->hide();
+        ui->BtnMainLink->hide();
         ui->BtnMainDefault->show();
     }
 }

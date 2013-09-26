@@ -50,6 +50,7 @@ linux-g++:QMAKE_TARGET.arch = $$QMAKE_HOST.arch
 linux-g++-32:QMAKE_TARGET.arch = x86
 linux-g++-64:QMAKE_TARGET.arch = x86_64
 linux-g++ {
+    QMAKE_RPATHDIR += ./ /usr/share/T3kShare/t3kcmd/lib
     contains(QMAKE_TARGET.arch, x86_64):{
         message( "g++ building for 64bit" );
         CONFIG(debug, debug|release) {
@@ -91,6 +92,7 @@ linux-g++ {
 }
 
 linux-g++-32 {
+    QMAKE_RPATHDIR += ./ /usr/share/T3kShare/t3kcmd/lib
     message( "building for 32bit" );
     CONFIG(debug, debug|release) {
         OBJECTS_DIR = $$PWD/.objs/debug/
@@ -112,6 +114,7 @@ linux-g++-32 {
 }
 
 linux-g++-64 {
+    QMAKE_RPATHDIR += ./ /usr/share/T3kShare/t3kcmd/lib
     message( "building for 64bit" );
     CONFIG(debug, debug|release) {
         OBJECTS_DIR = $$PWD/.objs_x64/debug/
