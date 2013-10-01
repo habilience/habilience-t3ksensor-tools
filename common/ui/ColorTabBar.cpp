@@ -213,14 +213,16 @@ bool QColorTabBar::eventFilter(QObject *target, QEvent *evt)
                     break;
                 }
             }
+
+            update();
         }
         else if( evt->type() == QEvent::HoverLeave )
         {
             m_nHoverIndex = -1;
             setCursor( Qt::ArrowCursor );
-        }
 
-        update();
+            update();
+        }
     }
 
     return QTabBar::eventFilter(target, evt);

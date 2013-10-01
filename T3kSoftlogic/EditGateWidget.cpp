@@ -37,7 +37,8 @@ QEditGateWidget::QEditGateWidget(QWidget* parent /*=NULL*/) :
     connect( ui->EditReport, &QLineEdit::editingFinished, this, &QEditGateWidget::onEditReportFinished );
 
     setWindowFlags( Qt::Tool );
-    setWindowModality( Qt::WindowModal );
+    setWindowModality( Qt::NonModal );
+    setModal( false );
 
     QDesktopWidget desktop;
     QRect rcScreen( desktop.screenGeometry( desktop.primaryScreen() ) );

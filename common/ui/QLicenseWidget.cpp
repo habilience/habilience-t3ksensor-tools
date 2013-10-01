@@ -10,6 +10,8 @@ QLicenseWidget::QLicenseWidget(QString strHtml, QWidget *parent) :
     ui->setupUi(this);
 
     setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
+    setWindowModality( Qt::WindowModal );
+    setModal( true );
 
     ui->TBLicenceHTML->setAcceptRichText( true );
 

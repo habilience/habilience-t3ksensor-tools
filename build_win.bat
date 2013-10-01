@@ -4,9 +4,7 @@ set QMAKE=C:\Qt\qt-everywhere-opensource-src-5.1.1\qtbase\bin
 
 mkdir release
 
-path=%MINGW32%\;%QMAKE%\;%path%
+%MINGW32%\mingw32-make.exe clean -w
 
-mingw32-make.exe clean -w
-
-qmake.exe T3k.pro -r -spec win32-g++ CONFIG+=release
-mingw32-make.exe -j8
+%QMAKE%\qmake.exe T3k.pro -r -spec win32-g++ CONFIG+=release
+%MINGW32%\mingw32-make.exe -j8

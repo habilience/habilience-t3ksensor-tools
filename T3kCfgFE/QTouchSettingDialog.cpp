@@ -1055,7 +1055,7 @@ void QTouchSettingDialog::sendEditValue( QBorderStyleEdit* txtEdit, float step, 
     char szValue[256];
 
     setModifyEditColor(txtEdit);
-    m_bIsModified = true;
+    //m_bIsModified = true;
 
     snprintf( szValue, 256, "%3.1f", fValue );
     txtEdit->setText( szValue );
@@ -1065,11 +1065,17 @@ void QTouchSettingDialog::sendEditValue( QBorderStyleEdit* txtEdit, float step, 
          || (txtEdit == ui->txtEdtTMRight)
          || (txtEdit == ui->txtEdtTMBottom) )
     {
+        float l1, t1, r1, b1;
+        l1 = ui->txtEdtTMLeft->toPlainText().toFloat() * 10;
+        t1 = ui->txtEdtTMTop->toPlainText().toFloat() * 10;
+        r1 = ui->txtEdtTMRight->toPlainText().toFloat() * 10;
+        b1 = ui->txtEdtTMBottom->toPlainText().toFloat() * 10;
+
         unsigned char l, t, r, b;
-        l = (unsigned char)ui->txtEdtTMLeft->toPlainText().toFloat() * 10;
-        t = (unsigned char)ui->txtEdtTMTop->toPlainText().toFloat() * 10;
-        r = (unsigned char)ui->txtEdtTMRight->toPlainText().toFloat() * 10;
-        b = (unsigned char)ui->txtEdtTMBottom->toPlainText().toFloat() * 10;
+        l = (unsigned char)(l1);
+        t = (unsigned char)(t1);
+        r = (unsigned char)(r1);
+        b = (unsigned char)(b1);
 
         snprintf( szValue, 256, "%02x%02x%02x%02x", l, t, r, b );
     }

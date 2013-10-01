@@ -39,7 +39,7 @@ QStyleButton::QStyleButton(QWidget *parent) :
 
     m_fntCaption = getSystemFont(this);
     m_fntAdditionalText = m_fntCaption;
-    m_fntAdditionalText.setPixelSize(m_fntCaption.pixelSize() * 7 / 10);
+    //m_fntAdditionalText.setPixelSize(m_fntCaption.pixelSize() * 7 / 10);
 }
 
 void QStyleButton::paintEvent(QPaintEvent */*evt*/)

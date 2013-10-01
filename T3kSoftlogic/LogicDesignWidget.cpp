@@ -2251,6 +2251,7 @@ void QLogicDesignWidget::mouseMoveEvent(QMouseEvent *evt)
                     pSoftlogic->m_ptPosition.setY( ((float)point.y() / (float)rcClient.height() * 200.f + 0.5f) / 200.f );
 
                     rcUpdate = rcUpdate.united( getLogicBound(pSoftlogic) );
+                    rcUpdate.adjust( 0,0,0, (rcClient.height() / LOGIC_SIZE / 5) );
 
                     CSoftlogic::Port epIn1 = pSoftlogic->getIn1Port();
                     if ( epIn1 != CSoftlogic::epNoGate )
@@ -2282,8 +2283,8 @@ void QLogicDesignWidget::mouseMoveEvent(QMouseEvent *evt)
                         }
                     }
 
-                    CSoftlogic::PortType eptOut = pSoftlogic->getOutPortType();
-                    if ( eptOut == CSoftlogic::eptState && pSoftlogic->getOutPort() == CSoftlogic::epNoGate )
+//                    CSoftlogic::PortType eptOut = pSoftlogic->getOutPortType();
+//                    if ( eptOut != CSoftlogic::eptState || pSoftlogic->getOutPort() != CSoftlogic::epNoGate )
                     {
                         for ( int i=0 ; i<Logics.getSize() ; i++ )
                         {

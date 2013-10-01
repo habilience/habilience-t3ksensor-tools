@@ -398,7 +398,7 @@ bool QKeyTracker::eventFilter(QObject *target, QEvent *evt)
             if (py != NULL)
                 *py = pEvt->pos().y() - yDiff;
 
-            m_rect.setRect( m_rectCalc.nL, m_rectCalc.nT, m_rectCalc.nR-m_rectCalc.nL+1, m_rectCalc.nB-m_rectCalc.nT );
+            m_rect.setRect( m_rectCalc.nL, m_rectCalc.nT, m_rectCalc.nR-m_rectCalc.nL+1, m_rectCalc.nB-m_rectCalc.nT+1 );
 
             // handle move case
             if (m_eTrackerHit == hitMiddle)

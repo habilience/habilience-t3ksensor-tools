@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>660</width>
-    <height>250</height>
+    <height>260</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>646</width>
-     <height>237</height>
+     <width>641</width>
+     <height>241</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="LayoutMain">
@@ -27,7 +27,7 @@
      <widget class="QGroupBox" name="GBOutputPort">
       <property name="minimumSize">
        <size>
-        <width>150</width>
+        <width>130</width>
         <height>130</height>
        </size>
       </property>
@@ -39,13 +39,13 @@
         <rect>
          <x>10</x>
          <y>40</y>
-         <width>130</width>
+         <width>110</width>
          <height>22</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>110</width>
          <height>0</height>
         </size>
        </property>
@@ -55,13 +55,13 @@
         <rect>
          <x>10</x>
          <y>70</y>
-         <width>130</width>
+         <width>110</width>
          <height>22</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>110</width>
          <height>0</height>
         </size>
        </property>
@@ -70,8 +70,8 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>20</y>
-         <width>130</width>
+         <y>30</y>
+         <width>110</width>
          <height>12</height>
         </rect>
        </property>
@@ -85,12 +85,12 @@
         <string/>
        </property>
       </widget>
-      <widget class="QUserDefinedKeyWidget" name="LBEditKey" native="true">
+      <widget class="QUserDefinedKeyWidget" name="LBEditKey">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>100</y>
-         <width>130</width>
+         <width>110</width>
          <height>40</height>
         </rect>
        </property>
@@ -100,13 +100,19 @@
         <rect>
          <x>10</x>
          <y>120</y>
-         <width>130</width>
+         <width>110</width>
          <height>20</height>
         </rect>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>110</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
-         <width>140</width>
+         <width>110</width>
          <height>16777215</height>
         </size>
        </property>
@@ -117,7 +123,7 @@
      <widget class="QGroupBox" name="GBInputPort">
       <property name="minimumSize">
        <size>
-        <width>150</width>
+        <width>130</width>
         <height>130</height>
        </size>
       </property>
@@ -129,15 +135,9 @@
         <rect>
          <x>10</x>
          <y>50</y>
-         <width>140</width>
+         <width>110</width>
          <height>16</height>
         </rect>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>140</width>
-         <height>0</height>
-        </size>
        </property>
        <property name="text">
         <string>Invert Port1</string>
@@ -148,15 +148,9 @@
         <rect>
          <x>10</x>
          <y>100</y>
-         <width>140</width>
+         <width>110</width>
          <height>16</height>
         </rect>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>140</width>
-         <height>0</height>
-        </size>
        </property>
        <property name="text">
         <string>Invert Port2</string>
@@ -167,13 +161,13 @@
         <rect>
          <x>10</x>
          <y>20</y>
-         <width>130</width>
+         <width>110</width>
          <height>22</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>110</width>
          <height>0</height>
         </size>
        </property>
@@ -183,13 +177,13 @@
         <rect>
          <x>10</x>
          <y>70</y>
-         <width>130</width>
+         <width>110</width>
          <height>22</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>110</width>
          <height>0</height>
         </size>
        </property>
@@ -276,33 +270,17 @@
     </item>
     <item row="1" column="1">
      <layout class="QGridLayout" name="LayoutGate">
-      <item row="0" column="1">
-       <spacer name="VSpacer1">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>15</width>
-          <height>15</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item row="1" column="1">
        <layout class="QVBoxLayout" name="LayoutGateOption">
         <item>
-         <spacer name="VSpacer2">
+         <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>40</height>
+            <height>5</height>
            </size>
           </property>
          </spacer>
@@ -340,17 +318,17 @@
          </layout>
         </item>
         <item>
-         <spacer name="VSpacer3">
+         <spacer name="VSpacer2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
+           <enum>QSizePolicy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>10</height>
+            <height>5</height>
            </size>
           </property>
          </spacer>
@@ -472,17 +450,17 @@
          </layout>
         </item>
         <item>
-         <spacer name="VSpacer4">
+         <spacer name="VSpacer1">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
+           <enum>QSizePolicy::Expanding</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>20</height>
+            <height>0</height>
            </size>
           </property>
          </spacer>
@@ -490,32 +468,26 @@
        </layout>
       </item>
       <item row="1" column="0">
-       <spacer name="HSpacer3">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>10</width>
+          <width>5</width>
           <height>20</height>
          </size>
         </property>
        </spacer>
       </item>
       <item row="1" column="2">
-       <spacer name="HSpacer4">
+       <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>10</width>
+          <width>5</width>
           <height>20</height>
          </size>
         </property>
@@ -529,7 +501,7 @@
  <customwidgets>
   <customwidget>
    <class>QUserDefinedKeyWidget</class>
-   <extends>QWidget</extends>
+   <extends>QLabel</extends>
    <header>UserDefinedKeyWidget.h</header>
    <container>1</container>
   </customwidget>
