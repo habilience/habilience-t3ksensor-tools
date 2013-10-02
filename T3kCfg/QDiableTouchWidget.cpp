@@ -13,7 +13,7 @@ QDiableTouchWidget::QDiableTouchWidget(T3kHandle*& pHandle, QWidget *parent) :
     m_pT3kHandle(pHandle), ui(new Ui::QDiableTouchWidget)
 {   
     setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
-    setWindowModality( Qt::WindowModal );
+    setWindowModality( Qt::NonModal );
     setModal( true );
 
     ui->setupUi(this);
