@@ -15,6 +15,10 @@ QLogicGalleryWidget::QLogicGalleryWidget(QWidget* parent) :
 {
     ui->setupUi(this);
 
+    setWindowFlags( Qt::Dialog );
+    setWindowModality( Qt::WindowModal );
+    setModal( true );
+
     m_nGalleryItemType = 0;
 	m_portKey = CSoftlogic::epNoGate;
 

@@ -1,0 +1,25 @@
+mkdir ./release
+mkdir ./release/linux
+
+if [ "$(uname -m)" = "x86_64" ]; then
+mkdir ./release/linux/release_x64
+cp -f T3kCfg/release_x64/T3kCfg ./release/linux/release_x64
+cp -f T3kCfgFE/release_x64/T3kCfgFE ./release/linux/release_x64
+cp -f T3kCmd/release_x64/T3kCmd ./release/linux/release_x64
+cp -f T3kSoftlogic/release_x64/T3kSoftlogic ./release/linux/release_x64
+cp -f T3kUpgrade/release_x64/T3kUpgrade ./release/linux/release_x64
+else
+mkdir ./release/linux/release
+cp -f T3kCfg/release/T3kCfg ./release/linux/release
+cp -f T3kCfgFE/release/T3kCfgFE ./release/linux/release
+cp -f T3kCmd/release/T3kCmd ./release/linux/release
+cp -f T3kSoftlogic/release/T3kSoftlogic ./release/linux/release
+cp -f T3kUpgrade/release/T3kUpgrade ./release/linux/release
+fi
+
+mkdir ./release/linux/Languages
+cp -f T3kCfg/Languages/*.txt ./release/linux/Languages
+
+mkdir ./release/linux/config
+cp -f T3kCfg/Config/config.ini ./release/linux/config
+
