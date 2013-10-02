@@ -1,0 +1,12 @@
+mkdir ./release
+
+cp -rpf ./T3kCfg/T3kCfg.app ./release
+mkdir ./release/T3kCfg.app/Contents/MacOS/Languages
+cp -rpf ./T3kCfg/Languages/*.txt ./release/T3kCfg.app/Contents/MacOS/Languages
+mkdir ./release/T3kCfg.app/Contents/MacOS/config
+cp -rpf ./T3kCfg/Config/config.ini ./release/T3kCfg.app/Contents/MacOS/config
+
+cp -rpf ./T3kCfgFE/T3kCfgFE.app ./release
+cp -rpf ./T3kCmd/T3kCmd ./release
+cp -rpf ./T3kSoftlogic/T3kSoftlogic.app ./release
+cp -rpf ./T3kUpgrade/T3kUpgrade.app ./release
