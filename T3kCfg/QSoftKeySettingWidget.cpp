@@ -14,7 +14,7 @@ QSoftKeySettingWidget::QSoftKeySettingWidget(T3kHandle*& pHandle, QWidget *paren
     ui(new Ui::QSoftKeySettingWidget), m_pT3kHandle(pHandle)
 {
     ui->setupUi(this);
-    setFont( parent->font() );
+    setFont( qApp->font() );
 
     m_bInit = false;
     m_bDefault = false;

@@ -27,7 +27,7 @@ QSensorSettingWidget::QSensorSettingWidget(T3kHandle*& pHandle, QWidget *parent)
     ui(new Ui::QSensorSettingWidget), m_pT3kHandle(pHandle)
 {
     ui->setupUi(this);
-    setFont( parent->font() );
+    setFont( qApp->font() );
 
     ui->TitleTouchScreen->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_TOUCHED.png");
     ui->TitleBuzzer->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_BUZZER.png" );

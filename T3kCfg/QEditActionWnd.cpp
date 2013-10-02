@@ -18,8 +18,11 @@ QEditActionWnd::QEditActionWnd(T3kHandle*& pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QEditActionWnd), m_pT3kHandle(pHandle)
 {
-    setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
     ui->setupUi(this);
+
+    setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
+    setWindowModality( Qt::WindowModal );
+    setModal( true );
 
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     genAdjustButtonWidgetForWinAndX11( this );

@@ -32,6 +32,8 @@ QLoadSensorDataWidget::QLoadSensorDataWidget(T3kHandle*& pHandle, QWidget *paren
     QDialog(parent), ui(new Ui::QLoadSensorDataWidget), m_pT3kHandle(pHandle)
 {
     setWindowFlags( Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint );
+    setWindowModality( Qt::WindowModal );
+    setModal( true );
 
     ui->setupUi(this);
 
@@ -118,7 +120,6 @@ void QLoadSensorDataWidget::Start()
 
     ResetStorage();
 
-    MoveWidgetToCenter();
     CreateSavePath();
 
     if( !m_pT3kHandle->GetReportCommand() )

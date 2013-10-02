@@ -52,6 +52,8 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QT3kUserData::GetInstance()->setTopParent( this );
+
     setWindowFlags(Qt::MSWindowsFixedSizeDialogHint);
 
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
@@ -63,6 +65,9 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     setFont( ft );
 
     setFixedSize( width(), height() );
+
+    m_strCompanyUrl = "http://www.habilience.com";
+    ui->BtnMainLink->SetAlignmentText( QFlatTextButton::FBA_CENTER );
 
     ui->BtnLogo->ChangeIcon( ":/T3kCfgRes/resources/PNG_HABILIENCE_LOGO.png" );
     m_strTitle = QString::fromLocal8Bit("T3k Series Configurator");
@@ -90,6 +95,8 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     m_nProfileIndexData = -1;
 
     m_nSendCmdID = -1;
+
+    m_bInit = false;
 
 #ifdef Q_OS_WIN
     m_bRunOtherTool = false;
@@ -137,42 +144,42 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 
     LoadCompany();
 
-    m_pMainWidget = new QMainMenuWidget( m_pT3kHandle, this );
-    m_pMouseSettingWidget = new QMouseSettingWidget( m_pT3kHandle, this );
-    m_pCaliSettingWidget = new QCalibrationSettingWidget( m_pT3kHandle, this );
-    m_pSensorSettingWidget = new QSensorSettingWidget( m_pT3kHandle, this );
-    m_pGeneralSettingWidget = new QGeneralSettingWidget( m_pT3kHandle, this );
-    m_pSoftkeySettingWidget = new QSoftKeySettingWidget( m_pT3kHandle, this );
+    m_pMainWidget = new QMainMenuWidget( m_pT3kHandle );
+    m_pMouseSettingWidget = new QMouseSettingWidget( m_pT3kHandle );
+    m_pCaliSettingWidget = new QCalibrationSettingWidget( m_pT3kHandle );
+    m_pSensorSettingWidget = new QSensorSettingWidget( m_pT3kHandle );
+    m_pGeneralSettingWidget = new QGeneralSettingWidget( m_pT3kHandle );
+    m_pSoftkeySettingWidget = new QSoftKeySettingWidget( m_pT3kHandle );
     m_pMenuWidget = NULL;
 
-    m_pMainWidget->setGeometry( 0, 50, 620, 330 );
+    //m_pMainWidget->setGeometry( 0, 50, 620, 330 );
     m_pMainWidget->hide();
     m_pMainWidget->setAttribute( Qt::WA_DeleteOnClose );
     m_pMainWidget->setFont( font() );
     connect( m_pMainWidget, SIGNAL(ShowMenuEvent(int)), this, SLOT(onShowMenuEvent(int)) );
 
-    m_pMouseSettingWidget->setGeometry( 0, 50, 620, 340 );
+    //m_pMouseSettingWidget->setGeometry( 0, 50, 620, 340 );
     m_pMouseSettingWidget->hide();
     m_pMouseSettingWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pMouseSettingWidget, SIGNAL(ByPassKeyPressEvent(QKeyEvent*)), this ,SLOT(onByPassKeyPressEvent(QKeyEvent*)), Qt::DirectConnection );
 
-    m_pCaliSettingWidget->setGeometry( 0, 50, 620, 340 );
+    //m_pCaliSettingWidget->setGeometry( 0, 50, 620, 340 );
     m_pCaliSettingWidget->hide();
     m_pCaliSettingWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pCaliSettingWidget, SIGNAL(ByPassKeyPressEvent(QKeyEvent*)), this ,SLOT(onByPassKeyPressEvent(QKeyEvent*)), Qt::DirectConnection );
 
-    m_pSensorSettingWidget->setGeometry( 0, 50, 620, 340 );
+    //m_pSensorSettingWidget->setGeometry( 0, 50, 620, 340 );
     m_pSensorSettingWidget->hide();
     m_pSensorSettingWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pSensorSettingWidget, SIGNAL(ByPassKeyPressEvent(QKeyEvent*)), this ,SLOT(onByPassKeyPressEvent(QKeyEvent*)), Qt::DirectConnection );
 
-    m_pGeneralSettingWidget->setGeometry( 0, 50, 620, 340 );
+    //m_pGeneralSettingWidget->setGeometry( 0, 50, 620, 340 );
     m_pGeneralSettingWidget->hide();
     m_pGeneralSettingWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pGeneralSettingWidget, SIGNAL(ByPassKeyPressEvent(QKeyEvent*)), this ,SLOT(onByPassKeyPressEvent(QKeyEvent*)), Qt::DirectConnection );
     connect( m_pGeneralSettingWidget, SIGNAL(RegisterTrayIcon(bool)), this, SLOT(onRegisterTrayIcon(bool)) );
 
-    m_pSoftkeySettingWidget->setGeometry( 0, 50, 620, 340 );
+    //m_pSoftkeySettingWidget->setGeometry( 0, 50, 620, 340 );
     m_pSoftkeySettingWidget->hide();
     m_pSoftkeySettingWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pSoftkeySettingWidget, SIGNAL(ByPassKeyPressEvent(QKeyEvent*)), this ,SLOT(onByPassKeyPressEvent(QKeyEvent*)), Qt::DirectConnection );
@@ -198,7 +205,13 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 
     connect( ui->SWMenu, &QSlidingStackedWidget::animationFinished, this, &T3kCfgWnd::OnFinishAnimationMenu );
 
-    Init();
+    QSettings RegOption( "Habilience", "T3kCfg" );
+    RegOption.beginGroup( "Options" );
+
+    if( RegOption.value( "TrayIcon", false ).toBool() )
+        onRegisterTrayIcon( true );
+
+    RegOption.endGroup();
 }
 
 T3kCfgWnd::~T3kCfgWnd()
@@ -257,6 +270,7 @@ T3kCfgWnd::~T3kCfgWnd()
 
 void T3kCfgWnd::Init()
 {
+    m_bInit = true;
     QSettings WindowPosition( "Habilience", "T3kCfg" );
 
     // Window History Pos
@@ -284,14 +298,12 @@ void T3kCfgWnd::Init()
     WindowPosition.endGroup();
 
     ui->BtnMainDefault->hide();
-    ui->BtnMainLink->hide();
 
     if( !m_nTimerObserver )
         m_nTimerObserver = startTimer( 100 );
 
     onChangeLanguage();
 
-    m_bShow = false;
     // Open T3k
     if( !OpenT30xHandle() )
     {
@@ -303,8 +315,6 @@ void T3kCfgWnd::Init()
     m_nSendCmdID = -1;
     m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrInputMode).toUtf8().data(), true, 5000 );
     m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrCalibrationScreenMargin).toUtf8().data(), true, 5000 );
-
-    m_bShow = true;
 
     if( !m_nTimerChkHIDCom )
         m_nTimerChkHIDCom = startTimer( 3000 );
@@ -428,17 +438,15 @@ void T3kCfgWnd::LoadCompany()
     if( QFile::exists( QString(strConfigFolderPath + "logo.png") ) )
     {
         ui->BtnLogo->ChangeIcon( strConfigFolderPath + "logo.png" );
-        ui->BtnLogo->setRaiseAction( true );
     }
     else if( QFile::exists( QString(strConfigFolderPath + "logo.bmp") ) )
     {
         ui->BtnLogo->ChangeIcon( strConfigFolderPath + "logo.bmp" );
-        ui->BtnLogo->setRaiseAction( true );
     }
 
     if( QFile::exists( strConfigFolderPath + "icon.png" ) )
     {
-        setWindowIcon( QIcon( strConfigFolderPath + "icon.png" ) );
+        QApplication::setWindowIcon( QIcon( strConfigFolderPath + "icon.png" ) );
     }
 
     QString strConfig( strConfigFolderPath + CUSTOM_CONFIG_FILENAME );
@@ -496,7 +504,7 @@ void T3kCfgWnd::LoadCompany()
 
         if( !strCopyright.isEmpty() )
         {
-            ui->BtnMainLink->setText( QString("@ %1").arg(strCopyright) );
+            ui->BtnMainLink->setText( QString("(c) %1").arg(strCopyright) );
         }
     }
 
@@ -513,13 +521,6 @@ void T3kCfgWnd::LoadCompany()
     QT3kUserData* pInst = QT3kUserData::GetInstance();
     pInst->SetProgramTitle( m_strTitle );
     pInst->SetProgramInfo( m_strProgInfo );
-
-    QFontMetricsF ftMetrics( ui->BtnMainLink->font() );
-    ui->BtnMainLink->setGeometry( ui->BtnMainLink->x(), ui->BtnMainLink->y(),
-                                  10 + ftMetrics.width( ui->BtnMainLink->text() ),
-                                  ui->BtnMainLink->height() );
-
-    ui->line->setGeometry( ui->BtnMainLink->x() + ui->BtnMainLink->width() + 5, ui->line->y(), width() - (ui->BtnMainLink->x() + ui->BtnMainLink->width() + 5), ui->line->height() );
 }
 
 void T3kCfgWnd::onChangeLanguage()
@@ -771,14 +772,13 @@ void T3kCfgWnd::OnTrayOpenT3kCfg()
 
 void T3kCfgWnd::showEvent(QShowEvent *)
 {
-    if( m_bShow )
-    {
-        if( !m_pT3kHandle->IsOpen() )
-            HideContentsMenu();
-        else
-            ShowContentsMenu();
-        m_bShow = false;
-    }
+    if( !m_bInit )
+        Init();
+
+    if( !m_pT3kHandle->IsOpen() )
+        HideContentsMenu();
+    else
+        ShowContentsMenu();
 }
 
 void T3kCfgWnd::closeEvent(QCloseEvent */*evt*/)
@@ -923,6 +923,11 @@ void T3kCfgWnd::onShowMenuEvent( int nMenu )
     ui->SWMenu->slideInIdx( nMenu );
 
     m_pMenuWidget->SetMenuButton( nMenu );
+
+    if( ui->SWMenu->currentIndex() == nMenu )
+    {
+        OnFinishAnimationMenu();
+    }
 }
 
 void T3kCfgWnd::OnFinishAnimationMenu()

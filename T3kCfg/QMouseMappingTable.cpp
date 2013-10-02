@@ -195,16 +195,18 @@ void QMouseMappingTable::Init()
     m_bCheckExtProperty[EXTP_ENABLE_SINGLE_DBLTAP]              = false;
     m_bCheckExtProperty[EXTP_ENABLE_SINGLE_MOVE]                = false;
 
-    m_pEditActionWnd = new QEditActionWnd(m_pT3kHandle, this);
+    QWidget* pParent = QT3kUserData::GetInstance()->getTopParent();
+    Q_ASSERT( pParent );
+    m_pEditActionWnd = new QEditActionWnd(m_pT3kHandle, pParent);
     m_pEditActionWnd->setFont( font() );
     m_pEditActionWnd->setModal( true );
-    m_pEditActionEDWnd = new QEditActionEDWnd(m_pT3kHandle, this);
+    m_pEditActionEDWnd = new QEditActionEDWnd(m_pT3kHandle, pParent);
     m_pEditActionEDWnd->setFont( font() );
     m_pEditActionEDWnd->setModal( true );
-    m_pEditAction2WDWnd = new QEditAction2WDWnd(m_pT3kHandle, this);
+    m_pEditAction2WDWnd = new QEditAction2WDWnd(m_pT3kHandle, pParent);
     m_pEditAction2WDWnd->setFont( font() );
     m_pEditAction2WDWnd->setModal( true );
-    m_pEditAction4WDWnd = new QEditAction4WDWnd(m_pT3kHandle, this);
+    m_pEditAction4WDWnd = new QEditAction4WDWnd(m_pT3kHandle, pParent);
     m_pEditAction4WDWnd->setFont( font() );
     m_pEditAction4WDWnd->setModal( true );
 
@@ -972,22 +974,22 @@ void QMouseMappingTable::PopEditActionWnd( CellInfo& ci, int nRow, int /*nCol*/ 
     {
     case KeyType1Key:
         m_pEditActionWnd->SetProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], nRow == ROW_PUTNTAP ? true : false );
-        m_pEditActionWnd->show();
+        m_pEditActionWnd->exec();
         break;
 
     case KeyTypeEnable:
         m_pEditActionEDWnd->SetProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], m_wProfileFlags );
-        m_pEditActionEDWnd->show();
+        m_pEditActionEDWnd->exec();
         break;
 
     case KeyType4Way:
         m_pEditAction4WDWnd->SetProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], ci.wKeyValue[1], ci.wKeyValue[2], ci.wKeyValue[3] );
-        m_pEditAction4WDWnd->show();
+        m_pEditAction4WDWnd->exec();
         break;
 
     case KeyType2Way:
         m_pEditAction2WDWnd->SetProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], ci.wKeyValue[1] );
-        m_pEditAction2WDWnd->show();
+        m_pEditAction2WDWnd->exec();
         break;
 
     case KeyTypeNone:

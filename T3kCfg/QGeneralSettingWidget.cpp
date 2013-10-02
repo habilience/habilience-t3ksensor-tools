@@ -21,7 +21,7 @@ QGeneralSettingWidget::QGeneralSettingWidget(T3kHandle*& pHandle, QWidget *paren
     m_pT3kHandle(pHandle)
 {
     setupUi(this);
-    setFont( parent->font() );
+    setFont( qApp->font() );
 
     m_nInputModeV = 0x0000;
     m_nInputMode = 0;

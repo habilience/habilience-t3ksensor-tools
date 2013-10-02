@@ -39,6 +39,9 @@ public:
 
     QTcpSocket* GetRemoteSocket() { QMutexLocker Lock(&m_Mutex); return &m_RemoteSocket; }
 
+    void setTopParent(QWidget* pParent) { m_pTopParent = pParent; }
+    QWidget* getTopParent() { return m_pTopParent; }
+
 protected:
     static QT3kUserData*    m_pInstance;
     QMutex                  m_Mutex;
@@ -55,6 +58,8 @@ protected:
 
     // remote
     QTcpSocket              m_RemoteSocket;
+
+    QWidget*                m_pTopParent;
 
 signals:
 

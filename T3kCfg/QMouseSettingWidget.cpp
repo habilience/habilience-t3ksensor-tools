@@ -17,7 +17,7 @@ QMouseSettingWidget::QMouseSettingWidget(T3kHandle*& pHandle, QWidget *parent) :
     ui(new Ui::QMouseSettingWidget), m_pT3kHandle(pHandle)
 {
     ui->setupUi(this);
-    setFont( parent->font() );
+    setFont( qApp->font() );
 
     ui->MouseSettingTableCtrl->SetT3kHandle( m_pT3kHandle );
     ui->TitleMouseMapping->setFont( font() );

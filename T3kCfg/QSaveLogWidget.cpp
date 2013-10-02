@@ -4,6 +4,7 @@
 
 #include <QDesktopWidget>
 #include <QtEvents>
+#include <QApplication>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -12,7 +13,9 @@
 QSaveLogWidget::QSaveLogWidget(T3kHandle*& pHandle, QWidget *parent) :
     QDialog(parent), m_pT3kHandle(pHandle)
 {
-    setWindowFlags( Qt::Dialog | Qt::FramelessWindowHint );
+    setWindowFlags( Qt::FramelessWindowHint );
+    setWindowModality( Qt::ApplicationModal );
+    setModal( true );
 
     // Qt 5.1.1 bug not work
 #ifdef _DEBUG
@@ -24,7 +27,7 @@ QSaveLogWidget::QSaveLogWidget(T3kHandle*& pHandle, QWidget *parent) :
     CurPalette.setColor( QPalette::Window, Qt::black );
     setPalette( CurPalette );
 
-    setFont( parent->font() );
+    setFont( qApp->font() );
 
     m_nTimer = 0;
 }

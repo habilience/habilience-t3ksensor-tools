@@ -101,10 +101,7 @@ int main(int argc, char *argv[])
     QApplication::setLayoutDirection( QLangManager::instance()->getResource().isR2L() ? Qt::RightToLeft : Qt::LeftToRight );
 
     T3kCfgWnd w;
-    if( w.AskShow() )
-        w.show();
-    else
-        w.hide();
+    w.show();
 
     return a.exec();
 }

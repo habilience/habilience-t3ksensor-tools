@@ -47,6 +47,6 @@ void QTabSensorStatus::keyPressEvent(QKeyEvent *evt)
 
 void QTabSensorStatus::on_BtnInfoSave_clicked()
 {
-    QSaveLogWidget widget( m_pT3kHandle, this );
+    QSaveLogWidget widget( m_pT3kHandle );
     widget.exec();
 }

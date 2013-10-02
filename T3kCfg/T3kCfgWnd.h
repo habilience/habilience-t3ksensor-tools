@@ -36,8 +36,6 @@ public:
     explicit T3kCfgWnd(QWidget *parent = 0);
     ~T3kCfgWnd();
 
-    bool AskShow() { return m_bShow; }//m_pT3kHandle->IsOpen(); }
-
     void ExitApplication();
 
     bool IsRegisterTrayIcon() { return m_bRegisterTrayIcon; }
@@ -122,8 +120,6 @@ private:
 
     int                         m_nSendCmdID;
 
-    bool                        m_bShow;
-
 #ifdef Q_OS_WIN
     bool                        m_bRunOtherTool;
     bool                        m_bPrevShowed;
@@ -140,6 +136,8 @@ private:
 
     bool                        m_bCustomLogo;
     bool                        m_bCustomLink;
+
+    bool                        m_bInit;
 
     // Custom Define
 protected slots:

@@ -28,6 +28,8 @@ QAssistanceWidget::QAssistanceWidget(T3kHandle*& pHandle, QWidget *parent) :
     ui->setupUi(this);
 
     setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
+    setWindowModality( Qt::WindowModal );
+    setModal( true );
 
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     genAdjustButtonWidgetForWinAndX11( this );

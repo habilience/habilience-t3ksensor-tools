@@ -23,7 +23,7 @@ QCalibrationSettingWidget::QCalibrationSettingWidget(T3kHandle*& pHandle, QWidge
     ui(new Ui::QCalibrationSettingWidget), m_pT3kHandle(pHandle)
 {
     ui->setupUi(this);
-    setFont( parent->font() );
+    setFont( qApp->font() );
     ui->BtnTouchSetting->setFont( font() );
 
     m_fScreenMargin = 0.f;
@@ -657,7 +657,7 @@ void QCalibrationSettingWidget::on_BtnTouchSetting_clicked()
 {
     if( !m_pTouchSettingWnd )
     {
-        m_pTouchSettingWnd = new QTouchSettingWidget( m_pT3kHandle, this );
+        m_pTouchSettingWnd = new QTouchSettingWidget( m_pT3kHandle, QT3kUserData::GetInstance()->getTopParent() );
         m_pTouchSettingWnd->setFont( font() );
     }
 

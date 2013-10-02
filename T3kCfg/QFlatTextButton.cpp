@@ -130,6 +130,20 @@ void QFlatTextButton::DrawButton( QPainter* pDC, QRect rcBody )
     qreal ftW = ftMetrics.width( strText );
 //    qreal ftH = ftMetrics.height();
     Qt::AlignmentFlag eFlag = Qt::AlignLeft;
+    switch( m_eFBA )
+    {
+    case FBA_LEFT:
+        break;
+    case FBA_RIGHT:
+        eFlag = Qt::AlignRight;
+        break;
+    case FBA_CENTER:
+        eFlag = Qt::AlignCenter;
+        break;
+    default:
+        break;
+    }
+
     if( m_pImageIcon )
     {
         int nIconW = m_pImageIcon->width();
@@ -144,11 +158,9 @@ void QFlatTextButton::DrawButton( QPainter* pDC, QRect rcBody )
             break;
         case FBA_RIGHT:
             nIconX = rcBody.right() - ftW - nOffsetX - nIconW;
-            eFlag = Qt::AlignRight;
             break;
         case FBA_CENTER:
             nIconX = rcBody.left() + (rcBody.width()-nIconW-ftW) / 2 - nOffsetX;
-            eFlag = Qt::AlignCenter;
             break;
         }
         int nIconY = rcBody.top() + (rcBody.height()-nIconH) / 2;

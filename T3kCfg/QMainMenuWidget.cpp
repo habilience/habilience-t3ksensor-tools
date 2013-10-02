@@ -26,15 +26,14 @@ QMainMenuWidget::QMainMenuWidget(T3kHandle*& pHandle, QWidget *parent) :
     ui(new Ui::QMainMenuWidget), m_pT3kHandle(pHandle)
 {
     ui->setupUi(this);
-    setFont( parent->font() );
+    setFont( qApp->font() );
 
 #if defined(Q_OS_MAC)
-    QFont ft( parent->font() );
+    QFont ft( qApp->font() );
     ft.setPointSize( ft.pointSize()-1 );
     ui->EditFirmWareVer->setFont( ft );
-    ui->MainMenuLayout->setSpacing( 10 );
 #elif defined(Q_OS_LINUX)
-    QFont font( parent->font() );
+    QFont font( qApp->font() );
     font.setPointSize(10);
     ui->EditFirmWareVer->setFont( font );
 #endif

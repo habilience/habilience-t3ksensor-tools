@@ -19,6 +19,7 @@ QT3kUserData::QT3kUserData(QObject *parent) :
     m_nSelectedVID = 0;
     m_nSelectedPID = 0;
     m_nSelectedIdx = 0xFFFF;
+    m_pTopParent = NULL;
 }
 
 QT3kUserData::~QT3kUserData()
