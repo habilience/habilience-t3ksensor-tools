@@ -12,8 +12,8 @@ QDiableTouchWidget::QDiableTouchWidget(T3kHandle*& pHandle, QWidget *parent) :
     QDialog(parent),
     m_pT3kHandle(pHandle), ui(new Ui::QDiableTouchWidget)
 {   
-    setWindowFlags( Qt::Tool | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
-    setWindowModality( Qt::NonModal );
+    setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
+    setWindowModality( Qt::WindowModal );
     setModal( true );
 
     ui->setupUi(this);
