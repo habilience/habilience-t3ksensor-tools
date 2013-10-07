@@ -2,6 +2,7 @@
 
 #include "qsingleapplication/qtsingleapplication.h"
 #include "QUtils.h"
+#include "../common/T3k_ver.h"
 #include <QStringList>
 
 #ifdef Q_OS_WIN
@@ -53,6 +54,26 @@ int main(int argc, char *argv[])
     }
 
     QApplication::setQuitOnLastWindowClosed( true );
+
+    QString strAppVer( T3000_VERSION );
+    int nRPos = -1;
+    for( int i=strAppVer.length()-1 ; i>=3 ; i-=2 )
+    {
+        if( strAppVer.at(i-1) == '.' &&
+            strAppVer.at(i) == '0' )
+        {
+            nRPos = i-1;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    if( nRPos >= 0 )
+        strAppVer = strAppVer.left(nRPos);
+
+    QCoreApplication::setApplicationVersion( strAppVer );
 
     T3kSoftlogicDlg dlg( NULL, strCmdLine.isEmpty() ? "" : strCmdLine );
 

@@ -37,6 +37,8 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
 
     ui->centralwidget->setLayout( ui->MainLayout );
 
+    setWindowTitle( windowTitle() + " Ver " + QCoreApplication::applicationVersion() );
+
     m_pTabPanelWidget = new TabPanelWidget( this );
     m_pTabKeyDesignWidget = new TabKeyDesignWidget( this );
     m_pTabLogicDesignWidget = new TabLogicDesignWidget( this );
