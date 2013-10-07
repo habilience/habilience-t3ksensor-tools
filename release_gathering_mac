@@ -7,6 +7,7 @@ mkdir ./release/T3kCfg.app/Contents/MacOS/config
 cp -rpf ./T3kCfg/Config/config.ini ./release/T3kCfg.app/Contents/MacOS/config
 
 cp -rpf ./T3kCfgFE/T3kCfgFE.app ./release
+cp -rpf ./T3kCfgFE/Languages/T3kCfgFE.rsc ./release/T3kCfgFE.app/Contents/MacOS
 cp -rpf ./T3kCmd/T3kCmd ./release
 cp -rpf ./T3kSoftlogic/T3kSoftlogic.app ./release
 cp -rpf ./T3kUpgrade/T3kUpgrade.app ./release

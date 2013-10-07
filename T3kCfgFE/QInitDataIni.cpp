@@ -122,10 +122,15 @@ bool QInitDataIni::load()
     strFile += ".ini";
 #endif
 #else
+#ifdef Q_OS_MAC
+    QString strFile = QCoreApplication::applicationFilePath();
+    strFile += ".ini";
+#else
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
     QString strFile = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator();
     strFile += QCoreApplication::applicationName() + ".ini";
+#endif
 #endif
 
     QIni ini;
@@ -278,11 +283,16 @@ bool QInitDataIni::save()
     strFile += ".ini";
 #endif
 #else
+#ifdef Q_OS_MAC
+    QString strFile = QCoreApplication::applicationFilePath();
+    strFile += ".ini";
+#else
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
     QString strFile = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator();
     makeDirectory(strFile);
     strFile += QCoreApplication::applicationName() + ".ini";
+#endif
 #endif
 
     QIni ini;
