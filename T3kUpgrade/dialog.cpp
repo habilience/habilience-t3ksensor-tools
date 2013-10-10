@@ -42,9 +42,11 @@ Dialog::Dialog(QWidget *parent) :
 
     memset( &m_TempSensorInfo, 0, sizeof(m_TempSensorInfo) );
     memset( &m_SensorInfo, 0, sizeof(m_SensorInfo) );
-    m_FirmwareInfo.clear();;
+    m_FirmwareInfo.clear();
 
     ui->setupUi(this);
+
+    setAcceptDrops( true );
 
     Qt::WindowFlags flags = windowFlags();
     Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
@@ -88,35 +90,43 @@ Dialog::~Dialog()
     delete ui;
 }
 
-bool Dialog::loadFirmwareFile()
+bool Dialog::loadFirmwareFile(QString strFirmwareFilePathName)
 {
-    QString strPath = QCoreApplication::applicationDirPath();
-    strPath = rstrip(strPath, "/\\");
-    strPath += QDir::separator();
-#ifdef Q_OS_MAC
-    strPath = strPath.replace( "/Contents/MacOS/", "" );
-    strPath = strPath.left( strPath.lastIndexOf( '/' )+1 );
-#endif
-    qDebug() << strPath;
+    m_FirmwareInfo.clear();
 
-    QDir currentDir(strPath);
-    QStringList files;
-    QString fileName = "*.fwb";
-    files = currentDir.entryList(QStringList(fileName),
-                                 QDir::Files | QDir::NoSymLinks);
-
-    qDebug( "fwb: %d", files.size() );
-
-    if (files.size() <= 0)
+    if( strFirmwareFilePathName.isEmpty() )
     {
-        return false;
-    }
+        QString strPath = QCoreApplication::applicationDirPath();
+        strPath = rstrip(strPath, "/\\");
+        strPath += QDir::separator();
+#ifdef Q_OS_MAC
+        strPath = strPath.replace( "/Contents/MacOS/", "" );
+        strPath = strPath.left( strPath.lastIndexOf( '/' )+1 );
+#elif defined(Q_OS_LINUX)
+        strPath = QStandardPaths::writableLocation( QStandardPaths::HomeLocation );
+#endif
+        qDebug() << strPath;
 
-    QString strFirmwareFilePathName = strPath;
-    strFirmwareFilePathName += files.front();
+        QDir currentDir(strPath);
+        QStringList files;
+        QString fileName = "*.fwb";
+        files = currentDir.entryList(QStringList(fileName),
+                                     QDir::Files | QDir::NoSymLinks);
+
+        qDebug( "fwb: %d", files.size() );
+
+        if (files.size() <= 0)
+        {
+            return false;
+        }
+
+        strFirmwareFilePathName = strPath;
+        strFirmwareFilePathName += files.front();
+    }
 
     qDebug( "file: %s", (const char*)strFirmwareFilePathName.toLatin1() );
 
+    // zip, deflate, zipcrypto
     QuaZip zip(strFirmwareFilePathName);
     zip.open( QuaZip::mdUnzip );
 
@@ -129,9 +139,11 @@ bool Dialog::loadFirmwareFile()
 #define MAJ_VER_OFFSET (0x302)
 #define MIN_VER_OFFSET (0x300)
 
+#define PW_FWB          "t3kfirmware"
+
     for ( bool more=zip.goToFirstFile(); more; more=zip.goToNextFile() )
     {
-        file.open(QIODevice::ReadOnly);
+        file.open(QIODevice::ReadOnly, PW_FWB);
 
         //qDebug( "actual filename: %s", (const char*)file.getActualFileName().toLatin1() );
         //qDebug( "filename: %s", (const char*)file.getFileName().toLatin1() );
@@ -1187,6 +1199,8 @@ void Dialog::updateSensorInformation()
 
 void Dialog::updateFirmwareInformation()
 {
+    ui->textEditFirmwareInformation->clear();
+
     QString strInformation;
     if (m_FirmwareInfo.size() == 0)
     {
@@ -1305,6 +1319,52 @@ void Dialog::paintEvent(QPaintEvent *)
 
     QPainter p(this);
     p.fillRect( QRect(0,0,width(),height()), clrBackground );
+}
+
+void Dialog::dragEnterEvent(QDragEnterEvent *evt)
+{
+    if( evt->mimeData()->hasUrls() )
+    {
+        foreach( const QUrl& url, evt->mimeData()->urls() )
+        {
+            QString str( url.toLocalFile() );
+            if( str.isEmpty() ) continue;
+
+            if( QFileInfo( str ).suffix() == "fwb" )
+            {
+                evt->acceptProposedAction();
+                return;
+            }
+        }
+    }
+}
+
+void Dialog::dropEvent(QDropEvent *evt)
+{
+    QString	strFileName;
+    if( evt->mimeData()->hasUrls() )
+    {
+        foreach( const QUrl& url, evt->mimeData()->urls() )
+        {
+            QString str( url.toLocalFile() );
+            if( str.isEmpty() ) continue;
+
+            if( QFileInfo( str ).suffix() == "fwb" )
+            {
+                strFileName = str;
+                break;
+            }
+        }
+    }
+
+    if( strFileName.isEmpty() )
+    {
+        QMessageBox::about( this, "Warning", QString("Not \"fwb\" file : %s").arg(strFileName) );
+        return;
+    }
+
+    loadFirmwareFile( strFileName );
+    updateFirmwareInformation();
 }
 
 bool Dialog::verifyFirmware(QString& strMsg)

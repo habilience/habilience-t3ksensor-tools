@@ -113,6 +113,8 @@ protected:
     virtual void showEvent(QShowEvent *evt);
     virtual void closeEvent(QCloseEvent *evt);
     virtual void paintEvent(QPaintEvent *);
+    virtual void dragEnterEvent(QDragEnterEvent *);
+    virtual void dropEvent(QDropEvent *);
 
     void connectDevice();
 
@@ -144,7 +146,7 @@ protected:
     void updateFirmwareInformation();
     void displayInformation(const QString &strText );
 
-    bool loadFirmwareFile();
+    bool loadFirmwareFile(QString strPath = "");
 
     bool analysisFirmwareBinary( const char* ver_info, FirmwareInfo* pFI );
 
