@@ -37,6 +37,7 @@ enum FlatMenuStatus { MenuHome = 0, MenuMouseSetting, MenuCalibrationSetting, Me
 typedef struct _ST_SHAREDMEMORY
 {
     char szDuplicateRuns;
+    char szRunningFE;
 } ST_SHAREDMEMORY;
 
 #include <QWidget>

@@ -1515,6 +1515,12 @@ void Dialog::switchMenu( SelectMenu menu )
     }
 }
 
+void Dialog::onHandleMessage(const QString &msg)
+{
+    raise();
+    activateWindow();
+}
+
 void Dialog::on_btnSelectSensor_clicked()
 {
     LOG_B( "Select Sensor..." );

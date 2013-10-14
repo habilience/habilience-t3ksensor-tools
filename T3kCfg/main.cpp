@@ -2,6 +2,7 @@
 #include "T3kCfgWnd.h"
 #include <QSettings>
 #include <QSharedMemory>
+#include <QMessageBox>
 #include "stdInclude.h"
 
 // Tag
@@ -41,11 +42,18 @@ int main(int argc, char *argv[])
 #endif
 
     QSharedMemory CheckDuplicateRuns( "Habilience T3k Series Configure" );
-    if( CheckDuplicateRuns.attach( QSharedMemory::ReadWrite ) )
+    if( CheckDuplicateRuns.isAttached() || CheckDuplicateRuns.attach( QSharedMemory::ReadWrite ) )
     {
         CheckDuplicateRuns.lock();
         void* pData = CheckDuplicateRuns.data();
         ST_SHAREDMEMORY* stSM = (ST_SHAREDMEMORY*)pData;
+
+        if( stSM->szRunningFE == 1 )
+        {
+            QMessageBox::critical( NULL, "Error", "T3k Factory-Edition Program(\"T3kCfe.exe\") is running.", QMessageBox::Ok );
+            CheckDuplicateRuns.unlock();
+            return 0;
+        }
 
         QString strPath = QCoreApplication::applicationDirPath();
         if( strPath.at( strPath.size()-1 ) == '/' )

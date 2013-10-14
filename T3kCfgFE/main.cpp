@@ -3,6 +3,7 @@
 #include "AppData.h"
 
 #include <QString>
+#include <QSharedMemory>
 
 AppData g_AppData;
 QMyApplication* g_pApp = NULL;
@@ -52,7 +53,46 @@ int main(int argc, char *argv[])
     QMyApplication a(argc, argv);
     g_pApp = &a;
     Dialog w;
+
+    QObject::connect( &a, &QtSingleApplication::messageReceived, &w, &Dialog::onHandleMessage );
+
+    if (a.isRunning())
+    {
+        a.sendMessage("");
+        return 0;
+    }
+
+    typedef struct _ST_SHAREDMEMORY
+    {
+        char szDuplicateRuns;
+        char szRunningFE;
+    } ST_SHAREDMEMORY;
+
+    QSharedMemory CheckDuplicateRuns( "Habilience T3k Series Configure" );
+    CheckDuplicateRuns.create( sizeof(ST_SHAREDMEMORY) );
+    if( CheckDuplicateRuns.isAttached() || CheckDuplicateRuns.attach( QSharedMemory::ReadWrite ) )
+    {
+        CheckDuplicateRuns.lock();
+        void* pData = CheckDuplicateRuns.data();
+        ST_SHAREDMEMORY* stSM = (ST_SHAREDMEMORY*)pData;
+
+        stSM->szRunningFE = 1;
+        CheckDuplicateRuns.unlock();
+    }
+
     w.show();
+
+    int nExit = a.exec();
     
-    return a.exec();
+    if( CheckDuplicateRuns.isAttached() || CheckDuplicateRuns.attach( QSharedMemory::ReadWrite ) )
+    {
+        CheckDuplicateRuns.lock();
+        void* pData = CheckDuplicateRuns.data();
+        ST_SHAREDMEMORY* stSM = (ST_SHAREDMEMORY*)pData;
+
+        stSM->szRunningFE = 0;
+        CheckDuplicateRuns.unlock();
+    }
+
+    return nExit;
 }

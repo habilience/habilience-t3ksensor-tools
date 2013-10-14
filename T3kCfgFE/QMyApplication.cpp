@@ -6,7 +6,7 @@
 #include "QUtils.h"
 
 QMyApplication::QMyApplication(int &argc, char **argv) :
-    QApplication(argc, argv)
+    QtSingleApplication(argc, argv)
 {
     QFont newFont = getSystemFont(NULL);
     setFont(newFont);
@@ -27,5 +27,5 @@ bool QMyApplication::eventFilter(QObject *obj, QEvent *evt)
             emit mouseMoved();
         }
     }
-    return QApplication::eventFilter(obj, evt);
+    return QtSingleApplication::eventFilter(obj, evt);
 }

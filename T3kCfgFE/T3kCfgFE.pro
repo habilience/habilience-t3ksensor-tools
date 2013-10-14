@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -187,6 +187,12 @@ macx {
 
 SOURCES += main.cpp\
         dialog.cpp \
+    ../common/qsingleapplication/qtsinglecoreapplication.cpp \
+    ../common/qsingleapplication/qtsingleapplication.cpp \
+    ../common/qsingleapplication/qtlockedfile_win.cpp \
+    ../common/qsingleapplication/qtlockedfile_unix.cpp \
+    ../common/qsingleapplication/qtlockedfile.cpp \
+    ../common/qsingleapplication/qtlocalpeer.cpp \
     ../common/QUtils.cpp \
     ../common/QKeyMapStr.cpp \
     ../common/QIni.cpp \
@@ -239,6 +245,12 @@ SOURCES += main.cpp\
     QRemoteTouchMarkDialog.cpp
 
 HEADERS  += dialog.h \
+    ../common/qsingleapplication/qtsinglecoreapplication.h \
+    ../common/qsingleapplication/qtsingleapplication.h \
+    ../common/qsingleapplication/qtlockedfile_win.h \
+    ../common/qsingleapplication/qtlockedfile_unix.h \
+    ../common/qsingleapplication/qtlockedfile.h \
+    ../common/qsingleapplication/qtlocalpeer.h \
     ../common/QUtils.h \
     ../common/QKeyMapStr.h \
     ../common/QSingletone.h \

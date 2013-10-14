@@ -54,7 +54,9 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 
     QT3kUserData::GetInstance()->setTopParent( this );
 
+#ifdef Q_OS_WIN
     setWindowFlags(Qt::MSWindowsFixedSizeDialogHint);
+#endif
 
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     genAdjustButtonWidgetForWinAndX11( this );
@@ -775,10 +777,13 @@ void T3kCfgWnd::showEvent(QShowEvent *)
     if( !m_bInit )
         Init();
 
-    if( !m_pT3kHandle->IsOpen() )
-        HideContentsMenu();
-    else
-        ShowContentsMenu();
+    if( !m_bFirmwareDownloading )
+    {
+        if( !m_pT3kHandle->IsOpen() )
+            HideContentsMenu();
+        else
+            ShowContentsMenu();
+    }
 }
 
 void T3kCfgWnd::closeEvent(QCloseEvent */*evt*/)
@@ -1303,11 +1308,43 @@ void T3kCfgWnd::timerEvent(QTimerEvent *evt)
         if( evt->timerId() == m_nTimerObserver )
         {
             QSharedMemory CheckDuplicateRuns( "Habilience T3k Series Configure" );
-            if( CheckDuplicateRuns.attach( QSharedMemory::ReadWrite ) )
+            if( CheckDuplicateRuns.isAttached() || CheckDuplicateRuns.attach( QSharedMemory::ReadWrite ) )
             {
                 CheckDuplicateRuns.lock();
                 const void* pData = CheckDuplicateRuns.constData();
                 ST_SHAREDMEMORY* stSM = (ST_SHAREDMEMORY*)pData;
+
+                if( stSM->szRunningFE == 1 )
+                {
+                    if( !m_bRunOtherTool )
+                    {
+                        if( isVisible() )
+                        {
+                            hide();
+                            onShowMenuEvent( QMENU_HOME );
+                            m_bPrevShowed = true;
+                        }
+                        m_bRunOtherTool = true;
+                    }
+                }
+                else
+                {
+                    if( m_bPrevShowed )
+                    {
+                        show();
+#ifdef Q_OS_WIN
+                        SetForegroundWindow( (HWND)winId() );
+                        SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
+                        SetWindowPos( (HWND)winId(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
+#else
+                        raise();
+                        activateWindow();
+#endif
+                        m_bPrevShowed = false;
+                    }
+                    m_bRunOtherTool = false;
+                }
+
                 if( stSM->szDuplicateRuns == 1 )
                     OnTrayOpenT3kCfg();
                 else if( stSM->szDuplicateRuns == 2 )
@@ -1317,38 +1354,6 @@ void T3kCfgWnd::timerEvent(QTimerEvent *evt)
                 stSM->szDuplicateRuns = 0;
                 CheckDuplicateRuns.unlock();
             }
-
-#ifdef Q_OS_WIN
-            HWND hOtherToolAppWnd = FindWindow( T3KFE_DIALOG_CLASSNAME, NULL );
-            if( hOtherToolAppWnd )
-            {
-                if( !m_bRunOtherTool )
-                {
-                    if( isVisible() )
-                    {
-                        hide();
-                        onShowMenuEvent( QMENU_HOME );
-                        m_bPrevShowed = true;
-                    }
-                    m_bRunOtherTool = true;
-
-
-                }
-            }
-            else
-            {
-                if( m_bPrevShowed )
-                {
-                    show();
-                    SetForegroundWindow( (HWND)winId() );
-                    SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
-                    SetWindowPos( (HWND)winId(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
-
-                    m_bPrevShowed = false;
-                }
-                m_bRunOtherTool = false;
-            }
-#endif
         }
 
         if( evt->timerId() == m_nTimerChkTrayDoubleClk )

@@ -133,6 +133,9 @@ public:
     void setInstantMode( int nInstantMode );
 
     void drawSafeMode(QRect rcBody, QPainter& p);
+
+public slots:
+    void onHandleMessage(const QString &msg);
     
 private slots:
     void on_btnSelectSensor_clicked();
