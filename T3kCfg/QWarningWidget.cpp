@@ -10,6 +10,8 @@ QWarningWidget::QWarningWidget(QWidget *parent) :
     ui(new Ui::QWarningWidget)
 {
     setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
+    setWindowModality( Qt::WindowModal );
+    setModal( true );
 
     ui->setupUi(this);
 
