@@ -20,6 +20,9 @@ QT3kUserData::QT3kUserData(QObject *parent) :
     m_nSelectedPID = 0;
     m_nSelectedIdx = 0xFFFF;
     m_pTopParent = NULL;
+    m_pT3kHandle = NULL;
+    m_bSubCameraExist = false;
+    m_nCamCount = 0;
 }
 
 QT3kUserData::~QT3kUserData()

@@ -110,6 +110,8 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 
     m_pT3kHandle = new T3kHandle();
 
+    QT3kUserData::GetInstance()->setT3kHandle( m_pT3kHandle );
+
     QSettings regT3kCfg( "Habilience", "T3kCfg" );
 
     QString strT3kCfgVer = regT3kCfg.value( "T3kCfg Version" ).toString();

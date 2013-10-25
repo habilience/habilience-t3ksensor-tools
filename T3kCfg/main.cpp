@@ -10,6 +10,7 @@
 
 #include "QLangManager.h"
 #include "QT3kUserData.h"
+#include "QConfigData.h"
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -107,6 +108,7 @@ int main(int argc, char *argv[])
 
     QLangManager::instance()->setRootPath( strPath );
     QApplication::setLayoutDirection( QLangManager::instance()->getResource().isR2L() ? Qt::RightToLeft : Qt::LeftToRight );
+    QConfigData::instance()->load( QCoreApplication::applicationDirPath() + "/config/config.ini" );
 
     T3kCfgWnd w;
     w.show();

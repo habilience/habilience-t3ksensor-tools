@@ -90,5 +90,9 @@
         <file>resources/PNG_NETWORK_ON.png</file>
         <file>resources/License.html</file>
         <file>resources/PNG_QUESTION_MARK.png</file>
+        <file>resources/PNG_DETECTION_LB.png</file>
+        <file>resources/PNG_DETECTION_LT.png</file>
+        <file>resources/PNG_DETECTION_RB.png</file>
+        <file>resources/PNG_DETECTION_RT.png</file>
     </qresource>
 </RCC>

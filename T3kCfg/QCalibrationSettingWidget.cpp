@@ -7,14 +7,15 @@
 
 #include "T3kCfgWnd.h"
 #include "QT3kUserData.h"
+#include "QLangManager.h"
+#include "QConfigData.h"
+#include "QAdvancedSettingWidget.h"
 
 #include <QShowEvent>
 #include <QMessageBox>
 
-#include "QLangManager.h"
-
-#define USER_AREA_RANGE_START           0x0000                          //NV_DEF_..._AREA_RANGE_START
-#define USER_AREA_RANGE_END		0x7fff                          //NV_DEF_..._AREA_RANGE_END
+#define USER_AREA_RANGE_START   0x0000                  //NV_DEF_..._AREA_RANGE_START
+#define USER_AREA_RANGE_END		0x7fff                  //NV_DEF_..._AREA_RANGE_END
 #define	USER_AREA_RANGE_MAX		USER_AREA_RANGE_END		//NV_DEF_..._AREA_RANGE_MAX
 
 
@@ -25,18 +26,19 @@ QCalibrationSettingWidget::QCalibrationSettingWidget(T3kHandle*& pHandle, QWidge
     ui->setupUi(this);
     setFont( qApp->font() );
     ui->BtnTouchSetting->setFont( font() );
+    ui->BtnAdvanced->setFont( font() );
 
     m_fScreenMargin = 0.f;
 
-    m_fMMVersion        = 0.0f;
+    m_fMMVersion    = 0.0f;
     m_nUsbConfigMode = 0;
 
     m_pTouchSettingWnd = NULL;
 
     m_pwndCalibration = new QCalibrationWidget( m_pT3kHandle );
 
-    ui->TitleCalibration->SetIconImage( tr(":/T3kCfgRes/resources/PNG_ICON_CALIBRATION.png") );
-    ui->TitleAreaSetting->SetIconImage( tr(":/T3kCfgRes/resources/PNG_ICON_AREA_SETTING.png") );
+    ui->TitleCalibration->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_CALIBRATION.png" );
+    ui->TitleAreaSetting->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_AREA_SETTING.png" );
     ui->BtnTouchSetting->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_SETTING.png" );
 
     // usbconfigmode
@@ -50,6 +52,10 @@ QCalibrationSettingWidget::QCalibrationSettingWidget(T3kHandle*& pHandle, QWidge
     ui->BtnTwoTouchInc->setEnabled(false);
     ui->EditTwoTouch->setEnabled(false);
     ui->BtnTouchSetting->setEnabled(false);
+
+    bool bEnable = QConfigData::instance()->getData( "ADVANCED", "ADVANCED_MENU", QVariant(false) ).toBool() &&
+            !QConfigData::instance()->getData( "ADVANCED", "PASSWORD", "" ).toString().isEmpty();
+    ui->BtnAdvanced->setVisible( bEnable );
 
     onChangeLanguage();
 }
@@ -88,14 +94,6 @@ void QCalibrationSettingWidget::onChangeLanguage()
     ui->LBPalm->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_PALM")) );
 
     ui->BtnTouchSetting->setText( Res.getResString(QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("BTN_CAPTION_TOUCH_SETTING")) );
-
-    {
-    QFontMetricsF ftMetrics( ui->BtnTouchSetting->font() );
-    ui->BtnTouchSetting->setMinimumWidth( 30+ftMetrics.width( Res.getResString(QString::fromUtf8("MOUSE SETTING"),
-                                                                               QString::fromUtf8("BTN_CAPTION_TOUCH_SETTING")) ) );
-    }
-
-    ui->BtnTSLayout->setAlignment( ui->BtnTouchSetting, Res.isR2L() ? Qt::AlignRight : Qt::AlignLeft );
 }
 
 void QCalibrationSettingWidget::RequestSensorData( bool bDefault )
@@ -662,4 +660,10 @@ void QCalibrationSettingWidget::on_BtnTouchSetting_clicked()
     }
 
     m_pTouchSettingWnd->exec();
+}
+
+void QCalibrationSettingWidget::on_BtnAdvanced_clicked()
+{
+    QAdvancedSettingWidget widget( QT3kUserData::GetInstance()->getTopParent() );
+    widget.exec();
 }

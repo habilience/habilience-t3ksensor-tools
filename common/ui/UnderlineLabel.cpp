@@ -35,7 +35,7 @@ void QUnderlineLabel::paintEvent(QPaintEvent */*event*/)
     QFont ftText;
     ftText.setFamily( font().family() );
     ftText.setBold( true );
-    ftText.setPixelSize( nH-6 );
+    ftText.setPixelSize( nH-8 );
     dc.setFont( ftText );
 
     bool bR2L = QApplication::layoutDirection() == Qt::RightToLeft;

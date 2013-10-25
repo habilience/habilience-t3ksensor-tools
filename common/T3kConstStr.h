@@ -71,6 +71,8 @@ static const char cstrSensorGain[] = "sensor_gain=";
 //static const char cstrDetectionAngle[] = "detection_angle=";
 static const char cstrFactorialCamPos[] = "f31=";
 static const char cstrAmbientLight[] = "ambient_light=";
+static const char cstrCamPosTrc[] = "c31=";
+static const char cstrCamPosUserTrc[] = "c32=";
 
 static const char cstrAdminDetectionLine[] = "admin_detection_line=";
 static const char cstrAdminDetectionCenter[] = "admin_detection_center=";

@@ -105,6 +105,26 @@ bool QCustomDefaultSensor::Reload()
             m_vCommandStr.push_back( strLine );
             continue;
         }
+        else if( strLine.contains(QString("cam1/%1").arg(cstrDetectionRange).toUtf8()) )
+        {
+            m_vCommandStr.push_back( strLine );
+            continue;
+        }
+        else if( strLine.contains(QString("cam2/%1").arg(cstrDetectionRange).toUtf8()) )
+        {
+            m_vCommandStr.push_back( strLine );
+            continue;
+        }
+        else if( strLine.contains(QString("cam1/sub/%1").arg(cstrDetectionRange).toUtf8()) )
+        {
+            m_vCommandStr.push_back( strLine );
+            continue;
+        }
+        else if( strLine.contains(QString("cam2/sub/%1").arg(cstrDetectionRange).toUtf8()) )
+        {
+            m_vCommandStr.push_back( strLine );
+            continue;
+        }
     }
 
     qDebug( "Custom Default Sensor : %d", m_vCommandStr.size() );

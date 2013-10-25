@@ -200,6 +200,8 @@ SOURCES += main.cpp\
     ../common/QLangManager.cpp \
     ../common/QZLangRes.cpp \
     ../common/ui/QLicenseWidget.cpp \
+    ../common/fe/QCalcCamValue.cpp \
+    ../common/fe/QPointClipper.cpp \
     QStyleButton.cpp \
     QT3kDevice.cpp \
     QT3kDeviceEventHandler.cpp \
@@ -229,9 +231,7 @@ SOURCES += main.cpp\
     QBentCfgParam.cpp \
     QArrowButton.cpp \
     t3kcomdef.cpp \
-    QPointClipper.cpp \
     QBentProgressDialog.cpp \
-    QCalcCamValue.cpp \
     QAutoRangeCompleteDialog.cpp \
     QGestureProfileDialog.cpp \
     QColorTabWidget.cpp \
@@ -259,6 +259,8 @@ HEADERS  += dialog.h \
     ../common/QLangManager.h \
     ../common/QZLangRes.h \
     ../common/ui/QLicenseWidget.h \
+    ../common/fe/QCalcCamValue.h \
+    ../common/fe/QPointClipper.h \
     QStyleButton.h \
     QT3kDevice.h \
     QT3kDeviceEventHandler.h \
@@ -289,9 +291,7 @@ HEADERS  += dialog.h \
     QEventRedirection.h \
     QBentCfgParam.h \
     QArrowButton.h \
-    QPointClipper.h \
     QBentProgressDialog.h \
-    QCalcCamValue.h \
     QAutoRangeCompleteDialog.h \
     QGestureProfileDialog.h \
     QColorTabWidget.h \

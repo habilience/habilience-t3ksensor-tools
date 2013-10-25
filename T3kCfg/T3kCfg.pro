@@ -190,6 +190,8 @@ SOURCES += main.cpp\
     ../common/ui/ColorTabBar.cpp \
     ../common/ui/ColorTabWidget.cpp \
     ../common/ui/QLicenseWidget.cpp \
+    ../common/fe/QCalcCamValue.cpp \
+    ../common/fe/QPointClipper.cpp \
     QMouseSettingWidget.cpp \
     QCalibrationSettingWidget.cpp \
     QGeneralSettingWidget.cpp \
@@ -252,6 +254,15 @@ SOURCES += main.cpp\
     QTabRemoteAssistance.cpp \
     QTabChat.cpp \
     QSimpleLed.cpp \
+    QConfigData.cpp \
+    QAdvancedSettingWidget.cpp \
+    QAdvancedCalibrationWidget.cpp \
+    QAutoDetectionRange.cpp \
+    QAutoRangeCompleteDialog.cpp \
+    QBentAdjustment.cpp \
+    QBentCfgParam.cpp \
+    QBentProgressDialog.cpp \
+    T3kBuzzerDef.cpp
 
 HEADERS  += \
     ../common/T3kHandle.h \
@@ -267,6 +278,8 @@ HEADERS  += \
     ../common/ui/ColorTabBar.h \
     ../common/ui/ColorTabWidget.h \
     ../common/ui/QLicenseWidget.h \
+    ../common/fe/QCalcCamValue.h \
+    ../common/fe/QPointClipper.h \
     QMouseSettingWidget.h \
     QCalibrationSettingWidget.h \
     QGeneralSettingWidget.h \
@@ -335,6 +348,16 @@ HEADERS  += \
     QTabRemoteAssistance.h \
     QTabChat.h \
     QSimpleLed.h \
+    QConfigData.h \
+    QAdvancedSettingWidget.h \
+    QAdvancedCalibrationWidget.h \
+    QAutoDetectionRange.h \
+    QAutoRangeCompleteDialog.h \
+    QBentAdjustment.h \
+    QBentCfgParam.h \
+    QBentProgressDialog.h \
+    T3kCamNameDef.h \
+    T3kBuzzerDef.h
 
 FORMS    += \
     ../common/ui/QLicenseWidget.ui \
@@ -359,7 +382,12 @@ FORMS    += \
     QMenuStripWidget.ui \
     QTabSensorStatus.ui \
     QTabRemoteAssistance.ui \
-    QTabChat.ui
+    QTabChat.ui \
+    QAdvancedSettingWidget.ui \
+    QAdvancedCalibrationWidget.ui \
+    QAutoRangeCompleteDialog.ui \
+    QBentProgressDialog.ui
+
 
 RESOURCES += \
     T3kCfgRes.qrc

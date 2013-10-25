@@ -1515,7 +1515,7 @@ void Dialog::switchMenu( SelectMenu menu )
     }
 }
 
-void Dialog::onHandleMessage(const QString &msg)
+void Dialog::onHandleMessage(const QString &/*msg*/)
 {
     raise();
     activateWindow();

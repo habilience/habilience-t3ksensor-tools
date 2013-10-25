@@ -442,7 +442,7 @@
      <x>10</x>
      <y>10</y>
      <width>280</width>
-     <height>18</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="focusPolicy">
@@ -464,7 +464,7 @@
      <x>10</x>
      <y>210</y>
      <width>600</width>
-     <height>18</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -504,7 +504,7 @@
      <x>10</x>
      <y>90</y>
      <width>600</width>
-     <height>18</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="focusPolicy">
@@ -532,7 +532,7 @@
      <x>330</x>
      <y>10</y>
      <width>280</width>
-     <height>18</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="focusPolicy">

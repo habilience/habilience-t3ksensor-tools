@@ -5,15 +5,15 @@
 
 #include "Common/nv.h"
 
-QWarningWidget::QWarningWidget(T3kHandle*& pHandle, QWidget *parent) :
+QWarningWidget::QWarningWidget(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::QWarningWidget), m_pT3kHandle(pHandle)
+    ui(new Ui::QWarningWidget)
 {
     setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
 
     ui->setupUi(this);
 
-    QFont ft( parent->font() );
+    QFont ft( qApp->font() );
 #ifdef Q_OS_MAC
     ft.setPointSize( ft.pointSize()+1 );
 #endif

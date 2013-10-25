@@ -5,7 +5,6 @@
 #include <QToolButton>
 
 #include "TPDPEventMultiCaster.h"
-#include "QWarningWidget.h"
 #include "QDiableTouchWidget.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"

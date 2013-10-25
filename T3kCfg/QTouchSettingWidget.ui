@@ -446,7 +446,7 @@
      <x>20</x>
      <y>20</y>
      <width>360</width>
-     <height>18</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
@@ -459,7 +459,7 @@
      <x>20</x>
      <y>200</y>
      <width>360</width>
-     <height>18</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">

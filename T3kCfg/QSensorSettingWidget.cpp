@@ -183,10 +183,6 @@ void QSensorSettingWidget::hideEvent(QHideEvent *evt)
         QAssistanceWidget* pDlg = findChild<QAssistanceWidget*>();
         if( pDlg && pDlg->isVisible() )
             pDlg->ForcedClose();
-        QWarningWidget* pWarning = findChild<QWarningWidget*>();
-        if( pWarning && pWarning->isVisible() )
-            pWarning->close();
-
 
         setFocusPolicy( Qt::NoFocus );
 

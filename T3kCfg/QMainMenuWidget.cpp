@@ -251,6 +251,9 @@ void QMainMenuWidget::UpdateInformation()
 
     QT3kUserData* pInst = QT3kUserData::GetInstance();
     pInst->SetFirmwareVersion( m_fMMVersion );
+    pInst->SetFirmwareVersion( m_strMMVersion );
+    pInst->setIsSubCameraExist( m_mapCMVerInfo.size() != 0 );
+    pInst->setCamCount( m_mapCMVerInfo.size() );
 }
 
 void QMainMenuWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)

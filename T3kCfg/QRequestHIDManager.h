@@ -13,7 +13,7 @@ class QRequestHIDManager : public QObject
 
 public:
     QRequestHIDManager(QObject* parent = NULL);
-    ~QRequestHIDManager();
+    virtual ~QRequestHIDManager();
 
     enum eRequestPart { MM = 0, CM1, CM2, CM1_1, CM2_1 };
 
@@ -35,14 +35,15 @@ protected:
     virtual void timerEvent(QTimerEvent *);
 
 protected:
-    QList<NVData>		m_RequestItem;
-    QMutex                      m_Mutex;
+    QList<NVData>           m_RequestItem;
+    QMutex                  m_Mutex;
 
-    int                         m_nTimer;
+    int                     m_nTimer;
 
-    T3kHandle*                 m_pT3kHandle;
+    T3kHandle*              m_pT3kHandle;
 
 signals:
+    void finish();
 
 public slots:
 

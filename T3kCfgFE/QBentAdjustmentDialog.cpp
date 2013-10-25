@@ -828,7 +828,7 @@ void QBentAdjustmentDialog::paintEvent(QPaintEvent *)
     int nC = nIn / 50;
     if( nC < 12 ) nC = 12;
 
-    drawErrorText( p, 10, 10, nIn / 60 );
+    drawErrorText( p, 10, 80, nIn / 60 );
     drawCursor( p, ptCursor.x(), ptCursor.y(), nC );
 
     int nWXY = rcBody.height() / 12;
@@ -1314,6 +1314,8 @@ void QBentAdjustmentDialog::drawErrorText( QPainter& p, int nx, int ny, int nc )
     if ( m_cError == 0 && m_cNG == 0 )
         return;
 
+    p.save();
+
     p.setRenderHint(QPainter::Antialiasing);
 
     QFont fntError = font();
@@ -1359,6 +1361,8 @@ void QBentAdjustmentDialog::drawErrorText( QPainter& p, int nx, int ny, int nc )
         str = "NG:" + str;
         p.drawText(nx, ny, str);
     }
+
+    p.restore();
 }
 
 void QBentAdjustmentDialog::drawWaitTime( QPainter& p, QRect rcWait )
@@ -2210,8 +2214,6 @@ void QBentAdjustmentDialog::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
     }
 #endif //DEVELOP_CROSSTRACE
 
-    QString str;
-
     if ( m_bEnterAdjustmentMode )
     {
         if ( cnt == 2 )
@@ -2662,7 +2664,6 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
     QBentCfgParam* param = QBentCfgParam::instance();
     const int nPosXYSel = param->algorithm();
     QString strCmd;
-    QString strCam;
     char szTemp[256];
 
     snprintf( szTemp, 256, "%s0x%02x", cstrDisplayOrientation, m_nMonitorOrientation );
@@ -2679,6 +2680,7 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
         ui->cmdAsyncMngr->insertCommand( strCmd );
     }
 
+    QString strHex, strCamPos;
     for ( int nI=0 ; nI<m_BentItemArray.size() ; nI++ )
     {
         const BentItem& item = m_BentItemArray.at(nI);
@@ -2695,6 +2697,37 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
         strCmd = getCameraPrefix(item.nCameraIndex) + cstrFactorialCamPos;
         strCmd += szTemp;
         ui->cmdAsyncMngr->insertCommand( strCmd );
+
+        strCamPos.clear();
+        unsigned char ch = param->direction() << 6; // direction
+        if ( item.nCameraIndex > 1 ) // error
+        {
+            if ( (m_cError & (FLAG_CAM1_1 << (item.nCameraIndex - 2))) != 0x0 )
+                ch |= 0x20;
+            if ( (m_cNG & (FLAG_CAM1_1 << (item.nCameraIndex - 2))) != 0x0 )
+                ch |= 0x10;
+        }
+        else
+        {
+            if ( (m_cError & (FLAG_CAM1 << item.nCameraIndex)) != 0x0 )
+                ch |= 0x20;
+            if ( (m_cNG & (FLAG_CAM1 << item.nCameraIndex)) != 0x0 )
+                ch |= 0x10;
+        }
+        ch |= nPosXYSel; // type
+        strCamPos += QString("%1").arg(ch, 2, 16, QChar('0')); // direction:2 error:2 type:4 (bit)
+        for ( int ni = 0; ni < ADJUSTMENT_STEP; ni++ ) // bent_adjustment trc
+        {
+            ulong dwOs = *(ulong*)(&item.fObcS[ni]);
+            ulong dwOe = *(ulong*)(&item.fObcE[ni]);
+            strCamPos += QString("%1%2").arg(dwOs, 8, 16, QChar('0')).arg(dwOe, 8, 16, QChar('0'));
+        }
+        ui->cmdAsyncMngr->insertCommand( getCameraPrefix(item.nCameraIndex) + cstrCamPosTrc +
+                                     QString("%1%2").arg(strCamPos.length()/2, 2, 16, QChar('0')).arg(strCamPos) +
+                                     QString("%1%2%3%4%5%6%7")  // f31 backup
+                                     .arg(dwA, 8, 16, QChar('0')).arg(dwB, 8, 16, QChar('0')).arg(dwC, 8, 16, QChar('0')).arg(dwD, 8, 16, QChar('0'))
+                                     .arg(dwE, 8, 16, QChar('0')).arg(dwF, 8, 16, QChar('0')).arg(item.mode, 2, 16, QChar('0')) );
+        ui->cmdAsyncMngr->insertCommand( getCameraPrefix(item.nCameraIndex) + cstrCamPosUserTrc + "**" );
     }
 
     // reset calibration

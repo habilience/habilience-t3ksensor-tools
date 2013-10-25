@@ -73,6 +73,7 @@ private slots:
     void on_BtnMarginInc_clicked();
     void on_BtnMarginDec_clicked();
     void on_BtnCalibration_clicked();
+    void on_BtnAdvanced_clicked();
 };
 
 #endif // QCALIBRATIONSETTINGWIDGET_H

@@ -5,6 +5,8 @@
 #include <QMutex>
 #include <QTcpSocket>
 
+#include "T3kHandle.h"
+
 class QT3kUserData_GC;
 class QT3kUserData : public QObject, public QObjectUserData
 {
@@ -18,7 +20,9 @@ public:
     static QT3kUserData* GetInstance();
 
     float GetFirmwareVersion() { QMutexLocker Lock(&m_Mutex); return m_fFirmwareVersion; }
+    QString getFirmwareVersionStr() { return m_strFirmwareVersion; }
     void SetFirmwareVersion(float fVersion) { QMutexLocker Lock(&m_Mutex); m_fFirmwareVersion = fVersion; }
+    void SetFirmwareVersion(QString str) { m_strFirmwareVersion = str; }
 
     bool IsMacMargin() { QMutexLocker Lock(&m_Mutex); return m_bMacMargin; }
     void SetMacMargin( bool bMacMargin ) { QMutexLocker Lock(&m_Mutex); m_bMacMargin = bMacMargin; }
@@ -42,11 +46,21 @@ public:
     void setTopParent(QWidget* pParent) { m_pTopParent = pParent; }
     QWidget* getTopParent() { return m_pTopParent; }
 
+    void setT3kHandle(T3kHandle* pHandle) { m_pT3kHandle = pHandle; }
+    T3kHandle* getT3kHandle() { return m_pT3kHandle; }
+
+    void setIsSubCameraExist(bool bExist) { m_bSubCameraExist = bExist; }
+    bool isSubCameraExist() { return m_bSubCameraExist; }
+
+    void setCamCount(int nCount) { m_nCamCount = nCount; }
+    int getCamCount() { return m_nCamCount; }
+
 protected:
     static QT3kUserData*    m_pInstance;
     QMutex                  m_Mutex;
 
     float                   m_fFirmwareVersion;
+    QString                 m_strFirmwareVersion;
     bool                    m_bMacMargin;
     ushort                  m_nModel;
     short                   m_nSelectedVID;
@@ -56,10 +70,14 @@ protected:
     QString                 m_strTitle;
     QString                 m_strProgInfo;
 
+    T3kHandle*              m_pT3kHandle;
     // remote
     QTcpSocket              m_RemoteSocket;
 
     QWidget*                m_pTopParent;
+
+    bool                    m_bSubCameraExist;
+    int                     m_nCamCount;
 
 signals:
 

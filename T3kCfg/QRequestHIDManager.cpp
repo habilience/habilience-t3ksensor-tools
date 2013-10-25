@@ -113,6 +113,7 @@ void QRequestHIDManager::timerEvent(QTimerEvent *evt)
         {
             killTimer( m_nTimer );
             m_nTimer = 0;
+            emit finish();
         }
     }
 

@@ -10,7 +10,7 @@ class QCustomDefaultSensor : public QObject
 public:
     explicit QCustomDefaultSensor(QObject *parent = 0);
 
-    static QCustomDefaultSensor* Instance(bool bReload = true);
+    static QCustomDefaultSensor* Instance(bool bReload = false);
 
     bool IsLoaded() { return m_bLoaded; }
 
