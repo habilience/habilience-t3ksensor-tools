@@ -120,10 +120,8 @@ private:
 
     int                         m_nSendCmdID;
 
-#ifdef Q_OS_WIN
     bool                        m_bRunOtherTool;
     bool                        m_bPrevShowed;
-#endif
 
     QString                     m_strTitle;
     QString                     m_strCompanyUrl;

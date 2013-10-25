@@ -100,10 +100,8 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 
     m_bInit = false;
 
-#ifdef Q_OS_WIN
     m_bRunOtherTool = false;
     m_bPrevShowed = false;
-#endif
 
     setAnimated( true );
     setDockOptions( AnimatedDocks );
