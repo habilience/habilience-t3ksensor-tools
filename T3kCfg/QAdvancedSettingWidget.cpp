@@ -36,38 +36,30 @@ void QAdvancedSettingWidget::OnRSP(ResponsePart part, ushort, const char *, long
     if( strstr( szCmd, cstrCamPosTrc ) == szCmd )
     {
         QString strCmd( szCmd );
-        if( !strCmd.isEmpty() )
+        strCmd = strCmd.mid( strCmd.indexOf('=')+1 );
+        switch( part )
         {
-            strCmd = strCmd.right( 50 ); // 8,8,8,8,8,8,2
-            QString str;
-            while( strCmd.size() > 2 )
-            {
-                str += strCmd.left( 8 ) + ',';
-                strCmd.remove( 0, 8 );
-            }
-            str += strCmd.left( 2 );
-            strCmd.remove( 0, 2 );
-            Q_ASSERT( strCmd.isEmpty() );
-
-            switch( part )
-            {
-            case CM1:
-                m_strCam1PosDefault = str;
-                break;
-            case CM2:
-                m_strCam2PosDefault = str;
-                break;
-            case CM1_1:
-                m_strCamS1PosDefault = str;
-                break;
-            case CM2_1:
-                m_strCamS2PosDefault = str;
-                break;
-            case MM:
-            default:
-                break;
-            }
+        case CM1:
+            m_strCam1PosTrc = strCmd;
+            break;
+        case CM2:
+            m_strCam2PosTrc = strCmd;
+            break;
+        case CM1_1:
+            m_strCamS1PosTrc = strCmd;
+            break;
+        case CM2_1:
+            m_strCamS2PosTrc = strCmd;
+            break;
+        case MM:
+        default:
+            break;
         }
+    }
+    else if( strstr( szCmd, cstrFactoryCalibration ) == szCmd )
+    {
+        QString strCmd( szCmd );
+        m_strFactoryCalibration = strCmd.mid( strCmd.indexOf('=')+1 );
     }
 }
 
@@ -117,17 +109,28 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
 
     T3kHandle* pHandle = QT3kUserData::GetInstance()->getT3kHandle();
     // bent
-    m_strCam1PosDefault.clear();
-    m_strCam2PosDefault.clear();
-    m_strCamS1PosDefault.clear();
-    m_strCamS2PosDefault.clear();
+    m_strCam1PosTrc.clear();
+    m_strCam2PosTrc.clear();
+    m_strCamS1PosTrc.clear();
+    m_strCamS2PosTrc.clear();
+    m_strFactoryCalibration.clear();
 
     int nCam = QT3kUserData::GetInstance()->isSubCameraExist() ? 4 : 2;
-    for( int i=0; i<nCam; i++ )
+    QStringList listCmd;
+    listCmd << sCam1 + QString(cstrCamPosTrc) + "?" <<
+               sCam2 + QString(cstrCamPosTrc) + "?";
+    if( nCam > 2 )
+    {
+        listCmd << sCam1_1 + QString(cstrCamPosTrc) + "?" <<
+                   sCam2_1 + QString(cstrCamPosTrc) + "?";
+    }
+    listCmd << QString(cstrFactoryCalibration) + "?";
+
+    for( int i=0; i<listCmd.size(); i++ )
     {
         int nRetry = 3;
         bool bOK = false;
-        QString strCmd = getCameraPrefix(i+1) + QString(cstrCamPosTrc) + "?";
+        QString strCmd = listCmd.at(i);
         do
         {
             if (pHandle->SendCommand(strCmd.toUtf8().data(), false))
@@ -144,19 +147,30 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
         }
     }
 
-    QStringList listCmd;
-    listCmd.push_back(QString(sCam1 + cstrCamPosUserTrc + "*"));
-    listCmd.push_back(QString(sCam2 + cstrCamPosUserTrc + "*"));
-    listCmd.push_back(QString(sCam1 + cstrFactorialCamPos) + m_strCam1PosDefault);
-    listCmd.push_back(QString(sCam2 + cstrFactorialCamPos) + m_strCam2PosDefault);
+    // reset f42.
+    QString strDefaultf42;
+    const char* pszCamPos1Trc = m_strCam1PosTrc.toUtf8().data();
+    const char* pszCamPos2Trc = m_strCam2PosTrc.toUtf8().data();
+    const char* pszCamPosS1Trc = m_strCamS1PosTrc.toUtf8().data();
+    const char* pszCamPosS2Trc = m_strCamS2PosTrc.toUtf8().data();
+    const char* pszFactoryCalibration = m_strFactoryCalibration.toUtf8().data();
 
-    if( QT3kUserData::GetInstance()->isSubCameraExist() )
-    {
-        listCmd.push_back(QString(sCam1_1 + cstrCamPosUserTrc + "*"));
-        listCmd.push_back(QString(sCam2_1 + cstrCamPosUserTrc + "*"));
-        listCmd.push_back(QString(sCam1_1 + cstrFactorialCamPos) + m_strCamS1PosDefault);
-        listCmd.push_back(QString(sCam2_1 + cstrFactorialCamPos) + m_strCamS2PosDefault);
-    }
+
+    //
+
+//    QStringList listCmd;
+//    listCmd.push_back(QString(sCam1 + cstrCamPosUserTrc + "*"));
+//    listCmd.push_back(QString(sCam2 + cstrCamPosUserTrc + "*"));
+//    listCmd.push_back(QString(sCam1 + cstrFactorialCamPos) + m_strCam1PosDefault);
+//    listCmd.push_back(QString(sCam2 + cstrFactorialCamPos) + m_strCam2PosDefault);
+
+//    if( QT3kUserData::GetInstance()->isSubCameraExist() )
+//    {
+//        listCmd.push_back(QString(sCam1_1 + cstrCamPosUserTrc + "*"));
+//        listCmd.push_back(QString(sCam2_1 + cstrCamPosUserTrc + "*"));
+//        listCmd.push_back(QString(sCam1_1 + cstrFactorialCamPos) + m_strCamS1PosDefault);
+//        listCmd.push_back(QString(sCam2_1 + cstrFactorialCamPos) + m_strCamS2PosDefault);
+//    }
 
     // detection
     listCmd.push_back(QString(sCam1 + cstrDetectionRange + "*"));

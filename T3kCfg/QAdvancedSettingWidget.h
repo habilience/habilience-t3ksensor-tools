@@ -23,10 +23,11 @@ protected:
     virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
 
 protected:
-    QString m_strCam1PosDefault;
-    QString m_strCam2PosDefault;
-    QString m_strCamS1PosDefault;
-    QString m_strCamS2PosDefault;
+    QString m_strCam1PosTrc;
+    QString m_strCam2PosTrc;
+    QString m_strCamS1PosTrc;
+    QString m_strCamS2PosTrc;
+    QString m_strFactoryCalibration;
 
 private:
     Ui::QAdvancedSettingWidget *ui;
