@@ -18,6 +18,8 @@ QAdvancedSettingWidget::QAdvancedSettingWidget(QWidget *parent) :
     ui->setupUi(this);
 
     setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
+    setWindowModality( Qt::WindowModal );
+    setModal( true );
 
     connect( ui->BtnCancel, &QPushButton::clicked, this, &QDialog::close );
 }
