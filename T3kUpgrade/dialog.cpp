@@ -1408,10 +1408,20 @@ bool Dialog::verifyFirmware(QString& strMsg)
 
 bool Dialog::checkFWVersion(QString& strMsg)
 {
+    switch( m_SensorInfo[IDX_MM].nMode )
+    {
+    case MODE_MM_UPG:
+    case MODE_MM_IAP:
+        return true;
+    case MODE_UNKNOWN:
+        return false;
+    default:
+        break;
+    }
+
     QString strSensorVer, strBinVer;
     // mm
     strSensorVer = QString::fromUtf8( m_SensorInfo[IDX_MM].szVersion );
-
     for (int i=0 ; i<m_FirmwareInfo.size() ; i++)
     {
         FirmwareInfo* pFI = m_FirmwareInfo.at(i);

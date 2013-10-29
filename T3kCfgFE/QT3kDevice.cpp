@@ -495,7 +495,7 @@ int QT3kDevice::sendCommand(const QString &cmd, bool bAsync/*=false*/, unsigned 
                     QString strTimeout = strCmd.left( nCP );
                     nTimeout = strTimeout.toInt( 0, 10 );
                     strCmd.remove( 0, nCP+1 );
-                    dwFGstValue = strCmd.toInt( 0, 16 );
+                    dwFGstValue = strtoul( strCmd.toUtf8().data(), NULL, 16 );
                 }
                 else
                 {
