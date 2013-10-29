@@ -25,6 +25,7 @@ bool QPrintLogData::Open(QString strFilePathName, OpenMode eMode)
     }
 
     m_TextStream.setDevice( this );
+    m_TextStream.setCodec( "UTF-8" );
 
     return true;
 }

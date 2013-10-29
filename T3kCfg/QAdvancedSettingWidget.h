@@ -21,6 +21,7 @@ public:
 
 protected:
     virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
+    virtual void OnRSE(ResponsePart, ushort, const char *, long, bool, const char *);
 
 protected:
     QString m_strCam1PosTrc;

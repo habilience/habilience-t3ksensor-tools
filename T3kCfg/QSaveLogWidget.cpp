@@ -49,7 +49,9 @@ void QSaveLogWidget::showEvent(QShowEvent *)
         rcFullScreen.setBottom( rcFullScreen.bottom() > rc.bottom() ? rcFullScreen.bottom() : rc.bottom() );
     }
 
+#ifndef _DEBUG
     setGeometry( rcFullScreen );
+#endif
 
 #ifdef Q_OS_WIN
     SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
