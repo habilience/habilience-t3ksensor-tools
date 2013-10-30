@@ -1,7 +1,7 @@
 ﻿#ifndef T3KS_VERSION
 #define T3KS_VERSION
 
-#define T3000_FILEVERSION 		2,8a,2
+#define T3000_FILEVERSION 		2,8a,2,0
 #define T3000_VERSION			"2.8a.2"
 
 

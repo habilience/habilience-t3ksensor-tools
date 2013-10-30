@@ -63,13 +63,6 @@ void QAdvancedSettingWidget::OnRSP(ResponsePart part, ushort, const char *, long
     }
 }
 
-void QAdvancedSettingWidget::OnRSE(ResponsePart, ushort, const char *, long, bool, const char *szCmd)
-{
-    if( !isVisible() ) return;
-
-
-}
-
 void QAdvancedSettingWidget::on_BtnStart_clicked()
 {
     if( QConfigData::instance()->getData( "ADVANCED", "PASSWORD", "" ).toString().compare( ui->EditPassword->text(), Qt::CaseSensitive ) != 0 )
@@ -97,29 +90,29 @@ void QAdvancedSettingWidget::on_ChkDetection_clicked()
 
 }
 
-static unsigned long hex2u32( const char * pstr )
-{
-    const char * str = pstr;
-    unsigned long u32Ret = 0;
+//static unsigned long hex2u32( const char * pstr )
+//{
+//    const char * str = pstr;
+//    unsigned long u32Ret = 0;
 
-    if ( str == NULL )
-        return 0;
+//    if ( str == NULL )
+//        return 0;
 
-    while ( str[0] == ' ' || str[0] == '\t' )
-        str++;
+//    while ( str[0] == ' ' || str[0] == '\t' )
+//        str++;
 
-    while ( 1 )
-    {
-        if ( str[0] >= '0' && str[0] <= '9' )
-            u32Ret = u32Ret * 16 + (*str++ - '0');
-        else if ( str[0] >= 'A' && str[0] <= 'F' )
-            u32Ret = u32Ret * 16 + (*str++ - 'A' + 10);
-        else if ( str[0] >= 'a' && str[0] <= 'f' )
-            u32Ret = u32Ret * 16 + (*str++ - 'a' + 10);
-        else
-            return u32Ret;
-    }
-}
+//    while ( 1 )
+//    {
+//        if ( str[0] >= '0' && str[0] <= '9' )
+//            u32Ret = u32Ret * 16 + (*str++ - '0');
+//        else if ( str[0] >= 'A' && str[0] <= 'F' )
+//            u32Ret = u32Ret * 16 + (*str++ - 'A' + 10);
+//        else if ( str[0] >= 'a' && str[0] <= 'f' )
+//            u32Ret = u32Ret * 16 + (*str++ - 'a' + 10);
+//        else
+//            return u32Ret;
+//    }
+//}
 
 void QAdvancedSettingWidget::on_BtnDefault_clicked()
 {
@@ -177,6 +170,7 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
             return;
         }
     }
+    listCmd.clear();
 
     // reset f42.
     QString strDefaultf42;
@@ -269,8 +263,24 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
         listCmd.push_back(QString(sCam2_1 + cstrDetectionRange + "*"));
     }
 
-    foreach( QString str, listCmd )
+    for( int i=0; i<listCmd.size(); i++ )
     {
-        pHandle->SendCommand( str.toUtf8().data(), true );
+        int nRetry = 3;
+        bool bOK = false;
+        QString strCmd = listCmd.at(i);
+        do
+        {
+            if (pHandle->SendCommand(strCmd.toUtf8().data(), false))
+            {
+                bOK = true;
+                break;
+            }
+        } while (--nRetry > 0);
+
+        if (!bOK)
+        {
+            QMessageBox::critical( this, "Error", "Command sending fail. \"" + strCmd.left(strCmd.indexOf('=')) + "\"", QMessageBox::Ok );
+            return;
+        }
     }
 }
