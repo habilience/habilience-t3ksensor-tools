@@ -49,7 +49,7 @@ protected:
     virtual void timerEvent(QTimerEvent *);
 
     void drawMonitor(QPainter& p, QRect rcBody);
-    void drawArrow(QPainter& p, QRect rcTouchArea);
+    void drawArrow(QPainter& p);
 
     // override QLangManager::ILangChangeNotify
     virtual void onChangeLanguage();

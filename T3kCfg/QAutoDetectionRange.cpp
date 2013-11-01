@@ -74,7 +74,7 @@ void QAutoDetectionRange::draw(QPainter &p, QRect rcBody)
 
     drawMonitor(p, rcBody);
 
-    drawArrow(p, QRect());
+    drawArrow(p);
 }
 
 void QAutoDetectionRange::drawMonitor(QPainter &p, QRect rcBody)
@@ -117,7 +117,7 @@ void QAutoDetectionRange::drawMonitor(QPainter &p, QRect rcBody)
 //    return rcTouchArea;
 }
 
-void QAutoDetectionRange::drawArrow(QPainter& p, QRect rcTouchArea)
+void QAutoDetectionRange::drawArrow(QPainter& p)
 {
     if (!m_bEnterAutoRangeSetting)
         return;

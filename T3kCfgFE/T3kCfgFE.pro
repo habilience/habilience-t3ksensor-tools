@@ -247,8 +247,6 @@ SOURCES += main.cpp\
 HEADERS  += dialog.h \
     ../common/qsingleapplication/qtsinglecoreapplication.h \
     ../common/qsingleapplication/qtsingleapplication.h \
-    ../common/qsingleapplication/qtlockedfile_win.h \
-    ../common/qsingleapplication/qtlockedfile_unix.h \
     ../common/qsingleapplication/qtlockedfile.h \
     ../common/qsingleapplication/qtlocalpeer.h \
     ../common/QUtils.h \

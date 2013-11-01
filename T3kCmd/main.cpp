@@ -167,7 +167,7 @@ int GetCommandPolling(void* pContext)
             }
             break;
         }
-        for ( size_t ni = 0; ni < len; ni++ )
+        for ( long ni = 0; ni < len; ni++ )
         {
             if ( isspace(*sz) )
             {
