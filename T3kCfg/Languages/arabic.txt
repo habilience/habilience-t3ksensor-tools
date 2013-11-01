@@ -61,7 +61,7 @@ BTN_CAPTION_SOFTKEY_SETTING_SUB2 =
 
 [MOUSE SETTING]
 TITLE_CAPTION_MOUSE_BUTTON_MAPPING = اللفتات اللمسة
-BTN_CAPTION_TOUCH_SETTING = تحديد اللمس
+BTN_CAPTION_TOUCH_SETTING = تحديد اللمس...
 
 ;TEXT_SINGLE = إصبع
 ;TEXT_FINGERS = الأصابع  المتعددة
@@ -128,7 +128,7 @@ TITLE_CAPTION_CALIBRATION = تصحيح  التنسيق اللمس
 TEXT_SCREEN_MARGIN = هوامش الشاشة
 TEXT_SCREEN_PERCENT_OF_SCREEN = من الشاشة %
 TEXT_CALIBRATE = تصحيح
-BTN_CAPTION_CALIBRATE = تصحيح
+BTN_CAPTION_CALIBRATE = تصحيح...
 
 TITLE_AREA_SETTING = (%)تقسيم المناطق
 TEXT_SINGLE_CLICK = نقر
@@ -138,6 +138,17 @@ TEXT_PALM = كف
 
 TEXT_CALIBRATION_WARNING = قد لا تعمل التصحيح. بشكل صحيح  .   "Mac OS X لم يتم تعيين من القائمة "بادرة"  "هامش الشاشة .
 TEXT_CALIBRATION_WARNING2 = هل تصفح 'Mac OS X Margin' في القائمة 'Gesture'. لأنه هذة المعايرة قد لا تعمل بشكل صحيح
+
+BTN_ADVANCED = متقدم ...
+
+[ADVANCED]
+WINDOW_CAPTION = متقدم
+TITLE_CAPTION_ADJUSTMENT = تعديل
+TEXT_CHECKBOX_BENT = 
+TEXT_CHECKBOX_DETECTION = نطاق الكشف
+TEXT_PASSWORD = كلمة السر
+BTN_START = بداية
+MSG_INCORRECT_PASSWORD = 
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = وجود الاستخدام اللمس
@@ -186,7 +197,7 @@ TEXT_NON_MULTI_MONITOR = غيرالدعم للشاشات المتعددة
 
 BTN_TOOLTIP_PLAY = تجديد
 
-BTN_CAMERA_DIAGNOSTICS = تحقق_الاستشعار
+BTN_CAMERA_DIAGNOSTICS = تحقق_الاستشعار...
 
 TITLE_LANGUAGE = تحديد اللغة(Language)
 TEXT_LANGUAGE = حدد لغة

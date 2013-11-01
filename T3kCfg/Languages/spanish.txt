@@ -61,7 +61,7 @@ BTN_CAPTION_SOFTKEY_SETTING_SUB2 =
 
 [MOUSE SETTING]
 TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Gesto táctil
-BTN_CAPTION_TOUCH_SETTING = Ajuste del tacto…
+BTN_CAPTION_TOUCH_SETTING = Ajuste del tacto...
 
 ;TEXT_SINGLE = Un dedo
 ;TEXT_FINGERS = Varios dedos
@@ -128,7 +128,7 @@ TITLE_CAPTION_CALIBRATION = Calibración
 TEXT_SCREEN_MARGIN = Espacio blanco de la pantalla
 TEXT_SCREEN_PERCENT_OF_SCREEN = Porcentaje de la pantalla
 TEXT_CALIBRATE = Calibrar
-BTN_CAPTION_CALIBRATE = Calibrar…
+BTN_CAPTION_CALIBRATE = Calibrar...
 
 TITLE_AREA_SETTING = Configuración del área(%)
 TEXT_SINGLE_CLICK = Clic simple
@@ -138,6 +138,17 @@ TEXT_PALM = Palma de la mano
 
 TEXT_CALIBRATION_WARNING = No seleccionaron ‘Mac OS X Margin’ en el menu ‘Gesture’. Porque la calibracion no funciona apropiadamente.
 TEXT_CALIBRATION_WARNING2 = No seleccionaron ‘Mac OS X Margin’ en el menu ‘Gesture’. Porque la calibracion no funciona apropiadamente.
+
+BTN_ADVANCED = Avanzado...
+
+[ADVANCED]
+WINDOW_CAPTION = Avanzado
+TITLE_CAPTION_ADJUSTMENT = Ajuste
+TEXT_CHECKBOX_BENT = 
+TEXT_CHECKBOX_DETECTION = Rango de detección
+TEXT_PASSWORD = Contraseña
+BTN_START = Iniciar
+MSG_INCORRECT_PASSWORD = 
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Táctil o no táctil
@@ -186,7 +197,7 @@ TEXT_NON_MULTI_MONITOR = Multi-Monitor no admitido
 
 BTN_TOOLTIP_PLAY = Poner
 
-BTN_CAMERA_DIAGNOSTICS = Diagnóstico del sensor…
+BTN_CAMERA_DIAGNOSTICS = Diagnóstico del sensor...
 
 TITLE_LANGUAGE = Idioma(Language)
 TEXT_LANGUAGE = Selección del idioma

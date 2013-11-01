@@ -61,7 +61,7 @@ BTN_CAPTION_SOFTKEY_SETTING_SUB2 =
 
 [MOUSE SETTING]
 TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Dokunmatik işaretleri
-BTN_CAPTION_TOUCH_SETTING = Dokunmatik ayarları…
+BTN_CAPTION_TOUCH_SETTING = Dokunmatik ayarları...
 
 ;TEXT_SINGLE = Tek
 ;TEXT_FINGERS = Parmaklar
@@ -128,7 +128,7 @@ TITLE_CAPTION_CALIBRATION = Kalibrasyon
 TEXT_SCREEN_MARGIN = Ekran marjları
 TEXT_SCREEN_PERCENT_OF_SCREEN = Erkanın  %
 TEXT_CALIBRATE = Kalibre et
-BTN_CAPTION_CALIBRATE = Kalibrasyon…
+BTN_CAPTION_CALIBRATE = Kalibrasyon...
 
 TITLE_AREA_SETTING = Bölge Ayarları (Ekranın %)
 TEXT_SINGLE_CLICK = Tek klik
@@ -138,6 +138,17 @@ TEXT_PALM = Avuç
 
 TEXT_CALIBRATION_WARNING = Mac OS X marjalrını işaret menüsünde kontrol etmediniz. Bu Sebeple kalibrasyon düzgün çalışmaya bilir.
 TEXT_CALIBRATION_WARNING2 = Mac OS X marjalrını işaret menüsünde kontrol etmediniz. Bu Sebeple kalibrasyon düzgün çalışmaya bilir.
+
+BTN_ADVANCED = Gelişmiş...
+
+[ADVANCED]
+WINDOW_CAPTION = Gelişmiş
+TITLE_CAPTION_ADJUSTMENT = Ayarlama
+TEXT_CHECKBOX_BENT = 
+TEXT_CHECKBOX_DETECTION = Algılama aralığı
+TEXT_PASSWORD = Parola
+BTN_START = Başlangıç
+MSG_INCORRECT_PASSWORD = 
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Dokunmatik Ekran Aç/Kapa

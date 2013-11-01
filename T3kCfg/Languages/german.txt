@@ -139,6 +139,17 @@ TEXT_PALM = Handfläche
 TEXT_CALIBRATION_WARNING = Mac OS X Margen des Bildschirms ist im "Geste" Menü nicht eingestellt worden. Es können Fehler beim Kalibrieren auftreten.
 TEXT_CALIBRATION_WARNING2 = Im Menü "Gesten" ist die Option "Mac OS X Bildschirmränder" aktiviert worden. Es können Fehler beim Kalibrieren auftreten.
 
+BTN_ADVANCED = Fortgeschritten...
+
+[ADVANCED]
+WINDOW_CAPTION = Fortgeschritten
+TITLE_CAPTION_ADJUSTMENT = Anpassung
+TEXT_CHECKBOX_BENT = 
+TEXT_CHECKBOX_DETECTION = Entdeckung Reichweite
+TEXT_PASSWORD = Kennwort
+BTN_START = Starten
+MSG_INCORRECT_PASSWORD = 
+
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Aktivierung/Deaktivierung der Berührungsfunktion
 TEXT_TOUCH_ENABLE = Berührung verwenden
@@ -186,7 +197,7 @@ TEXT_NON_MULTI_MONITOR = Multimonitor wird nicht unterstüzt.
 
 BTN_TOOLTIP_PLAY = Wiedergabe
 
-BTN_CAMERA_DIAGNOSTICS = Sensor Diagnostik…
+BTN_CAMERA_DIAGNOSTICS = Sensor Diagnostik...
 
 TITLE_LANGUAGE = Sprachen einstellen(Language)
 TEXT_LANGUAGE = Sprache auswählen

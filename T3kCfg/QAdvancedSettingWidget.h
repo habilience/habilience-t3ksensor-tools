@@ -3,6 +3,7 @@
 
 #include "QRequestHIDManager.h"
 #include "TPDPEventMultiCaster.h"
+#include "QLangManager.h"
 
 #include <QDialog>
 
@@ -11,7 +12,7 @@ namespace Ui {
 class QAdvancedSettingWidget;
 }
 
-class QAdvancedSettingWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener
+class QAdvancedSettingWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -20,7 +21,11 @@ public:
     ~QAdvancedSettingWidget();
 
 protected:
+    virtual void closeEvent(QCloseEvent *);
+
     virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
+
+    virtual void onChangeLanguage();
 
 protected:
     QString m_strCam1PosTrc;

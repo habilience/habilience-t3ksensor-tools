@@ -61,7 +61,7 @@ BTN_CAPTION_SOFTKEY_SETTING_SUB2 =
 
 [MOUSE SETTING]
 TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Dotyková gesta
-BTN_CAPTION_TOUCH_SETTING = Nastavení dotyku …
+BTN_CAPTION_TOUCH_SETTING = Nastavení dotyku...
 
 ;TEXT_SINGLE = Jeden prst
 ;TEXT_FINGERS = Prsty
@@ -138,6 +138,17 @@ TEXT_PALM = Dlaň
 
 TEXT_CALIBRATION_WARNING = Nazaškrtávejte 'Mac OS X Margin' v menu 'Gesta'. Kalibrace nemusí fungovat správně.
 TEXT_CALIBRATION_WARNING2 = Zaškrtněte 'Mac OS X Margin' v menu 'Gesta'. Kalibrace nemusí fungovat správně.
+
+BTN_ADVANCED = Pokročilý...
+
+[ADVANCED]
+WINDOW_CAPTION = Pokročilý
+TITLE_CAPTION_ADJUSTMENT = Nastavení
+TEXT_CHECKBOX_BENT = 
+TEXT_CHECKBOX_DETECTION = Rozsah detekce
+TEXT_PASSWORD = Heslo
+BTN_START = Začátek
+MSG_INCORRECT_PASSWORD = 
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Zapnout / vypnout dotykové ovládání

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>180</height>
+    <height>170</height>
    </rect>
   </property>
   <property name="palette">
@@ -428,6 +428,10 @@
   <property name="windowTitle">
    <string>Advanced</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="T3kCfgRes.qrc">
+    <normaloff>:/T3kCfgRes/resources/PNG_ICON_SETTING.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_SETTING.png</iconset>
+  </property>
   <widget class="QUnderlineLabel" name="TitleAdvanced">
    <property name="geometry">
     <rect>
@@ -447,54 +451,16 @@
     <string>Adjustment</string>
    </property>
   </widget>
-  <widget class="QWidget" name="verticalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>40</y>
-     <width>361</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QCheckBox" name="ChkBent">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="text">
-       <string>Bent Adjustment</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="ChkDetection">
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="text">
-       <string>Auto Detection Range</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>145</y>
+     <y>130</y>
      <width>381</width>
      <height>31</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout" name="ButtonLayout">
     <item>
      <widget class="QPushButton" name="BtnDefault">
       <property name="sizePolicy">
@@ -515,7 +481,7 @@
      </widget>
     </item>
     <item>
-     <spacer name="horizontalSpacer">
+     <spacer name="HSpacer2">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -568,12 +534,12 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>100</y>
+     <y>80</y>
      <width>361</width>
      <height>31</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <layout class="QHBoxLayout" name="PasswordLayout">
     <item>
      <widget class="QLabel" name="LbPassword">
       <property name="minimumSize">
@@ -601,7 +567,7 @@
      </widget>
     </item>
     <item>
-     <spacer name="horizontalSpacer_2">
+     <spacer name="HSpacer1">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -619,7 +585,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>130</y>
+     <y>115</y>
      <width>401</width>
      <height>16</height>
     </rect>
@@ -627,6 +593,57 @@
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>40</y>
+     <width>361</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QCheckBox" name="ChkDetection">
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="text">
+       <string>Detection Range</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="ChkBent">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string>Bent</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
   </widget>
  </widget>
  <customwidgets>
@@ -638,13 +655,13 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>ChkBent</tabstop>
-  <tabstop>ChkDetection</tabstop>
   <tabstop>EditPassword</tabstop>
   <tabstop>BtnDefault</tabstop>
   <tabstop>BtnStart</tabstop>
   <tabstop>BtnCancel</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="T3kCfgRes.qrc"/>
+ </resources>
  <connections/>
 </ui>

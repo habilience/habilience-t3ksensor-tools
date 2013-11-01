@@ -61,7 +61,7 @@ BTN_CAPTION_SOFTKEY_SETTING_SUB2 =
 
 [MOUSE SETTING]
 TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Сенсорлы қимыл
-BTN_CAPTION_TOUCH_SETTING = Сенсор реттеулері
+BTN_CAPTION_TOUCH_SETTING = Сенсор реттеулері...
 
 ;TEXT_SINGLE = Жалғыз
 ;TEXT_FINGERS = Саусақ
@@ -128,7 +128,7 @@ TITLE_CAPTION_CALIBRATION = Калибрлеу
 TEXT_SCREEN_MARGIN = Экранның шеті
 TEXT_SCREEN_PERCENT_OF_SCREEN = экранның %
 TEXT_CALIBRATE = Калибрлеу
-BTN_CAPTION_CALIBRATE = Калибрлеу…
+BTN_CAPTION_CALIBRATE = Калибрлеу...
 
 TITLE_AREA_SETTING = Жанасу бетінің реттеулері (экран %)
 TEXT_SINGLE_CLICK = Бір рет шерту
@@ -138,6 +138,17 @@ TEXT_PALM = Алақан
 
 TEXT_CALIBRATION_WARNING = Mac OS X Margin' "Қимылдар" мәзірінде тексермеңіз. Калибрлеу дұрыс жұмыс істемеуі мүмкін
 TEXT_CALIBRATION_WARNING2 = Mac OS X Margin' "Қимылдар" мәзірінде тексеріңіз. Калибрлеу дұрыс жұмыс істемеуі мүмкін
+
+BTN_ADVANCED = ...
+
+[ADVANCED]
+WINDOW_CAPTION = 
+TITLE_CAPTION_ADJUSTMENT = 
+TEXT_CHECKBOX_BENT = 
+TEXT_CHECKBOX_DETECTION = 
+TEXT_PASSWORD = 
+BTN_START = 
+MSG_INCORRECT_PASSWORD = 
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Сенсорлы экранды қосу/сөндіру
@@ -186,7 +197,7 @@ TEXT_NON_MULTI_MONITOR = Көпэкранты режимінде жұмыс іс
 
 BTN_TOOLTIP_PLAY = Қосу
 
-BTN_CAMERA_DIAGNOSTICS = Сенсорды тексеру
+BTN_CAMERA_DIAGNOSTICS = Сенсорды тексеру...
 
 TITLE_LANGUAGE = Тіл
 TEXT_LANGUAGE = Тілді таңдау

@@ -139,6 +139,17 @@ TEXT_PALM = 手の平
 TEXT_CALIBRATION_WARNING = ジェスチャーメニューから"Mac OS X Margin"が設定されていません。キャリブレーションが正常に動作しないことがあります。
 TEXT_CALIBRATION_WARNING2 = ジェスチャーメニューから"Mac OS X Margin"が設定されました。キャリブレーションが正常に動作しないことがあります。
 
+BTN_ADVANCED = 高度な...
+
+[ADVANCED]
+WINDOW_CAPTION = 高度な
+TITLE_CAPTION_ADJUSTMENT = 調整
+TEXT_CHECKBOX_BENT = 
+TEXT_CHECKBOX_DETECTION = 検出範囲
+TEXT_PASSWORD = パスワード
+BTN_START = 開始
+MSG_INCORRECT_PASSWORD = 
+
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = タッチ使用の有無
 TEXT_TOUCH_ENABLE = タッチ使用
@@ -186,7 +197,7 @@ TEXT_NON_MULTI_MONITOR = 多重モニター未支援
 
 BTN_TOOLTIP_PLAY = 再生
 
-BTN_CAMERA_DIAGNOSTICS = センサー点検…
+BTN_CAMERA_DIAGNOSTICS = センサー点検...
 
 TITLE_LANGUAGE = 言語設定(Language)
 TEXT_LANGUAGE = 言語選択

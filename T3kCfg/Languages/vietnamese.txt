@@ -61,7 +61,7 @@ BTN_CAPTION_SOFTKEY_SETTING_SUB2 =
 
 [MOUSE SETTING]
 TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Cảm ứng chuyển động
-BTN_CAPTION_TOUCH_SETTING = Cài đặt cảm ứng
+BTN_CAPTION_TOUCH_SETTING = Cài đặt cảm ứng...
 
 ;TEXT_SINGLE = Đơn
 ;TEXT_FINGERS = Vân tay
@@ -128,7 +128,7 @@ TITLE_CAPTION_CALIBRATION = Định vị
 TEXT_SCREEN_MARGIN = Căn lề hiển thị
 TEXT_SCREEN_PERCENT_OF_SCREEN = Phần trăm của hiển thị
 TEXT_CALIBRATE = Căn chỉnh
-BTN_CAPTION_CALIBRATE = Định vị
+BTN_CAPTION_CALIBRATE = Định vị...
 
 TITLE_AREA_SETTING = Thiết đặt vùng (phần trăm của hiển thị)
 TEXT_SINGLE_CLICK = Click đơn
@@ -138,6 +138,17 @@ TEXT_PALM = Bàn tay
 
 TEXT_CALIBRATION_WARNING = Không kiểm tra 'Mac OS X Margin' ở thanh công cụ 'Gesture' bởi vì hiệu chuẩn có thể hoạt động không chính xác
 TEXT_CALIBRATION_WARNING2 = Kiểm tra 'Mac OS X Margin' ở thanh công cụ 'Gesture' bởi vì hiệu chuẩn có thể hoạt động không chính xác
+
+BTN_ADVANCED = Tiên tiến...
+
+[ADVANCED]
+WINDOW_CAPTION = Tiên tiến
+TITLE_CAPTION_ADJUSTMENT = Điều chỉnh
+TEXT_CHECKBOX_BENT = 
+TEXT_CHECKBOX_DETECTION = Phạm vi phát hiện
+TEXT_PASSWORD = Mật khẩu
+BTN_START = Bắt đầu
+MSG_INCORRECT_PASSWORD = 
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Bật/tắt màn hình cảm ứng
@@ -186,7 +197,7 @@ TEXT_NON_MULTI_MONITOR = Không hỗ trợ nhiều màn hình
 
 BTN_TOOLTIP_PLAY = Chơi
 
-BTN_CAMERA_DIAGNOSTICS = Chuẩn đoán cảm biến
+BTN_CAMERA_DIAGNOSTICS = Chuẩn đoán cảm biến...
 
 TITLE_LANGUAGE = Ngôn ngữ
 TEXT_LANGUAGE = Lựa chọn ngôn ngữ

@@ -61,7 +61,7 @@ BTN_CAPTION_SOFTKEY_SETTING_SUB2 =
 
 [MOUSE SETTING]
 TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Touch-gebaren
-BTN_CAPTION_TOUCH_SETTING = Touch-instellingen
+BTN_CAPTION_TOUCH_SETTING = Touch-instellingen...
 
 ;TEXT_SINGLE = Eén vinger
 ;TEXT_FINGERS = Vingers
@@ -128,7 +128,7 @@ TITLE_CAPTION_CALIBRATION = Kalibratie
 TEXT_SCREEN_MARGIN = Schermmarges
 TEXT_SCREEN_PERCENT_OF_SCREEN = % van het scherm
 TEXT_CALIBRATE = Kalibreren
-BTN_CAPTION_CALIBRATE = Kalibratie…
+BTN_CAPTION_CALIBRATE = Kalibratie...
 
 TITLE_AREA_SETTING = Gebiedsinstellingen (% van het scherm)
 TEXT_SINGLE_CLICK = Eén keer klikken
@@ -138,6 +138,17 @@ TEXT_PALM = Palm
 
 TEXT_CALIBRATION_WARNING = ''Mac OS X Marge' niet aangevinkt in menu 'Gebaren'. Kalibratie werkt mogelijk niet naar behoren.
 TEXT_CALIBRATION_WARNING2 = Mac OS X Marge' aangevinkt in menu 'Gebaren'. Kalibratie werkt mogelijk niet naar behoren..
+
+BTN_ADVANCED = Vergevorderd...
+
+[ADVANCED]
+WINDOW_CAPTION = Vergevorderd
+TITLE_CAPTION_ADJUSTMENT = Aanpassing
+TEXT_CHECKBOX_BENT = 
+TEXT_CHECKBOX_DETECTION = Detectiebereik
+TEXT_PASSWORD = Wachtwoord
+BTN_START = Starten
+MSG_INCORRECT_PASSWORD = 
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Touch aan/uit
@@ -186,7 +197,7 @@ TEXT_NON_MULTI_MONITOR = Ondersteun multi-monitor niet
 
 BTN_TOOLTIP_PLAY = Spelen
 
-BTN_CAMERA_DIAGNOSTICS = Diagnostische gegevens sensor…
+BTN_CAMERA_DIAGNOSTICS = Diagnostische gegevens sensor...
 
 TITLE_LANGUAGE = Taal(Language)
 TEXT_LANGUAGE = Taal selecteren

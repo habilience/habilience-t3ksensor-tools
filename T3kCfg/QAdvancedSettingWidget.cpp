@@ -22,11 +22,18 @@ QAdvancedSettingWidget::QAdvancedSettingWidget(QWidget *parent) :
     setModal( true );
 
     connect( ui->BtnCancel, &QPushButton::clicked, this, &QDialog::close );
+
+    onChangeLanguage();
 }
 
 QAdvancedSettingWidget::~QAdvancedSettingWidget()
 {
     delete ui;
+}
+
+void QAdvancedSettingWidget::closeEvent(QCloseEvent *)
+{
+    ui->EditPassword->clear();
 }
 
 void QAdvancedSettingWidget::OnRSP(ResponsePart part, ushort, const char *, long, bool, const char *szCmd)
@@ -61,6 +68,24 @@ void QAdvancedSettingWidget::OnRSP(ResponsePart part, ushort, const char *, long
         QString strCmd( szCmd );
         m_strFactoryCalibration = strCmd.mid( strCmd.indexOf('=')+1 );
     }
+}
+
+void QAdvancedSettingWidget::onChangeLanguage()
+{
+    if( !winId() ) return;
+
+    QLangRes& Res = QLangManager::instance()->getResource();
+
+    setWindowTitle( Res.getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("WINDOW_CAPTION")) );
+    ui->TitleAdvanced->setText( Res.getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("TITLE_CAPTION_ADJUSTMENT")) );
+    ui->ChkBent->setText( Res.getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("TEXT_CHECKBOX_BENT")) );
+    ui->ChkDetection->setText( Res.getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("TEXT_CHECKBOX_DETECTION")) );
+    ui->LbPassword->setText( Res.getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("TEXT_PASSWORD")) );
+
+    ui->BtnStart->setText( Res.getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("BTN_START")) );
+
+    ui->BtnDefault->setText( Res.getResString(QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_DEFAULT")) );
+    ui->BtnCancel->setText( Res.getResString(QString::fromUtf8("MESSAGEBOX"), QString::fromUtf8("BTN_CAPTION_CANCEL")) );
 }
 
 void QAdvancedSettingWidget::on_BtnStart_clicked()

@@ -61,7 +61,7 @@ BTN_CAPTION_SOFTKEY_SETTING_SUB2 =
 
 [MOUSE SETTING]
 TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Сенсорный жест
-BTN_CAPTION_TOUCH_SETTING = Настройки сенсора
+BTN_CAPTION_TOUCH_SETTING = Настройки сенсора...
 
 ;TEXT_SINGLE = Одиночный
 ;TEXT_FINGERS = Пальцы
@@ -128,7 +128,7 @@ TITLE_CAPTION_CALIBRATION = Калибровка
 TEXT_SCREEN_MARGIN = Край экрана
 TEXT_SCREEN_PERCENT_OF_SCREEN = % экрана
 TEXT_CALIBRATE = Калибровка
-BTN_CAPTION_CALIBRATE = Калибровка…
+BTN_CAPTION_CALIBRATE = Калибровка...
 
 TITLE_AREA_SETTING = Настройки контактной поверхности (% экрана)
 TEXT_SINGLE_CLICK = Одинарный щелчок
@@ -138,6 +138,17 @@ TEXT_PALM = Ладонь
 
 TEXT_CALIBRATION_WARNING = Не проверяйте 'Mac OS X Margin' в меню "Жесты". Так как калибровка может работать неисправно
 TEXT_CALIBRATION_WARNING2 = Проверьте 'Mac OS X Margin' в меню "Жесты". Так как калибровка может работать неисправно
+
+BTN_ADVANCED = Передовой...
+
+[ADVANCED]
+WINDOW_CAPTION = Передовой
+TITLE_CAPTION_ADJUSTMENT = Pегулировка
+TEXT_CHECKBOX_BENT = 
+TEXT_CHECKBOX_DETECTION = Дальность обнаружения
+TEXT_PASSWORD = Пароль
+BTN_START = начало
+MSG_INCORRECT_PASSWORD = 
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Включить/выключить сенсорный экран
@@ -186,7 +197,7 @@ TEXT_NON_MULTI_MONITOR = Не поддерживает многоэкранны�
 
 BTN_TOOLTIP_PLAY = Включить
 
-BTN_CAMERA_DIAGNOSTICS = Диагностика сенсора
+BTN_CAMERA_DIAGNOSTICS = Диагностика сенсора...
 
 TITLE_LANGUAGE = Язык
 TEXT_LANGUAGE = Выбор яызка

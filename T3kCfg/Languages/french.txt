@@ -139,6 +139,17 @@ TEXT_PALM = Paume
 TEXT_CALIBRATION_WARNING = La bordure d'écran Mac OS X n'a pas été configurée dans le menu "Souris". La calibration ne peut pas fonctionner correctement.
 TEXT_CALIBRATION_WARNING2 = La bordure d'écran Mac OS X' a été vérifiée dans le menu 'Geste'. Il se peut que la calibration ne fonctionne pas correctement.
 
+BTN_ADVANCED = Avancé...
+
+[ADVANCED]
+WINDOW_CAPTION = Avancé
+TITLE_CAPTION_ADJUSTMENT = Réglage
+TEXT_CHECKBOX_BENT = 
+TEXT_CHECKBOX_DETECTION = Plage de détection
+TEXT_PASSWORD = Mot de passe
+BTN_START = Commencer
+MSG_INCORRECT_PASSWORD = 
+
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Activer/Désactiver l'écran tactile
 TEXT_TOUCH_ENABLE = Écran tactile

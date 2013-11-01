@@ -34,6 +34,7 @@ QCalibrationSettingWidget::QCalibrationSettingWidget(T3kHandle*& pHandle, QWidge
     m_nUsbConfigMode = 0;
 
     m_pTouchSettingWnd = NULL;
+    m_pAdvancedWidget = NULL;
 
     m_pwndCalibration = new QCalibrationWidget( m_pT3kHandle );
 
@@ -94,6 +95,9 @@ void QCalibrationSettingWidget::onChangeLanguage()
     ui->LBPalm->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_PALM")) );
 
     ui->BtnTouchSetting->setText( Res.getResString(QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("BTN_CAPTION_TOUCH_SETTING")) );
+    ui->BtnAdvanced->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("BTN_ADVANCED")) );
+
+    ui->BtnTouchSetting->setMinimumWidth( Res.isR2L() ? 90 : 0 ); // incorrect "auto calc text width" to arabic
 }
 
 void QCalibrationSettingWidget::RequestSensorData( bool bDefault )
@@ -175,14 +179,13 @@ void QCalibrationSettingWidget::hideEvent(QHideEvent *evt)
         setFocusPolicy( Qt::NoFocus );
 
         if( m_pTouchSettingWnd && m_pTouchSettingWnd->isVisible() )
-        {
             m_pTouchSettingWnd->close();
-        }
 
         if( m_pwndCalibration && m_pwndCalibration->isVisible() )
-        {
             m_pwndCalibration->ShowWindow( false );
-        }
+
+        if( m_pAdvancedWidget && m_pAdvancedWidget->isVisible() )
+            m_pAdvancedWidget->close();
 
         m_RequestSensorData.Stop();
     }
@@ -664,6 +667,8 @@ void QCalibrationSettingWidget::on_BtnTouchSetting_clicked()
 
 void QCalibrationSettingWidget::on_BtnAdvanced_clicked()
 {
-    QAdvancedSettingWidget widget( QT3kUserData::GetInstance()->getTopParent() );
-    widget.exec();
+    if( !m_pAdvancedWidget )
+        m_pAdvancedWidget = new QAdvancedSettingWidget( QT3kUserData::GetInstance()->getTopParent() );
+
+    m_pAdvancedWidget->exec();
 }

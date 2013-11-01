@@ -9,6 +9,7 @@
 #include "QTouchSettingWidget.h"
 
 class QLineEdit;
+class QAdvancedSettingWidget;
 
 namespace Ui {
     class QCalibrationSettingWidget;
@@ -46,6 +47,7 @@ protected:
     float			m_fScreenMargin;
 
     QTouchSettingWidget*        m_pTouchSettingWnd;
+    QAdvancedSettingWidget*     m_pAdvancedWidget;
 
     QRequestHIDManager          m_RequestSensorData;
 

@@ -139,6 +139,17 @@ TEXT_PALM = 손바닥
 TEXT_CALIBRATION_WARNING = 제스처 메뉴에서 "Mac OS X 화면 마진"이 설정되지 않았습니다. 보정이 제대로 동작하지 않을 수 있습니다.
 TEXT_CALIBRATION_WARNING2 = 제스처 메뉴에서 "Mac OS X 화면 마진"이 설정되었습니다. 보정이 제대로 동작하지 않을 수 있습니다.
 
+BTN_ADVANCED = 고급...
+
+[ADVANCED]
+WINDOW_CAPTION = 고급
+TITLE_CAPTION_ADJUSTMENT = 조정
+TEXT_CHECKBOX_BENT = 벤트
+TEXT_CHECKBOX_DETECTION = 검출영역
+TEXT_PASSWORD = 암호
+BTN_START = 시작
+MSG_INCORRECT_PASSWORD = 
+
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = 터치 사용 유무
 TEXT_TOUCH_ENABLE = 터치 사용

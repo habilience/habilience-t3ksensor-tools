@@ -139,6 +139,17 @@ TEXT_PALM = Palm
 TEXT_CALIBRATION_WARNING = Didn't check 'Mac OS X Margin' in 'Gesture' menu. Because the calibration may not work properly.
 TEXT_CALIBRATION_WARNING2 = Did check 'Mac OS X Margin' in 'Gesture' menu. Because the calibration may not work properly.
 
+BTN_ADVANCED = Advanced...
+
+[ADVANCED]
+WINDOW_CAPTION = Advanced
+TITLE_CAPTION_ADJUSTMENT = Adjustment
+TEXT_CHECKBOX_BENT = Bent
+TEXT_CHECKBOX_DETECTION = Detection Range
+TEXT_PASSWORD = Password
+BTN_START = Start
+MSG_INCORRECT_PASSWORD = The password is incorrect.
+
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Turn on/off Touch Screen
 TEXT_TOUCH_ENABLE = Touch Screen

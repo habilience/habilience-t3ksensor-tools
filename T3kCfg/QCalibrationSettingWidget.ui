@@ -1462,15 +1462,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QFlatTextButton</class>
-   <extends>QPushButton</extends>
-   <header>QFlatTextButton.h</header>
-  </customwidget>
-  <customwidget>
    <class>QUnderlineLabel</class>
    <extends>QLabel</extends>
    <header>ui/UnderlineLabel.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QFlatTextButton</class>
+   <extends>QPushButton</extends>
+   <header>QFlatTextButton.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
