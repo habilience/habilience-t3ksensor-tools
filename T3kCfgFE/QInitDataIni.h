@@ -14,6 +14,9 @@ protected:
     int		m_nBentAlgorithm2;		// 2-camera algorithm (0: old 13 points, 1: new 13 points, 2: new 9 points)
     int		m_nBentAlgorithm4;		// 4-camera algorithm (0: old 13 points, 1: new 13 points, 2: new 9 points)
 
+    bool    m_bBentWithDummyLoad;
+    bool    m_bBentWithDummy;
+
     int		m_nDetectionGraphSharpWidth;
     float	m_fDetectionGraphCrackThresholdError;
     float	m_fDetectionGraphCrackThresholdWarning;
@@ -29,6 +32,8 @@ public:
     void setBentAlgorithm4( int nType );
     int getBentAlgorithm4() const;
     int getActiveLanguageIndex() const;
+
+    bool getBentWithDummy() const;
 
     int getDTCGraphSharpWidth() const;
     float getDTCGraphCrackThresholdError() const;

@@ -11,6 +11,8 @@
 #define BENT_INIT_ALGORITHM2			(2)
 #define BENT_INIT_ALGORITHM4			(1)
 
+#define BENT_WITH_DUMMY                 (false)
+
 #define BENT_DIR_UP     (0)
 #define BENT_DIR_DOWN   (1)
 #define BENT_DIR_LEFT   (2)
@@ -21,6 +23,7 @@ private:
     float   m_fBentMargin[4]; // left, top, right, bottom
     int		m_nBentDirection;
     int     m_nAlgorithm;
+    bool    m_bBentWithDummy;
 public:
     QBentCfgParam();
 
@@ -31,6 +34,8 @@ public:
 
     int direction() const { return m_nBentDirection; }
     int algorithm() const { return m_nAlgorithm; }      // algorithm 0: old 13 points, 1: new 13 points, 2: new 9 points
+
+    bool isBentWithDummy() { return m_bBentWithDummy; }
 
     void setMarginLeft( float fLeft ) { m_fBentMargin[0] = fLeft; }
     void setMarginTop( float fTop ) { m_fBentMargin[1] = fTop; }
@@ -55,7 +60,7 @@ public:
 
     void setDirection( int direction ) { m_nBentDirection = direction; }
     void setAlgorithm( int algorithm ) { m_nAlgorithm = algorithm; }
-
+    void setBentWithDummy( bool bWithDummy ) { m_bBentWithDummy = bWithDummy; }
 };
 
 #endif // QBENTCFGPARAM_H

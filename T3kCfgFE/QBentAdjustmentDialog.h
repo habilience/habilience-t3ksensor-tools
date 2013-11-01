@@ -13,7 +13,7 @@ namespace Ui {
 class QBentAdjustmentDialog;
 }
 
-#define ADJUSTMENT_STEP	(7+6)
+#define ADJUSTMENT_STEP	(7+6+4)
 
 class QBentProgressDialog;
 class QCalcCamPosThread;

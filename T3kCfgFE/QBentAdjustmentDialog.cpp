@@ -39,54 +39,67 @@
 struct PosXY {
     float x;
     float y;
-    int idx;
+    short use;
+    short idx;
 };
 
 const PosXY s_PosXY[3][ADJUSTMENT_STEP] = {
     { // old 13 points
-        { -2.0f, -1.0f, 9  },
-        { -2.0f,  0.0f, 5  },
-        { -2.0f, +1.0f, 10 },
-        { -1.5f,  0.0f, 7  },
-        { -1.0f, +1.0f, 2  },
-        { -1.0f, -1.0f, 1  },
-        {  0.0f,  0.0f, 0  },
-        { +1.0f, -1.0f, 4  },
-        { +1.0f, +1.0f, 3  },
-        { +1.5f,  0.0f, 8  },
-        { +2.0f, +1.0f, 11 },
-        { +2.0f,  0.0f, 6  },
-        { +2.0f, -1.0f, 12 }
+        { -2.0f, -1.0f, 1, 9  },
+        { -2.0f,  0.0f, 1, 5  },
+        { -2.0f, +1.0f, 1, 10 },
+        { -1.5f,  0.0f, 1, 7  },
+        { -1.0f, +1.0f, 1, 2  },
+        { -1.0f, -1.0f, 1, 1  },
+        {  0.0f,  0.0f, 1, 0  },
+        { +1.0f, -1.0f, 1, 4  },
+        { +1.0f, +1.0f, 1, 3  },
+        { +1.5f,  0.0f, 1, 8  },
+        { +2.0f, +1.0f, 1, 11 },
+        { +2.0f,  0.0f, 1, 6  },
+        { +2.0f, -1.0f, 1, 12 },
+        {   NaN,   NaN, 0, -1 },
+        {   NaN,   NaN, 0, -1 },
+        {   NaN,   NaN, 0, -1 },
+        {   NaN,   NaN, 0, -1 }
     },
     { // new 13 points
-        { -2.0f, -1.0f, 9  },
-        { -2.0f,  0.0f, 5  },
-        { -2.0f, +1.0f, 10 },
-        { -1.0f, +1.0f, 2  },
-        { -1.0f,  0.0f, 7  },
-        { -1.0f, -1.0f, 1  },
-        {  0.0f,  0.0f, 0  },
-        { +1.0f, -1.0f, 4  },
-        { +1.0f,  0.0f, 8  },
-        { +1.0f, +1.0f, 3  },
-        { +2.0f, +1.0f, 11 },
-        { +2.0f,  0.0f, 6  },
-        { +2.0f, -1.0f, 12 }
+        { -2.0f, -1.0f, 1, 9  },
+        { -2.0f,  0.0f, 1, 5  },
+        { -2.0f, +1.0f, 1, 10 },
+        { -1.5f,  0.0f, 0, -1 },
+        { -1.0f, +1.0f, 1, 2  },
+        { -1.0f,  0.0f, 1, 7  },
+        { -1.0f, -1.0f, 1, 1  },
+        { -0.5f, -1.0f, 0, -1 },
+        {  0.0f,  0.0f, 1, 0  },
+        { +0.5f, -1.0f, 0, -1 },
+        { +1.0f, -1.0f, 1, 4  },
+        { +1.0f,  0.0f, 1, 8  },
+        { +1.0f, +1.0f, 1, 3  },
+        { +1.5f,  0.0f, 0, -1 },
+        { +2.0f, +1.0f, 1, 11 },
+        { +2.0f,  0.0f, 1, 6  },
+        { +2.0f, -1.0f, 1, 12 }
     },
     { // new 9 points
-        { -2.0f, -1.0f, 9  },
-        {   NaN,   NaN, 5  },
-        { -2.0f, +1.0f, 10 },
-        { -1.0f, +1.0f, 2  },
-        {   NaN,   NaN, 7  },
-        { -1.0f, -1.0f, 1  },
-        {  0.0f,  0.0f, 0  },
-        { +1.0f, -1.0f, 4  },
-        {   NaN,   NaN, 8  },
-        { +1.0f, +1.0f, 3  },
-        { +2.0f, +1.0f, 11 },
-        {   NaN,   NaN, 6  },
-        { +2.0f, -1.0f, 12 }
+        { -2.0f, -1.0f, 1, 9  },
+        { -2.0f,  0.0f, 1, -1 },
+        { -2.0f, +1.0f, 1, 10 },
+        { -1.5f,  0.0f, 0, -1 },
+        { -1.0f, +1.0f, 1, 2  },
+        { -1.0f,  0.0f, 1, -1 },
+        { -1.0f, -1.0f, 1, 1  },
+        { -0.5f, -1.0f, 0, -1 },
+        {  0.0f,  0.0f, 1, 0  },
+        { +0.5f, -1.0f, 0, -1 },
+        { +1.0f, -1.0f, 1, 4  },
+        { +1.0f,  0.0f, 1, -1 },
+        { +1.0f, +1.0f, 1, 3  },
+        { +1.5f,  0.0f, 0, -1 },
+        { +2.0f, +1.0f, 1, 11 },
+        { +2.0f,  0.0f, 1, -1 },
+        { +2.0f, -1.0f, 1, 12 }
     }
 };
 
@@ -173,6 +186,8 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog *parent) :
     {
         bentParam->setAlgorithm( iniData->getBentAlgorithm4() );
     }
+
+    bentParam->setBentWithDummy( iniData->getBentWithDummy() );
 
     int nLeft, nTop, nRight, nBottom, nDir;
     iniData->getBentMargin( nLeft, nTop, nRight, nBottom, nDir );
@@ -941,6 +956,7 @@ void QBentAdjustmentDialog::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint
     }
 
     int nPosXYSel = QBentCfgParam::instance()->algorithm();
+    bool bBentWithDummy = QBentCfgParam::instance()->isBentWithDummy();
 
     //QPainterPath gridPath;
     QPolygon gridPolyline1;
@@ -948,6 +964,9 @@ void QBentAdjustmentDialog::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint
     for ( int i=0; i<ADJUSTMENT_STEP; i++ )
     {
         if ( qIsNaN(s_PosXY[nPosXYSel][i].x) )
+            continue;
+
+        if ( !bBentWithDummy && s_PosXY[nPosXYSel][i].idx < 0 )
             continue;
 
         pt = PosToDCC( s_PosXY[nPosXYSel][i].x, s_PosXY[nPosXYSel][i].y, rcBody );
@@ -1000,7 +1019,7 @@ void QBentAdjustmentDialog::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint
         {
             const BentItem& item = m_BentItemArray.at(j);
             fPos[camIdxToIdx(item.nCameraIndex)] = item.fObcCenter[i];
-            fDist[camIdxToIdx(item.nCameraIndex)] = item.fDistortion[s_PosXY[nPosXYSel][i].idx];
+            fDist[camIdxToIdx(item.nCameraIndex)] = ( s_PosXY[nPosXYSel][i].idx >= 0 ) ? item.fDistortion[s_PosXY[nPosXYSel][i].idx] : 0.f;
         }
 
         if ( qIsNaN(fPos[0]) && qIsNaN(fPos[1]) && qIsNaN(fPos[2]) && qIsNaN(fPos[3]) )
@@ -1850,6 +1869,7 @@ void QBentAdjustmentDialog::checkTouchPoints( bool bTouch )
     m_bOldTouchState = bTouch;
 
     int nPosXYSel = QBentCfgParam::instance()->algorithm();
+    bool bBentWithDummy = QBentCfgParam::instance()->isBentWithDummy();
 
     if (bTouch && !m_bIsTouchOK)
     {
@@ -1914,11 +1934,14 @@ void QBentAdjustmentDialog::checkTouchPoints( bool bTouch )
                 if (item.bDataValid)
                 {
                     item.fObcCenter[m_nAdjustmentStep] = (item.fLastTouchPosS+item.fLastTouchPosE) / 2.f;
-                    item.fObcS[s_PosXY[nPosXYSel][m_nAdjustmentStep].idx] = item.fLastTouchPosS;
-                    item.fObcE[s_PosXY[nPosXYSel][m_nAdjustmentStep].idx] = item.fLastTouchPosE;
+                    if ( s_PosXY[nPosXYSel][m_nAdjustmentStep].idx >= 0 )
+                    {
+                        item.fObcS[s_PosXY[nPosXYSel][m_nAdjustmentStep].idx] = item.fLastTouchPosS;
+                        item.fObcE[s_PosXY[nPosXYSel][m_nAdjustmentStep].idx] = item.fLastTouchPosE;
 
-                    qDebug( "[%d] %.2f, %.2f", i, item.fLastTouchPosS, item.fLastTouchPosE );
-                    LOG_I( "[%d] %.2f, %.2f", i, item.fLastTouchPosS, item.fLastTouchPosE );
+                        qDebug( "[%d] %.2f, %.2f", i, item.fLastTouchPosS, item.fLastTouchPosE );
+                        LOG_I( "[%d] %.2f, %.2f", i, item.fLastTouchPosS, item.fLastTouchPosE );
+                    }
                 }
 
                 item.nAveCount = 0;
@@ -1947,7 +1970,10 @@ void QBentAdjustmentDialog::checkTouchPoints( bool bTouch )
                 m_nAdjustmentStep ++;
                 if (!qIsNaN(s_PosXY[nPosXYSel][m_nAdjustmentStep].x) &&
                     !qIsNaN(s_PosXY[nPosXYSel][m_nAdjustmentStep].y) )
-                    break;
+                {
+                    if ( bBentWithDummy || s_PosXY[nPosXYSel][m_nAdjustmentStep].idx >= 0 )
+                        break;
+                }
             } while (m_nAdjustmentStep < ADJUSTMENT_STEP);
 
             m_bIsValidTouch = true;
@@ -2718,6 +2744,8 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
         strCamPos += QString("%1").arg(ch, 2, 16, QChar('0')); // direction:2 error:2 type:4 (bit)
         for ( int ni = 0; ni < ADJUSTMENT_STEP; ni++ ) // bent_adjustment trc
         {
+            if ( !s_PosXY[nPosXYSel][ni].use )
+                continue;
             ulong dwOs = *(ulong*)(&item.fObcS[ni]);
             ulong dwOe = *(ulong*)(&item.fObcE[ni]);
             strCamPos += QString("%1%2").arg(dwOs, 8, 16, QChar('0')).arg(dwOe, 8, 16, QChar('0'));
@@ -2764,9 +2792,11 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
         const BentItem& item2 = m_BentItemArray.at(nCam2Idx);
         for ( int i=0 ; i<ADJUSTMENT_STEP ; i++ )
         {
+            if ( !s_PosXY[nPosXYSel][i].use )
+                continue;
             float fV = item1.fObcCenter[i];
             if ( (nPosXYSel == 1 || nPosXYSel == 2) &&
-                 (i == 1 || i == 4 || i == 8 || i == 11) )
+                 (s_PosXY[2][i].idx < 0) )
             {
                 fV = NaN;
             }
@@ -2777,9 +2807,11 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
 
         for ( int i=0 ; i<ADJUSTMENT_STEP ; i++ )
         {
+            if ( !s_PosXY[nPosXYSel][i].use )
+                continue;
             float fV = item2.fObcCenter[i];
             if ( (nPosXYSel == 1 || nPosXYSel == 2) &&
-                 (i == 1 || i == 4 || i == 8 || i == 11) )
+                 (s_PosXY[2][i].idx < 0) )
             {
                 fV = NaN;
             }

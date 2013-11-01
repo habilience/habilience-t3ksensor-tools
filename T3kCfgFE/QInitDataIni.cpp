@@ -27,6 +27,9 @@ QInitDataIni::QInitDataIni()
     m_nBentAlgorithm2 = BENT_INIT_ALGORITHM2;
     m_nBentAlgorithm4 = BENT_INIT_ALGORITHM4;
 
+    m_bBentWithDummyLoad = false;
+    m_bBentWithDummy = BENT_WITH_DUMMY;
+
     m_nActiveLanguageIndex = 0;
 
     m_nDetectionGraphSharpWidth				= DTC_GRAPH_INIT_SHARP_WIDTH;
@@ -77,6 +80,11 @@ int QInitDataIni::getBentAlgorithm4() const
 int QInitDataIni::getActiveLanguageIndex() const
 {
     return m_nActiveLanguageIndex;
+}
+
+bool QInitDataIni::getBentWithDummy() const
+{
+    return m_bBentWithDummy;
 }
 
 int QInitDataIni::getDTCGraphSharpWidth() const
@@ -213,6 +221,16 @@ bool QInitDataIni::load()
             m_nBentAlgorithm4 = trim(strData).toInt(0, 10);
     }
 
+    m_bBentWithDummy = BENT_WITH_DUMMY;
+    idx = pBentAdjustmentSection->getDataIndex("BentWithDummy");
+    if ( idx >= 0 )
+    {
+        m_bBentWithDummyLoad = true;
+        strData = pBentAdjustmentSection->getData(idx);
+        if ( !strData.isEmpty() )
+            m_bBentWithDummy = (strData.toInt( 0, 10 ) != 0) ? true : false;
+    }
+
     QIni::QSection * pDTCGraphSection = ini.getSectionNoCase("DETECTION GRAPH");
     if ( !pDTCGraphSection )
         return false;
@@ -313,6 +331,11 @@ bool QInitDataIni::save()
     strData = QString("%1").arg(m_nBentAlgorithm4);
     pBentAdjustmentSection->addData("BentAlgorithm4", strData, "3,4-camera algorithm (0: old 13 points, 1: new 13 points, 2: new 9 points)");
 
+    if ( m_bBentWithDummyLoad )
+    {
+        strData = QString("%1").arg(m_bBentWithDummy);
+        pBentAdjustmentSection->addData("BentWithDummy", strData, "bent-adjustment by 17 points that be included dummy points");
+    }
 
     QIni::QSection * pDTCGraphSection = ini.addSection("DETECTION GRAPH");
 

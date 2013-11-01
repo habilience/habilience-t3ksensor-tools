@@ -8,4 +8,5 @@ QBentCfgParam::QBentCfgParam()
     m_fBentMargin[3] = BENT_MARGIN_INIT_BOTTOM / 100.f;
     m_nBentDirection = BENT_MARGIN_INIT_DIR;
     m_nAlgorithm = 2;
+    m_bBentWithDummy = false;
 }
