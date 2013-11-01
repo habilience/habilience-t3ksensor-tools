@@ -7,10 +7,6 @@
 #include <QDialog>
 
 
-namespace Ui {
-class QAdvancedCalibrationWidget;
-}
-
 class QAdvancedCalibrationWidget : public QDialog
 {
     Q_OBJECT
@@ -35,9 +31,6 @@ protected:
 
     enum SettingPart { spDetectionRange, spBent };
     SettingPart                 m_eCurrentPart;
-
-private:
-    Ui::QAdvancedCalibrationWidget *ui;
 
 signals:
     void closeWidget();

@@ -457,7 +457,7 @@
      <x>10</x>
      <y>130</y>
      <width>381</width>
-     <height>31</height>
+     <height>32</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="ButtonLayout">
@@ -562,7 +562,7 @@
        </size>
       </property>
       <property name="echoMode">
-       <enum>QLineEdit::Password</enum>
+       <enum>QLineEdit::PasswordEchoOnEdit</enum>
       </property>
      </widget>
     </item>

@@ -384,7 +384,6 @@ FORMS    += \
     QTabRemoteAssistance.ui \
     QTabChat.ui \
     QAdvancedSettingWidget.ui \
-    QAdvancedCalibrationWidget.ui \
     QAutoRangeCompleteDialog.ui \
     QBentProgressDialog.ui
 

@@ -1,18 +1,16 @@
 #include "QAdvancedCalibrationWidget.h"
-#include "ui_QAdvancedCalibrationWidget.h"
 
 #include <QtEvents>
 #include <QPainter>
 #include <QDesktopWidget>
+#include <QApplication>
 
 #include "QT3kUserData.h"
 #include "QUtils.h"
 
 QAdvancedCalibrationWidget::QAdvancedCalibrationWidget(bool bDetection, QWidget *parent) :
-    QDialog(parent), m_DetectionRange(this), m_BentAdjustment(this, this),
-    ui(new Ui::QAdvancedCalibrationWidget)
+    QDialog(parent), m_DetectionRange(this), m_BentAdjustment(this, this)
 {
-    ui->setupUi(this);
     setFont( qApp->font() );
 
     Qt::WindowFlags flags = Qt::Tool;
@@ -39,7 +37,6 @@ QAdvancedCalibrationWidget::QAdvancedCalibrationWidget(bool bDetection, QWidget 
 
 QAdvancedCalibrationWidget::~QAdvancedCalibrationWidget()
 {
-    delete ui;
 }
 
 void QAdvancedCalibrationWidget::showEvent(QShowEvent *)
@@ -48,9 +45,7 @@ void QAdvancedCalibrationWidget::showEvent(QShowEvent *)
     int nPrimary = DeskWidget.primaryScreen();
     const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
 
-//#ifndef _DEBUG
     setGeometry( rcPrimaryMon );
-//#endif
 
 #ifdef Q_OS_WIN
     SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
@@ -75,7 +70,10 @@ void QAdvancedCalibrationWidget::closeEvent(QCloseEvent *)
 
 void QAdvancedCalibrationWidget::keyPressEvent(QKeyEvent *evt)
 {
-    if( evt->key() == Qt::Key_Escape )
+    if( evt->key() == Qt::Key_Escape ||
+            evt->key() == Qt::Key_Alt ||
+            evt->key() == Qt::Key_Meta ||
+            evt->key() == Qt::Key_Control )
     {
         // cancal current process : detection or bent
 

@@ -34,6 +34,7 @@ QAdvancedSettingWidget::~QAdvancedSettingWidget()
 void QAdvancedSettingWidget::closeEvent(QCloseEvent *)
 {
     ui->EditPassword->clear();
+    ui->ChkDetection->setChecked( false );
 }
 
 void QAdvancedSettingWidget::OnRSP(ResponsePart part, ushort, const char *, long, bool, const char *szCmd)
@@ -107,12 +108,12 @@ void QAdvancedSettingWidget::on_BtnStart_clicked()
     QAdvancedCalibrationWidget* pWidget = new QAdvancedCalibrationWidget( ui->ChkDetection->isChecked() );
     pWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( pWidget, &QAdvancedCalibrationWidget::closeWidget, this, &QDialog::close );
-    pWidget->exec();
+    pWidget->showFullScreen();
 }
 
 void QAdvancedSettingWidget::on_ChkDetection_clicked()
 {
-
+    ui->EditPassword->setFocus();
 }
 
 //static unsigned long hex2u32( const char * pstr )
