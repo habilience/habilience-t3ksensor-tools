@@ -103,7 +103,7 @@ void QAdvancedSettingWidget::on_BtnStart_clicked()
        }
     }
     strKeyCode = aryB;
-    if( strKeyCode.compare( ui->EditPassword->text(), Qt::CaseSensitive ) != 0 )
+    if ( strKeyCode.compare( ui->EditPassword->text(), Qt::CaseSensitive ) != 0 )
     {
         QMessageBox::warning( this, "Password", "The password is not correct.", QMessageBox::Ok );
         ui->EditPassword->setFocus();
