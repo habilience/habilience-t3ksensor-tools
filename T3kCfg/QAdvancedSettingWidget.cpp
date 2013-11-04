@@ -91,7 +91,19 @@ void QAdvancedSettingWidget::onChangeLanguage()
 
 void QAdvancedSettingWidget::on_BtnStart_clicked()
 {
-    if( QConfigData::instance()->getData( "ADVANCED", "PASSWORD", "" ).toString().compare( ui->EditPassword->text(), Qt::CaseSensitive ) != 0 )
+    QString strKeyCode = QConfigData::instance()->getData("ADVANCED", "PASSWORD", "").toString();
+    QByteArray aryB = strKeyCode.toUtf8();
+    for ( int ni = aryB.length() - 1; ni >= 0; ni-- )
+    {
+       char b = aryB[ni];
+       if ( b >= 33 && b <= 126 )
+       {
+           b = (((b - 33) + 1) % 94) + 33;
+           aryB[ni] = b;
+       }
+    }
+    strKeyCode = aryB;
+    if( strKeyCode.compare( ui->EditPassword->text(), Qt::CaseSensitive ) != 0 )
     {
         QMessageBox::warning( this, "Password", "The password is not correct.", QMessageBox::Ok );
         ui->EditPassword->setFocus();
