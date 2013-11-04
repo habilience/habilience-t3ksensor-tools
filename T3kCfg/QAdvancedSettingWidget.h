@@ -41,9 +41,7 @@ private:
 
 private slots:
     void on_BtnStart_clicked();
-
     void on_ChkDetection_clicked();
-
     void on_BtnDefault_clicked();
 };
 

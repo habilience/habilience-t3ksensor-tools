@@ -6,7 +6,6 @@
 #include "QT3kUserData.h"
 #include "T3kConstStr.h"
 #include "T3kCamNameDef.h"
-#include "QWarningWidget.h"
 
 #include <QMessageBox>
 
@@ -81,7 +80,7 @@ void QAdvancedSettingWidget::onChangeLanguage()
     ui->TitleAdvanced->setText( Res.getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("TITLE_CAPTION_ADJUSTMENT")) );
     ui->ChkBent->setText( Res.getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("TEXT_CHECKBOX_BENT")) );
     ui->ChkDetection->setText( Res.getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("TEXT_CHECKBOX_DETECTION")) );
-    ui->LbPassword->setText( Res.getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("TEXT_PASSWORD")) );
+    ui->LbPassword->setText( Res.getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("TEXT_ID")) );
 
     ui->BtnStart->setText( Res.getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("BTN_START")) );
 
@@ -91,7 +90,7 @@ void QAdvancedSettingWidget::onChangeLanguage()
 
 void QAdvancedSettingWidget::on_BtnStart_clicked()
 {
-    QString strKeyCode = QConfigData::instance()->getData("ADVANCED", "PASSWORD", "").toString();
+    QString strKeyCode = QConfigData::instance()->getData("ADVANCED", "ID", "").toString();
     QByteArray aryB = strKeyCode.toUtf8();
     for ( int ni = aryB.length() - 1; ni >= 0; ni-- )
     {
@@ -105,15 +104,8 @@ void QAdvancedSettingWidget::on_BtnStart_clicked()
     strKeyCode = aryB;
     if ( strKeyCode.compare( ui->EditPassword->text(), Qt::CaseSensitive ) != 0 )
     {
-        QMessageBox::warning( this, "Password", "The password is not correct.", QMessageBox::Ok );
+        QMessageBox::warning( this, "Error", QLangManager::instance()->getResource().getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("MSG_INCORRECT_ID")), QMessageBox::Ok );
         ui->EditPassword->setFocus();
-        return;
-    }
-
-    QWarningWidget warning( this );
-    if( warning.exec() == QDialog::Rejected )
-    {
-        close();
         return;
     }
 
@@ -280,10 +272,13 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
         {
             strCam1V += strCam1.left(8) + ",";
             strCam1.remove(0, 8);
+        }
+        strCam1V += strCam1.left(2);
+        while( strCam2.size() > 2 )
+        {
             strCam2V += strCam2.left(8) + ",";
             strCam2.remove(0, 8);
         }
-        strCam1V += strCam1.left(2);
         strCam2V += strCam2.left(2);
         listCmd.push_back(QString(sCam1_1 + cstrFactorialCamPos + strCam1V));
         listCmd.push_back(QString(sCam2_1 + cstrFactorialCamPos + strCam2V));

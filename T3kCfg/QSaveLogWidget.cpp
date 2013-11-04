@@ -17,7 +17,7 @@ QSaveLogWidget::QSaveLogWidget(T3kHandle*& pHandle, QWidget *parent) :
     setWindowModality( Qt::ApplicationModal );
     setModal( true );
 
-    // Qt 5.1.1 bug not work
+    // until Qt 5.1.1 bug
 #ifdef _DEBUG
     setWindowOpacity( 0.0 );
 #else

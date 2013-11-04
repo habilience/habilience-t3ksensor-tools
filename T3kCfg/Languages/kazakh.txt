@@ -139,16 +139,16 @@ TEXT_PALM = Алақан
 TEXT_CALIBRATION_WARNING = Mac OS X Margin' "Қимылдар" мәзірінде тексермеңіз. Калибрлеу дұрыс жұмыс істемеуі мүмкін
 TEXT_CALIBRATION_WARNING2 = Mac OS X Margin' "Қимылдар" мәзірінде тексеріңіз. Калибрлеу дұрыс жұмыс істемеуі мүмкін
 
-BTN_ADVANCED = ...
+BTN_ADVANCED = Advanced...
 
 [ADVANCED]
-WINDOW_CAPTION = 
-TITLE_CAPTION_ADJUSTMENT = 
-TEXT_CHECKBOX_BENT = 
-TEXT_CHECKBOX_DETECTION = 
-TEXT_PASSWORD = 
-BTN_START = 
-MSG_INCORRECT_PASSWORD = 
+WINDOW_CAPTION = Advanced
+TITLE_CAPTION_ADJUSTMENT = Adjustment
+TEXT_CHECKBOX_BENT = Bent
+TEXT_CHECKBOX_DETECTION = Detection Range
+TEXT_ID = ID
+BTN_START = Start
+MSG_INCORRECT_ID = The ID is incorrect.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Сенсорлы экранды қосу/сөндіру

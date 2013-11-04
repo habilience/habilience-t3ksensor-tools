@@ -146,9 +146,9 @@ WINDOW_CAPTION = Advanced
 TITLE_CAPTION_ADJUSTMENT = Adjustment
 TEXT_CHECKBOX_BENT = Bent
 TEXT_CHECKBOX_DETECTION = Detection Range
-TEXT_PASSWORD = Password
+TEXT_ID = ID
 BTN_START = Start
-MSG_INCORRECT_PASSWORD = The password is incorrect.
+MSG_INCORRECT_ID = The ID is incorrect.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Turn on/off Touch Screen
@@ -187,7 +187,7 @@ TEXT_INPUT_MODE_WARNING_MSG = Touch may not work properly under other OS. Contin
 
 TITLE_MULTI_MONITOR = Multi-monitor Display Setting
 TEXT_MULTI_MONITOR = Monitor Setting
-TEXT_MULTI_MONITOR_SETTING = Select Display Monitor...
+TEXT_MULTI_MONITOR_SETTING = Select Display Monitor…
 
 TEXT_BTN_MULTI_MONITOR_APPLY = Apply
 TEXT_BTN_MULTI_MONITOR_CANCEL = Cancel

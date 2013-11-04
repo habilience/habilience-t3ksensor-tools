@@ -9,6 +9,7 @@
 #include "QT3kUserData.h"
 #include "QLangManager.h"
 #include "QConfigData.h"
+#include "QWarningWidget.h"
 #include "QAdvancedSettingWidget.h"
 
 #include <QShowEvent>
@@ -54,8 +55,8 @@ QCalibrationSettingWidget::QCalibrationSettingWidget(T3kHandle*& pHandle, QWidge
     ui->EditTwoTouch->setEnabled(false);
     ui->BtnTouchSetting->setEnabled(false);
 
-    bool bEnable = QConfigData::instance()->getData( "ADVANCED", "ADVANCED_MENU", QVariant(false) ).toBool() &&
-            !QConfigData::instance()->getData( "ADVANCED", "PASSWORD", "" ).toString().isEmpty();
+    bool bEnable = QConfigData::instance()->getData( "ADVANCED", "USER_ADJUSTMENT", QVariant(false) ).toBool() &&
+            !QConfigData::instance()->getData( "ADVANCED", "ID", "" ).toString().isEmpty();
     ui->BtnAdvanced->setVisible( bEnable );
 
     onChangeLanguage();
@@ -667,6 +668,10 @@ void QCalibrationSettingWidget::on_BtnTouchSetting_clicked()
 
 void QCalibrationSettingWidget::on_BtnAdvanced_clicked()
 {
+    QWarningWidget warning( QT3kUserData::GetInstance()->getTopParent() );
+    if( warning.exec() == QDialog::Rejected )
+        return;
+
     if( !m_pAdvancedWidget )
         m_pAdvancedWidget = new QAdvancedSettingWidget( QT3kUserData::GetInstance()->getTopParent() );
 

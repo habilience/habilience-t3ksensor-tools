@@ -144,11 +144,11 @@ BTN_ADVANCED = Fortgeschritten...
 [ADVANCED]
 WINDOW_CAPTION = Fortgeschritten
 TITLE_CAPTION_ADJUSTMENT = Anpassung
-TEXT_CHECKBOX_BENT = 
+TEXT_CHECKBOX_BENT = Bent
 TEXT_CHECKBOX_DETECTION = Entdeckung Reichweite
-TEXT_PASSWORD = Kennwort
+TEXT_ID = 
 BTN_START = Starten
-MSG_INCORRECT_PASSWORD = 
+MSG_INCORRECT_ID = 
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Aktivierung/Deaktivierung der Berührungsfunktion
