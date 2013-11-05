@@ -213,8 +213,16 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
         //	| / |   6   | \ |
         //	|/  | /   \ |  \|
         //	0   5       7   12
-        const char orderData[] = { 9, -1, 10, 2, -1, 1, 0, 4, -1, 3, 11, -1, 12 };
-        int nSize = (int)sizeof(orderData);
+        const char orderDatas[2][13] = {
+            { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 },
+            { 0, -1, 2, 3, -1, 5, 6, 7, -1, 9, 10, -1, 12 }
+        };
+        const char * orderData;
+        int orderIdx;
+        int nSize = (int)sizeof(orderDatas[0]);
+        orderIdx = strtoul(m_strCam1PosTrc.mid(2, 2).toUtf8().data(), NULL, 16) & 0x0f;
+        if ( orderIdx > 1 ) orderIdx = 1;
+        orderData = orderDatas[orderIdx];
         for ( int ni = 0; ni < nSize; ni++ )
         {
             if ( orderData[ni] < 0 )
@@ -228,6 +236,9 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
             unsigned long dwF = (*(unsigned long *)&f);
             strDefaultf42 += QString("%1").arg(dwF, 8, 16, QChar('0'));
         }
+        orderIdx = strtoul(m_strCam2PosTrc.mid(2, 2).toUtf8().data(), NULL, 16) & 0x0f;
+        if ( orderIdx > 1 ) orderIdx = 1;
+        orderData = orderDatas[orderIdx];
         for ( int ni = 0; ni < nSize; ni++ )
         {
             if ( orderData[ni] < 0 )
