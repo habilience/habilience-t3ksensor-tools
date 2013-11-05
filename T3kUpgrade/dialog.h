@@ -105,8 +105,12 @@ public:
     ~Dialog();
 
 private:
+    Ui::Dialog *ui;
+
     QString m_strSensorInformation;
     QString m_strDownloadProgress;
+
+    bool    m_bAdministrator;
 
 protected:
     virtual void timerEvent(QTimerEvent *evt);
@@ -166,8 +170,8 @@ private slots:
     void onDisconnected();
     void onResponseFromSensor(unsigned short nPacketId);
 
-private:
-    Ui::Dialog *ui;
+public slots:
+    void onHandleMessage(const QString &msg);
 };
 
 #endif // DIALOG_H

@@ -6,6 +6,7 @@
 #include "QT3kUserData.h"
 #include "T3kConstStr.h"
 #include "T3kCamNameDef.h"
+#include "stdInclude.h"
 
 #include <QMessageBox>
 
@@ -21,6 +22,8 @@ QAdvancedSettingWidget::QAdvancedSettingWidget(QWidget *parent) :
     setModal( true );
 
     connect( ui->BtnCancel, &QPushButton::clicked, this, &QDialog::close );
+
+    ui->BtnDefault->setVisible( QT3kUserData::GetInstance()->getFirmwareVersionStr().compare( MM_MIN_SUPPORT_USER_BENT_STR ) > 0 ? true : false );
 
     onChangeLanguage();
 }

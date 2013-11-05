@@ -1831,18 +1831,18 @@ void QBentAdjustmentDialog::onAdjustmentFinish()
         strBaLog += curDate.toString("yyyy-MM-dd hh-mm-ss ") + buf;
     }
 
-#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
-    QString strPath = QCoreApplication::applicationDirPath();
-    strPath = rstrip(strPath, "/\\");
-    strPath += QDir::separator();
-    strPath += "bent_adjustment.txt";
-#else
+//#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
+//    QString strPath = QCoreApplication::applicationDirPath();
+//    strPath = rstrip(strPath, "/\\");
+//    strPath += QDir::separator();
+//    strPath += "bent_adjustment.txt";
+//#else
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
     QString strPath = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator();
     makeDirectory(strPath);
     strPath += "bent_adjustment.txt";
-#endif
+//#endif
 
     QFile file(strPath);
     if (file.open(QIODevice::WriteOnly))

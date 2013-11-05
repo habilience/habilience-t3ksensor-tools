@@ -55,9 +55,7 @@ QCalibrationSettingWidget::QCalibrationSettingWidget(T3kHandle*& pHandle, QWidge
     ui->EditTwoTouch->setEnabled(false);
     ui->BtnTouchSetting->setEnabled(false);
 
-    bool bEnable = QConfigData::instance()->getData( "ADVANCED", "USER_ADJUSTMENT", QVariant(false) ).toBool() &&
-            !QConfigData::instance()->getData( "ADVANCED", "ID", "" ).toString().isEmpty();
-    ui->BtnAdvanced->setVisible( bEnable );
+    ui->BtnAdvanced->setVisible( false );
 
     onChangeLanguage();
 }
@@ -164,32 +162,29 @@ void QCalibrationSettingWidget::ShowCalibrationWindow( bool bShow, int nScreenMa
 
 void QCalibrationSettingWidget::showEvent(QShowEvent *evt)
 {
-    if( evt->type() == QEvent::Show )
-    {
-        RequestSensorData( false );
-        setFocusPolicy( Qt::StrongFocus );
-    }
+    RequestSensorData( false );
+    setFocusPolicy( Qt::StrongFocus );
+
+    ui->BtnAdvanced->setVisible( QConfigData::instance()->getData( "ADVANCED", "USER_ADJUSTMENT", QVariant(false) ).toBool() &&
+                                 !QConfigData::instance()->getData( "ADVANCED", "ID", "" ).toString().isEmpty() );
 
     QWidget::showEvent(evt);
 }
 
 void QCalibrationSettingWidget::hideEvent(QHideEvent *evt)
 {
-    if( evt->type() == QEvent::Hide )
-    {
-        setFocusPolicy( Qt::NoFocus );
+    setFocusPolicy( Qt::NoFocus );
 
-        if( m_pTouchSettingWnd && m_pTouchSettingWnd->isVisible() )
-            m_pTouchSettingWnd->close();
+    if( m_pTouchSettingWnd && m_pTouchSettingWnd->isVisible() )
+        m_pTouchSettingWnd->close();
 
-        if( m_pwndCalibration && m_pwndCalibration->isVisible() )
-            m_pwndCalibration->ShowWindow( false );
+    if( m_pwndCalibration && m_pwndCalibration->isVisible() )
+        m_pwndCalibration->ShowWindow( false );
 
-        if( m_pAdvancedWidget && m_pAdvancedWidget->isVisible() )
-            m_pAdvancedWidget->close();
+    if( m_pAdvancedWidget && m_pAdvancedWidget->isVisible() )
+        m_pAdvancedWidget->close();
 
-        m_RequestSensorData.Stop();
-    }
+    m_RequestSensorData.Stop();
 
     QWidget::hideEvent(evt);
 }

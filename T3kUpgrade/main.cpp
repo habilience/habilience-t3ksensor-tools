@@ -1,31 +1,23 @@
 #include "dialog.h"
-#include <QApplication>
-#include <QSharedMemory>
+#include "qsingleapplication/qtsingleapplication.h"
 
 const static QString UniqueID = "T3kUpgrade@Habilience";
 
 int main(int argc, char *argv[])
 {
-    QSharedMemory sharedMemory;
-    sharedMemory.setKey(UniqueID);
+    QtSingleApplication a(argc, argv);
+    QApplication::setQuitOnLastWindowClosed( true );
 
-    bool bIsRunning = false;
-    if (sharedMemory.attach())
-    {
-        bIsRunning = true;
-    }
-
-    if (!bIsRunning &&!sharedMemory.create(1))
-    {
-        bIsRunning = true;
-    }
-
-    if (bIsRunning)
-    {
-        return 0; // Exit already a process running
-    }
-    QApplication a(argc, argv);
     Dialog w;
+
+    QObject::connect( &a, &QtSingleApplication::messageReceived, &w, &Dialog::onHandleMessage );
+
+    if (a.isRunning())
+    {
+        a.sendMessage("");
+        return 0;
+    }
+
     w.show();
     
     return a.exec();

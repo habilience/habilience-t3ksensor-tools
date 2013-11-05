@@ -251,7 +251,7 @@ void QMainMenuWidget::UpdateInformation()
 
     QT3kUserData* pInst = QT3kUserData::GetInstance();
     pInst->SetFirmwareVersion( m_fMMVersion );
-    pInst->SetFirmwareVersion( m_strMMVersion );
+    pInst->SetFirmwareVersion( m_strMMVersion.left( m_strMMVersion.indexOf( ' ' ) ) );
     pInst->setIsSubCameraExist( m_mapCMVerInfo.size() != 0 );
     pInst->setCamCount( m_mapCMVerInfo.size() );
 }

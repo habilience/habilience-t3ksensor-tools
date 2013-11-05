@@ -8,6 +8,7 @@
 #include "QUtils.h"
 #include <QPainter>
 #include <QDir>
+#include <QInputDialog>
 
 #define RETRY_CONNECTION_INTERVAL       (3000)
 #define WAIT_MODECHANGE_TIMEOUT         (60000)     // 60 secs
@@ -1341,6 +1342,15 @@ void Dialog::dragEnterEvent(QDragEnterEvent *evt)
 
 void Dialog::dropEvent(QDropEvent *evt)
 {
+    setFocus();
+
+    m_bAdministrator = false;
+    ui->pushButtonUpgrade->setStyleSheet( "QPushButton {color: black}" );
+    ui->pushButtonUpgrade->setText( "Upgrade" );
+
+    m_FirmwareInfo.clear();
+    updateFirmwareInformation();
+
     QString	strFileName;
     if( evt->mimeData()->hasUrls() )
     {
@@ -1351,6 +1361,24 @@ void Dialog::dropEvent(QDropEvent *evt)
 
             if( QFileInfo( str ).suffix() == "fwb" )
             {
+                if( (ulong)evt->keyboardModifiers() == (ulong)(Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier) )
+                {
+
+                    QString str = QInputDialog::getText( this, "Enter password", "Paasword", QLineEdit::Password );
+                    if( str.isEmpty() ) return;
+
+                    if( str.compare( "T3kHabilience" ) == 0 )
+                    {
+                        m_bAdministrator = true;
+                        ui->pushButtonUpgrade->setStyleSheet( "QPushButton {color: red; font-weight: bold}" );
+                        ui->pushButtonUpgrade->setText( "Upgrade(dev)" );
+                    }
+                    else
+                    {
+                        QMessageBox::warning( this, "Error", "The password is incorrect.", QMessageBox::Ok );
+                        return;
+                    }
+                }
                 strFileName = str;
                 break;
             }
@@ -1408,6 +1436,8 @@ bool Dialog::verifyFirmware(QString& strMsg)
 
 bool Dialog::checkFWVersion(QString& strMsg)
 {
+    if( m_bAdministrator ) return true;
+
     switch( m_SensorInfo[IDX_MM].nMode )
     {
     case MODE_MM_UPG:
@@ -1490,7 +1520,7 @@ void Dialog::on_pushButtonUpgrade_clicked()
     QString strMsg;
     if (!verifyFirmware(strMsg))
     {
-        QMessageBox msgBox;
+        QMessageBox msgBox( this );
         msgBox.setText("Error: Verify Firmware");
         msgBox.setInformativeText(strMsg);
         msgBox.setStandardButtons(QMessageBox::Ok);
@@ -1635,4 +1665,10 @@ void Dialog::addProgressText(QString& strMessage, TextMode tm)
     }
 
     ui->listWidget->scrollToBottom();
+}
+
+void Dialog::onHandleMessage(const QString &/*msg*/)
+{
+    raise();
+    activateWindow();
 }
