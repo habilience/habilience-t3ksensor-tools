@@ -7,6 +7,7 @@
 
 #include "QT3kUserData.h"
 #include "QUtils.h"
+#include "QAutoRangeCompleteDialog.h"
 
 QAdvancedCalibrationWidget::QAdvancedCalibrationWidget(bool bDetection, QWidget *parent) :
     QDialog(parent), m_DetectionRange(this), m_BentAdjustment(this, this)
@@ -29,6 +30,7 @@ QAdvancedCalibrationWidget::QAdvancedCalibrationWidget(bool bDetection, QWidget 
     connect( &m_DetectionRange, &QAutoDetectionRange::updateWidget, this, &QAdvancedCalibrationWidget::onUpdateWidget );
     connect( &m_DetectionRange, &QAutoDetectionRange::updateWidgetRect, this, &QAdvancedCalibrationWidget::onUpdateWidgetRect );
     connect( &m_DetectionRange, &QAutoDetectionRange::finishDetectionRange, this, &QAdvancedCalibrationWidget::onFinishDetectionRange );
+    connect( &m_DetectionRange, &QAutoDetectionRange::showProgressDialog, this, &QAdvancedCalibrationWidget::onShowDetectionWaitDialog, Qt::QueuedConnection );
 
     connect( &m_BentAdjustment, &QBentAdjustment::updateWidget, this, &QAdvancedCalibrationWidget::onUpdateWidget );
     connect( &m_BentAdjustment, &QBentAdjustment::updateWidgetRect, this, &QAdvancedCalibrationWidget::onUpdateWidgetRect );
@@ -161,4 +163,11 @@ void QAdvancedCalibrationWidget::onFinishDetectionRange(bool bRet)
 void QAdvancedCalibrationWidget::onFinishBentAdjustment()
 {
     close();
+}
+
+void QAdvancedCalibrationWidget::onShowDetectionWaitDialog()
+{
+    QAutoRangeCompleteDialog AutoRangeCompleteDialog( this );
+    AutoRangeCompleteDialog.setModal( false );
+    AutoRangeCompleteDialog.exec();
 }

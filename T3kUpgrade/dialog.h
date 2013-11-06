@@ -136,6 +136,7 @@ protected:
 
     void queryInformation();
     void firmwareDownload();
+//    void firmwareDownload(ushort nIDX);
     void stopAllQueryInformationJobs();
     void stopAllFirmwareDownloadJobs();
 

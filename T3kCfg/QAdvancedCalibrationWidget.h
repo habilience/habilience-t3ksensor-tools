@@ -40,6 +40,7 @@ private slots:
     void onUpdateWidgetRect(QRect rc);
     void onFinishDetectionRange(bool bRet);
     void onFinishBentAdjustment();
+    void onShowDetectionWaitDialog();
 };
 
 #endif // QAdvancedCalibrationWidget_H

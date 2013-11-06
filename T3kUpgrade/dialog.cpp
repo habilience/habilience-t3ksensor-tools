@@ -491,6 +491,32 @@ void Dialog::stopFirmwareDownload()
     m_bIsStartFirmwareDownload = false;
 }
 
+//void Dialog::firmwareDownload(ushort nIDX)
+//{
+//    Q_ASSERT( nIDX >= IDX_MM && nIDX < IDX_MAX );
+
+//    stopAllFirmwareDownloadJobs();
+
+//    JobItem job;
+//    if ((m_SensorInfo[i].nMode != MODE_CM_IAP) && (m_SensorInfo[i].nMode != MODE_MM_IAP))
+//    {
+//        job.type = JOBF_MARK_IAP;
+//        job.subStep = SUB_QUERY_FINISH;
+//        job.which = m_SensorInfo[i].nWhich;
+//        m_JobListForFirmwareDownload.append( job );
+
+//        job.type = JOBF_RESET;
+//        job.subStep = SUB_QUERY_FINISH;
+//        job.which = PKT_ADDR_MM;
+//        m_JobListForFirmwareDownload.append( job );
+
+//        job.type = JOBF_WAIT_IAP_ALL;
+//        job.subStep = SUB_QUERY_FINISH;
+//        job.which = 0;
+//        m_JobListForFirmwareDownload.append( job );
+//    }
+//}
+
 void Dialog::firmwareDownload()
 {
     stopAllFirmwareDownloadJobs();

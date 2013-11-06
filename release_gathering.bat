@@ -6,8 +6,6 @@ mkdir %USERAPP%
 copy T3kCfg\release\T3kCfg.exe %USERAPP% /Y
 mkdir %USERAPP%\Languages
 copy T3kCfg\languages\*.txt %USERAPP%\Languages /Y
-mkdir %USERAPP%\T3kStateReport
-copy T3kCfg\T3kStateReport\*.* %USERAPP%\T3kStateReport /Y
 mkdir %USERAPP%\config
 copy T3kCfg\config\config.ini %USERAPP%\config /Y
 

@@ -1,11 +1,13 @@
 #ifndef QAUTODETECTIONRANGE_H
 #define QAUTODETECTIONRANGE_H
 
-#include <QObject>
 #include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 //#include "t3kcomdef.h"
+
+#include <QObject>
+#include <QPixmap>
 
 class QBorderStyleEdit;
 class QAutoDetectionRange : public QObject
@@ -37,7 +39,7 @@ private:
     QRect   m_rcArrow[4];
     QRect   m_rcProgress[4];
 
-    QPixmap*        m_pPixmap;
+    QPixmap m_pmDirection[4];
 
     QRequestHIDManager  m_RequestHIDManager;
 
@@ -93,7 +95,6 @@ signals:
 
 private slots:
     void onRequestFinish();
-    void onShowProgressDialog();
 };
 
 #endif // QAUTODETECTIONRANGE_H

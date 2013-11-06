@@ -24,6 +24,7 @@ protected:
     virtual void closeEvent(QCloseEvent *);
 
     virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
+    virtual void OnRSE(ResponsePart, ushort, const char *, long, bool, const char *);
 
     virtual void onChangeLanguage();
 
@@ -33,6 +34,8 @@ protected:
     QString m_strCamS1PosTrc;
     QString m_strCamS2PosTrc;
     QString m_strFactoryCalibration;
+
+    bool    m_bRSE;
 
 private:
     Ui::QAdvancedSettingWidget *ui;

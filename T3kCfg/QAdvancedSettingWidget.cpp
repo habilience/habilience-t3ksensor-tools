@@ -23,7 +23,21 @@ QAdvancedSettingWidget::QAdvancedSettingWidget(QWidget *parent) :
 
     connect( ui->BtnCancel, &QPushButton::clicked, this, &QDialog::close );
 
-    ui->BtnDefault->setVisible( QT3kUserData::GetInstance()->getFirmwareVersionStr().compare( MM_MIN_SUPPORT_USER_BENT_STR ) > 0 ? true : false );
+    T3kHandle* pHandle = QT3kUserData::GetInstance()->getT3kHandle();
+    int nRetry = 3;
+    bool bOK = false;
+    m_bRSE = false;
+    QString strCmd(sCam1 + cstrCamPosTrc + "?");
+    do
+    {
+        if (pHandle->SendCommand(strCmd.toUtf8().data(), false))
+        {
+            bOK = true;
+            break;
+        }
+    } while (--nRetry > 0);
+
+    ui->BtnDefault->setVisible( bOK && !m_bRSE && !m_strCam1PosTrc.isEmpty() );
 
     onChangeLanguage();
 }
@@ -41,7 +55,7 @@ void QAdvancedSettingWidget::closeEvent(QCloseEvent *)
 
 void QAdvancedSettingWidget::OnRSP(ResponsePart part, ushort, const char *, long, bool, const char *szCmd)
 {
-    if( !isVisible() ) return;
+    if( !winId() ) return;
 
     if( strstr( szCmd, cstrCamPosTrc ) == szCmd )
     {
@@ -70,6 +84,17 @@ void QAdvancedSettingWidget::OnRSP(ResponsePart part, ushort, const char *, long
     {
         QString strCmd( szCmd );
         m_strFactoryCalibration = strCmd.mid( strCmd.indexOf('=')+1 );
+    }
+}
+
+void QAdvancedSettingWidget::OnRSE(ResponsePart part, ushort, const char *, long, bool, const char *szCmd)
+{
+    if( !winId() ) return;
+
+    if( strstr( szCmd, cstrCamPosTrc ) == szCmd )
+    {
+        qDebug() << QString(szCmd);
+        m_bRSE = true;
     }
 }
 
@@ -111,6 +136,8 @@ void QAdvancedSettingWidget::on_BtnStart_clicked()
         ui->EditPassword->setFocus();
         return;
     }
+
+    hide();
 
     QAdvancedCalibrationWidget* pWidget = new QAdvancedCalibrationWidget( ui->ChkDetection->isChecked() );
     pWidget->setAttribute( Qt::WA_DeleteOnClose );

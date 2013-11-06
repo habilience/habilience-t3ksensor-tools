@@ -1,7 +1,5 @@
 #include "QAutoDetectionRange.h"
 
-#include <QPainter>
-#include <QTimerEvent>
 //#include "QShowMessageBox.h"
 //#include "QLogSystem.h"
 
@@ -11,12 +9,15 @@
 //#include "QSensorInitDataCfg.h"
 
 //#include "QMyApplication.h"
-#include "QAutoRangeCompleteDialog.h"
 #include "QCustomDefaultSensor.h"
 #include "QT3kUserData.h"
 #include "T3kBuzzerDef.h"
 #include "CfgCustomCmdDef.h"
 
+#include <QCoreApplication>
+#include <QPainter>
+#include <QTimerEvent>
+#include <QDir>
 
 #define MAX_TICK_COUNT      (400)
 
@@ -40,7 +41,26 @@ QAutoDetectionRange::QAutoDetectionRange(QObject *parent) :
     m_bChekcFinish = false;
 
     connect( &m_RequestHIDManager, &QRequestHIDManager::finish, this, &QAutoDetectionRange::onRequestFinish );
-    connect( this, &QAutoDetectionRange::showProgressDialog, this, &QAutoDetectionRange::onShowProgressDialog, Qt::QueuedConnection );
+
+    QString strConfigFolderPath( QCoreApplication::applicationDirPath() + "/config/" );
+    if( QDir(strConfigFolderPath).exists() &&
+            QFile::exists( strConfigFolderPath + "topleft.png" ) &&
+            QFile::exists( strConfigFolderPath + "topright.png" ) &&
+            QFile::exists( strConfigFolderPath + "bottomright.png" ) &&
+            QFile::exists( strConfigFolderPath + "bottomleft.png" ) )
+    {
+        m_pmDirection[0] = QPixmap( strConfigFolderPath + "topleft.png" );
+        m_pmDirection[1] = QPixmap( strConfigFolderPath + "topright.png" );
+        m_pmDirection[2] = QPixmap( strConfigFolderPath + "bottomright.png" );
+        m_pmDirection[3] = QPixmap( strConfigFolderPath + "bottomleft.png" );
+    }
+    else
+    {
+        m_pmDirection[0] = QPixmap( ":/T3kCfgRes/resources/PNG_DETECTION_LT.png" );
+        m_pmDirection[1] = QPixmap( ":/T3kCfgRes/resources/PNG_DETECTION_RT.png" );
+        m_pmDirection[2] = QPixmap( ":/T3kCfgRes/resources/PNG_DETECTION_RB.png" );
+        m_pmDirection[3] = QPixmap( ":/T3kCfgRes/resources/PNG_DETECTION_LB.png" );
+    }
 //    onChangeLanguage();
 }
 
@@ -84,31 +104,9 @@ void QAutoDetectionRange::drawMonitor(QPainter &p, QRect rcBody)
 
     p.save();
 
-    QString strPng;
-    switch( m_nAutoRangeStep )
-    {
-    case 0:
-        strPng = ":/T3kCfgRes/resources/PNG_DETECTION_LT.png";
-        break;
-    case 1:
-        strPng = ":/T3kCfgRes/resources/PNG_DETECTION_RT.png";
-        break;
-    case 2:
-        strPng = ":/T3kCfgRes/resources/PNG_DETECTION_RB.png";
-        break;
-    case 3:
-        strPng = ":/T3kCfgRes/resources/PNG_DETECTION_LB.png";
-        break;
-    default:
-        return;
-        break;
-    }
+    QRect rcTouchArea( rcBody.center().x()-m_pmDirection[m_nAutoRangeStep].width()/2, rcBody.center().y()-m_pmDirection[m_nAutoRangeStep].height()/2, m_pmDirection[m_nAutoRangeStep].width(), m_pmDirection[m_nAutoRangeStep].height() );
 
-    QPixmap pixmap( strPng );
-
-    QRect rcTouchArea( rcBody.center().x()-pixmap.width()/2, rcBody.center().y()-pixmap.height()/2, pixmap.width(), pixmap.height() );
-
-    p.drawPixmap( rcTouchArea, pixmap );
+    p.drawPixmap( rcTouchArea, m_pmDirection[m_nAutoRangeStep] );
 
 //    rcTouchArea.adjust( (int)(rcTouchArea.width()*0.0611), (int)(rcTouchArea.height()*0.0611), -(int)(rcTouchArea.width()*0.0611), -(int)(rcTouchArea.height()*32.72) );
 
@@ -588,11 +586,4 @@ void QAutoDetectionRange::onRequestFinish()
 {
     if( m_bChekcFinish )
         emit finishDetectionRange( true );
-}
-
-void QAutoDetectionRange::onShowProgressDialog()
-{
-    QAutoRangeCompleteDialog AutoRangeCompleteDialog( QT3kUserData::GetInstance()->getTopParent() );
-    AutoRangeCompleteDialog.setModal( false );
-    AutoRangeCompleteDialog.exec();
 }
