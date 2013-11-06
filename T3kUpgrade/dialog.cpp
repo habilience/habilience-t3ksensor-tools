@@ -1363,7 +1363,6 @@ void Dialog::dropEvent(QDropEvent *evt)
             {
                 if( (ulong)evt->keyboardModifiers() == (ulong)(Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier) )
                 {
-
                     QString str = QInputDialog::getText( this, "Enter password", "Paasword", QLineEdit::Password );
                     if( str.isEmpty() ) return;
 
