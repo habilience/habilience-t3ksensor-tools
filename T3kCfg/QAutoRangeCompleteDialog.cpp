@@ -16,13 +16,17 @@ QAutoRangeCompleteDialog::QAutoRangeCompleteDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    Qt::WindowFlags flags = Qt::CustomizeWindowHint|Qt::WindowStaysOnTopHint|Qt::Dialog;
+    Qt::WindowFlags flags = Qt::CustomizeWindowHint|Qt::Dialog;
+    setWindowModality( Qt::ApplicationModal );
+    setModal( true );
 
 #if defined(Q_OS_WIN)
     flags |= Qt::MSWindowsFixedSizeDialogHint;
 #endif
 
     setWindowFlags(flags);
+    setWindowModality( Qt::WindowModal );
+    setModal( true );
 
     m_TimerDummyProgress = 0;
     m_nTimerCount = 0;

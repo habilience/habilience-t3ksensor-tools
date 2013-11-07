@@ -9,11 +9,11 @@ QWarningWidget::QWarningWidget(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QWarningWidget)
 {
+    ui->setupUi(this);
+
     setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
     setWindowModality( Qt::WindowModal );
     setModal( true );
-
-    ui->setupUi(this);
 
     QFont ft( qApp->font() );
 #ifdef Q_OS_MAC

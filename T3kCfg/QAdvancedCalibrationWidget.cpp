@@ -168,6 +168,5 @@ void QAdvancedCalibrationWidget::onFinishBentAdjustment()
 void QAdvancedCalibrationWidget::onShowDetectionWaitDialog()
 {
     QAutoRangeCompleteDialog AutoRangeCompleteDialog( this );
-    AutoRangeCompleteDialog.setModal( false );
     AutoRangeCompleteDialog.exec();
 }

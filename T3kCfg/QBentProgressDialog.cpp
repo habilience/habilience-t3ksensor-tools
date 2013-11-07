@@ -15,7 +15,7 @@ QBentProgressDialog::QBentProgressDialog(BentItem& item, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    Qt::WindowFlags flags = Qt::CustomizeWindowHint|Qt::WindowStaysOnTopHint|Qt::Dialog;
+    Qt::WindowFlags flags = Qt::FramelessWindowHint;
 
 #if defined(Q_OS_WIN)
     flags |= Qt::MSWindowsFixedSizeDialogHint;
