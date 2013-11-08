@@ -1389,7 +1389,16 @@ void Dialog::dropEvent(QDropEvent *evt)
             {
                 if( (ulong)evt->keyboardModifiers() == (ulong)(Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier) )
                 {
-                    QString str = QInputDialog::getText( this, "Enter password", "Paasword", QLineEdit::Password );
+                    QInputDialog dlg( this );
+                    dlg.setWindowModality( Qt::WindowModal );
+                    dlg.setModal( true );
+                    dlg.setWindowTitle( "Enter password" );
+                    dlg.setLabelText( "Paasword" );
+                    dlg.setTextEchoMode( QLineEdit::Password );
+                    installEventFilter( &dlg );
+                    if( dlg.exec() == QInputDialog::Rejected ) return;
+                    removeEventFilter( &dlg );
+                    QString str = dlg.textValue();
                     if( str.isEmpty() ) return;
 
                     if( str.compare( "T3kHabilience" ) == 0 )
