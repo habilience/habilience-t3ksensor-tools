@@ -1316,8 +1316,8 @@ void QBentAdjustment::onAdjustmentFinish()
             strCamPos += QString("%1").arg(ch, 2, 16, QChar('0')); // direction:2 error:2 type:4
             for ( int ni = 0; ni < ADJUSTMENT_STEP; ni++ ) // bent_adjustment trc
             {
-                ulong dwOs = *(ulong*)(&item.fObcS[s_PosXY[nPosXYSel][ni].idx]);
-                ulong dwOe = *(ulong*)(&item.fObcE[s_PosXY[nPosXYSel][ni].idx]);
+                ulong dwOs = *(uint*)(&item.fObcS[s_PosXY[nPosXYSel][ni].idx]);
+                ulong dwOe = *(uint*)(&item.fObcE[s_PosXY[nPosXYSel][ni].idx]);
                 strCamPos += QString("%1%2").arg(dwOs, 8, 16, QChar('0')).arg(dwOe, 8, 16, QChar('0'));
             }
             m_vSendCmd.push_back( getCameraPrefix(item.nCameraIndex) + cstrCamPosUserTrc +

@@ -2747,8 +2747,8 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
         {
             if ( !s_PosXY[nPosXYSel][ni].use )
                 continue;
-            ulong dwOs = *(ulong*)(&item.fObcS[s_PosXY[nPosXYSel][ni].idx]);
-            ulong dwOe = *(ulong*)(&item.fObcE[s_PosXY[nPosXYSel][ni].idx]);
+            ulong dwOs = *(uint*)(&item.fObcS[s_PosXY[nPosXYSel][ni].idx]);
+            ulong dwOe = *(uint*)(&item.fObcE[s_PosXY[nPosXYSel][ni].idx]);
             strCamPos += QString("%1%2").arg(dwOs, 8, 16, QChar('0')).arg(dwOe, 8, 16, QChar('0'));
         }
         ui->cmdAsyncMngr->insertCommand( getCameraPrefix(item.nCameraIndex) + cstrCamPosTrc +
