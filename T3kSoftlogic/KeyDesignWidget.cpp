@@ -95,7 +95,7 @@ QKeyDesignWidget::QKeyDesignWidget(QWidget *parent) :
 
     if( parent == NULL )
     {
-        setWindowFlags( Qt::FramelessWindowHint );
+        setWindowFlags( Qt::Tool | Qt::FramelessWindowHint );
         setMouseTracking( true );
 
         m_eScreenMode = ScreenModeKeyDesign;

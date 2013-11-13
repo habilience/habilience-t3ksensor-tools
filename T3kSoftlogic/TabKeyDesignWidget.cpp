@@ -173,7 +173,7 @@ void TabKeyDesignWidget::on_BtnKeydesign_clicked()
     m_DesignCanvasWidget.setFont( font() );
     m_DesignCanvasWidget.setGeometry( rcPrimary );
 
-    m_DesignCanvasWidget.showFullScreen();
+    m_DesignCanvasWidget.show();
     m_DesignCanvasWidget.raise();
     m_DesignCanvasWidget.activateWindow();
 }
