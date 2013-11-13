@@ -6,6 +6,7 @@
 #include <QTimerEvent>
 #include <QKeyEvent>
 #include <QWheelEvent>
+#include <QDesktopWidget>
 #include "QShowMessageBox.h"
 #include "QLogSystem.h"
 #include "QT3kDevice.h"
@@ -575,6 +576,26 @@ void QSideviewDialog::timerEvent(QTimerEvent *evt)
         QString strPrefix = getCameraPrefix(m_nCurrentCameraIndex);
         QT3kDevice::instance()->sendCommand( strPrefix + cstrDetectionLine + "?", true );
     }
+}
+
+void QSideviewDialog::showEvent(QShowEvent *)
+{
+    QDesktopWidget DeskWidget;
+    int nPrimary = DeskWidget.primaryScreen();
+    const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
+
+    setGeometry( rcPrimaryMon );
+
+#ifdef Q_OS_WIN
+    SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
+    SetForegroundWindow( (HWND)winId() );
+#else
+    raise();
+    activateWindow();
+#endif
+#ifdef Q_OS_MAC
+    cursor().setPos( rcPrimaryMon.center() );
+#endif
 }
 
 void QSideviewDialog::closeEvent(QCloseEvent *evt)

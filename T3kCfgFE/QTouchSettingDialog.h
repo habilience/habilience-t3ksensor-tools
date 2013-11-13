@@ -24,6 +24,7 @@ private:
 
 protected:
     virtual void paintEvent(QPaintEvent *);
+    virtual void showEvent(QShowEvent *);
     virtual void closeEvent(QCloseEvent *);
 
     // override QLangManager::ILangChangeNotify

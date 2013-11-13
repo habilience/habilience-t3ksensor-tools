@@ -45,6 +45,7 @@ private:
 protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void timerEvent(QTimerEvent *evt);
+    virtual void showEvent(QShowEvent *);
     virtual void closeEvent(QCloseEvent *);
 
     // override QEventRedirection::IEventListener

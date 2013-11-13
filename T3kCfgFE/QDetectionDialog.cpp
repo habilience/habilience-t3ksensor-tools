@@ -4,6 +4,7 @@
 #include "dialog.h"
 #include <QPainter>
 #include <QCloseEvent>
+#include <QDesktopWidget>
 #include "QShowMessageBox.h"
 #include "QLogSystem.h"
 #include "QT3kDevice.h"
@@ -339,6 +340,26 @@ void QDetectionDialog::drawArrow(QPainter& p)
         delete[] pArrowMirror;
 
     p.restore();
+}
+
+void QDetectionDialog::showEvent(QShowEvent *)
+{
+    QDesktopWidget DeskWidget;
+    int nPrimary = DeskWidget.primaryScreen();
+    const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
+
+    setGeometry( rcPrimaryMon );
+
+#ifdef Q_OS_WIN
+    SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
+    SetForegroundWindow( (HWND)winId() );
+#else
+    raise();
+    activateWindow();
+#endif
+#ifdef Q_OS_MAC
+    cursor().setPos( rcPrimaryMon.center() );
+#endif
 }
 
 void QDetectionDialog::closeEvent(QCloseEvent *evt)

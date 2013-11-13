@@ -3,6 +3,7 @@
 #include "dialog.h"
 #include <QPainter>
 #include <QCloseEvent>
+#include <QDesktopWidget>
 
 #include "QUtils.h"
 #include "QT3kDevice.h"
@@ -729,6 +730,26 @@ void QBentAdjustmentDialog::enableAllControls(bool bEnable)
 void QBentAdjustmentDialog::on_btnClose_clicked()
 {
     close();
+}
+
+void QBentAdjustmentDialog::showEvent(QShowEvent *)
+{
+    QDesktopWidget DeskWidget;
+    int nPrimary = DeskWidget.primaryScreen();
+    const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
+
+    setGeometry( rcPrimaryMon );
+
+#ifdef Q_OS_WIN
+    SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
+    SetForegroundWindow( (HWND)winId() );
+#else
+    raise();
+    activateWindow();
+#endif
+#ifdef Q_OS_MAC
+    cursor().setPos( rcPrimaryMon.center() );
+#endif
 }
 
 void QBentAdjustmentDialog::timerEvent(QTimerEvent *evt)

@@ -149,6 +149,7 @@ protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void closeEvent(QCloseEvent *);
     virtual void timerEvent(QTimerEvent *);
+    virtual void showEvent(QShowEvent *);
 
     // override QLangManager::ILangChangeNotify
     virtual void onChangeLanguage();

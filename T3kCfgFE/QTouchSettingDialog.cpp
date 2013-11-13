@@ -3,6 +3,7 @@
 #include "dialog.h"
 #include <QPainter>
 #include <QCloseEvent>
+#include <QDesktopWidget>
 #include "QT3kDevice.h"
 
 #include "QLogSystem.h"
@@ -416,6 +417,26 @@ void QTouchSettingDialog::drawVertArrow( QPainter& p, QPoint pt1, QPoint pt2, QP
 
     p.setPen( guidePen );
     p.drawLine( pt3, pt4 );
+}
+
+void QTouchSettingDialog::showEvent(QShowEvent *)
+{
+    QDesktopWidget DeskWidget;
+    int nPrimary = DeskWidget.primaryScreen();
+    const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
+
+    setGeometry( rcPrimaryMon );
+
+#ifdef Q_OS_WIN
+    SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
+    SetForegroundWindow( (HWND)winId() );
+#else
+    raise();
+    activateWindow();
+#endif
+#ifdef Q_OS_MAC
+    cursor().setPos( rcPrimaryMon.center() );
+#endif
 }
 
 void QTouchSettingDialog::closeEvent(QCloseEvent *evt)
