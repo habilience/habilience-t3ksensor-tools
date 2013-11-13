@@ -198,7 +198,7 @@ void TabLogicDesignWidget::on_BtnLogicdesign_clicked()
     QRect rcSelMonitor( desktop.screenGeometry(desktop.primaryScreen()) );
 
     m_LogicDesigner.setGeometry( rcSelMonitor );
-    m_LogicDesigner.show();
+    m_LogicDesigner.showFullScreen();
 }
 
 void TabLogicDesignWidget::on_BtnApply_clicked()

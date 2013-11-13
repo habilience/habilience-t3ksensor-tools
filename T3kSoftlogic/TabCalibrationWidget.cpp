@@ -1474,7 +1474,7 @@ void TabCalibrationWidget::on_BtnTest_clicked()
     m_wndTestCanvas.setGeometry( rcSelMonitor );
     m_wndTestCanvas.setScreenMode( QKeyDesignWidget::ScreenModeTest );
     m_wndTestCanvas.setFont( font() );
-    m_wndTestCanvas.show();
+    m_wndTestCanvas.showFullScreen();
     m_wndTestCanvas.setFocus();
 
     if( pT3kHandle )

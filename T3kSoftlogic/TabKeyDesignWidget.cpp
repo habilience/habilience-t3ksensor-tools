@@ -29,7 +29,7 @@ TabKeyDesignWidget::TabKeyDesignWidget(QWidget* parent /*=NULL*/) :
     ui->TableGPIO->verticalHeader()->setSectionResizeMode( QHeaderView::Fixed );
 
     ui->TableGPIO->setColumnWidth( 0, 100 );
-    ui->TableGPIO->setColumnWidth( 1, 120 );
+    ui->TableGPIO->setColumnWidth( 1, ui->TableGPIO->width()-110 );
 
     connect( &m_DesignCanvasWidget, &QKeyDesignWidget::closeWidget, this, &TabKeyDesignWidget::updatePreview );
 }
@@ -173,7 +173,7 @@ void TabKeyDesignWidget::on_BtnKeydesign_clicked()
     m_DesignCanvasWidget.setFont( font() );
     m_DesignCanvasWidget.setGeometry( rcPrimary );
 
-    m_DesignCanvasWidget.show();
+    m_DesignCanvasWidget.showFullScreen();
     m_DesignCanvasWidget.raise();
     m_DesignCanvasWidget.activateWindow();
 }
