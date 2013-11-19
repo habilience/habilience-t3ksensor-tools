@@ -149,6 +149,7 @@ TEXT_CHECKBOX_DETECTION = Дальность обнаружения
 TEXT_ID = 
 BTN_START = начало
 MSG_INCORRECT_ID = 
+MSG_ESCAPE = Нажмите Esc чтобы выйти.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Включить/выключить сенсорный экран

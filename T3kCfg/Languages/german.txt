@@ -149,6 +149,7 @@ TEXT_CHECKBOX_DETECTION = Entdeckung Reichweite
 TEXT_ID = 
 BTN_START = Starten
 MSG_INCORRECT_ID = 
+MSG_ESCAPE = Drücken Sie ESC um zu beenden.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Aktivierung/Deaktivierung der Berührungsfunktion

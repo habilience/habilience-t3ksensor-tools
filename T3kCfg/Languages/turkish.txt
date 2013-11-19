@@ -149,6 +149,7 @@ TEXT_CHECKBOX_DETECTION = Algılama aralığı
 TEXT_ID = 
 BTN_START = Başlangıç
 MSG_INCORRECT_ID = 
+MSG_ESCAPE = Çıkmak için ESC tuşuna basın.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Dokunmatik Ekran Aç/Kapa

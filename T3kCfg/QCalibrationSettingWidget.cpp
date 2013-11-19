@@ -165,8 +165,8 @@ void QCalibrationSettingWidget::showEvent(QShowEvent *evt)
     RequestSensorData( false );
     setFocusPolicy( Qt::StrongFocus );
 
-    ui->BtnAdvanced->setVisible( QConfigData::instance()->getData( "ADVANCED", "USER_ADJUSTMENT", QVariant(false) ).toBool() &&
-                                 !QConfigData::instance()->getData( "ADVANCED", "ID", "" ).toString().isEmpty() );
+    QString str = QConfigData::instance()->getData( "ADVANCED", "USER_ADJUSTMENT", "" ).toString();
+    ui->BtnAdvanced->setVisible( str.isEmpty() ? false : str.toInt() == 1 ? true : false );
 
     QWidget::showEvent(evt);
 }

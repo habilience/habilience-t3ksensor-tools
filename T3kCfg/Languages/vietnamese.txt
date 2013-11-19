@@ -149,6 +149,7 @@ TEXT_CHECKBOX_DETECTION = Phạm vi phát hiện
 TEXT_ID = 
 BTN_START = Bắt đầu
 MSG_INCORRECT_ID = 
+MSG_ESCAPE = Nhấn ESC để thoát.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Bật/tắt màn hình cảm ứng

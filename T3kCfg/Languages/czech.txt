@@ -149,6 +149,7 @@ TEXT_CHECKBOX_DETECTION = Rozsah detekce
 TEXT_ID = 
 BTN_START = Začátek
 MSG_INCORRECT_ID = 
+MSG_ESCAPE = Stiskněte klávesu ESC pro ukončení.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Zapnout / vypnout dotykové ovládání

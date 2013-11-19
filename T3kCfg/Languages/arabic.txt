@@ -149,6 +149,7 @@ TEXT_CHECKBOX_DETECTION = نطاق الكشف
 TEXT_ID = 
 BTN_START = بداية
 MSG_INCORRECT_ID = 
+MSG_ESCAPE = اضغط ESC للخروج.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = وجود الاستخدام اللمس

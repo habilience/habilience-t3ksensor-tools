@@ -149,6 +149,7 @@ TEXT_CHECKBOX_DETECTION = Detection Range
 TEXT_ID = ID
 BTN_START = Start
 MSG_INCORRECT_ID = The ID is incorrect.
+MSG_ESCAPE = Press ESC to exit.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Turn on/off Touch Screen

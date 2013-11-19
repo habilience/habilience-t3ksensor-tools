@@ -8,6 +8,8 @@
 #include "QT3kUserData.h"
 #include "QUtils.h"
 #include "QAutoRangeCompleteDialog.h"
+#include "QConfigData.h"
+
 
 QAdvancedCalibrationWidget::QAdvancedCalibrationWidget(bool bDetection, QWidget *parent) :
     QDialog(parent), m_DetectionRange(this), m_BentAdjustment(this, this)
@@ -35,6 +37,8 @@ QAdvancedCalibrationWidget::QAdvancedCalibrationWidget(bool bDetection, QWidget 
     connect( &m_BentAdjustment, &QBentAdjustment::updateWidget, this, &QAdvancedCalibrationWidget::onUpdateWidget );
     connect( &m_BentAdjustment, &QBentAdjustment::updateWidgetRect, this, &QAdvancedCalibrationWidget::onUpdateWidgetRect );
     connect( &m_BentAdjustment, &QBentAdjustment::finishBentAdjustment, this, &QAdvancedCalibrationWidget::onFinishBentAdjustment );
+
+    onChangeLanguage();
 }
 
 QAdvancedCalibrationWidget::~QAdvancedCalibrationWidget()
@@ -117,7 +121,33 @@ void QAdvancedCalibrationWidget::paintEvent(QPaintEvent *)
         break;
     }
 
+    QFont ft( font() );
+    ft.setPixelSize( rcClient.height() / 30 );
+    ft.setWeight(QFont::Black);
+
+    painter.setFont( ft );
+    QFontMetricsF fm( ft );
+    qreal dW = fm.width( m_strEscapeMsg );
+    qreal dH = fm.height();
+    QRectF rcText( rcClient.center().x() - (dW / 2.f),
+                  rcClient.height() / 4 - (dH / 2.f),
+                  dW, dH );
+
+    QPen penText( Qt::SolidLine );
+    penText.setColor( QColor(160,160,160) );
+    painter.setPen( penText );
+    painter.drawText( rcText, m_strEscapeMsg, QTextOption(Qt::AlignCenter) );
+
     painter.end();
+}
+
+void QAdvancedCalibrationWidget::onChangeLanguage()
+{
+    if( !winId() ) return;
+
+    QLangRes& Res = QLangManager::instance()->getResource();
+
+    m_strEscapeMsg = Res.getResString( QString::fromUtf8("ADVANCED"), QString::fromUtf8("MSG_ESCAPE") );
 }
 
 void QAdvancedCalibrationWidget::enterSettings()

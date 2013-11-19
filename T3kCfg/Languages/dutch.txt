@@ -149,6 +149,7 @@ TEXT_CHECKBOX_DETECTION = Detectiebereik
 TEXT_ID = 
 BTN_START = Starten
 MSG_INCORRECT_ID = 
+MSG_ESCAPE = Druk op ESC om te verlaten.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Touch aan/uit

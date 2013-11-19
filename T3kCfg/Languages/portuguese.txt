@@ -149,6 +149,7 @@ TEXT_CHECKBOX_DETECTION = Faixa de detecção
 TEXT_ID = 
 BTN_START = Começar
 MSG_INCORRECT_ID = 
+MSG_ESCAPE = Pressione a tecla ESC para sair.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Ativar / desativar o toque

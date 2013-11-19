@@ -149,6 +149,7 @@ TEXT_CHECKBOX_DETECTION = Rango de detección
 TEXT_ID = 
 BTN_START = Iniciar
 MSG_INCORRECT_ID = 
+MSG_ESCAPE = Pulse Esc para salir.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Táctil o no táctil

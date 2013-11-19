@@ -3,11 +3,12 @@
 
 #include "QAutoDetectionRange.h"
 #include "QBentAdjustment.h"
+#include "QLangManager.h"
 
 #include <QDialog>
 
 
-class QAdvancedCalibrationWidget : public QDialog
+class QAdvancedCalibrationWidget : public QDialog, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -21,6 +22,8 @@ protected:
     virtual void keyPressEvent(QKeyEvent *);
     virtual void paintEvent(QPaintEvent *);
 
+    virtual void onChangeLanguage();
+
     void enterSettings();
 
 protected:
@@ -31,6 +34,8 @@ protected:
 
     enum SettingPart { spDetectionRange, spBent };
     SettingPart                 m_eCurrentPart;
+
+    QString                     m_strEscapeMsg;
 
 signals:
     void closeWidget();

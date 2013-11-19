@@ -39,6 +39,12 @@ QAdvancedSettingWidget::QAdvancedSettingWidget(QWidget *parent) :
 
     ui->BtnDefault->setVisible( bOK && !m_bRSE && !m_strCam1PosTrc.isEmpty() );
 
+    if( QConfigData::instance()->getData("ADVANCED", "ID", "").toString().isEmpty() )
+    {
+        ui->LbPassword->setVisible( false );
+        ui->EditPassword->setVisible( false );
+    }
+
     onChangeLanguage();
 }
 
@@ -118,23 +124,26 @@ void QAdvancedSettingWidget::onChangeLanguage()
 
 void QAdvancedSettingWidget::on_BtnStart_clicked()
 {
-    QString strKeyCode = QConfigData::instance()->getData("ADVANCED", "ID", "").toString();
-    QByteArray aryB = strKeyCode.toUtf8();
-    for ( int ni = aryB.length() - 1; ni >= 0; ni-- )
+    if( ui->EditPassword->isVisible() )
     {
-       char b = aryB[ni];
-       if ( b >= 33 && b <= 126 )
-       {
-           b = (((b - 33) + 1) % 94) + 33;
-           aryB[ni] = b;
-       }
-    }
-    strKeyCode = aryB;
-    if ( strKeyCode.compare( ui->EditPassword->text(), Qt::CaseSensitive ) != 0 )
-    {
-        QMessageBox::warning( this, "Error", QLangManager::instance()->getResource().getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("MSG_INCORRECT_ID")), QMessageBox::Ok );
-        ui->EditPassword->setFocus();
-        return;
+        QString strKeyCode = QConfigData::instance()->getData("ADVANCED", "ID", "").toString();
+        QByteArray aryB = strKeyCode.toUtf8();
+        for ( int ni = aryB.length() - 1; ni >= 0; ni-- )
+        {
+           char b = aryB[ni];
+           if ( b >= 33 && b <= 126 )
+           {
+               b = (((b - 33) + 1) % 94) + 33;
+               aryB[ni] = b;
+           }
+        }
+        strKeyCode = aryB;
+        if ( strKeyCode.compare( ui->EditPassword->text(), Qt::CaseSensitive ) != 0 )
+        {
+            QMessageBox::warning( this, "Error", QLangManager::instance()->getResource().getResString(QString::fromUtf8("ADVANCED"), QString::fromUtf8("MSG_INCORRECT_ID")), QMessageBox::Ok );
+            ui->EditPassword->setFocus();
+            return;
+        }
     }
 
     hide();

@@ -149,6 +149,7 @@ TEXT_CHECKBOX_DETECTION = Plage de détection
 TEXT_ID = 
 BTN_START = Commencer
 MSG_INCORRECT_ID = 
+MSG_ESCAPE = Appuyez sur Echap pour quitter.
 
 [SETTING]
 TITLE_CAPTION_TOUCH_ENABLE = Activer/Désactiver l'écran tactile
