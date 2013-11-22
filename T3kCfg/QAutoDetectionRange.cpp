@@ -233,6 +233,9 @@ void QAutoDetectionRange::enterAutoRangeSetting()
 
     m_RequestHIDManager.Stop();
 
+    m_RequestHIDManager.AddItem( "mode=", "detection", QRequestHIDManager::CM1 );
+    m_RequestHIDManager.AddItem( "mode=", "detection", QRequestHIDManager::CM2 );
+
     m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(0) + "," + QString::number(0xffff), QRequestHIDManager::CM1 );
     m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(0) + "," + QString::number(0xffff), QRequestHIDManager::CM2 );
 

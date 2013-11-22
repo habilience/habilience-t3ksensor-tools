@@ -11,11 +11,15 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = T3kUpgrade
 CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
 
+CONFIG += static staticlib
+
 TEMPLATE = app
 
-#CONFIG += static staticlib
-
 DEFINES += USE_T3K_STATIC_LIBS QUAZIP_STATIC
+
+linux-g++|linux-g++-32|linux-g++-64:DEFINES += OS_LINUX
+
+macx:DEFINES += OS_MAC
 
 CONFIG(debug, debug|release):DEFINES += _DEBUG
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
@@ -65,8 +69,7 @@ linux-g++-32:QMAKE_TARGET.arch = x86
 linux-g++-64:QMAKE_TARGET.arch = x86_64
 
 linux-g++ { # depend on Qt Creator's setting
-    CONFIG += static staticlib
-    DEFINES += OS_LINUX
+    QMAKE_RPATHDIR += ./ /usr/share/T3kShare/t3kupgrade/lib
     contains(QMAKE_TARGET.arch, x86_64):{
         message( "building for 64bit" );
         CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs_x64/debug/
@@ -108,8 +111,7 @@ linux-g++ { # depend on Qt Creator's setting
 }
 
 linux-g++-32 { # generic g++ 32bit compiler
-    CONFIG += static staticlib
-    DEFINES += OS_LINUX
+    QMAKE_RPATHDIR += ./ /usr/share/T3kShare/t3kupgrade/lib
     message( "building for 32bit" );
     CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs/debug/
     CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs/debug/
@@ -129,8 +131,7 @@ linux-g++-32 { # generic g++ 32bit compiler
     }
 }
 linux-g++-64 { # generic g++ 64bit compiler
-    CONFIG += static staticlib
-    DEFINES += OS_LINUX
+    QMAKE_RPATHDIR += ./ /usr/share/T3kShare/t3kupgrade/lib
     message( "building for 64bit" );
     CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs_x64/debug/
     CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs_x64/debug/
