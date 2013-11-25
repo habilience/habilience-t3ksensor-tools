@@ -84,6 +84,8 @@ QMainMenuWidget::QMainMenuWidget(T3kHandle*& pHandle, QWidget *parent) :
     // usbconfigmode
     ui->BtnMainSoftkey->setVisible(false);
 
+    connect( &m_RequestSensorData, &QRequestHIDManager::finish, this, &QMainMenuWidget::onRequestFinish, Qt::QueuedConnection );
+
     onChangeLanguage();
 }
 
@@ -210,6 +212,14 @@ void QMainMenuWidget::on_BtnMainGeneral_clicked()
 void QMainMenuWidget::on_BtnMainSoftkey_clicked()
 {
     emit ShowMenuEvent( (int)MenuSoftkeySetting );
+}
+
+void QMainMenuWidget::onRequestFinish()
+{
+    if( m_mapCMVerInfo.size() < 2 )
+    {
+        RequestInformation();
+    }
 }
 
 void QMainMenuWidget::UpdateInformation()
@@ -465,11 +475,11 @@ void QMainMenuWidget::OnRSE(ResponsePart Part, ushort /*nTickTime*/, const char 
         m_RequestSensorData.RemoveItem( cstrFirmwareVersion, (QRequestHIDManager::eRequestPart)Part );
         m_RequestSensorData.RemoveItem( cstrAdminSettingTime, (QRequestHIDManager::eRequestPart)Part );
 
-        if( Part != CM1_1 && Part != CM2_1 )
-        {
-            CMVerInfo info = m_mapCMVerInfo.value( Part );
-            m_mapCMVerInfo.insert( Part, info );
-        }
+//        if( Part != CM1_1 && Part != CM2_1 )
+//        {
+//            CMVerInfo info = m_mapCMVerInfo.value( Part );
+//            m_mapCMVerInfo.insert( Part, info );
+//        }
 
         UpdateInformation();
     }
@@ -477,12 +487,8 @@ void QMainMenuWidget::OnRSE(ResponsePart Part, ushort /*nTickTime*/, const char 
 
 void QMainMenuWidget::showEvent(QShowEvent *evt)
 {
-    if( evt->type() == QEvent::Show )
-    {
-        m_mapCMVerInfo.clear();
-
-        RequestInformation();
-    }
+    m_mapCMVerInfo.clear();
+    RequestInformation();
 
     QWidget::showEvent(evt);
 }

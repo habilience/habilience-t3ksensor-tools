@@ -928,11 +928,6 @@ void T3kCfgWnd::onShowMenuEvent( int nMenu )
     ui->SWMenu->slideInIdx( nMenu );
 
     m_pMenuWidget->SetMenuButton( nMenu );
-
-    if( ui->SWMenu->currentIndex() == nMenu )
-    {
-        OnFinishAnimationMenu();
-    }
 }
 
 void T3kCfgWnd::OnFinishAnimationMenu()
@@ -953,7 +948,11 @@ void T3kCfgWnd::ShowContentsMenu()
 
 void T3kCfgWnd::HideContentsMenu()
 {
-    onShowMenuEvent( (int)MenuHome );
+    ShowMainMenu( false );
+    m_pMenuWidget->hide();
+    ui->SWMenu->setCurrentIndex( 0 );
+    m_pMenuWidget->SetMenuButton( 0 );
+
     m_pMainWidget->hide();
 }
 

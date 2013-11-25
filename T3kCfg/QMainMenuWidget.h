@@ -71,6 +71,7 @@ private slots:
     void on_BtnMainSensor_clicked();
     void on_BtnMainGeneral_clicked();
     void on_BtnMainSoftkey_clicked();
+    void onRequestFinish();
 };
 
 #endif // QMAINMENUWIDGET_H
