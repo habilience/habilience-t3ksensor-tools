@@ -162,12 +162,13 @@ bool CHIDCmd::OnCommand( char * cmd, bool * pbSysCmd )
                 QByteArray ba( file.readLine() );
                 TextOutRuntime( ba.data() );
             }
+            TextOutRuntime("\r\n");
             file.close();
         }
     }
     else if( strcmp(cmd, cstrCls) == 0 )
     {
-        system("cls");
+        system(cstrCls);
     }
     else if( strcmp(cmd, cstrExit) == 0 )
     {

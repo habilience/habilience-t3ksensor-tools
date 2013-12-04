@@ -15,7 +15,7 @@ protected:
         qint64 offset = (qint64)(T*)1 - (qint64)(QSingleton<T>*)(T*)1;
         m_pSingleton = (T*)( (qint64)this + offset );
         qDebug( "create singleton: %p", m_pSingleton );
-        std::atexit( deleteInstance );
+        atexit( deleteInstance );
     }
     ~QSingleton()
     {

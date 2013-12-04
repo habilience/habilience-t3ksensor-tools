@@ -17,6 +17,8 @@
 
 #ifdef Q_OS_WIN
 #include <winsock2.h>
+#elif defined(Q_OS_MAC)
+#include <unistd.h>
 #else
 #include <netdb.h>
 #include <sys/socket.h>

@@ -1,5 +1,5 @@
-export QMAKE=~/Desktop/qt-everywhere-opensource-src-5.1.1/qtbase/bin
+export QMAKE=~/Desktop/qt-everywhere-opensource-src-5.2.0-rc1/qtbase/bin
 
 make clean -w
-$QMAKE/qmake ./T3k.pro -r -spec macx-g++ CONFIG+=release
+$QMAKE/qmake ./T3k.pro -r -spec macx-clang CONFIG+=release
 make -j8
