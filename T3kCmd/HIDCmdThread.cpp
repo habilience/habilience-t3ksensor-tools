@@ -426,8 +426,14 @@ bool CHIDCmd::SendCommand( char * szCmd )
         {
             for( int i=0; i<strMode.length(); i++ )
             {
-                if( strMode.at(i) == cstrHidModeChar[i] )
-                    nInstantMode |= (0x01 <<i);
+                for( int j=0; j<sizeof(cstrHidModeChar); j++ )
+                {
+                    if( strMode.at(i) == cstrHidModeChar[j] )
+                    {
+                        nInstantMode |= (0x01 <<j);
+                        break;
+                    }
+                }
             }
 
             strCmd = strCmd.remove( 0, nP + 1 );
