@@ -186,7 +186,7 @@ void QDetectionGraphWidget::drawIRD( QPainter& p, QRect rcBody )
     QPainterPath gpRLine;
     bool bGpRLineMoveTo = true;
 
-    if ( false )//m_CrackInfo.bDisplay )
+    if ( m_CrackInfo.bDisplay )
     {
         int nLeft = m_nRangeLeft * m_nIRD / 0xffff;
         int nRight = m_nRangeRight * m_nIRD / 0xffff;
