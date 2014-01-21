@@ -40,10 +40,10 @@ public:
     QImage*		pIconImage;
 };
 
-#include "QEditActionEDWnd.h"
-#include "QEditAction2WDWnd.h"
-#include "QEditAction4WDWnd.h"
-#include "QEditActionWnd.h"
+#include "ui/QEditActionEDWnd.h"
+#include "ui/QEditAction2WDWnd.h"
+#include "ui/QEditAction4WDWnd.h"
+#include "ui/QEditActionWnd.h"
 
 class QMouseMappingTable : public QLabel, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
 {

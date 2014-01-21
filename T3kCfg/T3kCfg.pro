@@ -195,10 +195,10 @@ SOURCES += main.cpp\
     ../common/ui/QColorTabWidget.cpp \
     ../common/ui/Q2ColorTabWidget.cpp \
     ../common/ui/QGestureMappingTable.cpp \
-    ../common/ui/QEditActionWnd.h \
-    ../common/ui/QEditAction2WDWnd.h \
-    ../common/ui/QEditAction4WDWnd.h \
-    ../common/ui/QEditActionEDWnd.h \
+    ../common/ui/QEditActionWnd.cpp \
+    ../common/ui/QEditAction2WDWnd.cpp \
+    ../common/ui/QEditAction4WDWnd.cpp \
+    ../common/ui/QEditActionEDWnd.cpp \
     ../common/fe/QCalcCamValue.cpp \
     ../common/fe/QPointClipper.cpp \
     QMouseSettingWidget.cpp \

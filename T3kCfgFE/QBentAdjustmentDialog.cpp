@@ -2728,7 +2728,7 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
         ui->cmdAsyncMngr->insertCommand( strCmd );
     }
 
-    QString strHex, strCamPos;
+    QString strCamPos;
     for ( int nI=0 ; nI<m_BentItemArray.size() ; nI++ )
     {
         const BentItem& item = m_BentItemArray.at(nI);

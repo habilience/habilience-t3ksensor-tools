@@ -197,11 +197,11 @@ void QDetectionGraphWidget::drawIRD( QPainter& p, QRect rcBody )
         rcR.setY(rectView.y());
         rcR.setHeight(rectView.height());
 
-        float nR0s = -1.f, nR0e;
+        float nR0s = -1.f, nR0e = -1.f;
         QPainterPath gpR0;
-        float nR1s = -1.f, nR1e;
+        float nR1s = -1.f, nR1e = -1.f;
         QPainterPath gpR1;
-        float nR2s = -1.f, nR2e;
+        float nR2s = -1.f, nR2e = -1.f;
         QPainterPath gpR2;
         float fCrackThrMid = (m_CrackInfo.fCrackThresholdError + m_CrackInfo.fCrackThresholdWarning) / 2.f;
         for ( int ni = nMinI; ni < m_nIRD-2; ni++ )

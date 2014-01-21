@@ -373,10 +373,27 @@ void QAutoDetectionRange::TPDP_OnDTC(T3K_DEVICE_INFO /*devInfo*/, ResponsePart P
         {
             if (end_pos[cnt-1] - start_pos[0] < 0xffff/4)
             {
+                long width = 0;
+                int distMin = 0xffff;
+                int idxCenter = 0;
+                for ( int ni = 0; ni < cnt; ni++ )
+                {
+                    width += abs((long)(end_pos[ni] - start_pos[ni]));
+                    int dist = abs((long)(0x7fff - (start_pos[ni] + end_pos[ni]) / 2));
+                    if ( distMin > dist )
+                    {
+                        distMin = dist;
+                        idxCenter = ni;
+                    }
+                }
+
                 if (m_dwTickTouch < MAX_TICK_COUNT / 2)
                 {
-                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setX( start_pos[0] );
-                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setY( end_pos[cnt-1] );
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].s = start_pos[0];
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].e = end_pos[cnt-1];
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].sc = start_pos[idxCenter];
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].ec = end_pos[idxCenter];
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].width = width;
                     m_dwTickTouch ++;
                     int progress = m_dwTickTouch * 100 / MAX_TICK_COUNT;
                     if (m_nTouchProgress != progress)
@@ -387,8 +404,11 @@ void QAutoDetectionRange::TPDP_OnDTC(T3K_DEVICE_INFO /*devInfo*/, ResponsePart P
                 }
                 else
                 {
-                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setX( start_pos[0] < (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].x() ? start_pos[0] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].x() );
-                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setY( end_pos[cnt-1] > (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].y() ? end_pos[cnt-1] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].y() );
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].s = start_pos[0] < (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].s ? start_pos[0] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].s;
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].e = end_pos[cnt-1] > (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].e ? end_pos[cnt-1] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].e;
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].sc = start_pos[idxCenter] < (DWORD)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].sc ? start_pos[idxCenter] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].sc;
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].ec = end_pos[idxCenter] > (DWORD)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].ec ? end_pos[idxCenter] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].ec;
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].width = width > m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].width ? width : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].width;
                     m_dwTickTouch ++;
                     int progress = m_dwTickTouch * 100 / MAX_TICK_COUNT;
                     if (m_nTouchProgress != progress)
@@ -522,51 +542,67 @@ void QAutoDetectionRange::updateRect(QRect rc)
 
 void QAutoDetectionRange::analysisTouchObj()
 {
-    const int nMaxW = 100;
-    // left !!
+    int nMax1 = 0;
+    int nCam1Close = -1;
+    int nMax2 = 0;
+    int nCam2Close = -1;
+    for ( int ni = 0; ni < 4; ni++ )
+    {
+        if ( nMax1 < m_ptCamTouchObj[0][ni].width )
+        {
+            nMax1 = m_ptCamTouchObj[0][ni].width;
+            nCam1Close = ni;
+        }
+        if ( nMax2 < m_ptCamTouchObj[1][ni].width )
+        {
+            nMax2 = m_ptCamTouchObj[1][ni].width;
+            nCam2Close = ni;
+        }
+    }
     m_lCam1Left = 0xFFFF;
-    for ( int i=0 ; i<4 ; i++ )
-    {
-        long lW = qAbs(m_ptCamTouchObj[0][i].x() - m_ptCamTouchObj[0][i].y()) / 2;
-        if ( lW > nMaxW ) lW = nMaxW;
-        long lLeft = m_ptCamTouchObj[0][i].y() - lW;
-        if ( lLeft < m_lCam1Left )
-        {
-            m_lCam1Left = lLeft;
-        }
-    }
-    m_lCam2Left = 0xFFFF;
-    for ( int i=0 ; i<4 ; i++ )
-    {
-        long lW = qAbs(m_ptCamTouchObj[1][i].x() - m_ptCamTouchObj[1][i].y()) / 2;
-        if ( lW > nMaxW ) lW = nMaxW;
-        long lLeft = m_ptCamTouchObj[1][i].y() - lW;
-        if ( lLeft < m_lCam2Left )
-        {
-            m_lCam2Left = lLeft;
-        }
-    }
-
     m_lCam1Right = 0x0000;
-    for ( int i=0 ; i<4 ; i++ )
-    {
-        long lW = qAbs(m_ptCamTouchObj[0][i].x() - m_ptCamTouchObj[0][i].y()) / 2;
-        if ( lW > nMaxW ) lW = nMaxW;
-        long lRight = m_ptCamTouchObj[0][i].x() + lW;
-        if ( lRight > m_lCam1Right )
-        {
-            m_lCam1Right = lRight;
-        }
-    }
+    m_lCam2Left = 0xFFFF;
     m_lCam2Right = 0x0000;
-    for ( int i=0 ; i<4 ; i++ )
+    if ( nCam1Close < 0 || nCam2Close < 0 || nCam1Close == nCam2Close )
+        return; // error
+
+    for ( int ni = 0; ni < 4; ni++ )
     {
-        long lW = qAbs(m_ptCamTouchObj[1][i].x() - m_ptCamTouchObj[1][i].y()) / 2;
-        if ( lW > nMaxW ) lW = nMaxW;
-        long lRight = m_ptCamTouchObj[1][i].x() + lW;
-        if ( lRight > m_lCam2Right )
+        if ( ni != nCam1Close )
         {
-            m_lCam2Right = lRight;
+            if ( ni == nCam2Close )
+            {
+                if ( m_lCam1Left > m_ptCamTouchObj[0][ni].sc )
+                    m_lCam1Left = m_ptCamTouchObj[0][ni].sc;
+                if ( m_lCam1Right < m_ptCamTouchObj[0][ni].ec )
+                    m_lCam1Right = m_ptCamTouchObj[0][ni].ec;
+            }
+            else
+            {
+                long center = (m_ptCamTouchObj[0][ni].s + m_ptCamTouchObj[0][ni].e) / 2;
+                if ( m_lCam1Left > center )
+                    m_lCam1Left = center;
+                if ( m_lCam1Right < center )
+                    m_lCam1Right = center;
+            }
+        }
+        if ( ni != nCam2Close )
+        {
+            if ( ni == nCam1Close )
+            {
+                if ( m_lCam2Left > m_ptCamTouchObj[1][ni].sc )
+                    m_lCam2Left = m_ptCamTouchObj[1][ni].sc;
+                if ( m_lCam2Right < m_ptCamTouchObj[1][ni].ec )
+                    m_lCam2Right = m_ptCamTouchObj[1][ni].ec;
+            }
+            else
+            {
+                long center = (m_ptCamTouchObj[1][ni].s + m_ptCamTouchObj[1][ni].e) / 2;
+                if ( m_lCam2Left > center )
+                    m_lCam2Left = center;
+                if ( m_lCam2Right < center )
+                    m_lCam2Right = center;
+            }
         }
     }
 }
