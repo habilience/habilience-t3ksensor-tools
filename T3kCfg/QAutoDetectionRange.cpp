@@ -406,8 +406,8 @@ void QAutoDetectionRange::TPDP_OnDTC(T3K_DEVICE_INFO /*devInfo*/, ResponsePart P
                 {
                     m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].s = start_pos[0] < (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].s ? start_pos[0] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].s;
                     m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].e = end_pos[cnt-1] > (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].e ? end_pos[cnt-1] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].e;
-                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].sc = start_pos[idxCenter] < (DWORD)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].sc ? start_pos[idxCenter] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].sc;
-                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].ec = end_pos[idxCenter] > (DWORD)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].ec ? end_pos[idxCenter] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].ec;
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].sc = start_pos[idxCenter] < (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].sc ? start_pos[idxCenter] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].sc;
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].ec = end_pos[idxCenter] > (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].ec ? end_pos[idxCenter] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].ec;
                     m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].width = width > m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].width ? width : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].width;
                     m_dwTickTouch ++;
                     int progress = m_dwTickTouch * 100 / MAX_TICK_COUNT;
