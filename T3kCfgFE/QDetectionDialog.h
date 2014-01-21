@@ -29,7 +29,11 @@ private:
     bool    m_bCamTouch;
     unsigned long m_dwTickTouch;
     int     m_nCamTouchCount[2];
-    QPoint  m_ptCamTouchObj[2][4];
+    struct TchPoint {
+        long s, e;
+        long sc, ec;
+        long width;
+    }       m_ptCamTouchObj[2][4];
     int     m_nCamTouchMax[2];
 
     int     m_nOldMargins[4];

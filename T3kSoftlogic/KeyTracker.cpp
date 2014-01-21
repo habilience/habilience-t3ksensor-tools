@@ -635,7 +635,7 @@ int QKeyTracker::hitTestHandles(QPoint point)
     {
         QRect rect( m_rect );
         rect = rect.normalized();
-        if ((m_nStyle & dottedLine|solidLine) != 0)
+        if ((m_nStyle & (dottedLine|solidLine)) != 0)
             rect.adjust( -1, -1, 1, 1 );
         if (!rect.contains(point))
             return hitNothing;  // must have been between resize handles
