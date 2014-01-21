@@ -1,3 +1,3 @@
-./configure -prefix $PWD/qtbase -static -opensource -confirm-license -debug-and-release -platform macx-g++ -nomake tests -nomake examples -opengl -no-openssl -nomake tools -skip webkit
+./configure -prefix $PWD/qtbase -static -opensource -confirm-license -debug-and-release -platform macx-clang -nomake tests -nomake examples -opengl -no-openssl -nomake tools -skip webkit
 ./qtbase/bin/qmake qtsdk.pro
 make -j8

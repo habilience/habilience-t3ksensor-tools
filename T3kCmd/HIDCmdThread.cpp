@@ -376,7 +376,7 @@ bool CHIDCmd::SendCommand( char * szCmd )
         ulong dwFGstValue = 0xFFFFFFFF;
 
         QString strCmd( szCmd );
-        strCmd.trimmed();
+        strCmd = strCmd.trimmed();
         strCmd = strCmd.remove( 0, strCmd.indexOf( '=' ) + 1 );
         int nP = strCmd.indexOf( ',' );
         QString strMode = strCmd.left( nP ).toUpper();
@@ -472,7 +472,7 @@ void CHIDCmd::TextOutRuntime( const char * szCmd, uint time, ulong ticktime )
 
 	if ( time == 0 )
 	{
-		printf(szCmd);
+        printf(szCmd);
 	}
 	else
 	{
