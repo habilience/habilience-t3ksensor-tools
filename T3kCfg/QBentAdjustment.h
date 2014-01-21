@@ -1,7 +1,7 @@
 #ifndef QBENTADJUSTMENT_H
 #define QBENTADJUSTMENT_H
 
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QLangManager.h"
 #include "fe/QPointClipper.h"
 #include "QRequestHIDManager.h"
@@ -87,7 +87,7 @@ protected:
 };
 
 class QBentAdjustment : public QObject
-        , public TPDPEventMultiCaster::ITPDPEventListener
+        , public QT3kDeviceREventHandler::IListener
         , public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
@@ -132,7 +132,7 @@ private:
     QVector<BentItem> m_BentItemArray;
     QPointClipper     m_PointClipper;
 
-    T3kHandle*          m_pT3kHandle;
+    QT3kDeviceR*         m_pT3kHandle;
 
     QRect               m_rcBody;
 
@@ -180,16 +180,16 @@ protected:
 
     void sendSaveCommand();
 
-    // override QT3kDeviceEventHandler::IListener
-    virtual void OnOBJ(ResponsePart, ushort, const char *, int, T3kRangeF *, unsigned short);
-    virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
-    virtual void OnRSE(ResponsePart, ushort, const char *, long, bool, const char *);
+    // QT3kDeviceREventHandler::IListener
+    virtual void TPDP_OnOBJ(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, unsigned char *layerid, float *start_pos, float *end_pos, int cnt);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 public:
     explicit QBentAdjustment(QWidget* targetWidget, QObject *parent = 0);
     ~QBentAdjustment();
 
-    void Start();
+    void start();
 
     void enterAdjustmentMode();
     void leaveAdjustmentMode( bool bSuccess );

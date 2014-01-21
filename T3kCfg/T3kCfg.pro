@@ -28,7 +28,8 @@ INCLUDEPATH += ../common/ \
                 $$PWD/../external/T3kHIDLibrary/include \
                 $$PWD../external/quazip/zlib/ \
 
-DEPENDPATH += $$PWD/../external/quazip \
+DEPENDPATH += ../common/ \
+                $$PWD/../external/quazip \
                 $$PWD/../external/T3kHIDLibrary/include \
                 $$PWD../external/quazip/zlib/ \
 
@@ -177,19 +178,23 @@ macx: {
 
 #Socoures
 SOURCES += main.cpp\
-    ../common/T3kHandle.cpp \
-    ../common/IncludeRemoteNotify.cpp \
-    ../common/TPDPEventMultiCaster.cpp \
+    ../common/QT3kDevice.cpp \
+    ../common/QT3kDeviceR.cpp \
+    ../common/QT3kDeviceEventHandler.cpp \
+    ../common/QT3kDeviceREventHandler.cpp \
     ../common/QKeyMapStr.cpp \
     ../common/QUtils.cpp \
+    ../common/QGUIUtils.cpp \
     ../common/QLangRes.cpp \
     ../common/QLangManager.cpp \
     ../common/ui/UnderlineLabel.cpp \
     ../common/ui/QHoverComboBox.cpp \
     ../common/ui/SlidingStackedWidget.cpp \
     ../common/ui/ColorTabBar.cpp \
-    ../common/ui/ColorTabWidget.cpp \
     ../common/ui/QLicenseWidget.cpp \
+    ../common/ui/QColorTabWidget.cpp \
+    ../common/ui/Q2ColorTabWidget.cpp \
+    ../common/ui/QGestureMappingTable.cpp \
     ../common/fe/QCalcCamValue.cpp \
     ../common/fe/QPointClipper.cpp \
     QMouseSettingWidget.cpp \
@@ -262,22 +267,29 @@ SOURCES += main.cpp\
     QBentAdjustment.cpp \
     QBentCfgParam.cpp \
     QBentProgressDialog.cpp \
-    T3kBuzzerDef.cpp
+    T3kBuzzerDef.cpp \
+    QNMouseProfileWidget.cpp \
+    QOMouseProfileWidget.cpp \
 
 HEADERS  += \
-    ../common/T3kHandle.h \
-    ../common/IncludeRemoteNotify.h \
-    ../common/TPDPEventMultiCaster.h \
+    ../common/QT3kDevice.h \
+    ../common/QT3kDeviceR.h \
+    ../common/QT3kDeviceEventHandler.h \
+    ../common/QT3kDeviceREventHandler.h \
     ../common/QKeyMapStr.h \
     ../common/QUtils.h \
+    ../common/QGUIUtils.h \
     ../common/QLangRes.h \
     ../common/QLangManager.h \
+    ../common/T3kCamNameDef.h \
     ../common/ui/UnderlineLabel.h \
     ../common/ui/QHoverComboBox.h \
     ../common/ui/SlidingStackedWidget.h \
     ../common/ui/ColorTabBar.h \
-    ../common/ui/ColorTabWidget.h \
     ../common/ui/QLicenseWidget.h \
+    ../common/ui/QColorTabWidget.h \
+    ../common/ui/Q2ColorTabWidget.h \
+    ../common/ui/QGestureMappingTable.h \
     ../common/fe/QCalcCamValue.h \
     ../common/fe/QPointClipper.h \
     QMouseSettingWidget.h \
@@ -356,12 +368,15 @@ HEADERS  += \
     QBentAdjustment.h \
     QBentCfgParam.h \
     QBentProgressDialog.h \
-    T3kCamNameDef.h \
-    T3kBuzzerDef.h
+    T3kBuzzerDef.h \
+    QNMouseProfileWidget.h \
+    QOMouseProfileWidget.h \
+    ../common/T3kCommonColor.h
+
 
 FORMS    += \
     ../common/ui/QLicenseWidget.ui \
-    QMouseSettingWidget.ui \
+    T3kCfgWnd.ui \
     QCalibrationSettingWidget.ui \
     QGeneralSettingWidget.ui \
     QMainMenuWidget.ui \
@@ -376,7 +391,6 @@ FORMS    += \
     QSensorSettingWidget.ui \
     QSideViewWidget.ui \
     QSoftKeySettingWidget.ui \
-    T3kCfgWnd.ui \
     QLoadSensorDataWidget.ui \
     QSelectSensorWidget.ui \
     QMenuStripWidget.ui \
@@ -385,7 +399,9 @@ FORMS    += \
     QTabChat.ui \
     QAdvancedSettingWidget.ui \
     QAutoRangeCompleteDialog.ui \
-    QBentProgressDialog.ui
+    QBentProgressDialog.ui \
+    QNMouseProfileWidget.ui \
+    QOMouseProfileWidget.ui
 
 
 RESOURCES += \

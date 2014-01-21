@@ -1,7 +1,7 @@
 #ifndef T3KSOFTLOGICDLG_H
 #define T3KSOFTLOGICDLG_H
 
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceEventHandler.h"
 #include "T3kCommonData.h"
 
 #include "TabPanelWidget.h"
@@ -19,7 +19,7 @@ namespace Ui {
 class T3kSoftlogicDlg;
 }
 
-class T3kSoftlogicDlg : public QMainWindow, public TPDPEventMultiCaster::ITPDPEventListener
+class T3kSoftlogicDlg : public QMainWindow, public QT3kDeviceEventHandler::IListener
 {
     Q_OBJECT
     
@@ -39,7 +39,7 @@ public:
     bool checkModified();
 
 protected:
-    T3kHandle*              m_pT3kHandle;
+    QT3kDevice*            m_pT3kHandle;
     int                     m_nFirstActiveTab;
     QString                 m_strDataFileFromCmdLine;
 
@@ -62,7 +62,6 @@ protected:
     TabCalibrationWidget*   m_pTabCalibrationWidget;
 
     QStackedLayout          m_StackedPreviewLayout;
-//    CLogicDesignerWnd	m_wndPrevLogicDesign;
 
 protected:
     void init();
@@ -73,16 +72,13 @@ protected:
     bool loadModel( QString lpszPathName );
     bool saveModel( QString lpszPathName );
 
-    //void copyDataFile( QString lpszDataPath, QString lpszFileName );
-
     bool isModified();
 
 protected:
-    // T3kHIDNotify::IT3kEventListener
-    virtual void OnOpenT3kDevice(T3K_HANDLE);
-    virtual void OnCloseT3kDevice(T3K_HANDLE);
-    virtual void OnFirmwareDownload(bool);
-    virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
+    // QT3kDeviceEventHandler::IListener
+    virtual void TPDP_OnDisconnected(T3K_DEVICE_INFO devInfo);
+    virtual void TPDP_OnDownloadingFirmware(T3K_DEVICE_INFO devInfo, bool bIsDownload);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
     // QWidget
     virtual void timerEvent(QTimerEvent *);
@@ -100,6 +96,7 @@ private:
     Ui::T3kSoftlogicDlg *ui;
 
 signals:
+    void connectedT3kDevice();
 
 public slots:
     void onHandleMessage(const QString& msg);
@@ -112,7 +109,7 @@ private slots:
     void on_BtnExit_clicked();
     void on_TabMainMenu_currentChanged(int index);
     void onUpdatePrewview();
-    T3kHandle* onGetT3kHandle() { return m_pT3kHandle; }
+    QT3kDevice* onGetT3kHandle() { return m_pT3kHandle; }
     void onUpdateCalibrationStep(GroupKey* pGroup, CSoftkey* key, int nCalPos, bool bSet);
     void onDisplayPreviewTouchCount(int nTouchCount);
     bool onIsValidT3kSensorState() { return m_bIsConnected && !m_bIsInvalidFirmware && !m_bFirmwareDownload; }
@@ -125,6 +122,8 @@ private slots:
     void onDoRemoveFileExtAssociation();
     void onInvertDrawing(bool bInvert);
     void on_toolButton_clicked();
+
+    void onConnectedT3kDevice();
 };
 
 #endif // T3KSOFTLOGICDLG_H

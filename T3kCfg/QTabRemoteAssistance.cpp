@@ -32,7 +32,7 @@
 
 QString GetAbstractSocketErrorStr(QAbstractSocket::SocketError err);
 
-QTabRemoteAssistance::QTabRemoteAssistance(T3kHandle *&pHandle, QWidget *parent) :
+QTabRemoteAssistance::QTabRemoteAssistance(QT3kDeviceR *&pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QTabRemoteAssistance), m_pT3kHandle(pHandle)
 {
@@ -60,7 +60,7 @@ QTabRemoteAssistance::QTabRemoteAssistance(T3kHandle *&pHandle, QWidget *parent)
 
     m_pSideviewWidget = new QSideviewWidget( parentWidget() );
     m_pSideviewWidget->hide();
-    m_pSideviewWidget->SetT3kHandle(pHandle);
+    m_pSideviewWidget->setT3kHandle(pHandle);
 
     m_pOrderTouchWidget = new QOrderTouchWidget();
     m_pOrderTouchWidget->hide();
@@ -110,7 +110,7 @@ QTabRemoteAssistance::~QTabRemoteAssistance()
 void QTabRemoteAssistance::LoadServerList()
 {
     QString strPath = QStandardPaths::writableLocation( QStandardPaths::DocumentsLocation );
-    strPath += "t3kcfg/config/";
+    strPath += "/t3kcfg/config/";
 
     m_strServierListPath = strPath;
     if( !QFile::exists( m_strServierListPath + "serverlist.txt" ) )
@@ -177,8 +177,8 @@ void QTabRemoteAssistance::SaveChangedPort()
 
 void QTabRemoteAssistance::ExitRemote()
 {
-    if( m_pT3kHandle->GetExpireTime() == 0 )
-        m_pT3kHandle->SetExpireTime( 5000 );
+    if( m_pT3kHandle->getExpireTime() == 0 )
+        m_pT3kHandle->setExpireTime( 5000 );
     // disconnect
     m_nPreviousID = 0;
     m_eConnectState = Disconnected;
@@ -409,8 +409,8 @@ void QTabRemoteAssistance::onDisconnectedRemote()
         ui->StackedWidget->setCurrentIndex( 0 );
     else
     {
-        m_pT3kHandle->SetExpireTime( 5000 );
-        m_pT3kHandle->onReceiveRawDataFlag( false );
+        m_pT3kHandle->setExpireTime( 5000 );
+        m_pT3kHandle->onReceiveRawDataFlag( false ); //windnsoul
 
         m_eConnectState = Connecting;
 
@@ -470,8 +470,8 @@ void QTabRemoteAssistance::ProcessRemoteRawDataPacket(RRawDataPkt *packet)
             case NotifyPairConnected:
                 {
                     // Start Remote mode
-                    m_pT3kHandle->SetExpireTime( 0 );
-                    m_pT3kHandle->onReceiveRawDataFlag( true );
+                    m_pT3kHandle->setExpireTime( 0 );
+                    m_pT3kHandle->onReceiveRawDataFlag( true ); //windnsoul
 
                     QLangRes& Res = QLangManager::instance()->getResource();
 
@@ -485,8 +485,8 @@ void QTabRemoteAssistance::ProcessRemoteRawDataPacket(RRawDataPkt *packet)
                 break;
             case NotifyPairDisconnected:
                 {
-                    m_pT3kHandle->SetExpireTime( 5000 );
-                    m_pT3kHandle->onReceiveRawDataFlag( false );
+                    m_pT3kHandle->setExpireTime( 5000 );
+                    m_pT3kHandle->onReceiveRawDataFlag( false ); //windnsoul
 
                     emit ShowSideviewMode( false );
                     emit ShowOrderTouch( false, false, false, 0, 0, 0 );
@@ -585,10 +585,10 @@ void QTabRemoteAssistance::ProcessRemoteRawDataPacket(RRawDataPkt *packet)
             case TranSensorRawData:
                 {
                     RRawDataPkt* pPkt = (RRawDataPkt*)packet;
-                    if( m_pT3kHandle->IsOpen() )
+                    if( m_pT3kHandle->isOpen() )
                     {
                         //bool bRet =
-                        m_pT3kHandle->SendBuffer( (const unsigned char*)pPkt->data, RAWDATA_BLOCK, 1, 1000 );
+                        m_pT3kHandle->writeBuffer( (void*)pPkt->data, RAWDATA_BLOCK, true, 1000 );
                         //qDebug( "Send to HID : %d - %s", bRet, (char*)pBuffer+11 );
                     }
                 }
@@ -596,7 +596,7 @@ void QTabRemoteAssistance::ProcessRemoteRawDataPacket(RRawDataPkt *packet)
             case TranInstantMode:
                 {
                     RInstantMode* pPkt = (RInstantMode*)packet;
-                    m_pT3kHandle->SetInstantMode( pPkt->nMode, pPkt->nExpireTime, pPkt->dwGstFlag );
+                    m_pT3kHandle->setInstantMode( pPkt->nMode, pPkt->nExpireTime, pPkt->dwGstFlag );
                 }
                 break;
             case SideviewMode:

@@ -229,7 +229,7 @@ void QAutoDetectionRange::enterAutoRangeSetting()
 {
 //    LOG_I( "enter autorange setting" );
 
-    m_pT3kHandle->SetReportView( true );
+    m_pT3kHandle->setReportView( true );
 
     m_RequestHIDManager.Stop();
 
@@ -265,7 +265,7 @@ void QAutoDetectionRange::leaveAutoRangeSetting()
 {
 //    LOG_I( "leave autorange setting" );
 
-    m_pT3kHandle->SetReportView( false );
+    m_pT3kHandle->setReportView( false );
 
     m_bTouchOK = false;
     m_bCamTouch = false;
@@ -300,7 +300,7 @@ void QAutoDetectionRange::onFinishAutoRange()
 
     m_nAutoRangeStep = 0;
 
-    m_pT3kHandle->SetReportView( false );
+    m_pT3kHandle->setReportView( false );
 
     bool bRet = (m_lCam1Left < m_lCam1Right && m_lCam2Left < m_lCam2Right);
 
@@ -340,9 +340,9 @@ void QAutoDetectionRange::onFinishAutoRange()
     }
 }
 
-void QAutoDetectionRange::OnDTC(ResponsePart part, ushort, const char *, int, T3kRangeF * pDTC, unsigned short cnt)
+void QAutoDetectionRange::TPDP_OnDTC(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, unsigned char */*layerid*/, unsigned long *start_pos, unsigned long *end_pos, int cnt)
 {
-    int nCIdx = (part == CM1) || (part == CM1_1) ? 0 : 1;
+    int nCIdx = (Part == CM1) || (Part == CM1_1) ? 0 : 1;
 
     m_nCamTouchCount[nCIdx] = cnt;
 
@@ -385,12 +385,12 @@ void QAutoDetectionRange::OnDTC(ResponsePart part, ushort, const char *, int, T3
 
         if (m_bCamTouch)
         {
-            if (pDTC[cnt-1].End - pDTC[0].Start < 0xffff/4)
+            if (end_pos[cnt-1] - start_pos[0] < 0xffff/4)
             {
                 if (m_dwTickTouch < MAX_TICK_COUNT / 2)
                 {
-                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setX( pDTC[0].Start );
-                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setY( pDTC[cnt-1].End );
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setX( start_pos[0] );
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setY( end_pos[cnt-1] );
                     m_dwTickTouch ++;
                     int progress = m_dwTickTouch * 100 / MAX_TICK_COUNT;
                     if (m_nTouchProgress != progress)
@@ -401,8 +401,8 @@ void QAutoDetectionRange::OnDTC(ResponsePart part, ushort, const char *, int, T3
                 }
                 else
                 {
-                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setX( pDTC[0].Start < (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].x() ? pDTC[0].Start : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].x() );
-                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setY( pDTC[cnt-1].End > (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].y() ? pDTC[cnt-1].End : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].y() );
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setX( start_pos[0] < (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].x() ? start_pos[0] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].x() );
+                    m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].setY( end_pos[cnt-1] > (unsigned long)m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].y() ? end_pos[cnt-1] : m_ptCamTouchObj[nCIdx][m_nAutoRangeStep].y() );
                     m_dwTickTouch ++;
                     int progress = m_dwTickTouch * 100 / MAX_TICK_COUNT;
                     if (m_nTouchProgress != progress)
@@ -444,11 +444,11 @@ void QAutoDetectionRange::OnDTC(ResponsePart part, ushort, const char *, int, T3
     }
 }
 
-void QAutoDetectionRange::OnRSP(ResponsePart part, ushort, const char *, long, bool, const char *sCmd)
+void QAutoDetectionRange::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
-    if( strstr(sCmd, cstrDetectionRange) == sCmd )
+    if( strstr(cmd, cstrDetectionRange) == cmd )
     {
-        switch( part )
+        switch( Part )
         {
         case MM:
             m_RequestHIDManager.RemoveItem( cstrDetectionRange );
@@ -471,11 +471,11 @@ void QAutoDetectionRange::OnRSP(ResponsePart part, ushort, const char *, long, b
     }
 }
 
-void QAutoDetectionRange::OnRSE(ResponsePart part, ushort, const char *, long, bool, const char *sCmd)
+void QAutoDetectionRange::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
-    if( strstr(sCmd, cstrNoCam) == sCmd )
+    if( strstr(cmd, cstrNoCam) == cmd )
     {
-        switch( part )
+        switch( Part )
         {
         case MM:
             m_RequestHIDManager.RemoveItem( cstrDetectionRange );

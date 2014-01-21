@@ -2,7 +2,7 @@
 #define QSIDEVIEWWIDGET_H
 
 #include <QDialog>
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QLangManager.h"
 
 #include <QImage>
@@ -11,7 +11,7 @@ namespace Ui {
     class QSideviewWidget;
 }
 
-class QSideviewWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
+class QSideviewWidget : public QDialog, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -19,7 +19,7 @@ public:
     explicit QSideviewWidget(QWidget *parent = 0);
     ~QSideviewWidget();
 
-    void SetT3kHandle(T3kHandle* pHandle) { m_pT3kHandle = pHandle; }
+    void setT3kHandle(QT3kDeviceR* pHandle) { m_pT3kHandle = pHandle; }
 
 protected:
     virtual void showEvent(QShowEvent *evt);
@@ -31,19 +31,20 @@ protected:
     virtual void onChangeLanguage();
 
 protected:
-    virtual void OnRSP(ResponsePart Part, ushort, const char *, long, bool, const char *sCmd);
-    virtual void OnRSE(ResponsePart Part, ushort, const char *sPartId, long, bool, const char *sStatus);
-    virtual void OnPRV(ResponsePart Part, ushort, const char *, int nWidth, int nHeight, int, unsigned char *pBitmapBuffer);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnPRV(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int total, int offset, const unsigned char *data, int cnt);
 
 protected:
     void RequestSensorData( bool bDefault );
 
 protected:
-    T3kHandle*         m_pT3kHandle;
+    QT3kDeviceR*         m_pT3kHandle;
 
     QString             m_strModelName;
 
     QImage              m_bmpSnapSensor;
+    uchar*              m_pImgTempBuffer;
     int                 m_nCurrentCamNo;
 
     int                 m_nAutoLine;

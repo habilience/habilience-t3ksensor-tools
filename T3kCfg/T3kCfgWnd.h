@@ -16,7 +16,7 @@ class QSettings;
 #include <QTimer>
 
 #include "stdInclude.h"
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 
 #include "QMySystemTrayIcon.h"
 #include "QLangManager.h"
@@ -28,7 +28,7 @@ namespace Ui {
     class T3kCfgWnd;
 }
 
-class T3kCfgWnd : public QMainWindow, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
+class T3kCfgWnd : public QMainWindow, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -70,10 +70,9 @@ protected:
 
     void ExceptionFirmwareVer( QString str );
 
-    virtual void OnOpenT3kDevice(T3K_HANDLE);
-    virtual void OnCloseT3kDevice(T3K_HANDLE);
-    virtual void OnFirmwareDownload( bool bDownload );
-    virtual void OnRSP( ResponsePart Part, ushort nTickTime, const char* sPartId, long lId, bool bFinal, const char* sCmd );
+    virtual void TPDP_OnDisconnected(T3K_DEVICE_INFO devInfo);
+    virtual void TPDP_OnDownloadingFirmware(T3K_DEVICE_INFO devInfo, bool bIsDownload);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 private:
     void Init();
@@ -99,7 +98,7 @@ private:
     QAction*                    m_pOpenQAction;
     QAction*                    m_pExitQAction;
 
-    T3kHandle*                  m_pT3kHandle;
+    QT3kDeviceR*                m_pT3kHandle;
     int                         m_nProfileIndex;
 
     bool                        m_bIsConnect;
@@ -137,6 +136,9 @@ private:
 
     bool                        m_bInit;
 
+signals:
+    void connectedDevice(T3K_DEVICE_INFO info);
+
     // Custom Define
 protected slots:
     void OnTrayChangeProfile( QAction* pAction );
@@ -153,6 +155,8 @@ protected slots:
     void onDisconnectedRemote();
 
     void CoercionExit();
+
+    void onOpenT3kDevice(T3K_DEVICE_INFO info);
 
     // UI
 private slots:

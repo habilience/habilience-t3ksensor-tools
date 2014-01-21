@@ -207,6 +207,13 @@
      <item>
       <layout class="QVBoxLayout" name="layoutChkBox">
        <item>
+        <widget class="QCheckBox" name="chkInvertDetection">
+         <property name="text">
+          <string>Invert Detection</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="chkAutoDetectionLine">
          <property name="text">
           <string>Auto Correction: Detection Line</string>
@@ -217,13 +224,6 @@
         <widget class="QCheckBox" name="chkSimpleDetection">
          <property name="text">
           <string>Simple Detection</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="chkInvertDetection">
-         <property name="text">
-          <string>Invert Detection</string>
          </property>
         </widget>
        </item>
@@ -361,7 +361,6 @@
   <tabstop>btnReset</tabstop>
   <tabstop>chkAutoDetectionLine</tabstop>
   <tabstop>chkSimpleDetection</tabstop>
-  <tabstop>chkInvertDetection</tabstop>
   <tabstop>btnAutoRangeSetting</tabstop>
   <tabstop>btnRefresh</tabstop>
   <tabstop>btnSave</tabstop>

@@ -16,7 +16,7 @@ CONFIG += static staticlib
 TEMPLATE = app
 
 #Define
-DEFINES += _QT_COMPILER_ QUAZIP_STATIC _T3KHANDLE_REMOVE_PRV USE_T3K_STATIC_LIBS \
+DEFINES += _QT_COMPILER_ USE_T3K_STATIC_LIBS \
             USE_SOFTLOGIC_OUTPUT_MOUSE USE_SOFTLOGIC_OUTPUT_AUDIO_CONTROL \
             NO_LANGUAGE
 
@@ -162,15 +162,16 @@ SOURCES += main.cpp\
     ../common/qsingleapplication/qtlockedfile_unix.cpp \
     ../common/qsingleapplication/qtlockedfile.cpp \
     ../common/qsingleapplication/qtlocalpeer.cpp \
-    ../common/T3kHandle.cpp \
-    ../common/TPDPEventMultiCaster.cpp \
+    ../common/QT3kDevice.cpp \
+    ../common/QT3kDeviceEventHandler.cpp \
     ../common/QIniFormat.cpp \
     ../common/QKeyMapStr.cpp \
     ../common/QUtils.cpp \
+    ../common/QGUIUtils.cpp \
     ../common/ui/UnderlineLabel.cpp \
     ../common/ui/QHoverComboBox.cpp \
     ../common/ui/ColorTabBar.cpp \
-    ../common/ui/ColorTabWidget.cpp \
+    ../common/ui/Q2ColorTabWidget.cpp \
     ../common/ui/QLicenseWidget.cpp \
     T3kSoftlogicDlg.cpp \
     TabPanelWidget.cpp \
@@ -197,15 +198,16 @@ HEADERS  += \
     ../common/qsingleapplication/qtsingleapplication.h \
     ../common/qsingleapplication/qtlockedfile.h \
     ../common/qsingleapplication/qtlocalpeer.h \
-    ../common/T3kHandle.h \
-    ../common/TPDPEventMultiCaster.h \
+    ../common/QT3kDevice.h \
+    ../common/QT3kDeviceEventHandler.h \
     ../common/QIniFormat.h \
     ../common/QKeyMapStr.h \
     ../common/QUtils.h \
+    ../common/QGUIUtils.h \
     ../common/ui/UnderlineLabel.h \
     ../common/ui/QHoverComboBox.h \
     ../common/ui/ColorTabBar.h \
-    ../common/ui/ColorTabWidget.h \
+    ../common/ui/Q2ColorTabWidget.h \
     ../common/ui/QLicenseWidget.h \
     T3kSoftlogicDlg.h \
     TabPanelWidget.h \

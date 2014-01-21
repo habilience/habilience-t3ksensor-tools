@@ -5,6 +5,7 @@
 #include "T3kConstStr.h"
 #include "T3kCfgWnd.h"
 #include "QT3kUserData.h"
+#include "t3kcomdef.h"
 
 #include <QScrollBar>
 
@@ -28,7 +29,7 @@ QSelectSensorWidget::QSelectSensorWidget(QWidget *parent) :
 
     ui->TitleSelectSensor->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_HABILIENCE.png" );
 
-    m_pT3kHandle = new T3kHandle();
+    m_pT3kHandle = (QT3kDeviceR*)QT3kDevice::instance();
 
     int nW = ui->TableSensor->width() - ui->TableSensor->verticalHeader()->size().width();
     ui->TableSensor->verticalHeader()->setVisible( false );
@@ -79,18 +80,18 @@ void QSelectSensorWidget::on_BtnOpen_clicked()
     if( m_TimerBuzzer.isActive() )
         m_TimerBuzzer.stop();
 
-    if( m_pT3kHandle->IsOpen() )
-        m_pT3kHandle->Close();
+    if( m_pT3kHandle->isOpen() )
+        m_pT3kHandle->close();
 
     ModelID stID = m_mapDevModelID.value( m_nSelectIndex );
     ui->BtnOpen->setEnabled( false );
-    if( !m_pT3kHandle->OpenWithVIDPID( stID.VID, stID.PID, 1, stID.Idx ) )
+    if( !m_pT3kHandle->open( stID.VID, stID.PID, 1, stID.Idx ) )
     {
         ui->BtnOpen->setEnabled( true );
         return;
     }
 
-    m_pT3kHandle->Close();
+    m_pT3kHandle->close();
 
     QT3kUserData* pUD = QT3kUserData::GetInstance();
     pUD->SetSelectedVID( stID.VID );
@@ -127,9 +128,9 @@ void QSelectSensorWidget::on_TableButton_PlaySound(bool bToggled, int nIndex)
     {
         if( nIndex < 0 ) return;
         ModelID stID = m_mapDevModelID.value( nIndex );
-        if( m_pT3kHandle->IsOpen() )
-            m_pT3kHandle->Close();
-        if( m_pT3kHandle->OpenWithVIDPID( stID.VID, stID.PID, 1, stID.Idx ) )
+        if( m_pT3kHandle->isOpen() )
+            m_pT3kHandle->close();
+        if( m_pT3kHandle->open( stID.VID, stID.PID, 1, stID.Idx ) )
         {
             m_TimerBuzzer.setParent( this );
             connect( &m_TimerBuzzer, SIGNAL(timeout()), this, SLOT(on_Timer_Buzzer()) );
@@ -141,7 +142,7 @@ void QSelectSensorWidget::on_TableButton_PlaySound(bool bToggled, int nIndex)
         if( m_TimerBuzzer.isActive() )
         {
             m_TimerBuzzer.stop();
-            m_pT3kHandle->Close();
+            m_pT3kHandle->close();
         }
     }
 }
@@ -150,7 +151,7 @@ void QSelectSensorWidget::on_Timer_Buzzer()
 {
     if( m_TimerBuzzer.timerId() >= 0 )
     {
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2,3").arg(cstrBuzzerPlay).arg(1).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2,3").arg(cstrBuzzerPlay).arg(1), true );
     }
 }
 
@@ -174,7 +175,7 @@ void QSelectSensorWidget::showEvent(QShowEvent *evt)
         if( m_mapDevModelID.count() == 1 )
         {
             ModelID stID = m_mapDevModelID.value( 0 );
-            if( m_pT3kHandle->OpenWithVIDPID( stID.VID, stID.PID, 1, stID.Idx ) )
+            if( m_pT3kHandle->open( stID.VID, stID.PID, 1, stID.Idx ) )
                 QT3kUserData::GetInstance()->SetModel( stID.PID );
             QWidgetCloseEventManager::instance()->AddClosedWidget( this, 1000 );
             accept();
@@ -205,12 +206,9 @@ void QSelectSensorWidget::timerEvent(QTimerEvent *evt)
 {
     if( evt->timerId() == m_nTimerCheckDevice )
     {
-        int nTotalDetectCnt = m_pT3kHandle->GetDeviceCount( 0xFFFF, 0x0000 );
-        nTotalDetectCnt += m_pT3kHandle->GetDeviceCount( 0x2200, 0x3000 );
-        nTotalDetectCnt += m_pT3kHandle->GetDeviceCount( 0x2200, 0x3100 );
-        nTotalDetectCnt += m_pT3kHandle->GetDeviceCount( 0x2200, 0x3200 );
-        nTotalDetectCnt += m_pT3kHandle->GetDeviceCount( 0x2200, 0x3500 );
-        nTotalDetectCnt += m_pT3kHandle->GetDeviceCount( 0x2200, 0x3900 );
+        int nTotalDetectCnt = 0;
+        for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
+            nTotalDetectCnt += QT3kDeviceR::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
 
         if( m_nDeviceCount != nTotalDetectCnt )
         {
@@ -274,60 +272,17 @@ void QSelectSensorWidget::UpdateDeviceList()
     }
     m_mapDevModelID.clear();
 
-    ModelID stID;
-    stID.VID = 0xFFFF;
-    stID.PID = 0x0000;
-    int nOldT3000DetectCnt = m_pT3kHandle->GetDeviceCount( stID.VID, stID.PID );
-    for( int i=0; i<nOldT3000DetectCnt; i++ )
+    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
     {
-        stID.Idx = i;
-        m_mapDevModelID.insert( m_mapDevModelID.count(), stID );
-        AddSensorItem( "T3000", m_pT3kHandle->GetDevPath( stID.VID, stID.PID, 1, stID.Idx ) );
-    }
-    stID.VID = 0x2200;
-    stID.PID = 0x3000;
-    int nT3000DetectCnt = m_pT3kHandle->GetDeviceCount( stID.VID, stID.PID );
-    for( int i=0; i<nT3000DetectCnt; i++ )
-    {
-        stID.Idx = i;
-        m_mapDevModelID.insert( m_mapDevModelID.count(), stID );
-        AddSensorItem( "T3000", m_pT3kHandle->GetDevPath( stID.VID, stID.PID, 1, stID.Idx ) );
-    }
-    stID.VID = 0x2200;
-    stID.PID = 0x3100;
-    int nT3100DetectCnt = m_pT3kHandle->GetDeviceCount( stID.VID, stID.PID );
-    for( int i=0; i<nT3100DetectCnt; i++ )
-    {
-        stID.Idx = i;
-        m_mapDevModelID.insert( m_mapDevModelID.count(), stID );
-        AddSensorItem( "T3100", m_pT3kHandle->GetDevPath( stID.VID, stID.PID, 1, stID.Idx ) );
-    }
-    stID.VID = 0x2200;
-    stID.PID = 0x3200;
-    int nT3200DetectCnt = m_pT3kHandle->GetDeviceCount( stID.VID, stID.PID );
-    for( int i=0; i<nT3200DetectCnt; i++ )
-    {
-        stID.Idx = i;
-        m_mapDevModelID.insert( m_mapDevModelID.count(), stID );
-        AddSensorItem( "T3200", m_pT3kHandle->GetDevPath( stID.VID, stID.PID, 1, stID.Idx ) );
-    }
-    stID.VID = 0x2200;
-    stID.PID = 0x3500;
-    int nT3500DetectCnt = m_pT3kHandle->GetDeviceCount( stID.VID, stID.PID );
-    for( int i=0; i<nT3500DetectCnt; i++ )
-    {
-        stID.Idx = i;
-        m_mapDevModelID.insert( m_mapDevModelID.count(), stID );
-        AddSensorItem( "T3500", m_pT3kHandle->GetDevPath( stID.VID, stID.PID, 1, stID.Idx ) );
-    }
-    stID.VID = 0x2200;
-    stID.PID = 0x3900;
-    int nT3900DetectCnt = m_pT3kHandle->GetDeviceCount( stID.VID, stID.PID );
-    for( int i=0; i<nT3900DetectCnt; i++ )
-    {
-        stID.Idx = i;
-        m_mapDevModelID.insert( m_mapDevModelID.count(), stID );
-        AddSensorItem( "T3900", m_pT3kHandle->GetDevPath( stID.VID, stID.PID, 1, stID.Idx ) );
+        ModelID stID;
+        stID.VID = DEVICE_LIST[d].nVID; stID.PID = DEVICE_LIST[d].nPID;
+        int nCnt = QT3kDeviceR::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+        for( int i=0; i<nCnt; i++ )
+        {
+            stID.Idx = i;
+            m_mapDevModelID.insert( m_mapDevModelID.count(), stID );
+            AddSensorItem( DEVICE_LIST[d].szModelName, m_pT3kHandle->getDevicePath( stID.VID, stID.PID, DEVICE_LIST[d].nMI, stID.Idx ) );
+        }
     }
 }
 

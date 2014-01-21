@@ -46,13 +46,6 @@ QArrangeHelperWidget::QArrangeHelperWidget(bool bMake, QWidget* parent /*=NULL*/
         ui->LBKeyCount->setVisible( false );
         ui->EditKeyCount->setVisible( false );
     }
-
-//    m_edtKeyCount.SetFloatStyle( false );
-//    m_edtKeyCount.SetRange( 2, 30 );
-
-    updateUnit();
-
-//    pIconArray->copy(QRect( i*pIconArray->width()/2, 0, pIconArray->width()/2, pIconArray->height() ))
 }
 
 QArrangeHelperWidget::~QArrangeHelperWidget()
@@ -69,24 +62,21 @@ void QArrangeHelperWidget::setUnit( ScreenUnit eUnit, double dScaleWidth, double
 	m_eUnit = eUnit;
 	m_dD2PScaleWidth = dScaleWidth;
 	m_dD2PScaleHeight = dScaleHeight;
-}
 
-void QArrangeHelperWidget::updateUnit()
-{
-	switch ( m_eUnit )
-	{
-	case UnitRes:
-//		m_edtKeyWidth.SetFloatStyle( false, false );
-//		m_edtKeyHeight.SetFloatStyle( false, false );
-//		m_edtKeyInterval.SetFloatStyle( false, false );
-		break;
-	case UnitMM:
-//		m_edtKeyWidth.SetFloatStyle( true, false );
-//		m_edtKeyHeight.SetFloatStyle( true, false );
-//		m_edtKeyInterval.SetFloatStyle( true, false );
-		break;
-	}
-//	UpdateData( false );
+    m_strWidth = ui->EditWidth->text();
+    m_strHeight = ui->EditHeight->text();
+    m_strInterval = ui->EditInterval->text();
+
+    if( m_eUnit )
+    {
+        double dW = ui->EditWidth->text().toDouble() * m_dD2PScaleWidth;
+        double dH = ui->EditHeight->text().toDouble() * m_dD2PScaleHeight;
+        double dI = ui->EditInterval->text().toDouble() * (ui->RBHorizontal->isChecked() ? m_dD2PScaleWidth : m_dD2PScaleHeight);
+
+        ui->EditWidth->setText( QString("%1").arg(dW, 0, 'f', 1) );
+        ui->EditHeight->setText( QString("%1").arg(dH, 0, 'f', 1) );
+        ui->EditInterval->setText( QString("%1").arg(dI, 0, 'f', 1) );
+    }
 }
 
 void QArrangeHelperWidget::paintEvent(QPaintEvent *)
@@ -133,42 +123,72 @@ void QArrangeHelperWidget::on_RBVertical_clicked()
 void QArrangeHelperWidget::on_EditKeyCount_editingFinished()
 {
     QPalette plt( ui->EditKeyCount->palette() );
-    plt.setColor( QPalette::Text, m_strKeycount == ui->EditKeyCount->text() ? Qt::black : Qt::red );
+    plt.setColor( QPalette::Text, Qt::black );
     ui->EditKeyCount->setPalette( plt );
+
+    if( ui->EditKeyCount->text().toInt() > 30 )
+        ui->EditKeyCount->setText( "30" );
 }
 
 void QArrangeHelperWidget::on_EditWidth_editingFinished()
 {
     QPalette plt( ui->EditWidth->palette() );
-    plt.setColor( QPalette::Text, m_strWidth == ui->EditWidth->text() ? Qt::black : Qt::red );
+    plt.setColor( QPalette::Text, Qt::black );
     ui->EditWidth->setPalette( plt );
+
+    if( m_eUnit == UnitMM )
+    {
+        int nNewW = int(ui->EditWidth->text().toDouble() / m_dD2PScaleWidth);
+        if( m_strWidth.toInt() != nNewW )
+            m_strWidth = QString("%1").arg(nNewW);
+    }
+    else
+        m_strWidth = ui->EditWidth->text();
 }
 
 void QArrangeHelperWidget::on_EditHeight_editingFinished()
 {
     QPalette plt( ui->EditHeight->palette() );
-    plt.setColor( QPalette::Text, m_strHeight == ui->EditHeight->text() ? Qt::black : Qt::red );
+    plt.setColor( QPalette::Text, Qt::black );
     ui->EditHeight->setPalette( plt );
+
+    if( m_eUnit == UnitMM )
+    {
+        int nNewH = int(ui->EditHeight->text().toDouble() / m_dD2PScaleHeight);
+        if( m_strHeight.toInt() != nNewH )
+            m_strHeight = QString("%1").arg(nNewH);
+    }
+    else
+        m_strHeight = ui->EditHeight->text();
 }
 
 void QArrangeHelperWidget::on_EditInterval_editingFinished()
 {
     QPalette plt( ui->EditInterval->palette() );
-    plt.setColor( QPalette::Text, m_strInterval == ui->EditInterval->text() ? Qt::black : Qt::red );
+    plt.setColor( QPalette::Text, Qt::black );
     ui->EditInterval->setPalette( plt );
+
+    if( m_eUnit == UnitMM )
+    {
+        int nNewI = int(ui->EditInterval->text().toDouble() / (ui->RBHorizontal->isChecked() ? m_dD2PScaleWidth : m_dD2PScaleHeight));
+        if( m_strInterval.toInt() != nNewI )
+            m_strInterval = QString("%1").arg(nNewI);
+    }
+    else
+        m_strInterval = ui->EditInterval->text();
 }
 
 void QArrangeHelperWidget::on_BtnApply_clicked()
 {
     if( ui->RBHorizontal->isChecked() )
     {
-        emit generateKeys( KeyArrangeHorizontal, ui->EditKeyCount->text().toInt(), ui->EditWidth->text().toInt(),
-                           ui->EditHeight->text().toInt(), ui->EditInterval->text().toInt() );
+        emit generateKeys( KeyArrangeHorizontal, ui->EditKeyCount->text().toInt(), m_strWidth.toInt(),
+                           m_strHeight.toInt(), m_strInterval.toInt() );
     }
     else if( ui->RBVertical->isChecked() )
     {
-        emit generateKeys( KeyArrangeVertical, ui->EditKeyCount->text().toInt(), ui->EditWidth->text().toInt(),
-                           ui->EditHeight->text().toInt(), ui->EditInterval->text().toInt() );
+        emit generateKeys( KeyArrangeVertical, ui->EditKeyCount->text().toInt(),  m_strWidth.toInt(),
+                           m_strHeight.toInt(), m_strInterval.toInt() );
     }
 
     close();
@@ -177,4 +197,31 @@ void QArrangeHelperWidget::on_BtnApply_clicked()
 void QArrangeHelperWidget::on_BtnCancel_clicked()
 {
     close();
+}
+void QArrangeHelperWidget::on_EditKeyCount_textEdited(const QString &)
+{
+    QPalette plt( ui->EditKeyCount->palette() );
+    plt.setColor( QPalette::Text, Qt::red );
+    ui->EditKeyCount->setPalette( plt );
+}
+
+void QArrangeHelperWidget::on_EditWidth_textEdited(const QString &)
+{
+    QPalette plt( ui->EditWidth->palette() );
+    plt.setColor( QPalette::Text, Qt::red );
+    ui->EditWidth->setPalette( plt );
+}
+
+void QArrangeHelperWidget::on_EditHeight_textEdited(const QString &)
+{
+    QPalette plt( ui->EditHeight->palette() );
+    plt.setColor( QPalette::Text, Qt::red );
+    ui->EditHeight->setPalette( plt );
+}
+
+void QArrangeHelperWidget::on_EditInterval_textEdited(const QString &)
+{
+    QPalette plt( ui->EditInterval->palette() );
+    plt.setColor( QPalette::Text, Qt::red );
+    ui->EditInterval->setPalette( plt );
 }

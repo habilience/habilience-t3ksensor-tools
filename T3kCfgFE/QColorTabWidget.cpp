@@ -1,10 +1,14 @@
 #include "QColorTabWidget.h"
-#include <QPainter>
+
 #include "QUtils.h"
+#include "QGUIUtils.h"
+
+#include <QPainter>
 #include <QEvent>
 #include <QMouseEvent>
 #include <QResizeEvent>
 #include <QTimerEvent>
+
 
 QColorTabWidget::QColorTabWidget(QWidget *parent) :
     QWidget(parent)

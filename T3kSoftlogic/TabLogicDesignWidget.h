@@ -2,7 +2,7 @@
 #define TABLOGICDESIGNWIDGET_H
 
 #include "LogicDesignWidget.h"
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceEventHandler.h"
 
 #include <QWidget>
 
@@ -11,7 +11,7 @@ namespace Ui {
 class TabLogicDesignWidget;
 }
 
-class TabLogicDesignWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener
+class TabLogicDesignWidget : public QWidget, public QT3kDeviceEventHandler::IListener
 {
     Q_OBJECT
 
@@ -22,11 +22,10 @@ public:
     void setInvertDrawing(bool bInvert) { m_LogicDesigner.setInvertDrawing( bInvert ); if( isVisible() ) update(); }
 
 protected:
-	// CTPDPEventMulticaster::ITPDPEventListener
-    virtual void OnOpenT3kDevice(T3K_HANDLE);
-    virtual void OnCloseT3kDevice(T3K_HANDLE);
-    virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
-    virtual void OnFirmwareDownload(bool);
+    // QT3kDeviceEventHandler::IListener
+    virtual void TPDP_OnDisconnected(T3K_DEVICE_INFO devInfo);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnDownloadingFirmware(T3K_DEVICE_INFO devInfo, bool bIsDownload);
 
     virtual void showEvent(QShowEvent *);
     virtual void closeEvent(QCloseEvent *);
@@ -43,14 +42,16 @@ private:
     int                         m_nSensorGPIOCount;
 
 signals:
-    T3kHandle* getT3kHandle();
+    QT3kDevice* getT3kHandle();
     bool isValidT3kSensorState();
     void updatePreview();
 
 private slots:
-
     void on_BtnLogicdesign_clicked();
     void on_BtnApply_clicked();
+
+public slots:
+    void onConnectedT3kDevice();
 };
 
 #endif // TABLOGICDESIGNWIDGET_H

@@ -7,6 +7,8 @@
 
 #include "QIniFormat.h"
 
+#include "t3kcomdef.h"
+
 #include "ui/ColorTabBar.h"
 #include "ui/QLicenseWidget.h"
 
@@ -30,8 +32,8 @@
 extern bool g_bScreenShotMode;
 
 T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
-    QMainWindow(parent),
-    ui(new Ui::T3kSoftlogicDlg), m_strDataFileFromCmdLine(strModel)
+    QMainWindow(parent), m_strDataFileFromCmdLine(strModel),
+    ui(new Ui::T3kSoftlogicDlg)
 {
     ui->setupUi(this);
 
@@ -55,8 +57,8 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
 
     //m_hDeviceNotify = NULL;
 
-    m_pT3kHandle = new T3kHandle();
-    m_pT3kHandle->SetNotify( TPDPEventMultiCaster::instance() );
+    m_pT3kHandle = QT3kDevice::instance();
+    m_pT3kHandle->setEventHandler( QT3kDeviceEventHandler::instance() );
 
     bool bLoadOK = false;
 
@@ -122,6 +124,11 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
 
     connect( m_pTabCalibrationWidget, &TabCalibrationWidget::getT3kHandle, this, &T3kSoftlogicDlg::onGetT3kHandle, Qt::DirectConnection );
 
+    connect( this, &T3kSoftlogicDlg::connectedT3kDevice, this, &T3kSoftlogicDlg::onConnectedT3kDevice, Qt::QueuedConnection );
+    connect( this, &T3kSoftlogicDlg::connectedT3kDevice, m_pTabPanelWidget, &TabPanelWidget::onConnectedT3kDevice, Qt::QueuedConnection );
+    connect( this, &T3kSoftlogicDlg::connectedT3kDevice, m_pTabLogicDesignWidget, &TabLogicDesignWidget::onConnectedT3kDevice, Qt::QueuedConnection );
+    connect( this, &T3kSoftlogicDlg::connectedT3kDevice, m_pTabCalibrationWidget, &TabCalibrationWidget::onConnectedT3kDevice, Qt::QueuedConnection );
+
     ui->PreviewLayout->addLayout( &m_StackedPreviewLayout );
 
     m_StackedPreviewLayout.setObjectName( "StackedPrewviewLayout" );
@@ -174,7 +181,7 @@ T3kSoftlogicDlg::~T3kSoftlogicDlg()
 
     if( m_pT3kHandle )
     {
-        m_pT3kHandle->Close();
+        m_pT3kHandle->close();
         delete m_pT3kHandle;
         m_pT3kHandle = NULL;
     }
@@ -325,19 +332,12 @@ void T3kSoftlogicDlg::init()
 
 void T3kSoftlogicDlg::checkT3kDeviceStatus()
 {
-    int nDevCnt =	T3kHandle::GetDeviceCount( 0xFFFF, 0x0000, 1 ) +
-                    T3kHandle::GetDeviceCount( 0x2200, 0x3000, 1 ) +
-                    T3kHandle::GetDeviceCount( 0x2200, 0x3100, 1 ) +
-                    // later model
-                    T3kHandle::GetDeviceCount( 0x2200, 0x3200, 1 ) +
-                    T3kHandle::GetDeviceCount( 0x2200, 0x3500, 1 ) +
-                    T3kHandle::GetDeviceCount( 0x2200, 0x3900, 1 ) +
-                    T3kHandle::GetDeviceCount( 0x2200, 0xFF02, 0 );
+    int nDevCnt = 0;
+    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
+        nDevCnt += QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
 
     if( m_nT3kDeviceCount != 0 && m_nT3kDeviceCount != nDevCnt )
-    {
-        m_pT3kHandle->Close();
-    }
+        m_pT3kHandle->close();
 
     m_nT3kDeviceCount = nDevCnt;
 }
@@ -352,7 +352,7 @@ bool T3kSoftlogicDlg::openT3kHandle()
         m_nTimerReconnect = 0;
     }
 
-    if( m_pT3kHandle->IsOpen() )
+    if( m_pT3kHandle->isOpen() )
         return true;
 
     checkT3kDeviceStatus();
@@ -362,63 +362,26 @@ bool T3kSoftlogicDlg::openT3kHandle()
         if( m_SelectDeviceDlg->exec() == QDialog::Accepted )
         {
             QSelectDeviceWidget::DEVICE_ID deviceId = m_SelectDeviceDlg->getDevId();
-            bRet = m_pT3kHandle->OpenWithVIDPID( deviceId.nVID, deviceId.nPID, deviceId.nMI, deviceId.nDeviceIndex );
+            bRet = m_pT3kHandle->open( deviceId.nVID, deviceId.nPID, deviceId.nMI, deviceId.nDeviceIndex );
         }
 
         m_SelectDeviceDlg->close();
     }
     else
     {
-        do
+        for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
         {
-            int nOldT3000DetectCnt = T3kHandle::GetDeviceCount( 0xFFFF, 0x0000, 1 );
-            if( nOldT3000DetectCnt > 0 )
+            int nCnt = QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+            if( nCnt > 0 )
             {
-                bRet = m_pT3kHandle->OpenWithVIDPID( 0xFFFF, 0x0000, 1, 0 );
-                break;
+                bRet = m_pT3kHandle->open( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI, 0 );
             }
-            int nT3000DetectCnt = T3kHandle::GetDeviceCount( 0x2200, 0x3000, 1 );
-            if( nT3000DetectCnt > 0 )
-            {
-                bRet = m_pT3kHandle->OpenWithVIDPID( 0x2200, 0x3000, 1, 0 );
-                break;
-            }
-            int nT3100DetectCnt = T3kHandle::GetDeviceCount( 0x2200, 0x3100, 1 );
-            if( nT3100DetectCnt > 0 )
-            {
-                bRet = m_pT3kHandle->OpenWithVIDPID( 0x2200, 0x3100, 1, 0 );
-                break;
-            }
-            int nT3200DetectCnt = T3kHandle::GetDeviceCount( 0x2200, 0x3200, 1 );
-            if( nT3200DetectCnt > 0 )
-            {
-                bRet = m_pT3kHandle->OpenWithVIDPID( 0x2200, 0x3200, 1, 0 );
-                break;
-            }
-            int nT3500DetectCnt = T3kHandle::GetDeviceCount( 0x2200, 0x3500, 1 );
-            if( nT3500DetectCnt > 0 )
-            {
-                bRet = m_pT3kHandle->OpenWithVIDPID( 0x2200, 0x3500, 1, 0 );
-                break;
-            }
-            int nT3900DetectCnt = T3kHandle::GetDeviceCount( 0x2200, 0x3900, 1 );
-            if( nT3900DetectCnt > 0 )
-            {
-                bRet = m_pT3kHandle->OpenWithVIDPID( 0x2200, 0x3900, 1, 0 );
-                break;
-            }
-            int nT3kVHIDDetectCnt = T3kHandle::GetDeviceCount( 0x2200, 0xFF02, 0 );
-            if( nT3kVHIDDetectCnt > 0 )
-            {
-                bRet = m_pT3kHandle->OpenWithVIDPID( 0x2200, 0xFF02, 0, 0 );
-                break;
-            }
-        } while( false );
+        }
     }
 
     if( bRet )
     {
-
+        emit connectedT3kDevice();
     }
     else
     {
@@ -429,22 +392,22 @@ bool T3kSoftlogicDlg::openT3kHandle()
     return bRet;
 }
 
-void T3kSoftlogicDlg::OnOpenT3kDevice(T3K_HANDLE)
+void T3kSoftlogicDlg::onConnectedT3kDevice()
 {
     if( !isVisible() ) return;
 
     m_bIsConnected = true;
 
-    m_pT3kHandle->SetInstantMode( T3K_HID_MODE_COMMAND, 5000, 0 );
+    m_pT3kHandle->setInstantMode( T3K_HID_MODE_COMMAND, 5000, 0 );
 
     char szCmd[256];
     sprintf( szCmd, "%s?", cstrFirmwareVersion );
-    m_pT3kHandle->SendCommand( szCmd, true );
+    m_pT3kHandle->sendCommand( szCmd, true );
 }
 
-void T3kSoftlogicDlg::OnCloseT3kDevice(T3K_HANDLE)
+void T3kSoftlogicDlg::TPDP_OnDisconnected(T3K_DEVICE_INFO /*devInfo*/)
 {
-    m_pT3kHandle->Close();
+    m_pT3kHandle->close();
     m_bIsConnected = true;
 
     if( !m_nTimerReconnect )
@@ -454,22 +417,22 @@ void T3kSoftlogicDlg::OnCloseT3kDevice(T3K_HANDLE)
 
 }
 
-void T3kSoftlogicDlg::OnFirmwareDownload(bool bDownload)
+void T3kSoftlogicDlg::TPDP_OnDownloadingFirmware(T3K_DEVICE_INFO /*devInfo*/, bool bIsDownload)
 {
-    m_bFirmwareDownload = bDownload;
+    m_bFirmwareDownload = bIsDownload;
 }
 
-void T3kSoftlogicDlg::OnRSP(ResponsePart Part, ushort, const char *, long, bool, const char *szCmd)
+void T3kSoftlogicDlg::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
-    if ( strstr(szCmd, cstrFirmwareVersion) == szCmd )
+    if ( strstr(cmd, cstrFirmwareVersion) == cmd )
     {
         switch( Part )
         {
         case MM:
             {
-                float fFirmwareVersion = (float)atof(szCmd + sizeof(cstrFirmwareVersion) - 1);
+                float fFirmwareVersion = (float)atof(cmd + sizeof(cstrFirmwareVersion) - 1);
                 float fMinDesireFW = (float)MM_MIN_FIRMWARE_VERSION;
                 float fMaxDesireFW = (float)MM_NEXT_FIRMWARE_VERSION;
                 if( (fFirmwareVersion < fMinDesireFW) || (fFirmwareVersion >= fMaxDesireFW) )

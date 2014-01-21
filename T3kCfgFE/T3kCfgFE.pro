@@ -194,6 +194,7 @@ SOURCES += main.cpp\
     ../common/qsingleapplication/qtlockedfile.cpp \
     ../common/qsingleapplication/qtlocalpeer.cpp \
     ../common/QUtils.cpp \
+    ../common/QGUIUtils.cpp \
     ../common/QKeyMapStr.cpp \
     ../common/QIni.cpp \
     ../common/QLangZipFile.cpp \
@@ -250,6 +251,7 @@ HEADERS  += dialog.h \
     ../common/qsingleapplication/qtlockedfile.h \
     ../common/qsingleapplication/qtlocalpeer.h \
     ../common/QUtils.h \
+    ../common/QGUIUtils.h \
     ../common/QKeyMapStr.h \
     ../common/QSingletone.h \
     ../common/QIni.h \

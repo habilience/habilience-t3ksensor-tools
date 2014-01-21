@@ -1,7 +1,7 @@
 #ifndef QT3KHIDOBJECT_H
 #define QT3KHIDOBJECT_H
 
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QLangManager.h"
 
 #include "LogDataDef.h"
@@ -17,11 +17,11 @@
 #define LDS_ENVIRONMENT     3
 #define LDS_SAVE            4
 
-class QT3kHIDObject : public QObject, public QLangManager::ILangChangeNotify, public TPDPEventMultiCaster::ITPDPEventListener
+class QT3kHIDObject : public QObject, public QLangManager::ILangChangeNotify, public QT3kDeviceREventHandler::IListener
 {
     Q_OBJECT
 public:
-    explicit QT3kHIDObject(T3kHandle*& pHandle, QObject *parent = 0);
+    explicit QT3kHIDObject(QT3kDeviceR*& pHandle, QObject *parent = 0);
     virtual ~QT3kHIDObject();
 
     virtual bool Start( SensorLogData* pStorage ) = 0;
@@ -35,7 +35,7 @@ protected:
     void StopAsyncTimeoutChecker();
 
 protected:
-    T3kHandle*&        m_pT3kHandle;
+    QT3kDeviceR*&        m_pT3kHandle;
 
     QTimer              m_Timer;
     QString             m_strSendCmd;

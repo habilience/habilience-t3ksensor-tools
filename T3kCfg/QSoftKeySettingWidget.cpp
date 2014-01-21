@@ -9,7 +9,8 @@
 #include <QPalette>
 #include <QPixmap>
 
-QSoftKeySettingWidget::QSoftKeySettingWidget(T3kHandle*& pHandle, QWidget *parent) :
+
+QSoftKeySettingWidget::QSoftKeySettingWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QSoftKeySettingWidget), m_pT3kHandle(pHandle)
 {
@@ -122,22 +123,22 @@ void QSoftKeySettingWidget::onChangeLanguage()
     ui->TitleSotfKey->setText( Res.getResString( QString::fromUtf8("SOFTKEY SETTING"), QString::fromUtf8("TEXT_TITLE") ) );
 }
 
-void QSoftKeySettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QSoftKeySettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
-    if( strstr( sCmd, cstrSoftkey ) == sCmd )
+    if( strstr( cmd, cstrSoftkey ) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrSoftkey );
 
-        int nAddCount = ParseSoftKey( sCmd );
+        int nAddCount = ParseSoftKey( cmd );
         m_nAddCount = nAddCount;
         if( m_bDefault || m_bUpdateList )
         {
             UpdateListEnable();
         }
     }
-    else if ( strstr( sCmd, cstrSoftlogic ) == sCmd )
+    else if ( strstr( cmd, cstrSoftlogic ) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrSoftlogic );    
 
@@ -145,7 +146,7 @@ void QSoftKeySettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, c
         {
             ui->TableSoftkeyMap->setUpdatesEnabled( false );
 
-            ParseSoftLogic( sCmd );
+            ParseSoftLogic( cmd );
 
             ui->TableSoftkeyMap->setUpdatesEnabled( true );
 
@@ -468,7 +469,7 @@ void QSoftKeySettingWidget::UpdateListEnable()
         QString str( m_bDefault ? '*' : '?' );
         m_RequestSensorData.AddItem( cstrSoftlogic, str );
 
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrSoftlogic).arg(str).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrSoftlogic).arg(str), true );
         if( m_bDefault )
             m_bDefault = false;
     }
@@ -486,7 +487,7 @@ bool QSoftKeySettingWidget::Save()
 
     QString strCmd = QString("%1%2").arg(cstrSoftlogic).arg(strSave);
     qDebug( "%s", (const char*)strCmd.toUtf8().data() );
-    m_pT3kHandle->SendCommand( (const char*)strCmd.toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( strCmd, true );
 
     return true;
 }
@@ -503,7 +504,7 @@ void QSoftKeySettingWidget::RequestSensorData(bool bDefault)
     QString str( cQ );
     m_RequestSensorData.AddItem( cstrSoftkey, str );
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrSoftkey).arg(str).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrSoftkey).arg(str), true );
 
     m_RequestSensorData.Start( m_pT3kHandle );
 }

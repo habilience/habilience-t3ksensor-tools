@@ -112,6 +112,7 @@ QKeyDesignWidget::QKeyDesignWidget(QWidget *parent) :
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::recalcSelectionKeys, this, &QKeyDesignWidget::onRecalcSelectionKeys );
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::updateScreen, this, &QKeyDesignWidget::onUpdateScreen );
         connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::resetKeys, this, &QKeyDesignWidget::onResetKeys );
+        connect( m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::screenSize, this, &QKeyDesignWidget::onScreenSize );
 
         connect( this, &QKeyDesignWidget::keyStateCount, m_pSoftKeyDesignTool, &QSoftKeyDesignToolWidget::onKeyStateCount );
 
@@ -1689,7 +1690,7 @@ void QKeyDesignWidget::paintEvent(QPaintEvent *)
     if ( m_pSoftKeyDesignTool )
         m_pSoftKeyDesignTool->updateUIButtonState( (int)m_SelectKeys.count(), checkGroupStatus(), m_SelectKeys );
 
-    QRect rcClient( 0, 0, width()-1, height()-1 );
+    QRect rcClient( 0, 0, width(), height() );
 
     QPainter painterCanvas;
 
@@ -1727,6 +1728,8 @@ void QKeyDesignWidget::showEvent(QShowEvent *)
 {
     if( m_eScreenMode == ScreenModeKeyDesign && m_pSoftKeyDesignTool && !m_pSoftKeyDesignTool->isVisible() )
         m_pSoftKeyDesignTool->show();
+
+    resizeScreen();
 }
 
 void QKeyDesignWidget::closeEvent(QCloseEvent *)
@@ -2253,8 +2256,8 @@ int QKeyDesignWidget::onAddNewKey()
         rcKey.setLeft( nOffset );
         rcKey.setTop( nOffset );
         nOffset = DEV_COORD * 10 / 100 / 2;
-        rcKey.setRight( rcKey.left() + nOffset );
-        rcKey.setBottom( rcKey.top() + nOffset );
+        rcKey.setWidth( nOffset );
+        rcKey.setHeight( nOffset );
     }
     else
     {
@@ -2461,6 +2464,15 @@ void QKeyDesignWidget::onUpdateScreen()
     resizeScreen();
 }
 
+void QKeyDesignWidget::onScreenSize(int eScreen)
+{
+    m_eScrnSize = (ScreenSize)eScreen;
+
+    resizeScreen();
+
+    update();
+}
+
 void QKeyDesignWidget::onResetKeys()
 {
     updateKeys();
@@ -2631,8 +2643,8 @@ void QKeyDesignWidget::onRubberBandFinish(bool bChanged)
         rcNew = m_rcDevTracker;
         long lNewWidth = (long)(m_rcDevTracker.width() / dX + 0.5);
         long lNewHeight = (long)(m_rcDevTracker.height() / dY + 0.5);
-        rcNew.setRight( rcNew.left() + lNewWidth );
-        rcNew.setBottom( rcNew.top() + lNewHeight );
+        rcNew.setWidth( lNewWidth );
+        rcNew.setHeight( lNewHeight );
         if ( rcNewTracker.topLeft() != m_rcOldTracker.topLeft() )
         {
             QPoint ptOffset = rcNewTracker.topLeft() - m_rcOldTracker.topLeft();

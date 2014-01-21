@@ -33,6 +33,8 @@ protected:
 protected:
     QKeyDesignWidget     m_DesignCanvasWidget;
 
+    QStringList             m_TableLabals;
+
 private:
     Ui::TabKeyDesignWidget* ui;
 

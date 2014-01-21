@@ -15,13 +15,16 @@
 #define LD_Cam4             3
 #define LD_End              4
 
-QT3kLoadSideviewObject::QT3kLoadSideviewObject(T3kHandle*& pHandle, QObject *parent) :
+QT3kLoadSideviewObject::QT3kLoadSideviewObject(QT3kDeviceR*& pHandle, QObject *parent) :
     QT3kHIDObject(pHandle, parent)
 {
     m_nLoadCamNo = LD_End;
 
     m_pSideViewImage = NULL;
     m_nCountAskCam = 0;
+
+    m_pImageBuffer = NULL;
+    m_pCheckBufferY = NULL;
 
     m_pStorageHandle = NULL;
 
@@ -34,6 +37,18 @@ QT3kLoadSideviewObject::~QT3kLoadSideviewObject()
     {
         delete m_pSideViewImage;
         m_pSideViewImage = NULL;
+    }
+
+    if( m_pImageBuffer )
+    {
+        delete m_pImageBuffer;
+        m_pImageBuffer = NULL;
+    }
+
+    if( m_pCheckBufferY )
+    {
+        delete m_pCheckBufferY;
+        m_pCheckBufferY = NULL;
     }
 }
 
@@ -50,8 +65,8 @@ bool QT3kLoadSideviewObject::Start(SensorLogData *pStorage)
 
     m_nLoadCamNo = LD_Cam1;
     m_strSendCmd = "cam1/mode=sideview";
-    m_nSendCmdID = m_pT3kHandle->SendCommand( (const char*)m_strSendCmd.toUtf8().data(), true );
-    m_pT3kHandle->SetReportView( true );
+    m_nSendCmdID = m_pT3kHandle->sendCommand( m_strSendCmd, true );
+    m_pT3kHandle->setReportView( true );
 
     StartAsyncTimeoutChecker( 10000 );
 
@@ -67,17 +82,17 @@ void QT3kLoadSideviewObject::NextSideView(int nCamNo)
         m_strSendCmd += "sub/";
 
     m_strSendCmd += "mode=sideview";
-    m_nSendCmdID = m_pT3kHandle->SendCommand( (const char*)m_strSendCmd.toUtf8().data(), true );
+    m_nSendCmdID = m_pT3kHandle->sendCommand( m_strSendCmd, true );
 }
 
 void QT3kLoadSideviewObject::FinishSideView()
 {
     StopAsyncTimeoutChecker();
 
-    m_pT3kHandle->SendCommand( (const char*)"cam1/mode=detection", true );
-    m_pT3kHandle->SendCommand( (const char*)"cam2/mode=detection", true );
+    m_pT3kHandle->sendCommand( "cam1/mode=detection", true );
+    m_pT3kHandle->sendCommand( "cam2/mode=detection", true );
 
-    m_pT3kHandle->SetReportView( false );
+    m_pT3kHandle->setReportView( false );
 
     QMap<int, CMLogDataGroup*>::iterator iterCM1Sub = m_pStorageHandle->CM.find( CM1_1 );
     QMap<int, CMLogDataGroup*>::iterator iterCM2Sub = m_pStorageHandle->CM.find( CM2_1 );
@@ -112,15 +127,45 @@ void QT3kLoadSideviewObject::FinishSideView()
     m_bStart = false;
 }
 
-void QT3kLoadSideviewObject::OnPRV(ResponsePart Part, ushort, const char *, int nWidth, int nHeight, int, unsigned char *pImgBuffer)
+void QT3kLoadSideviewObject::TPDP_OnPRV(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int total, int offset, const unsigned char *data, int cnt)
 {
     int nCamNo = Part-1;
     Q_ASSERT( nCamNo >= 0 && nCamNo < m_nCountAskCam );
 
+    if ( m_pSideViewImage && (m_pSideViewImage->width() != cnt || m_pSideViewImage->height() != total) )
+    {
+        delete m_pSideViewImage;
+        m_pSideViewImage = NULL;
+    }
+
     if( !m_pSideViewImage )
-        m_pSideViewImage = new QImage( pImgBuffer, nWidth, nHeight, QImage::Format_RGB32 );
-    else
-        (*m_pSideViewImage) = QImage( pImgBuffer, nWidth, nHeight, QImage::Format_RGB32 );
+    {
+        if( m_pCheckBufferY )
+            delete m_pCheckBufferY;
+        m_pCheckBufferY = new uchar[total];
+        memset( m_pCheckBufferY, 0, sizeof(uchar)*total );
+
+        m_pSideViewImage = new QImage( cnt, total, QImage::Format_RGB32 );
+        m_pSideViewImage->fill( QColor(0,0,0) );
+    }
+
+    int nOffsetY = -offset + ((total - 1) / 2);
+    offset += total/2;
+    if ( offset >= 0 && offset < total )
+    {
+
+        for ( int ni = 0; ni < cnt; ni++ )
+            m_pSideViewImage->setPixel( ni, nOffsetY, qRgb( data[ni],data[ni],data[ni] ) );
+        m_pCheckBufferY[offset] = 1;
+    }
+
+    for( int i = 0 ; i < total ; i++ )
+    {
+        if( m_pCheckBufferY[i] == 0 )
+            return;
+    }
+
+    // complete
     (*m_pSideViewImage) = m_pSideViewImage->mirrored();
 
     QString strPngName;
@@ -167,6 +212,9 @@ void QT3kLoadSideviewObject::OnPRV(ResponsePart Part, ushort, const char *, int 
 
     emit PrintProgreeLog( strLog );
 
+    ::memset( m_pCheckBufferY, 0, sizeof(uchar) * total );
+    m_pSideViewImage->fill( QColor(0,0,0) );
+
     if( nCamNo+1 < m_nCountAskCam )
     {
         NextSideView( nCamNo+1 );
@@ -176,14 +224,14 @@ void QT3kLoadSideviewObject::OnPRV(ResponsePart Part, ushort, const char *, int 
     FinishSideView();
 }
 
-void QT3kLoadSideviewObject::OnRSE(ResponsePart Part, ushort, const char *sPartId, long lId, bool, const char *sCmd)
+void QT3kLoadSideviewObject::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char *partid, int id, bool /*bFinal*/, const char *cmd)
 {
-    if( m_nSendCmdID != lId ) return;
+    if( m_nSendCmdID != id ) return;
 
-    QString strPartID( sPartId );
+    QString strPartID( partid );
     if( !strPartID.contains( "RSE" ) ) return;
 
-    if( strstr( sCmd, cstrNoCam ) == sCmd )
+    if( strstr( cmd, cstrNoCam ) == cmd )
     {
         if( m_strSendCmd.contains("sub/") && Part < CM1_1 )
             Part = (ResponsePart)(Part+2);

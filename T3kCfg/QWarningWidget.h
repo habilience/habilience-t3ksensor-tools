@@ -2,7 +2,6 @@
 #define QWARNINGWIDGET_H
 
 #include <QDialog>
-#include "TPDPEventMultiCaster.h"
 #include "QLangManager.h"
 
 namespace Ui {
@@ -26,8 +25,6 @@ protected:
 
 private:
     Ui::QWarningWidget *ui;
-
-    T3kHandle*          m_pT3kHandle;
 
     QString             m_strTitleGroup;
     QString             m_strTitleText;

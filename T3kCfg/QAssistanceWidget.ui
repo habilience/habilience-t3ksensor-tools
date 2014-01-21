@@ -444,7 +444,7 @@
    <iconset resource="T3kCfgRes.qrc">
     <normaloff>:/T3kCfgRes/resources/PNG_ICON_SETTING.png</normaloff>:/T3kCfgRes/resources/PNG_ICON_SETTING.png</iconset>
   </property>
-  <widget class="QColorTabWidget" name="TabCamWidget">
+  <widget class="Q2ColorTabWidget" name="TabCamWidget" native="true">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -470,16 +470,10 @@
      <family>Arial</family>
     </font>
    </property>
-   <property name="tabShape">
-    <enum>QTabWidget::Rounded</enum>
-   </property>
-   <property name="currentIndex">
+   <property name="currentIndex" stdset="0">
     <number>-1</number>
    </property>
-   <property name="elideMode">
-    <enum>Qt::ElideNone</enum>
-   </property>
-   <property name="usesScrollButtons">
+   <property name="usesScrollButtons" stdset="0">
     <bool>true</bool>
    </property>
   </widget>
@@ -563,9 +557,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QColorTabWidget</class>
-   <extends>QTabWidget</extends>
-   <header>ui/ColorTabWidget.h</header>
+   <class>Q2ColorTabWidget</class>
+   <extends>QWidget</extends>
+   <header>ui/Q2ColorTabWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

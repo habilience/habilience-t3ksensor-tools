@@ -1,13 +1,13 @@
-#include "ColorTabWidget.h"
+#include "Q2ColorTabWidget.h"
 
-QColorTabWidget::QColorTabWidget(QWidget *parent) :
+Q2ColorTabWidget::Q2ColorTabWidget(QWidget *parent) :
     QTabWidget(parent)
 {
     m_pTabBar = new QColorTabBar( this );
     setTabBar( m_pTabBar );
 }
 
-QColorTabWidget::~QColorTabWidget()
+Q2ColorTabWidget::~Q2ColorTabWidget()
 {
     if( m_pTabBar )
     {
@@ -16,7 +16,7 @@ QColorTabWidget::~QColorTabWidget()
     }
 }
 
-void QColorTabWidget::blinkTab(int index)
+void Q2ColorTabWidget::blinkTab(int index)
 {
     m_pTabBar->BlinkTab( index );
 }

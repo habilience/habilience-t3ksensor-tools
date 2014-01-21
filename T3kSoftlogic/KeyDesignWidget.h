@@ -63,6 +63,8 @@ public:
 
     void updateTouchCount( int nTouchCount );
 
+    void init();
+
 protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void timerEvent(QTimerEvent *);
@@ -75,8 +77,6 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *);
     virtual void mouseMoveEvent(QMouseEvent *);
     virtual void mouseDoubleClickEvent(QMouseEvent *);
-
-    void init();
 
     void draw( QPainter* painter );
 
@@ -214,6 +214,7 @@ public slots:
     void onInvalidateKey( CSoftkey* key );
     void onRecalcSelectionKeys( QRect rcOld, QRect rcNew );
     void onUpdateScreen();
+    void onScreenSize( int eScreen );
 
     // QKeyTracker
     void onRubberBandFinish(bool bChanged);

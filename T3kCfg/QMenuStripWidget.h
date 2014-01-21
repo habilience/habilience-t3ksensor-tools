@@ -4,7 +4,7 @@
 #include <QWidget>
 #include "QRaisePushButton.h"
 
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QLangManager.h"
 
 
@@ -22,11 +22,11 @@ namespace Ui {
     class QMenuStripWidget;
 }
 
-class QMenuStripWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
+class QMenuStripWidget : public QWidget, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 public:
-    explicit QMenuStripWidget(T3kHandle*& pHandle, QWidget *parent = 0);
+    explicit QMenuStripWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
     ~QMenuStripWidget();
 
     void SetMenuButton( int nIndex );
@@ -37,7 +37,7 @@ protected:
     virtual void showEvent(QShowEvent *evt);
 
     virtual void onChangeLanguage();
-    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 protected:
     QRaisePushButton**      m_arybtnMenu;
@@ -53,7 +53,7 @@ protected:
 
 private:
     Ui::QMenuStripWidget *ui;
-    T3kHandle*&            m_pT3kHandle;
+    QT3kDeviceR*&            m_pT3kHandle;
 
 signals:
     void ShowMenuEvent(int nMenu);

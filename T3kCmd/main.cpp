@@ -76,7 +76,6 @@ static void OnStart()
 int T3kLoop(void* pContext)
 {
     g_HIDCmd.InitT3k();
-    g_HIDCmd.ProcessT3k();
 
     QExFuncThread* pSender = (QExFuncThread*)pContext;
 

@@ -55,29 +55,29 @@ void TabPanelWidget::setFocusPaname()
     ui->EditInfoName->setFocus();
 }
 
-void TabPanelWidget::OnOpenT3kDevice(T3K_HANDLE /*hDevice*/)
+void TabPanelWidget::onConnectedT3kDevice()
 {
     if( !isVisible() ) return;
 
     ui->BtnLoad->setEnabled( true );
 }
 
-void TabPanelWidget::OnCloseT3kDevice(T3K_HANDLE /*hDevice*/)
+void TabPanelWidget::TPDP_OnDisconnected(T3K_DEVICE_INFO /*devInfo*/)
 {
     if( !isVisible() ) return;
 
     ui->BtnLoad->setEnabled( false );
 }
 
-void TabPanelWidget::OnRSP(ResponsePart, ushort, const char *, long, bool, const char *szCmd)
+void TabPanelWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
     const char * buf;
 
-    if ( strstr(szCmd, cstrFactorialSoftkey) == szCmd )
+    if ( strstr(cmd, cstrFactorialSoftkey) == cmd )
     {
-        buf = szCmd + sizeof(cstrFactorialSoftkey) - 1;
+        buf = cmd + sizeof(cstrFactorialSoftkey) - 1;
 
         CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
 
@@ -92,9 +92,9 @@ void TabPanelWidget::OnRSP(ResponsePart, ushort, const char *, long, bool, const
             emit updatePreview();
         }
     }
-    else if ( strstr(szCmd, cstrFactorialSoftkeyBind) == szCmd )
+    else if ( strstr(cmd, cstrFactorialSoftkeyBind) == cmd )
     {
-        buf = szCmd + sizeof(cstrFactorialSoftkeyBind) - 1;
+        buf = cmd + sizeof(cstrFactorialSoftkeyBind) - 1;
 
         CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
 
@@ -108,9 +108,9 @@ void TabPanelWidget::OnRSP(ResponsePart, ushort, const char *, long, bool, const
             emit updatePreview();
         }
     }
-    else if ( strstr(szCmd, cstrFactorialSoftlogic) == szCmd )
+    else if ( strstr(cmd, cstrFactorialSoftlogic) == cmd )
     {
-        buf = szCmd + sizeof(cstrFactorialSoftlogic) - 1;
+        buf = cmd + sizeof(cstrFactorialSoftlogic) - 1;
 
         CSoftlogicArray& Logics = T3kCommonData::instance()->getLogics();
 
@@ -121,9 +121,9 @@ void TabPanelWidget::OnRSP(ResponsePart, ushort, const char *, long, bool, const
             Logics.load(strData, NULL);
         }
     }
-    else if ( strstr(szCmd, cstrFactorialGPIO) == szCmd )
+    else if ( strstr(cmd, cstrFactorialGPIO) == cmd )
     {
-        buf = szCmd + sizeof(cstrFactorialGPIO) - 1;
+        buf = cmd + sizeof(cstrFactorialGPIO) - 1;
 
         CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
 
@@ -154,12 +154,16 @@ void TabPanelWidget::on_EditScreenWidth_editingFinished()
 {
     CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
     Keys.setScreenDimension( ui->EditScreenWidth->text().toDouble(), ui->EditScreenHeight->text().toDouble() );
+
+    ui->EditScreenWidth->setText( QString("%1").arg(ui->EditScreenWidth->text().toDouble(), 0, 'f', 1 ) );
 }
 
 void TabPanelWidget::on_EditScreenHeight_editingFinished()
 {
     CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
     Keys.setScreenDimension( ui->EditScreenWidth->text().toDouble(), ui->EditScreenHeight->text().toDouble() );
+
+    ui->EditScreenHeight->setText( QString("%1").arg(ui->EditScreenHeight->text().toDouble(), 0, 'f', 1 ) );
 }
 
 void TabPanelWidget::on_EditInfoName_textChanged(const QString&)
@@ -192,14 +196,14 @@ void TabPanelWidget::on_BtnLoad_clicked()
     if( msg.exec() == QMessageBox::No )
         return;
 
-    T3kHandle* pT3kHandle = getT3kHandle();
+    QT3kDevice* pT3kHandle = getT3kHandle();
 
     char szCmd[256];
-    if( pT3kHandle->IsOpen() )
+    if( pT3kHandle->isOpen() )
     {
         m_bLoadFromSensor = true;
         sprintf( szCmd, "%s?", cstrFactorialSoftkey );
-        if( !pT3kHandle->SendCommand( szCmd, false ) )
+        if( !pT3kHandle->sendCommand( szCmd, false ) )
         {
             QMessageBox::critical( this, "Error", "Cannot retrieve the Sofkey data from the sensor.", QMessageBox::Ok );
             m_bLoadFromSensor = false;
@@ -209,14 +213,14 @@ void TabPanelWidget::on_BtnLoad_clicked()
 
         m_bLoadFromSensor = true;
         sprintf( szCmd, "%s?", cstrFactorialSoftkeyBind );
-        if( !pT3kHandle->SendCommand( szCmd, false ) )
+        if( !pT3kHandle->sendCommand( szCmd, false ) )
         {
             m_bLoadFromSensor = false;
         }
 
         m_bLoadFromSensor = true;
         sprintf( szCmd, "%s?", cstrFactorialSoftlogic );
-        if( !pT3kHandle->SendCommand( szCmd, false ) )
+        if( !pT3kHandle->sendCommand( szCmd, false ) )
         {
             QMessageBox::critical( this, "Error", "Cannot retrieve the Softlogic data from the sensor.", QMessageBox::Ok );
             m_bLoadFromSensor = false;
@@ -225,7 +229,7 @@ void TabPanelWidget::on_BtnLoad_clicked()
 
         m_bLoadFromSensor = true;
         sprintf( szCmd, "%s?", cstrFactorialGPIO );
-        if ( !pT3kHandle->SendCommand( szCmd, false ) )
+        if ( !pT3kHandle->sendCommand( szCmd, false ) )
         {
             m_bLoadFromSensor = false;
             return;

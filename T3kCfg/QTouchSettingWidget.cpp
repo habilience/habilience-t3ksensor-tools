@@ -9,7 +9,7 @@
 #include <QTimer>
 #include <QMessageBox>
 
-QTouchSettingWidget::QTouchSettingWidget(T3kHandle*& pHandle, QWidget *parent) :
+QTouchSettingWidget::QTouchSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QTouchSettingWidget), m_pT3kHandle(pHandle)
 {
@@ -94,15 +94,15 @@ void QTouchSettingWidget::onChangeLanguage()
     ui->EditZoom->setAlignment( eFlag );
 }
 
-void QTouchSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QTouchSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
-    if ( strstr(sCmd, cstrTimeA) == sCmd )
+    if ( strstr(cmd, cstrTimeA) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrTimeA );
 
-        int nTime = atoi(sCmd + sizeof(cstrTimeA) - 1);
+        int nTime = atoi(cmd + sizeof(cstrTimeA) - 1);
         if( nTime < NV_DEF_TIME_A_RANGE_START )
             nTime = NV_DEF_TIME_A_RANGE_START;
         if( nTime > NV_DEF_TIME_A_RANGE_END )
@@ -112,11 +112,11 @@ void QTouchSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, con
         ui->EditTap->setText( strV );
         ui->SldTap->setValue( NV_DEF_TIME_A_RANGE_END/100 - nTime/100 + (NV_DEF_TIME_A_RANGE_START)/100 );
     }
-    else if ( strstr(sCmd, cstrTimeL) == sCmd )
+    else if ( strstr(cmd, cstrTimeL) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrTimeL );
 
-        int nTime = atoi(sCmd + sizeof(cstrTimeL) - 1);
+        int nTime = atoi(cmd + sizeof(cstrTimeL) - 1);
         if( nTime < NV_DEF_TIME_L_RANGE_START )
             nTime = NV_DEF_TIME_L_RANGE_START;
         if( nTime > NV_DEF_TIME_L_RANGE_END )
@@ -126,11 +126,11 @@ void QTouchSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, con
         ui->EditLongTap->setText( strV );
         ui->SldLongTap->setValue( NV_DEF_TIME_L_RANGE_END/100 - nTime/100 + (NV_DEF_TIME_L_RANGE_START)/100 );
     }
-    else if ( strstr(sCmd, cstrWheelSensitivity) == sCmd )
+    else if ( strstr(cmd, cstrWheelSensitivity) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrWheelSensitivity );
 
-        int nSens = atoi(sCmd + sizeof(cstrWheelSensitivity) - 1);
+        int nSens = atoi(cmd + sizeof(cstrWheelSensitivity) - 1);
         if( !(nSens >= NV_DEF_WHEEL_SENSITIVITY_RANGE_START && nSens <= NV_DEF_WHEEL_SENSITIVITY_RANGE_END) )
         {
             nSens = NV_DEF_WHEEL_SENSITIVITY;
@@ -139,11 +139,11 @@ void QTouchSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, con
         ui->EditWheel->setText( strV );
         ui->SldWheel->setValue( nSens );
     }
-    else if ( strstr(sCmd, cstrZoomSensitivity) == sCmd )
+    else if ( strstr(cmd, cstrZoomSensitivity) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrZoomSensitivity );
 
-        int nSens = atoi(sCmd + sizeof(cstrZoomSensitivity) - 1);
+        int nSens = atoi(cmd + sizeof(cstrZoomSensitivity) - 1);
         if( !(nSens >= NV_DEF_ZOOM_SENSITIVITY_RANGE_START && nSens <= NV_DEF_ZOOM_SENSITIVITY_RANGE_END) )
         {
             nSens = NV_DEF_ZOOM_SENSITIVITY;
@@ -168,11 +168,11 @@ void QTouchSettingWidget::RequestSensorData( bool bDefault )
     m_RequestSensorData.AddItem( cstrWheelSensitivity, str );
     m_RequestSensorData.AddItem( cstrZoomSensitivity, str );
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrTimeA).arg(cQ).toUtf8().data(), true );
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrTimeL).arg(cQ).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrTimeA).arg(cQ), true );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrTimeL).arg(cQ), true );
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrWheelSensitivity).arg(cQ).toUtf8().data(), true );
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrZoomSensitivity).arg(cQ).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrWheelSensitivity).arg(cQ), true );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrZoomSensitivity).arg(cQ), true );
 
     m_RequestSensorData.Start( m_pT3kHandle );
 }
@@ -227,7 +227,7 @@ void QTouchSettingWidget::SendTimeTap( int nTime )
     if( nTime > NV_DEF_TIME_A_RANGE_END )
         nTime = NV_DEF_TIME_A_RANGE_END;
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrTimeA).arg(nTime).toUtf8().data(), false );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrTimeA).arg(nTime), false );
 }
 
 void QTouchSettingWidget::SendTimeLongTap( int nTime )
@@ -239,7 +239,7 @@ void QTouchSettingWidget::SendTimeLongTap( int nTime )
     if( nTime > NV_DEF_TIME_L_RANGE_END )
         nTime = NV_DEF_TIME_L_RANGE_END;
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrTimeL).arg(nTime).toUtf8().data(), false );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrTimeL).arg(nTime), false );
 }
 
 void QTouchSettingWidget::SendSensWheel( int nSensitivity )
@@ -251,7 +251,7 @@ void QTouchSettingWidget::SendSensWheel( int nSensitivity )
         nSensitivity = NV_DEF_WHEEL_SENSITIVITY;
     }
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrWheelSensitivity).arg(nSensitivity).toUtf8().data(), false );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrWheelSensitivity).arg(nSensitivity), false );
 }
 
 void QTouchSettingWidget::SendSensZoom( int nSensitivity )
@@ -263,7 +263,7 @@ void QTouchSettingWidget::SendSensZoom( int nSensitivity )
         nSensitivity = NV_DEF_ZOOM_SENSITIVITY;
     }
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrZoomSensitivity).arg(nSensitivity).toUtf8().data(), false );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrZoomSensitivity).arg(nSensitivity), false );
 }
 
 void QTouchSettingWidget::on_SldTap_valueChanged(int /*value*/)

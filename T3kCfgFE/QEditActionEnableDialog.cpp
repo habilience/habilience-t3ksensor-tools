@@ -17,9 +17,13 @@ QEditActionEnableDialog::QEditActionEnableDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    Qt::WindowFlags flags = Qt::Popup|Qt::WindowTitleHint|Qt::CustomizeWindowHint;
+    Qt::WindowFlags flags = Qt::WindowTitleHint|Qt::CustomizeWindowHint;
 #if defined(Q_OS_WIN)
-    flags |= Qt::MSWindowsFixedSizeDialogHint;
+    flags |= Qt::Dialog|Qt::MSWindowsFixedSizeDialogHint;
+#elif defined(Q_OS_MAC)
+    flags |= Qt::Popup;
+#else
+    flags |= Qt::Dialog;
 #endif
     setWindowFlags(flags);
     setWindowModality( Qt::WindowModal );
@@ -202,15 +206,6 @@ void QEditActionEnableDialog::on_btnApply_clicked()
         break;
     case 1:
         snprintf( szCmd, 256, "%s%02X%04X", cstrMouseProfile2, 0x00, m_wProfileFlags );
-        break;
-    case 2:
-        snprintf( szCmd, 256, "%s%02X%04X", cstrMouseProfile3, 0x00, m_wProfileFlags );
-        break;
-    case 3:
-        snprintf( szCmd, 256, "%s%02X%04X", cstrMouseProfile4, 0x00, m_wProfileFlags );
-        break;
-    case 4:
-        snprintf( szCmd, 256, "%s%02X%04X", cstrMouseProfile5, 0x00, m_wProfileFlags );
         break;
     default:
         close();

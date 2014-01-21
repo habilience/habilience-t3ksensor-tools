@@ -20,7 +20,7 @@
 #define	USER_AREA_RANGE_MAX		USER_AREA_RANGE_END		//NV_DEF_..._AREA_RANGE_MAX
 
 
-QCalibrationSettingWidget::QCalibrationSettingWidget(T3kHandle*& pHandle, QWidget *parent) :
+QCalibrationSettingWidget::QCalibrationSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QCalibrationSettingWidget), m_pT3kHandle(pHandle)
 {
@@ -118,23 +118,22 @@ void QCalibrationSettingWidget::RequestSensorData( bool bDefault )
 
     // calibration
     QString strTemp;
-    m_pT3kHandle->SendCommand( (const char*)strTemp.sprintf( "%s?", cstrFirmwareVersion ).toUtf8(), true );
-    m_pT3kHandle->SendCommand( (const char*)strTemp.sprintf( "%s%c", cstrCalibrationScreenMargin, cQ ).toUtf8(), true );
-    //m_pT3kHandle->SendCommand( (const char*)strTemp.sprintf( "%s%c", cstrCalibrationMode, cQ ).toUtf8(), true );
-    m_pT3kHandle->SendCommand( (const char*)strTemp.sprintf( "%s%c", cstrAreaC, cQ ).toUtf8(), true );
-    m_pT3kHandle->SendCommand( (const char*)strTemp.sprintf( "%s%c", cstrAreaD, cQ ).toUtf8(), true );
-    m_pT3kHandle->SendCommand( (const char*)strTemp.sprintf( "%s%c", cstrAreaM, cQ ).toUtf8(), true );
-    m_pT3kHandle->SendCommand( (const char*)strTemp.sprintf( "%s%c", cstrAreaP, cQ ).toUtf8(), true );
+    m_pT3kHandle->sendCommand( strTemp.sprintf( "%s?", cstrFirmwareVersion ), true );
+    m_pT3kHandle->sendCommand( strTemp.sprintf( "%s%c", cstrCalibrationScreenMargin, cQ ), true );
+    //m_pT3kHandle->sendCommand( strTemp.sprintf( "%s%c", cstrCalibrationMode, cQ ), true );
+    m_pT3kHandle->sendCommand( strTemp.sprintf( "%s%c", cstrAreaC, cQ ), true );
+    m_pT3kHandle->sendCommand( strTemp.sprintf( "%s%c", cstrAreaD, cQ ), true );
+    m_pT3kHandle->sendCommand( strTemp.sprintf( "%s%c", cstrAreaM, cQ ), true );
+    m_pT3kHandle->sendCommand( strTemp.sprintf( "%s%c", cstrAreaP, cQ ), true );
     if( cQ == '*' )
     {
         m_RequestSensorData.AddItem( cstrCalibration, str );
 
-        m_pT3kHandle->SendCommand( (const char*)strTemp.sprintf( "%s%c", cstrCalibration, cQ ).toUtf8(), true );
+        m_pT3kHandle->sendCommand( strTemp.sprintf( "%s%c", cstrCalibration, cQ ), true );
     }
 
     m_RequestSensorData.AddItem( cstrUsbConfigMode, "?" );
-    m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrUsbConfigMode).toUtf8().data(), true );
-
+    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
 
     m_RequestSensorData.Start( m_pT3kHandle );
 }
@@ -200,15 +199,15 @@ void QCalibrationSettingWidget::keyPressEvent(QKeyEvent *evt)
     QWidget::keyPressEvent(evt);
 }
 
-void QCalibrationSettingWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QCalibrationSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !winId() ) return;
 
-    if( strstr(sCmd, cstrUsbConfigMode) == sCmd )
+    if( strstr(cmd, cstrUsbConfigMode) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrUsbConfigMode );
 
-        m_nUsbConfigMode = strtol(sCmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
+        m_nUsbConfigMode = strtol(cmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
         switch( m_nUsbConfigMode )
         {
         case 0x04: // digitizer
@@ -239,12 +238,12 @@ void QCalibrationSettingWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, c
             break;
         }
     }
-    else if ( strstr(sCmd, cstrCalibrationScreenMargin) == sCmd )
+    else if ( strstr(cmd, cstrCalibrationScreenMargin) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrCalibrationScreenMargin );
 
         float fScreenMargin;
-        fScreenMargin = (float)atof(sCmd + sizeof(cstrCalibrationScreenMargin) - 1);
+        fScreenMargin = (float)atof(cmd + sizeof(cstrCalibrationScreenMargin) - 1);
         if( fScreenMargin < NV_DEF_CALIBRATION_SCRNMARGIN_START )
             fScreenMargin = NV_DEF_CALIBRATION_SCRNMARGIN_START;
 
@@ -256,11 +255,11 @@ void QCalibrationSettingWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, c
         strV.sprintf( "%.1f", fScreenMargin );
         ui->EditMargin->setText( strV );
     }
-    else if ( strstr(sCmd, cstrAreaC) == sCmd )
+    else if ( strstr(cmd, cstrAreaC) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrAreaC );
 
-        int nArea = atoi(sCmd + sizeof(cstrAreaC) - 1);
+        int nArea = atoi(cmd + sizeof(cstrAreaC) - 1);
         if( nArea < USER_AREA_RANGE_START )
             nArea = USER_AREA_RANGE_START;
         if( nArea > USER_AREA_RANGE_END )
@@ -273,11 +272,11 @@ void QCalibrationSettingWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, c
         strV.sprintf( "%.1f", fArea );
         ui->EditSingleClk->setText( strV );
     }
-    else if ( strstr(sCmd, cstrAreaD) == sCmd )
+    else if ( strstr(cmd, cstrAreaD) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrAreaD );
 
-        int nArea = atoi(sCmd + sizeof(cstrAreaD) - 1);
+        int nArea = atoi(cmd + sizeof(cstrAreaD) - 1);
         if( nArea < USER_AREA_RANGE_START )
             nArea = USER_AREA_RANGE_START;
         if( nArea > USER_AREA_RANGE_END )
@@ -290,11 +289,11 @@ void QCalibrationSettingWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, c
         strV.sprintf( "%.1f", fArea );
         ui->EditDoubleClk->setText( strV );
     }
-    else if ( strstr(sCmd, cstrAreaM) == sCmd )
+    else if ( strstr(cmd, cstrAreaM) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrAreaM );
 
-        int nArea = atoi(sCmd + sizeof(cstrAreaM) - 1);
+        int nArea = atoi(cmd + sizeof(cstrAreaM) - 1);
         if( nArea < USER_AREA_RANGE_START )
             nArea = USER_AREA_RANGE_START;
         if( nArea > USER_AREA_RANGE_END )
@@ -307,11 +306,11 @@ void QCalibrationSettingWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, c
         strV.sprintf( "%.1f", fArea );
         ui->EditTwoTouch->setText( strV );
     }
-    else if ( strstr(sCmd, cstrAreaP) == sCmd )
+    else if ( strstr(cmd, cstrAreaP) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrAreaP );
 
-        int nArea = atoi(sCmd + sizeof(cstrAreaP) - 1);
+        int nArea = atoi(cmd + sizeof(cstrAreaP) - 1);
         if( nArea < USER_AREA_RANGE_START )
             nArea = USER_AREA_RANGE_START;
         if( nArea > USER_AREA_RANGE_END )
@@ -324,18 +323,18 @@ void QCalibrationSettingWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, c
         strV.sprintf( "%.1f", fArea );
         ui->EditPalm->setText( strV );
     }
-    else if( strstr( sCmd, cstrCalibrationMode ) == sCmd &&
+    else if( strstr( cmd, cstrCalibrationMode ) == cmd &&
              (QT3kUserData::GetInstance()->GetFirmwareVersion() < MM_MIN_SUPPORT_STT_VERSION) )
     {
         m_RequestSensorData.RemoveItem( cstrCalibrationMode );
 
-        int nMode = atoi(sCmd + sizeof(cstrCalibrationMode) - 1);
+        int nMode = atoi(cmd + sizeof(cstrCalibrationMode) - 1);
         if ( (nMode == MODE_CALIBRATION_NONE) || (nMode == MODE_CALIBRATION_SELF) )
         {
             if ( nMode == MODE_CALIBRATION_SELF )
             {
                 char* pArg = NULL;
-                pArg = (char*)strchr( sCmd, ',' );
+                pArg = (char*)strchr( cmd, ',' );
                 int nScreenMargin = 0;
                 int nMacMargin = -1;
                 if( pArg )
@@ -364,36 +363,36 @@ void QCalibrationSettingWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, c
             }
         }
     }
-    else if ( strstr(sCmd, cstrCalibration) == sCmd )
+    else if ( strstr(cmd, cstrCalibration) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrCalibration );
     }
-    else if( Part == MM && strstr( sCmd, cstrFirmwareVersion ) == sCmd )
+    else if( Part == MM && strstr( cmd, cstrFirmwareVersion ) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrFirmwareVersion );
 
-        QString strMMVersion = sCmd + sizeof(cstrFirmwareVersion) - 1;
+        QString strMMVersion = cmd + sizeof(cstrFirmwareVersion) - 1;
         strMMVersion.trimmed();
         m_fMMVersion = 0.0f;
         m_fMMVersion = strMMVersion.left( strMMVersion.indexOf( ' ' ) ).toFloat();
     }
 }
 
-void QCalibrationSettingWidget::OnSTT(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, const char *pStatus)
+void QCalibrationSettingWidget::TPDP_OnSTT(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, const char *status)
 {
     if( !winId() ) return;
 
-    if( strstr( pStatus, cstrCalibrationMode ) == pStatus )
+    if( strstr( status, cstrCalibrationMode ) == status )
     {
         m_RequestSensorData.RemoveItem( cstrCalibrationMode );
 
-        int nMode = atoi(pStatus + sizeof(cstrCalibrationMode) - 1);
+        int nMode = atoi(status + sizeof(cstrCalibrationMode) - 1);
         if ( (nMode == MODE_CALIBRATION_NONE) || (nMode == MODE_CALIBRATION_SELF) )
         {
             if ( nMode == MODE_CALIBRATION_SELF )
             {
                 char* pArg = NULL;
-                pArg = (char*)strchr( pStatus, ',' );
+                pArg = (char*)strchr( status, ',' );
                 int nScreenMargin = 0;
                 int nMacMargin = -1;
                 if( pArg )
@@ -481,7 +480,7 @@ void QCalibrationSettingWidget::on_BtnCalibration_clicked()
         }
     }
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrCalibrationMode).arg(MODE_CALIBRATION_SELF).toUtf8(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrCalibrationMode).arg(MODE_CALIBRATION_SELF), true );
 }
 
 void QCalibrationSettingWidget::on_BtnMarginDec_clicked()
@@ -498,7 +497,7 @@ void QCalibrationSettingWidget::on_BtnMarginDec_clicked()
     strV.sprintf( "%.1f", fV );
     ui->EditMargin->setText( strV );
 
-    m_pT3kHandle->SendCommand( (const char*)strV.sprintf( "%s%3.1f", cstrCalibrationScreenMargin, fV ).toUtf8(), true );
+    m_pT3kHandle->sendCommand( strV.sprintf( "%s%3.1f", cstrCalibrationScreenMargin, fV ), true );
 }
 
 void QCalibrationSettingWidget::on_BtnMarginInc_clicked()
@@ -515,7 +514,7 @@ void QCalibrationSettingWidget::on_BtnMarginInc_clicked()
     strV.sprintf( "%.1f", fV );
     ui->EditMargin->setText( strV );
 
-    m_pT3kHandle->SendCommand( (const char*)strV.sprintf( "%s%3.1f", cstrCalibrationScreenMargin, fV ).toUtf8(), true );
+    m_pT3kHandle->sendCommand( strV.sprintf( "%s%3.1f", cstrCalibrationScreenMargin, fV ), true );
 }
 
 void QCalibrationSettingWidget::on_BtnSingleClkDec_clicked()
@@ -644,10 +643,7 @@ void QCalibrationSettingWidget::OnRangeLeftRight( bool bDecrease, QLineEdit* pEd
     strV.sprintf( "%.1f", fV );
     pEdit->setText( strV );
 
-    QByteArray btrTemp;
-    btrTemp = strV.sprintf( "%s%d", szCmdH, nV ).toUtf8();
-    const char* pszCmd = btrTemp.data();
-    m_pT3kHandle->SendCommand( pszCmd, true );
+    m_pT3kHandle->sendCommand( strV.sprintf( "%s%d", szCmdH, nV ), true );
 }
 
 void QCalibrationSettingWidget::on_BtnTouchSetting_clicked()

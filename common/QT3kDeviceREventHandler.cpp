@@ -1,20 +1,20 @@
-#include "IncludeRemoteNotify.h"
+#include "./QT3kDeviceREventHandler.h"
 
 #include "PacketStructure.h"
 
 
-IncludeRemoteNotify::IncludeRemoteNotify()
+QT3kDeviceREventHandler::QT3kDeviceREventHandler()
 {
     m_pSocket = NULL;
     m_bRemoteMode = false;
 }
 
-void IncludeRemoteNotify::SetSocket(QTcpSocket *socket)
+void QT3kDeviceREventHandler::setSocket(QTcpSocket *socket)
 {
     m_pSocket = socket;
 }
 
-void IncludeRemoteNotify::SendRemoteNotifyPacket(int nType)
+void QT3kDeviceREventHandler::sendRemoteNotifyPacket(int nType)
 {
     if( m_pSocket == NULL || m_pSocket->state() != QAbstractSocket::ConnectedState ) return;
 
@@ -25,7 +25,7 @@ void IncludeRemoteNotify::SendRemoteNotifyPacket(int nType)
     /*qint64 nRet = */m_pSocket->write( (const char*)&packet, packet.nPktSize );
 }
 
-void IncludeRemoteNotify::SendRemoteRawDataPacket(int nType, const char *pData, qint64 nDataSize)
+void QT3kDeviceREventHandler::sendRemoteRawDataPacket(int nType, const char *pData, qint64 nDataSize)
 {
     Q_ASSERT( pData != NULL && nDataSize != 0 );
 
@@ -48,16 +48,16 @@ void IncludeRemoteNotify::SendRemoteRawDataPacket(int nType, const char *pData, 
 //    }
 }
 
-void IncludeRemoteNotify::onSensorDisconnect(T3K_HANDLE hDevice)
+void QT3kDeviceREventHandler::_onDisconnected( T3K_DEVICE_INFO devInfo )
 {
     // send to remote
     if( m_bRemoteMode )
-        SendRemoteNotifyPacket( Client | NotifySensorDisconnected );
+        sendRemoteNotifyPacket( Client | NotifySensorDisconnected );
 
-    OnCloseT3kDevice(hDevice);
+    QT3kDeviceEventHandler::_onDisconnected( devInfo );
 }
 
-int IncludeRemoteNotify::onReceiveRawData(void* pContext)
+int QT3kDeviceREventHandler::onReceiveRawData(void* /*pContext*/)
 {
     // send to remote
     if( m_bRemoteMode )
@@ -67,7 +67,7 @@ int IncludeRemoteNotify::onReceiveRawData(void* pContext)
         int nTotalBytes = 0;
         do
         {
-            char* rawData = ((T3kHandle*)pContext)->GetRawDataPacket( nTotalBytes );
+            char* rawData = ((QT3kDeviceR*)QT3kDevice::instance())->getRawDataPacket( nTotalBytes );
             if( nTotalBytes == 0 || rawData == NULL ) break;
 
             Q_ASSERT( nTotalBytes < MAX_RAWDATA_BLOCK+1 );
@@ -108,16 +108,16 @@ int IncludeRemoteNotify::onReceiveRawData(void* pContext)
     return 0;
 }
 
-void IncludeRemoteNotify::onReceiveRawDataFlag(bool bReceive)
+void QT3kDeviceREventHandler::onReceiveRawDataFlag(bool bReceive)
 {
     m_bRemoteMode = bReceive;
 }
 
-void IncludeRemoteNotify::onDownloadingFirmware(int bDownload)
+void QT3kDeviceREventHandler::_onDownloadingFirmware( T3K_DEVICE_INFO devInfo, bool bIsDownload )
 {
     // send to remote
     if( m_bRemoteMode )
-        SendRemoteRawDataPacket( Client | NotifyFWDownloading, (const char*)&bDownload, sizeof(int) );
+        sendRemoteRawDataPacket( Client | NotifyFWDownloading, (const char*)&bIsDownload, sizeof(int) );
 
-    OnFirmwareDownload( bDownload == 1 ? true : false );
+    QT3kDeviceEventHandler::_onDownloadingFirmware( devInfo, bIsDownload == 1 ? true : false );
 }

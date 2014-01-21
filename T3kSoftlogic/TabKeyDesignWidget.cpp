@@ -22,14 +22,13 @@ TabKeyDesignWidget::TabKeyDesignWidget(QWidget* parent /*=NULL*/) :
     ui->TableGPIO->horizontalHeader()->setVisible( true );
 
     ui->TableGPIO->setColumnCount( 2 );
-    ui->TableGPIO->setHorizontalHeaderItem( 0, new QTableWidgetItem( "Enable" ) );
-    ui->TableGPIO->setHorizontalHeaderItem( 1, new QTableWidgetItem( "Input/Output" ) );
+    ui->TableGPIO->setHorizontalHeaderLabels(QString("Enable;Input/Output").split(";"));
 
     ui->TableGPIO->horizontalHeader()->setSectionResizeMode( QHeaderView::Fixed );
     ui->TableGPIO->verticalHeader()->setSectionResizeMode( QHeaderView::Fixed );
 
     ui->TableGPIO->setColumnWidth( 0, 100 );
-    ui->TableGPIO->setColumnWidth( 1, ui->TableGPIO->width()-110 );
+    ui->TableGPIO->setColumnWidth( 1, ui->TableGPIO->width()-120 );
 
     connect( &m_DesignCanvasWidget, &QKeyDesignWidget::closeWidget, this, &TabKeyDesignWidget::updatePreview );
 }
@@ -98,18 +97,18 @@ void TabKeyDesignWidget::refresh()
     CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
 
     int nGPIOCount = Keys.getGPIOCount();
-	if ( nGPIOCount > 0 )
-	{
+    if ( nGPIOCount > 0 )
+    {
         ui->EditGPIOCount->setText( QString("%1").arg(nGPIOCount) );
         if ( nGPIOCount != ui->TableGPIO->rowCount() )
-		{
+        {
             ui->TableGPIO->clear();
             ui->TableGPIO->setRowCount( nGPIOCount );
             for ( int i=0 ; i<nGPIOCount ; i++ )
-			{
+            {
                 GPIOInfo* pInfo = Keys.getGPIOInfo(i);
-				if ( pInfo )
-				{
+                if ( pInfo )
+                {
                     QHoverComboBox* cbEnable = new QHoverComboBox( ui->TableGPIO, true, i, 0 );
                     connect( cbEnable, &QHoverComboBox::ItemChanged, this, &TabKeyDesignWidget::onTableGPIOcellChanged );
                     cbEnable->addItem( "True" ); cbEnable->addItem( "False" );
@@ -122,15 +121,17 @@ void TabKeyDesignWidget::refresh()
                     ui->TableGPIO->setCellWidget( i, 0, cbEnable );
                     ui->TableGPIO->setCellWidget( i, 1, cbIO );
                 }
-			}
-		}
-		else
-		{
+            }
+
+            ui->TableGPIO->setHorizontalHeaderLabels(QString("Enable;Input/Output").split(";"));
+        }
+        else
+        {
             for ( int i=0 ; i<nGPIOCount ; i++ )
-			{
+            {
                 GPIOInfo* pInfo = Keys.getGPIOInfo(i);
-				if ( pInfo )
-				{
+                if ( pInfo )
+                {
                     Q_ASSERT( ui->TableGPIO->cellWidget( i, 0 )->inherits( "QHoverComboBox" ) );
                     QHoverComboBox* cbEnable = (QHoverComboBox*)ui->TableGPIO->cellWidget( i, 0 );
                     connect( cbEnable, &QHoverComboBox::ItemChanged, this, &TabKeyDesignWidget::onTableGPIOcellChanged );
@@ -139,16 +140,18 @@ void TabKeyDesignWidget::refresh()
                     QHoverComboBox* cbIO = (QHoverComboBox*)ui->TableGPIO->cellWidget( i, 1 );
                     connect( cbIO, &QHoverComboBox::ItemChanged, this, &TabKeyDesignWidget::onTableGPIOcellChanged );
                     cbIO->setCurrentIndex( pInfo->bOutput ? 1 : 0 );
-				}
-			}
-		}
-	}
-	else
-	{
+                }
+            }
+        }
+    }
+    else
+    {
         ui->EditGPIOCount->setText( "0" );
         ui->TableGPIO->clear();
         ui->TableGPIO->setRowCount( 0 );
-	}
+
+        ui->TableGPIO->setHorizontalHeaderLabels(QString("Enable;Input/Output").split(";"));
+    }
 }
 
 void TabKeyDesignWidget::showEvent(QShowEvent *)
@@ -173,6 +176,7 @@ void TabKeyDesignWidget::on_BtnKeydesign_clicked()
     m_DesignCanvasWidget.setFont( font() );
     m_DesignCanvasWidget.setGeometry( rcPrimary );
 
+    m_DesignCanvasWidget.init();
     m_DesignCanvasWidget.show();
     m_DesignCanvasWidget.raise();
     m_DesignCanvasWidget.activateWindow();
@@ -181,8 +185,8 @@ void TabKeyDesignWidget::on_BtnKeydesign_clicked()
 void TabKeyDesignWidget::on_BtnSet_clicked()
 {
     int nGPIOCount = ui->EditGPIOCount->text().toInt();
-    if ( nGPIOCount == ui->TableGPIO->rowCount() )
-        return;
+//    if ( nGPIOCount == ui->TableGPIO->rowCount() )
+//        return;
 
     CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
 
@@ -208,6 +212,8 @@ void TabKeyDesignWidget::on_BtnSet_clicked()
             ui->TableGPIO->setCellWidget( i, 1, cbIO );
         }
     }
+
+    ui->TableGPIO->setHorizontalHeaderLabels(QString("Enable;Input/Output").split(";"));
 }
 
 void TabKeyDesignWidget::onTableGPIOcellChanged(QObject* obj, int index)

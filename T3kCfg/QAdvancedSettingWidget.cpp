@@ -23,14 +23,14 @@ QAdvancedSettingWidget::QAdvancedSettingWidget(QWidget *parent) :
 
     connect( ui->BtnCancel, &QPushButton::clicked, this, &QDialog::close );
 
-    T3kHandle* pHandle = QT3kUserData::GetInstance()->getT3kHandle();
+    QT3kDeviceR* pHandle = QT3kUserData::GetInstance()->getT3kHandle();
     int nRetry = 3;
     bool bOK = false;
     m_bRSE = false;
     QString strCmd(sCam1 + cstrCamPosTrc + "?");
     do
     {
-        if (pHandle->SendCommand(strCmd.toUtf8().data(), false))
+        if (pHandle->sendCommand(strCmd, false))
         {
             bOK = true;
             break;
@@ -59,15 +59,15 @@ void QAdvancedSettingWidget::closeEvent(QCloseEvent *)
     ui->ChkDetection->setChecked( false );
 }
 
-void QAdvancedSettingWidget::OnRSP(ResponsePart part, ushort, const char *, long, bool, const char *szCmd)
+void QAdvancedSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !winId() ) return;
 
-    if( strstr( szCmd, cstrCamPosTrc ) == szCmd )
+    if( strstr( cmd, cstrCamPosTrc ) == cmd )
     {
-        QString strCmd( szCmd );
+        QString strCmd( cmd );
         strCmd = strCmd.mid( strCmd.indexOf('=')+1 );
-        switch( part )
+        switch( Part )
         {
         case CM1:
             m_strCam1PosTrc = strCmd;
@@ -86,20 +86,20 @@ void QAdvancedSettingWidget::OnRSP(ResponsePart part, ushort, const char *, long
             break;
         }
     }
-    else if( strstr( szCmd, cstrFactoryCalibration ) == szCmd )
+    else if( strstr( cmd, cstrFactoryCalibration ) == cmd )
     {
-        QString strCmd( szCmd );
+        QString strCmd( cmd );
         m_strFactoryCalibration = strCmd.mid( strCmd.indexOf('=')+1 );
     }
 }
 
-void QAdvancedSettingWidget::OnRSE(ResponsePart part, ushort, const char *, long, bool, const char *szCmd)
+void QAdvancedSettingWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !winId() ) return;
 
-    if( strstr( szCmd, cstrCamPosTrc ) == szCmd )
+    if( strstr( cmd, cstrCamPosTrc ) == cmd )
     {
-        qDebug() << QString(szCmd);
+        qDebug() << QString(cmd);
         m_bRSE = true;
     }
 }
@@ -200,7 +200,7 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
 
     if( msgBox.exec() != QMessageBox::Yes ) return;
 
-    T3kHandle* pHandle = QT3kUserData::GetInstance()->getT3kHandle();
+    QT3kDeviceR* pHandle = QT3kUserData::GetInstance()->getT3kHandle();
     // bent
     m_strCam1PosTrc.clear();
     m_strCam2PosTrc.clear();
@@ -226,7 +226,7 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
         QString strCmd = listCmd.at(i);
         do
         {
-            if (pHandle->SendCommand(strCmd.toUtf8().data(), false))
+            if (pHandle->sendCommand(strCmd, false))
             {
                 bOK = true;
                 break;
@@ -353,7 +353,7 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
         QString strCmd = listCmd.at(i);
         do
         {
-            if (pHandle->SendCommand(strCmd.toUtf8().data(), false))
+            if (pHandle->sendCommand(strCmd, false))
             {
                 bOK = true;
                 break;

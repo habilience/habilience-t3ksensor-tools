@@ -22,6 +22,8 @@ QSideviewWidget::QSideviewWidget(QWidget *parent) :
     m_nCurrentCamNo = 0;
     m_nAutoLine = -1;
 
+    m_pImgTempBuffer = NULL;
+
     ui->TitleSideview->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_CAMERA.png" );
 
     connect( this, SIGNAL(ChangeCamera(int)), this, SLOT(onChangeCamera(int)), Qt::QueuedConnection );
@@ -31,12 +33,18 @@ QSideviewWidget::QSideviewWidget(QWidget *parent) :
 
 QSideviewWidget::~QSideviewWidget()
 {
+    if( m_pImgTempBuffer )
+    {
+        delete m_pImgTempBuffer;
+        m_pImgTempBuffer = NULL;
+    }
+
     delete ui;
 }
 
 void QSideviewWidget::showEvent(QShowEvent *evt)
 {
-    m_pT3kHandle->SetBothSensorData( true );
+    m_pT3kHandle->setBothSensorData( true );
 
     RequestSensorData( false );
 
@@ -56,12 +64,12 @@ void QSideviewWidget::hideEvent(QHideEvent *evt)
         ui->BtnCam3->setChecked( false );
         ui->BtnCam4->setChecked( false );
 
-        m_pT3kHandle->SetBothSensorData( false );
+        m_pT3kHandle->setBothSensorData( false );
 
-        if( m_pT3kHandle->GetReportCommand() )
-            m_pT3kHandle->SetReportCommand( false );
-        if( m_pT3kHandle->GetReportView() )
-            m_pT3kHandle->SetReportView( false );
+        if( m_pT3kHandle->getReportCommand() )
+            m_pT3kHandle->setReportCommand( false );
+        if( m_pT3kHandle->getReportView() )
+            m_pT3kHandle->setReportView( false );
     }
 
     m_nCurrentCamNo = 0;
@@ -94,8 +102,8 @@ void QSideviewWidget::RequestSensorData( bool /*bDefault*/ )
     if( !m_pT3kHandle )
         return;
 
-    m_pT3kHandle->SendCommand( (const char*)QString( "%1?" ).arg(cstrFirmwareVersion).toUtf8().data() );
-    m_pT3kHandle->SendCommand( (const char*)QString( "%1?" ).arg(cstrSimpleDetection).toUtf8().data() );
+    m_pT3kHandle->sendCommand( QString( "%1?" ).arg(cstrFirmwareVersion) );
+    m_pT3kHandle->sendCommand( QString( "%1?" ).arg(cstrSimpleDetection) );
 
     int nSub = (int)(m_nCurrentCamNo/2);
     int nDir = (int)(m_nCurrentCamNo%2);
@@ -104,19 +112,19 @@ void QSideviewWidget::RequestSensorData( bool /*bDefault*/ )
     for( int i=0; i<nSub; i++ )
         strCmd += "sub/";
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2?").arg(strCmd).arg(cstrDetectionLine).toUtf8().data() );
+    m_pT3kHandle->sendCommand( QString("%1%2?").arg(strCmd).arg(cstrDetectionLine) );
 }
 
-void QSideviewWidget::OnRSP(ResponsePart Part, ushort, const char *, long, bool, const char *sCmd)
+void QSideviewWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !winId() ) return;
 
-    if ( strstr(sCmd, cstrFirmwareVersion) == sCmd )
+    if ( strstr(cmd, cstrFirmwareVersion) == cmd )
     {
         if( Part == MM )
         {
             char szVer[255];
-            strncpy( szVer, (sCmd + sizeof(cstrFirmwareVersion) - 1), 255 );
+            strncpy( szVer, (cmd + sizeof(cstrFirmwareVersion) - 1), 255 );
 
             QString str( szVer );
             int nS = str.indexOf( ' ' );
@@ -127,13 +135,13 @@ void QSideviewWidget::OnRSP(ResponsePart Part, ushort, const char *, long, bool,
             }
         }
     }
-    else if( strstr(sCmd, cstrSimpleDetection) == sCmd )
+    else if( strstr(cmd, cstrSimpleDetection) == cmd )
     {
-        ui->SensorImage->SetSimpleDetection( atoi( sCmd+sizeof(cstrSimpleDetection)-1 ) == 1 ? true : false );
+        ui->SensorImage->SetSimpleDetection( atoi( cmd+sizeof(cstrSimpleDetection)-1 ) == 1 ? true : false );
     }
-    else if( strstr(sCmd, cstrDetectionLine) == sCmd )
+    else if( strstr(cmd, cstrDetectionLine) == cmd )
     {
-        char* pCur = (char*)sCmd + sizeof(cstrDetectionLine) - 1;
+        char* pCur = (char*)cmd + sizeof(cstrDetectionLine) - 1;
         int nDetectLine = atoi(pCur);
 
         pCur = strchr(pCur, ',') + 1;
@@ -157,14 +165,14 @@ void QSideviewWidget::OnRSP(ResponsePart Part, ushort, const char *, long, bool,
     }
 }
 
-void QSideviewWidget::OnRSE(ResponsePart /*Part*/, ushort, const char *sPartId, long, bool, const char *sStatus)
+void QSideviewWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char *partid, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
-    QString strPartID( sPartId );
+    QString strPartID( partid );
     if( !strPartID.contains( "RSE" ) ) return;
 
-    if( strstr( sStatus, cstrNoCam ) == sStatus )
+    if( strstr( cmd, cstrNoCam ) == cmd )
     {
         ui->SensorImage->SetNoCam( true );
         // fill empty image
@@ -186,23 +194,64 @@ void QSideviewWidget::OnRSE(ResponsePart /*Part*/, ushort, const char *sPartId, 
 
         ui->EditOffset->setText( "" );
 
-        if( m_pT3kHandle->GetReportCommand() )
-            m_pT3kHandle->SetReportCommand( false );
-        if( m_pT3kHandle->GetReportView() )
-            m_pT3kHandle->SetReportView( false );
+        if( m_pT3kHandle->getReportCommand() )
+            m_pT3kHandle->setReportCommand( false );
+        if( m_pT3kHandle->getReportView() )
+            m_pT3kHandle->setReportView( false );
     }
 }
 
-void QSideviewWidget::OnPRV(ResponsePart /*Part*/, ushort, const char *, int nWidth, int nHeight, int, unsigned char *pBitmapBuffer)
+void QSideviewWidget::TPDP_OnPRV(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int total, int offset, const unsigned char *data, int cnt)
 {
     if( !isVisible() ) return;
 
-    ui->SensorImage->SetNoCam( false );
+    if ( (m_bmpSnapSensor.width() != cnt) || (m_bmpSnapSensor.height() != total) )
+    {
+        if (m_pImgTempBuffer)
+            delete m_pImgTempBuffer;
+        m_pImgTempBuffer = new uchar[cnt * total];
 
-    m_bmpSnapSensor = QImage( pBitmapBuffer, nWidth, nHeight, QImage::Format_RGB32 ).mirrored();
+        memset( m_pImgTempBuffer, 0, sizeof(uchar)*cnt*total );
 
-    ui->SensorImage->SetImage( &m_bmpSnapSensor );
-    ui->SensorImage->SetProgress( 100 );
+        m_bmpSnapSensor = QImage( cnt, total, QImage::Format_RGB32 );
+        m_bmpSnapSensor.fill(QColor(0,0,0));
+    }
+
+    bool bUpdate = false;
+
+#ifndef Q_OS_LINUX
+    if (offset == 0)
+#endif
+        bUpdate = true;
+
+    offset += total/2;
+    if ( offset >= 0 && offset < total )
+    {
+        int nOffsetY = offset * cnt;
+        memcpy( m_pImgTempBuffer + nOffsetY, data, cnt );
+    }
+
+    if (bUpdate)
+    {
+        int nW = cnt;
+        int nH = total;
+        int nOffsetY = 0;
+        for ( int y=0 ; y<nH ; y++ )
+        {
+            QRgb* pRgbLine = (QRgb*)m_bmpSnapSensor.scanLine(y);
+            nOffsetY = y * nW;
+            int g;
+            for (int i=0 ; i<m_bmpSnapSensor.width(); i++ )
+            {
+                g = m_pImgTempBuffer[nOffsetY+i];
+                pRgbLine[i] = qRgb(g, g, g);
+            }
+        }
+//        if (m_rcUpdateImage.isEmpty())
+            update();
+//        else
+//            update(m_rcUpdateImage);
+    }
 }
 
 void QSideviewWidget::on_BtnCam1_clicked(bool clicked)
@@ -275,14 +324,14 @@ void QSideviewWidget::onChangeCamera(int nCamNo)
     for( int i=0; i<nSub; i++ )
         strSendCmd += "sub/";
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2?").arg(strSendCmd).arg(cstrDetectionLine).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2?").arg(strSendCmd).arg(cstrDetectionLine), true );
 
-    if( !m_pT3kHandle->GetReportCommand() )
-        m_pT3kHandle->SetReportCommand( true );
-    if( !m_pT3kHandle->GetReportView() )
-        m_pT3kHandle->SetReportView( true );
+    if( !m_pT3kHandle->getReportCommand() )
+        m_pT3kHandle->setReportCommand( true );
+    if( !m_pT3kHandle->getReportView() )
+        m_pT3kHandle->setReportView( true );
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1mode=sideview").arg(strSendCmd).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1mode=sideview").arg(strSendCmd), true );
 }
 
 void QSideviewWidget::on_BtnPlus_clicked()
@@ -302,8 +351,8 @@ void QSideviewWidget::on_BtnPlus_clicked()
 
     ui->EditOffset->setText( QString("%1").arg(nOffset) );
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2%3").arg(strCmd).arg(cstrDetectionLine).arg(nOffset).toUtf8().data(), true );
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2!").arg(strCmd).arg(cstrDetectionLine).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2%3").arg(strCmd).arg(cstrDetectionLine).arg(nOffset), true );
+    m_pT3kHandle->sendCommand( QString("%1%2!").arg(strCmd).arg(cstrDetectionLine), true );
 }
 
 void QSideviewWidget::on_BtnMinus_clicked()
@@ -323,6 +372,6 @@ void QSideviewWidget::on_BtnMinus_clicked()
 
     ui->EditOffset->setText( QString("%1").arg(nOffset) );
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2%3").arg(strCmd).arg(cstrDetectionLine).arg(nOffset).toUtf8().data(), true );
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2!").arg(strCmd).arg(cstrDetectionLine).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2%3").arg(strCmd).arg(cstrDetectionLine).arg(nOffset), true );
+    m_pT3kHandle->sendCommand( QString("%1%2!").arg(strCmd).arg(cstrDetectionLine), true );
 }

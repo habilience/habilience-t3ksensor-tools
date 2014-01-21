@@ -170,8 +170,8 @@ protected:
     T3K_HANDLE                              m_pT3kDevice;
 
     t3k_hid_library::CHID                   m_T3kVirtualDevice;
-    bool                                    m_bIsVirtualDevice;
-    QTimer                                  m_TimerCheckT3kVD;
+//    bool                                    m_bIsVirtualDevice;
+//    QTimer                                  m_TimerCheckT3kVD;
 
     bool                                    m_bCloseNotify;
 

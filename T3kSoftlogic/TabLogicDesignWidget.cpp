@@ -26,16 +26,6 @@ TabLogicDesignWidget::~TabLogicDesignWidget()
         m_LogicDesigner.close();
 }
 
-void TabLogicDesignWidget::OnFirmwareDownload(bool)
-{
-    if( !isVisible() ) return;
-
-    if( isValidT3kSensorState() )
-        ui->BtnApply->setEnabled( true );
-	else
-        ui->BtnApply->setEnabled( false );
-}
-
 void TabLogicDesignWidget::showEvent(QShowEvent *)
 {
     if( isValidT3kSensorState() )
@@ -54,7 +44,7 @@ bool TabLogicDesignWidget::verifyGPIO( int &nSensorGPIOCount )
 {
     CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
 
-    T3kHandle* pT3kHandle = getT3kHandle();
+    QT3kDevice* pT3kHandle = getT3kHandle();
 
 	m_nSensorGPIOCount = 0;
 	char szCmd[256];
@@ -62,7 +52,7 @@ bool TabLogicDesignWidget::verifyGPIO( int &nSensorGPIOCount )
 	int nRetry = 0;
 	do
 	{
-        if ( pT3kHandle->SendCommand( szCmd, false ) )
+        if ( pT3kHandle->sendCommand( szCmd, false ) )
 			break;
 		nRetry++;
 	} while( nRetry < 3 );
@@ -76,31 +66,31 @@ bool TabLogicDesignWidget::verifyGPIO( int &nSensorGPIOCount )
     return true;
 }
 
-void TabLogicDesignWidget::OnOpenT3kDevice(T3K_HANDLE)
+void TabLogicDesignWidget::onConnectedT3kDevice()
 {
     if( !isVisible() ) return;
 
     ui->BtnApply->setEnabled( true );
 }
 
-void TabLogicDesignWidget::OnCloseT3kDevice(T3K_HANDLE)
+void TabLogicDesignWidget::TPDP_OnDisconnected(T3K_DEVICE_INFO /*devInfo*/)
 {
     if( !isVisible() ) return;
 
     ui->BtnApply->setEnabled( false );
 }
 
-void TabLogicDesignWidget::OnRSP(ResponsePart Part, ushort, const char *, long, bool, const char *szCmd)
+void TabLogicDesignWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
-	if ( strstr(szCmd, cstrFirmwareVersion) == szCmd )
+    if ( strstr(cmd, cstrFirmwareVersion) == cmd )
 	{		
 		switch( Part )
 		{
 		case MM:
 			{
-				float fFirmwareVersion = (float)atof(szCmd + sizeof(cstrFirmwareVersion) - 1);
+                float fFirmwareVersion = (float)atof(cmd + sizeof(cstrFirmwareVersion) - 1);
 				float fMinDesireFW = (float)MM_MIN_FIRMWARE_VERSION;
 				float fMaxDesireFW = (float)MM_NEXT_FIRMWARE_VERSION;
 				if( (fFirmwareVersion < fMinDesireFW) || (fFirmwareVersion >= fMaxDesireFW) )
@@ -111,12 +101,22 @@ void TabLogicDesignWidget::OnRSP(ResponsePart Part, ushort, const char *, long, 
             break;
 		}
 	}
-	else if ( strstr(szCmd, cstrFactorialGPIO) == szCmd )
+    else if ( strstr(cmd, cstrFactorialGPIO) == cmd )
 	{
-		const char* buf = szCmd + sizeof(cstrFactorialGPIO) - 1;
+        const char* buf = cmd + sizeof(cstrFactorialGPIO) - 1;
 		int nLen = (int)strlen( buf );
 		m_nSensorGPIOCount = nLen / 2;
 	}
+}
+
+void TabLogicDesignWidget::TPDP_OnDownloadingFirmware(T3K_DEVICE_INFO /*devInfo*/, bool /*bIsDownload*/)
+{
+    if( !isVisible() ) return;
+
+    if( isValidT3kSensorState() )
+        ui->BtnApply->setEnabled( true );
+    else
+        ui->BtnApply->setEnabled( false );
 }
 
 bool TabLogicDesignWidget::writeToSensor( bool bLogicOnly )
@@ -124,7 +124,7 @@ bool TabLogicDesignWidget::writeToSensor( bool bLogicOnly )
     CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
     CSoftlogicArray& Logics = T3kCommonData::instance()->getLogics();
 
-    T3kHandle* pT3kHandle = getT3kHandle();
+    QT3kDevice* pT3kHandle = getT3kHandle();
 
     bool bOK = false;
 
@@ -143,7 +143,7 @@ bool TabLogicDesignWidget::writeToSensor( bool bLogicOnly )
 			{
                 strRet = Keys.save( strExtra, NULL );
                 strCmd = QString("%1%2").arg(cstrFactorialSoftkey).arg(strRet);
-                if( !pT3kHandle->SendCommand( (const char*)strCmd.toUtf8().data(), false ) )
+                if( !pT3kHandle->sendCommand( strCmd, false ) )
 				{
                     bOK = false;
 					nRetry++;
@@ -153,7 +153,7 @@ bool TabLogicDesignWidget::writeToSensor( bool bLogicOnly )
 
             strRet = Keys.saveBindInfo();
             strCmd = QString("%1%2").arg(cstrFactorialSoftkeyBind).arg(strRet);
-            if( !pT3kHandle->SendCommand( (const char*)strCmd.toUtf8().data(), false ) )
+            if( !pT3kHandle->sendCommand( strCmd, false ) )
 			{
                 bOK = false;
 				nRetry++;
@@ -162,7 +162,7 @@ bool TabLogicDesignWidget::writeToSensor( bool bLogicOnly )
 
             strRet = Keys.saveGPIOInfo();
             strCmd = QString("%1%2").arg(cstrFactorialGPIO).arg(strRet);
-            if ( !pT3kHandle->SendCommand( (const char*)strCmd.toUtf8().data(), false ) )
+            if ( !pT3kHandle->sendCommand( strCmd, false ) )
 			{
                 bOK = false;
 				nRetry++;
@@ -171,7 +171,7 @@ bool TabLogicDesignWidget::writeToSensor( bool bLogicOnly )
 
             strRet = Logics.save(NULL);
             strCmd = QString("%1%2").arg(cstrFactorialSoftlogic).arg(strRet);
-            if( !pT3kHandle->SendCommand( (const char*)strCmd.toUtf8().data(), false ) )
+            if( !pT3kHandle->sendCommand( strCmd, false ) )
 			{
                 bOK = false;
 				nRetry++;
@@ -179,7 +179,7 @@ bool TabLogicDesignWidget::writeToSensor( bool bLogicOnly )
 			}
 
             strCmd = QString("%1*").arg(cstrSoftlogic);
-            if( !pT3kHandle->SendCommand( (const char*)strCmd.toUtf8().data(), false ) )
+            if( !pT3kHandle->sendCommand( strCmd, false ) )
 			{
                 bOK = false;
 				nRetry++;

@@ -596,11 +596,6 @@ void QTouchSettingDialog::sensorReset()
 
     resetDataWithInitData( cstrMouseProfile1, false );
     resetDataWithInitData( cstrMouseProfile2, false );
-    resetDataWithInitData( cstrMouseProfile3, false );
-    resetDataWithInitData( cstrMouseProfile4, false );
-    resetDataWithInitData( cstrMouseProfile5, false );
-
-    resetDataWithInitData( cstrMouseProfile, false );
 }
 
 void QTouchSettingDialog::sensorLoadFactoryDefault()

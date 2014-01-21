@@ -1,7 +1,7 @@
 #ifndef QAUTODETECTIONRANGE_H
 #define QAUTODETECTIONRANGE_H
 
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 //#include "t3kcomdef.h"
@@ -11,7 +11,7 @@
 
 class QBorderStyleEdit;
 class QAutoDetectionRange : public QObject
-        , public TPDPEventMultiCaster::ITPDPEventListener
+        , public QT3kDeviceREventHandler::IListener
         , public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
@@ -43,7 +43,7 @@ private:
 
     QRequestHIDManager  m_RequestHIDManager;
 
-    T3kHandle*          m_pT3kHandle;
+    QT3kDeviceR*          m_pT3kHandle;
 
     bool                m_bChekcFinish;
 
@@ -53,7 +53,7 @@ protected:
     void drawMonitor(QPainter& p, QRect rcBody);
     void drawArrow(QPainter& p);
 
-    // override QLangManager::ILangChangeNotify
+    // QLangManager::ILangChangeNotify
     virtual void onChangeLanguage();
 
     enum RequestCmd { cmdRefresh, cmdWriteToFactoryDefault, cmdLoadFactoryDefault, cmdInitialize };
@@ -64,10 +64,10 @@ protected:
 
     void resetDataWithInitData( const QString& strCmd, bool bWithFactoryDefault=true);
 
-    // override QT3kDeviceEventHandler::IListener
-    virtual void OnDTC(ResponsePart, ushort, const char *, int, T3kRangeF *, unsigned short);
-    virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
-    virtual void OnRSE(ResponsePart, ushort, const char *, long, bool, const char *);
+    // QT3kDeviceREventHandler::IListener
+    virtual void TPDP_OnDTC(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, unsigned char *layerid, unsigned long *start_pos, unsigned long *end_pos, int cnt);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
     void onFinishAutoRange();
 

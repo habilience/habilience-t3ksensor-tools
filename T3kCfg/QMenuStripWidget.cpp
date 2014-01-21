@@ -11,7 +11,7 @@
 #define QICON_WIDTH             40
 #define QICON_HEIGHT            40
 
-QMenuStripWidget::QMenuStripWidget(T3kHandle*& pHandle, QWidget *parent) :
+QMenuStripWidget::QMenuStripWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QMenuStripWidget), m_pT3kHandle(pHandle)
 {
@@ -108,10 +108,10 @@ void QMenuStripWidget::showEvent(QShowEvent *evt)
     {
         setFocusPolicy( Qt::NoFocus );
 
-        m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrUsbConfigMode).toUtf8().data(), false );
+        m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), false );
 
         if( !m_bDigitizerMode )
-            m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrSoftkey).toUtf8().data(), true );
+            m_pT3kHandle->sendCommand( QString("%1?").arg(cstrSoftkey), true );
     }
     QWidget::showEvent(evt);
 }
@@ -131,13 +131,13 @@ void QMenuStripWidget::onChangeLanguage()
     m_arybtnMenu[QMENU_REMOTE]->setToolTip( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("MENU_TOOLTIP_REMOTE_SUPPORT") ) );
 }
 
-void QMenuStripWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QMenuStripWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !winId() ) return;
 
-    if( strstr(sCmd, cstrUsbConfigMode) == sCmd )
+    if( strstr(cmd, cstrUsbConfigMode) == cmd )
     {
-        int nMode = strtol(sCmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
+        int nMode = strtol(cmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
         switch( nMode )
         {
         case 0x04: // digitizer
@@ -152,9 +152,9 @@ void QMenuStripWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const 
             break;
         }
     }
-    else if( strstr(sCmd, cstrSoftkey) == sCmd )
+    else if( strstr(cmd, cstrSoftkey) == cmd )
     {
-        QString strSoftKey( sCmd );
+        QString strSoftKey( cmd );
 
         int nE = strSoftKey.indexOf( '=' );
         if( nE >= 0 )

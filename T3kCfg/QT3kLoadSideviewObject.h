@@ -11,7 +11,7 @@ class QT3kLoadSideviewObject : public QT3kHIDObject
 {
     Q_OBJECT
 public:
-    explicit QT3kLoadSideviewObject(T3kHandle*& pHandle, QObject *parent = 0);
+    explicit QT3kLoadSideviewObject(QT3kDeviceR*& pHandle, QObject *parent = 0);
     virtual ~QT3kLoadSideviewObject();
 
     void SetSavePath( QString strSavePath ) { m_strSavePath = strSavePath; }
@@ -19,17 +19,16 @@ public:
     // QT3kHIDObject
     virtual bool Start(SensorLogData *pStorage);
 
-
 protected:
     void NextSideView(int nCamNo);
     void FinishSideView();
 
     void FillEmptySideview(QImage *pImg, int nWidth, int nHeight);
 
-    // TPDPEventMultiCaster::ITPDPEventListener
 protected:
-    virtual void OnPRV(ResponsePart, ushort, const char *, int, int, int, unsigned char *);
-    virtual void OnRSE(ResponsePart, ushort, const char *, long, bool, const char *);
+    // QT3kDeviceREventHandler::IListener
+    virtual void TPDP_OnPRV(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int total, int offset, const unsigned char *data, int cnt);
+    virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 protected:
     QString             m_strSavePath;
@@ -39,6 +38,9 @@ protected:
     // Data
     QImage*             m_pSideViewImage;
     int                 m_nCountAskCam;
+
+    uchar*              m_pImageBuffer;
+    uchar*              m_pCheckBufferY;
 
     SensorLogData*      m_pStorageHandle;
 

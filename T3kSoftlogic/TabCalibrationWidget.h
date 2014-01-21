@@ -2,7 +2,7 @@
 #define TABCALIBRATIONWIDGET_H
 
 #include "KeyDesignWidget.h"
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceEventHandler.h"
 #include "SoftKey.h"
 
 #include <QWidget>
@@ -13,7 +13,7 @@ namespace Ui {
 class TabCalibrationWidget;
 }
 
-class TabCalibrationWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener
+class TabCalibrationWidget : public QWidget, public QT3kDeviceEventHandler::IListener
 {
     Q_OBJECT
 
@@ -47,13 +47,12 @@ protected:
 
     void forceMouseEvent( uchar cButtons, char cWheel, int wX, int wY );
 
-    // TPDPEventMulticaster::ITPDPEventListener
-    virtual void OnOpenT3kDevice(T3K_HANDLE);
-    virtual void OnCloseT3kDevice(T3K_HANDLE);
-    virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
-    virtual void OnMSG(ResponsePart, ushort, const char *, const char *);
-    virtual void OnFirmwareDownload(bool);
-    virtual void OnDVC(ResponsePart, ushort, T3kDVC &);
+    // QT3kDeviceEventHandler::IListener
+    virtual void TPDP_OnDisconnected(T3K_DEVICE_INFO devInfo);
+    virtual void TPDP_OnDownloadingFirmware(T3K_DEVICE_INFO devInfo, bool bIsDownload);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnMSG(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, const char *txt);
+    virtual void TPDP_OnDVC(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, t3kpacket::_body::_dvc *device);
 
     //
     virtual void showEvent(QShowEvent *);
@@ -117,7 +116,7 @@ private:
     Ui::TabCalibrationWidget* ui;
 
 signals:
-    T3kHandle* getT3kHandle();
+    QT3kDevice* getT3kHandle();
     bool isT3kConnected();
     bool isT3kInvalidFirmware();
     void updatePreview();
@@ -139,6 +138,9 @@ private slots:
     void on_BtnHSK_clicked();
     void on_ChkBackground_toggled(bool checked);
     void onCloseTestWidget();
+
+public slots:
+    void onConnectedT3kDevice();
 };
 
 #endif // TABCALIBRATIONWIDGET_H

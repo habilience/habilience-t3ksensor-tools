@@ -16,7 +16,7 @@
 #include <windows.h>
 #endif
 
-QGeneralSettingWidget::QGeneralSettingWidget(T3kHandle*& pHandle, QWidget *parent) :
+QGeneralSettingWidget::QGeneralSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
     QWidget(parent),
     m_pT3kHandle(pHandle)
 {
@@ -179,12 +179,12 @@ void QGeneralSettingWidget::RequestGeneralSetting( bool bDefault )
 
     QCustomDefaultSensor* pInstance = QCustomDefaultSensor::Instance();
     if( pInstance->IsLoaded() )
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrInputMode).arg(pInstance->GetDefaultData(cstrInputMode, str)).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrInputMode).arg(pInstance->GetDefaultData(cstrInputMode, str)), true );
     else
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrInputMode).arg(cQ).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrInputMode).arg(cQ), true );
 
     if( bSupportDOCmd )
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrDisplayOrientation).arg(cQ).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrDisplayOrientation).arg(cQ), true );
 
     m_RequestSensorData.Start( m_pT3kHandle );
 
@@ -211,22 +211,22 @@ void QGeneralSettingWidget::RequestGeneralSetting( bool bDefault )
         chkTrayIcon->setChecked( false );
 
         if( !bSupportDOCmd )
-            m_pT3kHandle->SendCommand( (const char*)QString("%1*").arg(cstrCalibration).toUtf8().data(), true );
+            m_pT3kHandle->sendCommand( QString("%1*").arg(cstrCalibration), true );
     }
 
     m_RequestSensorData.AddItem( cstrUsbConfigMode, "?" );
-    m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrUsbConfigMode).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
 }
 
-void QGeneralSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QGeneralSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
-    if( strstr(sCmd, cstrUsbConfigMode) == sCmd )
+    if( strstr(cmd, cstrUsbConfigMode) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrUsbConfigMode );
 
-        int nMode = strtol(sCmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
+        int nMode = strtol(cmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
         switch( nMode )
         {
         case 0x04: // digitizer
@@ -257,15 +257,15 @@ void QGeneralSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, c
             break;
         }
     }
-    else if ( strstr(sCmd, cstrInputMode) == sCmd )
+    else if ( strstr(cmd, cstrInputMode) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrInputMode );
 
         int nInputMode = -1;
-        nInputMode = strtol(sCmd + sizeof(cstrInputMode) - 1, NULL, 16);
+        nInputMode = strtol(cmd + sizeof(cstrInputMode) - 1, NULL, 16);
         int nInputModeMulti = -1;
         char* pInputModeData = NULL;
-        pInputModeData = (char*)strchr( sCmd, ',' );
+        pInputModeData = (char*)strchr( cmd, ',' );
         if( pInputModeData )
         {
             nInputModeMulti = strtol( pInputModeData+1, NULL, 16 );
@@ -322,6 +322,11 @@ void QGeneralSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, c
         {
         case 0:
             RBMouse->setChecked( true );
+            // windnsoul
+//            if( (QT3kUserData::GetInstance()->getFirmwareVersionStr() >= "2.8b") && chkTrayIcon->isChecked() )
+//            {
+
+//            }
             break;
         case 2:
             RBMultiTouchWin7->setChecked( true );
@@ -330,11 +335,11 @@ void QGeneralSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, c
             break;
         }
     }
-    else if( strstr( sCmd, cstrDisplayOrientation ) == sCmd )
+    else if( strstr( cmd, cstrDisplayOrientation ) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrDisplayOrientation );
 
-        m_nDisplayOrientation = strtol(sCmd + sizeof(cstrDisplayOrientation) - 1, NULL, 10);
+        m_nDisplayOrientation = strtol(cmd + sizeof(cstrDisplayOrientation) - 1, NULL, 10);
 
         ChangeRadioButtonOrientation( m_nDisplayOrientation );
     }
@@ -384,16 +389,11 @@ void QGeneralSettingWidget::timerEvent(QTimerEvent *evt)
             QString str;
             if( ChkInputModeAutoSelect->isChecked() )
             {
-                m_pT3kHandle->SendCommand( (const char*)str.sprintf( "%s0xFF", cstrInputMode ).toUtf8().data(), true );
+                m_pT3kHandle->sendCommand( str.sprintf( "%s0xFF", cstrInputMode ), true );
             }
             else
             {
-                m_pT3kHandle->SendCommand( (const char*)str.sprintf( "%s0x%02x", cstrInputMode, m_nInputMode ).toUtf8().data(), true );
-            }
-
-            if( chkTrayIcon->isChecked() )
-            {
-                m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrMouseProfile).toUtf8().data(), true );
+                m_pT3kHandle->sendCommand( str.sprintf( "%s0x%02x", cstrInputMode, m_nInputMode ), true );
             }
         }
     }
@@ -434,11 +434,11 @@ void QGeneralSettingWidget::on_RBMouse_clicked()
     if( ChkInputModeAutoSelect->isChecked() )
         ChkInputModeAutoSelect->setChecked( false );
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%10x00").arg(cstrInputMode).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%10x00").arg(cstrInputMode), true );
 
-    if( chkTrayIcon->isChecked() )
+    if( (QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b") && chkTrayIcon->isChecked() )
     {
-        m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrMouseProfile).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1?").arg(cstrMouseProfile), true );
     }
 }
 
@@ -502,11 +502,11 @@ void QGeneralSettingWidget::on_RBMultiTouchWin7_clicked()
         ChkInputModeAutoSelect->setChecked( false );
 
     QString str;
-    m_pT3kHandle->SendCommand( (const char*)str.sprintf( "%s0x%02x", cstrInputMode, 0x02 ).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( str.sprintf( "%s0x%02x", cstrInputMode, 0x02 ), true );
 
-    if( chkTrayIcon->isChecked() )
+    if( (QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b") && chkTrayIcon->isChecked() )
     {
-        m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrMouseProfile).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1?").arg(cstrMouseProfile), true );
     }
 }
 
@@ -537,14 +537,14 @@ void QGeneralSettingWidget::on_RBtnLandscape_clicked()
 {
     if( QT3kUserData::GetInstance()->GetFirmwareVersion() >= MM_MIN_SUPPORT_DISPLAYORICMD_VERSION )
     {
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrDisplayOrientation).arg(0).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrDisplayOrientation).arg(0), true );
         return;
     }
     QString strCmd;
-    if( m_pT3kHandle->SendCommand( (const char*)strCmd.sprintf( "%s0x%02x,0x%02x,0x%02x", cstrInputMode, m_nInputModeV >> 8, m_nInputModeV & 0x00FF, 0x000 ).toUtf8().data(), true ) )
+    if( m_pT3kHandle->sendCommand( strCmd.sprintf( "%s0x%02x,0x%02x,0x%02x", cstrInputMode, m_nInputModeV >> 8, m_nInputModeV & 0x00FF, 0x000 ), true ) )
     {
         int nCalVIdx = g_nCalibration[(m_nDisplayOrientation)%4];
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrCalibration).arg(nCalVIdx).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrCalibration).arg(nCalVIdx), true );
     }
 }
 
@@ -552,14 +552,14 @@ void QGeneralSettingWidget::on_RBtnPortrait_clicked()
 {
     if( QT3kUserData::GetInstance()->GetFirmwareVersion() >= MM_MIN_SUPPORT_DISPLAYORICMD_VERSION )
     {
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrDisplayOrientation).arg(1).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrDisplayOrientation).arg(1), true );
         return;
     }
     QString strCmd;
-    if( m_pT3kHandle->SendCommand( (const char*)strCmd.sprintf( "%s0x%02x,0x%02x,0x%02x", cstrInputMode, m_nInputModeV >> 8, m_nInputModeV & 0x00FF, 0x0001 ).toUtf8().data(), true ) )
+    if( m_pT3kHandle->sendCommand( strCmd.sprintf( "%s0x%02x,0x%02x,0x%02x", cstrInputMode, m_nInputModeV >> 8, m_nInputModeV & 0x00FF, 0x0001 ), true ) )
     {
         int nCalVIdx = g_nCalibration[(m_nDisplayOrientation+3)%4];
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrCalibration).arg(nCalVIdx).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrCalibration).arg(nCalVIdx), true );
     }
 }
 
@@ -567,14 +567,14 @@ void QGeneralSettingWidget::on_RBtnLandscapeF_clicked()
 {
     if( QT3kUserData::GetInstance()->GetFirmwareVersion() >= MM_MIN_SUPPORT_DISPLAYORICMD_VERSION )
     {
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrDisplayOrientation).arg(2).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrDisplayOrientation).arg(2), true );
         return;
     }
     QString strCmd;
-    if( m_pT3kHandle->SendCommand( (const char*)strCmd.sprintf( "%s0x%02x,0x%02x,0x%02x", cstrInputMode, m_nInputModeV >> 8, m_nInputModeV & 0x00FF, 0x0002 ).toUtf8().data(), true ) )
+    if( m_pT3kHandle->sendCommand( strCmd.sprintf( "%s0x%02x,0x%02x,0x%02x", cstrInputMode, m_nInputModeV >> 8, m_nInputModeV & 0x00FF, 0x0002 ), true ) )
     {
         int nCalVIdx = g_nCalibration[(m_nDisplayOrientation+2)%4];
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrCalibration).arg(nCalVIdx).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrCalibration).arg(nCalVIdx), true );
     }
 }
 
@@ -582,13 +582,13 @@ void QGeneralSettingWidget::on_RBtnPortraitF_clicked()
 {
     if( QT3kUserData::GetInstance()->GetFirmwareVersion() >= MM_MIN_SUPPORT_DISPLAYORICMD_VERSION )
     {
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrDisplayOrientation).arg(3).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrDisplayOrientation).arg(3), true );
         return;
     }
     QString strCmd;
-    if( m_pT3kHandle->SendCommand( (const char*)strCmd.sprintf( "%s0x%02x,0x%02x,0x%02x", cstrInputMode, m_nInputModeV >> 8, m_nInputModeV & 0x00FF, 0x0003 ).toUtf8().data(), true ) )
+    if( m_pT3kHandle->sendCommand( strCmd.sprintf( "%s0x%02x,0x%02x,0x%02x", cstrInputMode, m_nInputModeV >> 8, m_nInputModeV & 0x00FF, 0x0003 ), true ) )
     {
         int nCalVIdx = g_nCalibration[(m_nDisplayOrientation+1)%4];
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrCalibration).arg(nCalVIdx).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrCalibration).arg(nCalVIdx), true );
     }
 }

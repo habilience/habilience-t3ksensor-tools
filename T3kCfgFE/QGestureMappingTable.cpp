@@ -4,6 +4,7 @@
 #include "QKeyMapStr.h"
 #include "T3kConstStr.h"
 #include "QUtils.h"
+#include "QGUIUtils.h"
 #include "QT3kDevice.h"
 #include "QLangManager.h"
 #include <QMouseEvent>
@@ -67,11 +68,6 @@ inline bool extract2Word( QString& str, unsigned char& cV )
 
 QGestureMappingTable::QGestureMappingTable(QWidget *parent) :
     QWidget(parent)
-  , m_editActionEnableDialog(this)
-  , m_editActionKey1Dialog(this)
-  , m_editActionKey2WayDialog(this)
-  , m_editActionKey4WayDialog(this)
-
 {
     m_nProfileIndex = 0;
     m_wProfileFlags = 0x00;
@@ -599,27 +595,7 @@ goto_FontRecalc:
 
 void QGestureMappingTable::popEditActionWnd( const CellInfo& ci )
 {
-    switch (ci.keyType)
-    {
-    default:
-        break;
-    case KeyTypeEnable:
-        m_editActionEnableDialog.setProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], m_wProfileFlags );
-        m_editActionEnableDialog.exec();
-        break;
-    case KeyType1Key:
-        m_editActionKey1Dialog.setProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0] );
-        m_editActionKey1Dialog.exec();
-        break;
-    case KeyType2Way:
-        m_editActionKey2WayDialog.setProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], ci.wKeyValue[1] );
-        m_editActionKey2WayDialog.exec();
-        break;
-    case KeyType4Way:
-        m_editActionKey4WayDialog.setProfileInfo( m_nProfileIndex, ci.cKey, ci.wKeyValue[0], ci.wKeyValue[1], ci.wKeyValue[2], ci.wKeyValue[3] );
-        m_editActionKey4WayDialog.exec();
-        break;
-    }
+    updateProfile( m_nProfileIndex, ci, m_wProfileFlags );
 
     resetSelect();
 }
@@ -636,18 +612,6 @@ void QGestureMappingTable::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart 
         break;
     case 1:
         if ( strstr(szCmd, cstrMouseProfile2) == szCmd )
-            bParseProfile = true;
-        break;
-    case 2:
-        if ( strstr(szCmd, cstrMouseProfile3) == szCmd )
-            bParseProfile = true;
-        break;
-    case 3:
-        if ( strstr(szCmd, cstrMouseProfile4) == szCmd )
-            bParseProfile = true;
-        break;
-    case 4:
-        if ( strstr(szCmd, cstrMouseProfile5) == szCmd )
             bParseProfile = true;
         break;
     default:
@@ -971,15 +935,6 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
             break;
         case 1:
             snprintf( szCmd, 256, "%s%02X%04X", cstrMouseProfile2, 0x00, m_wProfileFlags );
-            break;
-        case 2:
-            snprintf( szCmd, 256, "%s%02X%04X", cstrMouseProfile3, 0x00, m_wProfileFlags );
-            break;
-        case 3:
-            snprintf( szCmd, 256, "%s%02X%04X", cstrMouseProfile4, 0x00, m_wProfileFlags );
-            break;
-        case 4:
-            snprintf( szCmd, 256, "%s%02X%04X", cstrMouseProfile5, 0x00, m_wProfileFlags );
             break;
         }
         QT3kDevice::instance()->sendCommand( szCmd, true );

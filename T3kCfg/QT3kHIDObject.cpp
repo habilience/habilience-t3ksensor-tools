@@ -2,7 +2,7 @@
 
 #define CHECK_TIMEOUT_COUNT     3
 
-QT3kHIDObject::QT3kHIDObject(T3kHandle*& pHandle, QObject *parent) :
+QT3kHIDObject::QT3kHIDObject(QT3kDeviceR*& pHandle, QObject *parent) :
     QObject(parent), m_pT3kHandle(pHandle)
 {
     m_nSendCmdID = -1;
@@ -49,7 +49,7 @@ void QT3kHIDObject::on_AsyncTimeout()
     {
         m_nTimeOutCount++;
         if( m_nTimeOutCount < CHECK_TIMEOUT_COUNT )
-            m_nSendCmdID = m_pT3kHandle->SendCommand( (const char*)m_strSendCmd.toUtf8().data(), true );
+            m_nSendCmdID = m_pT3kHandle->sendCommand( m_strSendCmd, true );
         else
         {
             StopAsyncTimeoutChecker();

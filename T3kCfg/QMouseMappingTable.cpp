@@ -56,7 +56,7 @@ QMouseMappingTable::QMouseMappingTable(QWidget *parent) :
     m_nProfileIndex = 1;
     m_wProfileFlags = 0x00;
 
-    m_nCurInputMode = -1;
+    m_nMultiProfile = -1;
 
     m_bExtSet = false;
 
@@ -197,18 +197,22 @@ void QMouseMappingTable::Init()
 
     QWidget* pParent = QT3kUserData::GetInstance()->getTopParent();
     Q_ASSERT( pParent );
-    m_pEditActionWnd = new QEditActionWnd(m_pT3kHandle, pParent);
+    m_pEditActionWnd = new QEditActionWnd(pParent);
     m_pEditActionWnd->setFont( font() );
     m_pEditActionWnd->setModal( true );
-    m_pEditActionEDWnd = new QEditActionEDWnd(m_pT3kHandle, pParent);
+    connect( m_pEditActionWnd, &QEditActionWnd::sendCommand, this, &QMouseMappingTable::onSendCommand );
+    m_pEditActionEDWnd = new QEditActionEDWnd(pParent);
     m_pEditActionEDWnd->setFont( font() );
     m_pEditActionEDWnd->setModal( true );
-    m_pEditAction2WDWnd = new QEditAction2WDWnd(m_pT3kHandle, pParent);
+    connect( m_pEditActionEDWnd, &QEditActionEDWnd::sendCommand, this, &QMouseMappingTable::onSendCommand );
+    m_pEditAction2WDWnd = new QEditAction2WDWnd(pParent);
     m_pEditAction2WDWnd->setFont( font() );
     m_pEditAction2WDWnd->setModal( true );
-    m_pEditAction4WDWnd = new QEditAction4WDWnd(m_pT3kHandle, pParent);
+    connect( m_pEditAction2WDWnd, &QEditAction2WDWnd::sendCommand, this, &QMouseMappingTable::onSendCommand );
+    m_pEditAction4WDWnd = new QEditAction4WDWnd(pParent);
     m_pEditAction4WDWnd->setFont( font() );
     m_pEditAction4WDWnd->setModal( true );
+    connect( m_pEditAction4WDWnd, &QEditAction4WDWnd::sendCommand, this, &QMouseMappingTable::onSendCommand );
 
     onChangeLanguage();
 }
@@ -597,50 +601,55 @@ inline bool Extract2Word( QString& str, uchar& cV )
     return true;
 }
 
-void QMouseMappingTable::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QMouseMappingTable::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !winId() ) return;
+
+    if( strstr(cmd, cstrMouseProfile) == cmd)
+    {
+        char* pProfile = (char*)strchr( cmd, ',' );
+        if( pProfile )
+            m_nMultiProfile = strtol( pProfile+1, NULL, 10 );
+    }
 
     bool bParseProfile = false;
 
     switch( m_nProfileIndex )
     {
     case 0:
-        if ( strstr(sCmd, cstrMouseProfile1) == sCmd )
+        if ( strstr(cmd, cstrMouseProfile1) == cmd )
             bParseProfile = true;
         break;
     case 1:
-        if ( strstr(sCmd, cstrMouseProfile2) == sCmd )
+        if ( strstr(cmd, cstrMouseProfile2) == cmd )
             bParseProfile = true;
         break;
     case 2:
-        if ( strstr(sCmd, cstrMouseProfile3) == sCmd )
+        if ( strstr(cmd, cstrMouseProfile3) == cmd )
             bParseProfile = true;
         break;
     case 3:
-        if ( strstr(sCmd, cstrMouseProfile4) == sCmd )
+        if ( strstr(cmd, cstrMouseProfile4) == cmd )
             bParseProfile = true;
         break;
     case 4:
-        if ( strstr(sCmd, cstrMouseProfile5) == sCmd )
+        if ( strstr(cmd, cstrMouseProfile5) == cmd )
             bParseProfile = true;
         break;
     default:
-        if ( strstr(sCmd, cstrMouseProfile2) == sCmd )
+        if ( strstr(cmd, cstrMouseProfile2) == cmd )
             bParseProfile = true;
         break;
     }
 
     if ( bParseProfile )
     {
-        ParseMouseProfile( sCmd );
+        ParseMouseProfile( cmd );
     }
 }
 
-void QMouseMappingTable::onRecvInputMode(int nCurInputMode)
+void QMouseMappingTable::onRecvInputMode()
 {
-    m_nCurInputMode = nCurInputMode;
-
     if( m_bExtSet ) return;
     if( !m_wProfileFlags ) return;
     QString strCmd;
@@ -663,7 +672,14 @@ void QMouseMappingTable::onRecvInputMode(int nCurInputMode)
         break;
     }
 
-    m_pT3kHandle->SendCommand( (const char*)strCmd.toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( strCmd, true );
+}
+
+void QMouseMappingTable::onSendCommand(QString strCmd, bool bAsync, unsigned short nTimeout)
+{
+    if( strCmd.isEmpty() ) return;
+
+    m_pT3kHandle->sendCommand( strCmd, bAsync, nTimeout );
 }
 
 void QMouseMappingTable::SetCellInfo( int nCol, int nRow, uchar cV0, uchar cV1 )
@@ -761,25 +777,8 @@ void QMouseMappingTable::ParseMouseProfile( const char* szProfile )
 
             m_wProfileFlags = wFlags;
 
-            switch( m_nCurInputMode )
+            if( m_nMultiProfile == m_nProfileIndex+1 )
             {
-            case 0:
-                for( int j=1 ; j<ROW_COUNT ; j++ )
-                {
-                    for( int i=1 ; i<COL_COUNT ; i++ )
-                    {
-                        CellInfo* ci = GetAt( TABLE(i, j) );
-                        ci->bNoUse = false;
-                    }
-                }
-
-                GetAt( TABLE(1,4) )->bNoUse = true;
-
-                m_ciZoom.bNoUse = false;
-                m_ciRotate.bNoUse = false;
-                break;
-            case 1:
-            case 2:
                 if( m_bCheckExtProperty[EXTP_PUTAND_ON_MULTITOUCHDEVICE] )
                 {
                     for( int j=1 ; j<ROW_COUNT-2 ; j++ )
@@ -816,9 +815,22 @@ void QMouseMappingTable::ParseMouseProfile( const char* szProfile )
 
                 m_ciZoom.bNoUse = true;
                 m_ciRotate.bNoUse = true;
-                break;
-            default:
-                break;
+            }
+            else
+            {
+                for( int j=1 ; j<ROW_COUNT ; j++ )
+                {
+                    for( int i=1 ; i<COL_COUNT ; i++ )
+                    {
+                        CellInfo* ci = GetAt( TABLE(i, j) );
+                        ci->bNoUse = false;
+                    }
+                }
+
+                GetAt( TABLE(1,4) )->bNoUse = true;
+
+                m_ciZoom.bNoUse = false;
+                m_ciRotate.bNoUse = false;
             }
 
             update();
@@ -1036,7 +1048,7 @@ void QMouseMappingTable::OnMouseLBDown(QPointF point)
                 if( ci->rectCell.contains( point ) )
                 {
                     PopEditActionWnd( *ci, j, i );
-                    m_pSelectCell = ci;
+                    //m_pSelectCell = ci;
                     update();
                 }
             }
@@ -1115,7 +1127,7 @@ void QMouseMappingTable::OnMouseLBDown(QPointF point)
 
     if( m_bExtSet )
     {
-        m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrInputMode).toUtf8().data(), false ); // sync
+        m_pT3kHandle->sendCommand( QString("%1?").arg(cstrInputMode), false ); // sync
 
         QString strCmd;
         switch( m_nProfileIndex )
@@ -1137,7 +1149,7 @@ void QMouseMappingTable::OnMouseLBDown(QPointF point)
             break;
         }
 
-        m_pT3kHandle->SendCommand( (const char*)strCmd.toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( strCmd, true );
 
         m_bExtSet = false;
     }

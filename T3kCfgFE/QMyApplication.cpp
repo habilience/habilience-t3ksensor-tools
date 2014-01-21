@@ -4,6 +4,8 @@
 #include <QKeyEvent>
 #include <QFont>
 #include "QUtils.h"
+#include "QGUIUtils.h"
+
 
 QMyApplication::QMyApplication(int &argc, char **argv) :
     QtSingleApplication(argc, argv)

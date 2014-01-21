@@ -20,6 +20,7 @@
 #include "Common/nv.h"
 #include "T3k_ver.h"
 #include "QUtils.h"
+#include "QGUIUtils.h"
 
 #include <QMenu>
 #include <QSettings>
@@ -41,6 +42,8 @@
 #endif
 
 #include "T3kPacketDef.h"
+
+#include "t3kcomdef.h"
 
 extern bool g_bIsScreenShotMode;
 
@@ -106,7 +109,8 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     setAnimated( true );
     setDockOptions( AnimatedDocks );
 
-    m_pT3kHandle = new T3kHandle();
+    m_pT3kHandle = (QT3kDeviceR*)QT3kDevice::instance();
+    m_pT3kHandle->setEventHandler( (QT3kDeviceREventHandler*)QT3kDeviceREventHandler::instance() );
 
     QT3kUserData::GetInstance()->setT3kHandle( m_pT3kHandle );
 
@@ -207,6 +211,8 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 
     connect( ui->SWMenu, &QSlidingStackedWidget::animationFinished, this, &T3kCfgWnd::OnFinishAnimationMenu );
 
+    connect( this, &T3kCfgWnd::connectedDevice, this, &T3kCfgWnd::onOpenT3kDevice );
+
     QSettings RegOption( "Habilience", "T3kCfg" );
     RegOption.beginGroup( "Options" );
 
@@ -240,7 +246,7 @@ T3kCfgWnd::~T3kCfgWnd()
 
     if( m_pT3kHandle )
     {
-        m_pT3kHandle->Close();
+        m_pT3kHandle->close();
         m_pT3kHandle = NULL;
     }
 
@@ -315,8 +321,8 @@ void T3kCfgWnd::Init()
     }
 
     m_nSendCmdID = -1;
-    m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrInputMode).toUtf8().data(), true, 5000 );
-    m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrCalibrationScreenMargin).toUtf8().data(), true, 5000 );
+    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrInputMode), true, 5000 );
+    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrCalibrationScreenMargin), true, 5000 );
 
     if( !m_nTimerChkHIDCom )
         m_nTimerChkHIDCom = startTimer( 3000 );
@@ -329,52 +335,21 @@ bool T3kCfgWnd::OpenT30xHandle()
 {
     if( !m_pT3kHandle ) return false;
 
-    m_pT3kHandle->SetNotify( TPDPEventMultiCaster::instance() );
+    // windnsoul
+//    TPDPEventMultiCaster::instance()->SetSocket( QT3kUserData::GetInstance()->GetRemoteSocket() );
 
-    TPDPEventMultiCaster::instance()->SetSocket( QT3kUserData::GetInstance()->GetRemoteSocket() );
-
+    int nIdx = 0;
     int nTotalSensorCount = 0;
-    char pszPath[MAX_PATH];
-    memset( pszPath, 0, sizeof(char)*MAX_PATH );
-    T3kHandle::TouchSensorModel eModel = T3kHandle::TSM_NONE;
-    do
+    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
     {
-        int nOldT3000DetectCnt = m_pT3kHandle->GetDeviceCount( 0xFFFF, 0x0000 );
-        nTotalSensorCount += nOldT3000DetectCnt;
-        if( nTotalSensorCount > 1 ) break;
-        if( nOldT3000DetectCnt != 0 ) eModel = T3kHandle::TSM_OLDT3000;
-
-        int nT3000DetectCnt = m_pT3kHandle->GetDeviceCount( 0x2200, 0x3000 );
-        nTotalSensorCount += nT3000DetectCnt;
-        if( nTotalSensorCount > 1 ) break;
-        if( nT3000DetectCnt != 0 ) eModel = T3kHandle::TSM_T3000;
-
-        int nT3100DetectCnt = m_pT3kHandle->GetDeviceCount( 0x2200, 0x3100 );
-        nTotalSensorCount += nT3100DetectCnt;
-        if( nTotalSensorCount > 1 ) break;
-        if( nT3100DetectCnt != 0 ) eModel = T3kHandle::TSM_T3100;
-
-        int nT3200DetectCnt = m_pT3kHandle->GetDeviceCount( 0x2200, 0x3200 );
-        nTotalSensorCount += nT3200DetectCnt;
-        if( nTotalSensorCount > 1 ) break;
-        if( nT3200DetectCnt != 0 ) eModel = T3kHandle::TSM_T3200;
-
-        int nT3500DetectCnt = m_pT3kHandle->GetDeviceCount( 0x2200, 0x3500 );
-        nTotalSensorCount += nT3500DetectCnt;
-        if( nTotalSensorCount > 1 ) break;
-        if( nT3500DetectCnt != 0 ) eModel = T3kHandle::TSM_T3500;
-
-        int nT3900DetectCnt = m_pT3kHandle->GetDeviceCount( 0x2200, 0x3900 );
-        nTotalSensorCount += nT3900DetectCnt;
-        if( nTotalSensorCount > 1 ) break;
-        if( nT3900DetectCnt != 0 ) eModel = T3kHandle::TSM_T3900;
+        int nCnt = QT3kDeviceR::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+        if( nCnt > 0 && (d != COUNT_OF_DEVICE_LIST-1 || nTotalSensorCount == 0) )
+            nIdx = d;
+        nTotalSensorCount += nCnt;
     }
-    while( false );
 
     if( !nTotalSensorCount )
-    {
         return true;
-    }
 
     bool bRet = false;
     if( nTotalSensorCount > 1 )
@@ -390,44 +365,23 @@ bool T3kCfgWnd::OpenT30xHandle()
         ushort nPID = pUD->GetSelectedPID();
         ushort nIdx = pUD->GetSelectedIdx();
 
-        bRet = m_pT3kHandle->OpenWithVIDPID( nVID, nPID, 1, nIdx );
+        bRet = m_pT3kHandle->open( nVID, nPID, 1, nIdx );
         if( bRet )
+        {
+            emit connectedDevice( m_pT3kHandle->getDeviceInfo() );
             QT3kUserData::GetInstance()->SetModel( nPID );
+        }
 
         return bRet;
     }
 
-    unsigned short nVID = 0x0000;
-    unsigned short nPID = 0x0000;
-    switch( eModel )
-    {
-    case T3kHandle::TSM_OLDT3000:
-        nVID = 0xFFFF;  nPID = 0x0000;
-        break;
-    case T3kHandle::TSM_T3000:
-        nVID = 0x2200;  nPID = 0x3000;
-        break;
-    case T3kHandle::TSM_T3100:
-        nVID = 0x2200;  nPID = 0x3100;
-        break;
-    case T3kHandle::TSM_T3200:
-        nVID = 0x2200;  nPID = 0x3200;
-        break;
-    case T3kHandle::TSM_T3500:
-        nVID = 0x2200;  nPID = 0x3500;
-        break;
-    case T3kHandle::TSM_T3900:
-        nVID = 0x2200;  nPID = 0x3900;
-        break;
-    case T3kHandle::TSM_NONE:
-    default:
-        return false;
-        break;
-    }
+    bRet = QT3kDeviceR::instance()->open( DEVICE_LIST[nIdx].nVID, DEVICE_LIST[nIdx].nPID, DEVICE_LIST[nIdx].nMI, 0 );
 
-    bRet = m_pT3kHandle->OpenWithVIDPID( nVID, nPID, 1 );
     if( bRet )
-        QT3kUserData::GetInstance()->SetModel( nPID );
+    {
+        emit connectedDevice( m_pT3kHandle->getDeviceInfo() );
+        QT3kUserData::GetInstance()->SetModel( DEVICE_LIST[nIdx].nPID );
+    }
 
     return bRet;
 }
@@ -670,7 +624,7 @@ void T3kCfgWnd::ShowTrayMenu()
     QAction* pMenuAction = NULL;
     foreach( pMenuAction, m_listProfilesQAction )
     {
-        if( !m_pT3kHandle->IsOpen() )
+        if( !m_pT3kHandle->isOpen() )
         {
             pMenuAction->setEnabled( false );
         }
@@ -681,7 +635,7 @@ void T3kCfgWnd::ShowTrayMenu()
         }
     }
 
-    if( m_pT3kHandle->IsOpen() )
+    if( m_pT3kHandle->isOpen() )
         m_listProfilesQAction.at(m_nProfileIndex)->setChecked( true );
 }
 
@@ -744,7 +698,7 @@ void T3kCfgWnd::OnTrayChangeProfile( QAction* pAction )
             break;
         }
 
-        m_nSendCmdID = m_pT3kHandle->SendCommand( (const char*)strCmd.toUtf8().data(), true );
+        m_nSendCmdID = m_pT3kHandle->sendCommand( strCmd, true );
     }
 }
 
@@ -779,7 +733,7 @@ void T3kCfgWnd::showEvent(QShowEvent *)
 
     if( !m_bFirmwareDownloading )
     {
-        if( !m_pT3kHandle->IsOpen() )
+        if( !m_pT3kHandle->isOpen() )
             HideContentsMenu();
         else
             ShowContentsMenu();
@@ -956,10 +910,10 @@ void T3kCfgWnd::HideContentsMenu()
     m_pMainWidget->hide();
 }
 
-void T3kCfgWnd::OnOpenT3kDevice(T3K_HANDLE)
+void T3kCfgWnd::onOpenT3kDevice(T3K_DEVICE_INFO /*info*/)
 {
-    if( !m_pT3kHandle->GetReportCommand() )
-        m_pT3kHandle->SetReportCommand( true );
+    if( !m_pT3kHandle->getReportCommand() )
+        m_pT3kHandle->setReportCommand( true );
 
     m_bIsConnect = true;
 
@@ -969,12 +923,11 @@ void T3kCfgWnd::OnOpenT3kDevice(T3K_HANDLE)
     EnableTrayProfile( true );
 }
 
-void T3kCfgWnd::OnCloseT3kDevice(T3K_HANDLE)
+void T3kCfgWnd::TPDP_OnDisconnected(T3K_DEVICE_INFO /*devInfo*/)
 {
     if( m_pT3kHandle )
-    {
-        m_pT3kHandle->Close( true );
-    }
+        m_pT3kHandle->close( /*true*/ );
+
     if( !isWindow() )
         return;
 
@@ -995,9 +948,9 @@ void T3kCfgWnd::OnCloseT3kDevice(T3K_HANDLE)
     EnableTrayProfile( false );
 }
 
-void T3kCfgWnd::OnFirmwareDownload( bool bDownload )
+void T3kCfgWnd::TPDP_OnDownloadingFirmware(T3K_DEVICE_INFO /*devInfo*/, bool bIsDownload)
 {
-    m_bFirmwareDownloading = bDownload;
+    m_bFirmwareDownloading = bIsDownload;
     if( m_bFirmwareDownloading )
     {
         HideContentsMenu();
@@ -1010,15 +963,15 @@ void T3kCfgWnd::OnFirmwareDownload( bool bDownload )
     }
     else
         ShowContentsMenu();
-    EnableTrayProfile( !bDownload );
-    qDebug( "Firmware download: %d\r\n", bDownload );
+    EnableTrayProfile( !bIsDownload );
+    qDebug( "Firmware download: %d\r\n", bIsDownload );
 
     update();
 
     if( !m_bFirmwareDownloading )
     {
-        if( !m_pT3kHandle->GetReportCommand() )
-            m_pT3kHandle->SetReportCommand( true );
+        if( !m_pT3kHandle->getReportCommand() )
+            m_pT3kHandle->setReportCommand( true );
 
         if( isVisible() )
             m_pMainWidget->RequestInformation();
@@ -1090,43 +1043,87 @@ int ParseProfileforIsMacMargin( const char* sCmd, int nProfileIndex )
     return -1;
 }
 
-void T3kCfgWnd::OnRSP( ResponsePart /*Part*/, ushort /*nTickTime*/, const char* /*sPartId*/, long lId, bool /*bFinal*/, const char* sCmd )
+void T3kCfgWnd::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int id, bool /*bFinal*/, const char *cmd)
 {
     if( !winId() ) return;
-    if( m_nSendCmdID >= 0 && m_nSendCmdID != lId ) return;
+    if( m_nSendCmdID >= 0 && m_nSendCmdID != id ) return;
     m_nSendCmdID = -1;
-    if( ui->SWMenu->currentIndex() == 0 && strstr(sCmd, cstrInputMode) == sCmd )
+    if( ui->SWMenu->currentIndex() == 0 && strstr(cmd, cstrInputMode) == cmd )
     {
         char* pInputMode = NULL;
-        pInputMode = (char*)strchr( sCmd, ',' );
+        pInputMode = (char*)strchr( cmd, ',' );
 
         int nMode1 = -1;
 
         if( !pInputMode )
-            m_nCurInputMode = strtol(sCmd + sizeof(cstrInputMode) - 1, NULL, 16);
+            m_nCurInputMode = strtol(cmd + sizeof(cstrInputMode) - 1, NULL, 16);
         else
         {
-            nMode1 = strtol(sCmd + sizeof(cstrInputMode) - 1, NULL, 16);
+            nMode1 = strtol(cmd + sizeof(cstrInputMode) - 1, NULL, 16);
             if( nMode1 == 0xFF )
                 m_nCurInputMode = strtol( pInputMode+1, NULL, 16 );
             else
                 m_nCurInputMode = nMode1;
         }
 
-        m_nSendCmdID = m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrMouseProfile).toUtf8().data(), true );
+        if( QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b" )
+        {
+            m_nSendCmdID = m_pT3kHandle->sendCommand( QString("%1?").arg(cstrMouseProfile), true );
+        }
+        else
+        {
+            int nProfile = 1;
+            switch( m_nCurInputMode )
+            {
+            case 0xFF:
+            case -1:
+                Q_ASSERT(false);
+                break;
+            case 0x02:
+                nProfile = 2;
+                break;
+            case 0x00:
+            default:
+                nProfile = 1;
+                break;
+            }
+
+            if( nProfile < NV_DEF_MOUSE_PROFILE_RANGE_START || nProfile > NV_DEF_MOUSE_PROFILE_RANGE_END+1 ) nProfile = NV_DEF_MOUSE_PROFILE;
+            int nCurProfile = nProfile-1;
+
+            SetTrayIconIamge( nCurProfile );
+            m_nProfileIndex = nCurProfile;
+#ifdef Q_OS_MAC
+            if( m_nCurInputMode >= 0 )
+            {
+                QString strCmd;
+                switch( m_nProfileIndex )
+                {
+                case 0:
+                    strCmd = QString("%1?").arg(cstrMouseProfile1);
+                    break;
+                case 1:
+                    strCmd = QString("%1?").arg(cstrMouseProfile2);
+                    break;
+                }
+
+                if( !strCmd.isEmpty() )
+                    m_nSendCmdID = m_pT3kHandle->sendCommand( strCmd, true );
+            }
+#endif
+        }
     }
-    else
-    if ( strstr(sCmd,  cstrMouseProfile) == sCmd )
+    else if ( strstr(cmd,  cstrMouseProfile) == cmd )
     {
         if( (m_nCurInputMode < 0 ) ) return;
         //if( !IsRegisterTrayIcon() || !m_pTrayIcon->isSystemTrayAvailable() ) return;
 
-        int nProfile = atoi(sCmd + sizeof(cstrMouseProfile) - 1);
+        int nProfile = atoi(cmd + sizeof(cstrMouseProfile) - 1);
 
-        char* pProfile = (char*)strchr( sCmd, ',' );
+        char* pProfile = (char*)strchr( cmd, ',' );
         if( pProfile )
         {
-            int nMouseIdx = strtol(sCmd + sizeof(cstrMouseProfile) - 1, NULL, 16);
+            int nMouseIdx = strtol(cmd + sizeof(cstrMouseProfile) - 1, NULL, 16);
             int nMultiIdx = strtol( pProfile+1, NULL, 16 );
 
             m_nProfileIndexData = (nMouseIdx << 16) | nMultiIdx;
@@ -1176,13 +1173,13 @@ void T3kCfgWnd::OnRSP( ResponsePart /*Part*/, ushort /*nTickTime*/, const char* 
             }
 
             if( !strCmd.isEmpty() )
-                m_nSendCmdID = m_pT3kHandle->SendCommand( (const char*)strCmd.toUtf8().data(), true );
+                m_nSendCmdID = m_pT3kHandle->sendCommand( strCmd, true );
         }
 #endif
     }
-    else if( strstr(sCmd, cstrSoftkey) == sCmd )
+    else if( strstr(cmd, cstrSoftkey) == cmd )
     {
-        QString strSoftKey( sCmd );
+        QString strSoftKey( cmd );
 
         int nE = strSoftKey.indexOf( '=' );
         if( nE >= 0 )
@@ -1194,7 +1191,7 @@ void T3kCfgWnd::OnRSP( ResponsePart /*Part*/, ushort /*nTickTime*/, const char* 
     else
     {
         int bRet = -1;
-        if( (bRet = ParseProfileforIsMacMargin( sCmd, m_nProfileIndex )) != -1 )
+        if( (bRet = ParseProfileforIsMacMargin( cmd, m_nProfileIndex )) != -1 )
         {
             QT3kUserData::GetInstance()->SetMacMargin( bRet == 1 ? true : false );
         }
@@ -1210,9 +1207,9 @@ bool T3kCfgWnd::onRegisterTrayIcon(bool bRegister)
         {
             if( CreateTrayIcon() )
             {
-                if( m_pT3kHandle->IsOpen() )
+                if( m_pT3kHandle->isOpen() )
                 {
-                    m_nSendCmdID = m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrMouseProfile).toUtf8().data(), true );
+                    m_nSendCmdID = m_pT3kHandle->sendCommand( QString("%1?").arg(cstrInputMode), true );
                 }
                 else
                     SetTrayIconIamge( -1 );
@@ -1224,7 +1221,7 @@ bool T3kCfgWnd::onRegisterTrayIcon(bool bRegister)
         {
             m_pTrayIcon->show();
 
-            m_nSendCmdID = m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrMouseProfile).toUtf8().data(), true );
+            m_nSendCmdID = m_pT3kHandle->sendCommand( QString("%1?").arg(cstrInputMode), true );
         }
     }
     else
@@ -1369,13 +1366,13 @@ void T3kCfgWnd::timerEvent(QTimerEvent *evt)
 
         if( evt->timerId() == m_nTimerChkHIDCom )
         {
-            if( m_pT3kHandle && !m_pT3kHandle->IsOpen() )
+            if( m_pT3kHandle && !m_pT3kHandle->isOpen() )
             {
                 if( OpenT30xHandle() )
                 {
                     m_nSendCmdID = -1;
-                    m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrInputMode).toUtf8().data(), true, 5000 );
-                    m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrCalibrationScreenMargin).toUtf8().data(), true, 5000 );
+                    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrInputMode), true, 5000 );
+                    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrCalibrationScreenMargin), true, 5000 );
                 }
             }
         }
@@ -1460,5 +1457,6 @@ void T3kCfgWnd::onConnectedRemote()
 
 void T3kCfgWnd::onDisconnectedRemote()
 {
+   // windnsoul
     m_pT3kHandle->onReceiveRawDataFlag( false );
 }

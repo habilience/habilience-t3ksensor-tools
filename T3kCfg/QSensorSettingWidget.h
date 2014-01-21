@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QToolButton>
 
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QDiableTouchWidget.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
@@ -13,12 +13,12 @@ namespace Ui {
     class QSensorSettingWidget;
 }
 
-class QSensorSettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
+class QSensorSettingWidget : public QWidget, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QSensorSettingWidget(T3kHandle*& pHandle, QWidget *parent = 0);
+    explicit QSensorSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
     ~QSensorSettingWidget();
 
     enum BuzzerType { BT_ERROR, BT_CLICK, BT_KEYTONE, BT_CALIBRATION, BT_SENSORATTACH, BT_USBATTACH, BT_PENPAIRING, MaxBuzzer };
@@ -40,12 +40,12 @@ protected:
     virtual void hideEvent(QHideEvent *evt);
     virtual void keyPressEvent(QKeyEvent *evt);
 
-    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 private:
     Ui::QSensorSettingWidget *ui;
 
-    T3kHandle*&                m_pT3kHandle;
+    QT3kDeviceR*&                m_pT3kHandle;
 
     QString                     m_strCaptionON;
     QString                     m_strCaptionOFF;

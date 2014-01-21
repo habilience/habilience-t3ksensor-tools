@@ -1,7 +1,7 @@
 #ifndef CHIDCMD_H
 #define CHIDCMD_H
 
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceEventHandler.h"
 
 #include <QObject>
 #include <QMutex>
@@ -11,7 +11,7 @@
 #define PROMPT_MAX  3
 
 
-class CHIDCmd : public QObject, public TPDPEventMultiCaster::ITPDPEventListener
+class CHIDCmd : public QObject, public QT3kDeviceEventHandler::IListener
 {
     Q_OBJECT
 
@@ -69,20 +69,19 @@ protected:
 
     bool OpenT3kHandle();
 
-    void OnDeviceConnected(T3K_HANDLE hDevice);
-    void OnDeviceDisconnected(T3K_HANDLE hDevice);
+    void OnDeviceConnected();
+    void OnDeviceDisconnected(T3K_DEVICE_INFO devInfo);
 
     // T3kHIDNotify::IT3kEventListener
-    virtual void OnOpenT3kDevice(T3K_HANDLE hDevice);
-    virtual void OnCloseT3kDevice(T3K_HANDLE hDevice);
-    virtual void OnMSG(ResponsePart, ushort, const char *, const char *);
-    virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
-    virtual void OnRSE(ResponsePart, ushort, const char *, long, bool, const char *);
-    virtual void OnSTT(ResponsePart, ushort, const char *, const char *);
-    virtual void OnVER(ResponsePart, ushort, const char *, T3kVER &);
+    virtual void TPDP_OnDisconnected(T3K_DEVICE_INFO devInfo);
+    virtual void TPDP_OnMSG(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, const char *txt);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnSTT(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, const char *status);
+    virtual void TPDP_OnVER(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, t3kpacket::_body::_ver *ver);
 
 protected:
-    T3kHandle*          m_pT3kHandle;
+    QT3kDevice*         m_pT3kHandle;
     QMutex              m_csTextOut;
 
     char                m_szInstantMode[100];
@@ -97,8 +96,10 @@ protected:
     QFuture<void>       m_ftCmdThread;
 
 signals:
+    void connectedT3kDevice();
 
 public slots:
+    void onConnectedT3kDevice();
 
 };
 

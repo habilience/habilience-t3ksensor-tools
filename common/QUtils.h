@@ -2,7 +2,6 @@
 #define QSTRINGUTILS_H
 
 #include <QString>
-#include <QFont>
 
 QString lstrip(const QString& str, const char *chars);
 QString rstrip(const QString& str, const char *chars);
@@ -45,7 +44,5 @@ void setTabletPenServicePropertiesWidthAllChilds( HWND hwnd );
 #define DISABLE_MSWINDOWS_TOUCH_PROPERTY
 #define DISABLE_MSWINDOWS_TOUCH_PROPERTY_RECURSIVE
 #endif
-
-QFont getSystemFont(QWidget* widget);
 
 #endif // QSTRINGUTILS_H

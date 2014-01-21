@@ -15,6 +15,8 @@ public:
 
     enum eButtonMode{ BM_OFF, BM_ON, BM_HOVER };
 
+    void setParentClassName(QString strClassName) { m_strParentClassName = strClassName; }
+
     void ChangeButtonMode( eButtonMode eBM );
 
     bool IsCheckBox() { return m_bCheckBox; }
@@ -51,6 +53,8 @@ protected:
     QColor      clrCheckBox;
 
     QLineEdit*  m_pTextEdit;
+
+    QString     m_strParentClassName;
 
 signals:
     void OnBtnClickEvent();

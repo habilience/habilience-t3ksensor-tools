@@ -21,7 +21,7 @@
 #include "CfgCustomCmdDef.h"
 
 
-QAssistanceWidget::QAssistanceWidget(T3kHandle*& pHandle, QWidget *parent) :
+QAssistanceWidget::QAssistanceWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QAssistanceWidget), m_pT3kHandle(pHandle)
 {
@@ -112,14 +112,14 @@ void QAssistanceWidget::onChangeLanguage()
     }
 }
 
-void QAssistanceWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QAssistanceWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
-    if( strstr(sCmd, cstrCalibrationMode) == sCmd )
+    if( strstr(cmd, cstrCalibrationMode) == cmd )
     {
         int nMode;
-        nMode = atoi(sCmd + sizeof(cstrCalibrationMode) - 1);
+        nMode = atoi(cmd + sizeof(cstrCalibrationMode) - 1);
         if ( (nMode == MODE_CALIBRATION_NONE) || (nMode == MODE_CALIBRATION_SELF) )
         {
             if ( nMode == MODE_CALIBRATION_SELF )
@@ -130,14 +130,14 @@ void QAssistanceWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const
     }
 }
 
-void QAssistanceWidget::OnSTT(ResponsePart, ushort, const char *, const char *pStatus)
+void QAssistanceWidget::TPDP_OnSTT(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, const char *status)
 {
     if( !isVisible() ) return;
 
-    if( strstr(pStatus, cstrCalibrationMode) == pStatus )
+    if( strstr(status, cstrCalibrationMode) == status )
     {
         int nMode;
-        nMode = atoi(pStatus + sizeof(cstrCalibrationMode) - 1);
+        nMode = atoi(status + sizeof(cstrCalibrationMode) - 1);
         if ( (nMode == MODE_CALIBRATION_NONE) || (nMode == MODE_CALIBRATION_SELF) )
         {
             if ( nMode == MODE_CALIBRATION_SELF )

@@ -2,18 +2,18 @@
 #define QCALIBRATIONWIDGET_H
 
 #include <QWidget>
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QLangManager.h"
 
 #define QCALI_POINTS                (9)
 #define UNDER_VER_CALI_PNTS         (9)
 #define SUPPORT_VER_CALI_PNTS       (4)
 
-class QCalibrationWidget : public QWidget, public QLangManager::ILangChangeNotify, public TPDPEventMultiCaster::ITPDPEventListener
+class QCalibrationWidget : public QWidget, public QLangManager::ILangChangeNotify, public QT3kDeviceREventHandler::IListener
 {
     Q_OBJECT
 public:
-    explicit QCalibrationWidget(T3kHandle*& pHandle, QWidget *parent = 0);
+    explicit QCalibrationWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
     ~QCalibrationWidget();
 
     bool ShowWindow( bool nShow, int nUsbConfigMode=0, float fScreenMargin=0, int nMacMargin=0, float fMMVersion=0.0f );
@@ -21,7 +21,7 @@ public:
 protected:
     void EscapeCalibrationMode();
 
-    virtual void OnMSG(ResponsePart Part, ushort /*nTickTime*/, const char *sPartId, const char *sTxt);
+    virtual void TPDP_OnMSG(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, const char *txt);
 
     virtual void onChangeLanguage();
 
@@ -33,7 +33,7 @@ protected:
     virtual void timerEvent(QTimerEvent *);
 
 protected:
-    T3kHandle*&                m_pT3kHandle;
+    QT3kDeviceR*&                m_pT3kHandle;
     float                       m_fScreenMargin;
 
     bool*                       m_paryCaliPoints;

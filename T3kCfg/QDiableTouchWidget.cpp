@@ -8,7 +8,7 @@
 
 #include "QWidgetCloseEventManager.h"
 
-QDiableTouchWidget::QDiableTouchWidget(T3kHandle*& pHandle, QWidget *parent) :
+QDiableTouchWidget::QDiableTouchWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
     QDialog(parent),
     m_pT3kHandle(pHandle), ui(new Ui::QDiableTouchWidget)
 {   
@@ -30,7 +30,7 @@ QDiableTouchWidget::QDiableTouchWidget(T3kHandle*& pHandle, QWidget *parent) :
     ui->BtnOK->SetBorder( true );
     ui->BtnOK->SetAlignmentText( QFlatTextButton::FBA_CENTER );
 
-    m_pT3kHandle->EnableMouse( false, true );
+    m_pT3kHandle->enableMouse( false );
 
     m_TimerCountDown.setParent( this );
     connect( &m_TimerCountDown, SIGNAL(timeout()), this, SLOT(OnTimer()) );
@@ -89,14 +89,14 @@ void QDiableTouchWidget::timerEvent(QTimerEvent *evt)
     QDialog::timerEvent(evt);
 }
 
-void QDiableTouchWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QDiableTouchWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
-    if ( strstr(sCmd, cstrCalibrationMode) == sCmd )
+    if ( strstr(cmd, cstrCalibrationMode) == cmd )
     {
         int nMode;
-        nMode = atoi(sCmd + sizeof(cstrCalibrationMode) - 1);
+        nMode = atoi(cmd + sizeof(cstrCalibrationMode) - 1);
         if ( (nMode == MODE_CALIBRATION_NONE) || (nMode == MODE_CALIBRATION_SELF) )
         {
             if ( nMode == MODE_CALIBRATION_SELF )
@@ -123,5 +123,5 @@ void QDiableTouchWidget::on_BtnOK_clicked()
 
 void QDiableTouchWidget::On_Cancel()
 {
-    m_pT3kHandle->EnableMouse( true, true );
+    m_pT3kHandle->enableMouse( true );
 }

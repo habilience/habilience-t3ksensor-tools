@@ -44,13 +44,12 @@
 
 #define EXTP_COUNT              5
 
+#define GESTURE_PROFILE_COUNT   2
+
 #include "QT3kDeviceEventHandler.h"
 #include <QVector>
 #include <QRegion>
-#include "QEditActionEnableDialog.h"
-#include "QEditActionKey1Dialog.h"
-#include "QEditActionKey2WayDialog.h"
-#include "QEditActionKey4WayDialog.h"
+
 
 class QGestureMappingTable : public QWidget
         , public QT3kDeviceEventHandler::IListener
@@ -62,7 +61,6 @@ public:
     void setProfileIndex( int nIndex );
     void resetSelect();
 
-protected:
     enum CellKeyType { KeyTypeNone, KeyTypeEnable, KeyType1Key, KeyType2Way, KeyType4Way };
     struct CellInfo
     {
@@ -76,6 +74,8 @@ protected:
         CellKeyType keyType;
         bool bBold;
     };
+
+protected:
 
     QVector<CellInfo>	m_aryCell;
 
@@ -100,11 +100,6 @@ protected:
     QRegion m_rgnHover;
 
     QFont   m_fntSystem;
-
-    QEditActionEnableDialog     m_editActionEnableDialog;
-    QEditActionKey1Dialog       m_editActionKey1Dialog;
-    QEditActionKey2WayDialog    m_editActionKey2WayDialog;
-    QEditActionKey4WayDialog    m_editActionKey4WayDialog;
 
     void setCellInfo( int nCol, int nRow,
                       unsigned char cV00, unsigned char cV01,
@@ -136,6 +131,7 @@ protected:
 public:
     
 signals:
+    void updateProfile(int nProfileIndex, const CellInfo& ci, ushort nProfileFlags);
     
 public slots:
     

@@ -21,7 +21,7 @@ extern bool g_bIsScreenShotMode;
 #define QICON_WIDTH             40
 #define QICON_HEIGHT            40
 
-QMainMenuWidget::QMainMenuWidget(T3kHandle*& pHandle, QWidget *parent) :
+QMainMenuWidget::QMainMenuWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QMainMenuWidget), m_pT3kHandle(pHandle)
 {
@@ -143,7 +143,7 @@ void QMainMenuWidget::onChangeLanguage()
 
 void QMainMenuWidget::RequestInformation()
 {
-    if ( !m_pT3kHandle->IsOpen() )
+    if ( !m_pT3kHandle->isOpen() )
         return;
 
     ushort nModel = QT3kUserData::GetInstance()->GetModel();
@@ -163,27 +163,27 @@ void QMainMenuWidget::RequestInformation()
         m_RequestSensorData.AddItem( cstrAdminSettingTime, "?", QRequestHIDManager::CM2_1 );
     }
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrFirmwareVersion).toUtf8().data(), true );
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2?").arg(cstrCam1).arg(cstrFirmwareVersion).toUtf8().data(), true );
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2?").arg(cstrCam1).arg(cstrAdminSettingTime).toUtf8().data(), true );
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2?").arg(cstrCam2).arg(cstrFirmwareVersion).toUtf8().data(), true );
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2?").arg(cstrCam2).arg(cstrAdminSettingTime).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrFirmwareVersion), true );
+    m_pT3kHandle->sendCommand( QString("%1%2?").arg(cstrCam1).arg(cstrFirmwareVersion), true );
+    m_pT3kHandle->sendCommand( QString("%1%2?").arg(cstrCam1).arg(cstrAdminSettingTime), true );
+    m_pT3kHandle->sendCommand( QString("%1%2?").arg(cstrCam2).arg(cstrFirmwareVersion), true );
+    m_pT3kHandle->sendCommand( QString("%1%2?").arg(cstrCam2).arg(cstrAdminSettingTime), true );
 
     if( nModel != 0x0000 && nModel != 0x3000 && nModel != 0x3100 )
     {
-        m_pT3kHandle->SendCommand( (const char*)QString("%1sub/%2?").arg(cstrCam1).arg(cstrFirmwareVersion).toUtf8().data(), true );
-        m_pT3kHandle->SendCommand( (const char*)QString("%1sub/%2?").arg(cstrCam1).arg(cstrAdminSettingTime).toUtf8().data(), true );
-        m_pT3kHandle->SendCommand( (const char*)QString("%1sub/%2?").arg(cstrCam2).arg(cstrFirmwareVersion).toUtf8().data(), true );
-        m_pT3kHandle->SendCommand( (const char*)QString("%1sub/%2?").arg(cstrCam2).arg(cstrAdminSettingTime).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1sub/%2?").arg(cstrCam1).arg(cstrFirmwareVersion), true );
+        m_pT3kHandle->sendCommand( QString("%1sub/%2?").arg(cstrCam1).arg(cstrAdminSettingTime), true );
+        m_pT3kHandle->sendCommand( QString("%1sub/%2?").arg(cstrCam2).arg(cstrFirmwareVersion), true );
+        m_pT3kHandle->sendCommand( QString("%1sub/%2?").arg(cstrCam2).arg(cstrAdminSettingTime), true );
     }
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrUsbConfigMode).toUtf8().data(), false );
+    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), false );
 
     if( !m_bDigitizerMode )
     {
         m_RequestSensorData.AddItem( cstrSoftkey, "?" );
 
-        m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrSoftkey).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1?").arg(cstrSoftkey), true );
     }
 
     m_RequestSensorData.Start( m_pT3kHandle );
@@ -266,18 +266,18 @@ void QMainMenuWidget::UpdateInformation()
     pInst->setCamCount( m_mapCMVerInfo.size() );
 }
 
-void QMainMenuWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QMainMenuWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
     bool bUpdateInformation = false;
-    const char* szCmd = sCmd;
+    const char* szCmd = cmd;
 
-    if( strstr(sCmd, cstrUsbConfigMode) == sCmd )
+    if( strstr(cmd, cstrUsbConfigMode) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrUsbConfigMode );
 
-        int nMode = strtol(sCmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
+        int nMode = strtol(cmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
         switch( nMode )
         {
         case 0x04: // digitizer
@@ -458,11 +458,11 @@ void QMainMenuWidget::OnRSP(ResponsePart Part, ushort /*nTickTime*/, const char 
     }
 }
 
-void QMainMenuWidget::OnRSE(ResponsePart Part, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QMainMenuWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
-    if( strstr( sCmd, cstrNoCam ) == sCmd )
+    if( strstr( cmd, cstrNoCam ) == cmd )
     {
         if( Part == CM1 || Part == CM2 )
         {

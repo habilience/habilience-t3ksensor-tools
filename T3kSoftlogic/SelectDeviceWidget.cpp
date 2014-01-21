@@ -1,7 +1,8 @@
 #include "SelectDeviceWidget.h"
 #include "ui_SelectDeviceWidget.h"
 
-#include "T3kHandle.h"
+#include "QT3kDeviceR.h"
+#include "t3kcomdef.h"
 
 #include <QScrollBar>
 
@@ -48,61 +49,16 @@ void QSelectDeviceWidget::refreshDeviceList()
 {
     ui->TableDeviceList->clear();
 
-    int nOldT3000 = T3kHandle::GetDeviceCount( 0xFFFF, 0x0000, 1 );
-    int nCnt = 0;
-    for( int i=0 ; i<nOldT3000 ; i++ )
+    int nDevCnt = 0;
+    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
     {
-        insertListItem( "T3000", nCnt, 0xFFFF, 0x0000, 1, i );
+        int nCnt = QT3kDeviceR::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+        for( int i=0; i<nCnt; i++ )
+        {
+            insertListItem( DEVICE_LIST[d].szModelName, nDevCnt, DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI, i);
 
-        nCnt++;
-    }
-
-    int nT3000 = T3kHandle::GetDeviceCount( 0x2200, 0x3000, 1 );
-    for( int i=0 ; i<nT3000 ; i++ )
-    {
-        insertListItem( "T3000", nCnt, 0x2200, 0x3000, 1, i );
-
-        nCnt++;
-    }
-
-    int nT3100 = T3kHandle::GetDeviceCount( 0x2200, 0x3100, 1 );
-    for( int i=0 ; i<nT3100 ; i++ )
-    {
-        insertListItem( "T3100", nCnt, 0x2200, 0x3100, 1, i );
-
-        nCnt++;
-    }
-    // later model
-    int nT3200 = T3kHandle::GetDeviceCount( 0x2200, 0x3200, 1 );
-    for( int i=0 ; i<nT3200 ; i++ )
-    {
-        insertListItem( "T3200", nCnt, 0x2200, 0x3200, 1, i );
-
-        nCnt++;
-    }
-	
-    int nT3500 = T3kHandle::GetDeviceCount( 0x2200, 0x3500, 1 );
-    for( int i=0 ; i<nT3500 ; i++ )
-    {
-        insertListItem( "T3500", nCnt, 0x2200, 0x3500, 1, i );
-
-        nCnt++;
-    }
-
-    int nT3900 = T3kHandle::GetDeviceCount( 0x2200, 0x3900, 1 );
-    for( int i=0 ; i<nT3900 ; i++ )
-    {
-        insertListItem( "T3900", nCnt, 0x2200, 0x3900, 1, i );
-
-        nCnt++;
-    }
-
-    int nT3kVHID = T3kHandle::GetDeviceCount( 0x2200, 0xFF02, 0 );
-    for( int i=0 ; i<nT3kVHID ; i++ )
-    {
-        insertListItem( "T3kVHID", nCnt, 0x2200, 0xFF02, 0, i );
-
-        nCnt++;
+            nDevCnt++;
+        }
     }
 
     int nW = 310;
@@ -132,7 +88,7 @@ void QSelectDeviceWidget::insertListItem(QString strModelName, int nIdx, ushort 
     pItem1->setTextAlignment( Qt::AlignCenter );
     pItem1->setData( Qt::UserRole, vData );
     ui->TableDeviceList->setItem( nIdx, 0, pItem1 );
-    ui->TableDeviceList->setItem( nIdx, 1, new QTableWidgetItem(QString(T3kHandle::GetDevPath(nVID, nPID, nMI, nDeviceIndex))) );
+    ui->TableDeviceList->setItem( nIdx, 1, new QTableWidgetItem(QString(QT3kDeviceR::getDevicePath(nVID, nPID, nMI, nDeviceIndex))) );
 }
 
 void QSelectDeviceWidget::on_TableDeviceList_itemSelectionChanged()
@@ -162,11 +118,11 @@ void QSelectDeviceWidget::on_BtnBuzzer_clicked()
 
     DEVICE_ID deviceId = ui->TableDeviceList->item( nIdx, 0 )->data( Qt::UserRole ).value<DEVICE_ID>();
 
-    T3kHandle handle;
-    if( handle.OpenWithVIDPID( deviceId.nVID, deviceId.nPID, deviceId.nMI, deviceId.nDeviceIndex ) )
-        handle.SendCommand( "buzzer_play=3,1", true );
+    QT3kDevice handle;
+    if( handle.open( deviceId.nVID, deviceId.nPID, deviceId.nMI, deviceId.nDeviceIndex ) )
+        handle.sendCommand( "buzzer_play=3,1", true );
 
-    handle.Close();
+    handle.close();
 }
 
 void QSelectDeviceWidget::on_BtnSelect_clicked()

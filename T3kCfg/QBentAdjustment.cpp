@@ -201,7 +201,7 @@ void QBentAdjustment::enterAdjustmentMode()
         QString strCmd( strCmdList[i] );
         do
         {
-            if (m_pT3kHandle->SendCommand(strCmd.toUtf8().data(), false))
+            if (m_pT3kHandle->sendCommand(strCmd, false))
             {
                 bOK = true;
                 break;
@@ -216,13 +216,11 @@ void QBentAdjustment::enterAdjustmentMode()
         }
     }
 
-    m_pT3kHandle->SetReportObject( true );
+    m_pT3kHandle->setReportObject( true );
 
 //    setCursor(QCursor(Qt::BlankCursor));
 
     // reset camera enabler
-
-
 
     m_nBentProgress = 0;
 
@@ -249,7 +247,7 @@ void QBentAdjustment::leaveAdjustmentMode( bool bSuccess )
 {
 //    LOG_I( "leave adjustment mode" );
 
-    m_pT3kHandle->SetReportObject( false );
+    m_pT3kHandle->setReportObject( false );
 
     m_T3kRequestManager.Stop();
 
@@ -1597,12 +1595,12 @@ void QBentAdjustment::sendSaveCommand()
     for( int i=0; i<m_vSendCmd.size(); i++ )
     {
         QString strCmd( m_vSendCmd.at(i) );
-        int nSendCmdID = m_pT3kHandle->SendCommand( strCmd.toUtf8().data(), true );
+        int nSendCmdID = m_pT3kHandle->sendCommand( strCmd, true );
         m_vSendCmdID.push_back( nSendCmdID );
     }
 }
 
-void QBentAdjustment::OnOBJ(ResponsePart Part, ushort, const char *, int, T3kRangeF *pOBJ, unsigned short cnt)
+void QBentAdjustment::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, unsigned char */*layerid*/, float *start_pos, float *end_pos, int cnt)
 {
     if ( Part == MM ) return;
     int nCamIndex = (int)Part;
@@ -1761,9 +1759,9 @@ void QBentAdjustment::OnOBJ(ResponsePart Part, ushort, const char *, int, T3kRan
 
                     item.bDataValid = true;
                     item.nTouchCnt = cnt;
-                    item.fLastTouchPosS = pOBJ[0].Start;
-                    item.fLastTouchPosE = pOBJ[0].End;
-                    item.fLastTouchPos = (pOBJ[0].Start + pOBJ[0].End) / 2;
+                    item.fLastTouchPosS = start_pos[0];
+                    item.fLastTouchPosE = end_pos[0];
+                    item.fLastTouchPos = (start_pos[0] + end_pos[0]) / 2;
                     break;
                 }
             }
@@ -1775,9 +1773,9 @@ void QBentAdjustment::OnOBJ(ResponsePart Part, ushort, const char *, int, T3kRan
                 item.nCameraIndex = nCamIndex;
                 item.bDataValid = false;
                 item.nTouchCnt = cnt;
-                item.fLastTouchPosS = pOBJ[0].Start;
-                item.fLastTouchPosE = pOBJ[0].End;
-                item.fLastTouchPos = (pOBJ[0].Start + pOBJ[0].Start) / 2;
+                item.fLastTouchPosS = start_pos[0];
+                item.fLastTouchPosE = end_pos[0];
+                item.fLastTouchPos = (start_pos[0] + end_pos[0]) / 2;
 
                 for ( int i=0 ; i<ADJUSTMENT_STEP; i++ )
                 {
@@ -1848,8 +1846,8 @@ void QBentAdjustment::OnOBJ(ResponsePart Part, ushort, const char *, int, T3kRan
 
                     for ( int j=0 ; j<cnt ; j++ )
                     {
-                        item.fTouchPosS[j] = pOBJ[j].Start;
-                        item.fTouchPosE[j] = pOBJ[j].End;
+                        item.fTouchPosS[j] = start_pos[j];
+                        item.fTouchPosE[j] = end_pos[j];
                     }
                     item.nTouchCnt = cnt;
                     break;
@@ -1864,8 +1862,8 @@ void QBentAdjustment::OnOBJ(ResponsePart Part, ushort, const char *, int, T3kRan
 
                 for ( int j=0 ; j<cnt ; j++ )
                 {
-                    item.fTouchPosS[j] = pOBJ[j].Start;
-                    item.fTouchPosE[j] = pOBJ[j].End;
+                    item.fTouchPosS[j] = start_pos[j];
+                    item.fTouchPosE[j] = end_pos[j];
                 }
                 item.nTouchCnt = cnt;
 
@@ -1913,14 +1911,14 @@ void QBentAdjustment::OnOBJ(ResponsePart Part, ushort, const char *, int, T3kRan
     }
 }
 
-void QBentAdjustment::OnRSP(ResponsePart, ushort, const char *, long lID, bool, const char *szCmd)
+void QBentAdjustment::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int id, bool /*bFinal*/, const char *cmd)
 {
     if( !m_pTargetWidget->isVisible() ) return;
 
-    if ( strstr(szCmd, cstrAreaC) == szCmd )
+    if ( strstr(cmd, cstrAreaC) == cmd )
     {
         m_T3kRequestManager.RemoveItem( cstrAreaC );
-        const char * pCur = szCmd + sizeof(cstrAreaC) - 1;
+        const char * pCur = cmd + sizeof(cstrAreaC) - 1;
 
         int nAreaC = atoi(pCur);
         m_lClickArea = nAreaC * 2;
@@ -1930,9 +1928,9 @@ void QBentAdjustment::OnRSP(ResponsePart, ushort, const char *, long lID, bool, 
             m_lClickArea = 300;
         }
     }
-    else if( strstr(szCmd, cstrCamPosTrc) == szCmd )
+    else if( strstr(cmd, cstrCamPosTrc) == cmd )
     {
-        QString str(szCmd);
+        QString str(cmd);
         str = str.mid( str.indexOf('=')+1 );
         int nV = str.mid( 2, 2 ).toInt(0, 16);
         int nDir = nV >> 6;
@@ -1951,9 +1949,9 @@ void QBentAdjustment::OnRSP(ResponsePart, ushort, const char *, long lID, bool, 
         bentParam->setAlgorithm( nAlgorithm );
         bentParam->setDirection( nDir );
     }
-    else if( m_nTimerSaveCmd == 0 && strstr(szCmd, cstrFactoryCalibration) == szCmd )
+    else if( m_nTimerSaveCmd == 0 && strstr(cmd, cstrFactoryCalibration) == cmd )
     {
-        QString str(szCmd);
+        QString str(cmd);
         str = str.left( str.indexOf(' ') ).mid( str.indexOf('=')+1 );
 
         QBentCfgParam* bentParam = QBentCfgParam::instance();
@@ -1969,7 +1967,7 @@ void QBentAdjustment::OnRSP(ResponsePart, ushort, const char *, long lID, bool, 
         QMutexLocker Lock( &m_Mutex );
         for( int i=0; i<m_vSendCmdID.size(); i++ )
         {
-            if( m_vSendCmdID.at(i) == lID )
+            if( m_vSendCmdID.at(i) == id )
             {
                 m_vSendCmd.remove(i);
                 m_vSendCmdID.remove(i);
@@ -1979,12 +1977,12 @@ void QBentAdjustment::OnRSP(ResponsePart, ushort, const char *, long lID, bool, 
     }
 }
 
-void QBentAdjustment::OnRSE(ResponsePart, ushort, const char *, long lID, bool, const char *)
+void QBentAdjustment::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int id, bool /*bFinal*/, const char */*cmd*/)
 {
     QMutexLocker Lock( &m_Mutex );
     for( int i=0; i<m_vSendCmdID.size(); i++ )
     {
-        if( m_vSendCmdID.at(i) == lID )
+        if( m_vSendCmdID.at(i) == id )
         {
             m_vSendCmd.remove(i);
             m_vSendCmdID.remove(i);

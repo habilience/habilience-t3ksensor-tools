@@ -10,11 +10,13 @@
 QCheckableButton::QCheckableButton(QWidget *parent) :
     QPushButton(parent)
 {
-    QFont ft( parent->font() );
+    QFont ft( qApp->font() );
 #ifdef Q_OS_MAC
     ft.setPixelSize( 1 );
 #endif
     setFont( ft );
+
+    m_strParentClassName = "QOMouseSettingWidget";
 
     m_bChecked = false;
     m_bCheckBox = false;
@@ -199,7 +201,7 @@ void QCheckableButton::mousePressEvent(QMouseEvent *event)
     QObject* pObj = parent()->parent();
     if( event->type() == QEvent::MouseButtonDblClick )
     {
-        if( pObj->inherits( "QMouseSettingWidget" ) )
+        if( pObj->inherits( m_strParentClassName.toUtf8().data() ) )
         {
             QMouseSettingWidget* pMS = (QMouseSettingWidget*)pObj;
             QList<QCheckableButton*> pChildren = pMS->findChildren<QCheckableButton*>();
@@ -220,7 +222,7 @@ void QCheckableButton::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    if( pObj->inherits( "QMouseSettingWidget" ) )
+    if( pObj->inherits( m_strParentClassName.toUtf8().data() ) )
     {
         QMouseSettingWidget* pMS = (QMouseSettingWidget*)pObj;
         QList<QCheckableButton*> pChildren = pMS->findChildren<QCheckableButton*>();
@@ -329,7 +331,7 @@ void QCheckableButton::OnEditEnter()
     setText( m_pTextEdit->text() );
     m_pTextEdit->hide();
 
-    if( parent()->parent()->inherits("QMouseSettingWidget") )
+    if( parent()->parent()->inherits(m_strParentClassName.toUtf8().data()) )
     {
         QMouseSettingWidget* pWidget = (QMouseSettingWidget*)parent();
         pWidget->ReplaceLabelName( this );

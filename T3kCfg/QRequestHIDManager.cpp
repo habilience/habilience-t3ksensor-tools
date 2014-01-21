@@ -14,13 +14,15 @@ QRequestHIDManager::~QRequestHIDManager()
     Stop();
 }
 
-void QRequestHIDManager::Start( T3kHandle* pHandle )
+void QRequestHIDManager::Start( QT3kDeviceR* pHandle )
 {
     Q_ASSERT( pHandle );
     m_pT3kHandle = pHandle;
 
+    m_bStart = true;
+
     if( !m_nTimer )
-        m_nTimer = startTimer( 1000 );
+        m_nTimer = startTimer( 1 );
 }
 
 void QRequestHIDManager::Pause()
@@ -34,6 +36,7 @@ void QRequestHIDManager::Pause()
 
 void QRequestHIDManager::Stop()
 {
+    m_bStart = false;
     if( m_nTimer )
     {
         killTimer( m_nTimer );
@@ -105,12 +108,20 @@ void QRequestHIDManager::timerEvent(QTimerEvent *evt)
                     continue;
                 }
 
-                m_pT3kHandle->SendCommand( (const char*)strCmd.toUtf8().data(), true );
+                m_pT3kHandle->sendCommand( strCmd, true );
                 qDebug( "**Retry request** : %s%s", (const char*)Data.strItem.toUtf8(), (const char*)Data.strValue.toUtf8() );
+            }
+
+            if( m_bStart )
+            {
+                m_bStart = false;
+                killTimer( m_nTimer );
+                m_nTimer = startTimer( 1000 );
             }
         }
         else
         {
+            m_bStart = false;
             killTimer( m_nTimer );
             m_nTimer = 0;
             emit finish();

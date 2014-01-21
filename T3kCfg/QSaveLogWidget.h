@@ -2,13 +2,13 @@
 #define QSAVELOGWIDGET_H
 
 #include <QDialog>
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceR.h"
 
 class QSaveLogWidget : public QDialog
 {
     Q_OBJECT
 public:
-    explicit QSaveLogWidget(T3kHandle*& pHandle, QWidget *parent = 0);
+    explicit QSaveLogWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
     ~QSaveLogWidget();
 
 protected:
@@ -17,7 +17,7 @@ protected:
     virtual void keyPressEvent(QKeyEvent *);
 
 private:
-    T3kHandle*&        m_pT3kHandle;
+    QT3kDeviceR*&        m_pT3kHandle;
 
     int                 m_nTimer;
 

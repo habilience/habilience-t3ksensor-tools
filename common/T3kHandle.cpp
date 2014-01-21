@@ -62,7 +62,7 @@ T3kHandle::T3kHandle()
     m_pNotify = NULL;
     m_bOpen = false;
 
-    m_bIsVirtualDevice = false;
+    //m_bIsVirtualDevice = false;
 
     m_bCloseNotify = true;
     m_nInstantMode = 0;
@@ -84,7 +84,7 @@ T3kHandle::T3kHandle()
     m_T3kNotify.fnOnDownloadingFirmware = OnDownloadingFirmware;
     m_T3kNotify.fnOnDisconnect = OnDisconnect;
 
-    m_TimerCheckT3kVD.connect( &m_TimerCheckT3kVD, &QTimer::timeout, this, &T3kHandle::onTimeout );
+    //m_TimerCheckT3kVD.connect( &m_TimerCheckT3kVD, &QTimer::timeout, this, &T3kHandle::onTimeout );
     //qRegisterMetaType<T3K_HANDLE>("T3K_HANDLE");
 }
 
@@ -221,21 +221,21 @@ bool T3kHandle::OpenWithVIDPID( unsigned short nVID, unsigned short nPID, unsign
     {
         do
         {
-            if ( m_T3kVirtualDevice.Open( 0x2200, 0xFF02, 0, 0 ) )
-            {
-                FeatureCheckConnection CheckConnection;
-                CheckConnection.ReportID = REPORTID_FEATURE_CHK_CONN;
-                if ( m_T3kVirtualDevice.GetFeature(&CheckConnection, sizeof(CheckConnection)) )
-                {
-                    if ( CheckConnection.ConnectionOK )
-                    {
-                        m_bIsVirtualDevice = true;
-                        if( !m_TimerCheckT3kVD.isActive() )
-                            m_TimerCheckT3kVD.start( 2000 );
-                        break;
-                    }
-                }
-            }
+//            if ( m_T3kVirtualDevice.Open( 0x2200, 0xFF02, 0, 0 ) )
+//            {
+//                FeatureCheckConnection CheckConnection;
+//                CheckConnection.ReportID = REPORTID_FEATURE_CHK_CONN;
+//                if ( m_T3kVirtualDevice.GetFeature(&CheckConnection, sizeof(CheckConnection)) )
+//                {
+//                    if ( CheckConnection.ConnectionOK )
+//                    {
+//                        m_bIsVirtualDevice = true;
+//                        if( !m_TimerCheckT3kVD.isActive() )
+//                            m_TimerCheckT3kVD.start( 2000 );
+//                        break;
+//                    }
+//                }
+//            }
             Close( false );
             return false;
         } while ( false );
@@ -252,14 +252,14 @@ bool T3kHandle::Close( bool bNotify )
     if( !m_pT3kDevice )
         return false;
 
-    if ( m_bIsVirtualDevice )
-    {
-        if( m_TimerCheckT3kVD.isActive() )
-            m_TimerCheckT3kVD.stop();
+//    if ( m_bIsVirtualDevice )
+//    {
+//        if( m_TimerCheckT3kVD.isActive() )
+//            m_TimerCheckT3kVD.stop();
 
-        m_T3kVirtualDevice.Close();
-        m_bIsVirtualDevice = false;
-    }
+//        m_T3kVirtualDevice.Close();
+//        m_bIsVirtualDevice = false;
+//    }
 
     m_nInstantMode = 0;
 
@@ -410,24 +410,24 @@ void T3kHandle::onReceiveRawDataFlag(bool bReceive)
 
 void T3kHandle::onTimeout()
 {
-    if ( m_TimerCheckT3kVD.isActive() )
-    {
-        if ( m_bIsVirtualDevice )
-        {
-            FeatureCheckConnection CheckConnection;
-            CheckConnection.ReportID = REPORTID_FEATURE_CHK_CONN;
-            if ( m_T3kVirtualDevice.GetFeature(&CheckConnection, sizeof(CheckConnection)) )
-            {
-                if ( !CheckConnection.ConnectionOK )
-                {
-                    if ( m_pNotify )
-                        emit Disconnect( m_pT3kDevice );
+//    if ( m_TimerCheckT3kVD.isActive() )
+//    {
+//        if ( m_bIsVirtualDevice )
+//        {
+//            FeatureCheckConnection CheckConnection;
+//            CheckConnection.ReportID = REPORTID_FEATURE_CHK_CONN;
+//            if ( m_T3kVirtualDevice.GetFeature(&CheckConnection, sizeof(CheckConnection)) )
+//            {
+//                if ( !CheckConnection.ConnectionOK )
+//                {
+//                    if ( m_pNotify )
+//                        emit Disconnect( m_pT3kDevice );
 
-                    m_TimerCheckT3kVD.stop();
-                }
-            }
-        }
-    }
+//                    m_TimerCheckT3kVD.stop();
+//                }
+//            }
+//        }
+//    }
 }
 
 void T3kHandle::ExOnDisconnect(T3K_HANDLE hDevice)

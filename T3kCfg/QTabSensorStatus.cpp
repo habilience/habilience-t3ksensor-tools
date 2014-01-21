@@ -6,7 +6,7 @@
 #include <QCloseEvent>
 
 
-QTabSensorStatus::QTabSensorStatus(T3kHandle *&pHandle, QWidget *parent) :
+QTabSensorStatus::QTabSensorStatus(QT3kDeviceR *&pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QTabSensorStatus), m_pT3kHandle(pHandle)
 {

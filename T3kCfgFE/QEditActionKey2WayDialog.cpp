@@ -20,9 +20,13 @@ QEditActionKey2WayDialog::QEditActionKey2WayDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    Qt::WindowFlags flags = Qt::Popup|Qt::WindowTitleHint|Qt::CustomizeWindowHint;
+    Qt::WindowFlags flags = Qt::WindowTitleHint|Qt::CustomizeWindowHint;
 #if defined(Q_OS_WIN)
-    flags |= Qt::MSWindowsFixedSizeDialogHint;
+    flags |= Qt::Dialog|Qt::MSWindowsFixedSizeDialogHint;
+#elif defined(Q_OS_MAC)
+    flags |= Qt::Popup;
+#else
+    flags |= Qt::Dialog;
 #endif
     setWindowFlags(flags);
     setWindowModality( Qt::WindowModal );
@@ -453,15 +457,6 @@ void QEditActionKey2WayDialog::on_btnApply_clicked()
         break;
     case 1:
         snprintf( szCmd, 256, "%s%02X%04X%04X", cstrMouseProfile2, m_cProfileKey, wKeyValues[0], wKeyValues[1] );
-        break;
-    case 2:
-        snprintf( szCmd, 256, "%s%02X%04X%04X", cstrMouseProfile3, m_cProfileKey, wKeyValues[0], wKeyValues[1] );
-        break;
-    case 3:
-        snprintf( szCmd, 256, "%s%02X%04X%04X", cstrMouseProfile4, m_cProfileKey, wKeyValues[0], wKeyValues[1] );
-        break;
-    case 4:
-        snprintf( szCmd, 256, "%s%02X%04X%04X", cstrMouseProfile5, m_cProfileKey, wKeyValues[0], wKeyValues[1] );
         break;
     default:
         QDialog::accept();

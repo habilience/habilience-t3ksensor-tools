@@ -3,16 +3,16 @@
 
 #include "ui_QGeneralSettingWidget.h"
 
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 
-class QGeneralSettingWidget : public QWidget, private Ui::QGeneralSettingWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
+class QGeneralSettingWidget : public QWidget, private Ui::QGeneralSettingWidget, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QGeneralSettingWidget(T3kHandle*& pHandle, QWidget *parent = 0);
+    explicit QGeneralSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
     ~QGeneralSettingWidget();
 
     void SetDefault();
@@ -30,7 +30,7 @@ protected:
     virtual void keyPressEvent(QKeyEvent *evt);
     virtual void timerEvent(QTimerEvent *evt);
 
-    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 protected:
     int                         m_nInputModeV;
@@ -42,7 +42,7 @@ protected:
     int                         m_nDisplayOrientation;
 
 private:
-    T3kHandle*&                m_pT3kHandle;
+    QT3kDeviceR*&                m_pT3kHandle;
 
 signals:
     void ByPassKeyPressEvent(QKeyEvent *evt);

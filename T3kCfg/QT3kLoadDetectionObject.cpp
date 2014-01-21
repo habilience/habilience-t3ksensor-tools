@@ -2,7 +2,7 @@
 
 #include <QTimer>
 
-QT3kLoadDetectionObject::QT3kLoadDetectionObject(T3kHandle *&pHandle, QObject *parent) :
+QT3kLoadDetectionObject::QT3kLoadDetectionObject(QT3kDeviceR *&pHandle, QObject *parent) :
     QT3kHIDObject(pHandle, parent)
 {
     m_bMainCamDetection = false;
@@ -65,7 +65,7 @@ bool QT3kLoadDetectionObject::Start(SensorLogData *pStorage)
     }
     InitCamDataForDetection();
 
-    m_pT3kHandle->SetReportView( true );
+    m_pT3kHandle->setReportView( true );
 
     connect( &m_DetectionWaitTimer, SIGNAL(timeout()), this, SLOT(on_DetectionCheckTimer()) );
     m_DetectionWaitTimer.start( 4000 );
@@ -73,20 +73,21 @@ bool QT3kLoadDetectionObject::Start(SensorLogData *pStorage)
     return true;
 }
 
-void QT3kLoadDetectionObject::OnIRD(ResponsePart Part, ushort, const char *, int, int nCount, unsigned char *pIRD)
+void QT3kLoadDetectionObject::TPDP_OnIRD(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int total, int offset, const unsigned char *data, int cnt)
+//OnIRD(ResponsePart Part, ushort, const char *, int, int nCount, unsigned char *pIRD)
 {
-    if ( nCount <= 0 )
-        return;
-
     Q_ASSERT( (Part == CM1) || (Part == CM2) || (Part == CM1_1) || (Part == CM2_1) );
 
     int nCamPart = (int)(Part-1);
     Q_ASSERT( nCamPart >= 0 && nCamPart < m_pStorageHandle->CM.size() );
     if( m_vDetectionData.size() < nCamPart ) return;
 
+    if ( cnt <= 0 || total <= 0 || total > 2048 )
+        return;
+
     if ( m_vDetectionData[nCamPart].nIRD == 0 )
-        m_vDetectionData[nCamPart].nIRD = nCount;
-    else if ( m_vDetectionData[nCamPart].nIRD != nCount )
+        m_vDetectionData[nCamPart].nIRD = total;
+    else if ( m_vDetectionData[nCamPart].nIRD != total )
     {
         if( m_vDetectionData[nCamPart].pIRD )
             delete[] m_vDetectionData[nCamPart].pIRD;
@@ -100,32 +101,32 @@ void QT3kLoadDetectionObject::OnIRD(ResponsePart Part, ushort, const char *, int
         return;
     }
 
-    if( nCount > (int)(sizeof(uchar))*nCount )
+    if( offset + cnt > total )
         return;
 
     if( m_vDetectionData[nCamPart].pIRD == NULL )
     {
-        m_vDetectionData[nCamPart].pIRD = new uchar[nCount];
-        ::memset( m_vDetectionData[nCamPart].pIRD, 0, sizeof(uchar) * nCount );
+        m_vDetectionData[nCamPart].pIRD = new uchar[total];
+        ::memset( m_vDetectionData[nCamPart].pIRD, 0, sizeof(uchar) * total );
     }
 
-    ::memcpy( m_vDetectionData[nCamPart].pIRD, pIRD, nCount );
+    ::memcpy( m_vDetectionData[nCamPart].pIRD + offset, data, cnt );
 }
 
-void QT3kLoadDetectionObject::OnITD(ResponsePart Part, ushort, const char *, int, int nCount, unsigned char *pITD)
+void QT3kLoadDetectionObject::TPDP_OnITD(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int total, int offset, const unsigned char *data, int cnt)
 {
-    if ( nCount <= 0 )
-        return;
-
     Q_ASSERT( (Part == CM1) || (Part == CM2) || (Part == CM1_1) || (Part == CM2_1) );
 
     int nCamPart = (int)(Part-1);
     Q_ASSERT( nCamPart >= 0 && nCamPart < m_pStorageHandle->CM.size() );
     if( m_vDetectionData.size() < nCamPart ) return;
 
+    if ( cnt <= 0 || total <= 0 || total > 2048 )
+        return;
+
     if ( m_vDetectionData[nCamPart].nIRD == 0 )
-        m_vDetectionData[nCamPart].nIRD = nCount;
-    else if ( m_vDetectionData[nCamPart].nIRD != nCount )
+        m_vDetectionData[nCamPart].nIRD = total;
+    else if ( m_vDetectionData[nCamPart].nIRD != total )
     {
         if( m_vDetectionData[nCamPart].pIRD )
             delete[] m_vDetectionData[nCamPart].pIRD;
@@ -139,13 +140,16 @@ void QT3kLoadDetectionObject::OnITD(ResponsePart Part, ushort, const char *, int
         return;
     }
 
+    if (offset + cnt > total)
+        return;
+
     if( m_vDetectionData[nCamPart].pITD == NULL )
     {
-        m_vDetectionData[nCamPart].pITD = new uchar[nCount];
-        ::memset( m_vDetectionData[nCamPart].pITD, 0, sizeof(uchar) * nCount );
+        m_vDetectionData[nCamPart].pITD = new uchar[total];
+        ::memset( m_vDetectionData[nCamPart].pITD, 0, sizeof(uchar) * total );
     }
 
-    ::memcpy( m_vDetectionData[nCamPart].pITD, pITD, nCount );
+    ::memcpy( m_vDetectionData[nCamPart].pITD + offset, data, cnt );
 }
 
 void QT3kLoadDetectionObject::on_DetectionCheckTimer()
@@ -159,8 +163,8 @@ void QT3kLoadDetectionObject::on_DetectionCheckTimer()
         {
             m_bMainCamDetection = true;
 
-            m_pT3kHandle->SendCommand( (const char*)"cam1/sub/mode=detection", true );
-            m_pT3kHandle->SendCommand( (const char*)"cam2/sub/mode=detection", true );
+            m_pT3kHandle->sendCommand( "cam1/sub/mode=detection", true );
+            m_pT3kHandle->sendCommand( "cam2/sub/mode=detection", true );
 
             QString strLog( "[" + QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_COMPLETE")) + "] " );
             strLog += QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_DETECTION")) + " M";
@@ -183,10 +187,10 @@ void QT3kLoadDetectionObject::on_DetectionCheckTimer()
     {
         m_DetectionWaitTimer.stop();
 
-        m_pT3kHandle->SendCommand( (const char*)"cam1/mode=detection", true );
-        m_pT3kHandle->SendCommand( (const char*)"cam2/mode=detection", true );
+        m_pT3kHandle->sendCommand( "cam1/mode=detection", true );
+        m_pT3kHandle->sendCommand( "cam2/mode=detection", true );
 
-        m_pT3kHandle->SetReportView( false );
+        m_pT3kHandle->setReportView( false );
 
         QString strLog( "[" + QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_COMPLETE")) + "] " );
         strLog += QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_DETECTION")) + (m_bMainCamDetection ? " S" : " M");

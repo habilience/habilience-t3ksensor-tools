@@ -27,8 +27,6 @@ protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void keyPressEvent(QKeyEvent *);
 
-    void updateUnit();
-
 protected:
     ScreenUnit			m_eUnit;
     double              m_dD2PScaleWidth;
@@ -56,6 +54,10 @@ private slots:
     void on_EditHeight_editingFinished();
     void on_BtnApply_clicked();
     void on_BtnCancel_clicked();
+    void on_EditKeyCount_textEdited(const QString &arg1);
+    void on_EditWidth_textEdited(const QString &arg1);
+    void on_EditHeight_textEdited(const QString &arg1);
+    void on_EditInterval_textEdited(const QString &arg1);
 };
 
 #endif // QARRANGEHELPERWIDGET_H

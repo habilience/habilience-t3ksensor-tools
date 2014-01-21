@@ -20,7 +20,7 @@
 #define STD_SCALE 32767.0f
 #define MAC_SCALE 27827.0f // STD_SCALE-MAC_MARGIN*2
 
-QCalibrationWidget::QCalibrationWidget(T3kHandle*& pHandle, QWidget *parent) :
+QCalibrationWidget::QCalibrationWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
     QWidget(parent), m_pT3kHandle(pHandle)
 {
     m_fScreenMargin = 0.f;
@@ -57,11 +57,11 @@ void QCalibrationWidget::onChangeLanguage()
     m_strTitle = QLangManager::instance()->getResource().getResString( QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_CALIBRATE") );
 }
 
-void QCalibrationWidget::OnMSG(ResponsePart Part, ushort /*nTickTime*/, const char *sPartId, const char *sTxt)
+void QCalibrationWidget::TPDP_OnMSG(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char *partid, const char *txt)
 {
-    if( Part == MM && QString(sPartId).compare("CAL") == 0 )
+    if( Part == MM && QString(partid).compare("CAL") == 0 )
     {
-        QString strTxt( sTxt );
+        QString strTxt( txt );
         int nPoints = m_bUnderVersion ? UNDER_VER_CALI_PNTS : SUPPORT_VER_CALI_PNTS;
         if( m_bDigitizerMode && strTxt.contains("CAL_AXIS_COORD") )
         {
@@ -149,7 +149,7 @@ bool QCalibrationWidget::ShowWindow( bool bShow, int nUsbConfigMode, float fScre
         cursor().setPos( rcPrimaryMon.center() );
 #endif
 
-        m_pT3kHandle->SetReportMessage( true );
+        m_pT3kHandle->setReportMessage( true );
 
         if( fMMVersion >= MM_MIN_SUPPORT_FIRMWARE_VERSION && fMMVersion <= MM_LAST_SUPPORT_FRIMWARE_VERSION )
         {
@@ -164,7 +164,7 @@ bool QCalibrationWidget::ShowWindow( bool bShow, int nUsbConfigMode, float fScre
     }
     else
     {
-        m_pT3kHandle->SetReportMessage( false );
+        m_pT3kHandle->setReportMessage( false );
         QWidget::hide();
         QApplication::restoreOverrideCursor();
     }
@@ -179,7 +179,7 @@ void QCalibrationWidget::EscapeCalibrationMode()
         killTimer( m_nTimerUpdate );
         m_nTimerUpdate = 0;
     }
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrCalibrationMode).arg(MODE_CALIBRATION_NONE).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrCalibrationMode).arg(MODE_CALIBRATION_NONE), true );
 }
 
 void QCalibrationWidget::paintEvent(QPaintEvent */*evt*/)

@@ -18,56 +18,6 @@
 #define DEFAULT_SOFTLOGIC	"10P02T@0Q010H0R00PH0S00;@0T0<GU0U02\\I0V03XE`W0<CW@W00C`0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000P8LCW"
 #endif
 
-//#include <afxpriv.h>
-//#include <float.h>
-
-//void QSoftKeyDesignToolWidget::MYDDX_Text(CDataExchange* pDX, int nIDC, double& dValue, BOOL bIsScaleX)
-//{
-//	double	dValueDouble = dValue;
-//	int		nValueInt;
-//	if (pDX->m_bSaveAndValidate)
-//	{
-//		switch ( m_eUnit )
-//		{
-//		case UnitRes:
-//			MyAfxTextIntFormat(pDX, nIDC, _T("%d"), AFX_IDP_PARSE_INT, &nValueInt);
-//			dValue = (double)nValueInt;
-//			break;
-//		case UnitMM:
-//			MyAfxTextFloatFormat(pDX, nIDC, &dValueDouble, dValueDouble, DBL_DIG);
-//			if ( bIsScaleX )
-//			{
-//				dValue = dValueDouble / m_dD2PScaleWidth;
-//			}
-//			else
-//			{
-//				dValue = dValueDouble / m_dD2PScaleHeight;
-//			}
-//			break;
-//		}
-//	}
-//	else
-//	{
-//		switch ( m_eUnit )
-//		{
-//		case UnitRes:
-//			nValueInt = int(dValue + .5f);
-//			MyAfxTextIntFormat(pDX, nIDC, _T("%d"), AFX_IDP_PARSE_INT, nValueInt);
-//			break;
-//		case UnitMM:
-//			if ( bIsScaleX )
-//			{
-//				dValueDouble = dValue * m_dD2PScaleWidth;
-//			}
-//			else
-//			{
-//				dValueDouble = dValue * m_dD2PScaleHeight;
-//			}
-//			MyAfxTextFloatFormat(pDX, nIDC, &dValueDouble, dValueDouble, DBL_DIG);
-//			break;
-//		}
-//	}
-//}
 
 QSoftKeyDesignToolWidget::QSoftKeyDesignToolWidget(QVector<CSoftkey*>* pSelectedKeys, QWidget *parent) :
     QDialog(parent),
@@ -276,6 +226,11 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
         ui->EditHeight->setEnabled( false );
 
         ui->BtnReorder->setEnabled( false );
+
+        ui->EditPosX->clear();
+        ui->EditPosY->clear();
+        ui->EditWidth->clear();
+        ui->EditHeight->clear();
     }
     else if ( SelectKeys.count() == 1 )
     {
@@ -283,13 +238,33 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
         ui->EditName->setText( key->getName() );
         ui->CBVisible->setCurrentIndex( key->getShow() ? 0 : 1 );
         QRect rc( key->getPosition() );
-        ui->EditPosX->setText( QString::number( rc.left() ) );
-        ui->EditPosY->setText( QString::number( rc.top() ) );
-        ui->EditWidth->setText( QString::number( rc.width() ) );
-        ui->EditHeight->setText( QString::number( rc.height() ) );
 
-        m_rcOld.setRect( ui->EditPosX->text().toDouble()+.5, ui->EditPosY->text().toDouble()+.5,
-                         ui->EditWidth->text().toDouble()+.5, ui->EditHeight->text().toDouble()+.5 );
+        if( m_eUnit == UnitMM )
+        {
+            double dPX = rc.left() * m_dD2PScaleWidth;
+            double dPY = rc.top() * m_dD2PScaleHeight;
+            double dW = rc.width() * m_dD2PScaleWidth;
+            double dH = rc.height() * m_dD2PScaleHeight;
+
+            ui->EditPosX->setText( QString("%1").arg(dPX, 0, 'f', 1) );
+            ui->EditPosY->setText( QString("%1").arg(dPY, 0, 'f', 1) );
+            ui->EditWidth->setText( QString("%1").arg(dW, 0, 'f', 1) );
+            ui->EditHeight->setText( QString("%1").arg(dH, 0, 'f', 1) );
+
+            m_rcOld.setRect( dPX+.5, dPY+.5, dW+.5, dH+.5 );
+        }
+        else
+        {
+            qDebug() << QString("%1,%2,%3,%4").arg(rc.left()).arg(rc.top()).arg(rc.width()).arg(rc.height());
+
+            ui->EditPosX->setText( QString::number( rc.left() ) );
+            ui->EditPosY->setText( QString::number( rc.top() ) );
+            ui->EditWidth->setText( QString::number( rc.width() ) );
+            ui->EditHeight->setText( QString::number( rc.height() ) );
+
+            m_rcOld.setRect( ui->EditPosX->text().toDouble()+.5, ui->EditPosY->text().toDouble()+.5,
+                             ui->EditWidth->text().toDouble()+.5, ui->EditHeight->text().toDouble()+.5 );
+        }
 
         ui->CBVisible->setEnabled( true );
         ui->EditName->setEnabled( true );
@@ -317,13 +292,30 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
             }
         }
 
-        ui->EditPosX->setText( QString::number( rcMerge.left() ) );
-        ui->EditPosY->setText( QString::number( rcMerge.top() ) );
-        ui->EditWidth->setText( QString::number( rcMerge.width() ) );
-        ui->EditHeight->setText( QString::number( rcMerge.height() ) );
+        if( m_eUnit == UnitMM )
+        {
+            double dPX = rcMerge.left() * m_dD2PScaleWidth;
+            double dPY = rcMerge.top() * m_dD2PScaleHeight;
+            double dW = rcMerge.width() * m_dD2PScaleWidth;
+            double dH = rcMerge.height() * m_dD2PScaleHeight;
 
-        m_rcOld.setRect( ui->EditPosX->text().toDouble()+.5, ui->EditPosY->text().toDouble()+.5,
-                         ui->EditWidth->text().toDouble()+.5, ui->EditHeight->text().toDouble()+.5 );
+            ui->EditPosX->setText( QString("%1").arg(dPX, 0, 'f', 1) );
+            ui->EditPosY->setText( QString("%1").arg(dPY, 0, 'f', 1) );
+            ui->EditWidth->setText( QString("%1").arg(dW, 0, 'f', 1) );
+            ui->EditHeight->setText( QString("%1").arg(dH, 0, 'f', 1) );
+
+            m_rcOld.setRect( dPX+.5, dPY+.5, dW+.5, dH+.5 );
+        }
+        else
+        {
+            ui->EditPosX->setText( QString::number( rcMerge.left() ) );
+            ui->EditPosY->setText( QString::number( rcMerge.top() ) );
+            ui->EditWidth->setText( QString::number( rcMerge.width() ) );
+            ui->EditHeight->setText( QString::number( rcMerge.height() ) );
+
+            m_rcOld.setRect( ui->EditPosX->text().toDouble()+.5, ui->EditPosY->text().toDouble()+.5,
+                             ui->EditWidth->text().toDouble()+.5, ui->EditHeight->text().toDouble()+.5 );
+        }
 
         switch ( nVisible )
         {
@@ -360,10 +352,21 @@ void QSoftKeyDesignToolWidget::updateLayoutButton(bool bVisible)
 void QSoftKeyDesignToolWidget::EditModified()
 {
     QRect rcNew;
-    rcNew.setLeft( (int)(ui->EditPosX->text().toDouble()+0.5) );
-    rcNew.setTop( (int)(ui->EditPosY->text().toDouble()+0.5) );
-    rcNew.setWidth( (int)(ui->EditWidth->text().toDouble()+0.5) );
-    rcNew.setHeight( (int)(ui->EditHeight->text().toDouble()+0.5) );
+
+    if( m_eUnit == UnitMM )
+    {
+        rcNew.setLeft( (int)(ui->EditPosX->text().toDouble() / m_dD2PScaleWidth + .5) );
+        rcNew.setTop( (int)(ui->EditPosY->text().toDouble() / m_dD2PScaleWidth + .5) );
+        rcNew.setWidth( (int)(ui->EditWidth->text().toDouble() / m_dD2PScaleWidth + .5) );
+        rcNew.setHeight( (int)(ui->EditHeight->text().toDouble() / m_dD2PScaleWidth + .5) );
+    }
+    else
+    {
+        rcNew.setLeft( (int)(ui->EditPosX->text().toDouble()+.5) );
+        rcNew.setTop( (int)(ui->EditPosY->text().toDouble()+.5) );
+        rcNew.setWidth( (int)(ui->EditWidth->text().toDouble()+.5) );
+        rcNew.setHeight( (int)(ui->EditHeight->text().toDouble()+.5) );
+    }
 
     emit recalcSelectionKeys( m_rcOld, rcNew );
 }
@@ -394,7 +397,7 @@ void QSoftKeyDesignToolWidget::closeEvent(QCloseEvent *)
 
     QString strShow( ui->BtnShowToolbar->text() );
     bool bShow = false;
-    if( strShow.contains( "Hide" ) >= 0 )
+    if( strShow.contains( "Hide" ) )
         bShow = true;
 
     settings.beginGroup( "Settings" );
@@ -583,6 +586,11 @@ void QSoftKeyDesignToolWidget::onSelectedKeys(bool bGroup, int nSelectedCount)
         ui->BtnRemove->setEnabled( false );
         ui->BtnGroup->setEnabled( false );
         ui->BtnUngroup->setEnabled( false );
+
+        ui->EditPosX->clear();
+        ui->EditPosY->clear();
+        ui->EditWidth->clear();
+        ui->EditHeight->clear();
         return;
     }
 

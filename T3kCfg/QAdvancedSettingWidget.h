@@ -2,7 +2,7 @@
 #define QADVANCEDSETTINGWIDGET_H
 
 #include "QRequestHIDManager.h"
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QLangManager.h"
 
 #include <QDialog>
@@ -12,7 +12,7 @@ namespace Ui {
 class QAdvancedSettingWidget;
 }
 
-class QAdvancedSettingWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
+class QAdvancedSettingWidget : public QDialog, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -21,11 +21,14 @@ public:
     ~QAdvancedSettingWidget();
 
 protected:
+    // QDialog
     virtual void closeEvent(QCloseEvent *);
 
-    virtual void OnRSP(ResponsePart, ushort, const char *, long, bool, const char *);
-    virtual void OnRSE(ResponsePart, ushort, const char *, long, bool, const char *);
+    // QT3kDeviceREventHandler::IListener
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
+    // QLangManager::ILangChangeNotify
     virtual void onChangeLanguage();
 
 protected:

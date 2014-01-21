@@ -5,7 +5,7 @@
 #include <QMutex>
 #include <QTcpSocket>
 
-#include "T3kHandle.h"
+#include "QT3kDeviceR.h"
 
 class QT3kUserData_GC;
 class QT3kUserData : public QObject, public QObjectUserData
@@ -46,8 +46,8 @@ public:
     void setTopParent(QWidget* pParent) { m_pTopParent = pParent; }
     QWidget* getTopParent() { return m_pTopParent; }
 
-    void setT3kHandle(T3kHandle* pHandle) { m_pT3kHandle = pHandle; }
-    T3kHandle* getT3kHandle() { return m_pT3kHandle; }
+    void setT3kHandle(QT3kDeviceR* pHandle) { m_pT3kHandle = pHandle; }
+    QT3kDeviceR* getT3kHandle() { return m_pT3kHandle; }
 
     void setIsSubCameraExist(bool bExist) { m_bSubCameraExist = bExist; }
     bool isSubCameraExist() { return m_bSubCameraExist; }
@@ -70,7 +70,7 @@ protected:
     QString                 m_strTitle;
     QString                 m_strProgInfo;
 
-    T3kHandle*              m_pT3kHandle;
+    QT3kDeviceR*             m_pT3kHandle;
     // remote
     QTcpSocket              m_RemoteSocket;
 

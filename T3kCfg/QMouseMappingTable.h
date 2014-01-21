@@ -2,7 +2,7 @@
 #define QMOUSEMAPPINGTABLE_H
 
 #include <QLabel>
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QLangManager.h"
 
 #define EXTP_COUNT              5
@@ -45,18 +45,17 @@ public:
 #include "QEditAction4WDWnd.h"
 #include "QEditActionWnd.h"
 
-class QMouseMappingTable : public QLabel, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
+class QMouseMappingTable : public QLabel, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 public:
     explicit QMouseMappingTable(QWidget *parent = 0);
     ~QMouseMappingTable();
 
-    void SetT3kHandle( T3kHandle* pHandle ) { m_pT3kHandle = pHandle; }
+    void SetT3kHandle( QT3kDeviceR* pHandle ) { m_pT3kHandle = pHandle; }
 
     void SetProfileIndex( int nIndex );
     void ResetSelect();
-    void EnableTable( bool bEnable );
 
     virtual void onChangeLanguage();
 
@@ -81,13 +80,13 @@ protected:
 
     void OnMouseLBDown(QPointF point);
 
-    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 private:
     CellInfo* GetAt(int nIndex);
 
 protected:
-    T3kHandle*                 m_pT3kHandle;
+    QT3kDeviceR*                 m_pT3kHandle;
 
     QEditActionEDWnd*           m_pEditActionEDWnd;
     QEditAction2WDWnd*          m_pEditAction2WDWnd;
@@ -115,14 +114,15 @@ protected:
     bool                        m_bIsTitleOver;
     bool                        m_bIsHovered;
 
-    int                         m_nCurInputMode;
+    int                         m_nMultiProfile;
 
     bool                        m_bExtSet;
 
 signals:
 
 public slots:
-    void onRecvInputMode(int nCurInputMode);
+    void onRecvInputMode();
+    void onSendCommand(QString strCmd, bool bAsync = false, unsigned short nTimeout = 1000);
 };
 
 inline CellInfo* QMouseMappingTable::GetAt(int nIndex)

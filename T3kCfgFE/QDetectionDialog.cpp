@@ -1411,13 +1411,12 @@ void QDetectionDialog::on_btnAutoRangeSetting_clicked()
     {
         LOG_I( "Enter Auto Range Setting" );
         if ( m_detectionMode == DetectionModeSub )
-        {
             setDetectionMode(DetectionModeMain);
-            if ( !requestSensorData( cmdLoadFactoryDefault, true ) )
-            {
-                LOG_I( "Error RequestSensorData timeout!" );
-                return;
-            }
+
+        if ( !requestSensorData( cmdLoadFactoryDefault, true ) )
+        {
+            LOG_I( "Error RequestSensorData timeout!" );
+            return;
         }
         enterAutoRangeSetting();
     }

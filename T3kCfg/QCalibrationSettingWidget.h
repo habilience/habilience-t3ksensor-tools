@@ -2,7 +2,7 @@
 #define QCALIBRATIONSETTINGWIDGET_H
 
 #include <QWidget>
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QCalibrationWidget.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
@@ -15,12 +15,12 @@ namespace Ui {
     class QCalibrationSettingWidget;
 }
 
-class QCalibrationSettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
+class QCalibrationSettingWidget : public QWidget, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QCalibrationSettingWidget(T3kHandle*& pHandle, QWidget *parent = 0);
+    explicit QCalibrationSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
     ~QCalibrationSettingWidget();
 
     void SetDefault();
@@ -30,21 +30,22 @@ public:
 
 protected:
     virtual void onChangeLanguage();
-    void RequestSensorData( bool bDefault );
-    void ShowCalibrationWindow( bool bShow, int nScreenMargin=-1, int nMacMargin=0 );
-    float ChangeRangeValue( bool bDecrease, float fCurrentValue );
-    void OnRangeLeftRight( bool bDecrease, QLineEdit* pEdit, int nRangeS, int nRangeE, int nRangeMax, const char* szCmdH );
 
     virtual void showEvent(QShowEvent *evt);
     virtual void hideEvent(QHideEvent *evt);
     virtual void keyPressEvent(QKeyEvent *evt);
 
-    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
-    virtual void OnSTT(ResponsePart Part, ushort nTickTime, const char *sPartId, const char *pStatus);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnSTT(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, const char *status);
+
+    void RequestSensorData( bool bDefault );
+    void ShowCalibrationWindow( bool bShow, int nScreenMargin=-1, int nMacMargin=0 );
+    float ChangeRangeValue( bool bDecrease, float fCurrentValue );
+    void OnRangeLeftRight( bool bDecrease, QLineEdit* pEdit, int nRangeS, int nRangeE, int nRangeMax, const char* szCmdH );
 
 protected:
     QCalibrationWidget*         m_pwndCalibration;
-    float			m_fScreenMargin;
+    float                       m_fScreenMargin;
 
     QTouchSettingWidget*        m_pTouchSettingWnd;
     QAdvancedSettingWidget*     m_pAdvancedWidget;
@@ -57,7 +58,7 @@ protected:
 private:
     Ui::QCalibrationSettingWidget *ui;
 
-    T3kHandle*&                m_pT3kHandle;
+    QT3kDeviceR*&                m_pT3kHandle;
 
 signals:
     void ByPassKeyPressEvent(QKeyEvent *evt);

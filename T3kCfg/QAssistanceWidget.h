@@ -2,7 +2,7 @@
 #define QASSISTANCEWIDGET_H
 
 #include <QDialog>
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 
 #include "QLangManager.h"
 
@@ -14,24 +14,28 @@ namespace Ui{
     class QAssistanceWidget;
 }
 
-class QAssistanceWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
+class QAssistanceWidget : public QDialog, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QAssistanceWidget(T3kHandle*& pHandle, QWidget *parent = 0);
+    explicit QAssistanceWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
     virtual ~QAssistanceWidget();
+
+    // QLangManager::ILangChangeNotify
     virtual void onChangeLanguage();
 
     void ForcedClose() { m_bForcedClose = true; close(); }
 
 protected:
+    // QDialog
     virtual void closeEvent(QCloseEvent *);
     virtual void showEvent(QShowEvent *evt);
     virtual void hideEvent(QHideEvent *evt);
 
-    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
-    virtual void OnSTT(ResponsePart, ushort, const char *, const char *pStatus);
+    // public QT3kDeviceREventHandler::IListener
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnSTT(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, const char *status);
 
 private:
     Ui::QAssistanceWidget* ui;
@@ -40,7 +44,7 @@ private:
     QTabRemoteAssistance*       m_pTabRemote;
     QTabChat*                   m_pTabChat;
 
-    T3kHandle*&                m_pT3kHandle;
+    QT3kDeviceR*&                m_pT3kHandle;
 
     int                         m_nCurrentTab;
     bool                        m_bForcedClose;

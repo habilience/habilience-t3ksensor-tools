@@ -16,7 +16,7 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 #Define
-DEFINES += _QT_COMPILER_ QUAZIP_STATIC USE_T3K_STATIC_LIBS _T3KHANDLE_REMOVE_PRV
+DEFINES += _QT_COMPILER_ USE_T3K_STATIC_LIBS
 
 linux-g++|linux-g++-32|linux-g++-64:DEFINES += OS_LINUX
 
@@ -154,17 +154,19 @@ macx: {
 }
 
 SOURCES += main.cpp \
-    ../common/T3kHandle.cpp \
-    ../common/TPDPEventMultiCaster.cpp \
+    ../common/QT3kDevice.cpp \
+    ../common/QT3kDeviceEventHandler.cpp \
+    ../common/QUtils.cpp \
     HIDCmdThread.cpp \
-    QExFuncThread.cpp
+    QExFuncThread.cpp \
 
 HEADERS += \
-    ../common/T3kHandle.h \
-    ../common/TPDPEventMultiCaster.h \
+    ../common/QT3kDevice.h \
+    ../common/QT3kDeviceEventHandler.h \
+    ../common/QUtils.h \
     HIDCmdThread.h \
     DefineString.h \
-    QExFuncThread.h
+    QExFuncThread.h \
 
 
 win32:RC_FILE = T3kCmd.rc

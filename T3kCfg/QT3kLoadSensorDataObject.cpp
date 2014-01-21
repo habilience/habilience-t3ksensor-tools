@@ -13,7 +13,7 @@ static const char cstrMode[] = "mode=";
 static const char cstrSytaxError[] = "systax error";
 
 
-QT3kLoadSensorDataObject::QT3kLoadSensorDataObject(T3kHandle*& pHandle, QObject *parent) :
+QT3kLoadSensorDataObject::QT3kLoadSensorDataObject(QT3kDeviceR*& pHandle, QObject *parent) :
     QT3kHIDObject(pHandle, parent)
 {
     m_bFactoryCmd = false;
@@ -57,15 +57,15 @@ bool QT3kLoadSensorDataObject::Start( SensorLogData* pStorage )
     if( nModel != 0x0000 && nModel != 0x3000 && nModel != 0x3100 )
         bSub = true;
     int nMode = 0;
-    if( m_pT3kHandle->QueryFirmwareVersion( PKT_ADDR_MM, &nMode ) )
+    if( m_pT3kHandle->queryFirmwareVersion( PKT_ADDR_MM, &nMode ) )
     {
-        if ( m_pT3kHandle->QueryFirmwareVersion(PKT_ADDR_CM1, &nMode) && bSub )
+        if ( m_pT3kHandle->queryFirmwareVersion(PKT_ADDR_CM1, &nMode) && bSub )
         {
-            m_pT3kHandle->QueryFirmwareVersion(PKT_ADDR_CM1 | PKT_ADDR_CM_SUB, &nMode);
+            m_pT3kHandle->queryFirmwareVersion(PKT_ADDR_CM1 | PKT_ADDR_CM_SUB, &nMode);
         }
-        if ( m_pT3kHandle->QueryFirmwareVersion(PKT_ADDR_CM2, &nMode) && bSub )
+        if ( m_pT3kHandle->queryFirmwareVersion(PKT_ADDR_CM2, &nMode) && bSub )
         {
-            m_pT3kHandle->QueryFirmwareVersion(PKT_ADDR_CM2 | PKT_ADDR_CM_SUB, &nMode);
+            m_pT3kHandle->queryFirmwareVersion(PKT_ADDR_CM2 | PKT_ADDR_CM_SUB, &nMode);
         }
     }
 
@@ -88,7 +88,7 @@ void QT3kLoadSensorDataObject::LoadNextCamData(eDataPart /*ePart*/)
             m_strSendCmd += "sub/";
     }
     m_strSendCmd += "get_nv=-1";
-    m_nSendCmdID = m_pT3kHandle->SendCommand( (const char*)m_strSendCmd.toUtf8().data(), true );
+    m_nSendCmdID = m_pT3kHandle->sendCommand( m_strSendCmd, true );
 
     StartAsyncTimeoutChecker( 1000 );
 }
@@ -117,7 +117,7 @@ void QT3kLoadSensorDataObject::NextCommand()
         break;
     }
 
-    m_nSendCmdID = m_pT3kHandle->SendCommand( (const char*)m_strSendCmd.toUtf8().data(), true );
+    m_nSendCmdID = m_pT3kHandle->sendCommand( m_strSendCmd, true );
     Q_ASSERT( m_nSendCmdID >= 0 );
 
     StartAsyncTimeoutChecker( 1000 );
@@ -195,16 +195,16 @@ void QT3kLoadSensorDataObject::Push_Data(ResponsePart Part, PairRSP &stRSP, cons
     }
 }
 
-void QT3kLoadSensorDataObject::OnRSP(ResponsePart Part, ushort, const char * /*sPartId*/, long lId, bool, const char *sCmd)
+void QT3kLoadSensorDataObject::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int id, bool /*bFinal*/, const char *cmd)
 {
-    if( m_nSendCmdID != lId ) return;
+    if( m_nSendCmdID != id ) return;
 
-    if( strstr( sCmd, cstrInstantMode ) == sCmd ||
-        strstr( sCmd, cstrMode ) == sCmd ||
-        strstr( sCmd, cstrCam1Mode ) == sCmd ||
-        strstr( sCmd, cstrCam2Mode ) == sCmd ||
-        strstr( sCmd, cstrCam1_1Mode ) == sCmd ||
-        strstr( sCmd, cstrCam2_1Mode ) == sCmd )
+    if( strstr( cmd, cstrInstantMode ) == cmd ||
+        strstr( cmd, cstrMode ) == cmd ||
+        strstr( cmd, cstrCam1Mode ) == cmd ||
+        strstr( cmd, cstrCam2Mode ) == cmd ||
+        strstr( cmd, cstrCam1_1Mode ) == cmd ||
+        strstr( cmd, cstrCam2_1Mode ) == cmd )
     {
         return;
     }
@@ -213,10 +213,10 @@ void QT3kLoadSensorDataObject::OnRSP(ResponsePart Part, ushort, const char * /*s
     m_strSendCmd.clear();
     m_nSendCmdID = -1;
 
-    const char* pszData = strchr( sCmd, '=' );
+    const char* pszData = strchr( cmd, '=' );
     if( !pszData ) return;
 
-    QString strCmd( sCmd );
+    QString strCmd( cmd );
     QString strKey( strCmd.left(strCmd.indexOf( '=' )) );
 
     pszData++;
@@ -225,16 +225,16 @@ void QT3kLoadSensorDataObject::OnRSP(ResponsePart Part, ushort, const char * /*s
     stRSP.strKey = strKey;
     stRSP.strData = pszData;
 
-    Push_Data( Part, stRSP, sCmd );
+    Push_Data( Part, stRSP, cmd );
 
     NextCommand();
 }
 
-void QT3kLoadSensorDataObject::OnRSE(ResponsePart Part, ushort, const char * sPartId, long lId, bool, const char *sCmd)
+void QT3kLoadSensorDataObject::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char *partid, int id, bool /*bFinal*/, const char *cmd)
 {
-    if( m_nSendCmdID != lId ) return;
+    if( m_nSendCmdID != id ) return;
 
-    if( strstr( sCmd, cstrNoCam ) == sCmd )
+    if( strstr( cmd, cstrNoCam ) == cmd )
     {
         if( Part != (ResponsePart)m_eDataPart ) return;
 
@@ -242,12 +242,12 @@ void QT3kLoadSensorDataObject::OnRSE(ResponsePart Part, ushort, const char * sPa
         if( !pCM )
             pCM = new CMLogDataGroup;
         pCM->bNoCam = true;
-        m_pStorageHandle->RSE.push_back( QString("%1:%2").arg(sPartId).arg(sCmd) );
+        m_pStorageHandle->RSE.push_back( QString("%1:%2").arg(partid).arg(cmd) );
         return;
     }
-    else if( strstr( sCmd, cstrSytaxError ) == sCmd )
+    else if( strstr( cmd, cstrSytaxError ) == cmd )
     {
-        m_pStorageHandle->RSE.push_back( QString("%1:%2 - %3").arg(sPartId).arg(sCmd).arg(m_strSendCmd));
+        m_pStorageHandle->RSE.push_back( QString("%1:%2 - %3").arg(partid).arg(cmd).arg(m_strSendCmd));
         NextCommand();
         return;
     }
@@ -256,10 +256,10 @@ void QT3kLoadSensorDataObject::OnRSE(ResponsePart Part, ushort, const char * sPa
     m_strSendCmd.clear();
     m_nSendCmdID = -1;
 
-    const char* pszData = strchr( sCmd, '=' );
+    const char* pszData = strchr( cmd, '=' );
     if( !pszData )
     {
-        if( sCmd[0] == 0 )
+        if( cmd[0] == 0 )
         {
             if( m_bFactoryCmd )
             {
@@ -284,7 +284,7 @@ void QT3kLoadSensorDataObject::OnRSE(ResponsePart Part, ushort, const char * sPa
                     break;
                 }
 
-                m_nSendCmdID = m_pT3kHandle->SendCommand( (const char*)m_strSendCmd.toUtf8().data(), true );
+                m_nSendCmdID = m_pT3kHandle->sendCommand( m_strSendCmd, true );
                 Q_ASSERT( m_nSendCmdID >= 0 );
 
                 StartAsyncTimeoutChecker( 1000 );
@@ -335,29 +335,29 @@ void QT3kLoadSensorDataObject::OnRSE(ResponsePart Part, ushort, const char * sPa
         return;
     }
 
-    m_pStorageHandle->RSE.push_back( sCmd );
+    m_pStorageHandle->RSE.push_back( cmd );
 }
 
-void QT3kLoadSensorDataObject::OnVER(ResponsePart Part, ushort, const char * /*sPartId*/, T3kVER &VER)
+void QT3kLoadSensorDataObject::TPDP_OnVER(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, t3kpacket::_body::_ver *ver)
 {
     switch( Part )
     {
     case MM:
         {
-            m_pStorageHandle->MM.VerInfo.strNV = QString("%1").arg(VER.nv);
-            m_pStorageHandle->MM.VerInfo.strVer = QString("%1.%2").arg(VER.major, 0, 16).arg(VER.minor, 0, 16);
-            m_pStorageHandle->MM.VerInfo.strModel = QString("%1").arg(VER.model, 0, 16);
-            m_pStorageHandle->MM.VerInfo.strDateTime = QString("%1 %2").arg(QString((const char*)VER.date)).arg(QString((const char*)VER.time));
+            m_pStorageHandle->MM.VerInfo.strNV = QString("%1").arg(ver->nv);
+            m_pStorageHandle->MM.VerInfo.strVer = QString("%1.%2").arg(ver->major, 0, 16).arg(ver->minor, 0, 16);
+            m_pStorageHandle->MM.VerInfo.strModel = QString("%1").arg(ver->model, 0, 16);
+            m_pStorageHandle->MM.VerInfo.strDateTime = QString("%1 %2").arg(QString((const char*)ver->date)).arg(QString((const char*)ver->time));
         }
         break;
     default:
         {
             Q_ASSERT( (int)Part-1 >= 0 );
             if( m_pStorageHandle->CM.find( Part ) == m_pStorageHandle->CM.end() ) break;
-            m_pStorageHandle->CM.value( Part )->VerInfo.strNV = QString("%1").arg(VER.nv);
-            m_pStorageHandle->CM.value( Part )->VerInfo.strVer = QString("%1.%2").arg(VER.major, 0, 16).arg(VER.minor, 0, 16);
-            m_pStorageHandle->CM.value( Part )->VerInfo.strModel = QString("%1").arg(VER.model, 0, 16);
-            m_pStorageHandle->CM.value( Part )->VerInfo.strDateTime = QString("%1 %2").arg(QString((const char*)VER.date)).arg(QString((const char*)VER.time));
+            m_pStorageHandle->CM.value( Part )->VerInfo.strNV = QString("%1").arg(ver->nv);
+            m_pStorageHandle->CM.value( Part )->VerInfo.strVer = QString("%1.%2").arg(ver->major, 0, 16).arg(ver->minor, 0, 16);
+            m_pStorageHandle->CM.value( Part )->VerInfo.strModel = QString("%1").arg(ver->model, 0, 16);
+            m_pStorageHandle->CM.value( Part )->VerInfo.strDateTime = QString("%1 %2").arg(QString((const char*)ver->date)).arg(QString((const char*)ver->time));
         }
         break;
     }

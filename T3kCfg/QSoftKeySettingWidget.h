@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 #include "QSoftkey.h"
@@ -14,12 +14,12 @@ namespace Ui {
     class QSoftKeySettingWidget;
 }
 
-class QSoftKeySettingWidget : public QWidget, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
+class QSoftKeySettingWidget : public QWidget, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QSoftKeySettingWidget(T3kHandle*& pHandle, QWidget *parent = 0);
+    explicit QSoftKeySettingWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
     ~QSoftKeySettingWidget();
 
     void SetDefault();
@@ -31,7 +31,7 @@ protected:
     virtual bool eventFilter(QObject *target, QEvent *evt);
 
     virtual void onChangeLanguage();
-    virtual void OnRSP(ResponsePart Part, ushort nTickTime, const char *sPartId, long lId, bool bFinal, const char *sCmd);
+    virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 
     int ParseSoftKey( const char* psSoftKey );
@@ -70,7 +70,7 @@ signals:
 
 private:
     Ui::QSoftKeySettingWidget   *ui;
-    T3kHandle*&                m_pT3kHandle;
+    QT3kDeviceR*&                m_pT3kHandle;
 
 private slots:
     void onslot_TableSoftkeyMap_cellChanged(int nRow, int nColumn, int nIndex);

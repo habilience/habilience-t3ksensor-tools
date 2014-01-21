@@ -1021,7 +1021,7 @@ void QBentAdjustmentDialog::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint
 
         pt = PosToDCC( s_PosXY[nPosXYSel][i].x, s_PosXY[nPosXYSel][i].y, rcBody );
 
-        if( bBentWithDummy || s_PosXY[nPosXYSel][i].use )
+        if( bBentWithDummy || s_PosXY[nPosXYSel][i].idx >= 0 )
             p.drawEllipse( QRect(pt.x()-nCW, pt.y()-nCW, nCW*2+1, nCW*2+1) );
     }
 

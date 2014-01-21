@@ -8,6 +8,7 @@
 #include <QMouseEvent>
 
 #include "QUtils.h"
+#include "QGUIUtils.h"
 
 #define BORDER_ROUND        (3)
 

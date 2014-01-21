@@ -7,6 +7,7 @@
 #include <QKeyEvent>
 #include <QPainter>
 #include "QUtils.h"
+#include "QGUIUtils.h"
 #include "QInitDataIni.h"
 
 #include "T3k_ver.h"
@@ -1722,17 +1723,9 @@ void Dialog::saveSensorDefaultSettings()
 
     /* gesture profile section */
     dataProgressDlg.insertCommand( "# gesture profile section" );
-    strCmd = QString(cstrMouseProfile) + "?";
-    dataProgressDlg.insertCommand( strCmd );
     strCmd = QString(cstrMouseProfile1) + "?";
     dataProgressDlg.insertCommand( strCmd );
     strCmd = QString(cstrMouseProfile2) + "?";
-    dataProgressDlg.insertCommand( strCmd );
-    strCmd = QString(cstrMouseProfile3) + "?";
-    dataProgressDlg.insertCommand( strCmd );
-    strCmd = QString(cstrMouseProfile4) + "?";
-    dataProgressDlg.insertCommand( strCmd );
-    strCmd = QString(cstrMouseProfile5) + "?";
     dataProgressDlg.insertCommand( strCmd );
 
     if ( dataProgressDlg.exec() != QDialog::Accepted )
@@ -1764,12 +1757,9 @@ bool Dialog::isExistSensorDefaultValue( const QString& strSensorCmd )
         cstrSimpleDetection,
         cstrInvertDetection,
         cstrFactorialScreenMargin,
-        cstrMouseProfile,
         cstrMouseProfile1,
         cstrMouseProfile2,
-        cstrMouseProfile3,
-        cstrMouseProfile4,
-        cstrMouseProfile5
+        cstrMouseProfile3
     };
 
     for ( int i=0 ; i<(int)(sizeof(strNoSensorDefaultCmd)/sizeof(QString)) ; i++ )
@@ -1815,12 +1805,9 @@ void Dialog::loadSensorDefaultSettings( bool bQuestion/*=true*/ )
         cstrAreaP,
         cstrWheelSensitivity,
         cstrZoomSensitivity,
-        cstrMouseProfile,
         cstrMouseProfile1,
         cstrMouseProfile2,
         cstrMouseProfile3,
-        cstrMouseProfile4,
-        cstrMouseProfile5,
         cstrCalibrationKey,
         cstrCalibrationNo,
         cstrTouchDisableKey,

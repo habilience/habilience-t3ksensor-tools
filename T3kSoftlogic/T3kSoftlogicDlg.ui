@@ -467,7 +467,7 @@
         <number>10</number>
        </property>
        <item>
-        <widget class="QColorTabWidget" name="TabMainMenu">
+        <widget class="Q2ColorTabWidget" name="TabMainMenu" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -901,7 +901,7 @@
            </disabled>
           </palette>
          </property>
-         <property name="currentIndex">
+         <property name="currentIndex" stdset="0">
           <number>-1</number>
          </property>
         </widget>
@@ -1093,6 +1093,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>Q2ColorTabWidget</class>
+   <extends>QWidget</extends>
+   <header>ui/Q2ColorTabWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>QKeyDesignWidget</class>
    <extends>QWidget</extends>
    <header>KeyDesignWidget.h</header>
@@ -1102,12 +1108,6 @@
    <class>QLogicDesignWidget</class>
    <extends>QWidget</extends>
    <header>LogicDesignWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QColorTabWidget</class>
-   <extends>QTabWidget</extends>
-   <header>ui/ColorTabWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

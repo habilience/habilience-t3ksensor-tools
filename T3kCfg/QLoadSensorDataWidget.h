@@ -2,7 +2,7 @@
 #define QLOADSENSORDATAWIDGET_H
 
 #include <QDialog>
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceREventHandler.h"
 #include "QLangManager.h"
 #include "QPrintLogData.h"
 #include "LogDataDef.h"
@@ -28,11 +28,11 @@ namespace Ui {
     class QLoadSensorDataWidget;
 }
 
-class QLoadSensorDataWidget : public QDialog, public TPDPEventMultiCaster::ITPDPEventListener, public QLangManager::ILangChangeNotify
+class QLoadSensorDataWidget : public QDialog, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 public:
-    explicit QLoadSensorDataWidget(T3kHandle*& pHandle, QWidget *parent = 0);
+    explicit QLoadSensorDataWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
     ~QLoadSensorDataWidget();
     enum eDataPart { DP_CM1 = 1, DP_CM2, DP_CM1_1, DP_CM2_1, DP_MM, DP_END };
     enum eLoadStep { LS_SIDEVIEW, LS_DETECTION, LS_DATA, LS_SAVE };
@@ -73,7 +73,7 @@ protected:
 
 private:
     Ui::QLoadSensorDataWidget   *ui;
-    T3kHandle*&            m_pT3kHandle;
+    QT3kDeviceR*&            m_pT3kHandle;
 
     int                     m_nTimerLoadStep;
     int                     m_nLoadProgStep;

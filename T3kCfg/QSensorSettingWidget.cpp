@@ -22,7 +22,7 @@ typedef enum
         buzzeridUsbAttach     = 6
 } BuzzerID;
 
-QSensorSettingWidget::QSensorSettingWidget(T3kHandle*& pHandle, QWidget *parent) :
+QSensorSettingWidget::QSensorSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QSensorSettingWidget), m_pT3kHandle(pHandle)
 {
@@ -208,7 +208,7 @@ void QSensorSettingWidget::OnBuzzerPlay(unsigned int nIndex)
     if( !m_pT3kHandle || nIndex >= MaxBuzzer )
             return;
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2,3").arg(cstrBuzzerPlay).arg(nIndex).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2,3").arg(cstrBuzzerPlay).arg(nIndex), true );
 }
 
 void QSensorSettingWidget::OnBnClickedCheckBuzzer( QToolButton* pBtn, unsigned int nIndex )
@@ -220,7 +220,7 @@ void QSensorSettingWidget::OnBnClickedCheckBuzzer( QToolButton* pBtn, unsigned i
 
     pBtn->setText( pBtn->isChecked() ? m_strCaptionON : m_strCaptionOFF );
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2:%3").arg(cstrBuzzer).arg(buzzerId[nIndex]).arg(pBtn->isChecked() ? 1 : 0).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2:%3").arg(cstrBuzzer).arg(buzzerId[nIndex]).arg(pBtn->isChecked() ? 1 : 0), true );
 }
 
 void QSensorSettingWidget::RequestGeneralSetting( bool bDefault )
@@ -240,32 +240,32 @@ void QSensorSettingWidget::RequestGeneralSetting( bool bDefault )
     m_RequestSensorData.AddItem( cstrBuzzer, str );
 
     // calibration
-    m_pT3kHandle->SendCommand( (const char*)QString( "%1%2" ).arg(cstrCalibrationKey).arg(cQ).toUtf8().data(), true );
-    m_pT3kHandle->SendCommand( (const char*)QString( "%1%2" ).arg(cstrCalibrationNo).arg(cQ).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString( "%1%2" ).arg(cstrCalibrationKey).arg(cQ), true );
+    m_pT3kHandle->sendCommand( QString( "%1%2" ).arg(cstrCalibrationNo).arg(cQ), true );
 
     // touch e/d
-    m_pT3kHandle->SendCommand( (const char*)QString( "%1%2" ).arg(cstrTouchEnable).arg(cQ).toUtf8().data(), true );
-    m_pT3kHandle->SendCommand( (const char*)QString( "%1%2" ).arg(cstrTouchDisableKey).arg(cQ).toUtf8().data(), true );
-    m_pT3kHandle->SendCommand( (const char*)QString( "%1%2" ).arg(cstrTouchDisableNo).arg(cQ).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString( "%1%2" ).arg(cstrTouchEnable).arg(cQ), true );
+    m_pT3kHandle->sendCommand( QString( "%1%2" ).arg(cstrTouchDisableKey).arg(cQ), true );
+    m_pT3kHandle->sendCommand( QString( "%1%2" ).arg(cstrTouchDisableNo).arg(cQ), true );
 
     // buzzer
-    m_pT3kHandle->SendCommand( (const char*)QString( "%1%2" ).arg(cstrBuzzer).arg(cQ).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString( "%1%2" ).arg(cstrBuzzer).arg(cQ), true );
 
     m_RequestSensorData.AddItem( cstrUsbConfigMode, "?" );
-    m_pT3kHandle->SendCommand( (const char*)QString("%1?").arg(cstrUsbConfigMode).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
 
     m_RequestSensorData.Start( m_pT3kHandle );
 }
 
-void QSensorSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, const char */*sPartId*/, long /*lId*/, bool /*bFinal*/, const char *sCmd)
+void QSensorSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
-    if( strstr(sCmd, cstrUsbConfigMode) == sCmd )
+    if( strstr(cmd, cstrUsbConfigMode) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrUsbConfigMode );
 
-        int nMode = strtol(sCmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
+        int nMode = strtol(cmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
         switch( nMode )
         {
         case 0x04: // digitizer
@@ -284,24 +284,24 @@ void QSensorSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, co
             break;
         }
     }
-    else if ( strstr(sCmd, cstrCalibrationKey) == sCmd )
+    else if ( strstr(cmd, cstrCalibrationKey) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrCalibrationKey );
 
         int nKey;
-        nKey = atoi(sCmd + sizeof(cstrCalibrationKey) - 1);
+        nKey = atoi(cmd + sizeof(cstrCalibrationKey) - 1);
         if( !(nKey >= NV_DEF_CALIBRATION_KEY_RANGE_START && nKey < NV_DEF_CALIBRATION_KEY_RANGE_END) )
             nKey = -1;
 
         ui->CBLCalibrationKey->setCurrentIndex( nKey+1 );
         ui->CBLCalibrationKeyPresses->setEnabled( ui->CBLCalibrationKey->currentIndex() == 0 ? false : true );
     }
-    else if ( strstr(sCmd, cstrCalibrationNo) == sCmd )
+    else if ( strstr(cmd, cstrCalibrationNo) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrCalibrationNo );
 
         int nNumberOfKey;
-        nNumberOfKey = atoi(sCmd + sizeof(cstrCalibrationNo) - 1);
+        nNumberOfKey = atoi(cmd + sizeof(cstrCalibrationNo) - 1);
         if( !(nNumberOfKey >= NV_DEF_CALIBRATION_KEY_NO_RANGE_START && nNumberOfKey <= NV_DEF_CALIBRATION_KEY_NO_RANGE_END) )
         {
             ui->CBLCalibrationKeyPresses->setCurrentIndex( -1 );
@@ -310,11 +310,11 @@ void QSensorSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, co
     }
     ///////////////////////////////////////////////////////////
     // touch enable/disable
-    else if ( strstr(sCmd, cstrTouchEnable) == sCmd )
+    else if ( strstr(cmd, cstrTouchEnable) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrTouchEnable );
 
-        int nOnOff = atoi(sCmd + sizeof(cstrTouchEnable) - 1);
+        int nOnOff = atoi(cmd + sizeof(cstrTouchEnable) - 1);
         if( nOnOff == 1 )
         {
             ui->BtnChkTouch->setChecked( true );
@@ -326,22 +326,22 @@ void QSensorSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, co
             ui->BtnChkTouch->setText( m_strCaptionOFF );
         }
     }
-    else if ( strstr(sCmd, cstrTouchDisableKey) == sCmd )
+    else if ( strstr(cmd, cstrTouchDisableKey) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrTouchDisableKey );
 
-        int nKey = atoi(sCmd + sizeof(cstrTouchDisableKey) - 1);
+        int nKey = atoi(cmd + sizeof(cstrTouchDisableKey) - 1);
         if( !(nKey >= NV_DEF_TOUCH_DISABLE_KEY_RANGE_START && nKey < NV_DEF_TOUCH_DISABLE_KEY_RANGE_END) )
             nKey = -1;
 
         ui->CBLTouchEnableKey->setCurrentIndex( nKey+1 );
         ui->CBLTouchKeyPresses->setEnabled( ui->CBLTouchEnableKey->currentIndex() == 0 ? false : true );
     }
-    else if ( strstr(sCmd, cstrTouchDisableNo) == sCmd )
+    else if ( strstr(cmd, cstrTouchDisableNo) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrTouchDisableNo );
 
-        int nNumberOfKey = atoi(sCmd + sizeof(cstrTouchDisableNo) - 1);
+        int nNumberOfKey = atoi(cmd + sizeof(cstrTouchDisableNo) - 1);
         if( !(nNumberOfKey >= NV_DEF_TOUCH_DISABLE_KEY_NO_RANGE_START && nNumberOfKey <= NV_DEF_TOUCH_DISABLE_KEY_NO_RANGE_END) )
         {
             ui->CBLTouchKeyPresses->setCurrentIndex( -1 );
@@ -351,11 +351,11 @@ void QSensorSettingWidget::OnRSP(ResponsePart /*Part*/, ushort /*nTickTime*/, co
 
     ///////////////////////////////////////////////////////////
     // buzzer
-    else if ( strstr(sCmd, cstrBuzzer) == sCmd )
+    else if ( strstr(cmd, cstrBuzzer) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrBuzzer );
 
-        ParseBuzzerSetting( sCmd );
+        ParseBuzzerSetting( cmd );
     }
 }
 
@@ -446,7 +446,7 @@ void QSensorSettingWidget::on_CBLCalibrationKey_activated(int index)
     if( nKey == 0 )
         nKey = 3+1;
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrCalibrationKey).arg(nKey-1).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrCalibrationKey).arg(nKey-1), true );
 }
 
 void QSensorSettingWidget::on_CBLCalibrationKeyPresses_activated(int index)
@@ -463,7 +463,7 @@ void QSensorSettingWidget::on_CBLCalibrationKeyPresses_activated(int index)
     else
         nNumberOfPress = (nNumberOfPress + 1) * 2;
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrCalibrationNo).arg(nNumberOfPress).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrCalibrationNo).arg(nNumberOfPress), true );
 }
 
 void QSensorSettingWidget::on_CBLTouchEnableKey_activated(int index)
@@ -477,7 +477,7 @@ void QSensorSettingWidget::on_CBLTouchEnableKey_activated(int index)
     if( nKey == 0 )
         nKey = 3+1;
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrTouchDisableKey).arg(nKey-1).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrTouchDisableKey).arg(nKey-1), true );
 }
 
 void QSensorSettingWidget::on_CBLTouchKeyPresses_activated(int index)
@@ -493,7 +493,7 @@ void QSensorSettingWidget::on_CBLTouchKeyPresses_activated(int index)
     else
         nNumberOfPress = (nNumberOfPress + 1) * 2;
 
-    m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrTouchDisableNo).arg(nNumberOfPress).toUtf8().data(), true );
+    m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrTouchDisableNo).arg(nNumberOfPress), true );
 }
 
 void QSensorSettingWidget::on_BtnChkTouch_clicked()
@@ -501,7 +501,7 @@ void QSensorSettingWidget::on_BtnChkTouch_clicked()
     if( !m_pT3kHandle ) return;
 
     if( ui->BtnChkTouch->isChecked() )
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrTouchEnable).arg(1).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrTouchEnable).arg(1), true );
     else
     {
         QDiableTouchWidget* pDiableTouchWnd = new QDiableTouchWidget( m_pT3kHandle, parentWidget()->parentWidget()->parentWidget() );
@@ -514,7 +514,7 @@ void QSensorSettingWidget::on_BtnChkTouch_clicked()
             return;
         }
 
-        m_pT3kHandle->SendCommand( (const char*)QString("%1%2").arg(cstrTouchEnable).arg(0).toUtf8().data(), true );
+        m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrTouchEnable).arg(0), true );
     }
 }
 

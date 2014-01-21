@@ -28,7 +28,7 @@
 //static const char cstrSytaxError[] = "systax error";
 
 
-QLoadSensorDataWidget::QLoadSensorDataWidget(T3kHandle*& pHandle, QWidget *parent) :
+QLoadSensorDataWidget::QLoadSensorDataWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
     QDialog(parent), ui(new Ui::QLoadSensorDataWidget), m_pT3kHandle(pHandle)
 {
     setWindowFlags( Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint );
@@ -116,14 +116,15 @@ void QLoadSensorDataWidget::ResetStorage()
 
 void QLoadSensorDataWidget::Start()
 {
-    TPDPEventMultiCaster::instance()->SetSingleListener( this );
+    //windnsoul
+//    TPDPEventMultiCaster::instance()->SetSingleListener( this );
 
     ResetStorage();
 
     CreateSavePath();
 
-    if( !m_pT3kHandle->GetReportCommand() )
-        m_pT3kHandle->SetReportCommand( true );
+    if( !m_pT3kHandle->getReportCommand() )
+        m_pT3kHandle->setReportCommand( true );
 
     on_InsertProgressLog( "[" + QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("LOG_START")) + "]" );
 
@@ -143,15 +144,15 @@ void QLoadSensorDataWidget::CloseWidget()
         m_nTimerLoadStep = 0;
     }
 
-    m_pT3kHandle->SendCommand( (const char*)"cam1/mode=detection", true );
-    m_pT3kHandle->SendCommand( (const char*)"cam2/mode=detection", true );
+    m_pT3kHandle->sendCommand( "cam1/mode=detection", true );
+    m_pT3kHandle->sendCommand( "cam2/mode=detection", true );
 
-    if( !m_pT3kHandle->GetReportCommand() )
-        m_pT3kHandle->SetReportCommand( true );
-    if( m_pT3kHandle->GetReportView() )
-        m_pT3kHandle->SetReportView( false );
-    if( m_pT3kHandle->GetReportDevice() )
-        m_pT3kHandle->SetReportDevice( false );
+    if( !m_pT3kHandle->getReportCommand() )
+        m_pT3kHandle->setReportCommand( true );
+    if( m_pT3kHandle->getReportView() )
+        m_pT3kHandle->setReportView( false );
+    if( m_pT3kHandle->getReportDevice() )
+        m_pT3kHandle->setReportDevice( false );
 
     ResetStorage();
 }
@@ -204,8 +205,8 @@ void QLoadSensorDataWidget::timerEvent(QTimerEvent *evt)
                 strLog += QLangManager::getResUTF8String( "SENSOR DIAGNOSIS", "LOG_SIDEVIEW" );
                 on_InsertProgressLog( strLog );
 
-                if( !m_pT3kHandle->GetReportCommand() )
-                    m_pT3kHandle->SetReportCommand( true );
+                if( !m_pT3kHandle->getReportCommand() )
+                    m_pT3kHandle->setReportCommand( true );
                 LoadSideView();
             }
             break;
@@ -215,8 +216,8 @@ void QLoadSensorDataWidget::timerEvent(QTimerEvent *evt)
                 strLog += QLangManager::getResUTF8String( "SENSOR DIAGNOSIS", "LOG_DETECTION" );
                 on_InsertProgressLog( strLog );
 
-                if( !m_pT3kHandle->GetReportCommand() )
-                    m_pT3kHandle->SetReportCommand( true );
+                if( !m_pT3kHandle->getReportCommand() )
+                    m_pT3kHandle->setReportCommand( true );
                 LoadDetection();
             }
             break;
@@ -226,8 +227,8 @@ void QLoadSensorDataWidget::timerEvent(QTimerEvent *evt)
                 strLog += QLangManager::getResUTF8String( "SENSOR DIAGNOSIS", "LOG_DATA" );
                 on_InsertProgressLog( strLog );
 
-                if( !m_pT3kHandle->GetReportCommand() )
-                    m_pT3kHandle->SetReportCommand( true );
+                if( !m_pT3kHandle->getReportCommand() )
+                    m_pT3kHandle->setReportCommand( true );
                 LoadData();
             }
             break;
@@ -300,7 +301,8 @@ void QLoadSensorDataWidget::LoadSideView()
     QT3kLoadSideviewObject* pTempObj = (QT3kLoadSideviewObject*)m_pHIDObject;
     pTempObj->SetSavePath( m_strSavePath + "/data" );
 
-    TPDPEventMultiCaster::instance()->SetSingleListener( m_pHIDObject );
+    // windnsoul
+//    TPDPEventMultiCaster::instance()->SetSingleListener( m_pHIDObject );
     m_pHIDObject->Start( m_pSensorLogData );
 }
 
@@ -315,7 +317,8 @@ void QLoadSensorDataWidget::LoadDetection()
     connect( m_pHIDObject, SIGNAL(Complete(int)), this, SLOT(onLoadComplete(int)), Qt::QueuedConnection );
     connect( m_pHIDObject, SIGNAL(PrintProgreeLog(QString,bool)), this, SLOT(on_InsertProgressLog(QString,bool)), Qt::QueuedConnection );
 
-    TPDPEventMultiCaster::instance()->SetSingleListener( m_pHIDObject );
+    // windnsoul
+//    TPDPEventMultiCaster::instance()->SetSingleListener( m_pHIDObject );
     m_pHIDObject->Start( m_pSensorLogData );
 }
 
@@ -330,7 +333,8 @@ void QLoadSensorDataWidget::LoadData()
     connect( m_pHIDObject, SIGNAL(Complete(int)), this, SLOT(onLoadComplete(int)), Qt::QueuedConnection );
     connect( m_pHIDObject, SIGNAL(PrintProgreeLog(QString,bool)), this, SLOT(on_InsertProgressLog(QString,bool)), Qt::QueuedConnection );
 
-    TPDPEventMultiCaster::instance()->SetSingleListener( m_pHIDObject );
+    // windnsoul
+    //TPDPEventMultiCaster::instance()->SetSingleListener( m_pHIDObject );
     m_pHIDObject->Start( m_pSensorLogData );
 }
 
@@ -351,8 +355,8 @@ void QLoadSensorDataWidget::LoadEnvironment()
 void QLoadSensorDataWidget::onLoadComplete(int nStep)
 {
     if( nStep > LDS_SAVE ) return;
-
-    TPDPEventMultiCaster::instance()->SetSingleListener( this );
+    //windnsoul
+    //TPDPEventMultiCaster::instance()->SetSingleListener( this );
     if( m_pHIDObject )
     {
         delete m_pHIDObject;
@@ -507,7 +511,8 @@ bool QLoadSensorDataWidget::ExportReportFiles(QString strOutPutPath)
 void QLoadSensorDataWidget::on_BTOK_clicked()
 {
     CloseWidget();
-    TPDPEventMultiCaster::instance()->ClearSingleListener();
+    //windnsoul
+    //TPDPEventMultiCaster::instance()->ClearSingleListener();
 
     if( ui->BTOK->text() == QLangManager::instance()->getResource().getResString(QString::fromUtf8("EDIT PROFILE ITEM"),QString::fromUtf8("BTN_CAPTION_CANCEL")) )
     {

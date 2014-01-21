@@ -2,7 +2,7 @@
 
 #include "T3kConstStr.h"
 
-void playBuzzer( T3kHandle* pHandle, BuzzerType type )
+void playBuzzer( QT3kDeviceR* pHandle, BuzzerType type )
 {
     int nCat = 0, nType = 0;
 
@@ -27,5 +27,5 @@ void playBuzzer( T3kHandle* pHandle, BuzzerType type )
 
     QString strCmd;
     strCmd = QString(cstrBuzzerPlay) + QString::number(nCat) + "," + QString::number(nType);
-    pHandle->SendCommand(strCmd.toUtf8().data(), true);
+    pHandle->sendCommand( strCmd, true);
 }

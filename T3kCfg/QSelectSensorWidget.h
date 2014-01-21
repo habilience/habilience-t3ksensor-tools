@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QToolButton>
 #include <QTimer>
-#include "TPDPEventMultiCaster.h"
+#include "QT3kDeviceR.h"
 #include "QLangManager.h"
 
 namespace Ui {
@@ -39,7 +39,7 @@ protected:
 
 private:
     Ui::QSelectSensorWidget *ui;
-    T3kHandle*             m_pT3kHandle;
+    QT3kDeviceR*             m_pT3kHandle;
 
     QTimer                  m_TimerBuzzer;
 
