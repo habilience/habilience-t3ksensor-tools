@@ -30,10 +30,10 @@ QNMouseProfileWidget::QNMouseProfileWidget(QT3kDeviceR*& pT3kHandle, QWidget *pa
     connect( &m_MouseProfileTableWidget, SIGNAL(sendCommand(QString,bool,unsigned short)), this, SLOT(onSendCommand(QString,bool,unsigned short)), Qt::QueuedConnection );
     connect( this, SIGNAL(SendInputModeState()), &m_MouseProfileTableWidget, SLOT(onUpdateInputMode()), Qt::QueuedConnection );
 
-    m_pEditActionWnd = new QEditActionWnd( this );
-    m_pEditActionEWnd = new QEditActionEDWnd( this );
-    m_pEditAction2WDWnd = new QEditAction2WDWnd( this );
-    m_pEditAction4WDWnd = new QEditAction4WDWnd( this );
+    m_pEditActionWnd = new QEditActionWnd( QT3kUserData::GetInstance()->getTopParent() );
+    m_pEditActionEWnd = new QEditActionEDWnd( QT3kUserData::GetInstance()->getTopParent() );
+    m_pEditAction2WDWnd = new QEditAction2WDWnd( QT3kUserData::GetInstance()->getTopParent() );
+    m_pEditAction4WDWnd = new QEditAction4WDWnd( QT3kUserData::GetInstance()->getTopParent() );
 
     connect( m_pEditActionWnd, &QEditActionWnd::sendCommand, this, &QNMouseProfileWidget::onSendCommand, Qt::QueuedConnection );
     connect( m_pEditActionEWnd, &QEditActionEDWnd::sendCommand, this, &QNMouseProfileWidget::onSendCommand, Qt::QueuedConnection );

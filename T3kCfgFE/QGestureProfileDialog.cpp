@@ -21,6 +21,8 @@ QGestureProfileDialog::QGestureProfileDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    m_bModified = false;
+
     Qt::WindowFlags flags =
 #ifdef Q_OS_LINUX
             Qt::Dialog;
