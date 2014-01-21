@@ -213,15 +213,16 @@ void QDetectionDialog::paintEvent(QPaintEvent *)
     p.fillRect( rcBody, Qt::white );
 
     const QRect rcArrow(0, 0, 55, 55);
-    // LT, RT, RB, LB
+    // LT, LB, RT, RB,
     m_rcArrow[0] = rcArrow;
-    m_rcArrow[1] = QRect(rcBody.right()-rcArrow.width(), rcBody.top(), rcArrow.width(), rcArrow.height());
-    m_rcArrow[2] = QRect(rcBody.right()-rcArrow.width(), rcBody.bottom()-rcArrow.height(), rcArrow.width(), rcArrow.height());
-    m_rcArrow[3] = QRect(rcBody.left(), rcBody.bottom()-rcArrow.height(), rcArrow.width(), rcArrow.height());
+    m_rcArrow[1] = QRect(rcBody.left(), rcBody.bottom()-rcArrow.height(), rcArrow.width(), rcArrow.height());
+    m_rcArrow[2] = QRect(rcBody.right()-rcArrow.width(), rcBody.top(), rcArrow.width(), rcArrow.height());
+    m_rcArrow[3] = QRect(rcBody.right()-rcArrow.width(), rcBody.bottom()-rcArrow.height(), rcArrow.width(), rcArrow.height());
+
 
     m_rcProgress[0] = QRect(m_rcArrow[0].left() + ARROW_OFFSETXY, m_rcArrow[0].bottom() + 2, m_rcArrow[0].width()-ARROW_OFFSETXY*2, 2);
-    m_rcProgress[1] = QRect(m_rcArrow[1].left() + ARROW_OFFSETXY, m_rcArrow[1].bottom() + 2, m_rcArrow[1].width()-ARROW_OFFSETXY*2, 2);
-    m_rcProgress[2] = QRect(m_rcArrow[2].left() + ARROW_OFFSETXY, m_rcArrow[2].top() - 2 - 2, m_rcArrow[2].width()-ARROW_OFFSETXY*2, 2);
+    m_rcProgress[1] = QRect(m_rcArrow[1].left() + ARROW_OFFSETXY, m_rcArrow[1].top() - 2 - 2, m_rcArrow[1].width()-ARROW_OFFSETXY*2, 2);
+    m_rcProgress[2] = QRect(m_rcArrow[2].left() + ARROW_OFFSETXY, m_rcArrow[2].bottom() + 2, m_rcArrow[2].width()-ARROW_OFFSETXY*2, 2);
     m_rcProgress[3] = QRect(m_rcArrow[3].left() + ARROW_OFFSETXY, m_rcArrow[3].top() - 2 - 2, m_rcArrow[3].width()-ARROW_OFFSETXY*2, 2);
 
     drawArrow(p);
@@ -267,7 +268,16 @@ void QDetectionDialog::drawArrow(QPainter& p)
     case 0:		// LT
         pDrawArrow = ptArrowLT;
         break;
-    case 1:		// RT
+    case 1:		// LB
+        pArrowMirror = new QPointF[ nPtCnt ];
+        pDrawArrow = pArrowMirror;
+        for ( int i=0 ; i<nPtCnt ; i++ )
+        {
+            pArrowMirror[i].setX(rcArea.x() + ptArrowLT[i].x());
+            pArrowMirror[i].setY(rcArea.y() + rcArea.height() - ptArrowLT[i].y());
+        }
+        break;
+    case 2:		// RT
         pArrowMirror = new QPointF[ nPtCnt ];
         pDrawArrow = pArrowMirror;
         for ( int i=0 ; i<nPtCnt ; i++ )
@@ -276,21 +286,12 @@ void QDetectionDialog::drawArrow(QPainter& p)
             pArrowMirror[i].setY(rcArea.y() + ptArrowLT[i].y());
         }
         break;
-    case 2:		// RB
+    case 3:		// RB
         pArrowMirror = new QPointF[ nPtCnt ];
         pDrawArrow = pArrowMirror;
         for ( int i=0 ; i<nPtCnt ; i++ )
         {
             pArrowMirror[i].setX(rcArea.x() + rcArea.width() - ptArrowLT[i].x());
-            pArrowMirror[i].setY(rcArea.y() + rcArea.height() - ptArrowLT[i].y());
-        }
-        break;
-    case 3:		// LB
-        pArrowMirror = new QPointF[ nPtCnt ];
-        pDrawArrow = pArrowMirror;
-        for ( int i=0 ; i<nPtCnt ; i++ )
-        {
-            pArrowMirror[i].setX(rcArea.x() + ptArrowLT[i].x());
             pArrowMirror[i].setY(rcArea.y() + rcArea.height() - ptArrowLT[i].y());
         }
         break;

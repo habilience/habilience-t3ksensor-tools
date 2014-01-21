@@ -16,7 +16,7 @@ CONFIG += static staticlib
 TEMPLATE = app
 
 #Define
-DEFINES += _QT_COMPILER_ QUAZIP_STATIC USE_T3K_STATIC_LIBS _T3KHANDLE_INCLUDE_REMOTE
+DEFINES += _QT_COMPILER_ QUAZIP_STATIC USE_T3K_STATIC_LIBS _T3KHANDLE_INCLUDE_REMOTE T3K_DEFULAT_FONT
 
 
 CONFIG(debug, debug|release):DEFINES += _DEBUG
@@ -195,6 +195,10 @@ SOURCES += main.cpp\
     ../common/ui/QColorTabWidget.cpp \
     ../common/ui/Q2ColorTabWidget.cpp \
     ../common/ui/QGestureMappingTable.cpp \
+    ../common/ui/QEditActionWnd.h \
+    ../common/ui/QEditAction2WDWnd.h \
+    ../common/ui/QEditAction4WDWnd.h \
+    ../common/ui/QEditActionEDWnd.h \
     ../common/fe/QCalcCamValue.cpp \
     ../common/fe/QPointClipper.cpp \
     QMouseSettingWidget.cpp \
@@ -210,10 +214,6 @@ SOURCES += main.cpp\
     QWarningWidget.cpp \
     QDiableTouchWidget.cpp \
     QAssistanceWidget.cpp \
-    QEditActionWnd.cpp \
-    QEditAction2WDWnd.cpp \
-    QEditAction4WDWnd.cpp \
-    QEditActionEDWnd.cpp \
     QIconLabel.cpp \
     QUserDefinedKeyWidget.cpp \
     QDetectionGraphView.cpp \
@@ -290,8 +290,13 @@ HEADERS  += \
     ../common/ui/QColorTabWidget.h \
     ../common/ui/Q2ColorTabWidget.h \
     ../common/ui/QGestureMappingTable.h \
+    ../common/ui/QEditActionWnd.h \
+    ../common/ui/QEditAction2WDWnd.h \
+    ../common/ui/QEditAction4WDWnd.h \
+    ../common/ui/QEditActionEDWnd.h \
     ../common/fe/QCalcCamValue.h \
     ../common/fe/QPointClipper.h \
+    ../common/T3kCommonColor.h \
     QMouseSettingWidget.h \
     QCalibrationSettingWidget.h \
     QGeneralSettingWidget.h \
@@ -306,10 +311,6 @@ HEADERS  += \
     QWarningWidget.h \
     QDiableTouchWidget.h \
     QAssistanceWidget.h \
-    QEditActionWnd.h \
-    QEditAction2WDWnd.h \
-    QEditAction4WDWnd.h \
-    QEditActionEDWnd.h \
     QIconLabel.h \
     QUserDefinedKeyWidget.h \
     QKeyEditWidget.h \
@@ -371,11 +372,14 @@ HEADERS  += \
     T3kBuzzerDef.h \
     QNMouseProfileWidget.h \
     QOMouseProfileWidget.h \
-    ../common/T3kCommonColor.h
 
 
 FORMS    += \
     ../common/ui/QLicenseWidget.ui \
+    ../common/ui/QEditActionWnd.ui \
+    ../common/ui/QEditAction2WDWnd.ui \
+    ../common/ui/QEditAction4WDWnd.ui \
+    ../common/ui/QEditActionEDWnd.ui \
     T3kCfgWnd.ui \
     QCalibrationSettingWidget.ui \
     QGeneralSettingWidget.ui \
@@ -384,10 +388,6 @@ FORMS    += \
     QWarningWidget.ui \
     QDiableTouchWidget.ui \
     QAssistanceWidget.ui \
-    QEditActionWnd.ui \
-    QEditAction2WDWnd.ui \
-    QEditAction4WDWnd.ui \
-    QEditActionEDWnd.ui \
     QSensorSettingWidget.ui \
     QSideViewWidget.ui \
     QSoftKeySettingWidget.ui \

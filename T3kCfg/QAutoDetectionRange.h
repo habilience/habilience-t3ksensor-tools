@@ -2,17 +2,15 @@
 #define QAUTODETECTIONRANGE_H
 
 #include "QT3kDeviceREventHandler.h"
-#include "QLangManager.h"
 #include "QRequestHIDManager.h"
-//#include "t3kcomdef.h"
 
 #include <QObject>
 #include <QPixmap>
 
+
 class QBorderStyleEdit;
 class QAutoDetectionRange : public QObject
         , public QT3kDeviceREventHandler::IListener
-        , public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 private:
@@ -52,9 +50,6 @@ protected:
 
     void drawMonitor(QPainter& p, QRect rcBody);
     void drawArrow(QPainter& p);
-
-    // QLangManager::ILangChangeNotify
-    virtual void onChangeLanguage();
 
     enum RequestCmd { cmdRefresh, cmdWriteToFactoryDefault, cmdLoadFactoryDefault, cmdInitialize };
     bool requestSensorData( RequestCmd cmd, bool bWait );
