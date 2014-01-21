@@ -51,6 +51,7 @@ protected:
     QEditActionKey2WayDialog        m_editActionKey2WayDialog;
     QEditActionKey4WayDialog        m_editActionKey4WayDialog;
 
+    bool                            m_bModified;
 
 private:
     Ui::QGestureProfileDialog *ui;
@@ -58,6 +59,7 @@ private:
 
 public slots:
     void onUpdateProfile(int nProfileIndex, const QGestureMappingTable::CellInfo& ci, ushort nProfileFlags);
+    void onModifiedExtProperty();
 };
 
 #endif // QGESTUREPROFILEDIALOG_H

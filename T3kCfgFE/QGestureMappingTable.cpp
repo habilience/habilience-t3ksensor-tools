@@ -927,6 +927,7 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
 
     if ( bExtSet )
     {
+        emit modifiedExtProperty();
         char szCmd[256];
         switch ( m_nProfileIndex )
         {

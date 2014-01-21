@@ -21,7 +21,12 @@ QGestureProfileDialog::QGestureProfileDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    Qt::WindowFlags flags = Qt::Tool;
+    Qt::WindowFlags flags =
+#ifdef Q_OS_LINUX
+            Qt::Dialog;
+#else
+            Qt::Tool;
+#endif
 
     setWindowFlags(flags);
     setWindowModality( Qt::WindowModal );
@@ -40,6 +45,7 @@ QGestureProfileDialog::QGestureProfileDialog(QWidget *parent) :
 
     connect( ui->widgetProfileTab, SIGNAL(tabSelectChanged(QColorTabWidget*,int)), SLOT(onTabSelChanged(QColorTabWidget*,int)) );
     connect( &m_widgetGestureMappingTable, &QGestureMappingTable::updateProfile, this, &QGestureProfileDialog::onUpdateProfile, Qt::DirectConnection );
+    connect( &m_widgetGestureMappingTable, &QGestureMappingTable::modifiedExtProperty, this, &QGestureProfileDialog::onModifiedExtProperty );
 
     ui->widgetProfileTab->selectTab(0);
 
@@ -97,6 +103,15 @@ void QGestureProfileDialog::sensorReset()
     resetDataWithInitData( cstrMouseProfile2 );
 
     ui->cmdAsyncMngr->start( (unsigned int)-1 );
+
+    QEventLoop loop;
+    loop.connect( ui->cmdAsyncMngr, SIGNAL(asyncFinished(bool,int)), SLOT(quit()));
+
+    ui->cmdAsyncMngr->start( 6000 );
+
+    loop.exec();
+
+    m_bModified = false;
 }
 
 void QGestureProfileDialog::sensorRefresh( bool bTabOnly/*=false*/ )
@@ -242,6 +257,29 @@ void QGestureProfileDialog::on_btnSave_clicked()
 
 void QGestureProfileDialog::on_btnClose_clicked()
 {
+    if( m_bModified )
+    {
+        QLangRes& res = QLangManager::getResource();
+        QString strPrompt = res.getResString( MAIN_TAG, "TEXT_WARNING_SENSOR_DATA_IS_CHANGED" );
+        QString strTitle = res.getResString( MAIN_TAG, "TEXT_WARNING_MESSAGE_TITLE" );
+        int nRet = showMessageBox( this,
+            strPrompt,
+            strTitle,
+            QMessageBox::Question, QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel, QMessageBox::Yes );
+        if (nRet == QMessageBox::Yes)
+        {
+            on_btnSave_clicked();
+        }
+        else if (nRet == QMessageBox::No)
+        {
+            sensorReset();
+        }
+        else
+        {
+            return;
+        }
+    }
+
     LOG_B( "Gesture Profile: Close" );
     close();
 }
@@ -254,19 +292,28 @@ void QGestureProfileDialog::onUpdateProfile(int nProfileIndex, const QGestureMap
         break;
     case QGestureMappingTable::KeyTypeEnable:
         m_editActionEnableDialog.setProfileInfo( nProfileIndex, ci.cKey, ci.wKeyValue[0], nProfileFlags );
-        m_editActionEnableDialog.exec();
+        if( m_editActionEnableDialog.exec() == QDialog::Accepted )
+            m_bModified = true;
         break;
     case QGestureMappingTable::KeyType1Key:
         m_editActionKey1Dialog.setProfileInfo( nProfileIndex, ci.cKey, ci.wKeyValue[0] );
-        m_editActionKey1Dialog.exec();
+        if( m_editActionKey1Dialog.exec() == QDialog::Accepted )
+            m_bModified = true;
         break;
     case QGestureMappingTable::KeyType2Way:
         m_editActionKey2WayDialog.setProfileInfo( nProfileIndex, ci.cKey, ci.wKeyValue[0], ci.wKeyValue[1] );
-        m_editActionKey2WayDialog.exec();
+        if( m_editActionKey2WayDialog.exec() == QDialog::Accepted )
+            m_bModified = true;
         break;
     case QGestureMappingTable::KeyType4Way:
         m_editActionKey4WayDialog.setProfileInfo( nProfileIndex, ci.cKey, ci.wKeyValue[0], ci.wKeyValue[1], ci.wKeyValue[2], ci.wKeyValue[3] );
-        m_editActionKey4WayDialog.exec();
+        if( m_editActionKey4WayDialog.exec() == QDialog::Accepted )
+            m_bModified = true;
         break;
     }
+}
+
+void QGestureProfileDialog::onModifiedExtProperty()
+{
+    m_bModified = true;
 }

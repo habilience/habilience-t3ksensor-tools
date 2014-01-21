@@ -132,6 +132,7 @@ public:
     
 signals:
     void updateProfile(int nProfileIndex, const CellInfo& ci, ushort nProfileFlags);
+    void modifiedExtProperty();
     
 public slots:
     

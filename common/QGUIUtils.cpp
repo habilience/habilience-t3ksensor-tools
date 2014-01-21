@@ -24,7 +24,7 @@ QFont::Weight weightFromInteger(long weight)
 QFont getSystemFont(QWidget* widget)
 {
     QFont fontSystem;
-#if  defined(Q_OS_WIN) && defined(T3K_DEFULAT_FONT)
+#if  defined(Q_OS_WIN) && !defined(T3K_DEFULAT_FONT)
     NONCLIENTMETRICSW ncm;
     ncm.cbSize = FIELD_OFFSET(NONCLIENTMETRICS, lfMessageFont) + sizeof(LOGFONT);
     SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, ncm.cbSize, &ncm, 0);
