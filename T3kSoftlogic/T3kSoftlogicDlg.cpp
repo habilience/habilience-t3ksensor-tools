@@ -20,6 +20,10 @@
 #include <QtEvents>
 #include <QMimeData>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 #define ID_TIMER_RE_CONNECT			(100)
 #define ID_TIMER_CHECK_DEVICE		(300)
 
@@ -51,6 +55,9 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
     m_bIsInvalidFirmware = false;
     m_bIsConnected = false;
     m_nTimerReconnect = 0;
+#ifdef Q_OS_WIN
+    m_nTimerCheckRunning = 0;
+#endif
 
     m_nFirstActiveTab = -1;
     m_nT3kDeviceCount = 0;
@@ -173,6 +180,10 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
     init();
 
     connect( QApplication::desktop(), &QDesktopWidget::resized, this, &T3kSoftlogicDlg::onResizedScreen );
+
+#ifdef Q_OS_WIN
+    m_nTimerCheckRunning = startTimer( 1000 );
+#endif
 }
 
 T3kSoftlogicDlg::~T3kSoftlogicDlg()
@@ -190,6 +201,18 @@ T3kSoftlogicDlg::~T3kSoftlogicDlg()
     {
         delete m_SelectDeviceDlg;
         m_SelectDeviceDlg = NULL;
+    }
+
+    if( m_nTimerReconnect )
+    {
+        killTimer( m_nTimerReconnect );
+        m_nTimerReconnect = 0;
+    }
+
+    if( m_nTimerCheckRunning )
+    {
+        killTimer( m_nTimerCheckRunning );
+        m_nTimerCheckRunning = 0;
     }
 }
 
@@ -821,12 +844,25 @@ void T3kSoftlogicDlg::onResizedScreen(int /*nScreen*/)
 {
 
 }
-
+#define T3K_SOFTLOGIC_DIALOG_CLASSNAME			"Habilience T3k Softlogic Dialog"
 void T3kSoftlogicDlg::timerEvent(QTimerEvent *evt)
 {
     if( evt->timerId() == m_nTimerReconnect )
     {
         openT3kHandle();
+    }
+#ifdef Q_OS_WIN
+    else if( evt->timerId() == m_nTimerCheckRunning )
+    {
+        HWND hWnd = ::FindWindowA( T3K_SOFTLOGIC_DIALOG_CLASSNAME, NULL );
+        if (hWnd)
+        {
+            ::SendMessage( hWnd, WM_CLOSE, 0, 0 );
+
+            ::ShowWindow((HWND)winId(), SW_SHOWNORMAL);
+            ::SetForegroundWindow((HWND)winId());
+        }
+#endif
     }
 //    else if ( evt->timerId() == ID_TIMER_CHECK_DEVICE )
 //    {

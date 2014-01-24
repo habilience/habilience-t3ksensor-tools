@@ -34,6 +34,7 @@ public:
 protected:
     // QT3kDeviceREventHandler::IListener
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
     // QLangManager::ILangChangeNotify
     virtual void onChangeLanguage();
@@ -60,6 +61,7 @@ protected:
 
     int                         m_nInputMode;
     int                         m_nSelectedProfileIndex;
+    int                         m_nChkUsbCfgMode;
 
 private:
     Ui::QNMouseProfileWidget *ui;

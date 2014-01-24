@@ -17,6 +17,16 @@ bool g_bScreenShotMode = false;
 #include <QVector>
 int main(int argc, char *argv[])
 {
+#ifdef Q_OS_WIN
+    HWND hWnd = ::FindWindowA( T3K_SOFTLOGIC_DIALOG_CLASSNAME, NULL );
+    if (hWnd)
+    {
+        ::ShowWindow(hWnd, SW_SHOWNORMAL);
+        ::SetForegroundWindow(hWnd);
+
+        return -1;
+    }
+#endif
     QtSingleApplication a(argc, argv);    
 
     int nActiveTab = -1;

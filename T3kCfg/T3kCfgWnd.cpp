@@ -246,7 +246,8 @@ T3kCfgWnd::~T3kCfgWnd()
 
     if( m_pT3kHandle )
     {
-        m_pT3kHandle->close();
+        if( m_pT3kHandle->isOpen() )
+            m_pT3kHandle->close();
         m_pT3kHandle = NULL;
     }
 
@@ -525,8 +526,11 @@ bool T3kCfgWnd::CreateTrayIcon()
     {
         CreateAction();
         m_pTrayMenu = new QMenu( this );
-        m_pTrayMenu->addActions( m_listProfilesQAction );
-        m_pTrayMenu->addSeparator();
+        if( QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b" )
+        {
+            m_pTrayMenu->addActions( m_listProfilesQAction );
+            m_pTrayMenu->addSeparator();
+        }
         m_pTrayMenu->addAction( m_pOpenQAction );
         m_pTrayMenu->addAction( m_pExitQAction );
         m_pTrayMenu->setFont( font() );
@@ -642,10 +646,12 @@ void T3kCfgWnd::ShowTrayMenu()
 void T3kCfgWnd::CreateAction()
 {
     QProfileLabel ProfileLabels;
-    for( int i=0; i<5; i++ )
+    bool bCheck = QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b";
+    int nCnt = bCheck ? 5 : 2;
+    for( int i=0; i<nCnt; i++ )
     {
         QAction* pAction = new QAction( ProfileLabels.GetLabel(i), this );
-        pAction->setCheckable( true );
+        if( bCheck ) pAction->setCheckable( true );
         m_listProfilesQAction.push_back( pAction );
     }
 
@@ -1048,7 +1054,8 @@ void T3kCfgWnd::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, u
     if( !winId() ) return;
     if( m_nSendCmdID >= 0 && m_nSendCmdID != id ) return;
     m_nSendCmdID = -1;
-    if( ui->SWMenu->currentIndex() == 0 && strstr(cmd, cstrInputMode) == cmd )
+    if( (ui->SWMenu->currentIndex() == 0 ||
+            ui->SWMenu->currentIndex() == 5) && strstr(cmd, cstrInputMode) == cmd )
     {
         char* pInputMode = NULL;
         pInputMode = (char*)strchr( cmd, ',' );
@@ -1066,52 +1073,7 @@ void T3kCfgWnd::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, u
                 m_nCurInputMode = nMode1;
         }
 
-        if( QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b" )
-        {
-            m_nSendCmdID = m_pT3kHandle->sendCommand( QString("%1?").arg(cstrMouseProfile), true );
-        }
-        else
-        {
-            int nProfile = 1;
-            switch( m_nCurInputMode )
-            {
-            case 0xFF:
-            case -1:
-                Q_ASSERT(false);
-                break;
-            case 0x02:
-                nProfile = 2;
-                break;
-            case 0x00:
-            default:
-                nProfile = 1;
-                break;
-            }
-
-            if( nProfile < NV_DEF_MOUSE_PROFILE_RANGE_START || nProfile > NV_DEF_MOUSE_PROFILE_RANGE_END+1 ) nProfile = NV_DEF_MOUSE_PROFILE;
-            int nCurProfile = nProfile-1;
-
-            SetTrayIconIamge( nCurProfile );
-            m_nProfileIndex = nCurProfile;
-#ifdef Q_OS_MAC
-            if( m_nCurInputMode >= 0 )
-            {
-                QString strCmd;
-                switch( m_nProfileIndex )
-                {
-                case 0:
-                    strCmd = QString("%1?").arg(cstrMouseProfile1);
-                    break;
-                case 1:
-                    strCmd = QString("%1?").arg(cstrMouseProfile2);
-                    break;
-                }
-
-                if( !strCmd.isEmpty() )
-                    m_nSendCmdID = m_pT3kHandle->sendCommand( strCmd, true );
-            }
-#endif
-        }
+        m_nSendCmdID = m_pT3kHandle->sendCommand( QString("%1?").arg(cstrMouseProfile), true );
     }
     else if ( strstr(cmd,  cstrMouseProfile) == cmd )
     {

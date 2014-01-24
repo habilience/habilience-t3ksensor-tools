@@ -53,6 +53,9 @@ protected:
     QString                 m_strLoadedModelPathName;
 
     int                     m_nTimerReconnect;
+#ifdef Q_OS_WIN
+    int                     m_nTimerCheckRunning;
+#endif
 
     QSelectDeviceWidget*          m_SelectDeviceDlg;
 

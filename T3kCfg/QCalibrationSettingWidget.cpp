@@ -44,16 +44,16 @@ QCalibrationSettingWidget::QCalibrationSettingWidget(QT3kDeviceR*& pHandle, QWid
     ui->BtnTouchSetting->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_SETTING.png" );
 
     // usbconfigmode
-    ui->BtnDoubleClkDec->setEnabled(false);
-    ui->BtnDoubleClkInc->setEnabled(false);
-    ui->EditDoubleClk->setEnabled(false);
-    ui->BtnPalmDec->setEnabled(false);
-    ui->BtnPalmInc->setEnabled(false);
-    ui->EditPalm->setEnabled(false);
-    ui->BtnTwoTouchDec->setEnabled(false);
-    ui->BtnTwoTouchInc->setEnabled(false);
-    ui->EditTwoTouch->setEnabled(false);
-    ui->BtnTouchSetting->setEnabled(false);
+//    ui->BtnDoubleClkDec->setEnabled(false);
+//    ui->BtnDoubleClkInc->setEnabled(false);
+//    ui->EditDoubleClk->setEnabled(false);
+//    ui->BtnPalmDec->setEnabled(false);
+//    ui->BtnPalmInc->setEnabled(false);
+//    ui->EditPalm->setEnabled(false);
+//    ui->BtnTwoTouchDec->setEnabled(false);
+//    ui->BtnTwoTouchInc->setEnabled(false);
+//    ui->EditTwoTouch->setEnabled(false);
+//    ui->BtnTouchSetting->setEnabled(false);
 
     ui->BtnAdvanced->setVisible( false );
 
@@ -133,7 +133,7 @@ void QCalibrationSettingWidget::RequestSensorData( bool bDefault )
     }
 
     m_RequestSensorData.AddItem( cstrUsbConfigMode, "?" );
-    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
+    m_nUsbConfigMode = m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
 
     m_RequestSensorData.Start( m_pT3kHandle );
 }
@@ -375,6 +375,15 @@ void QCalibrationSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, Response
         strMMVersion.trimmed();
         m_fMMVersion = 0.0f;
         m_fMMVersion = strMMVersion.left( strMMVersion.indexOf( ' ' ) ).toFloat();
+    }
+}
+
+void QCalibrationSettingWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int id, bool /*bFinal*/, const char */*cmd*/)
+{
+    if( m_nUsbConfigMode == id )
+    {
+        m_RequestSensorData.RemoveItem( cstrUsbConfigMode );
+        m_nUsbConfigMode = 0;
     }
 }
 

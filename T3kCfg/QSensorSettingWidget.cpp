@@ -60,10 +60,12 @@ QSensorSettingWidget::QSensorSettingWidget(QT3kDeviceR*& pHandle, QWidget *paren
     ui->BtnSoundCalibration->setVisible( false );
 
     // usbconfigmode
-    ui->CBLCalibrationKey->setEnabled(false);
-    ui->CBLCalibrationKeyPresses->setEnabled(false);
-    ui->CBLTouchEnableKey->setEnabled(false);
-    ui->CBLTouchKeyPresses->setEnabled(false);
+//    ui->CBLCalibrationKey->setEnabled(false);
+//    ui->CBLCalibrationKeyPresses->setEnabled(false);
+//    ui->CBLTouchEnableKey->setEnabled(false);
+//    ui->CBLTouchKeyPresses->setEnabled(false);
+
+    m_nChkUsbCfgMode = -1;
 
     Init();
 }
@@ -252,7 +254,7 @@ void QSensorSettingWidget::RequestGeneralSetting( bool bDefault )
     m_pT3kHandle->sendCommand( QString( "%1%2" ).arg(cstrBuzzer).arg(cQ), true );
 
     m_RequestSensorData.AddItem( cstrUsbConfigMode, "?" );
-    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
+    m_nChkUsbCfgMode = m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
 
     m_RequestSensorData.Start( m_pT3kHandle );
 }
@@ -264,6 +266,7 @@ void QSensorSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart 
     if( strstr(cmd, cstrUsbConfigMode) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrUsbConfigMode );
+        m_nChkUsbCfgMode = -1;
 
         int nMode = strtol(cmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
         switch( nMode )
@@ -356,6 +359,15 @@ void QSensorSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart 
         m_RequestSensorData.RemoveItem( cstrBuzzer );
 
         ParseBuzzerSetting( cmd );
+    }
+}
+
+void QSensorSettingWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int id, bool /*bFinal*/, const char */*cmd*/)
+{
+    if( m_nChkUsbCfgMode == id )
+    {
+        m_RequestSensorData.RemoveItem( cstrUsbConfigMode );
+        m_nChkUsbCfgMode = -1;
     }
 }
 

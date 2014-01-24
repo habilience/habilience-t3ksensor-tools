@@ -10,6 +10,10 @@
 #include <QDir>
 #include <QInputDialog>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 #define RETRY_CONNECTION_INTERVAL       (3000)
 #define WAIT_MODECHANGE_TIMEOUT         (60000)     // 60 secs
 
@@ -24,6 +28,9 @@ Dialog::Dialog(QWidget *parent) :
     m_TimerRequestTimeout = 0;
     m_TimerRequestInformation = 0;
     m_TimerWaitModeChange = 0;
+#ifdef Q_OS_WIN
+    m_TimerCheckRunning = 0;
+#endif
     m_nPacketId = -1;
     m_nCountDownTimeout = 0;
 
@@ -71,6 +78,10 @@ Dialog::Dialog(QWidget *parent) :
 
     loadFirmwareFile();
     updateFirmwareInformation();
+
+#ifdef Q_OS_WIN
+    m_TimerCheckRunning = startTimer( 1000 );
+#endif
 }
 
 Dialog::~Dialog()
@@ -88,6 +99,14 @@ Dialog::~Dialog()
     m_FirmwareInfo.clear();
 
     m_Packet.close();
+
+#ifdef Q_OS_WIN
+    if( m_TimerCheckRunning )
+    {
+        killTimer( m_TimerCheckRunning );
+        m_TimerCheckRunning = 0;
+    }
+#endif
     delete ui;
 }
 
@@ -413,6 +432,19 @@ void Dialog::timerEvent(QTimerEvent *evt)
                 QString strCAUTION = CAUTION + "(" + QString::number(m_nCountDownTimeout) + ")";
                 ui->labelMessage->setText(strCAUTION);
             }
+        }
+#ifdef Q_OS_WIN
+        else if(evt->timerId() == m_TimerCheckRunning )
+        {
+            HWND hWnd = ::FindWindowA( "Habilience T3k Downloader Dialog", NULL );
+            if (hWnd)
+            {
+                ::SendMessage( hWnd, WM_CLOSE, 0, 0 );
+
+                ::ShowWindow((HWND)winId(), SW_SHOWNORMAL);
+                ::SetForegroundWindow((HWND)winId());
+            }
+#endif
         }
     }
 }

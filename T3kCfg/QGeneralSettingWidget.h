@@ -31,11 +31,14 @@ protected:
     virtual void timerEvent(QTimerEvent *evt);
 
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 protected:
     int                         m_nInputModeV;
     int                         m_nInputMode;
     int                         m_nTimerAutoInputMode;
+
+    int                         m_nChkUsbCfgMode;
 
     QRequestHIDManager          m_RequestSensorData;
 

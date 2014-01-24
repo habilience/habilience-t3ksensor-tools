@@ -45,6 +45,7 @@ protected:
     virtual void keyPressEvent(QKeyEvent *evt);
 
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 protected:
     QProfileLabel           m_ProfileLabel;
@@ -56,6 +57,7 @@ protected:
     int                     m_nProfileIndexData;
 
     int                     m_nCurInputMode;
+    int                     m_nChkUsbCfgMode;
 
     QRequestHIDManager      m_RequestSensorData;
 

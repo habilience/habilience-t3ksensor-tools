@@ -96,7 +96,9 @@ int  T3K_CALLBACK QT3kDevice::_OnT3kReceiveRawDataHandler( T3K_HANDLE /*hDevice*
 {
     QT3kDevice* pThis = (QT3kDevice*)pContext;
 
-    return emit pThis->receiveRawData( pBuffer, nBytes );
+    int nRet = pThis->receiveRawData( pBuffer, nBytes );
+
+    return nRet;
 }
 
 void T3K_CALLBACK QT3kDevice::_OnT3kDownloadingFirmwareHandler( T3K_HANDLE /*hDevice*/, int bDownload, void * pContext )

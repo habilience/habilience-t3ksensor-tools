@@ -3,7 +3,6 @@
 #include "AppData.h"
 
 #include <QString>
-#include <QSharedMemory>
 
 AppData g_AppData;
 QMyApplication* g_pApp = NULL;
@@ -62,37 +61,6 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    typedef struct _ST_SHAREDMEMORY
-    {
-        char szDuplicateRuns;
-        char szRunningFE;
-    } ST_SHAREDMEMORY;
-
-    QSharedMemory CheckDuplicateRuns( "Habilience T3k Series Configure" );
-    CheckDuplicateRuns.create( sizeof(ST_SHAREDMEMORY) );
-    if( CheckDuplicateRuns.isAttached() || CheckDuplicateRuns.attach( QSharedMemory::ReadWrite ) )
-    {
-        CheckDuplicateRuns.lock();
-        void* pData = CheckDuplicateRuns.data();
-        ST_SHAREDMEMORY* stSM = (ST_SHAREDMEMORY*)pData;
-
-        stSM->szRunningFE = 1;
-        CheckDuplicateRuns.unlock();
-    }
-
     w.show();
-
-    int nExit = a.exec();
-    
-    if( CheckDuplicateRuns.isAttached() || CheckDuplicateRuns.attach( QSharedMemory::ReadWrite ) )
-    {
-        CheckDuplicateRuns.lock();
-        void* pData = CheckDuplicateRuns.data();
-        ST_SHAREDMEMORY* stSM = (ST_SHAREDMEMORY*)pData;
-
-        stSM->szRunningFE = 0;
-        CheckDuplicateRuns.unlock();
-    }
-
-    return nExit;
+    return a.exec();
 }

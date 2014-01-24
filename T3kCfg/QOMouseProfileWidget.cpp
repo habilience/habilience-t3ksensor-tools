@@ -51,16 +51,17 @@ QOMouseProfileWidget::QOMouseProfileWidget(QT3kDeviceR*& pHandle, QWidget *paren
     m_nProfileIndexData = -1;
 
     m_nCurInputMode = -1;
+    m_nChkUsbCfgMode = -1;
 
     m_bSetDefault = false;
 
     // usbconfigmode
-    ui->MouseSettingTableCtrl->setEnabled(false);
-    ui->Profile1->setEnabled(false);
-    ui->Profile2->setEnabled(false);
-    ui->Profile3->setEnabled(false);
-    ui->Profile4->setEnabled(false);
-    ui->Profile5->setEnabled(false);
+//    ui->MouseSettingTableCtrl->setEnabled(false);
+//    ui->Profile1->setEnabled(false);
+//    ui->Profile2->setEnabled(false);
+//    ui->Profile3->setEnabled(false);
+//    ui->Profile4->setEnabled(false);
+//    ui->Profile5->setEnabled(false);
 
     onChangeLanguage();
 }
@@ -120,6 +121,7 @@ void QOMouseProfileWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart 
     if( strstr(cmd, cstrUsbConfigMode) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrUsbConfigMode );
+        m_nChkUsbCfgMode = -1;
 
         int nMode = strtol(cmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
         switch( nMode )
@@ -317,6 +319,15 @@ void QOMouseProfileWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart 
         m_RequestSensorData.RemoveItem( cstrMouseProfile5 );
 }
 
+void QOMouseProfileWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int id, bool /*bFinal*/, const char */*cmd*/)
+{
+    if( m_nChkUsbCfgMode == id )
+    {
+        m_RequestSensorData.RemoveItem( cstrUsbConfigMode );
+        m_nChkUsbCfgMode = -1;
+    }
+}
+
 void QOMouseProfileWidget::RequestSensorData( bool bDefault )
 {
     if( !m_pT3kHandle ) return;
@@ -370,7 +381,7 @@ void QOMouseProfileWidget::RequestSensorData( bool bDefault )
     }
 
     m_RequestSensorData.AddItem( cstrUsbConfigMode, "?" );
-    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
+    m_nChkUsbCfgMode = m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
 
     int nRet = 3;
     do

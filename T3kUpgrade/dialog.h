@@ -42,6 +42,9 @@ private:
     int         m_TimerRequestTimeout;
     int         m_TimerRequestInformation;
     int         m_TimerWaitModeChange;
+#ifdef Q_OS_WIN
+    int         m_TimerCheckRunning;
+#endif
     int         m_nCountDownTimeout;
 
     enum QueryInfoStep {

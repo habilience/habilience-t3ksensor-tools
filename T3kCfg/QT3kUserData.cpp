@@ -4,7 +4,7 @@ class QT3kUserData_GC
 {
 public:
     QT3kUserData_GC() {}
-    ~QT3kUserData_GC() { if( QT3kUserData::m_pInstance ) delete QT3kUserData::m_pInstance; }
+    ~QT3kUserData_GC() { if( QT3kUserData::m_pInstance ) delete QT3kUserData::m_pInstance; QT3kUserData::m_pInstance = NULL; }
 };
 
 static QT3kUserData_GC T3kUD_GC;

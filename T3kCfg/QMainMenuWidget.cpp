@@ -177,6 +177,7 @@ void QMainMenuWidget::RequestInformation()
         m_pT3kHandle->sendCommand( QString("%1sub/%2?").arg(cstrCam2).arg(cstrAdminSettingTime), true );
     }
 
+    m_bDigitizerMode = false;
     m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), false );
 
     if( !m_bDigitizerMode )

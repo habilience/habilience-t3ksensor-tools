@@ -35,6 +35,9 @@ private:
     int     m_TimerReconnect;
     int     m_TimerRefreshInfo;
     int     m_TimerCheckDevice;
+#ifdef Q_OS_WIN
+    int     m_TimerCheckRunning;
+#endif
 
     QFont   m_fntErrorTitle;
     QFont   m_fntErrorDetail;

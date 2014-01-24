@@ -16,6 +16,7 @@ QNMouseProfileWidget::QNMouseProfileWidget(QT3kDeviceR*& pT3kHandle, QWidget *pa
     setFont( parent->font() );
 
     m_nInputMode = -1;
+    m_nChkUsbCfgMode = -1;
 
     ui->TabMouseSettingTable->setTabDirection( QColorTabWidget::TabDirectionHorzLeftTop, 28, 10 );
     QWidget* pWidget = &m_MouseProfileTableWidget;
@@ -79,21 +80,12 @@ void QNMouseProfileWidget::requestSensorData( bool bDefault )
             QString strQ = QString( cQ );
             QString strP1 = pInstance->GetDefaultData( cstrMouseProfile1, strQ );
             QString strP2 = pInstance->GetDefaultData( cstrMouseProfile2, strQ );
-            QString strP3 = pInstance->GetDefaultData( cstrMouseProfile3, strQ );
-            QString strP4 = pInstance->GetDefaultData( cstrMouseProfile4, strQ );
-            QString strP5 = pInstance->GetDefaultData( cstrMouseProfile5, strQ );
 
             m_RequestCmdManager.AddItem( cstrMouseProfile1, strP1 );
             m_RequestCmdManager.AddItem( cstrMouseProfile2, strP2 );
-            m_RequestCmdManager.AddItem( cstrMouseProfile3, strP3 );
-            m_RequestCmdManager.AddItem( cstrMouseProfile4, strP4 );
-            m_RequestCmdManager.AddItem( cstrMouseProfile5, strP5 );
 
             pT3kHandle->sendCommand( QString("%1%2").arg(cstrMouseProfile1).arg(strP1), true );
             pT3kHandle->sendCommand( QString("%1%2").arg(cstrMouseProfile2).arg(strP2), true );
-            pT3kHandle->sendCommand( QString("%1%2").arg(cstrMouseProfile3).arg(strP3), true );
-            pT3kHandle->sendCommand( QString("%1%2").arg(cstrMouseProfile4).arg(strP4), true );
-            pT3kHandle->sendCommand( QString("%1%2").arg(cstrMouseProfile5).arg(strP5), true );
         }
         else
         {
@@ -108,7 +100,7 @@ void QNMouseProfileWidget::requestSensorData( bool bDefault )
     }
 
     m_RequestCmdManager.AddItem( cstrUsbConfigMode, "?" );
-    pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
+    m_nChkUsbCfgMode = pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
 
     int nRet = 3;
     do
@@ -121,28 +113,20 @@ void QNMouseProfileWidget::requestSensorData( bool bDefault )
 
     if( !nRet ) m_RequestCmdManager.AddItem( cstrInputMode, "?" );
 
-    if( pInstance->IsLoaded() )
-    {
-        QString str = pInstance->GetDefaultData( cstrMouseProfile, QString(cQ) );
-        m_RequestCmdManager.AddItem( cstrMouseProfile, str );
-        pT3kHandle->sendCommand( QString("%1%2").arg(cstrMouseProfile).arg(str), true );
-    }
-    else
-    {
-        m_RequestCmdManager.AddItem( cstrMouseProfile, (QString)cQ );
-        pT3kHandle->sendCommand( QString("%1%2").arg(cstrMouseProfile).arg(cQ), true );
-    }
+    m_RequestCmdManager.AddItem( cstrMouseProfile, "?" );
+    pT3kHandle->sendCommand( QString("%1?").arg(cstrMouseProfile), true );
 
     m_RequestCmdManager.Start( pT3kHandle );
 }
 
 void QNMouseProfileWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
-    if( !winId() ) return;
+    if( !isVisible() ) return;
 
     if( strstr(cmd, cstrUsbConfigMode) == cmd )
     {
         m_RequestCmdManager.RemoveItem( cstrUsbConfigMode );
+        m_nChkUsbCfgMode = -1;
 
         int nMode = strtol(cmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
         switch( nMode )
@@ -216,6 +200,15 @@ void QNMouseProfileWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart 
         m_RequestCmdManager.RemoveItem( cstrMouseProfile2 );
 }
 
+void QNMouseProfileWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int id, bool /*bFinal*/, const char */*cmd*/)
+{
+    if( m_nChkUsbCfgMode == id )
+    {
+        m_RequestCmdManager.RemoveItem( cstrUsbConfigMode );
+        m_nChkUsbCfgMode = -1;
+    }
+}
+
 void QNMouseProfileWidget::onChangeLanguage()
 {
     if( !winId() ) return;
@@ -255,7 +248,8 @@ void QNMouseProfileWidget::keyPressEvent(QKeyEvent *evt)
 void QNMouseProfileWidget::onTabSelChanged(QColorTabWidget* /*pTabWidget*/, int tabIndex)
 {
     m_MouseProfileTableWidget.setProfileIndex(tabIndex);
-    sensorRefresh(true);
+    if( isVisible() )
+        sensorRefresh(true);
 }
 
 void QNMouseProfileWidget::onSendCommand(QString strCmd, bool bAsync, unsigned short nTimeout)

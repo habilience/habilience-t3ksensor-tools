@@ -35,7 +35,10 @@ protected:
     static void deleteInstance()
     {
         if (m_pSingleton)
+        {
             delete m_pSingleton;
+            m_pSingleton = NULL;
+        }
     }
 };
 

@@ -27,6 +27,8 @@ QGeneralSettingWidget::QGeneralSettingWidget(QT3kDeviceR*& pHandle, QWidget *par
     m_nInputMode = 0;
     m_nTimerAutoInputMode = 0;
 
+    m_nChkUsbCfgMode = -1;
+
     m_nDisplayOrientation = -1;
 
     ChkInputModeAutoSelect->setChecked( false );
@@ -54,12 +56,12 @@ QGeneralSettingWidget::QGeneralSettingWidget(QT3kDeviceR*& pHandle, QWidget *par
     CBLLanguage->setCurrentIndex( nSelIdx );
 
     // usbconfigmode
-    TitleDisplayOrientation->setVisible( false );
-    GBOrientation->setVisible( false );
-    RBtnLandscape->setVisible( false );
-    RBtnPortrait->setVisible( false );
-    RBtnLandscapeF->setVisible( false );
-    RBtnPortraitF->setVisible( false );
+//    TitleDisplayOrientation->setVisible( false );
+//    GBOrientation->setVisible( false );
+//    RBtnLandscape->setVisible( false );
+//    RBtnPortrait->setVisible( false );
+//    RBtnLandscapeF->setVisible( false );
+//    RBtnPortraitF->setVisible( false );
 
     onChangeLanguage();
     GBInputMode->setTitle( "                                        " );
@@ -215,7 +217,7 @@ void QGeneralSettingWidget::RequestGeneralSetting( bool bDefault )
     }
 
     m_RequestSensorData.AddItem( cstrUsbConfigMode, "?" );
-    m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
+    m_nChkUsbCfgMode = m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
 }
 
 void QGeneralSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
@@ -225,6 +227,7 @@ void QGeneralSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
     if( strstr(cmd, cstrUsbConfigMode) == cmd )
     {
         m_RequestSensorData.RemoveItem( cstrUsbConfigMode );
+        m_nChkUsbCfgMode = -1;
 
         int nMode = strtol(cmd + sizeof(cstrUsbConfigMode) - 1, NULL, 16);
         switch( nMode )
@@ -342,6 +345,15 @@ void QGeneralSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
         m_nDisplayOrientation = strtol(cmd + sizeof(cstrDisplayOrientation) - 1, NULL, 10);
 
         ChangeRadioButtonOrientation( m_nDisplayOrientation );
+    }
+}
+
+void QGeneralSettingWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int id, bool /*bFinal*/, const char */*cmd*/)
+{
+    if( m_nChkUsbCfgMode == id )
+    {
+        m_RequestSensorData.RemoveItem( cstrUsbConfigMode );
+        m_nChkUsbCfgMode = -1;
     }
 }
 

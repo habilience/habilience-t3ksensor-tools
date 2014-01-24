@@ -6,6 +6,7 @@
 #include <QCloseEvent>
 #include <QKeyEvent>
 #include <QPainter>
+
 #include "QUtils.h"
 #include "QGUIUtils.h"
 #include "QInitDataIni.h"
@@ -54,6 +55,9 @@ Dialog::Dialog(QWidget *parent) :
     m_TimerReconnect = 0;
     m_TimerRefreshInfo = 0;
     m_TimerCheckDevice = 0;
+#ifdef Q_OS_WIN
+    m_TimerCheckRunning = 0;
+#endif
 
     m_pDlgSelectDevice = NULL;
 
@@ -139,6 +143,10 @@ Dialog::Dialog(QWidget *parent) :
     ui->btnSideview->installEventFilter(&m_EventRedirect);
     ui->btnTouchMark->installEventFilter(&m_EventRedirect);
     ui->btnTouchSetting->installEventFilter(&m_EventRedirect);
+
+#ifdef Q_OS_WIN
+    m_TimerCheckRunning = startTimer( 1000 );
+#endif
 }
 
 Dialog::~Dialog()
@@ -172,6 +180,12 @@ void Dialog::onDestroy()
     {
         killTimer(m_TimerCheckDevice);
         m_TimerCheckDevice = 0;
+    }
+
+    if (m_TimerCheckRunning)
+    {
+        killTimer(m_TimerCheckRunning);
+        m_TimerCheckRunning = 0;
     }
 
     QT3kDevice* pDevice = QT3kDevice::instance();
@@ -593,10 +607,10 @@ void Dialog::paintEvent(QPaintEvent */*evt*/)
 
         if (!strWarningDetail.isEmpty())
         {
-            rcText = rcBody;
+            //rcText = rcBody;
             p.setFont(m_fntErrorDetail);
 
-            rcText.adjust( nTitleOffsetX, nTitleOffsetY, nTitleOffsetX, nTitleOffsetY );
+            rcText.adjust( nTitleOffsetX, nTitleOffsetY*2, nTitleOffsetX, nTitleOffsetY );
 
             p.drawText( rcText, Qt::AlignLeft|Qt::AlignVCenter, strWarningDetail );
         }
@@ -638,6 +652,19 @@ void Dialog::timerEvent(QTimerEvent *evt)
         {
             checkDeviceStatus();
         }
+#ifdef Q_OS_WIN
+        else if (evt->timerId() == m_TimerCheckRunning)
+        {
+            HWND hWnd = ::FindWindowA( "Habilience T3000 Factory-Edition Dialog", NULL );
+            if (hWnd)
+            {
+                ::SendMessage( hWnd, WM_CLOSE, 0, 0 );
+
+                ::ShowWindow((HWND)winId(), SW_SHOWNORMAL);
+                ::SetForegroundWindow((HWND)winId());
+            }
+        }
+#endif
     }
 }
 
@@ -690,6 +717,7 @@ void Dialog::onDeviceConnected()
         ui->chkSafeMode->setVisible(false);
         ui->layoutMid->removeWidget(ui->chkSafeMode);
         ui->layoutMid->removeItem(ui->spacerBody);
+        ui->layoutMid->removeItem(ui->verticalSpacer);
     }
 
     setInstantMode(T3K_HID_MODE_COMMAND);
@@ -737,6 +765,7 @@ void Dialog::onDeviceDisconnected()
         return;
 
     m_bIsConnected = false;
+    m_bInvalidFirmwareVersion = false;
 
     closeAllSubMenuDialogs();
     if (m_pDlgRemoteTouchMark)
@@ -854,6 +883,8 @@ void Dialog::TPDP_OnDownloadingFirmware( T3K_DEVICE_INFO /*devInfo*/, bool bIsDo
 
     if (bIsDownload)
     {
+        m_bInvalidFirmwareVersion = false;
+
         closeAllSubMenuDialogs();
         if (m_pDlgRemoteTouchMark)
         {
@@ -909,6 +940,8 @@ void Dialog::TPDP_OnDownloadingFirmware( T3K_DEVICE_INFO /*devInfo*/, bool bIsDo
             ui->layoutMid->removeWidget(ui->chkSafeMode);
             ui->layoutMid->removeItem(ui->spacerBody);
         }
+
+        ui->layoutMid->removeItem( ui->verticalSpacer );
 
         ui->btnReset->setEnabled(true);
         ui->btnTouchMark->setEnabled(true);
@@ -994,6 +1027,8 @@ void Dialog::updateVersionInformation()
 
             ui->btnReset->setEnabled(false);
             ui->btnTouchMark->setEnabled(false);
+
+            ui->layoutMid->addItem(ui->verticalSpacer);
         }
         else
         {

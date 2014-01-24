@@ -41,6 +41,7 @@ protected:
     virtual void keyPressEvent(QKeyEvent *evt);
 
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 private:
     Ui::QSensorSettingWidget *ui;
@@ -51,6 +52,8 @@ private:
     QString                     m_strCaptionOFF;
 
     QRequestHIDManager          m_RequestSensorData;
+
+    int                         m_nChkUsbCfgMode;
 
 signals:
     void ByPassKeyPressEvent(QKeyEvent *evt);
