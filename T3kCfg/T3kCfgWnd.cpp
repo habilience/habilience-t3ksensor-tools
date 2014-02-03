@@ -526,7 +526,7 @@ bool T3kCfgWnd::CreateTrayIcon()
     {
         CreateAction();
         m_pTrayMenu = new QMenu( this );
-        if( QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b" )
+        if( QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a" )
         {
             m_pTrayMenu->addActions( m_listProfilesQAction );
             m_pTrayMenu->addSeparator();
@@ -646,7 +646,7 @@ void T3kCfgWnd::ShowTrayMenu()
 void T3kCfgWnd::CreateAction()
 {
     QProfileLabel ProfileLabels;
-    bool bCheck = QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b";
+    bool bCheck = QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a";
     int nCnt = bCheck ? 5 : 2;
     for( int i=0; i<nCnt; i++ )
     {

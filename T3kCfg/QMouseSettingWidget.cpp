@@ -26,7 +26,7 @@ QMouseSettingWidget::~QMouseSettingWidget()
 
 void QMouseSettingWidget::SetDefault()
 {
-    if( QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b" )
+    if( QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a" )
         m_pOldMouseProfile->SetDefault();
     else
         m_pNewMouseProfile->setDefault();
@@ -34,7 +34,7 @@ void QMouseSettingWidget::SetDefault()
 
 void QMouseSettingWidget::Refresh()
 {
-    if( QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b" )
+    if( QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a" )
         m_pOldMouseProfile->Refresh();
     else
         m_pNewMouseProfile->refresh();
@@ -47,7 +47,7 @@ void QMouseSettingWidget::ReplaceLabelName(QCheckableButton *pBtn)
 
 void QMouseSettingWidget::showEvent(QShowEvent *evt)
 {
-    if( QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b" )
+    if( QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a" )
     {
         m_pOldMouseProfile->show();
         m_pNewMouseProfile->hide();

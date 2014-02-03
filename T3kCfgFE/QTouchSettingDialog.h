@@ -74,6 +74,7 @@ private slots:
 
     void onEditModified(QBorderStyleEdit* pEdit, int nValue, double dValue);
     void onCmdAsyncMngrFinished(bool, int);
+    void onModifiedProfile();
 
     void on_btnClose_clicked();
     void on_btnReset_clicked();

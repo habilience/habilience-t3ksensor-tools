@@ -1792,8 +1792,6 @@ bool Dialog::isExistSensorDefaultValue( const QString& strSensorCmd )
         cstrSimpleDetection,
         cstrInvertDetection,
         cstrFactorialScreenMargin,
-        cstrMouseProfile1,
-        cstrMouseProfile2,
         cstrMouseProfile3
     };
 

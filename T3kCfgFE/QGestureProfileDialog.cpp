@@ -54,6 +54,8 @@ QGestureProfileDialog::QGestureProfileDialog(QWidget *parent) :
     sensorRefresh();
 
     ui->btnClose->setFocus();
+
+    ui->btnSave->setVisible( false );
 }
 
 QGestureProfileDialog::~QGestureProfileDialog()
@@ -95,6 +97,17 @@ void QGestureProfileDialog::paintEvent(QPaintEvent *)
 
 void QGestureProfileDialog::sensorReset()
 {
+    QLangRes& res = QLangManager::getResource();
+    QString strPrompt = res.getResString( MAIN_TAG, "TEXT_WARNING_RESET_ALL_VALUES" );
+    QString strTitle = res.getResString( MAIN_TAG, "TEXT_WARNING_MESSAGE_TITLE" );
+    int nRet = showMessageBox( this,
+        strPrompt,
+        strTitle,
+        QMessageBox::Warning, QMessageBox::Yes|QMessageBox::No, QMessageBox::No );
+
+    if (nRet != QMessageBox::Yes)
+        return;
+
     if ( ui->cmdAsyncMngr->isStarted() )
     {
         ui->cmdAsyncMngr->stop();
@@ -288,6 +301,7 @@ void QGestureProfileDialog::on_btnClose_clicked()
 
 void QGestureProfileDialog::onUpdateProfile(int nProfileIndex, const QGestureMappingTable::CellInfo &ci, ushort nProfileFlags)
 {
+    bool bModified = false;
     switch (ci.keyType)
     {
     default:
@@ -295,27 +309,30 @@ void QGestureProfileDialog::onUpdateProfile(int nProfileIndex, const QGestureMap
     case QGestureMappingTable::KeyTypeEnable:
         m_editActionEnableDialog.setProfileInfo( nProfileIndex, ci.cKey, ci.wKeyValue[0], nProfileFlags );
         if( m_editActionEnableDialog.exec() == QDialog::Accepted )
-            m_bModified = true;
+            bModified = true;
         break;
     case QGestureMappingTable::KeyType1Key:
         m_editActionKey1Dialog.setProfileInfo( nProfileIndex, ci.cKey, ci.wKeyValue[0] );
         if( m_editActionKey1Dialog.exec() == QDialog::Accepted )
-            m_bModified = true;
+            bModified = true;
         break;
     case QGestureMappingTable::KeyType2Way:
         m_editActionKey2WayDialog.setProfileInfo( nProfileIndex, ci.cKey, ci.wKeyValue[0], ci.wKeyValue[1] );
         if( m_editActionKey2WayDialog.exec() == QDialog::Accepted )
-            m_bModified = true;
+            bModified = true;
         break;
     case QGestureMappingTable::KeyType4Way:
         m_editActionKey4WayDialog.setProfileInfo( nProfileIndex, ci.cKey, ci.wKeyValue[0], ci.wKeyValue[1], ci.wKeyValue[2], ci.wKeyValue[3] );
         if( m_editActionKey4WayDialog.exec() == QDialog::Accepted )
-            m_bModified = true;
+            bModified = true;
         break;
     }
+
+    if( bModified )
+        emit modifiedProfile();
 }
 
 void QGestureProfileDialog::onModifiedExtProperty()
 {
-    m_bModified = true;
+    emit modifiedProfile();
 }

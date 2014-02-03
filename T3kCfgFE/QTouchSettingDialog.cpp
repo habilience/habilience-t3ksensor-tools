@@ -580,6 +580,11 @@ void QTouchSettingDialog::onCmdAsyncMngrFinished(bool, int)
     setViewMode(true);
 }
 
+void QTouchSettingDialog::onModifiedProfile()
+{
+    m_bIsModified = true;
+}
+
 void QTouchSettingDialog::sensorReset()
 {
     resetDataWithInitData( cstrAreaC );
@@ -594,8 +599,8 @@ void QTouchSettingDialog::sensorReset()
     resetDataWithInitData( cstrInputMode, false );
     resetDataWithInitData( cstrUsbConfigMode, false );
 
-    resetDataWithInitData( cstrMouseProfile1, false );
-    resetDataWithInitData( cstrMouseProfile2, false );
+    resetDataWithInitData( cstrMouseProfile1 );
+    resetDataWithInitData( cstrMouseProfile2 );
 }
 
 void QTouchSettingDialog::sensorLoadFactoryDefault()
@@ -623,6 +628,11 @@ void QTouchSettingDialog::sensorLoadFactoryDefault()
     strSensorCmd = QString(cstrInputMode) + "?";
     ui->cmdAsyncMngr->insertCommand( strSensorCmd );
     strSensorCmd = QString(cstrUsbConfigMode) + "?";
+    ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+
+    strSensorCmd = QString(cstrMouseProfile1) + "*";
+    ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+    strSensorCmd = QString(cstrMouseProfile2) + "*";
     ui->cmdAsyncMngr->insertCommand( strSensorCmd );
 }
 
@@ -679,6 +689,11 @@ void QTouchSettingDialog::sensorWriteToFactoryDefault()
     strSensorCmd = QString(cstrInputMode) + "?";
     ui->cmdAsyncMngr->insertCommand( strSensorCmd );
     strSensorCmd = QString(cstrUsbConfigMode) + "?";
+    ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+
+    strSensorCmd = QString(cstrMouseProfile1) + "!";
+    ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+    strSensorCmd = QString(cstrMouseProfile2) + "!";
     ui->cmdAsyncMngr->insertCommand( strSensorCmd );
 }
 
@@ -1056,6 +1071,7 @@ void QTouchSettingDialog::on_btnGestureProfile_clicked()
 {
     setViewMode(false);
     QGestureProfileDialog gestureProfileDlg(this);
+    connect( &gestureProfileDlg, &QGestureProfileDialog::modifiedProfile, this, &QTouchSettingDialog::onModifiedProfile, Qt::QueuedConnection );
     gestureProfileDlg.exec();
     setViewMode(true);
 }

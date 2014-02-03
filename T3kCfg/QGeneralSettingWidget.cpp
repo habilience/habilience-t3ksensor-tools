@@ -325,11 +325,6 @@ void QGeneralSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
         {
         case 0:
             RBMouse->setChecked( true );
-            // windnsoul
-//            if( (QT3kUserData::GetInstance()->getFirmwareVersionStr() >= "2.8b") && chkTrayIcon->isChecked() )
-//            {
-
-//            }
             break;
         case 2:
             RBMultiTouchWin7->setChecked( true );
@@ -448,7 +443,7 @@ void QGeneralSettingWidget::on_RBMouse_clicked()
 
     m_pT3kHandle->sendCommand( QString("%10x00").arg(cstrInputMode), true );
 
-    if( (QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b") && chkTrayIcon->isChecked() )
+    if( (QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a") && chkTrayIcon->isChecked() )
     {
         m_pT3kHandle->sendCommand( QString("%1?").arg(cstrMouseProfile), true );
     }
@@ -516,7 +511,7 @@ void QGeneralSettingWidget::on_RBMultiTouchWin7_clicked()
     QString str;
     m_pT3kHandle->sendCommand( str.sprintf( "%s0x%02x", cstrInputMode, 0x02 ), true );
 
-    if( (QT3kUserData::GetInstance()->getFirmwareVersionStr() < "2.8b") && chkTrayIcon->isChecked() )
+    if( (QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a") && chkTrayIcon->isChecked() )
     {
         m_pT3kHandle->sendCommand( QString("%1?").arg(cstrMouseProfile), true );
     }

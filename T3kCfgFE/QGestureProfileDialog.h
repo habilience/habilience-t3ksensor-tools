@@ -57,6 +57,9 @@ private:
     Ui::QGestureProfileDialog *ui;
     QGestureMappingTable    m_widgetGestureMappingTable;
 
+signals:
+    void modifiedProfile();
+
 public slots:
     void onUpdateProfile(int nProfileIndex, const QGestureMappingTable::CellInfo& ci, ushort nProfileFlags);
     void onModifiedExtProperty();
