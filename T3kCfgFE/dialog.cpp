@@ -182,11 +182,13 @@ void Dialog::onDestroy()
         m_TimerCheckDevice = 0;
     }
 
+#ifdef Q_OS_WIN
     if (m_TimerCheckRunning)
     {
         killTimer(m_TimerCheckRunning);
         m_TimerCheckRunning = 0;
     }
+#endif
 
     QT3kDevice* pDevice = QT3kDevice::instance();
     if (pDevice->isOpen())

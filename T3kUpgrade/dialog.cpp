@@ -444,8 +444,8 @@ void Dialog::timerEvent(QTimerEvent *evt)
                 ::ShowWindow((HWND)winId(), SW_SHOWNORMAL);
                 ::SetForegroundWindow((HWND)winId());
             }
-#endif
         }
+#endif
     }
 }
 

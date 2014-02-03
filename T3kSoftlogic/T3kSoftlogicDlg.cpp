@@ -209,11 +209,13 @@ T3kSoftlogicDlg::~T3kSoftlogicDlg()
         m_nTimerReconnect = 0;
     }
 
+#ifdef Q_OS_WIN
     if( m_nTimerCheckRunning )
     {
         killTimer( m_nTimerCheckRunning );
         m_nTimerCheckRunning = 0;
     }
+#endif
 }
 
 void T3kSoftlogicDlg::onHandleMessage(const QString &msg)
@@ -862,8 +864,8 @@ void T3kSoftlogicDlg::timerEvent(QTimerEvent *evt)
             ::ShowWindow((HWND)winId(), SW_SHOWNORMAL);
             ::SetForegroundWindow((HWND)winId());
         }
-#endif
     }
+#endif
 //    else if ( evt->timerId() == ID_TIMER_CHECK_DEVICE )
 //    {
 //        killTimer( ID_TIMER_CHECK_DEVICE );
