@@ -1853,17 +1853,17 @@ void QBentAdjustmentDialog::onAdjustmentFinish()
     }
 
 //#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
-//    QString strPath = QCoreApplication::applicationDirPath();
-//    strPath = rstrip(strPath, "/\\");
-//    strPath += QDir::separator();
-//    strPath += "bent_adjustment.txt";
-//#else
+#if defined(Q_OS_LINUX)
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
     QString strPath = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator();
     makeDirectory(strPath);
+#else
+    QString strPath = QCoreApplication::applicationDirPath();
+    strPath = rstrip(strPath, "/\\");
+    strPath += QDir::separator();
+#endif
     strPath += "bent_adjustment.txt";
-//#endif
 
     QFile file(strPath);
     if (file.open(QIODevice::WriteOnly))

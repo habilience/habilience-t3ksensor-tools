@@ -76,8 +76,16 @@ int main(int argc, char *argv[])
         void* pData = CheckDuplicateRuns.data();
         ST_SHAREDMEMORY* stSM = (ST_SHAREDMEMORY*)pData;
 
-        stSM->szRunningFE = 1;
+        bool bExit = false;
+        char szRunningFE = stSM->szRunningFE;
+        if( szRunningFE == 1 )
+            bExit = true;
+        else
+            szRunningFE = 1;
         CheckDuplicateRuns.unlock();
+
+        if( bExit )
+            return 0;
     }
 
     w.show();

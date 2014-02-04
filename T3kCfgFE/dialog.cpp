@@ -2122,6 +2122,33 @@ bool Dialog::onKeyPress(QKeyEvent *evt)
     {
         return true;
     }
+
+    return false;
+}
+
+bool Dialog::onKeyRelease(QKeyEvent *evt)
+{
+    if (evt->key() == Qt::Key_1)
+    {
+        ui->btnSideview->click();
+        return true;
+    }
+    else if (evt->key() == Qt::Key_2)
+    {
+        ui->btnDetection->click();
+        return true;
+    }
+    else if (evt->key() == Qt::Key_3)
+    {
+        ui->btnBentAdjustment->click();
+        return true;
+    }
+    else if (evt->key() == Qt::Key_4)
+    {
+        ui->btnTouchSetting->click();
+        return true;
+    }
+
     return false;
 }
 

@@ -23,14 +23,15 @@ void QSensorInitDataCfg::Enumerator::enumCfgData()
     m_aryCfgData.clear();
 
 //#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
-//    QString strDir = QCoreApplication::applicationDirPath();
-//    strDir = rstrip(strDir, "/\\");
-//    QString strPath = strDir + QDir::separator() +"SensorData" + QDir::separator();
-//#else
+#if defined(Q_OS_LINUX)
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     QString strDir = rstrip( strDocuments, "/\\" );
     QString strPath = strDir + QDir::separator() + "T3kCfgFE" + QDir::separator() + "SensorData" + QDir::separator();
-//#endif
+#else
+    QString strDir = QCoreApplication::applicationDirPath();
+    strDir = rstrip(strDir, "/\\");
+    QString strPath = strDir + QDir::separator() +"SensorData" + QDir::separator();
+#endif
 
     QDir currentDir(strPath);
     QStringList files;
@@ -155,13 +156,14 @@ bool QSensorInitDataCfg::load(const QString &strDataFileName )
     m_strFileName = "";
 
 //#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
-//    QString strDir = QCoreApplication::applicationDirPath();
-//    strDir = rstrip(strDir, "/\\");
-//#else
+#if defined(Q_OS_LINUX)
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
     QString strDir = strDocuments + QDir::separator() + "T3kCfgFE";
-//#endif
+#else
+    QString strDir = QCoreApplication::applicationDirPath();
+    strDir = rstrip(strDir, "/\\");
+#endif
 
     QString strSoftkeyPath;
     QString strFile = strDir + QDir::separator() + "SensorData" + QDir::separator();
@@ -225,17 +227,17 @@ bool QSensorInitDataCfg::load(const QString &strDataFileName )
 bool QSensorInitDataCfg::save(const QString &strDataFileName )
 {
 //#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
-//    QString strDir = QCoreApplication::applicationDirPath();
-//    strDir = rstrip(strDir, "/\\");
-
-//    QString strFile = strDir + QDir::separator() + "SensorData" + QDir::separator();
-//    makeDirectory( strFile );
-//#else
+#if defined(Q_OS_LINUX)
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
     QString strFile = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator() + "SensorData" + QDir::separator();
     makeDirectory( strFile );
-//#endif
+#else
+    QString strDir = QCoreApplication::applicationDirPath();
+    strDir = rstrip(strDir, "/\\");
+    QString strFile = strDir + QDir::separator() + "SensorData" + QDir::separator();
+    makeDirectory( strFile );
+#endif
     strFile += strDataFileName;
     strFile += ".cfg";
 

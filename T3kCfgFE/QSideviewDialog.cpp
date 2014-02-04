@@ -660,6 +660,60 @@ bool QSideviewDialog::onKeyRelease(QKeyEvent *evt)
             return true;
         }
     }
+    else if (evt->key() == Qt::Key_Left)
+    {
+        if (m_TimerPreviewCountDown && (m_nPreviewCountDown < (PREVIEW_COUNT_DOWN-1)) )
+        {
+            stopPreviewCountDown();
+        }
+
+        QPushButton* pBtns[] = {
+            ui->btnCam1,
+            ui->btnCam2,
+            ui->btnCam1_1,
+            ui->btnCam2_1
+        };
+
+        int nIdx = m_nCurrentCameraIndex -2; // - 1 - 1
+        if( nIdx >= 0 )
+            pBtns[nIdx]->click();
+    }
+    else if (evt->key() == Qt::Key_Right)
+    {
+        if (m_TimerPreviewCountDown && (m_nPreviewCountDown < (PREVIEW_COUNT_DOWN-1)) )
+        {
+            stopPreviewCountDown();
+        }
+
+        QPushButton* pBtns[] = {
+            ui->btnCam1,
+            ui->btnCam2,
+            ui->btnCam1_1,
+            ui->btnCam2_1
+        };
+
+        int nIdx = m_nCurrentCameraIndex; // - 1 + 1
+        if( nIdx < g_AppData.bIsSubCameraExist ? 4 : 2 )
+            pBtns[nIdx]->click();
+    }
+    else if (evt->key() == Qt::Key_Up)
+    {
+        if (m_TimerPreviewCountDown && (m_nPreviewCountDown < (PREVIEW_COUNT_DOWN-1)) )
+        {
+            stopPreviewCountDown();
+        }
+
+        on_btnDetectLineUp_clicked();
+    }
+    else if (evt->key() == Qt::Key_Down)
+    {
+        if (m_TimerPreviewCountDown && (m_nPreviewCountDown < (PREVIEW_COUNT_DOWN-1)) )
+        {
+            stopPreviewCountDown();
+        }
+
+        on_btnDetectLineDn_clicked();
+    }
     return false;
 }
 

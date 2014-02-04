@@ -1,9 +1,7 @@
 #ifndef CONF_H
 #define CONF_H
 
-#ifndef Q_OS_WIN
-#define CREATE_FILE_TO_DOCUMENTS_LOCATION
-#endif
+//#define CREATE_FILE_TO_DOCUMENTS_LOCATION
 
 //#define SUPPORT_RBUTTON_SHORTCUT
 

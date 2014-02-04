@@ -118,6 +118,7 @@ protected:
     // override QEventRedirection::IEventListener
     virtual void onRButtonClicked();
     virtual bool onKeyPress(QKeyEvent *evt);
+    virtual bool onKeyRelease(QKeyEvent *evt);
     virtual bool onMouseWheel(QWheelEvent *evt);
 
     void focusChangeToNextShortcutWidget(bool bDirection);
