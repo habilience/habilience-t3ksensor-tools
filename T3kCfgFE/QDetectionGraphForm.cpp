@@ -402,6 +402,8 @@ void QDetectionGraphForm::setDisplayCrackInfo( bool bDisplay )
 
 void QDetectionGraphForm::clear()
 {
+    setFocus();
+
     ui->txtEdtThreshold->setText("");
     ui->txtEdtGain->setText("");
     ui->txtEdtOffset->setText("");
