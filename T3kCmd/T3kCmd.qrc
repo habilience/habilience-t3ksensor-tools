@@ -3,5 +3,6 @@
         <file>resources/T3kCmd.ico</file>
         <file>resources/T3kCmd.png</file>
         <file>resources/license.txt</file>
+        <file>resources/51-t3ksensors.rules</file>
     </qresource>
 </RCC>

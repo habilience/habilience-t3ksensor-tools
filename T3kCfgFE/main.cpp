@@ -13,8 +13,35 @@ QMyApplication* g_pApp = NULL;
 #include "QShowMessageBox.h"
 #endif
 
+#ifdef Q_OS_LINUX
+#include <QFile>
+#include <QProcess>
+#endif
+
 int main(int argc, char *argv[])
 {
+#ifdef Q_OS_LINUX
+    bool bCreateRules = false;
+    if( !QFile::exists( "/etc/udev/rules.d/51-t3ksensors.rules" ) )
+    {
+        QFile fResource( ":/T3kCfgFERes/resources/51-t3ksensors.rules" );
+        if( fResource.open( QIODevice::ReadOnly ) )
+        {
+            QFile fSaveFile( "/etc/udev/rules.d/51-t3ksensors.rules" );
+            if( fSaveFile.open( QIODevice::WriteOnly ) )
+            {
+                fSaveFile.write( fResource.readAll() );
+                fSaveFile.close();
+
+                bCreateRules = true;
+            }
+
+            fResource.close();
+        }
+
+        QProcess::startDetached( "/etc/init.d/udev", QStringList("restart") );
+    }
+#endif
 #ifdef Q_OS_WIN
     HWND hWnd = ::FindWindowA( "Habilience T3000 Factory-Edition Dialog", NULL );
     if (hWnd)
@@ -101,6 +128,11 @@ int main(int argc, char *argv[])
         stSM->szRunningFE = 0;
         CheckDuplicateRuns.unlock();
     }
+
+#ifdef Q_OS_LINUX
+    if( QFile::exists( "/etc/udev/rules.d/51-t3ksensors.rules" ) && bCreateRules )
+        QFile::remove( "/etc/udev/rules.d/51-t3ksensors.rules" );
+#endif
 
     return nExit;
 }

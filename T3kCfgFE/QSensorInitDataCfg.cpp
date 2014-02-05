@@ -22,8 +22,7 @@ void QSensorInitDataCfg::Enumerator::enumCfgData()
 {
     m_aryCfgData.clear();
 
-//#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
-#if defined(Q_OS_LINUX)
+#ifdef CREATE_FILE_TO_DOCUMENTS_LOCATION
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     QString strDir = rstrip( strDocuments, "/\\" );
     QString strPath = strDir + QDir::separator() + "T3kCfgFE" + QDir::separator() + "SensorData" + QDir::separator();
@@ -155,8 +154,7 @@ bool QSensorInitDataCfg::load(const QString &strDataFileName )
     m_strPrevFileName = "";
     m_strFileName = "";
 
-//#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
-#if defined(Q_OS_LINUX)
+#ifdef CREATE_FILE_TO_DOCUMENTS_LOCATION
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
     QString strDir = strDocuments + QDir::separator() + "T3kCfgFE";
@@ -226,8 +224,7 @@ bool QSensorInitDataCfg::load(const QString &strDataFileName )
 
 bool QSensorInitDataCfg::save(const QString &strDataFileName )
 {
-//#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
-#if defined(Q_OS_LINUX)
+#ifdef CREATE_FILE_TO_DOCUMENTS_LOCATION
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
     QString strFile = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator() + "SensorData" + QDir::separator();
@@ -244,6 +241,8 @@ bool QSensorInitDataCfg::save(const QString &strDataFileName )
     QFile file(strFile);
     if (!file.open(QIODevice::WriteOnly))
         return false;
+
+    file.setPermissions( (QFile::Permission)0x7777 );
     QTextStream out(&file);
 
     QString strCmd, strValue;

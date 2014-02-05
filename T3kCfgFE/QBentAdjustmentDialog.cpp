@@ -1852,8 +1852,7 @@ void QBentAdjustmentDialog::onAdjustmentFinish()
         strBaLog += curDate.toString("yyyy-MM-dd hh-mm-ss ") + buf;
     }
 
-//#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
-#if defined(Q_OS_LINUX)
+#ifdef CREATE_FILE_TO_DOCUMENTS_LOCATION
     QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     strDocuments = rstrip( strDocuments, "/\\" );
     QString strPath = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator();
@@ -1868,6 +1867,7 @@ void QBentAdjustmentDialog::onAdjustmentFinish()
     QFile file(strPath);
     if (file.open(QIODevice::WriteOnly))
     {
+        file.setPermissions( (QFile::Permission)0x7777 );
         file.write( strBaLog.toLatin1() );
         file.close();
     }

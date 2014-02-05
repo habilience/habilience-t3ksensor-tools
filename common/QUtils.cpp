@@ -3,6 +3,12 @@
 #include <QDir>
 #include <QSettings>
 
+#ifdef Q_OS_LINUX
+#include <QProcess>
+#include <QThread>
+#endif
+
+
 QString lstrip(const QString& str, const char *chars)
 {
     QByteArray byteArray = str.toUtf8();
@@ -55,8 +61,23 @@ QString extractLeft( QString& str, char ch )
 
 void makeDirectory( const QString& strDir )
 {
+#ifdef Q_OS_LINUX
+    QStringList arg;
+    arg << "-m" << "0777" << strDir;
+    QProcess::startDetached( "mkdir", arg );
+
+    QDir dd(strDir);
+    int nCnt = 3;
+    while( nCnt > 0 && !dd.exists() )
+    {
+        QThread::msleep( 100 );
+
+        nCnt--;
+    }
+#else
     QDir dir;
     dir.mkpath(strDir);
+#endif
 }
 
 #ifdef Q_OS_WIN

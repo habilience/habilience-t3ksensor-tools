@@ -4,5 +4,6 @@
         <file>resources/usb.png</file>
         <file>resources/brief.png</file>
         <file>resources/download.png</file>
+        <file>resources/51-t3ksensors.rules</file>
     </qresource>
 </RCC>

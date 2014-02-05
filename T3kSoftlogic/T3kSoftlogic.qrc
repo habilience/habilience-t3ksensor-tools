@@ -17,5 +17,6 @@
         <file>resources/PNG_GALLERY_TOUCHONOFF_GPIO.png</file>
         <file>resources/License.html</file>
         <file>resources/PNG_QUESTION_MARK.png</file>
+        <file>resources/51-t3ksensors.rules</file>
     </qresource>
 </RCC>

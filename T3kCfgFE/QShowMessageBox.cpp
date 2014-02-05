@@ -57,8 +57,12 @@ int showMessageBox( QWidget* parent, const QString& strMessage, const QString& s
     msgBox.setButtonText(QMessageBox::Cancel, res.getResString("MESSAGEBOX", "BTN_CAPTION_CANCEL"));
     msgBox.setButtonText(QMessageBox::Yes, res.getResString("MESSAGEBOX", "BTN_CAPTION_YES"));
     msgBox.setButtonText(QMessageBox::No, res.getResString("MESSAGEBOX", "BTN_CAPTION_NO"));
-    msgBox.button(QMessageBox::Yes)->setShortcut( QKeySequence(Qt::Key_Y) );
-    msgBox.button(QMessageBox::No)->setShortcut( QKeySequence(Qt::Key_N) );
+    QAbstractButton* pBtn = msgBox.button(QMessageBox::Yes);
+    if( pBtn )
+        pBtn->setShortcut( QKeySequence(Qt::Key_Y) );
+    pBtn = msgBox.button(QMessageBox::No);
+    if( pBtn )
+        pBtn->setShortcut( QKeySequence(Qt::Key_N) );
 
     QFont fnt(msgBox.font());
     fnt.setPointSize(fnt.pointSize()+1);

@@ -52,7 +52,6 @@ linux-g++:QMAKE_TARGET.arch = $$QMAKE_HOST.arch
 linux-g++-32:QMAKE_TARGET.arch = x86
 linux-g++-64:QMAKE_TARGET.arch = x86_64
 linux-g++ {
-    QMAKE_RPATHDIR += ./ /usr/share/T3kShare/t3ksoftlogic/lib
     contains(QMAKE_TARGET.arch, x86_64):{
         message( "g++ building for 64bit" );
         CONFIG(debug, debug|release) {
@@ -68,7 +67,6 @@ linux-g++ {
         }
 
         LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
-        QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
         PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
     }
     !contains(QMAKE_TARGET.arch, x86_64):{
@@ -86,7 +84,6 @@ linux-g++ {
         }
 
         LIBS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
-        QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/32bit
         PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
     }
 
@@ -94,7 +91,6 @@ linux-g++ {
 }
 
 linux-g++-32 {
-    QMAKE_RPATHDIR += ./ /usr/share/T3kShare/t3ksoftlogic/lib
     message( "building for 32bit" );
     CONFIG(debug, debug|release) {
         OBJECTS_DIR = $$PWD/.objs/debug/
@@ -109,14 +105,12 @@ linux-g++-32 {
     }
 
     LIBS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
-    QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/32bit
     PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
 
     LIBS +=
 }
 
 linux-g++-64 {
-    QMAKE_RPATHDIR += ./ /usr/share/T3kShare/t3ksoftlogic/lib
     message( "building for 64bit" );
     CONFIG(debug, debug|release) {
         OBJECTS_DIR = $$PWD/.objs_x64/debug/
@@ -131,7 +125,6 @@ linux-g++-64 {
     }
 
     LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
-    QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
     PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
 
     LIBS +=

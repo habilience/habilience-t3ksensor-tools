@@ -69,7 +69,6 @@ linux-g++-32:QMAKE_TARGET.arch = x86
 linux-g++-64:QMAKE_TARGET.arch = x86_64
 
 linux-g++ { # depend on Qt Creator's setting
-    QMAKE_RPATHDIR += ./ /usr/share/T3kShare/t3kupgrade/lib
     contains(QMAKE_TARGET.arch, x86_64):{
         message( "building for 64bit" );
         CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs_x64/debug/
@@ -80,7 +79,6 @@ linux-g++ { # depend on Qt Creator's setting
         CONFIG(release, debug|release): DESTDIR = $$PWD/release_x64
 
         LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
-        QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
 
         CONFIG(release, debug|release) {
             LIBS += -L$$PWD/../external/quazip/ -lquazip_x64
@@ -99,7 +97,6 @@ linux-g++ { # depend on Qt Creator's setting
         CONFIG(release, debug|release): DESTDIR = $$PWD/release
 
         LIBS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
-        QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/32bit
 
         CONFIG(release, debug|release) {
             LIBS += -L$$PWD/../external/quazip/ -lquazip
@@ -111,7 +108,6 @@ linux-g++ { # depend on Qt Creator's setting
 }
 
 linux-g++-32 { # generic g++ 32bit compiler
-    QMAKE_RPATHDIR += ./ /usr/share/T3kShare/t3kupgrade/lib
     message( "building for 32bit" );
     CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs/debug/
     CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs/debug/
@@ -121,7 +117,6 @@ linux-g++-32 { # generic g++ 32bit compiler
     CONFIG(release, debug|release): DESTDIR = $$PWD/release
 
     LIBS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
-    QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/32bit
 
     CONFIG(release, debug|release) {
         LIBS += -L$$PWD/../external/quazip/ -lquazip
@@ -131,7 +126,6 @@ linux-g++-32 { # generic g++ 32bit compiler
     }
 }
 linux-g++-64 { # generic g++ 64bit compiler
-    QMAKE_RPATHDIR += ./ /usr/share/T3kShare/t3kupgrade/lib
     message( "building for 64bit" );
     CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs_x64/debug/
     CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs_x64/debug/
@@ -141,7 +135,6 @@ linux-g++-64 { # generic g++ 64bit compiler
     CONFIG(release, debug|release): DESTDIR = $$PWD/release_x64
 
     LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
-    QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
 
     CONFIG(release, debug|release) {
         LIBS += -L$$PWD/../external/quazip/ -lquazip_x64
