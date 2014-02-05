@@ -242,7 +242,6 @@ bool QSensorInitDataCfg::save(const QString &strDataFileName )
     if (!file.open(QIODevice::WriteOnly))
         return false;
 
-    file.setPermissions( (QFile::Permission)0x7777 );
     QTextStream out(&file);
 
     QString strCmd, strValue;

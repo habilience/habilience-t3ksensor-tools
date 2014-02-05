@@ -40,6 +40,10 @@ bool QIni::save( const QString& strIni )
     if (!file.open(QIODevice::WriteOnly))
         return false;
 
+#ifdef Q_OS_LINUX
+    file.setPermissions( (QFile::Permission)0x7777 );
+#endif
+
     return save(file);
 }
 
