@@ -303,7 +303,8 @@ HEADERS  += dialog.h \
     QUserDefinedKeyCtrl.h \
     QKeyEdit.h \
     QRemoteTouchMarkDialog.h \
-    conf.h
+    conf.h \
+    ../common/T3kSMDef.h
 
 FORMS    += dialog.ui \
     ../common/ui/QLicenseWidget.ui \

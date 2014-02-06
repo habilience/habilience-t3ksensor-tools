@@ -5,5 +5,7 @@
         <file>resources/brief.png</file>
         <file>resources/download.png</file>
         <file>resources/51-t3ksensors.rules</file>
+        <file>resources/License.html</file>
+        <file>resources/PNG_QUESTION_MARK.png</file>
     </qresource>
 </RCC>

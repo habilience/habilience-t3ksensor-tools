@@ -17,9 +17,9 @@
 
 #define T3K_SOFTLOGIC_DIALOG_CLASSNAME			"Habilience T3k Softlogic Dialog"
 
-#include <QMessageBox>
+
 bool g_bScreenShotMode = false;
-#include <QVector>
+
 int main(int argc, char *argv[])
 {
 #ifdef Q_OS_LINUX
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
         return -1;
     }
 #endif
-    QtSingleApplication a(argc, argv);    
+    QtSingleApplication a(T3K_SOFTLOGIC_DIALOG_CLASSNAME, argc, argv);
 
     int nActiveTab = -1;
     QString strExecute;

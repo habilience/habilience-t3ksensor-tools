@@ -1,7 +1,7 @@
 #include "dialog.h"
 #include "qsingleapplication/qtsingleapplication.h"
 
-const static QString UniqueID = "T3kUpgrade@Habilience";
+#include "../common/T3k_ver.h"
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -11,6 +11,8 @@ const static QString UniqueID = "T3kUpgrade@Habilience";
 #include <QFile>
 #include <QProcess>
 #endif
+
+const static QString UniqueID = "T3kUpgrade@Habilience";
 
 
 int main(int argc, char *argv[])
@@ -49,8 +51,28 @@ int main(int argc, char *argv[])
     }
 #endif
 
-    QtSingleApplication a(argc, argv);
+    QtSingleApplication a("Habilience T3k Downloader Dialog", argc, argv);
     QApplication::setQuitOnLastWindowClosed( true );
+
+    QString strAppVer( T3000_VERSION );
+    int nRPos = -1;
+    for( int i=strAppVer.length()-1 ; i>=3 ; i-=2 )
+    {
+        if( strAppVer.at(i-1) == '.' &&
+            strAppVer.at(i) == '0' )
+        {
+            nRPos = i-1;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    if( nRPos >= 0 )
+        strAppVer = strAppVer.left(nRPos);
+
+    QCoreApplication::setApplicationVersion( strAppVer );
 
     Dialog w;
 

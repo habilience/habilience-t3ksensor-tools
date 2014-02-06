@@ -249,7 +249,6 @@ void T3kSoftlogicDlg::init()
 
     settings.beginGroup( "Windows" );
     QString strPos = settings.value( "Main_Pos" ).toString();
-    int nShow =  settings.value( "Main_Show", 1 ).toInt();
     settings.endGroup();
     if ( !strPos.isEmpty() )
     {
@@ -304,25 +303,6 @@ void T3kSoftlogicDlg::init()
         QDesktopWidget DeskWidget;
         const QRect rcPrimaryMon = DeskWidget.screenGeometry( DeskWidget.primaryScreen() );
         move( (rcPrimaryMon.width()-width())/2, (rcPrimaryMon.height()-height())/2 );
-    }
-
-    if( nShow == WND_MIN )
-        nShow = WND_SHOW;
-
-    switch( nShow )
-    {
-    case WND_HIDE:
-        hide();
-        break;
-    case WND_MIN:
-        break;
-    case WND_MAX:
-        showMaximized();
-        break;
-    case WND_SHOW:
-    default:
-        show();
-        break;
     }
 
     if ( g_bScreenShotMode )
@@ -884,6 +864,33 @@ void T3kSoftlogicDlg::keyPressEvent(QKeyEvent *evt)
     }
 }
 
+void T3kSoftlogicDlg::showEvent(QShowEvent *)
+{
+    QSettings settings( "Habilience", "T3kSoftlogic" );
+    settings.beginGroup( "Windows" );
+    int nShow =  settings.value( "Main_Show", 1 ).toInt();
+    settings.endGroup();
+
+    if( nShow == WND_MIN )
+        nShow = WND_SHOW;
+
+    switch( nShow )
+    {
+    case WND_HIDE:
+        hide();
+        break;
+    case WND_MIN:
+        break;
+    case WND_MAX:
+        showMaximized();
+        break;
+    case WND_SHOW:
+    default:
+        show();
+        break;
+    }
+}
+
 void T3kSoftlogicDlg::closeEvent(QCloseEvent *)
 {
     if( isModified() )
@@ -1192,7 +1199,7 @@ void T3kSoftlogicDlg::onDoRemoveFileExtAssociation()
     unregisterShellFileTypes( Softlogic_ExtStr, Softlogic_TypStr );
 }
 
-void T3kSoftlogicDlg::on_toolButton_clicked()
+void T3kSoftlogicDlg::on_BtnLicense_clicked()
 {
     QLicenseWidget wig( ":/T3kSoftlogicRes/resources/License.html", this );
     wig.activateWindow();

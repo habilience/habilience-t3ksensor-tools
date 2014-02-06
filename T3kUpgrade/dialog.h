@@ -168,8 +168,8 @@ protected:
     
 private slots:
     void on_pushButtonUpgrade_clicked();
-
     void on_pushButtonCancel_clicked();
+    void on_toolButtonLicense_clicked();
 
     void onDisconnected();
     void onResponseFromSensor(unsigned short nPacketId);

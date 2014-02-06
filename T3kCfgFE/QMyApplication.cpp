@@ -15,6 +15,14 @@ QMyApplication::QMyApplication(int &argc, char **argv) :
     installEventFilter(this);
 }
 
+QMyApplication::QMyApplication(const QString &id, int &argc, char **argv) :
+    QtSingleApplication(id, argc, argv)
+{
+    QFont newFont = getSystemFont(NULL);
+    setFont(newFont);
+    installEventFilter(this);
+}
+
 void QMyApplication::setMonitoringMouseMovement(bool bMonitoring)
 {
     m_bWatchMouseMovement = bMonitoring;

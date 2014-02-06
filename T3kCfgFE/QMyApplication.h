@@ -16,6 +16,7 @@ protected:
     virtual bool eventFilter(QObject *, QEvent *);
 public:
     explicit QMyApplication(int &argc, char **argv);
+    explicit QMyApplication(const QString& id, int &argc, char **argv);
 
     void setMonitoringMouseMovement( bool bMonitoring );
     

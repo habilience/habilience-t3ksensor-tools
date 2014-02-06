@@ -85,6 +85,7 @@ protected:
 
     // QWidget
     virtual void timerEvent(QTimerEvent *);
+    virtual void showEvent(QShowEvent *);
     virtual void closeEvent(QCloseEvent *);
     virtual void keyPressEvent(QKeyEvent *);
     virtual void dropEvent(QDropEvent *);
@@ -111,6 +112,7 @@ private slots:
     void on_BtnSave_clicked();
     void on_BtnExit_clicked();
     void on_TabMainMenu_currentChanged(int index);
+    void on_BtnLicense_clicked();
     void onUpdatePrewview();
     QT3kDevice* onGetT3kHandle() { return m_pT3kHandle; }
     void onUpdateCalibrationStep(GroupKey* pGroup, CSoftkey* key, int nCalPos, bool bSet);
@@ -124,7 +126,6 @@ private slots:
     void onDoAssociateFileExt();
     void onDoRemoveFileExtAssociation();
     void onInvertDrawing(bool bInvert);
-    void on_toolButton_clicked();
 
     void onConnectedT3kDevice();
 };

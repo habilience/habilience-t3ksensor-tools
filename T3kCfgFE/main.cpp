@@ -1,6 +1,7 @@
 #include "dialog.h"
 #include "QMyApplication.h"
 #include "AppData.h"
+#include "../common/T3kSMDef.h"
 
 #include <QString>
 #include <QSharedMemory>
@@ -77,7 +78,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    QMyApplication a(argc, argv);
+    QMyApplication a( "Habilience T3000 Factory-Edition Dialog", argc, argv);
     g_pApp = &a;
     Dialog w;
 
@@ -89,30 +90,15 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    typedef struct _ST_SHAREDMEMORY
-    {
-        char szDuplicateRuns;
-        char szRunningFE;
-    } ST_SHAREDMEMORY;
-
-    QSharedMemory CheckDuplicateRuns( "Habilience T3k Series Configure" );
-    CheckDuplicateRuns.create( sizeof(ST_SHAREDMEMORY) );
+    QSharedMemory CheckDuplicateRuns( T3K_SM_NAME );
+    CheckDuplicateRuns.create( sizeof(T3K_SHAREDMEMORY) );
     if( CheckDuplicateRuns.isAttached() || CheckDuplicateRuns.attach( QSharedMemory::ReadWrite ) )
     {
         CheckDuplicateRuns.lock();
-        void* pData = CheckDuplicateRuns.data();
-        ST_SHAREDMEMORY* stSM = (ST_SHAREDMEMORY*)pData;
+        T3K_SHAREDMEMORY* stSM = (T3K_SHAREDMEMORY*)CheckDuplicateRuns.data();
 
-        bool bExit = false;
-        char szRunningFE = stSM->szRunningFE;
-        if( szRunningFE == 1 )
-            bExit = true;
-        else
-            szRunningFE = 1;
+        stSM->szRunningFE = 1;
         CheckDuplicateRuns.unlock();
-
-        if( bExit )
-            return 0;
     }
 
     w.show();
@@ -122,8 +108,7 @@ int main(int argc, char *argv[])
     if( CheckDuplicateRuns.isAttached() || CheckDuplicateRuns.attach( QSharedMemory::ReadWrite ) )
     {
         CheckDuplicateRuns.lock();
-        void* pData = CheckDuplicateRuns.data();
-        ST_SHAREDMEMORY* stSM = (ST_SHAREDMEMORY*)pData;
+        T3K_SHAREDMEMORY* stSM = (T3K_SHAREDMEMORY*)CheckDuplicateRuns.data();
 
         stSM->szRunningFE = 0;
         CheckDuplicateRuns.unlock();

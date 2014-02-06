@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>441</width>
-    <height>437</height>
+    <width>440</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -15,6 +15,18 @@
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>440</width>
+    <height>450</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>440</width>
+    <height>450</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>T3k Firmware Upgrader</string>
@@ -26,6 +38,9 @@
    <bool>false</bool>
   </property>
   <layout class="QVBoxLayout" name="layoutBody">
+   <property name="topMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QSlidingStackedWidget" name="stackedWidget">
      <property name="frameShape">
@@ -36,11 +51,51 @@
      </property>
      <widget class="QWidget" name="pageInformation">
       <layout class="QVBoxLayout" name="verticalLayout_6">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetMinimumSize</enum>
+       </property>
        <item>
         <layout class="QVBoxLayout" name="layoutSensorInformation">
          <property name="spacing">
           <number>0</number>
          </property>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QToolButton" name="toolButtonLicense">
+             <property name="minimumSize">
+              <size>
+               <width>23</width>
+               <height>23</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="T3kUpgrade.qrc">
+               <normaloff>:/T3kUpgradeRes/resources/PNG_QUESTION_MARK.png</normaloff>:/T3kUpgradeRes/resources/PNG_QUESTION_MARK.png</iconset>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
          <item>
           <widget class="QLabel" name="labelSensorInformation">
            <property name="minimumSize">
@@ -387,6 +442,8 @@ QScrollBar:vertical {
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="T3kUpgrade.qrc"/>
+ </resources>
  <connections/>
 </ui>

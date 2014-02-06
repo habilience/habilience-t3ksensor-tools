@@ -7,6 +7,7 @@
 
 // Tag
 #include "T3k_ver.h"
+#include "../common/T3kSMDef.h"
 
 #include "QLangManager.h"
 #include "QT3kUserData.h"
@@ -36,22 +37,21 @@ int main(int argc, char *argv[])
     HWND hOtherAppWnd = FindWindow( T3KFE_DIALOG_CLASSNAME, NULL );
     if( hOtherAppWnd )
     {
-        ::MessageBox( NULL, L"T3k Factory-Edition Program(\"T3kCfe.exe\") is running.", L"Error", MB_OK );
+        ::MessageBox( NULL, L"T3k Factory-Edition Program(\"T3kCfgFE.exe\") is running.", L"Error", MB_OK );
         ::SetForegroundWindow( hOtherAppWnd );
         return 0;
     }
 #endif
 
-    QSharedMemory CheckDuplicateRuns( "Habilience T3k Series Configure" );
+    QSharedMemory CheckDuplicateRuns( T3K_SM_NAME );
     if( CheckDuplicateRuns.isAttached() || CheckDuplicateRuns.attach( QSharedMemory::ReadWrite ) )
     {
         CheckDuplicateRuns.lock();
-        void* pData = CheckDuplicateRuns.data();
-        ST_SHAREDMEMORY* stSM = (ST_SHAREDMEMORY*)pData;
+        T3K_SHAREDMEMORY* stSM = (T3K_SHAREDMEMORY*)CheckDuplicateRuns.data();
 
         if( stSM->szRunningFE == 1 )
         {
-            QMessageBox::critical( NULL, "Error", "T3k Factory-Edition Program(\"T3kCfe.exe\") is running.", QMessageBox::Ok );
+            QMessageBox::critical( NULL, "Error", "T3k Factory-Edition Program(\"T3kCfgFE.exe\") is running.", QMessageBox::Ok );
             CheckDuplicateRuns.unlock();
             return 0;
         }
@@ -66,17 +66,17 @@ int main(int argc, char *argv[])
         {
             RegOption.setValue( "TrayIcon", false );
             RegOption.setValue( "Exec Path", strPath );
-            stSM->szDuplicateRuns = 2;
+            stSM->szNotifyCFG = 2;
             CheckDuplicateRuns.unlock();
         }
         else
         {
-            stSM->szDuplicateRuns = 1;
+            stSM->szNotifyCFG = 1;
             CheckDuplicateRuns.unlock();
             return 0;
         }
     }
-    else if( !CheckDuplicateRuns.create( sizeof(ST_SHAREDMEMORY) ) )
+    else if( !CheckDuplicateRuns.create( sizeof(T3K_SHAREDMEMORY) ) )
         return -1;
 
     QApplication::setQuitOnLastWindowClosed( false );

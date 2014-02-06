@@ -1028,7 +1028,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="toolButton">
+        <widget class="QToolButton" name="BtnLicense">
          <property name="minimumSize">
           <size>
            <width>23</width>

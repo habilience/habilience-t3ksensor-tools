@@ -15,7 +15,7 @@ CONFIG += static staticlib
 
 TEMPLATE = app
 
-DEFINES += USE_T3K_STATIC_LIBS QUAZIP_STATIC
+DEFINES += USE_T3K_STATIC_LIBS QUAZIP_STATIC NO_LANGUAGE
 
 linux-g++|linux-g++-32|linux-g++-64:DEFINES += OS_LINUX
 
@@ -55,7 +55,7 @@ win32 {
                             $$PWD/../external/T3kHIDLibrary/win32/StaticLib/Lib/libT3kHIDLibd.a
     }
 
-    LIBS += -lsetupapi
+    LIBS += -lsetupapi -lole32 -luuid -lws2_32 \
 }
 ##
 #################################################################################################
@@ -178,29 +178,33 @@ macx {
 
 
 SOURCES += main.cpp \
+    dialog.cpp \
     ../common/qsingleapplication/qtsinglecoreapplication.cpp \
     ../common/qsingleapplication/qtsingleapplication.cpp \
     ../common/qsingleapplication/qtlockedfile_win.cpp \
     ../common/qsingleapplication/qtlockedfile_unix.cpp \
     ../common/qsingleapplication/qtlockedfile.cpp \
     ../common/qsingleapplication/qtlocalpeer.cpp \
+    ../common/QUtils.cpp \
+    ../common/ui/QLicenseWidget.cpp \
     QSlidingStackedWidget.cpp \
     QFWDPacket.cpp \
-    dialog.cpp \
     QBriefingDialog.cpp \
-    ../common/QUtils.cpp
 
 HEADERS  += dialog.h \
     ../common/qsingleapplication/qtsinglecoreapplication.h \
     ../common/qsingleapplication/qtsingleapplication.h \
     ../common/qsingleapplication/qtlockedfile.h \
     ../common/qsingleapplication/qtlocalpeer.h \
+    ../common/QUtils.h \
+    ../common/ui/QLicenseWidget.h \
     QSlidingStackedWidget.h \
     QFWDPacket.h \
     QBriefingDialog.h
 
 FORMS    += dialog.ui \
-    briefing_dialog.ui
+    briefing_dialog.ui \
+    ../common/ui/QLicenseWidget.ui \
 
 RESOURCES += \
     T3kUpgrade.qrc

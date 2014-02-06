@@ -22,6 +22,8 @@
 #include "QUtils.h"
 #include "QGUIUtils.h"
 
+#include "../common/T3kSMDef.h"
+
 #include <QMenu>
 #include <QSettings>
 #include <QCloseEvent>
@@ -1265,12 +1267,11 @@ void T3kCfgWnd::timerEvent(QTimerEvent *evt)
     {
         if( evt->timerId() == m_nTimerObserver )
         {
-            QSharedMemory CheckDuplicateRuns( "Habilience T3k Series Configure" );
+            QSharedMemory CheckDuplicateRuns( T3K_SM_NAME );
             if( CheckDuplicateRuns.isAttached() || CheckDuplicateRuns.attach( QSharedMemory::ReadWrite ) )
             {
                 CheckDuplicateRuns.lock();
-                const void* pData = CheckDuplicateRuns.constData();
-                ST_SHAREDMEMORY* stSM = (ST_SHAREDMEMORY*)pData;
+                T3K_SHAREDMEMORY* stSM = (T3K_SHAREDMEMORY*)CheckDuplicateRuns.constData();
 
                 if( stSM->szRunningFE == 1 )
                 {
@@ -1303,13 +1304,13 @@ void T3kCfgWnd::timerEvent(QTimerEvent *evt)
                     m_bRunOtherTool = false;
                 }
 
-                if( stSM->szDuplicateRuns == 1 )
+                if( stSM->szNotifyCFG == 1 )
                     OnTrayOpenT3kCfg();
-                else if( stSM->szDuplicateRuns == 2 )
+                else if( stSM->szNotifyCFG == 2 )
                 {
                     qApp->exit( 0 );
                 }
-                stSM->szDuplicateRuns = 0;
+                stSM->szNotifyCFG = 0;
                 CheckDuplicateRuns.unlock();
             }
         }

@@ -10,6 +10,8 @@
 #include <QDir>
 #include <QInputDialog>
 
+#include "../common/ui/QLicenseWidget.h"
+
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
@@ -55,6 +57,8 @@ Dialog::Dialog(QWidget *parent) :
     ui->setupUi(this);
 
     setAcceptDrops( true );
+
+    setWindowTitle( windowTitle() + " Ver " + QCoreApplication::applicationVersion() );
 
     Qt::WindowFlags flags = windowFlags();
     Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
@@ -1741,4 +1745,11 @@ void Dialog::onHandleMessage(const QString &/*msg*/)
 {
     raise();
     activateWindow();
+}
+
+void Dialog::on_toolButtonLicense_clicked()
+{
+    QLicenseWidget wig( ":/T3kUpgradeRes/resources/License.html", this );
+    wig.activateWindow();
+    wig.exec();
 }
