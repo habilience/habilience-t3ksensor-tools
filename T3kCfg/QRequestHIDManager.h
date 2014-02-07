@@ -4,7 +4,7 @@
 #include <QList>
 #include <QString>
 #include <QObject>
-#include "QT3kDeviceR.h"
+#include "QT3kDevice.h"
 #include <QMutex>
 
 class QRequestHIDManager : public QObject
@@ -24,7 +24,7 @@ public:
         QString         strValue;
     };
 
-    void Start( QT3kDeviceR* pHandle );
+    void Start( QT3kDevice* pHandle );
     void Pause();
     void Stop();
 
@@ -40,7 +40,7 @@ protected:
 
     int                     m_nTimer;
 
-    QT3kDeviceR*             m_pT3kHandle;
+    QT3kDevice*             m_pT3kHandle;
     bool                    m_bStart;
 
 signals:

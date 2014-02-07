@@ -44,14 +44,22 @@
 
 #define EXTP_COUNT              5
 
+#ifdef T3KDEVICE_CUSTOM
 #include "../QT3kDeviceEventHandler.h"
+#else
+#include "../QT3kDeviceEventHandler.h"
+#endif
 #include "QLangManager.h"
 #include <QVector>
 #include <QRegion>
 
 
 class QGestureMappingTable : public QWidget
-        , public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
+#ifdef T3KDEVICE_CUSTOM
+        , public QT3kDeviceEventHandler::IListener
+#else
+        , public QLangManager::ILangChangeNotify
+#endif
 {
     Q_OBJECT
 public:

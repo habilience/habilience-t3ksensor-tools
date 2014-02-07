@@ -2,7 +2,7 @@
 #define QSIDEVIEWWIDGET_H
 
 #include <QDialog>
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 
 #include <QImage>
@@ -11,7 +11,7 @@ namespace Ui {
     class QSideviewWidget;
 }
 
-class QSideviewWidget : public QDialog, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
+class QSideviewWidget : public QDialog, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -19,7 +19,7 @@ public:
     explicit QSideviewWidget(QWidget *parent = 0);
     ~QSideviewWidget();
 
-    void setT3kHandle(QT3kDeviceR* pHandle) { m_pT3kHandle = pHandle; }
+    void setT3kHandle(QT3kDevice* pHandle) { m_pT3kHandle = pHandle; }
 
 protected:
     virtual void showEvent(QShowEvent *evt);
@@ -39,7 +39,7 @@ protected:
     void RequestSensorData( bool bDefault );
 
 protected:
-    QT3kDeviceR*         m_pT3kHandle;
+    QT3kDevice*         m_pT3kHandle;
 
     QString             m_strModelName;
 

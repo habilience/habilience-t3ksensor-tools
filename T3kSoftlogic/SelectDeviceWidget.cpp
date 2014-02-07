@@ -1,7 +1,7 @@
 #include "SelectDeviceWidget.h"
 #include "ui_SelectDeviceWidget.h"
 
-#include "QT3kDeviceR.h"
+#include "QT3kDevice.h"
 #include "t3kcomdef.h"
 
 #include <QScrollBar>
@@ -52,7 +52,7 @@ void QSelectDeviceWidget::refreshDeviceList()
     int nDevCnt = 0;
     for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
     {
-        int nCnt = QT3kDeviceR::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+        int nCnt = QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
         for( int i=0; i<nCnt; i++ )
         {
             insertListItem( DEVICE_LIST[d].szModelName, nDevCnt, DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI, i);
@@ -88,7 +88,7 @@ void QSelectDeviceWidget::insertListItem(QString strModelName, int nIdx, ushort 
     pItem1->setTextAlignment( Qt::AlignCenter );
     pItem1->setData( Qt::UserRole, vData );
     ui->TableDeviceList->setItem( nIdx, 0, pItem1 );
-    ui->TableDeviceList->setItem( nIdx, 1, new QTableWidgetItem(QString(QT3kDeviceR::getDevicePath(nVID, nPID, nMI, nDeviceIndex))) );
+    ui->TableDeviceList->setItem( nIdx, 1, new QTableWidgetItem(QString(QT3kDevice::getDevicePath(nVID, nPID, nMI, nDeviceIndex))) );
 }
 
 void QSelectDeviceWidget::on_TableDeviceList_itemSelectionChanged()

@@ -23,7 +23,7 @@ QAdvancedSettingWidget::QAdvancedSettingWidget(QWidget *parent) :
 
     connect( ui->BtnCancel, &QPushButton::clicked, this, &QDialog::close );
 
-    QT3kDeviceR* pHandle = QT3kUserData::GetInstance()->getT3kHandle();
+    QT3kDevice* pHandle = QT3kUserData::GetInstance()->getT3kHandle();
     int nRetry = 3;
     bool bOK = false;
     m_bRSE = false;
@@ -200,7 +200,7 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
 
     if( msgBox.exec() != QMessageBox::Yes ) return;
 
-    QT3kDeviceR* pHandle = QT3kUserData::GetInstance()->getT3kHandle();
+    QT3kDevice* pHandle = QT3kUserData::GetInstance()->getT3kHandle();
     // bent
     m_strCam1PosTrc.clear();
     m_strCam2PosTrc.clear();

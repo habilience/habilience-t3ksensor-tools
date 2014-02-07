@@ -5,19 +5,19 @@
 #include <QPushButton>
 #include <QTimer>
 
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 
 namespace Ui{
     class QDiableTouchWidget;
 }
 
-class QDiableTouchWidget : public QDialog, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
+class QDiableTouchWidget : public QDialog, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QDiableTouchWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
+    explicit QDiableTouchWidget(QT3kDevice*& pHandle, QWidget *parent = 0);
     ~QDiableTouchWidget();
 
 protected:
@@ -28,7 +28,7 @@ protected:
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 protected:
-    QT3kDeviceR*&            m_pT3kHandle;
+    QT3kDevice*&            m_pT3kHandle;
 
     int                     m_nTimerRemain;
     QString                 m_strTimeout;

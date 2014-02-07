@@ -20,7 +20,6 @@ CHIDCmd::CHIDCmd(QObject* parent) :
     QObject(parent)
 {
     m_pT3kHandle = QT3kDevice::instance();
-    m_pT3kHandle->setEventHandler( QT3kDeviceEventHandler::instance() );
     connect( this, &CHIDCmd::connectedT3kDevice, this, &CHIDCmd::onConnectedT3kDevice, Qt::QueuedConnection );
 
     m_bIsConnect = false;

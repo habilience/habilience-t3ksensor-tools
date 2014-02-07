@@ -2,7 +2,7 @@
 
 #include <QTimer>
 
-QT3kLoadDetectionObject::QT3kLoadDetectionObject(QT3kDeviceR *&pHandle, QObject *parent) :
+QT3kLoadDetectionObject::QT3kLoadDetectionObject(QT3kDevice *&pHandle, QObject *parent) :
     QT3kHIDObject(pHandle, parent)
 {
     m_bMainCamDetection = false;

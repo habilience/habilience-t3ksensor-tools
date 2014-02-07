@@ -9,7 +9,7 @@
 #include <QTimer>
 #include <QMessageBox>
 
-QTouchSettingWidget::QTouchSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
+QTouchSettingWidget::QTouchSettingWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QTouchSettingWidget), m_pT3kHandle(pHandle)
 {

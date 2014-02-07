@@ -11,14 +11,14 @@ class QT3kLoadDetectionObject : public QT3kHIDObject
 {
     Q_OBJECT
 public:
-    explicit QT3kLoadDetectionObject(QT3kDeviceR*& pHandle, QObject *parent = 0);
+    explicit QT3kLoadDetectionObject(QT3kDevice*& pHandle, QObject *parent = 0);
     virtual ~QT3kLoadDetectionObject();
 
     // QT3kHIDObject
     virtual bool Start(SensorLogData *pStorage);
 
 protected:
-    // QT3kDeviceREventHandler::IListener
+    // QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnIRD(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int total, int offset, const unsigned char *data, int cnt);
     virtual void TPDP_OnITD(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int total, int offset, const unsigned char *data, int cnt);
 

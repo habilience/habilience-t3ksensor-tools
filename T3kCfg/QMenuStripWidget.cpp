@@ -11,7 +11,7 @@
 #define QICON_WIDTH             40
 #define QICON_HEIGHT            40
 
-QMenuStripWidget::QMenuStripWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
+QMenuStripWidget::QMenuStripWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QMenuStripWidget), m_pT3kHandle(pHandle)
 {

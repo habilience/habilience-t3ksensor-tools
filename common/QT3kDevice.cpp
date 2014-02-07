@@ -6,11 +6,17 @@
 #include "T3kConstStr.h"
 #include <stdio.h>
 
+#ifdef T3KDEVICE_CUSTOM
+#include "PacketStructure.h"
+
+#define MAX_RAWBUFFER           4194304     // 4M
+#endif
+
+
 QT3kDevice::QT3kDevice(QObject *parent) :
     QObject(parent)
 {
     m_hDevice = NULL;
-    m_pT3kEventHandler = NULL;
 
 #ifdef Q_OS_WIN
     m_bIsVirtualDevice = false;
@@ -21,18 +27,36 @@ QT3kDevice::QT3kDevice(QObject *parent) :
     m_nExpireTime = 5000;
     m_dwFgstValue = 0x00;
 
+#ifdef T3KDEVICE_CUSTOM
+    m_pRawDataBuffer = NULL;
+    m_nTotalRawBytes = 0;
+
+    m_bGetBothSensorData = false;
+    m_bRemoting = false;
+#endif
+
     connect( this, SIGNAL(disconnected()), this, SLOT(onDisconnected()), Qt::QueuedConnection );
     connect( this, SIGNAL(downloadingFirmware(bool)), this, SLOT(onDownloadingFirmware(bool)), Qt::QueuedConnection );
     connect( this, SIGNAL(packetReceived()), this, SLOT(onPacketReceived()), Qt::QueuedConnection );
     connect( this, SIGNAL(packetReceivedSync()), this, SLOT(onPacketReceived()), Qt::BlockingQueuedConnection );
-    connect( this, SIGNAL(receiveRawData(unsigned char*,unsigned short)), this, SLOT(onReceiveRawData(unsigned char*,unsigned short)), Qt::QueuedConnection );
-    connect( this, SIGNAL(receiveRawDataFlag(bool)), this, SLOT(onReceiveRawDataFlag(bool)), Qt::QueuedConnection );
+#ifdef T3KDEVICE_CUSTOM
+    connect( this, SIGNAL(receiveRawData(void*)), QT3kDeviceEventHandler::instance(), SLOT(onReceiveRawData(void*)), Qt::QueuedConnection );
+    connect( this, SIGNAL(receiveRawDataFlag(bool)), QT3kDeviceEventHandler::instance(), SLOT(onReceiveRawDataFlag(bool)), Qt::QueuedConnection );
+#endif
 }
 
 QT3kDevice::~QT3kDevice()
 {
     if (isOpen())
         close();
+
+#ifdef T3KDEVICE_CUSTOM
+    if( m_pRawDataBuffer )
+    {
+        delete[] m_pRawDataBuffer;
+        m_pRawDataBuffer = NULL;
+    }
+#endif
 }
 
 #ifdef Q_OS_WIN
@@ -72,8 +96,7 @@ void QT3kDevice::timerEvent(QTimerEvent *evt)
                 if (!checkConnection.ConnectionOK)
                 {
                     T3K_DEVICE_INFO devInfo = ::T3kGetDeviceInfoFromHandle(m_hDevice);
-                    if( m_pT3kEventHandler )
-                        m_pT3kEventHandler->_onDisconnected(devInfo);
+                    QT3kDeviceEventHandler::instance()->_onDisconnected(devInfo);
                 }
             }
         }
@@ -96,9 +119,13 @@ int  T3K_CALLBACK QT3kDevice::_OnT3kReceiveRawDataHandler( T3K_HANDLE /*hDevice*
 {
     QT3kDevice* pThis = (QT3kDevice*)pContext;
 
-    int nRet = pThis->receiveRawData( pBuffer, nBytes );
+#ifdef T3KDEVICE_CUSTOM
+    int nRet = pThis->onReceiveRawData( pBuffer, nBytes );
 
     return nRet;
+#else
+    return 0;
+#endif
 }
 
 void T3K_CALLBACK QT3kDevice::_OnT3kDownloadingFirmwareHandler( T3K_HANDLE /*hDevice*/, int bDownload, void * pContext )
@@ -267,25 +294,18 @@ void QT3kDevice::close()
 
 }
 
-void QT3kDevice::setEventHandler(QT3kDeviceEventHandler *pHandler)
-{
-    m_pT3kEventHandler = pHandler;
-}
-
 void QT3kDevice::onDisconnected()
 {
     T3K_DEVICE_INFO devInfo = ::T3kGetDeviceInfoFromHandle( m_hDevice );
 
-    if( m_pT3kEventHandler )
-        m_pT3kEventHandler->_onDisconnected(devInfo);
+    QT3kDeviceEventHandler::instance()->_onDisconnected(devInfo);
 }
 
 void QT3kDevice::onDownloadingFirmware( bool bIsDownload )
 {
     T3K_DEVICE_INFO devInfo = ::T3kGetDeviceInfoFromHandle( m_hDevice );
 
-    if( m_pT3kEventHandler )
-        m_pT3kEventHandler->_onDownloadingFirmware(devInfo, bIsDownload);
+    QT3kDeviceEventHandler::instance()->_onDownloadingFirmware(devInfo, bIsDownload);
 }
 
 void QT3kDevice::onPacketReceived()
@@ -309,101 +329,99 @@ void QT3kDevice::onPacketReceived()
     }
 
     T3K_DEVICE_INFO devInfo = ::T3kGetDeviceInfoFromHandle( m_hDevice );
-    if( m_pT3kEventHandler )
+    Q_ASSERT( QT3kDeviceEventHandler::instance() );
+    switch ( packet->type )
     {
-        switch ( packet->type )
-        {
-        case t3ktype_msg:
-                m_pT3kEventHandler->_onMSG( devInfo, packet->ticktime, packet->partid,
-                            packet->body.msg.message );
-            break;
-        case t3ktype_obj:
-                m_pT3kEventHandler->_onOBJ( devInfo, packet->ticktime, packet->partid, 0,
-                            packet->body.obj.start_pos,
-                            packet->body.obj.end_pos,
-                            packet->body.obj.count );
-            break;
-        case t3ktype_obc:
-                m_pT3kEventHandler->_onOBC( devInfo, packet->ticktime, packet->partid, 0,
-                            &packet->body.obc.start_pos,
-                            &packet->body.obc.end_pos,
-                            packet->body.obc.count );
-            break;
-        case t3ktype_dtc:
-                m_pT3kEventHandler->_onDTC( devInfo, packet->ticktime, packet->partid, 0,
-                            packet->body.dtc.start_pos,
-                            packet->body.dtc.end_pos,
-                            packet->body.dtc.count );
-            break;
-        case t3ktype_ird:
-                m_pT3kEventHandler->_onIRD( devInfo, packet->ticktime, packet->partid,
-                            packet->body.ixd.total,
-                            packet->body.ixd.offset,
-                            packet->body.ixd.data,
-                            packet->body.ixd.count );
-            break;
-        case t3ktype_itd:
-                m_pT3kEventHandler->_onITD( devInfo, packet->ticktime, packet->partid,
-                            packet->body.ixd.total,
-                            packet->body.ixd.offset,
-                            packet->body.ixd.data,
-                            packet->body.ixd.count );
-            break;
-        case t3ktype_prv:
-                m_pT3kEventHandler->_onPRV( devInfo, packet->ticktime, packet->partid,
-                            packet->body.prv.height,
-                            packet->body.prv.offset_y,
-                            packet->body.prv.image,
-                            packet->body.prv.width );
-            break;
-        case t3ktype_cmd:
-                m_pT3kEventHandler->_onCMD( devInfo, packet->ticktime, packet->partid,
-                            packet->body.cmd.id,
-                            packet->body.cmd.command );
-            break;
-        case t3ktype_rsp:
-                m_pT3kEventHandler->_onRSP( devInfo, packet->ticktime, packet->partid,
-                            packet->body.rsp.id,
-                            packet->body.rsp.is_final,
-                            packet->body.rsp.command );
-            break;
-        case t3ktype_rse:
-                m_pT3kEventHandler->_onRSE( devInfo, packet->ticktime, packet->partid,
-                            packet->body.rsp.id,
-                            packet->body.rsp.is_final,
-                            packet->body.rsp.command );
-            break;
-        case t3ktype_stt:
-                m_pT3kEventHandler->_onSTT( devInfo, packet->ticktime, packet->partid,
-                            packet->body.stt.status );
-            break;
-        case t3ktype_dvc:
-                m_pT3kEventHandler->_onDVC( devInfo, packet->ticktime, packet->partid,
-                            &packet->body.dvc );
-            break;
-        case t3ktype_tpt:
-                m_pT3kEventHandler->_onTPT( devInfo, packet->ticktime, packet->partid,
-                            packet->body.tpt.touch_count,
-                            packet->body.tpt.actual_touch,
-                            packet->body.tpt.points );
-            break;
-        case t3ktype_gst:
-                m_pT3kEventHandler->_onGST( devInfo, packet->ticktime, packet->partid,
-                            packet->body.gst.action_group,
-                            packet->body.gst.action,
-                            packet->body.gst.feasibleness,
-                            packet->body.gst.x,
-                            packet->body.gst.y,
-                            packet->body.gst.w,
-                            packet->body.gst.h,
-                            packet->body.gst.zoom,
-                            packet->body.gst.message );
-            break;
-        case t3ktype_ver:
-                m_pT3kEventHandler->_onVER( devInfo, packet->ticktime, packet->partid,
-                            &packet->body.ver );
-            break;
-        }
+    case t3ktype_msg:
+            QT3kDeviceEventHandler::instance()->_onMSG( devInfo, packet->ticktime, packet->partid,
+                        packet->body.msg.message );
+        break;
+    case t3ktype_obj:
+            QT3kDeviceEventHandler::instance()->_onOBJ( devInfo, packet->ticktime, packet->partid, 0,
+                        packet->body.obj.start_pos,
+                        packet->body.obj.end_pos,
+                        packet->body.obj.count );
+        break;
+    case t3ktype_obc:
+            QT3kDeviceEventHandler::instance()->_onOBC( devInfo, packet->ticktime, packet->partid, 0,
+                        &packet->body.obc.start_pos,
+                        &packet->body.obc.end_pos,
+                        packet->body.obc.count );
+        break;
+    case t3ktype_dtc:
+            QT3kDeviceEventHandler::instance()->_onDTC( devInfo, packet->ticktime, packet->partid, 0,
+                        packet->body.dtc.start_pos,
+                        packet->body.dtc.end_pos,
+                        packet->body.dtc.count );
+        break;
+    case t3ktype_ird:
+            QT3kDeviceEventHandler::instance()->_onIRD( devInfo, packet->ticktime, packet->partid,
+                        packet->body.ixd.total,
+                        packet->body.ixd.offset,
+                        packet->body.ixd.data,
+                        packet->body.ixd.count );
+        break;
+    case t3ktype_itd:
+            QT3kDeviceEventHandler::instance()->_onITD( devInfo, packet->ticktime, packet->partid,
+                        packet->body.ixd.total,
+                        packet->body.ixd.offset,
+                        packet->body.ixd.data,
+                        packet->body.ixd.count );
+        break;
+    case t3ktype_prv:
+            QT3kDeviceEventHandler::instance()->_onPRV( devInfo, packet->ticktime, packet->partid,
+                        packet->body.prv.height,
+                        packet->body.prv.offset_y,
+                        packet->body.prv.image,
+                        packet->body.prv.width );
+        break;
+    case t3ktype_cmd:
+            QT3kDeviceEventHandler::instance()->_onCMD( devInfo, packet->ticktime, packet->partid,
+                        packet->body.cmd.id,
+                        packet->body.cmd.command );
+        break;
+    case t3ktype_rsp:
+            QT3kDeviceEventHandler::instance()->_onRSP( devInfo, packet->ticktime, packet->partid,
+                        packet->body.rsp.id,
+                        packet->body.rsp.is_final,
+                        packet->body.rsp.command );
+        break;
+    case t3ktype_rse:
+            QT3kDeviceEventHandler::instance()->_onRSE( devInfo, packet->ticktime, packet->partid,
+                        packet->body.rsp.id,
+                        packet->body.rsp.is_final,
+                        packet->body.rsp.command );
+        break;
+    case t3ktype_stt:
+            QT3kDeviceEventHandler::instance()->_onSTT( devInfo, packet->ticktime, packet->partid,
+                        packet->body.stt.status );
+        break;
+    case t3ktype_dvc:
+            QT3kDeviceEventHandler::instance()->_onDVC( devInfo, packet->ticktime, packet->partid,
+                        &packet->body.dvc );
+        break;
+    case t3ktype_tpt:
+            QT3kDeviceEventHandler::instance()->_onTPT( devInfo, packet->ticktime, packet->partid,
+                        packet->body.tpt.touch_count,
+                        packet->body.tpt.actual_touch,
+                        packet->body.tpt.points );
+        break;
+    case t3ktype_gst:
+            QT3kDeviceEventHandler::instance()->_onGST( devInfo, packet->ticktime, packet->partid,
+                        packet->body.gst.action_group,
+                        packet->body.gst.action,
+                        packet->body.gst.feasibleness,
+                        packet->body.gst.x,
+                        packet->body.gst.y,
+                        packet->body.gst.w,
+                        packet->body.gst.h,
+                        packet->body.gst.zoom,
+                        packet->body.gst.message );
+        break;
+    case t3ktype_ver:
+            QT3kDeviceEventHandler::instance()->_onVER( devInfo, packet->ticktime, packet->partid,
+                        &packet->body.ver );
+        break;
     }
 
     // return to pool
@@ -790,3 +808,112 @@ bool QT3kDevice::queryFirmwareVersion( unsigned short nAddrMask, int* pnMode )
 {
     return ::T3kQueryFirmwareVersion( m_hDevice, nAddrMask, pnMode, 0, 300 ) == 1 ? true : false;
 }
+
+
+#ifdef T3KDEVICE_CUSTOM
+char* QT3kDevice::getRawDataPacket( int& nRetBytes )
+{
+    QMutexLocker Locker( &m_RawDataMutex );
+
+    if( !m_pRawDataBuffer || !m_nTotalRawBytes )
+    {
+        nRetBytes = 0;
+        return NULL;
+    }
+
+    int nReturnLength = m_nTotalRawBytes > MAX_RAWDATA_BLOCK ? MAX_RAWDATA_BLOCK : m_nTotalRawBytes;
+    m_nTotalRawBytes -= nReturnLength;
+
+    char* pBuffer = new char[nReturnLength];
+    ::memcpy( pBuffer, m_pRawDataBuffer, nReturnLength );
+
+    if( m_nTotalRawBytes )
+        ::memmove( m_pRawDataBuffer, m_pRawDataBuffer+nReturnLength, m_nTotalRawBytes );
+
+    nRetBytes = nReturnLength;
+
+    return pBuffer;
+}
+
+int QT3kDevice::onReceiveRawData(unsigned char * pBuffer, unsigned short nBytes)
+{
+    m_RemoteStatusMutex.lock();
+    bool bRemoting = m_bRemoting;
+    m_RemoteStatusMutex.unlock();
+    if( bRemoting )
+    {
+//        if( !m_pNotify )
+//            return 0;
+
+        {
+        QMutexLocker Locker( &m_RawDataMutex );
+        Q_ASSERT( !m_pRawDataBuffer || m_nTotalRawBytes + nBytes < MAX_RAWBUFFER );
+
+        ::memcpy( m_pRawDataBuffer+m_nTotalRawBytes, pBuffer, nBytes );
+        m_nTotalRawBytes += nBytes;
+        }
+
+        // windnsoul signal
+        emit receiveRawData( this );
+
+        if( m_bGetBothSensorData )
+            return 0;
+        else
+            return 1;
+    }
+
+    return 0;
+}
+
+void QT3kDevice::onReceiveRawDataFlag(bool bReceive)
+{
+    m_RemoteStatusMutex.lock();
+    m_bRemoting = bReceive;
+    m_RemoteStatusMutex.unlock();
+
+    if( bReceive )
+    {
+        m_pNotify.fnOnReceiveRawData = _OnT3kReceiveRawDataHandler;
+
+        QMutexLocker Lock( &m_RawDataMutex );
+        // create buffer
+        if( !m_pRawDataBuffer )
+            m_pRawDataBuffer = new char[MAX_RAWBUFFER];
+
+        m_nTotalRawBytes = 0;
+        //g_nRawDataCount = 0;
+    }
+    else
+    {
+        m_pNotify.fnOnReceiveRawData = NULL;
+    }
+
+    emit receiveRawDataFlag( bReceive );
+
+    if( !m_hDevice )
+        return;
+
+    ::T3kSetEventNotify( m_hDevice, &m_pNotify );
+
+    if( !bReceive )
+    {
+        QMutexLocker Lock( &m_RawDataMutex );
+        foreach( char* pBuf, m_qBuffers )
+        {
+            if( pBuf )
+                delete[] pBuf;
+        }
+        m_qBuffers.clear();
+        m_qBytes.clear();
+
+        // create buffer
+        if( m_pRawDataBuffer )
+        {
+            delete[] m_pRawDataBuffer;
+            m_pRawDataBuffer = NULL;
+        }
+
+        m_nTotalRawBytes = 0;
+    }
+}
+#endif

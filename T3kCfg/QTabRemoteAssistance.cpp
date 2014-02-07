@@ -32,7 +32,7 @@
 
 QString GetAbstractSocketErrorStr(QAbstractSocket::SocketError err);
 
-QTabRemoteAssistance::QTabRemoteAssistance(QT3kDeviceR *&pHandle, QWidget *parent) :
+QTabRemoteAssistance::QTabRemoteAssistance(QT3kDevice *&pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QTabRemoteAssistance), m_pT3kHandle(pHandle)
 {

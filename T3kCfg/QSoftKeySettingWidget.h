@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 #include "QSoftkey.h"
@@ -14,12 +14,12 @@ namespace Ui {
     class QSoftKeySettingWidget;
 }
 
-class QSoftKeySettingWidget : public QWidget, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
+class QSoftKeySettingWidget : public QWidget, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QSoftKeySettingWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
+    explicit QSoftKeySettingWidget(QT3kDevice*& pHandle, QWidget *parent = 0);
     ~QSoftKeySettingWidget();
 
     void SetDefault();
@@ -70,7 +70,7 @@ signals:
 
 private:
     Ui::QSoftKeySettingWidget   *ui;
-    QT3kDeviceR*&                m_pT3kHandle;
+    QT3kDevice*&                m_pT3kHandle;
 
 private slots:
     void onslot_TableSoftkeyMap_cellChanged(int nRow, int nColumn, int nIndex);

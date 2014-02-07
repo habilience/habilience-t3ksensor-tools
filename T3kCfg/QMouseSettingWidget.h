@@ -16,7 +16,7 @@ class QMouseSettingWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit QMouseSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
+    explicit QMouseSettingWidget(QT3kDevice*& pHandle, QWidget *parent = 0);
     ~QMouseSettingWidget();
 
     // old
@@ -37,7 +37,7 @@ signals:
     void SendInputModeState(int nCurInputMode);
 
 private:
-    QT3kDeviceR*&            m_pT3kHandle;
+    QT3kDevice*&            m_pT3kHandle;
 
 private slots:
 

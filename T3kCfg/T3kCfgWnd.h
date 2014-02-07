@@ -16,7 +16,7 @@ class QSettings;
 #include <QTimer>
 
 #include "stdInclude.h"
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 
 #include "QMySystemTrayIcon.h"
 #include "QLangManager.h"
@@ -28,7 +28,7 @@ namespace Ui {
     class T3kCfgWnd;
 }
 
-class T3kCfgWnd : public QMainWindow, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
+class T3kCfgWnd : public QMainWindow, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
@@ -98,7 +98,7 @@ private:
     QAction*                    m_pOpenQAction;
     QAction*                    m_pExitQAction;
 
-    QT3kDeviceR*                m_pT3kHandle;
+    QT3kDevice*                m_pT3kHandle;
     int                         m_nProfileIndex;
 
     bool                        m_bIsConnect;

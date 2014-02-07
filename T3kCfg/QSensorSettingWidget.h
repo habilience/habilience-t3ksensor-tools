@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QToolButton>
 
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 #include "QDiableTouchWidget.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
@@ -13,12 +13,12 @@ namespace Ui {
     class QSensorSettingWidget;
 }
 
-class QSensorSettingWidget : public QWidget, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
+class QSensorSettingWidget : public QWidget, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QSensorSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
+    explicit QSensorSettingWidget(QT3kDevice*& pHandle, QWidget *parent = 0);
     ~QSensorSettingWidget();
 
     enum BuzzerType { BT_ERROR, BT_CLICK, BT_KEYTONE, BT_CALIBRATION, BT_SENSORATTACH, BT_USBATTACH, BT_PENPAIRING, MaxBuzzer };
@@ -46,7 +46,7 @@ protected:
 private:
     Ui::QSensorSettingWidget *ui;
 
-    QT3kDeviceR*&                m_pT3kHandle;
+    QT3kDevice*&                m_pT3kHandle;
 
     QString                     m_strCaptionON;
     QString                     m_strCaptionOFF;

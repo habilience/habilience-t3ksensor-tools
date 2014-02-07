@@ -14,7 +14,7 @@ QRequestHIDManager::~QRequestHIDManager()
     Stop();
 }
 
-void QRequestHIDManager::Start( QT3kDeviceR* pHandle )
+void QRequestHIDManager::Start( QT3kDevice* pHandle )
 {
     Q_ASSERT( pHandle );
     m_pT3kHandle = pHandle;

@@ -16,7 +16,7 @@ CONFIG += static staticlib
 TEMPLATE = app
 
 #Define
-DEFINES += _QT_COMPILER_ QUAZIP_STATIC USE_T3K_STATIC_LIBS _T3KHANDLE_INCLUDE_REMOTE T3K_DEFULAT_FONT
+DEFINES += _QT_COMPILER_ QUAZIP_STATIC USE_T3K_STATIC_LIBS _T3KHANDLE_INCLUDE_REMOTE T3K_DEFULAT_FONT T3KDEVICE_CUSTOM
 
 
 CONFIG(debug, debug|release):DEFINES += _DEBUG
@@ -179,9 +179,7 @@ macx: {
 #Socoures
 SOURCES += main.cpp\
     ../common/QT3kDevice.cpp \
-    ../common/QT3kDeviceR.cpp \
     ../common/QT3kDeviceEventHandler.cpp \
-    ../common/QT3kDeviceREventHandler.cpp \
     ../common/QKeyMapStr.cpp \
     ../common/QUtils.cpp \
     ../common/QGUIUtils.cpp \
@@ -273,9 +271,7 @@ SOURCES += main.cpp\
 
 HEADERS  += \
     ../common/QT3kDevice.h \
-    ../common/QT3kDeviceR.h \
     ../common/QT3kDeviceEventHandler.h \
-    ../common/QT3kDeviceREventHandler.h \
     ../common/QKeyMapStr.h \
     ../common/QUtils.h \
     ../common/QGUIUtils.h \

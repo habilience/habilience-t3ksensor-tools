@@ -10,6 +10,10 @@
 
 #include "QT3kDevice.h"
 
+#ifdef T3KDEVICE_CUSTOM
+#include <QTcpSocket>
+#endif
+
 enum ResponsePart { MM, CM1, CM2, CM1_1, CM2_1 };
 
 
@@ -116,9 +120,22 @@ public:
 protected:
     QVector<IListener*>      m_EventListener;
 
+#ifdef T3KDEVICE_CUSTOM
+    // Remote
+    QTcpSocket*         m_pSocket;
+    bool                m_bRemoteMode;
+#endif
+
 public:
     void addListener(IListener* l);
     void removeListener(IListener* l);
+
+#ifdef T3KDEVICE_CUSTOM
+    void sendRemoteNotifyPacket(int nType);
+    void sendRemoteRawDataPacket(int nType, const char* pData, qint64 nDataSize);
+
+    void setSocket(QTcpSocket* socket);
+#endif
 
     friend class QT3kDevice;
 protected:
@@ -167,6 +184,10 @@ public:
 signals:
 
 public slots:
+#ifdef T3KDEVICE_CUSTOM
+    virtual int onReceiveRawData(void* pContext);
+    virtual void onReceiveRawDataFlag(bool bReceive);
+#endif
 };
 
 ResponsePart getResponsPartFromPartId( const char* partid, const char* cmd );

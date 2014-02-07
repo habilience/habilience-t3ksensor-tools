@@ -2,7 +2,7 @@
 #define QCALIBRATIONSETTINGWIDGET_H
 
 #include <QWidget>
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 #include "QCalibrationWidget.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
@@ -15,12 +15,12 @@ namespace Ui {
     class QCalibrationSettingWidget;
 }
 
-class QCalibrationSettingWidget : public QWidget, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
+class QCalibrationSettingWidget : public QWidget, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QCalibrationSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
+    explicit QCalibrationSettingWidget(QT3kDevice*& pHandle, QWidget *parent = 0);
     ~QCalibrationSettingWidget();
 
     void SetDefault();
@@ -59,7 +59,7 @@ protected:
 private:
     Ui::QCalibrationSettingWidget *ui;
 
-    QT3kDeviceR*&                m_pT3kHandle;
+    QT3kDevice*&                m_pT3kHandle;
 
 signals:
     void ByPassKeyPressEvent(QKeyEvent *evt);

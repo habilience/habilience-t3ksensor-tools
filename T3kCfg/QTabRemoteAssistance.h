@@ -9,7 +9,7 @@
 #include "QT3kUserData.h"
 #include "PacketStructure.h"
 
-#include "QT3kDeviceR.h"
+#include "QT3kDevice.h"
 
 class QSideviewWidget;
 class QOrderTouchWidget;
@@ -23,7 +23,7 @@ class QTabRemoteAssistance : public QDialog, public QLangManager::ILangChangeNot
     Q_OBJECT
 
 public:
-    explicit QTabRemoteAssistance(QT3kDeviceR*& pHandle, QWidget *parent = 0);
+    explicit QTabRemoteAssistance(QT3kDevice*& pHandle, QWidget *parent = 0);
     ~QTabRemoteAssistance();
 
     enum eConnectState { Disconnected, Connecting, Connected };
@@ -75,7 +75,7 @@ protected:
 private:
     Ui::QTabRemoteAssistance *ui;
 
-    QT3kDeviceR*&                m_pT3kHandle;
+    QT3kDevice*&                m_pT3kHandle;
 
 signals:
     void StartRemoteMode();

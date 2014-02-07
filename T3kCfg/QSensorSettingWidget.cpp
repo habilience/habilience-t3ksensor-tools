@@ -22,7 +22,7 @@ typedef enum
         buzzeridUsbAttach     = 6
 } BuzzerID;
 
-QSensorSettingWidget::QSensorSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
+QSensorSettingWidget::QSensorSettingWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QSensorSettingWidget), m_pT3kHandle(pHandle)
 {

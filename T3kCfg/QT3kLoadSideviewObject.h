@@ -11,7 +11,7 @@ class QT3kLoadSideviewObject : public QT3kHIDObject
 {
     Q_OBJECT
 public:
-    explicit QT3kLoadSideviewObject(QT3kDeviceR*& pHandle, QObject *parent = 0);
+    explicit QT3kLoadSideviewObject(QT3kDevice*& pHandle, QObject *parent = 0);
     virtual ~QT3kLoadSideviewObject();
 
     void SetSavePath( QString strSavePath ) { m_strSavePath = strSavePath; }
@@ -26,7 +26,7 @@ protected:
     void FillEmptySideview(QImage *pImg, int nWidth, int nHeight);
 
 protected:
-    // QT3kDeviceREventHandler::IListener
+    // QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnPRV(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int total, int offset, const unsigned char *data, int cnt);
     virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 

@@ -2,7 +2,7 @@
 
 #include "T3kConstStr.h"
 
-void playBuzzer( QT3kDeviceR* pHandle, BuzzerType type )
+void playBuzzer( QT3kDevice* pHandle, BuzzerType type )
 {
     int nCat = 0, nType = 0;
 

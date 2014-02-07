@@ -8,7 +8,7 @@
 
 #include "QWidgetCloseEventManager.h"
 
-QDiableTouchWidget::QDiableTouchWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
+QDiableTouchWidget::QDiableTouchWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QDialog(parent),
     m_pT3kHandle(pHandle), ui(new Ui::QDiableTouchWidget)
 {   

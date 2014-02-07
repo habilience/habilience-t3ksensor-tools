@@ -4,7 +4,7 @@
 #include <QWidget>
 #include "QRaisePushButton.h"
 
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 
 
@@ -22,11 +22,11 @@ namespace Ui {
     class QMenuStripWidget;
 }
 
-class QMenuStripWidget : public QWidget, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
+class QMenuStripWidget : public QWidget, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 public:
-    explicit QMenuStripWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
+    explicit QMenuStripWidget(QT3kDevice*& pHandle, QWidget *parent = 0);
     ~QMenuStripWidget();
 
     void SetMenuButton( int nIndex );
@@ -53,7 +53,7 @@ protected:
 
 private:
     Ui::QMenuStripWidget *ui;
-    QT3kDeviceR*&            m_pT3kHandle;
+    QT3kDevice*&            m_pT3kHandle;
 
 signals:
     void ShowMenuEvent(int nMenu);

@@ -13,7 +13,7 @@
 #include <QFile>
 
 
-QOMouseProfileWidget::QOMouseProfileWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
+QOMouseProfileWidget::QOMouseProfileWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QOMouseProfileWidget), m_pT3kHandle(pHandle)
 {

@@ -15,7 +15,7 @@
 #define LD_Cam4             3
 #define LD_End              4
 
-QT3kLoadSideviewObject::QT3kLoadSideviewObject(QT3kDeviceR*& pHandle, QObject *parent) :
+QT3kLoadSideviewObject::QT3kLoadSideviewObject(QT3kDevice*& pHandle, QObject *parent) :
     QT3kHIDObject(pHandle, parent)
 {
     m_nLoadCamNo = LD_End;

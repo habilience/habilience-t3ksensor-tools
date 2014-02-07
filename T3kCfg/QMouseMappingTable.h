@@ -2,7 +2,7 @@
 #define QMOUSEMAPPINGTABLE_H
 
 #include <QLabel>
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 
 #define EXTP_COUNT              5
@@ -45,14 +45,14 @@ public:
 #include "ui/QEditAction4WDWnd.h"
 #include "ui/QEditActionWnd.h"
 
-class QMouseMappingTable : public QLabel, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
+class QMouseMappingTable : public QLabel, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 public:
     explicit QMouseMappingTable(QWidget *parent = 0);
     ~QMouseMappingTable();
 
-    void SetT3kHandle( QT3kDeviceR* pHandle ) { m_pT3kHandle = pHandle; }
+    void SetT3kHandle( QT3kDevice* pHandle ) { m_pT3kHandle = pHandle; }
 
     void SetProfileIndex( int nIndex );
     void ResetSelect();
@@ -86,7 +86,7 @@ private:
     CellInfo* GetAt(int nIndex);
 
 protected:
-    QT3kDeviceR*                 m_pT3kHandle;
+    QT3kDevice*                 m_pT3kHandle;
 
     QEditActionEDWnd*           m_pEditActionEDWnd;
     QEditAction2WDWnd*          m_pEditAction2WDWnd;

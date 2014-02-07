@@ -1,6 +1,10 @@
 #include "./QT3kDeviceEventHandler.h"
 #include "./T3kConstStr.h"
 
+#ifdef T3KDEVICE_CUSTOM
+#include "PacketStructure.h"
+#endif
+
 
 #define PARTID_LENGTH		(8)
 ResponsePart getResponsePartFromPartId( const char* partid, const char* cmd )
@@ -79,6 +83,10 @@ ResponsePart getResponsePartFromPartId( const char* partid, const char* cmd )
 QT3kDeviceEventHandler::QT3kDeviceEventHandler(QObject *parent) :
     QObject(parent)
 {
+#ifdef T3KDEVICE_CUSTOM
+    m_pSocket = NULL;
+    m_bRemoteMode = false;
+#endif
 }
 
 QT3kDeviceEventHandler::~QT3kDeviceEventHandler()
@@ -110,6 +118,12 @@ void QT3kDeviceEventHandler::removeListener(IListener* l)
 
 void QT3kDeviceEventHandler::_onDisconnected( T3K_DEVICE_INFO devInfo )
 {
+#ifdef T3KDEVICE_CUSTOM
+    // send to remote
+    if( m_bRemoteMode )
+        sendRemoteNotifyPacket( Client | NotifySensorDisconnected );
+#endif
+
     for (int i=0 ; i<m_EventListener.size() ; i++)
     {
         m_EventListener.at(i)->TPDP_OnDisconnected(devInfo);
@@ -118,6 +132,12 @@ void QT3kDeviceEventHandler::_onDisconnected( T3K_DEVICE_INFO devInfo )
 
 void QT3kDeviceEventHandler::_onDownloadingFirmware( T3K_DEVICE_INFO devInfo, bool bIsDownload )
 {
+#ifdef T3KDEVICE_CUSTOM
+    // send to remote
+    if( m_bRemoteMode )
+        sendRemoteRawDataPacket( Client | NotifyFWDownloading, (const char*)&bIsDownload, sizeof(int) );
+#endif
+
     for (int i=0 ; i<m_EventListener.size() ; i++)
     {
         m_EventListener.at(i)->TPDP_OnDownloadingFirmware(devInfo, bIsDownload);
@@ -310,3 +330,100 @@ void QT3kDeviceEventHandler::_onVER( T3K_DEVICE_INFO devInfo, unsigned short tic
         m_EventListener.at(i)->TPDP_OnVER(devInfo, Part, ticktime, partid, ver);
     }
 }
+
+#ifdef T3KDEVICE_CUSTOM
+void QT3kDeviceEventHandler::setSocket(QTcpSocket *socket)
+{
+    m_pSocket = socket;
+}
+
+void QT3kDeviceEventHandler::sendRemoteNotifyPacket(int nType)
+{
+    if( m_pSocket == NULL || m_pSocket->state() != QAbstractSocket::ConnectedState ) return;
+
+    RHeaderPkt packet;
+    packet.nType = nType;
+    packet.nPktSize = sizeof(RHeaderPkt);
+
+    /*qint64 nRet = */m_pSocket->write( (const char*)&packet, packet.nPktSize );
+}
+
+void QT3kDeviceEventHandler::sendRemoteRawDataPacket(int nType, const char *pData, qint64 nDataSize)
+{
+    Q_ASSERT( pData != NULL && nDataSize != 0 );
+
+    if( m_pSocket == NULL || m_pSocket->state() != QAbstractSocket::ConnectedState ) return;
+
+    int nPacketSize = sizeof(RHeaderPkt) + nDataSize + sizeof(short);
+    char* pBuffer = new char[nPacketSize];
+    RRawDataPkt* packet = (RRawDataPkt*)pBuffer;
+    packet->Header.nType = nType;
+    packet->Header.nPktSize = nPacketSize;
+    memcpy( packet->data, pData, nDataSize );
+
+    /*qint64 nRet = */m_pSocket->write( (const char*)pBuffer, nPacketSize );
+
+    delete[] pBuffer;
+
+//    if( nRet < 0 )
+//    {
+//        // error
+//    }
+}
+
+int QT3kDeviceEventHandler::onReceiveRawData(void* /*pContext*/)
+{
+    // send to remote
+    if( m_bRemoteMode )
+    {
+        if( m_pSocket == NULL || m_pSocket->state() != QAbstractSocket::ConnectedState ) return 0;
+
+        int nTotalBytes = 0;
+        do
+        {
+            char* rawData = QT3kDevice::instance()->getRawDataPacket( nTotalBytes );
+            if( nTotalBytes == 0 || rawData == NULL ) break;
+
+            Q_ASSERT( nTotalBytes < MAX_RAWDATA_BLOCK+1 );
+
+            int nPacketSize = sizeof(RHeaderPkt) + nTotalBytes + sizeof(short);
+            char* pBuffer = new char[nPacketSize];
+            ::memset( pBuffer, 9, nPacketSize );
+            RRawDataPkt* packet = (RRawDataPkt*)pBuffer;
+            packet->Header.nType = Client | TranSensorRawData;
+            packet->Header.nPktSize = nPacketSize;
+            //packet->nTotalBlockCount = ++g_nRawDataCount;           // del
+            ::memcpy( packet->data, rawData, nTotalBytes );
+
+            qint64 nRet = nPacketSize;
+            char* pSendBuf = pBuffer;
+            qint64 nSend = 0;
+            while( nPacketSize )
+            {
+//                qDebug( "write %02x %02x %02x %02x",
+//                        (unsigned char)pSendBuf[0], (unsigned char)pSendBuf[1],
+//                        (unsigned char)pSendBuf[2], (unsigned char)pSendBuf[3] );
+                nRet = m_pSocket->write( (const char*)pSendBuf, nPacketSize );
+                if ( nRet <= 0 ) break;
+                nSend += nRet;
+                nPacketSize -= nRet;
+                pSendBuf += nRet;
+            }
+
+            //qDebug( "Write : %d, %d %d", nSend, g_nRawDataCount, packet->nTotalBlockCount );
+            //qDebug( "Write : %d %s", packet->Header.nPktSize );
+            //qDebug( "Write : %d %d %s", ((RRawDataPkt*)pBuffer)->Header.nType, ((RRawDataPkt*)pBuffer)->Header.nPktSize, (char*)(pBuffer+17) );
+            delete[] pBuffer;
+            delete[] rawData;
+
+        } while( nTotalBytes > 0 );
+    }
+
+    return 0;
+}
+
+void QT3kDeviceEventHandler::onReceiveRawDataFlag(bool bReceive)
+{
+    m_bRemoteMode = bReceive;
+}
+#endif

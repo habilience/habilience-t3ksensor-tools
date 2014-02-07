@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 #include "ui/QGestureMappingTable.h"
 #include "ui/QEditActionWnd.h"
 #include "ui/QEditActionEDWnd.h"
@@ -20,19 +20,19 @@ class QNMouseProfileWidget;
 }
 
 class QColorTabWidget;
-class QNMouseProfileWidget : public QWidget, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
+class QNMouseProfileWidget : public QWidget, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QNMouseProfileWidget(QT3kDeviceR*& pT3kHandle, QWidget *parent = 0);
+    explicit QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *parent = 0);
     ~QNMouseProfileWidget();
 
     void setDefault();
     void refresh();
 
 protected:
-    // QT3kDeviceREventHandler::IListener
+    // QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
     virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
@@ -65,7 +65,7 @@ protected:
 
 private:
     Ui::QNMouseProfileWidget *ui;
-    QT3kDeviceR*&               m_pT3kHandle;
+    QT3kDevice*&               m_pT3kHandle;
 
 signals:
     void ByPassKeyPressEvent(QKeyEvent *evt);

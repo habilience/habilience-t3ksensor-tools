@@ -21,7 +21,7 @@ extern bool g_bIsScreenShotMode;
 #define QICON_WIDTH             40
 #define QICON_HEIGHT            40
 
-QMainMenuWidget::QMainMenuWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
+QMainMenuWidget::QMainMenuWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QMainMenuWidget), m_pT3kHandle(pHandle)
 {
@@ -269,7 +269,7 @@ void QMainMenuWidget::UpdateInformation()
 
 void QMainMenuWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
-    if( !isVisible() ) return;
+    if( !winId() ) return;
 
     bool bUpdateInformation = false;
     const char* szCmd = cmd;

@@ -16,7 +16,7 @@
 #include <windows.h>
 #endif
 
-QGeneralSettingWidget::QGeneralSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
+QGeneralSettingWidget::QGeneralSettingWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QWidget(parent),
     m_pT3kHandle(pHandle)
 {

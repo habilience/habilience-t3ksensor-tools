@@ -8,7 +8,7 @@
 #include <QKeyEvent>
 
 
-QNMouseProfileWidget::QNMouseProfileWidget(QT3kDeviceR*& pT3kHandle, QWidget *parent) :
+QNMouseProfileWidget::QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QNMouseProfileWidget), m_pT3kHandle(pT3kHandle)
 {
@@ -65,7 +65,7 @@ void QNMouseProfileWidget::refresh()
 
 void QNMouseProfileWidget::requestSensorData( bool bDefault )
 {
-    QT3kDeviceR* pT3kHandle = QT3kUserData::GetInstance()->getT3kHandle();
+    QT3kDevice* pT3kHandle = QT3kUserData::GetInstance()->getT3kHandle();
     if( !pT3kHandle ) return;
 
     m_RequestCmdManager.Stop();

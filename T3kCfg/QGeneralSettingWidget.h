@@ -3,16 +3,16 @@
 
 #include "ui_QGeneralSettingWidget.h"
 
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 
-class QGeneralSettingWidget : public QWidget, private Ui::QGeneralSettingWidget, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
+class QGeneralSettingWidget : public QWidget, private Ui::QGeneralSettingWidget, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QGeneralSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
+    explicit QGeneralSettingWidget(QT3kDevice*& pHandle, QWidget *parent = 0);
     ~QGeneralSettingWidget();
 
     void SetDefault();
@@ -45,7 +45,7 @@ protected:
     int                         m_nDisplayOrientation;
 
 private:
-    QT3kDeviceR*&                m_pT3kHandle;
+    QT3kDevice*&                m_pT3kHandle;
 
 signals:
     void ByPassKeyPressEvent(QKeyEvent *evt);

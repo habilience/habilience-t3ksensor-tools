@@ -1,7 +1,7 @@
 #ifndef QBENTADJUSTMENT_H
 #define QBENTADJUSTMENT_H
 
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "fe/QPointClipper.h"
 #include "QRequestHIDManager.h"
@@ -87,7 +87,7 @@ protected:
 };
 
 class QBentAdjustment : public QObject
-        , public QT3kDeviceREventHandler::IListener
+        , public QT3kDeviceEventHandler::IListener
         , public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
@@ -132,7 +132,7 @@ private:
     QVector<BentItem> m_BentItemArray;
     QPointClipper     m_PointClipper;
 
-    QT3kDeviceR*         m_pT3kHandle;
+    QT3kDevice*         m_pT3kHandle;
 
     QRect               m_rcBody;
 
@@ -180,7 +180,7 @@ protected:
 
     void sendSaveCommand();
 
-    // QT3kDeviceREventHandler::IListener
+    // QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnOBJ(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, unsigned char *layerid, float *start_pos, float *end_pos, int cnt);
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
     virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);

@@ -28,7 +28,7 @@
 //static const char cstrSytaxError[] = "systax error";
 
 
-QLoadSensorDataWidget::QLoadSensorDataWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
+QLoadSensorDataWidget::QLoadSensorDataWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QDialog(parent), ui(new Ui::QLoadSensorDataWidget), m_pT3kHandle(pHandle)
 {
     setWindowFlags( Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint );

@@ -21,7 +21,7 @@
 #include "CfgCustomCmdDef.h"
 
 
-QAssistanceWidget::QAssistanceWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
+QAssistanceWidget::QAssistanceWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QAssistanceWidget), m_pT3kHandle(pHandle)
 {

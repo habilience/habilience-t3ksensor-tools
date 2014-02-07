@@ -65,7 +65,6 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
     //m_hDeviceNotify = NULL;
 
     m_pT3kHandle = QT3kDevice::instance();
-    m_pT3kHandle->setEventHandler( QT3kDeviceEventHandler::instance() );
 
     bool bLoadOK = false;
 

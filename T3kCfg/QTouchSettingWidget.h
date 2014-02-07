@@ -2,7 +2,7 @@
 #define QTOUCHSETTINGWIDGET_H
 
 #include <QDialog>
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "QRequestHIDManager.h"
 
@@ -10,12 +10,12 @@ namespace Ui{
     class QTouchSettingWidget;
 }
 
-class QTouchSettingWidget : public QDialog, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
+class QTouchSettingWidget : public QDialog, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QTouchSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
+    explicit QTouchSettingWidget(QT3kDevice*& pHandle, QWidget *parent = 0);
     ~QTouchSettingWidget();
 
 protected:
@@ -32,7 +32,7 @@ protected:
     // QDialog
     virtual void showEvent(QShowEvent *evt);
 
-    // QT3kDeviceREventHandler::IListener
+    // QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 protected:
@@ -42,7 +42,7 @@ protected:
 
 private:
     Ui::QTouchSettingWidget* ui;
-    QT3kDeviceR*&                m_pT3kHandle;
+    QT3kDevice*&                m_pT3kHandle;
 
 private slots:
     void on_SldZoom_valueChanged(int value);

@@ -1023,7 +1023,11 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
             snprintf( szCmd, 256, "%s%02X%04X", cstrMouseProfile5, 0x00, m_wProfileFlags );
             break;
         }
+#ifdef T3KDEVICE_CUSTOM
         QT3kDevice::instance()->sendCommand( szCmd, true );
+#else
+        QT3kDevice::instance()->sendCommand( szCmd, true );
+#endif
     }
 }
 

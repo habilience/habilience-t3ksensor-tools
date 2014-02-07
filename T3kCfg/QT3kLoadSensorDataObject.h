@@ -10,7 +10,7 @@ class QT3kLoadSensorDataObject : public QT3kHIDObject
 {
     Q_OBJECT
 public:
-    explicit QT3kLoadSensorDataObject(QT3kDeviceR*& pHandle, QObject *parent = 0);
+    explicit QT3kLoadSensorDataObject(QT3kDevice*& pHandle, QObject *parent = 0);
     virtual ~QT3kLoadSensorDataObject();
 
     enum eDataPart { DP_CM1 = 1, DP_CM2, DP_CM1_1, DP_CM2_1, DP_MM, DP_END };
@@ -25,7 +25,7 @@ protected:
     void Push_Data(ResponsePart Part, PairRSP &stRSP, const char* sCmd);
 
 protected:
-    // QT3kDeviceREventHandler::IListener
+    // QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
     virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
     virtual void TPDP_OnVER(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, t3kpacket::_body::_ver *ver);

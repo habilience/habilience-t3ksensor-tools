@@ -4,7 +4,7 @@
 #include <QWidget>
 
 #include "QProfileLabel.h"
-#include "QT3kDeviceREventHandler.h"
+#include "QT3kDeviceEventHandler.h"
 #include "QMouseMappingTable.h"
 #include "QTouchSettingWidget.h"
 
@@ -18,12 +18,12 @@ namespace Ui {
     class QOMouseProfileWidget;
 }
 
-class QOMouseProfileWidget : public QWidget, public QT3kDeviceREventHandler::IListener, public QLangManager::ILangChangeNotify
+class QOMouseProfileWidget : public QWidget, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 
 public:
-    explicit QOMouseProfileWidget(QT3kDeviceR*& pHandle, QWidget *parent = 0);
+    explicit QOMouseProfileWidget(QT3kDevice*& pHandle, QWidget *parent = 0);
     ~QOMouseProfileWidget();
 
     void SetDefault();
@@ -67,7 +67,7 @@ signals:
 
 private:
     Ui::QOMouseProfileWidget *ui;
-    QT3kDeviceR*&            m_pT3kHandle;
+    QT3kDevice*&            m_pT3kHandle;
 
 private slots:
     void on_Profile5_clicked();

@@ -5,7 +5,7 @@
 #include "QT3kUserData.h"
 
 
-QMouseSettingWidget::QMouseSettingWidget(QT3kDeviceR*& pHandle, QWidget *parent) :
+QMouseSettingWidget::QMouseSettingWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QWidget(parent), m_pT3kHandle(pHandle)
 {
     setFont( qApp->font() );

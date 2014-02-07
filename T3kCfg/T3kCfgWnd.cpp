@@ -111,8 +111,7 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     setAnimated( true );
     setDockOptions( AnimatedDocks );
 
-    m_pT3kHandle = (QT3kDeviceR*)QT3kDevice::instance();
-    m_pT3kHandle->setEventHandler( (QT3kDeviceREventHandler*)QT3kDeviceREventHandler::instance() );
+    m_pT3kHandle = QT3kDevice::instance();
 
     QT3kUserData::GetInstance()->setT3kHandle( m_pT3kHandle );
 
@@ -339,13 +338,13 @@ bool T3kCfgWnd::OpenT30xHandle()
     if( !m_pT3kHandle ) return false;
 
     // windnsoul
-//    TPDPEventMultiCaster::instance()->SetSocket( QT3kUserData::GetInstance()->GetRemoteSocket() );
+    QT3kDeviceEventHandler::instance()->setSocket( QT3kUserData::GetInstance()->GetRemoteSocket() );
 
     int nIdx = 0;
     int nTotalSensorCount = 0;
     for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
     {
-        int nCnt = QT3kDeviceR::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+        int nCnt = QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
         if( nCnt > 0 && (d != COUNT_OF_DEVICE_LIST-1 || nTotalSensorCount == 0) )
             nIdx = d;
         nTotalSensorCount += nCnt;
@@ -378,7 +377,7 @@ bool T3kCfgWnd::OpenT30xHandle()
         return bRet;
     }
 
-    bRet = QT3kDeviceR::instance()->open( DEVICE_LIST[nIdx].nVID, DEVICE_LIST[nIdx].nPID, DEVICE_LIST[nIdx].nMI, 0 );
+    bRet = QT3kDevice::instance()->open( DEVICE_LIST[nIdx].nVID, DEVICE_LIST[nIdx].nPID, DEVICE_LIST[nIdx].nMI, 0 );
 
     if( bRet )
     {

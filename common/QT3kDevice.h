@@ -49,7 +49,18 @@ private:
     QVector<t3kpacket*> m_PacketPool;
     QMutex              m_PktPoolLock;
 
-    QT3kDeviceEventHandler*     m_pT3kEventHandler;
+#ifdef T3KDEVICE_CUSTOM
+    // Only RawData
+    char*                                   m_pRawDataBuffer;
+    int                                     m_nTotalRawBytes;
+    QMutex                                  m_RawDataMutex;
+    QQueue<unsigned short>                  m_qBytes;
+    QQueue<char*>                           m_qBuffers;
+
+    bool                                    m_bGetBothSensorData;
+    QMutex                                  m_RemoteStatusMutex;
+    bool                                    m_bRemoting;
+#endif
 
 protected:
     T3K_EVENT_NOTIFY            m_pNotify;
@@ -59,8 +70,6 @@ public:
     void close();
     bool isOpen();
     T3K_DEVICE_INFO getDeviceInfo();
-
-    virtual void setEventHandler( QT3kDeviceEventHandler* pHandler );
 
     static int getDeviceCount( unsigned short nVID, unsigned short nPID, unsigned short nMI );
     static char* getDevicePath( unsigned short nVID, unsigned short nPID, unsigned short nMI, int nDevIndex );
@@ -118,6 +127,11 @@ public:
     bool isVirtualDevice() { return false; }
 #endif
 
+#ifdef T3KDEVICE_CUSTOM
+    char* getRawDataPacket( int& nRetBytes );
+    void setBothSensorData( bool bBoth ) { m_bGetBothSensorData = bBoth ;}
+#endif
+
 public:
     explicit QT3kDevice(QObject *parent = 0);
     ~QT3kDevice();
@@ -139,14 +153,17 @@ signals:
     void packetReceived();
     void packetReceivedSync();
 
-    int receiveRawData( unsigned char* pBuffer, unsigned short nBytes );
+    int receiveRawData( void* pContext );
     void receiveRawDataFlag( bool bReceive );
     
 protected slots:
     virtual void onDisconnected();
     virtual void onDownloadingFirmware( bool bIsDownload );
-    virtual int onReceiveRawData(unsigned char* /*pBuffer*/, unsigned short /*nBytes*/) { return 0;}
-    virtual void onReceiveRawDataFlag(bool /*bReceive*/) {}
+#ifdef T3KDEVICE_CUSTOM
+public slots:
+    virtual int onReceiveRawData(unsigned char* /*pBuffer*/, unsigned short /*nBytes*/);
+    virtual void onReceiveRawDataFlag(bool /*bReceive*/);
+#endif
     void onPacketReceived();
 };
 

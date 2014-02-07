@@ -29,7 +29,7 @@ QSelectSensorWidget::QSelectSensorWidget(QWidget *parent) :
 
     ui->TitleSelectSensor->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_HABILIENCE.png" );
 
-    m_pT3kHandle = (QT3kDeviceR*)QT3kDevice::instance();
+    m_pT3kHandle = QT3kDevice::instance();
 
     int nW = ui->TableSensor->width() - ui->TableSensor->verticalHeader()->size().width();
     ui->TableSensor->verticalHeader()->setVisible( false );
@@ -208,7 +208,7 @@ void QSelectSensorWidget::timerEvent(QTimerEvent *evt)
     {
         int nTotalDetectCnt = 0;
         for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
-            nTotalDetectCnt += QT3kDeviceR::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+            nTotalDetectCnt += QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
 
         if( m_nDeviceCount != nTotalDetectCnt )
         {
@@ -276,7 +276,7 @@ void QSelectSensorWidget::UpdateDeviceList()
     {
         ModelID stID;
         stID.VID = DEVICE_LIST[d].nVID; stID.PID = DEVICE_LIST[d].nPID;
-        int nCnt = QT3kDeviceR::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+        int nCnt = QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
         for( int i=0; i<nCnt; i++ )
         {
             stID.Idx = i;
