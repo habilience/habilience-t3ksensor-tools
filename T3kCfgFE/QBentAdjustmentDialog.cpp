@@ -619,6 +619,37 @@ void QBentAdjustmentDialog::updateData( bool bSaveAndValidate )
     }
 }
 
+inline int camIdxToIdx( int nCameraIndex )
+{
+    switch (nCameraIndex)
+    {
+    case IDX_CM1:
+        return 0;
+    case IDX_CM2:
+        return 1;
+    case IDX_CM1_1:
+        return 2;
+    case IDX_CM2_1:
+        return 3;
+    }
+    return 0;
+}
+inline int idxToCamIdx( int nCam )
+{
+    switch ( nCam )
+    {
+    case 0:
+        return IDX_CM1;
+    case 1:
+        return IDX_CM2;
+    case 2:
+        return IDX_CM1_1;
+    case 3:
+        return IDX_CM2_1;
+    }
+    return IDX_CM1;
+}
+
 void QBentAdjustmentDialog::enterAdjustmentMode()
 {
     LOG_I( "enter adjustment mode" );
@@ -679,6 +710,103 @@ void QBentAdjustmentDialog::enterAdjustmentMode()
         killTimer(m_TimerDrawWaitTimeout);
     }
     m_TimerDrawWaitTimeout = startTimer( 1000 / WAIT_ANIMATION_FRAME );
+
+#if 1
+#ifdef CREATE_FILE_TO_DOCUMENTS_LOCATION
+    QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    strDocuments = rstrip( strDocuments, "/\\" );
+    QString strPath = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator();
+    makeDirectory(strPath);
+#else
+    QString strPath = QCoreApplication::applicationDirPath();
+    strPath = rstrip(strPath, "/\\");
+    strPath += QDir::separator();
+#endif
+    strPath += "bent_adjustment_.txt";
+    QFile file(strPath);
+    if ( file.open(QIODevice::ReadOnly) )
+    {
+        char buf[1024];
+        qint64 lineLength;
+        while ( (lineLength=file.readLine(buf, sizeof(buf))) >= 0 )
+        {
+            QString strLine = buf;
+            strLine = strLine.trimmed();
+            if ( strLine.isEmpty() )
+                continue;
+
+            int nD = strLine.indexOf("Cam"); if ( nD < 0 ) continue;
+            strLine = strLine.mid(nD + 3);
+            int nCamIndex = idxToCamIdx(strtol(strLine.toUtf8().data(), NULL, 0) - 1);
+
+            nD = strLine.indexOf(":"); if ( nD < 0 ) continue;
+            strLine = strLine.mid(nD + 1);
+
+            QString strNum;
+            float fObcS[ADJUSTMENT_STEP];
+            float fObcE[ADJUSTMENT_STEP];
+            float fObcCenter[ADJUSTMENT_STEP];
+            for ( int ni = 0; ni < ADJUSTMENT_STEP; ni++ )
+            {
+                nD = strLine.indexOf(","); if ( nD < 0 ) continue;
+                strNum = strLine.left(nD); strLine = strLine.mid(nD + 1);
+                if ( strNum.contains("#") )
+                    fObcS[ni] = NaN;
+                else
+                    fObcS[ni] = strtod(strNum.toUtf8().data(), NULL);
+                nD = strLine.indexOf("|"); if ( nD < 0 ) continue;
+                strNum = strLine.left(nD); strLine = strLine.mid(nD + 1);
+                if ( strNum.contains("#") )
+                    fObcE[ni] = NaN;
+                else
+                    fObcE[ni] = strtod(strNum.toUtf8().data(), NULL);
+                if ( _isnan(fObcS[ni]) || _isnan(fObcE[ni]) )
+                    fObcCenter[ni] = NaN;
+                else
+                    fObcCenter[ni] = (fObcS[ni] + fObcE[ni]) / 2.f;
+            }
+
+            bool bNewOBC = true;
+            for ( int i = 0; i < m_BentItemArray.size(); i++ )
+            {
+                BentItem& item = m_BentItemArray[i];
+                if ( item.nCameraIndex != nCamIndex )
+                    continue;
+
+                bNewOBC = false;
+                item.bDataValid = false;
+                for ( int i = 0; i < ADJUSTMENT_STEP; i++ )
+                {
+                    item.fObcS[i] = fObcS[i];
+                    item.fObcE[i] = fObcE[i];
+                    item.fObcCenter[i] = fObcCenter[i];
+                }
+                break;
+            }
+            if ( bNewOBC )
+            {
+                BentItem item;
+                memset(&item, 0, sizeof(BentItem));
+                item.nCameraIndex = nCamIndex;
+                item.bDataValid = false;
+                for ( int i = 0; i < ADJUSTMENT_STEP; i++ )
+                {
+                    item.fObcS[i] = fObcS[i];
+                    item.fObcE[i] = fObcE[i];
+                    item.fObcCenter[i] = fObcCenter[i];
+                }
+                m_BentItemArray.push_back(item);
+            }
+        }
+        file.close();
+
+        m_bIsValidTouch = true;
+        setInvalidTouch();
+        remoteCursor(false);
+        onAdjustmentFinish();
+        m_nAdjustmentStep = 0;
+    }
+#endif
 }
 
 void QBentAdjustmentDialog::leaveAdjustmentMode( bool bSuccess )
@@ -937,22 +1065,6 @@ QPointF QBentAdjustmentDialog::PosToTPos( float x, float y, float o/*=1.f*/ )
 QPoint QBentAdjustmentDialog::TPosToDCC( float x, float y, const QRect rcClient )
 {
     return QPoint((long)(x * rcClient.width()) + rcClient.left(), (long)(y * rcClient.height()) + rcClient.top());
-}
-
-inline int camIdxToIdx( int nCameraIndex )
-{
-    switch (nCameraIndex)
-    {
-    case IDX_CM1:
-        return 0;
-    case IDX_CM2:
-        return 1;
-    case IDX_CM1_1:
-        return 2;
-    case IDX_CM2_1:
-        return 3;
-    }
-    return 0;
 }
 
 void QBentAdjustmentDialog::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint* pPtCursor)

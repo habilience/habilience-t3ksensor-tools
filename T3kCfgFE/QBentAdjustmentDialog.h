@@ -54,7 +54,7 @@ struct BentItem
     int     nCalcPosProg;
     //HANDLE  hThread;
     QCalcCamPosThread* pThread;
-    QBentProgressDialog*    pCalcPosWnd;
+    QBentProgressDialog* pCalcPosWnd;
     bool    bCalcPos;
 
     bool	bDataValid;
