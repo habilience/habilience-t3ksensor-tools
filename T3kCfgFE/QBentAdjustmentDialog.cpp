@@ -760,7 +760,7 @@ void QBentAdjustmentDialog::enterAdjustmentMode()
                     fObcE[ni] = NaN;
                 else
                     fObcE[ni] = strtod(strNum.toUtf8().data(), NULL);
-                if ( _isnan(fObcS[ni]) || _isnan(fObcE[ni]) )
+                if ( qIsNaN(fObcS[ni]) || qIsNaN(fObcE[ni]) )
                     fObcCenter[ni] = NaN;
                 else
                     fObcCenter[ni] = (fObcS[ni] + fObcE[ni]) / 2.f;
