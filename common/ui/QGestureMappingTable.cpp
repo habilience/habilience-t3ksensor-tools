@@ -78,6 +78,11 @@ QGestureMappingTable::QGestureMappingTable(QWidget *parent) :
     m_pHoverCell = NULL;
     m_nHoverExtProperty = -1;
     m_nMultiProfile = -1;
+    m_bOnlyDisplay = false;
+
+    m_nMarginLeft = m_nMarginRight = 10;
+    m_nMarginTop = m_nMarginBottom = 16;
+
 
     m_fntSystem = getSystemFont(this);
 
@@ -165,9 +170,11 @@ void QGestureMappingTable::initControl()
     m_bCheckExtProperty[EXTP_PUTAND_ON_MULTITOUCHDEVICE]		= false;
     m_bCheckExtProperty[EXTP_MAC_OS_MARGIN]						= false;
 
-    m_bCheckExtProperty[EXTP_ENABLE_SINGLE_TAP]		= false;
-    m_bCheckExtProperty[EXTP_ENABLE_SINGLE_DBLTAP]	= false;
-    m_bCheckExtProperty[EXTP_ENABLE_SINGLE_MOVE]	= false;
+    m_bCheckExtProperty[EXTP_ENABLE_SINGLE_TAP]		= true;
+    m_bCheckExtProperty[EXTP_ENABLE_SINGLE_DBLTAP]	= true;
+    m_bCheckExtProperty[EXTP_ENABLE_SINGLE_MOVE]	= true;
+
+    m_wProfileFlags = 0x000007;
 
     onChangeLanguage();
 }
@@ -503,6 +510,119 @@ void QGestureMappingTable::parseMouseProfile( const char* szProfile )
     } while (!strProfile.isEmpty());
 }
 
+QString QGestureMappingTable::mergeMouseProfile()
+{
+    QString strValue;
+
+    // single
+    unsigned short wV1 = (m_wProfileFlags >> 8) & 0xFF;
+    unsigned short wV2 = m_wProfileFlags & 0xFF;
+    QString str = QString("00%1%2").arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'));
+    strValue += str;
+
+    unsigned short wV = m_aryCell[TABLE(COL_LONGTAP, ROW_SINGLE)].wKeyValue[0];
+    wV1 = (wV >> 8) & 0xFF;
+    wV2 = wV & 0xFF;
+    strValue += QString(" %1%2%3").arg(MM_GESTURE_SINGLE_LONG_TAP, 2, 16, QChar('0')).arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'));
+
+    // fingers
+    unsigned short* pwV = m_aryCell[TABLE(COL_MOVE, ROW_FINGERS)].wKeyValue;
+    wV1 = (pwV[0] >> 8) & 0xFF;
+    wV2 = pwV[0] & 0xFF;
+    unsigned short wV3 = (pwV[1] >> 8) & 0xFF;
+    unsigned short wV4 = pwV[1] & 0xFF;
+    unsigned short wV5 = (pwV[2] >> 8) & 0xFF;
+    unsigned short wV6 = pwV[2] & 0xFF;
+    unsigned short wV7 = (pwV[3] >> 8) & 0xFF;
+    unsigned short wV8 = pwV[3] & 0xFF;
+    strValue += QString(" %1%2%3%4%5%6%7%8%9").arg(MM_GESTURE_FINGERS_MOVE, 2, 16, QChar('0'))
+            .arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'))
+            .arg(wV3, 2, 16, QChar('0')).arg(wV4, 2, 16, QChar('0'))
+            .arg(wV5, 2, 16, QChar('0')).arg(wV6, 2, 16, QChar('0'))
+            .arg(wV7, 2, 16, QChar('0')).arg(wV8, 2, 16, QChar('0'));
+
+    wV = m_aryCell[TABLE(COL_TAP, ROW_FINGERS)].wKeyValue[0];
+    wV1 = (wV >> 8) & 0xFF;
+    wV2 = wV & 0xFF;
+    strValue += QString(" %1%2%3").arg(MM_GESTURE_FINGERS_TAP, 2, 16, QChar('0')).arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'));
+
+    wV = m_aryCell[TABLE(COL_DBLTAP, ROW_FINGERS)].wKeyValue[0];
+    wV1 = (wV >> 8) & 0xFF;
+    wV2 = wV & 0xFF;
+    strValue += QString(" %1%2%3").arg(MM_GESTURE_FINGERS_DOUBLE_TAP, 2, 16, QChar('0')).arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'));
+
+    wV = m_aryCell[TABLE(COL_LONGTAP, ROW_FINGERS)].wKeyValue[0];
+    wV1 = (wV >> 8) & 0xFF;
+    wV2 = wV & 0xFF;
+    strValue += QString(" %1%2%3").arg(MM_GESTURE_FINGERS_LONG_TAP, 2, 16, QChar('0')).arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'));
+
+    // palm
+    pwV = m_aryCell[TABLE(COL_MOVE, ROW_PALM)].wKeyValue;
+    wV1 = (pwV[0] >> 8) & 0xFF;
+    wV2 = pwV[0] & 0xFF;
+    wV3 = (pwV[1] >> 8) & 0xFF;
+    wV4 = pwV[1] & 0xFF;
+    wV5 = (pwV[2] >> 8) & 0xFF;
+    wV6 = pwV[2] & 0xFF;
+    wV7 = (pwV[3] >> 8) & 0xFF;
+    wV8 = pwV[3] & 0xFF;
+    strValue += QString(" %1%2%3%4%5%6%7%8%9").arg(MM_GESTURE_PALM_MOVE, 2, 16, QChar('0'))
+            .arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'))
+            .arg(wV3, 2, 16, QChar('0')).arg(wV4, 2, 16, QChar('0'))
+            .arg(wV5, 2, 16, QChar('0')).arg(wV6, 2, 16, QChar('0'))
+            .arg(wV7, 2, 16, QChar('0')).arg(wV8, 2, 16, QChar('0'));
+
+    wV = m_aryCell[TABLE(COL_TAP, ROW_PALM)].wKeyValue[0];
+    wV1 = (wV >> 8) & 0xFF;
+    wV2 = wV & 0xFF;
+    strValue += QString(" %1%2%3").arg(MM_GESTURE_PALM_TAP, 2, 16, QChar('0')).arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'));
+
+    wV = m_aryCell[TABLE(COL_DBLTAP, ROW_PALM)].wKeyValue[0];
+    wV1 = (wV >> 8) & 0xFF;
+    wV2 = wV & 0xFF;
+    strValue += QString(" %1%2%3").arg(MM_GESTURE_PALM_DOUBLE_TAP, 2, 16, QChar('0')).arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'));
+
+    wV = m_aryCell[TABLE(COL_LONGTAP, ROW_PALM)].wKeyValue[0];
+    wV1 = (wV >> 8) & 0xFF;
+    wV2 = wV & 0xFF;
+    strValue += QString(" %1%2%3").arg(MM_GESTURE_PALM_LONG_TAP, 2, 16, QChar('0')).arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'));
+
+    // put and tap
+    wV = m_aryCell[TABLE(COL_TAP, ROW_PUTNTAP)].wKeyValue[0];
+    wV1 = (wV >> 8) & 0xFF;
+    wV2 = wV & 0xFF;
+    strValue += QString(" %1%2%3").arg(MM_GESTURE_PUTAND_TAP, 2, 16, QChar('0')).arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'));
+
+    wV = m_aryCell[TABLE(COL_DBLTAP, ROW_PUTNTAP)].wKeyValue[0];
+    wV1 = (wV >> 8) & 0xFF;
+    wV2 = wV & 0xFF;
+    strValue += QString(" %1%2%3").arg(MM_GESTURE_PUTAND_DOUBLE_TAP, 2, 16, QChar('0')).arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'));
+
+    wV = m_aryCell[TABLE(COL_LONGTAP, ROW_PUTNTAP)].wKeyValue[0];
+    wV1 = (wV >> 8) & 0xFF;
+    wV2 = wV & 0xFF;
+    strValue += QString(" %1%2%3").arg(MM_GESTURE_PUTAND_LONG_TAP, 2, 16, QChar('0')).arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'));
+
+    // zoom
+    wV1 = (m_ciZoom.wKeyValue[0] >> 8) & 0xFF;
+    wV2 = m_ciZoom.wKeyValue[0] & 0xFF;
+    wV3 = (m_ciZoom.wKeyValue[1] >> 8) & 0xFF;
+    wV4 = m_ciZoom.wKeyValue[1] & 0xFF;
+    strValue += QString(" %1%2%3%4%5").arg(MM_GESTURE_ZOOM, 2, 16, QChar('0'))
+            .arg(wV1, 2, 16, QChar('0')).arg(wV2, 2, 16, QChar('0'))
+            .arg(wV3, 2, 16, QChar('0')).arg(wV4, 2, 16, QChar('0'));
+
+    return strValue;
+}
+
+void QGestureMappingTable::setMargin(int nL, int nT, int nR, int nB)
+{
+    if( nL >= 0 ) m_nMarginLeft = nL; else m_nMarginLeft = 10;
+    if( nT >= 0 ) m_nMarginTop = nT; else m_nMarginTop = 16;
+    if( nR >= 0 ) m_nMarginRight = nR; else m_nMarginRight = 10;
+    if( nB >= 0 ) m_nMarginBottom = nB; else m_nMarginBottom = 16;
+}
+
 void QGestureMappingTable::drawExtProperty( QPainter& p, int nExtIndex, QRectF &rectExtProperty, QFont& fntCellNormal, int flags, const QColor& cellFontColor )
 {
     p.setRenderHint( QPainter::Antialiasing );
@@ -660,6 +780,8 @@ void QGestureMappingTable::popEditActionWnd( const CellInfo& ci )
 
 void QGestureMappingTable::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
+    if( m_bOnlyDisplay ) return;
+
     bool bParseProfile = false;
 
     if( strstr(cmd, cstrMouseProfile) == cmd)
@@ -709,7 +831,7 @@ void QGestureMappingTable::paintEvent(QPaintEvent *)
 
     QRect rectBody( 0, 0, width()-1, height()-1 );
     QRect rcClient = rectBody;
-    rectBody.adjust( 10, 16, -10, -16 );
+    rectBody.adjust( m_nMarginLeft, m_nMarginTop, -m_nMarginRight, -m_nMarginBottom );
 
     QRect rectTable = rectBody;
     rectTable.setHeight( rectTable.height() - rectTable.height()/(ROW_COUNT-2) );
@@ -1023,11 +1145,16 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
             snprintf( szCmd, 256, "%s%02X%04X", cstrMouseProfile5, 0x00, m_wProfileFlags );
             break;
         }
-#ifdef T3KDEVICE_CUSTOM
-        QT3kDevice::instance()->sendCommand( szCmd, true );
-#else
-        QT3kDevice::instance()->sendCommand( szCmd, true );
-#endif
+
+        if( m_bOnlyDisplay )
+        {
+            parseMouseProfile( szCmd );
+            update();
+        }
+        else
+        {
+            QT3kDevice::instance()->sendCommand( szCmd, true );
+        }
     }
 }
 

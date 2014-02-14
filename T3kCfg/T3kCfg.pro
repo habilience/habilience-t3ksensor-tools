@@ -268,6 +268,8 @@ SOURCES += main.cpp\
     T3kBuzzerDef.cpp \
     QNMouseProfileWidget.cpp \
     QOMouseProfileWidget.cpp \
+    QPredefProfileEditDialog.cpp
+
 
 HEADERS  += \
     ../common/QT3kDevice.h \
@@ -368,6 +370,7 @@ HEADERS  += \
     T3kBuzzerDef.h \
     QNMouseProfileWidget.h \
     QOMouseProfileWidget.h \
+    QPredefProfileEditDialog.h
 
 
 FORMS    += \
@@ -397,7 +400,8 @@ FORMS    += \
     QAutoRangeCompleteDialog.ui \
     QBentProgressDialog.ui \
     QNMouseProfileWidget.ui \
-    QOMouseProfileWidget.ui
+    QOMouseProfileWidget.ui \
+    QPredefProfileEditDialog.ui
 
 
 RESOURCES += \

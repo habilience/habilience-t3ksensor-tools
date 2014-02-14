@@ -1,10 +1,12 @@
 ﻿
+[COMMON]
+TEXT_CLOSE = أغلق
+
 [MAIN]
 APP_ERROR_MSG1 = !لا يمكنك تشغيلها على الأجهزة المحمولة
 TITLE_GENERAL_ERROR = خطأ
 
 BTN_CAPTION_EXIT = نهاية
-BTN_CAPTION_CLOSE = أغلق
 BTN_CAPTION_DEFAULT = الافتراضي
 BTN_CAPTION_REFRESH = التحديث
 MENU_TOOLTIP_START_PAGE = صفحة البداية
@@ -123,6 +125,12 @@ TEXT_PROFILE_ITEM_MLEFT_DOWN = الزراليسار
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = الزر اليمين
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = الزر الأوسط
 
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = 
+TEXT_ADD = 
+TEXT_EDIT = 
+TEXT_DELETE = 
+
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = تصحيح  التنسيق اللمس
 TEXT_SCREEN_MARGIN = هوامش الشاشة
@@ -192,7 +200,6 @@ TEXT_MULTI_MONITOR_SETTING = حدد الشاشة العرض
 
 TEXT_BTN_MULTI_MONITOR_APPLY = تطبيق
 TEXT_BTN_MULTI_MONITOR_CANCEL = إلغاء
-TEXT_BTN_MULTI_MONITOR_CLOSE = أغلق
 TEXT_PRIMARY_MONITOR = الشاشة الرئيسية : %d
 TEXT_NON_MULTI_MONITOR = غيرالدعم للشاشات المتعددة
 
@@ -237,7 +244,6 @@ TEXT_ZOOM = تكبير / تصغير
 
 BTN_CAPTION_DEFAULT = الافتراضي
 BTN_CAPTION_REFRESH = تحديث
-BTN_CAPTION_CLOSE = أغلق
 MSGBOX_TEXT_DEFAULT = هل متأكد أنك تريد تغيير إعداد الأولى
 MSGBOX_TITLE_DEFAULT = تأكيد التغيير إلى الإعدادات الافتراضية
 
@@ -250,7 +256,6 @@ BTN_TIMER_TEXT = %1  ثانية
 TITLE_CAPTION = تحذير
 TEXT_MESSAGE = تحذير! تحتوي على إعدادات  في الشاشة التالية لفحص حالة من أجهزة الاستشعار  . إذا قمت بتغيير الإعدادات قد لا تعمل أجهزة الاستشعار عادة
 BTN_CAPTION_CONTINUE = مواصلة
-BTN_CAPTION_CLOSE = أغلق
 
 [INFORMATION GATHERING]
 TITLE_CAPTION = موافقة
@@ -262,7 +267,6 @@ BTN_CAPTION_CLOSE = رفض
 TITLE_CAPTION = أداة التشخيص الاستشعار
 BTN_CAPTION_DEFAULT = الافتراضي
 BTN_CAPTION_REFRESH = تحديث
-BTN_CAPTION_CLOSE = أغلق
 BTN_CAPTION_SAVELOG = مخزن حالة الاستشعار
 BTN_CAPTION_MAIN = رئيسي
 BTN_CAPTION_SUB = فرعى

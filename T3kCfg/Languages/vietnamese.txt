@@ -1,10 +1,12 @@
 ﻿
+[COMMON]
+TEXT_CLOSE = Đóng
+
 [MAIN]
 APP_ERROR_MSG1 = Không thể thực hiện điều khiển thiết bị ngoài
 TITLE_GENERAL_ERROR = Lỗi
 
 BTN_CAPTION_EXIT = Thoát
-BTN_CAPTION_CLOSE = Đóng
 BTN_CAPTION_DEFAULT = Mặc địch
 BTN_CAPTION_REFRESH = Làm mới
 MENU_TOOLTIP_START_PAGE = Trang khởi động
@@ -123,6 +125,12 @@ TEXT_PROFILE_ITEM_MLEFT_DOWN = Nút bấn bên trái
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = Nút bấm bên phải
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Nút bấm giữa
 
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = 
+TEXT_ADD = 
+TEXT_EDIT = 
+TEXT_DELETE = 
+
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = Định vị
 TEXT_SCREEN_MARGIN = Căn lề hiển thị
@@ -192,7 +200,6 @@ TEXT_MULTI_MONITOR_SETTING = Chọn màn hình hiển thị
 
 TEXT_BTN_MULTI_MONITOR_APPLY = Áp dụng
 TEXT_BTN_MULTI_MONITOR_CANCEL = Hủy bỏ
-TEXT_BTN_MULTI_MONITOR_CLOSE = Đóng lại
 TEXT_PRIMARY_MONITOR = Màn hình chính : %d
 TEXT_NON_MULTI_MONITOR = Không hỗ trợ nhiều màn hình
 
@@ -237,7 +244,6 @@ TEXT_ZOOM = Zoom
 
 BTN_CAPTION_DEFAULT = Mặc định
 BTN_CAPTION_REFRESH = Làm mới
-BTN_CAPTION_CLOSE = Đóng lại
 MSGBOX_TEXT_DEFAULT = Khôi phục cài đặt gốc
 MSGBOX_TITLE_DEFAULT = Mặc định
 
@@ -250,7 +256,6 @@ BTN_TIMER_TEXT = 1% Giây
 TITLE_CAPTION = Cảnh báo
 TEXT_MESSAGE = Cảnh báo! Màn hình sau đây có chứa nội dung quan trọng để thiết lập các hoạt động của cảm biến cảm ứng. Nạp những dữ liệu cài đặt có thể làm cho màn hình cảm ứng của bạn không ổn định.
 BTN_CAPTION_CONTINUE = Tiếp tục
-BTN_CAPTION_CLOSE = Đóng lại
 
 [INFORMATION GATHERING]
 TITLE_CAPTION = Thỏa thuận
@@ -262,7 +267,6 @@ BTN_CAPTION_CLOSE = Từ chối
 TITLE_CAPTION = Chuẩn đoán cảm biến
 BTN_CAPTION_DEFAULT = Mặc định
 BTN_CAPTION_REFRESH = Làm mới
-BTN_CAPTION_CLOSE = Đóng lại
 BTN_CAPTION_SAVELOG = Lưu trạng thái cảm biến
 BTN_CAPTION_MAIN = Chính
 BTN_CAPTION_SUB = Phụ

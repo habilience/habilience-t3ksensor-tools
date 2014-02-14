@@ -7,6 +7,7 @@
 #include <QResizeEvent>
 #include <QTimerEvent>
 
+
 QColorTabWidget::QColorTabWidget(QWidget *parent) :
     QWidget(parent)
   , m_sizeTabHeader(90,40)
@@ -27,6 +28,17 @@ QColorTabWidget::QColorTabWidget(QWidget *parent) :
     m_nActiveTabIndex = -1;
     m_nHoverTabIndex = -1;
 
+    m_pExtraWidget = NULL;
+    m_nVisibleCount = 0;
+    m_nMoveCount = 0;
+
+    m_btnLeftTab.setParent( this );
+    m_btnLeftTab.setVisible( false );
+    m_btnLeftTab.setAutoRaise( true );
+    m_btnRightTab.setParent( this );
+    m_btnRightTab.setVisible( false );
+    m_btnRightTab.setAutoRaise( true );
+
     m_fntTab = getSystemFont(this);
     m_fntTab.setPixelSize(11);
 
@@ -37,8 +49,47 @@ QColorTabWidget::QColorTabWidget(QWidget *parent) :
 void QColorTabWidget::setTabDirection( TabDirection dir, int nBarSize, int nBarOffset/*=0*/ )
 {
     m_eTabDirection = dir;
-    isHorzTab() ? m_sizeTabHeader.setHeight(nBarSize) : m_sizeTabHeader.setWidth(nBarSize);
     m_nBarOffset = nBarOffset;
+
+    if( isHorzTab() )
+    {
+        m_sizeTabHeader.setHeight(nBarSize);
+        m_btnLeftTab.setFixedSize( nBarOffset-2, nBarSize-4 );
+        m_btnRightTab.setFixedSize( nBarOffset-2, nBarSize-4 );
+
+        QPixmap pm(":/T3kCfgRes/resources/PNG_SPIN_ARROW_H.png");
+        m_btnLeftTab.setIcon( QIcon( pm.copy(0,0,pm.width()/2,pm.height()) ) );
+        m_btnRightTab.setIcon( QIcon( pm.copy(pm.width()/2,0,pm.width()/2,pm.height()) ) );
+    }
+    else
+    {
+        m_sizeTabHeader.setWidth(nBarSize);
+        m_btnLeftTab.setFixedSize( nBarSize-4, nBarOffset-2 );
+        m_btnRightTab.setFixedSize( nBarSize-4, nBarOffset-2 );
+
+        QPixmap pm(":/T3kCfgRes/resources/PNG_SPIN_ARROW_V.png");
+        m_btnLeftTab.setIcon( QIcon( pm.copy(0,0,pm.width(),pm.height()/2) ) );
+        m_btnRightTab.setIcon( QIcon( pm.copy(0,pm.height()/2,pm.width(),pm.height()/2) ) );
+    }
+
+    disconnect( &m_btnLeftTab, &QToolButton::clicked, NULL, NULL );
+    disconnect( &m_btnLeftTab, &QToolButton::clicked, NULL, NULL );
+
+    switch( m_eTabDirection )
+    {
+    case TabDirectionHorzLeftTop:
+    case TabDirectionVertLeftTop:
+        connect( &m_btnLeftTab, &QToolButton::clicked, this, &QColorTabWidget::onClickedBtnPrev );
+        connect( &m_btnRightTab, &QToolButton::clicked, this, &QColorTabWidget::onClickedBtnNext );
+        m_btnLeftTab.setEnabled( false );
+        break;
+    case TabDirectionHorzRightTop:
+    case TabDirectionVertLeftBottom:
+        connect( &m_btnLeftTab, &QToolButton::clicked, this, &QColorTabWidget::onClickedBtnNext );
+        connect( &m_btnRightTab, &QToolButton::clicked, this, &QColorTabWidget::onClickedBtnPrev );
+        m_btnRightTab.setEnabled( false );
+        break;
+    }
 }
 
 void QColorTabWidget::paintEvent(QPaintEvent *)
@@ -110,7 +161,8 @@ void QColorTabWidget::mousePressEvent(QMouseEvent *e)
             m_bIsHovered = false;
         }
 
-        for (int i=0 ; i<m_aryTabInfo.size() ; i++)
+        int nCnt = m_nVisibleCount < m_aryTabInfo.size() ? m_nVisibleCount : m_aryTabInfo.size();
+        for (int i=0 ; i<nCnt ; i++)
         {
             const TabInfo& ti = m_aryTabInfo.at(i);
             if (ti.rcArea.contains(e->pos()))
@@ -132,7 +184,8 @@ void QColorTabWidget::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton)
     {
         m_bIsMouseDown = false;
-        for (int i=0 ; i<m_aryTabInfo.size() ; i++)
+        int nCnt = m_nVisibleCount < m_aryTabInfo.size() ? m_nVisibleCount : m_aryTabInfo.size();
+        for (int i=0 ; i<nCnt ; i++)
         {
             const TabInfo& ti = m_aryTabInfo.at(i);
             if (ti.rcArea.contains(e->pos()))
@@ -156,7 +209,8 @@ void QColorTabWidget::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_bIsMouseDown)
     {
-        for (int i=0 ; i<m_aryTabInfo.size() ; i++)
+        int nCnt = m_nVisibleCount < m_aryTabInfo.size() ? m_nVisibleCount : m_aryTabInfo.size();
+        for (int i=0 ; i<nCnt ; i++)
         {
             const TabInfo& ti = m_aryTabInfo.at(i);
             if (ti.rcArea.contains(e->pos()))
@@ -181,7 +235,8 @@ void QColorTabWidget::mouseMoveEvent(QMouseEvent *e)
     {
         if (m_bIsHovered)
         {
-            for (int i=0 ; i<m_aryTabInfo.size() ; i++)
+            int nCnt = m_nVisibleCount < m_aryTabInfo.size() ? m_nVisibleCount : m_aryTabInfo.size();
+            for (int i=0 ; i<nCnt ; i++)
             {
                 const TabInfo& ti = m_aryTabInfo.at(i);
                 if (ti.rcArea.contains(e->pos()))
@@ -219,6 +274,9 @@ void QColorTabWidget::resizeEvent(QResizeEvent *evt)
         m_rcChildArea.setTop(rc.top()+m_sizeTabHeader.height());
         m_rcChildArea.setRight(rc.right());
         m_rcChildArea.setBottom(rc.bottom());
+
+        m_btnLeftTab.move( rc.left(), rc.top()+2 );
+        m_btnRightTab.move( rc.right()-m_btnRightTab.width(), rc.top()+2 );
     }
     else
     {
@@ -226,6 +284,31 @@ void QColorTabWidget::resizeEvent(QResizeEvent *evt)
         m_rcChildArea.setTop(rc.top());
         m_rcChildArea.setRight(rc.right());
         m_rcChildArea.setBottom(rc.bottom());
+
+        m_btnLeftTab.move( rc.left(), rc.top()+2 );
+        m_btnRightTab.move( rc.right()-m_btnRightTab.width(), rc.top()+2 );
+    }
+
+    if( m_pExtraWidget )
+    {
+        switch( m_eTabDirection )
+        {
+        case TabDirectionHorzLeftTop:
+            m_pExtraWidget->move( rc.right() - m_nBarOffset - m_pExtraWidget->width(), rc.top() + (m_sizeTabHeader.height() - m_pExtraWidget->height())/2 );
+            break;
+        case TabDirectionHorzRightTop:
+            m_pExtraWidget->move( rc.left() + m_nBarOffset, rc.top() + (m_sizeTabHeader.height() - m_pExtraWidget->height())/2 );
+            break;
+        case TabDirectionVertLeftTop:
+            m_pExtraWidget->move( rc.left() + (m_sizeTabHeader.width() - m_pExtraWidget->width())/2, rc.top() + m_nBarOffset );
+            break;
+        case TabDirectionVertLeftBottom:
+            m_pExtraWidget->move( rc.left() + (m_sizeTabHeader.width() - m_pExtraWidget->width())/2, rc.bottom() + m_pExtraWidget->height() + m_nBarOffset );
+            break;
+        default:
+            Q_ASSERT( false );
+            break;
+        }
     }
 
     m_rcChildArea.adjust( 1, 1, -1, -1 );
@@ -283,7 +366,12 @@ void QColorTabWidget::drawTabs( QPainter& p, QRect rc )
         rectTab.setWidth(m_sizeTabHeader.width());
     }
 
-    for (int nI = 0 ; nI < m_aryTabInfo.size() ; nI ++)
+    int nMaxTabBarSize = rc.width() - m_nBarOffset * 2;
+    nMaxTabBarSize -= m_pExtraWidget != NULL ? (isHorzTab() ? m_pExtraWidget->width() : m_pExtraWidget->height()) + TAB_MARGIN*2 : 0;
+    int nTabBarSize = 0;
+
+    m_nVisibleCount = 0;
+    for (int nI = m_nMoveCount; nI < m_aryTabInfo.size() ; nI ++)
     {
         TabInfo& ti = m_aryTabInfo[nI];
         szTab = calcTabSize( p, ti );
@@ -298,13 +386,24 @@ void QColorTabWidget::drawTabs( QPainter& p, QRect rc )
         }
 
         if (isHorzTab())
+        {
             rectTab.setWidth(szTab.width() + TAB_MARGIN);   // margin x: 5px
+            nTabBarSize += rectTab.width();
+        }
         else
+        {
             rectTab.setHeight(szTab.height() + TAB_MARGIN);
+            nTabBarSize += rectTab.height();
+        }
 
-        drawTab( p, rectTab, ti,
-            m_nHoverTabIndex == nI ? true : false,
-            m_nActiveTabIndex == nI ? true : false, isNotifyTab(nI) < 0 ? false : true );
+        if( nTabBarSize <= nMaxTabBarSize )
+        {
+            drawTab( p, rectTab, ti,
+                m_nHoverTabIndex == nI ? true : false,
+                m_nActiveTabIndex == nI ? true : false, isNotifyTab(nI) < 0 ? false : true );
+
+            m_nVisibleCount++;
+        }
 
         ti.rcArea = rectTab;
 
@@ -318,6 +417,23 @@ void QColorTabWidget::drawTabs( QPainter& p, QRect rc )
         }
     }
 
+    if( m_nVisibleCount < m_aryTabInfo.size() )
+    {
+        if( !m_btnLeftTab.isVisible() )
+        {
+            m_btnLeftTab.setVisible( true );
+            m_btnRightTab.setVisible( true );
+        }
+    }
+    else
+    {
+        if( m_btnLeftTab.isVisible() )
+        {
+            m_btnLeftTab.setVisible( false );
+            m_btnRightTab.setVisible( false );
+        }
+    }
+
     QPen bodyPen( QColor(160, 160, 160), 1.f);
     QPen bodyShadowPen( QColor(160, 160, 160, 150), 2.f);
 
@@ -325,7 +441,7 @@ void QColorTabWidget::drawTabs( QPainter& p, QRect rc )
     if (isHorzTab())
     {
         int nTop = rectTab.bottom();
-        if (m_nActiveTabIndex >= 0)
+        if (m_nActiveTabIndex >= 0 && (m_nActiveTabIndex >= m_nMoveCount && m_nActiveTabIndex < (m_nMoveCount+m_nVisibleCount)))
         {
             const TabInfo& ti = m_aryTabInfo.at(m_nActiveTabIndex);
             p.drawLine( rc.left(), nTop, ti.rcArea.left(), nTop );
@@ -333,7 +449,6 @@ void QColorTabWidget::drawTabs( QPainter& p, QRect rc )
         }
         else
         {
-
             p.drawLine( rc.left(), nTop, rc.right(), nTop );
         }
 
@@ -347,7 +462,7 @@ void QColorTabWidget::drawTabs( QPainter& p, QRect rc )
     else
     {
         int nLeft = rectTab.right();
-        if (m_nActiveTabIndex >= 0)
+        if (m_nActiveTabIndex >= 0 && (m_nActiveTabIndex >= m_nMoveCount && m_nActiveTabIndex < (m_nMoveCount+m_nVisibleCount)))
         {
             const TabInfo& ti = m_aryTabInfo.at(m_nActiveTabIndex);
             p.drawLine( nLeft, rc.top(), nLeft, ti.rcArea.top() );
@@ -371,12 +486,11 @@ void QColorTabWidget::drawTabs( QPainter& p, QRect rc )
     if (isHorzTab())
     {
         int nTop = rectTab.bottom();
-        if (m_nActiveTabIndex >= 0)
+        if (m_nActiveTabIndex >= 0 && (m_nActiveTabIndex >= m_nMoveCount && m_nActiveTabIndex < (m_nMoveCount+m_nVisibleCount)))
         {
             const TabInfo& ti = m_aryTabInfo.at(m_nActiveTabIndex);
             p.drawLine( rc.left(), nTop, ti.rcArea.left(), nTop );
             p.drawLine( ti.rcArea.right(), nTop, rc.right(), nTop );
-
         }
         else
         {
@@ -390,7 +504,7 @@ void QColorTabWidget::drawTabs( QPainter& p, QRect rc )
     else
     {
         int nLeft = rectTab.right();
-        if (m_nActiveTabIndex >= 0)
+        if (m_nActiveTabIndex >= 0 && (m_nActiveTabIndex >= m_nMoveCount && m_nActiveTabIndex < (m_nMoveCount+m_nVisibleCount)))
         {
             const TabInfo& ti = m_aryTabInfo.at(m_nActiveTabIndex);
             p.drawLine( nLeft, rc.top(), nLeft, ti.rcArea.top() );
@@ -551,8 +665,8 @@ QSize QColorTabWidget::calcTabSize( QPainter& p, const TabInfo& ti )
     QString strCaption = ti.strCaption;
     int flags = Qt::AlignLeft|Qt::AlignVCenter|Qt::TextSingleLine;
 
-    QRectF rectBB;
-    p.drawText( rectText, flags, strCaption, &rectBB );
+    QRectF rectBB = p.boundingRect( rectText, flags, strCaption );
+    //p.drawText( rectText, flags, strCaption, &rectBB );
 
     float fImageOffset = 0.f;
     if( ti.pIconImage )
@@ -710,4 +824,75 @@ void QColorTabWidget::resetNotify()
 void QColorTabWidget::enableTabChange( bool bEnable )
 {
     m_bEnableTabChange = bEnable;
+}
+
+void QColorTabWidget::onClickedBtnPrev(bool /*checked*/)
+{
+    m_nMoveCount--;
+    if( m_nMoveCount < 1 )
+    {
+        m_nMoveCount = 0;
+        switch( m_eTabDirection )
+        {
+        case TabDirectionHorzLeftTop:
+        case TabDirectionVertLeftTop:
+            m_btnLeftTab.setEnabled( false );
+            break;
+        case TabDirectionHorzRightTop:
+        case TabDirectionVertLeftBottom:
+            m_btnRightTab.setEnabled( false );
+            break;
+        }
+    }
+
+    switch( m_eTabDirection )
+    {
+    case TabDirectionHorzLeftTop:
+    case TabDirectionVertLeftTop:
+        if( !m_btnRightTab.isEnabled() )
+            m_btnRightTab.setEnabled( true );
+        break;
+    case TabDirectionHorzRightTop:
+    case TabDirectionVertLeftBottom:
+        if( !m_btnLeftTab.isEnabled() )
+            m_btnLeftTab.setEnabled( true );
+        break;
+    }
+
+    update();
+}
+
+void QColorTabWidget::onClickedBtnNext(bool /*checked*/)
+{
+    m_nMoveCount++;
+    if( m_nMoveCount + m_nVisibleCount >= m_aryTabInfo.size() )
+    {
+        switch( m_eTabDirection )
+        {
+        case TabDirectionHorzLeftTop:
+        case TabDirectionVertLeftTop:
+            m_btnRightTab.setEnabled( false );
+            break;
+        case TabDirectionHorzRightTop:
+        case TabDirectionVertLeftBottom:
+            m_btnLeftTab.setEnabled( false );
+            break;
+        }
+    }
+
+    switch( m_eTabDirection )
+    {
+    case TabDirectionHorzLeftTop:
+    case TabDirectionVertLeftTop:
+        if( !m_btnLeftTab.isEnabled() )
+            m_btnLeftTab.setEnabled( true );
+        break;
+    case TabDirectionHorzRightTop:
+    case TabDirectionVertLeftBottom:
+        if( !m_btnRightTab.isEnabled() )
+            m_btnRightTab.setEnabled( true );
+        break;
+    }
+
+    update();
 }

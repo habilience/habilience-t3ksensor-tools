@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QVector>
+#include <QToolButton>
+
 
 class QColorTabWidget : public QWidget
 {
@@ -41,6 +43,13 @@ private:
     int                 m_nHoverTabIndex;
     QRect               m_rcChildArea;
 
+    QWidget*            m_pExtraWidget;
+    int                 m_nVisibleCount;
+
+    QToolButton         m_btnLeftTab;
+    QToolButton         m_btnRightTab;
+    int                 m_nMoveCount;
+
 protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void timerEvent(QTimerEvent *);
@@ -59,6 +68,8 @@ protected:
 public:
     explicit QColorTabWidget(QWidget *parent = 0);
 
+    void setExtraWidget(QWidget* pWidget) { m_pExtraWidget = pWidget; }
+
     bool isHorzTab();
     void setTabDirection( TabDirection dir, int nBarSize, int nBarOffset=0 );
     int addTab( const QString& strCaption, QWidget* pChildWidget, QColor clrTab=QColor(255,60,60,200), QImage* pIconImage=NULL);
@@ -75,7 +86,8 @@ signals:
     void tabSelectChange(QColorTabWidget* sender, int tabIndex);
     void tabSelectChanged(QColorTabWidget* sender, int tabIndex);
 public slots:
-    
+    void onClickedBtnPrev(bool checked = false);
+    void onClickedBtnNext(bool checked = false);
 };
 
 inline bool QColorTabWidget::isHorzTab()

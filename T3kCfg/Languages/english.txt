@@ -1,10 +1,12 @@
 ﻿
+[COMMON]
+TEXT_CLOSE = Close
+
 [MAIN]
 APP_ERROR_MSG1 = Cannot Execute on Removable Devices!
 TITLE_GENERAL_ERROR = Error
 
 BTN_CAPTION_EXIT = Exit
-BTN_CAPTION_CLOSE = Close
 BTN_CAPTION_DEFAULT = Default
 BTN_CAPTION_REFRESH = Refresh
 MENU_TOOLTIP_START_PAGE = Start Page
@@ -123,6 +125,12 @@ TEXT_PROFILE_ITEM_MLEFT_DOWN = Left Button
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = Right Button
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Middle Button
 
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = Manage Profile
+TEXT_ADD = Add
+TEXT_EDIT = Edit
+TEXT_DELETE = Delete
+
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = Calibration
 TEXT_SCREEN_MARGIN = Screen Margins
@@ -192,7 +200,6 @@ TEXT_MULTI_MONITOR_SETTING = Select Display Monitor…
 
 TEXT_BTN_MULTI_MONITOR_APPLY = Apply
 TEXT_BTN_MULTI_MONITOR_CANCEL = Cancel
-TEXT_BTN_MULTI_MONITOR_CLOSE = Close
 TEXT_PRIMARY_MONITOR = Primary Monitor : %d
 TEXT_NON_MULTI_MONITOR = Do Not Support Multi-Monitor
 
@@ -237,7 +244,6 @@ TEXT_ZOOM = Zoom
 
 BTN_CAPTION_DEFAULT = Default
 BTN_CAPTION_REFRESH = Refresh
-BTN_CAPTION_CLOSE = Close
 MSGBOX_TEXT_DEFAULT = Restore to the original settings?
 MSGBOX_TITLE_DEFAULT = Default
 
@@ -250,7 +256,6 @@ BTN_TIMER_TEXT = %1 secs
 TITLE_CAPTION = Warning
 TEXT_MESSAGE = Warning! The following screen contains settings data crucial to the workings of the touch sensors.\n\nChanging these settings data may make your touch screen unstable.
 BTN_CAPTION_CONTINUE = Continue
-BTN_CAPTION_CLOSE = Close
 
 [INFORMATION GATHERING]
 TITLE_CAPTION = Agreement
@@ -262,7 +267,6 @@ BTN_CAPTION_CLOSE = Reject
 TITLE_CAPTION = Sensor Diagnostics
 BTN_CAPTION_DEFAULT = Default
 BTN_CAPTION_REFRESH = Refresh
-BTN_CAPTION_CLOSE = Close
 BTN_CAPTION_SAVELOG = Save Sensor State
 BTN_CAPTION_MAIN = Main
 BTN_CAPTION_SUB = Sub

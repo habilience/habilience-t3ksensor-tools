@@ -1426,6 +1426,7 @@ void Dialog::dropEvent(QDropEvent *evt)
                 if( (ulong)evt->keyboardModifiers() == (ulong)(Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier) )
                 {
                     QInputDialog dlg( this );
+                    dlg.setWindowFlags( dlg.windowFlags() & ~Qt::WindowContextHelpButtonHint );
                     dlg.setWindowModality( Qt::WindowModal );
                     dlg.setModal( true );
                     dlg.setWindowTitle( "Enter password" );

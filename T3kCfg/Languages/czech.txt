@@ -1,10 +1,12 @@
 ﻿
+[COMMON]
+TEXT_CLOSE = Zavřít
+
 [MAIN]
 APP_ERROR_MSG1 = Nelze spustit na výměnných zařízeních
 TITLE_GENERAL_ERROR = Chyba
 
 BTN_CAPTION_EXIT = Ukončit
-BTN_CAPTION_CLOSE = Zavřít
 BTN_CAPTION_DEFAULT = Výchozí
 BTN_CAPTION_REFRESH = Obnovit
 MENU_TOOLTIP_START_PAGE = Úvodní stránka
@@ -123,6 +125,12 @@ TEXT_PROFILE_ITEM_MLEFT_DOWN = Levé tlačítko
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = Pravé tlačítko
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Střední tlačítko
 
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = 
+TEXT_ADD = 
+TEXT_EDIT = 
+TEXT_DELETE = 
+
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = Kalibrace
 TEXT_SCREEN_MARGIN = Okraje obrazu
@@ -192,7 +200,6 @@ TEXT_MULTI_MONITOR_SETTING = Výběr monitoru...
 
 TEXT_BTN_MULTI_MONITOR_APPLY = Použít
 TEXT_BTN_MULTI_MONITOR_CANCEL = Zrušit
-TEXT_BTN_MULTI_MONITOR_CLOSE = Zavřít
 TEXT_PRIMARY_MONITOR = Primární zobrazení : %d
 TEXT_NON_MULTI_MONITOR = Bez podpory více monitorů
 
@@ -237,7 +244,6 @@ TEXT_ZOOM = Zvětšení
 
 BTN_CAPTION_DEFAULT = Výchozí
 BTN_CAPTION_REFRESH = Obnovit
-BTN_CAPTION_CLOSE = Zavřít
 MSGBOX_TEXT_DEFAULT = Obnovit výchozí nastavení?
 MSGBOX_TITLE_DEFAULT = Výchozí
 
@@ -250,7 +256,6 @@ BTN_TIMER_TEXT = %1 sek.
 TITLE_CAPTION = Upozornění
 TEXT_MESSAGE = Upozornění! Následující obrazovka obsahuje nastavení údajů nezbytných pro fungování dotykových senzorů. \n\nZměna těchto údajů může způsobit, že systém nebude správně pracovat.
 BTN_CAPTION_CONTINUE = Pokračovat
-BTN_CAPTION_CLOSE = Zavřít
 
 [INFORMATION GATHERING]
 TITLE_CAPTION = Souhlas
@@ -262,7 +267,6 @@ BTN_CAPTION_CLOSE = Nesouhlasím
 TITLE_CAPTION = Diagnostika senzorů
 BTN_CAPTION_DEFAULT = Výchozí
 BTN_CAPTION_REFRESH = Obnovit
-BTN_CAPTION_CLOSE = Zavřít
 BTN_CAPTION_SAVELOG = Uložit stav senzorů
 BTN_CAPTION_MAIN = Hlavní
 BTN_CAPTION_SUB = Podružné

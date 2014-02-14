@@ -94,5 +94,7 @@
         <file>resources/PNG_DETECTION_LT.png</file>
         <file>resources/PNG_DETECTION_RB.png</file>
         <file>resources/PNG_DETECTION_RT.png</file>
+        <file>resources/PNG_SPIN_ARROW_H.png</file>
+        <file>resources/PNG_SPIN_ARROW_V.png</file>
     </qresource>
 </RCC>

@@ -27,7 +27,7 @@ QWarningWidget::QWarningWidget(QWidget *parent) :
     connect( ui->BtnContinue, SIGNAL(clicked()), this, SLOT(accept()) );
 
     SetTextFromLanguage( "WARNING SENSOR DIAGNOSIS", "TITLE_CAPTION", "WARNING SENSOR DIAGNOSIS", "TEXT_MESSAGE" );
-    SetBtnTextFromLanguage( "WARNING SENSOR DIAGNOSIS", "BTN_CAPTION_CONTINUE", "WARNING SENSOR DIAGNOSIS", "BTN_CAPTION_CLOSE" );
+    SetBtnTextFromLanguage( "WARNING SENSOR DIAGNOSIS", "BTN_CAPTION_CONTINUE", "COMMON", "TEXT_CLOSE" );
 }
 
 QWarningWidget::~QWarningWidget()

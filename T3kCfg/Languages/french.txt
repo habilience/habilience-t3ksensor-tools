@@ -1,10 +1,12 @@
 ﻿
+[COMMON]
+TEXT_CLOSE = Fermer
+
 [MAIN]
 APP_ERROR_MSG1 = Impossible d'exécuter (le programme) sur les dispositifs amovibles.
 TITLE_GENERAL_ERROR = Erreur
 
 BTN_CAPTION_EXIT = Sortir
-BTN_CAPTION_CLOSE = Fermer
 BTN_CAPTION_DEFAULT = Par défaut
 BTN_CAPTION_REFRESH = Rafraîchir
 MENU_TOOLTIP_START_PAGE = Page de démarrage
@@ -123,6 +125,12 @@ TEXT_PROFILE_ITEM_MLEFT_DOWN = Bouton gauche
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = Bouton droit
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Bouton milieu
 
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = 
+TEXT_ADD = 
+TEXT_EDIT = 
+TEXT_DELETE = 
+
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = Calibration
 TEXT_SCREEN_MARGIN = Bordure d'écran
@@ -192,7 +200,6 @@ TEXT_MULTI_MONITOR_SETTING = Sélectionner le moniteur d'affichage...
 
 TEXT_BTN_MULTI_MONITOR_APPLY = Appliquer
 TEXT_BTN_MULTI_MONITOR_CANCEL = Annuler
-TEXT_BTN_MULTI_MONITOR_CLOSE = Fermer
 TEXT_PRIMARY_MONITOR = Moniteur principal: %1
 TEXT_NON_MULTI_MONITOR = Moniteurs multiples non supportés
 
@@ -237,7 +244,6 @@ TEXT_ZOOM = Zoom
 
 BTN_CAPTION_DEFAULT = Par défaut
 BTN_CAPTION_REFRESH = Rafraîchir
-BTN_CAPTION_CLOSE = Fermer
 MSGBOX_TEXT_DEFAULT = Restaurer la configuration initiale ?
 MSGBOX_TITLE_DEFAULT = Restaurer le paramètres par défauts
 
@@ -250,7 +256,6 @@ BTN_TIMER_TEXT = %1 sec
 TITLE_CAPTION = Attention
 TEXT_MESSAGE = Attention ! L'écran suivant contient des données capitales pour le fonctionnement des capteurs tactiles. Modifier ces paramètres peut altérer le fonctionnement de votre écran tactile.
 BTN_CAPTION_CONTINUE = Continuer
-BTN_CAPTION_CLOSE = Fermer
 
 [INFORMATION GATHERING]
 TITLE_CAPTION = Acceptation
@@ -262,7 +267,6 @@ BTN_CAPTION_CLOSE = Refuse
 TITLE_CAPTION = Outils de diagnostique du capteur
 BTN_CAPTION_DEFAULT = Par défaut
 BTN_CAPTION_REFRESH = Rafraîchir
-BTN_CAPTION_CLOSE = Fermer
 BTN_CAPTION_SAVELOG = Capturer l'état du capteur
 BTN_CAPTION_MAIN = Principal
 BTN_CAPTION_SUB = Secondaire

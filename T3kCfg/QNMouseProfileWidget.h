@@ -14,10 +14,12 @@
 #include "QRequestHIDManager.h"
 
 #include <QKeyEvent>
+#include <QComboBox>
 
 namespace Ui {
 class QNMouseProfileWidget;
 }
+
 
 class QColorTabWidget;
 class QNMouseProfileWidget : public QWidget, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
@@ -44,11 +46,9 @@ protected:
     virtual void hideEvent(QHideEvent *);
     virtual void keyPressEvent(QKeyEvent *);
 
-protected:
     void requestSensorData( bool bDefault );
-
-protected:
     void sensorRefresh( bool bTabOnly/*=false*/ );
+    void loadPredefProfiles();
 
 protected:
     QGestureMappingTable        m_MouseProfileTableWidget;
@@ -60,8 +60,9 @@ protected:
     QRequestHIDManager          m_RequestCmdManager;
 
     int                         m_nInputMode;
-    int                         m_nSelectedProfileIndex;
     int                         m_nChkUsbCfgMode;
+
+    QComboBox                   m_cbPredefinedProfile;
 
 private:
     Ui::QNMouseProfileWidget *ui;
@@ -75,6 +76,7 @@ protected slots:
     void onTabSelChanged(QColorTabWidget* /*pTabWidget*/, int tabIndex);
     void onSendCommand(QString strCmd, bool bAsync = false, unsigned short nTimeout = 1000);
     void onUpdateProfile(int nProfileIndex, const QGestureMappingTable::CellInfo& ci, ushort nProfileFlags);
+    void onCBPredefinedProfileActivated(int index);
 };
 
 #endif // QNMOUSEPROFILEWIDGET_H

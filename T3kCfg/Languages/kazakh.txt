@@ -1,10 +1,12 @@
 ﻿
+[COMMON]
+TEXT_CLOSE = Жабу
+
 [MAIN]
 APP_ERROR_MSG1 = Алмалы құрылғыларда істемейді!
 TITLE_GENERAL_ERROR = Қателік
 
 BTN_CAPTION_EXIT = Шығу
-BTN_CAPTION_CLOSE = Жабу
 BTN_CAPTION_DEFAULT = Үнсіз келісім бойынша
 BTN_CAPTION_REFRESH = Жаңарту
 MENU_TOOLTIP_START_PAGE = Басты бет
@@ -123,6 +125,12 @@ TEXT_PROFILE_ITEM_MLEFT_DOWN = Сол жақ батырма
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = Оң жақ батырма
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Ортаңғы батырма
 
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = 
+TEXT_ADD = 
+TEXT_EDIT = 
+TEXT_DELETE = 
+
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = Калибрлеу
 TEXT_SCREEN_MARGIN = Экранның шеті
@@ -192,7 +200,6 @@ TEXT_MULTI_MONITOR_SETTING = Экран дисплейін таңдау....
 
 TEXT_BTN_MULTI_MONITOR_APPLY = Қолдану
 TEXT_BTN_MULTI_MONITOR_CANCEL = Қайтару
-TEXT_BTN_MULTI_MONITOR_CLOSE = Жабу
 TEXT_PRIMARY_MONITOR = Негізгі экран
 TEXT_NON_MULTI_MONITOR = Көпэкранты режимінде жұмыс істемейді
 
@@ -237,7 +244,6 @@ TEXT_ZOOM = Үлкейту
 
 BTN_CAPTION_DEFAULT = Үнсіздік бойынша
 BTN_CAPTION_REFRESH = Жаңарту
-BTN_CAPTION_CLOSE = Жабу
 MSGBOX_TEXT_DEFAULT = Шығарушы реттеулерін қайта орнату ма?
 MSGBOX_TITLE_DEFAULT = Үнсіздік бойынша
 
@@ -250,7 +256,6 @@ BTN_TIMER_TEXT = %1 сек
 TITLE_CAPTION = Ескерту
 TEXT_MESSAGE = Ескерту! Келесі экранның реттеулері сенсорлы экранның жұмысымен сәйкес келмейді. Бұл деректерді өзгерту сенсорлы экранның дұрыс емес жұмыс істеуіне әкеледі.
 BTN_CAPTION_CONTINUE = Жалғастыру
-BTN_CAPTION_CLOSE = Жабу
 
 [INFORMATION GATHERING]
 TITLE_CAPTION = Келісім
@@ -262,7 +267,6 @@ BTN_CAPTION_CLOSE = Қайтару
 TITLE_CAPTION = Сенсордың диагностикасы
 BTN_CAPTION_DEFAULT = Үнсіздік бойынша
 BTN_CAPTION_REFRESH = Жаңарту
-BTN_CAPTION_CLOSE = Жабу
 BTN_CAPTION_SAVELOG = Сенсордың күйін сақтау
 BTN_CAPTION_MAIN = Басты
 BTN_CAPTION_SUB = Қосымша

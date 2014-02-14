@@ -1,10 +1,12 @@
 ﻿
+[COMMON]
+TEXT_CLOSE = Закрыть
+
 [MAIN]
 APP_ERROR_MSG1 = Невозможно запустить на съемных носителях!
 TITLE_GENERAL_ERROR = Ошибка
 
 BTN_CAPTION_EXIT = Выход
-BTN_CAPTION_CLOSE = Закрыть
 BTN_CAPTION_DEFAULT = По умолчанию
 BTN_CAPTION_REFRESH = Обновить
 MENU_TOOLTIP_START_PAGE = Главная страница
@@ -123,6 +125,12 @@ TEXT_PROFILE_ITEM_MLEFT_DOWN = Левая кнопка
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = Правая кнопка
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Центральная кнопка
 
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = 
+TEXT_ADD = 
+TEXT_EDIT = 
+TEXT_DELETE = 
+
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = Калибровка
 TEXT_SCREEN_MARGIN = Край экрана
@@ -192,7 +200,6 @@ TEXT_MULTI_MONITOR_SETTING = Выбрать дисплей экрана
 
 TEXT_BTN_MULTI_MONITOR_APPLY = Применить
 TEXT_BTN_MULTI_MONITOR_CANCEL = Отмена
-TEXT_BTN_MULTI_MONITOR_CLOSE = Закрыть
 TEXT_PRIMARY_MONITOR = Основной экран
 TEXT_NON_MULTI_MONITOR = Не поддерживает многоэкранный режим
 
@@ -237,7 +244,6 @@ TEXT_ZOOM = Увеличение
 
 BTN_CAPTION_DEFAULT = По умолчанию
 BTN_CAPTION_REFRESH = Обновить
-BTN_CAPTION_CLOSE = Закрыть
 MSGBOX_TEXT_DEFAULT = Восстановить заводские настройки
 MSGBOX_TITLE_DEFAULT = По умолчанию
 
@@ -250,7 +256,6 @@ BTN_TIMER_TEXT = %1 сек
 TITLE_CAPTION = Предупреждение
 TEXT_MESSAGE = Предупреждение! Следующий экран имеет настройки данных, несовместимых с работой сенсорного экрана. Изменение этих данных приведет к нестабильной работе сенсорного экрана.
 BTN_CAPTION_CONTINUE = Продолжать
-BTN_CAPTION_CLOSE = Закрыть
 
 [INFORMATION GATHERING]
 TITLE_CAPTION = Соглашение
@@ -262,7 +267,6 @@ BTN_CAPTION_CLOSE = Отклонить
 TITLE_CAPTION = Диагностика сенсора
 BTN_CAPTION_DEFAULT = ПО умолчанию
 BTN_CAPTION_REFRESH = Обновить
-BTN_CAPTION_CLOSE = Закрыть
 BTN_CAPTION_SAVELOG = Сохранить положение сенсора
 BTN_CAPTION_MAIN = Главный
 BTN_CAPTION_SUB = Вспомогательный

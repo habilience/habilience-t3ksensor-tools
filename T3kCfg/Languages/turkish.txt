@@ -1,10 +1,12 @@
 ﻿
+[COMMON]
+TEXT_CLOSE = Kapat
+
 [MAIN]
 APP_ERROR_MSG1 = Değşebilen cihazlar üzerinde kullanılamaz.
 TITLE_GENERAL_ERROR = Hata
 
 BTN_CAPTION_EXIT = Çıkış
-BTN_CAPTION_CLOSE = Kapat
 BTN_CAPTION_DEFAULT = Varsayılan
 BTN_CAPTION_REFRESH = Yenile
 MENU_TOOLTIP_START_PAGE = Başlanıç sayfası
@@ -123,6 +125,12 @@ TEXT_PROFILE_ITEM_MLEFT_DOWN = Sol tuş
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = Sağ tuş
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Orta Tuş
 
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = 
+TEXT_ADD = 
+TEXT_EDIT = 
+TEXT_DELETE = 
+
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = Kalibrasyon
 TEXT_SCREEN_MARGIN = Ekran marjları
@@ -192,7 +200,6 @@ TEXT_MULTI_MONITOR_SETTING = Gösterilecek monitörü seçin.
 
 TEXT_BTN_MULTI_MONITOR_APPLY = Uygula
 TEXT_BTN_MULTI_MONITOR_CANCEL = İptal
-TEXT_BTN_MULTI_MONITOR_CLOSE = Kapat
 TEXT_PRIMARY_MONITOR = Ana Monitör: %d
 TEXT_NON_MULTI_MONITOR = Çoklu monitör desteği yok.
 
@@ -237,7 +244,6 @@ TEXT_ZOOM = Zoom
 
 BTN_CAPTION_DEFAULT = Varsayılan
 BTN_CAPTION_REFRESH = Yenile
-BTN_CAPTION_CLOSE = Kapat
 MSGBOX_TEXT_DEFAULT = Tüm ayarları orijinal haline geri çevir?
 MSGBOX_TITLE_DEFAULT = Varsayılan
 
@@ -250,7 +256,6 @@ BTN_TIMER_TEXT = %1 saniye
 TITLE_CAPTION = Dikkat
 TEXT_MESSAGE = Dikkat! Bu ayarları dokunmatik sensörlerin düzgün çalışması için hasas bilgleri içeriyor. Bu bilgilerin değişimi sonunca dokunmatik ekran düzgün çalışmaya bilir.
 BTN_CAPTION_CONTINUE = Devam
-BTN_CAPTION_CLOSE = Kapat
 
 [INFORMATION GATHERING]
 TITLE_CAPTION = Anlaşma
@@ -262,7 +267,6 @@ BTN_CAPTION_CLOSE = Kabul etme
 TITLE_CAPTION = Sensör Diagnosu
 BTN_CAPTION_DEFAULT = Varsayılan
 BTN_CAPTION_REFRESH = Yenile
-BTN_CAPTION_CLOSE = Kapat
 BTN_CAPTION_SAVELOG = Sensör Durumunu kaydet
 BTN_CAPTION_MAIN = Main
 BTN_CAPTION_SUB = Sub

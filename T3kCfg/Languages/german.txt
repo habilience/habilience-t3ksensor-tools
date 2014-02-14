@@ -1,10 +1,12 @@
 ﻿
+[COMMON]
+TEXT_CLOSE = Schließen
+
 [MAIN]
 APP_ERROR_MSG1 = Es kann an einem abnehmbaren Gerät nicht ausgeführt werden!
 TITLE_GENERAL_ERROR = Fehler
 
 BTN_CAPTION_EXIT = Ende
-BTN_CAPTION_CLOSE = Schließen
 BTN_CAPTION_DEFAULT = Voreinstellung
 BTN_CAPTION_REFRESH = Aktualisierung
 MENU_TOOLTIP_START_PAGE = Startseite
@@ -123,6 +125,12 @@ TEXT_PROFILE_ITEM_MLEFT_DOWN = Linke Taste
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = Rechte Taste
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Mittlere Taste
 
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = 
+TEXT_ADD = 
+TEXT_EDIT = 
+TEXT_DELETE = 
+
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = Kalibrierung
 TEXT_SCREEN_MARGIN = Margen des Bildschirms
@@ -192,7 +200,6 @@ TEXT_MULTI_MONITOR_SETTING = Anzeigemonitor auswählen...
 
 TEXT_BTN_MULTI_MONITOR_APPLY = Anwendung
 TEXT_BTN_MULTI_MONITOR_CANCEL = Abbrechen
-TEXT_BTN_MULTI_MONITOR_CLOSE = Schließen
 TEXT_PRIMARY_MONITOR = Hauptmonitor : %1
 TEXT_NON_MULTI_MONITOR = Multimonitor wird nicht unterstüzt.
 
@@ -237,7 +244,6 @@ TEXT_ZOOM = Größer/Kleiner
 
 BTN_CAPTION_DEFAULT = Voreinstellung
 BTN_CAPTION_REFRESH = Aktualisierung
-BTN_CAPTION_CLOSE = Schließen
 MSGBOX_TEXT_DEFAULT = Möchten Sie die anfängliche Einstellung wiederherstellen?
 MSGBOX_TITLE_DEFAULT = Überprüfen der Wiederherstellung der anfänglichen Einstellung
 
@@ -250,7 +256,6 @@ BTN_TIMER_TEXT = %1 Sekunde
 TITLE_CAPTION = Achtung
 TEXT_MESSAGE = Achtung! Die folgende Seite enthält die Einstellungsdaten, die die Berührungsfunktionen beeinflussen.Änderungen an diesen Einstellungen können zu Fehlfunktionen oder dem Ausfall des Berührungssystems führen!
 BTN_CAPTION_CONTINUE = Fortsetzen
-BTN_CAPTION_CLOSE = Schließen
 
 [INFORMATION GATHERING]
 TITLE_CAPTION = Zustimmen
@@ -262,7 +267,6 @@ BTN_CAPTION_CLOSE = Ablehnen
 TITLE_CAPTION = Sensordiagnostik
 BTN_CAPTION_DEFAULT = Voreinstellung
 BTN_CAPTION_REFRESH = Aktualisierung
-BTN_CAPTION_CLOSE = Schließen
 BTN_CAPTION_SAVELOG = Sensorzustand speichern
 BTN_CAPTION_MAIN = Hauptmenü
 BTN_CAPTION_SUB = Untermenü

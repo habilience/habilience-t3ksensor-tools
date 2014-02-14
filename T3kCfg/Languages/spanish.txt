@@ -1,10 +1,12 @@
 ﻿
+[COMMON]
+TEXT_CLOSE = Cerrar
+
 [MAIN]
 APP_ERROR_MSG1 = No se puede ejecutar en el dispositivo desmontable
 TITLE_GENERAL_ERROR = Error
 
 BTN_CAPTION_EXIT = Salida
-BTN_CAPTION_CLOSE = Cerrar
 BTN_CAPTION_DEFAULT = Valor por omisión
 BTN_CAPTION_REFRESH = Renovar
 MENU_TOOLTIP_START_PAGE = Página de inicio
@@ -123,6 +125,12 @@ TEXT_PROFILE_ITEM_MLEFT_DOWN = Boton Izquierdo
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = Boton Derecho
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Boton Medio
 
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = 
+TEXT_ADD = 
+TEXT_EDIT = 
+TEXT_DELETE = 
+
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = Calibración
 TEXT_SCREEN_MARGIN = Espacio blanco de la pantalla
@@ -192,7 +200,6 @@ TEXT_MULTI_MONITOR_SETTING = Selección del Display Monitor…
 
 TEXT_BTN_MULTI_MONITOR_APPLY = Aplicar
 TEXT_BTN_MULTI_MONITOR_CANCEL = Cancelar
-TEXT_BTN_MULTI_MONITOR_CLOSE = Cerrar
 TEXT_PRIMARY_MONITOR = Monitor principal: %1
 TEXT_NON_MULTI_MONITOR = Multi-Monitor no admitido
 
@@ -237,7 +244,6 @@ TEXT_ZOOM = Ampliar/Reducir
 
 BTN_CAPTION_DEFAULT = Valor por omisión
 BTN_CAPTION_REFRESH = Renovar
-BTN_CAPTION_CLOSE = Cerrar
 MSGBOX_TEXT_DEFAULT = ¿Quiere volver al ajuste inicial?
 MSGBOX_TITLE_DEFAULT = Modificar el valor por omisión
 
@@ -250,7 +256,6 @@ BTN_TIMER_TEXT = %1 segundos
 TITLE_CAPTION = Advertencia
 TEXT_MESSAGE = Advertencia! En la pantalla siguiente contiene el valor configurado para el chequeo del sensor. Si se modifica el valor configurado, el sensor no puede funcionar normalmente.
 BTN_CAPTION_CONTINUE = Continuar
-BTN_CAPTION_CLOSE = Cerrar
 
 [INFORMATION GATHERING]
 TITLE_CAPTION = Convenio
@@ -262,7 +267,6 @@ BTN_CAPTION_CLOSE = No Acepto
 TITLE_CAPTION = Herramienta para diagnosticar el sensor
 BTN_CAPTION_DEFAULT = Valor por omisión
 BTN_CAPTION_REFRESH = Renovar
-BTN_CAPTION_CLOSE = Cerrar
 BTN_CAPTION_SAVELOG = Guardar el Estado del Sensor
 BTN_CAPTION_MAIN = Principal
 BTN_CAPTION_SUB = Sub

@@ -1,10 +1,12 @@
 ﻿
+[COMMON]
+TEXT_CLOSE = Sluiten
+
 [MAIN]
 APP_ERROR_MSG1 = Kan niet worden uitgevoerd op verwisselbare apparaten
 TITLE_GENERAL_ERROR = Fout
 
 BTN_CAPTION_EXIT = Verlaten
-BTN_CAPTION_CLOSE = Sluiten
 BTN_CAPTION_DEFAULT = Standaard
 BTN_CAPTION_REFRESH = Vernieuwen
 MENU_TOOLTIP_START_PAGE = Start pagina
@@ -123,6 +125,12 @@ TEXT_PROFILE_ITEM_MLEFT_DOWN = Linker knop
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = Rechter knop
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Middelste knop
 
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = 
+TEXT_ADD = 
+TEXT_EDIT = 
+TEXT_DELETE = 
+
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = Kalibratie
 TEXT_SCREEN_MARGIN = Schermmarges
@@ -192,7 +200,6 @@ TEXT_MULTI_MONITOR_SETTING = Selecteer display monitor…
 
 TEXT_BTN_MULTI_MONITOR_APPLY = Toepassen
 TEXT_BTN_MULTI_MONITOR_CANCEL = Annuleren
-TEXT_BTN_MULTI_MONITOR_CLOSE = Sluiten
 TEXT_PRIMARY_MONITOR = Eerste monitor : %d
 TEXT_NON_MULTI_MONITOR = Ondersteun multi-monitor niet
 
@@ -237,7 +244,6 @@ TEXT_ZOOM = Zoom
 
 BTN_CAPTION_DEFAULT = Standaard
 BTN_CAPTION_REFRESH = Vernieuwen
-BTN_CAPTION_CLOSE = Sluiten
 MSGBOX_TEXT_DEFAULT = Terugzetten naar oorspronkelijke instellingen?
 MSGBOX_TITLE_DEFAULT = Standaard
 
@@ -250,7 +256,6 @@ BTN_TIMER_TEXT = %1 sec
 TITLE_CAPTION = Waarschuwing
 TEXT_MESSAGE = Waarschuwing, het volgende scherm bevat instellingen die cruciaal zijn voor een correcte werking van het touchsysteem.\n\nHet aanpassen van de instellingen kan resulteren in instabiliteit en niet correct werken van het touchsysteem.
 BTN_CAPTION_CONTINUE = Doorgaan
-BTN_CAPTION_CLOSE = Sluiten
 
 [INFORMATION GATHERING]
 TITLE_CAPTION = Overeenkomst
@@ -262,7 +267,6 @@ BTN_CAPTION_CLOSE = Niet akkoord
 TITLE_CAPTION = Diagnostische gegevens sensor
 BTN_CAPTION_DEFAULT = Standaard
 BTN_CAPTION_REFRESH = Vernieuwen
-BTN_CAPTION_CLOSE = Sluiten
 BTN_CAPTION_SAVELOG = Sensorstatus opslaan
 BTN_CAPTION_MAIN = Hoek
 BTN_CAPTION_SUB = Sub

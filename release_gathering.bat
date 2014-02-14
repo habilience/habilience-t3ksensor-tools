@@ -8,6 +8,7 @@ mkdir %USERAPP%\Languages
 copy T3kCfg\languages\*.txt %USERAPP%\Languages /Y
 mkdir %USERAPP%\config
 copy T3kCfg\config\config.ini %USERAPP%\config /Y
+copy T3kCfg\config\gestureprofiles.txt %USERAPP%\config /Y
 
 copy T3kCfgFE\release\T3kCfgFE.exe release /Y
 copy T3kCmd\release\T3kCmd.exe release /Y

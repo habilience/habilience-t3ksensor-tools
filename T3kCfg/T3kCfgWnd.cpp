@@ -490,7 +490,7 @@ void T3kCfgWnd::onChangeLanguage()
     ui->BtnMainDefault->setText( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_DEFAULT") ) );
     if( IsRegisterTrayIcon() )
     {
-        ui->BtnMainExit->setText( Res.getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_CLOSE") ) );
+        ui->BtnMainExit->setText( Res.getResString( QString::fromUtf8("COMMON"), QString::fromUtf8("TEXT_CLOSE") ) );
         m_pOpenQAction->setText( Res.getResString( QString::fromUtf8("TRAYICON"), QString::fromUtf8("TEXT_MENU_OPEN") ) );
         m_pExitQAction->setText( Res.getResString( QString::fromUtf8("TRAYICON"), QString::fromUtf8("TEXT_MENU_EXIT") ) );
     }
@@ -1165,7 +1165,7 @@ bool T3kCfgWnd::onRegisterTrayIcon(bool bRegister)
 {
     if( bRegister )
     {
-        ui->BtnMainExit->setText( QLangManager::instance()->getResource().getResString( QString::fromUtf8("MAIN"), QString::fromUtf8("BTN_CAPTION_CLOSE") ) );
+        ui->BtnMainExit->setText( QLangManager::instance()->getResource().getResString( QString::fromUtf8("COMMON"), QString::fromUtf8("TEXT_CLOSE") ) );
         if( !IsRegisterTrayIcon() )
         {
             if( CreateTrayIcon() )

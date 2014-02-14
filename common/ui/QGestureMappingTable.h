@@ -44,22 +44,15 @@
 
 #define EXTP_COUNT              5
 
-#ifdef T3KDEVICE_CUSTOM
 #include "../QT3kDeviceEventHandler.h"
-#else
-#include "../QT3kDeviceEventHandler.h"
-#endif
 #include "QLangManager.h"
 #include <QVector>
 #include <QRegion>
 
 
 class QGestureMappingTable : public QWidget
-#ifdef T3KDEVICE_CUSTOM
         , public QT3kDeviceEventHandler::IListener
-#else
         , public QLangManager::ILangChangeNotify
-#endif
 {
     Q_OBJECT
 public:
@@ -67,6 +60,12 @@ public:
 
     void setProfileIndex( int nIndex );
     void resetSelect();
+
+    void setOnlyDisplay( bool bDisplay ) { m_bOnlyDisplay = bDisplay; }
+    void parseMouseProfile( const char* szProfile );
+    QString mergeMouseProfile();
+
+    void setMargin( int nL = -1, int nT = -1, int nR = -1, int nB = -1 ); // -1 : default
 
     enum CellKeyType { KeyTypeNone, KeyTypeEnable, KeyType1Key, KeyType2Way, KeyType4Way };
     struct CellInfo
@@ -108,6 +107,12 @@ protected:
     QFont   m_fntSystem;
 
     int         m_nMultiProfile;
+    bool        m_bOnlyDisplay;
+
+    int         m_nMarginLeft;
+    int         m_nMarginTop;
+    int         m_nMarginRight;
+    int         m_nMarginBottom;
 
     void setCellInfo( int nCol, int nRow,
                       unsigned char cV00, unsigned char cV01,
@@ -116,8 +121,6 @@ protected:
                       unsigned char cV30, unsigned char cV31 );
     void setCellInfo( int nCol, int nRow,
                       unsigned char cV0, unsigned char cV1 );
-
-    void parseMouseProfile( const char* szProfile );
 
     void drawExtProperty(QPainter& p, int nExtIndex, QRectF &rectExtProperty, QFont& fntCellNormal, int flags, const QColor &cellFontColor );
     void drawCellInfo(QPainter& p, const CellInfo& ci, QFont& fntCellNormal, QFont& fntCellBold, const QColor& cellFontColor, int &flags, const QString &strFontFamily );

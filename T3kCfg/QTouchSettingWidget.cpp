@@ -77,7 +77,7 @@ void QTouchSettingWidget::onChangeLanguage()
     ui->LBFast1->setText( Res.getResString(QString::fromUtf8("TOUCH SETTING"), QString::fromUtf8("TEXT_FAST")) );
     ui->LBFast2->setText( Res.getResString(QString::fromUtf8("TOUCH SETTING"), QString::fromUtf8("TEXT_FAST")) );
     ui->BtnDefault->setText( Res.getResString(QString::fromUtf8("TOUCH SETTING"), QString::fromUtf8("BTN_CAPTION_DEFAULT")) );
-    ui->BtnClose->setText( Res.getResString(QString::fromUtf8("TOUCH SETTING"), QString::fromUtf8("BTN_CAPTION_CLOSE")) );
+    ui->BtnClose->setText( Res.getResString(QString::fromUtf8("COMMON"), QString::fromUtf8("TEXT_CLOSE")) );
 
     ui->TitleTimeSetting->setText( Res.getResString(QString::fromUtf8("TOUCH SETTING"), QString::fromUtf8("TITLE_TIME_SETTING")) );
     ui->TitleWheelZoomSetting->setText( Res.getResString(QString::fromUtf8("TOUCH SETTING"), QString::fromUtf8("TITLE_WHEEL_SENSITIVITY_SETTING")) );

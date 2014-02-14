@@ -1,10 +1,12 @@
 ﻿
+[COMMON]
+TEXT_CLOSE = Fechar
+
 [MAIN]
 APP_ERROR_MSG1 = Não pode executar no dispositivo removível !
 TITLE_GENERAL_ERROR = Erro
 
 BTN_CAPTION_EXIT = Sair
-BTN_CAPTION_CLOSE = Fechar
 BTN_CAPTION_DEFAULT = Padrão
 BTN_CAPTION_REFRESH = Renoar
 MENU_TOOLTIP_START_PAGE = Página inicial
@@ -123,6 +125,12 @@ TEXT_PROFILE_ITEM_MLEFT_DOWN = Botão Esquerdo
 TEXT_PROFILE_ITEM_MRIGHT_DOWN = Botão Direito
 TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Botão  Meio
 
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = 
+TEXT_ADD = 
+TEXT_EDIT = 
+TEXT_DELETE = 
+
 [CALIBRATION SETTING]
 TITLE_CAPTION_CALIBRATION = Calibração
 TEXT_SCREEN_MARGIN = Margem de tela
@@ -192,7 +200,6 @@ TEXT_MULTI_MONITOR_SETTING = Selecionar monitor de ecrã
 
 TEXT_BTN_MULTI_MONITOR_APPLY = Aplicar
 TEXT_BTN_MULTI_MONITOR_CANCEL = Cancelar
-TEXT_BTN_MULTI_MONITOR_CLOSE = Erro
 TEXT_PRIMARY_MONITOR = Monitor principal: %1
 TEXT_NON_MULTI_MONITOR = Não suportar multi-monitores
 
@@ -237,7 +244,6 @@ TEXT_ZOOM = Zoom
 
 BTN_CAPTION_DEFAULT = Padrão
 BTN_CAPTION_REFRESH = Renoar
-BTN_CAPTION_CLOSE = Fechar
 MSGBOX_TEXT_DEFAULT = Restaurar todas as configurações originais?
 MSGBOX_TITLE_DEFAULT = Mudar para o padrão
 
@@ -250,7 +256,6 @@ BTN_TIMER_TEXT = %1 segundos
 TITLE_CAPTION = Aviso
 TEXT_MESSAGE = Aviso! A tela a seguir contém configuração de dados cruciais para o funcionamento de sensores de toque. mudar as definições de dados pode fazer sua tela de toque instável.
 BTN_CAPTION_CONTINUE = Conitnuar
-BTN_CAPTION_CLOSE = Fechar
 
 [INFORMATION GATHERING]
 TITLE_CAPTION = Acordo
@@ -262,7 +267,6 @@ BTN_CAPTION_CLOSE = Rejeitar
 TITLE_CAPTION = Diagnóstico do sensor
 BTN_CAPTION_DEFAULT = Padrão
 BTN_CAPTION_REFRESH = Renoar
-BTN_CAPTION_CLOSE = Fechar
 BTN_CAPTION_SAVELOG = Salvar Estado Sensor
 BTN_CAPTION_MAIN = Principal
 BTN_CAPTION_SUB = Sub

@@ -4,8 +4,10 @@
 #include "QT3kUserData.h"
 #include "T3kConstStr.h"
 #include "QCustomDefaultSensor.h"
+#include "QPredefProfileEditDialog.h"
 
 #include <QKeyEvent>
+#include <QPropertyAnimation>
 
 
 QNMouseProfileWidget::QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *parent) :
@@ -18,12 +20,21 @@ QNMouseProfileWidget::QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *par
     m_nInputMode = -1;
     m_nChkUsbCfgMode = -1;
 
-    ui->TabMouseSettingTable->setTabDirection( QColorTabWidget::TabDirectionHorzLeftTop, 28, 10 );
+    ui->TitleMouseMapping->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_MOUSE_MAP.png" );
+
     QWidget* pWidget = &m_MouseProfileTableWidget;
     m_MouseProfileTableWidget.setParent(ui->TabMouseSettingTable);
     QLangRes& res = QLangManager::instance()->getResource();
     ui->TabMouseSettingTable->addTab( res.getResString("MOUSE SETTING", "TEXT_PROFILE_LEGEND_MODE1"), pWidget, QColor(237, 28, 36, 200), NULL );
     ui->TabMouseSettingTable->addTab( res.getResString("MOUSE SETTING", "TEXT_PROFILE_LEGEND_MODE2"), pWidget, QColor(0, 162, 232, 200), NULL );
+
+    m_cbPredefinedProfile.setParent( ui->TabMouseSettingTable );
+    m_cbPredefinedProfile.setFixedSize( 150, 22 );
+
+    loadPredefProfiles();
+
+    ui->TabMouseSettingTable->setExtraWidget( &m_cbPredefinedProfile );
+    connect( &m_cbPredefinedProfile, SIGNAL(activated(int)), this, SLOT(onCBPredefinedProfileActivated(int)) );
 
     connect( ui->TabMouseSettingTable, SIGNAL(tabSelectChanged(QColorTabWidget*,int)), SLOT(onTabSelChanged(QColorTabWidget*,int)) );
     connect( &m_MouseProfileTableWidget, &QGestureMappingTable::UpdateProfile, this, &QNMouseProfileWidget::onUpdateProfile, Qt::DirectConnection );
@@ -44,6 +55,8 @@ QNMouseProfileWidget::QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *par
     connect( &m_MouseProfileTableWidget, &QGestureMappingTable::UpdateProfile, this, &QNMouseProfileWidget::onUpdateProfile, Qt::QueuedConnection );
 
     ui->TabMouseSettingTable->selectTab( 0 );
+
+    onChangeLanguage();
 }
 
 QNMouseProfileWidget::~QNMouseProfileWidget()
@@ -51,6 +64,31 @@ QNMouseProfileWidget::~QNMouseProfileWidget()
     delete ui;
 
     m_RequestCmdManager.Stop();
+
+    if( m_pEditActionWnd )
+    {
+        m_pEditActionWnd->close();
+        delete m_pEditActionWnd;
+        m_pEditActionWnd = NULL;
+    }
+    if( m_pEditActionEWnd )
+    {
+        m_pEditActionEWnd->close();
+        delete m_pEditActionEWnd;
+        m_pEditActionEWnd = NULL;
+    }
+    if( m_pEditAction2WDWnd )
+    {
+        m_pEditAction2WDWnd->close();
+        delete m_pEditAction2WDWnd;
+        m_pEditAction2WDWnd = NULL;
+    }
+    if( m_pEditAction4WDWnd )
+    {
+        m_pEditAction4WDWnd->close();
+        delete m_pEditAction4WDWnd;
+        m_pEditAction4WDWnd = NULL;
+    }
 }
 
 void QNMouseProfileWidget::setDefault()
@@ -65,47 +103,34 @@ void QNMouseProfileWidget::refresh()
 
 void QNMouseProfileWidget::requestSensorData( bool bDefault )
 {
-    QT3kDevice* pT3kHandle = QT3kUserData::GetInstance()->getT3kHandle();
-    if( !pT3kHandle ) return;
-
     m_RequestCmdManager.Stop();
 
     char cQ = bDefault ? '*' : '?';
 
     QCustomDefaultSensor* pInstance = QCustomDefaultSensor::Instance();
-    if( bDefault )
+    if( pInstance->IsLoaded() )
     {
-        if( pInstance->IsLoaded() )
-        {
-            QString strQ = QString( cQ );
-            QString strP1 = pInstance->GetDefaultData( cstrMouseProfile1, strQ );
-            QString strP2 = pInstance->GetDefaultData( cstrMouseProfile2, strQ );
+        QString strQ = QString( cQ );
+        QString strP1 = pInstance->GetDefaultData( cstrMouseProfile1, strQ );
+        QString strP2 = pInstance->GetDefaultData( cstrMouseProfile2, strQ );
 
-            m_RequestCmdManager.AddItem( cstrMouseProfile1, strP1 );
-            m_RequestCmdManager.AddItem( cstrMouseProfile2, strP2 );
-
-            pT3kHandle->sendCommand( QString("%1%2").arg(cstrMouseProfile1).arg(strP1), true );
-            pT3kHandle->sendCommand( QString("%1%2").arg(cstrMouseProfile2).arg(strP2), true );
-        }
-        else
-        {
-            QString str( cQ );
-            m_RequestCmdManager.AddItem( cstrMouseProfile1, str );
-            m_RequestCmdManager.AddItem( cstrMouseProfile2, str );
-
-            pT3kHandle->sendCommand( QString("%1%2").arg(cstrMouseProfile1).arg(cQ), true );
-            pT3kHandle->sendCommand( QString("%1%2").arg(cstrMouseProfile2).arg(cQ), true );
-        }
-        m_nSelectedProfileIndex = -1;
+        m_RequestCmdManager.AddItem( cstrMouseProfile1, strP1 );
+        m_RequestCmdManager.AddItem( cstrMouseProfile2, strP2 );
+    }
+    else
+    {
+        QString str( cQ );
+        m_RequestCmdManager.AddItem( cstrMouseProfile1, str );
+        m_RequestCmdManager.AddItem( cstrMouseProfile2, str );
     }
 
     m_RequestCmdManager.AddItem( cstrUsbConfigMode, "?" );
-    m_nChkUsbCfgMode = pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
+    m_nChkUsbCfgMode = m_pT3kHandle->sendCommand( QString("%1?").arg(cstrUsbConfigMode), true );
 
     int nRet = 3;
     do
     {
-    if( !pT3kHandle->sendCommand( QString("%1?").arg(cstrInputMode), false ) )
+    if( !m_pT3kHandle->sendCommand( QString("%1?").arg(cstrInputMode), false ) )
         nRet--;
     else
         break;
@@ -114,9 +139,8 @@ void QNMouseProfileWidget::requestSensorData( bool bDefault )
     if( !nRet ) m_RequestCmdManager.AddItem( cstrInputMode, "?" );
 
     m_RequestCmdManager.AddItem( cstrMouseProfile, "?" );
-    pT3kHandle->sendCommand( QString("%1?").arg(cstrMouseProfile), true );
 
-    m_RequestCmdManager.Start( pT3kHandle );
+    m_RequestCmdManager.Start( m_pT3kHandle );
 }
 
 void QNMouseProfileWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
@@ -216,6 +240,8 @@ void QNMouseProfileWidget::onChangeLanguage()
     QLangRes& Res = QLangManager::instance()->getResource();
 
     ui->TitleMouseMapping->setText( Res.getResString(QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TITLE_CAPTION_MOUSE_BUTTON_MAPPING")) );
+
+    ui->TabMouseSettingTable->setTabDirection( Res.isR2L() ? QColorTabWidget::TabDirectionHorzRightTop : QColorTabWidget::TabDirectionHorzLeftTop, 28, 20 );
 }
 
 void QNMouseProfileWidget::showEvent(QShowEvent *)
@@ -229,8 +255,6 @@ void QNMouseProfileWidget::hideEvent(QHideEvent *)
     setFocusPolicy( Qt::NoFocus );
 
     m_RequestCmdManager.Stop();
-
-    m_nSelectedProfileIndex = -1;
     //m_nMouseProfileIndex = -1;
 }
 
@@ -254,7 +278,7 @@ void QNMouseProfileWidget::onTabSelChanged(QColorTabWidget* /*pTabWidget*/, int 
 
 void QNMouseProfileWidget::onSendCommand(QString strCmd, bool bAsync, unsigned short nTimeout)
 {
-    QT3kUserData::GetInstance()->getT3kHandle()->sendCommand( strCmd, bAsync, nTimeout );
+    m_pT3kHandle->sendCommand( strCmd, bAsync, nTimeout );
 }
 
 void QNMouseProfileWidget::onUpdateProfile(int nProfileIndex, const QGestureMappingTable::CellInfo &ci, ushort nProfileFlags)
@@ -282,6 +306,32 @@ void QNMouseProfileWidget::onUpdateProfile(int nProfileIndex, const QGestureMapp
     }
 }
 
+void QNMouseProfileWidget::onCBPredefinedProfileActivated(int index)
+{
+    if( index < 0 ) return;
+
+    m_cbPredefinedProfile.setCurrentIndex( -1 );
+
+//    if( index == 0 )
+//    {
+//        // show editer
+//        QPredefProfileEditDialog dlg( this );
+//        dlg.exec();
+//        loadPredefProfiles();
+//        return;
+//    }
+    m_RequestCmdManager.Stop();
+
+    QString strV = m_cbPredefinedProfile.itemData( index ).toString();
+    int nProfileIdx = ui->TabMouseSettingTable->getActiveTab();
+
+    QString strCmd(cstrMouseProfile1);
+    strCmd.replace( '1', QString::number(nProfileIdx+1) );
+    m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), strV );
+
+    m_RequestCmdManager.Start( m_pT3kHandle );
+}
+
 void QNMouseProfileWidget::sensorRefresh( bool bTabOnly/*=false*/ )
 {
     m_RequestCmdManager.Stop();
@@ -303,5 +353,37 @@ void QNMouseProfileWidget::sensorRefresh( bool bTabOnly/*=false*/ )
 //        ui->cmdAsyncMngr->insertCommand( strSensorCmd );
     }
 
-    m_RequestCmdManager.Start( QT3kUserData::GetInstance()->getT3kHandle() );
+    m_RequestCmdManager.Start( m_pT3kHandle );
+}
+
+void QNMouseProfileWidget::loadPredefProfiles()
+{
+    m_cbPredefinedProfile.clear();
+
+    //m_cbPredefinedProfile.addItem( "Manage..." );
+
+    QString strFilePath( QApplication::applicationDirPath() );
+    strFilePath += "/config/gestureprofiles.txt";
+    if( !QFile::exists( strFilePath ) )
+    {
+        m_cbPredefinedProfile.setVisible( false );
+        return;
+    }
+
+    QFile file( strFilePath );
+    if( !file.open( QFile::ReadOnly ) )
+        return;
+
+    while( !file.atEnd() )
+    {
+        QByteArray bt = file.readLine();
+        QString strName( bt.left(bt.indexOf('=')).trimmed() );
+        QString strValue( bt.mid(bt.indexOf('=') + 1).trimmed() );
+
+        m_cbPredefinedProfile.addItem( strName, strValue );
+    }
+
+    file.close();
+
+    m_cbPredefinedProfile.setCurrentIndex( -1 );
 }

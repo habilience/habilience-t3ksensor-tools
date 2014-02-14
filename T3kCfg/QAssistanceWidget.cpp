@@ -100,7 +100,7 @@ void QAssistanceWidget::onChangeLanguage()
     QLangRes& Res = QLangManager::instance()->getResource();
 
     setWindowTitle( Res.getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_CAPTION")) );
-    ui->BtnClose->setText( Res.getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("BTN_CAPTION_CLOSE")) );
+    ui->BtnClose->setText( Res.getResString(QString::fromUtf8("COMMON"), QString::fromUtf8("TEXT_CLOSE")) );
 
     ui->TabCamWidget->setTabText( 0, Res.getResString(QString::fromUtf8("SENSOR DIAGNOSIS"), QString::fromUtf8("BTN_CAPTION_SAVELOG")) );
 
