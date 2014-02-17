@@ -7,7 +7,6 @@
 #include "QPredefProfileEditDialog.h"
 
 #include <QKeyEvent>
-#include <QPropertyAnimation>
 
 
 QNMouseProfileWidget::QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *parent) :
