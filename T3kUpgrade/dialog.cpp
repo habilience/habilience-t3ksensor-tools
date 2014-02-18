@@ -35,6 +35,7 @@ Dialog::Dialog(QWidget *parent) :
 #endif
     m_nPacketId = -1;
     m_nCountDownTimeout = 0;
+    m_TimerCheckAdmin = 0;
 
     m_bWaitIAP = false;
     m_bWaitIAPCheckOK = false;
@@ -111,6 +112,11 @@ Dialog::~Dialog()
         m_TimerCheckRunning = 0;
     }
 #endif
+    if( m_TimerCheckAdmin )
+    {
+        killTimer( m_TimerCheckAdmin );
+        m_TimerCheckAdmin = 0;
+    }
     delete ui;
 }
 
@@ -453,6 +459,40 @@ void Dialog::timerEvent(QTimerEvent *evt)
             }
         }
 #endif
+        else if(evt->timerId() == m_TimerCheckAdmin )
+        {
+            killTimer( m_TimerCheckAdmin );
+            m_TimerCheckAdmin = 0;
+
+            QString strFileName = m_strDropFileName;
+            m_strDropFileName.clear();
+
+            QInputDialog dlg( this );
+            dlg.setWindowFlags( dlg.windowFlags() & ~Qt::WindowContextHelpButtonHint );
+            dlg.setWindowModality( Qt::WindowModal );
+            dlg.setModal( true );
+            dlg.setWindowTitle( "Enter password" );
+            dlg.setLabelText( "Paasword" );
+            dlg.setTextEchoMode( QLineEdit::Password );
+            if( dlg.exec() == QInputDialog::Rejected ) return;
+            QString str = dlg.textValue();
+            if( str.isEmpty() ) return;
+
+            if( str.compare( "T3kHabilience" ) == 0 )
+            {
+                m_bAdministrator = true;
+                ui->pushButtonUpgrade->setStyleSheet( "QPushButton {color: red; font-weight: bold}" );
+                ui->pushButtonUpgrade->setText( "Upgrade(dev)" );
+            }
+            else
+            {
+                QMessageBox::warning( this, "Error", "The password is incorrect.", QMessageBox::Ok );
+                return;
+            }
+
+            loadFirmwareFile( strFileName );
+            updateFirmwareInformation();
+        }
     }
 }
 
@@ -1428,30 +1468,15 @@ void Dialog::dropEvent(QDropEvent *evt)
             {
                 if( (ulong)evt->keyboardModifiers() == (ulong)(Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier) )
                 {
-                    QInputDialog dlg( this );
-                    dlg.setWindowFlags( dlg.windowFlags() & ~Qt::WindowContextHelpButtonHint );
-                    dlg.setWindowModality( Qt::WindowModal );
-                    dlg.setModal( true );
-                    dlg.setWindowTitle( "Enter password" );
-                    dlg.setLabelText( "Paasword" );
-                    dlg.setTextEchoMode( QLineEdit::Password );
-                    installEventFilter( &dlg );
-                    if( dlg.exec() == QInputDialog::Rejected ) return;
-                    removeEventFilter( &dlg );
-                    QString str = dlg.textValue();
-                    if( str.isEmpty() ) return;
+                    m_strDropFileName = str;
+                    if( m_TimerCheckAdmin )
+                    {
+                        killTimer( m_TimerCheckAdmin );
+                        m_TimerCheckAdmin = 0;
+                    }
 
-                    if( str.compare( "T3kHabilience" ) == 0 )
-                    {
-                        m_bAdministrator = true;
-                        ui->pushButtonUpgrade->setStyleSheet( "QPushButton {color: red; font-weight: bold}" );
-                        ui->pushButtonUpgrade->setText( "Upgrade(dev)" );
-                    }
-                    else
-                    {
-                        QMessageBox::warning( this, "Error", "The password is incorrect.", QMessageBox::Ok );
-                        return;
-                    }
+                    m_TimerCheckAdmin = startTimer( 500 );
+                    return;
                 }
                 strFileName = str;
                 break;
@@ -1529,7 +1554,7 @@ bool Dialog::checkFWVersion(QString& strMsg)
     for (int i=0 ; i<m_FirmwareInfo.size() ; i++)
     {
         FirmwareInfo* pFI = m_FirmwareInfo.at(i);
-        if (pFI->type == TYPE_MM)
+        if (pFI->type == TYPE_MM && m_SensorInfo[IDX_MM].nModelNumber == pFI->nModelNumber)
         {
             strBinVer = QString::fromUtf8( pFI->szVersion );
             break;

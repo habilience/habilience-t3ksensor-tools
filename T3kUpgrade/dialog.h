@@ -46,6 +46,9 @@ private:
     int         m_TimerCheckRunning;
 #endif
     int         m_nCountDownTimeout;
+    int         m_TimerCheckAdmin;
+
+    QString     m_strDropFileName;
 
     enum QueryInfoStep {
         SUB_QUERY_MODE = 0,
