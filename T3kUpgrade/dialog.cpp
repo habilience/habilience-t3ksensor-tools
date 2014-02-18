@@ -225,6 +225,9 @@ bool Dialog::loadFirmwareFile(QString strFirmwareFilePathName)
 
 FirmwareInfo* Dialog::findFirmware( FIRMWARE_TYPE type, unsigned short nModelNumber )
 {
+    if( type == TYPE_CM && nModelNumber == 0x3400 )
+        nModelNumber = 0x3500;
+
     for ( int f=0 ; f<m_FirmwareInfo.size() ; f++ )
     {
         FirmwareInfo* pFI = m_FirmwareInfo.at(f);
