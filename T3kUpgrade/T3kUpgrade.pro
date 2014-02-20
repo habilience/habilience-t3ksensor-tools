@@ -190,6 +190,7 @@ SOURCES += main.cpp \
     QSlidingStackedWidget.cpp \
     QFWDPacket.cpp \
     QBriefingDialog.cpp \
+    QPartCheckBox.cpp
 
 HEADERS  += dialog.h \
     ../common/qsingleapplication/qtsinglecoreapplication.h \
@@ -200,7 +201,8 @@ HEADERS  += dialog.h \
     ../common/ui/QLicenseWidget.h \
     QSlidingStackedWidget.h \
     QFWDPacket.h \
-    QBriefingDialog.h
+    QBriefingDialog.h \
+    QPartCheckBox.h
 
 FORMS    += dialog.ui \
     briefing_dialog.ui \

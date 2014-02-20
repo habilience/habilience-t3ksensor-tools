@@ -5,6 +5,8 @@
 #include <QFWDPacket.h>
 #include <QList>
 
+#include "../common/T3kCamNameDef.h"
+
 namespace Ui {
 class Dialog;
 }
@@ -19,6 +21,7 @@ struct SensorInfo {
     char            szVersion[256];
     char            szDateTime[256];
     char            szModel[256];
+    bool            bUpgradeTarget;
 };
 
 enum FIRMWARE_TYPE { TYPE_MM=0, TYPE_CM=1 };
@@ -96,12 +99,6 @@ private:
 
     int             m_nStableCheck;
 
-#define IDX_MM      (0)
-#define IDX_CM1     (1)
-#define IDX_CM2     (2)
-#define IDX_CM1_1   (3)
-#define IDX_CM2_1   (4)
-#define IDX_MAX     (5)
     SensorInfo      m_SensorInfo[IDX_MAX];
     SensorInfo      m_TempSensorInfo[IDX_MAX];
     QList<FirmwareInfo*> m_FirmwareInfo;
@@ -158,6 +155,7 @@ protected:
     void displayInformation(const QString &strText );
 
     bool loadFirmwareFile(QString strPath = "");
+    void loadFirmwarePartFile(QString strPath);
 
     bool analysisFirmwareBinary( const char* ver_info, FirmwareInfo* pFI );
 
@@ -176,6 +174,8 @@ private slots:
 
     void onDisconnected();
     void onResponseFromSensor(unsigned short nPacketId);
+
+    void onToggledPart(QString strPart, bool bChecked);
 
 public slots:
     void onHandleMessage(const QString &msg);

@@ -213,14 +213,6 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     connect( ui->SWMenu, &QSlidingStackedWidget::animationFinished, this, &T3kCfgWnd::OnFinishAnimationMenu );
 
     connect( this, &T3kCfgWnd::connectedDevice, this, &T3kCfgWnd::onOpenT3kDevice );
-
-    QSettings RegOption( "Habilience", "T3kCfg" );
-    RegOption.beginGroup( "Options" );
-
-    if( RegOption.value( "TrayIcon", false ).toBool() )
-        onRegisterTrayIcon( true );
-
-    RegOption.endGroup();
 }
 
 T3kCfgWnd::~T3kCfgWnd()
@@ -745,6 +737,14 @@ void T3kCfgWnd::showEvent(QShowEvent *)
         else
             ShowContentsMenu();
     }
+
+    QSettings RegOption( "Habilience", "T3kCfg" );
+    RegOption.beginGroup( "Options" );
+
+    if( RegOption.value( "TrayIcon", false ).toBool() )
+        onRegisterTrayIcon( true );
+
+    RegOption.endGroup();
 }
 
 void T3kCfgWnd::closeEvent(QCloseEvent */*evt*/)

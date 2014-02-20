@@ -51,6 +51,9 @@
           <property name="text">
            <string>Touch ON/OFF</string>
           </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -64,6 +67,9 @@
           <property name="text">
            <string>Calibration</string>
           </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -76,6 +82,9 @@
           </property>
           <property name="text">
            <string>Task Switch</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -106,6 +115,9 @@
           <property name="text">
            <string>Touch ON/OFF with GPIO</string>
           </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -119,6 +131,9 @@
           <property name="text">
            <string>Calibration with GPIO</string>
           </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -131,6 +146,9 @@
           </property>
           <property name="text">
            <string>Task Switch with GPIO</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
           </property>
          </widget>
         </item>

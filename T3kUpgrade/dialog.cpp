@@ -19,7 +19,6 @@
 #define RETRY_CONNECTION_INTERVAL       (3000)
 #define WAIT_MODECHANGE_TIMEOUT         (60000)     // 60 secs
 
-static const QString PartName[] = { "MM", "CM1", "CM2", "CM1-1", "CM2-1" };
 const QString CAUTION = "CAUTION: Do not unplug the device until the process is completed.";
 
 Dialog::Dialog(QWidget *parent) :
@@ -54,6 +53,8 @@ Dialog::Dialog(QWidget *parent) :
     memset( &m_TempSensorInfo, 0, sizeof(m_TempSensorInfo) );
     memset( &m_SensorInfo, 0, sizeof(m_SensorInfo) );
     m_FirmwareInfo.clear();
+
+    m_bAdministrator = false;
 
     ui->setupUi(this);
 
@@ -227,6 +228,63 @@ bool Dialog::loadFirmwareFile(QString strFirmwareFilePathName)
     zip.close();
 
     return m_FirmwareInfo.size() != 0 ? true : false;
+}
+
+void Dialog::loadFirmwarePartFile(QString strPath)
+{
+    m_FirmwareInfo.clear();
+
+    QFile file( strPath );
+    if( !file.open(QIODevice::ReadOnly) ) return;
+
+    char ver_info[40];
+    FirmwareInfo* pFI = NULL;
+
+    if ( file.size() > 0 )
+    {
+        pFI = new FirmwareInfo;
+        memset( pFI, 0, sizeof(FirmwareInfo) );
+        pFI->pFirmwareBinary = (char*)malloc(sizeof(char) * file.size());
+        int nReadBytes = file.read( pFI->pFirmwareBinary, file.size() );
+        pFI->dwFirmwareSize = nReadBytes;
+        if (nReadBytes != (int)file.size())
+        {
+            qDebug( "read error: %d/%d", nReadBytes, (int)file.size());
+            free( pFI->pFirmwareBinary );
+            delete pFI;
+            file.close();
+            return;
+        }
+
+        memset( ver_info, 0, sizeof(ver_info) );
+        memcpy( ver_info, pFI->pFirmwareBinary+NAME_OFFSET, sizeof(ver_info)-1 );
+
+        if (!analysisFirmwareBinary(ver_info, pFI))
+        {
+            free( pFI->pFirmwareBinary );
+            delete pFI;
+            file.close();
+            return;
+        }
+
+        unsigned short major = ((unsigned short)(pFI->pFirmwareBinary[MAJ_VER_OFFSET+1]) << 8) | (unsigned char)pFI->pFirmwareBinary[MAJ_VER_OFFSET];
+        unsigned short minor = ((unsigned short)(pFI->pFirmwareBinary[MIN_VER_OFFSET+1]) << 8) | (unsigned char)pFI->pFirmwareBinary[MIN_VER_OFFSET];
+        pFI->dwFirmwareVersion = ((unsigned long)(major) << 16) | minor;
+
+        if ((minor & 0x0f) != 0)
+        {
+            snprintf( pFI->szVersion, 256, "%x.%02x", major, minor );
+        }
+        else
+        {
+            snprintf( pFI->szVersion, 256, "%x.%x", major, minor );
+        }
+
+        qDebug( "> firmware binary[%s] %s %s: %ld bytes", pFI->type == TYPE_MM ? "mm" : "cm", pFI->szVersion, pFI->szModel, pFI->dwFirmwareSize );
+
+        m_FirmwareInfo.push_back(pFI);
+    }
+    file.close();
 }
 
 FirmwareInfo* Dialog::findFirmware( FIRMWARE_TYPE type, unsigned short nModelNumber )
@@ -490,7 +548,10 @@ void Dialog::timerEvent(QTimerEvent *evt)
                 return;
             }
 
-            loadFirmwareFile( strFileName );
+            if( QFileInfo(strFileName).suffix() == "bin" )
+                loadFirmwarePartFile( strFileName );
+            else
+                loadFirmwareFile( strFileName );
             updateFirmwareInformation();
         }
     }
@@ -606,6 +667,8 @@ void Dialog::firmwareDownload()
     // check iap mode
     for ( int i=IDX_MAX-1 ; i>=0 ; i-- )
     {
+        if (m_bAdministrator && !m_SensorInfo[i].bUpgradeTarget) continue;
+
         if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
             continue;
         if ((m_SensorInfo[i].nMode != MODE_CM_IAP) && (m_SensorInfo[i].nMode != MODE_MM_IAP))
@@ -619,6 +682,8 @@ void Dialog::firmwareDownload()
     {
         for ( int i=IDX_MAX-1 ; i>=0 ; i-- )
         {
+            if (m_bAdministrator && !m_SensorInfo[i].bUpgradeTarget) continue;
+
             if (m_SensorInfo[i].nMode == MODE_UNKNOWN
                     || (m_SensorInfo[i].nMode == MODE_CM_IAP
                         || m_SensorInfo[i].nMode == MODE_MM_IAP))
@@ -642,6 +707,8 @@ void Dialog::firmwareDownload()
 
     for ( int i=IDX_MAX-1 ; i>=0 ; i-- )
     {
+        if (m_bAdministrator && !m_SensorInfo[i].bUpgradeTarget ) continue;
+
         if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
             continue;
 
@@ -1085,6 +1152,8 @@ void Dialog::executeNextJob( bool bRetry/*=false*/ )
                         bool bIAPModeOK = true;
                         for (int i=0 ; i<IDX_MAX ; i++)
                         {
+                            if (m_bAdministrator && !m_SensorInfo[i].bUpgradeTarget ) continue;
+
                             if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
                                 continue;
                             if ( (m_SensorInfo[i].nMode != MODE_CM_IAP) && (m_SensorInfo[i].nMode != MODE_MM_IAP) )
@@ -1115,6 +1184,8 @@ void Dialog::executeNextJob( bool bRetry/*=false*/ )
                         bool bAPPModeOK = true;
                         for (int i=0 ; i<IDX_MAX ; i++)
                         {
+                            if (m_bAdministrator && !m_SensorInfo[i].bUpgradeTarget ) continue;
+
                             if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
                                 continue;
                             if ( (m_SensorInfo[i].nMode != MODE_CM_APP) && (m_SensorInfo[i].nMode != MODE_MM_APP) )
@@ -1436,7 +1507,13 @@ void Dialog::dragEnterEvent(QDragEnterEvent *evt)
             QString str( url.toLocalFile() );
             if( str.isEmpty() ) continue;
 
-            if( QFileInfo( str ).suffix() == "fwb" )
+            QString strSuffix = QFileInfo( str ).suffix();
+            if( strSuffix == "fwb" )
+            {
+                evt->acceptProposedAction();
+                return;
+            }
+            else if( strSuffix == "bin" )
             {
                 evt->acceptProposedAction();
                 return;
@@ -1449,13 +1526,6 @@ void Dialog::dropEvent(QDropEvent *evt)
 {
     setFocus();
 
-    m_bAdministrator = false;
-    ui->pushButtonUpgrade->setStyleSheet( "QPushButton {color: black}" );
-    ui->pushButtonUpgrade->setText( "Upgrade" );
-
-    m_FirmwareInfo.clear();
-    updateFirmwareInformation();
-
     QString	strFileName;
     if( evt->mimeData()->hasUrls() )
     {
@@ -1464,8 +1534,16 @@ void Dialog::dropEvent(QDropEvent *evt)
             QString str( url.toLocalFile() );
             if( str.isEmpty() ) continue;
 
-            if( QFileInfo( str ).suffix() == "fwb" )
+            QString strSuffix = QFileInfo( str ).suffix();
+            if( strSuffix == "fwb" || strSuffix == "bin" )
             {
+                m_bAdministrator = false;
+                ui->pushButtonUpgrade->setStyleSheet( "QPushButton {color: black}" );
+                ui->pushButtonUpgrade->setText( "Upgrade" );
+
+                m_FirmwareInfo.clear();
+                updateFirmwareInformation();
+
                 if( (ulong)evt->keyboardModifiers() == (ulong)(Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier) )
                 {
                     m_strDropFileName = str;
@@ -1496,6 +1574,8 @@ void Dialog::dropEvent(QDropEvent *evt)
 
 bool Dialog::verifyFirmware(QString& strMsg)
 {
+    if( m_bAdministrator ) return true;
+
     if (m_SensorInfo[0].nMode == MODE_UNKNOWN )
     {
         qDebug( "invalid firmware mode" );
@@ -1639,91 +1719,29 @@ void Dialog::on_pushButtonUpgrade_clicked()
         return;
     }
 
-    QString strDetailHTML;
 
-    QString strHead1 =
-        "<html><body><font color=black>"
-        "<table width=\"100%\" cellspacing=\"0\" bgcolor=\"#d5dffb\">"
-            "<tr>"
-                "<td width=\"15%\">"
-                    "<p align=\"left\">Part</p>"
-                "</td>"
-                "<td width=\"15%\">"
-                    "<p align=\"left\">Model</p>"
-                "</td>"
-                "<td width=\"40%\">"
-                    "<p align=\"center\">from</p>"
-                "</td>"
-                "<td width=\"10%\">"
-                    "<p align=\"center\">&nbsp;</p>"
-                "</td>"
-                "<td width=\"20%\">"
-                    "<p align=\"center\">to</p>"
-                "</td>"
-            "</tr>"
-        "</table>"
-        "<hr>";
+    QBriefingDialog briefDialog(m_bAdministrator, this);
 
-    QString strHead2 =
-        "<table width=\"100%\" cellspacing=\"0\" align=\"center\">";
+    connect( &briefDialog, &QBriefingDialog::togglePart, this, &Dialog::onToggledPart );
 
-    QString strCMInfo = "";
+    if( m_SensorInfo[IDX_MM].nMode != MODE_UNKNOWN )
+    {
+        FirmwareInfo* pFI_MM = findFirmware( TYPE_MM, m_SensorInfo[IDX_MM].nModelNumber );
+        if( pFI_MM )
+            briefDialog.addPart( "MM", QString(m_SensorInfo[IDX_MM].szModel), QString(m_SensorInfo[IDX_MM].szVersion), QString(pFI_MM->szVersion) );
+    }
+
     FirmwareInfo* pFI_CM = NULL;
-    int nCMCount = 0;
     for (int i=IDX_CM1; i<IDX_MAX ; i++)
     {
         if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
             continue;
 
         pFI_CM = findFirmware( TYPE_CM, m_SensorInfo[i].nModelNumber );
-        QString strCMItem =
-            "<tr>"
-                "<td width=\"15%\">"
-                    "<p align=\"left\">" + QString(PartName[i]) + "</p>"
-                "</td>"
-                "<td width=\"15%\">"
-                    "<p align=\"left\">" + QString(m_SensorInfo[i].szModel) + "</p>"
-                "</td>"
-                "<td width=\"40%\">"
-                "<p align=\"center\">" + QString(m_SensorInfo[i].szVersion) + "</p>"
-                "</td>"
-                "<td width=\"20%\">"
-                    "<p align=\"center\">" + QString(pFI_CM->szVersion) + "</p>"
-                "</td>"
-            "</tr>";
-        strCMInfo += strCMItem;
-        nCMCount++;
+        if( pFI_CM != NULL )
+            briefDialog.addPart( QString(PartName[i]), QString(m_SensorInfo[i].szModel), QString(m_SensorInfo[i].szVersion), QString(pFI_CM->szVersion) );
     }
 
-    FirmwareInfo* pFI_MM = findFirmware( TYPE_MM, m_SensorInfo[IDX_MM].nModelNumber );
-    QString strMMInfo =
-        "<tr>"
-            "<td width=\"15%\">"
-                "<p align=\"left\">MM</p>"
-            "</td>"
-            "<td width=\"15%\">"
-                "<p align=\"left\">" + QString(m_SensorInfo[IDX_MM].szModel) + "</p>"
-            "</td>"
-            "<td width=\"40%\">"
-                "<p align=\"center\">" + QString(m_SensorInfo[IDX_MM].szVersion) + "</p>"
-            "</td>"
-            "<td width=\"10%\" rowspan=" + QString("%1").arg(nCMCount+1) + " align=\"center\" valign=\"middle\">"
-                "<p align=\"center\">=&gt;</p>"
-            "</td>"
-            "<td width=\"20%\">"
-                "<p align=\"center\">" + QString(pFI_MM->szVersion) + "</p>"
-            "</td>"
-        "</tr>";
-
-
-
-    QString strTail =
-        "</table></font>"
-        "</body></html>";
-
-    strDetailHTML = strHead1 + strHead2 + strMMInfo + strCMInfo + strTail;
-
-    QBriefingDialog briefDialog(strDetailHTML, this);
     int nResult = briefDialog.exec();
 
     if (nResult == QDialog::Accepted)
@@ -1781,4 +1799,11 @@ void Dialog::on_toolButtonLicense_clicked()
     QLicenseWidget wig( ":/T3kUpgradeRes/resources/License.html", this );
     wig.activateWindow();
     wig.exec();
+}
+
+void Dialog::onToggledPart(QString strPart, bool bChecked)
+{
+    int nIdx = partNameToIdx(strPart);
+    if( nIdx >= 0 )
+        m_SensorInfo[nIdx].bUpgradeTarget = bChecked;
 }
