@@ -18,7 +18,7 @@
 #endif
 
 #include "DefineString.h"
-#include "T3k_ver.h"
+#include "../T3k_ver.h"
 
 #ifdef Q_OS_LINUX
 #include <QFile>

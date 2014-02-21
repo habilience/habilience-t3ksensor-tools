@@ -3,7 +3,7 @@
 #include "qsingleapplication/qtsingleapplication.h"
 #include "QUtils.h"
 #include "QGUIUtils.h"
-#include "../common/T3k_ver.h"
+#include "../T3k_ver.h"
 #include <QStringList>
 
 #ifdef Q_OS_WIN

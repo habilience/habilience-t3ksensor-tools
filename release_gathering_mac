@@ -7,12 +7,14 @@ mkdir ./release/T3kCfg.app/Contents/MacOS/Languages
 cp -rpf ./T3kCfg/Languages/*.txt ./release/T3kCfg.app/Contents/MacOS/Languages
 mkdir ./release/T3kCfg.app/Contents/MacOS/config
 cp -rpf ./T3kCfg/Config/config.ini ./release/T3kCfg.app/Contents/MacOS/config
+cp -rpf ./T3kCfg/Config/gestureprofiles.txt ./release/T3kCfg.app/Contents/MacOS/config
 
 cp -rpf ./T3kCfg/T3kCfg.app ./release/ctouchtools.app
 mkdir ./release/ctouchtools.app/Contents/MacOS/Languages
 cp -rpf ./T3kCfg/Languages/*.txt ./release/ctouchtools.app/Contents/MacOS/Languages
 mkdir ./release/ctouchtools.app/Contents/MacOS/config
 cp -rpf ../T3kPackage/partner/CTouch/*.* ./release/ctouchtools.app/Contents/MacOS/config
+cp -rpf ./T3kCfg/Config/gestureprofiles.txt ./release/ctouchtools.app/Contents/MacOS/config
 
 cp -rpf ./T3kCfgFE/T3kCfgFE.app ./release
 cp -rpf ./T3kCfgFE/Languages/T3kCfgFE.rsc ./release/T3kCfgFE.app/Contents/MacOS

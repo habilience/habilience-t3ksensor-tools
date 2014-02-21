@@ -1,4 +1,4 @@
-#include "T3k_ver.h"
+#include "../T3k_ver.h"
 
 #include "QMainMenuWidget.h"
 #include "ui_QMainMenuWidget.h"

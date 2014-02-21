@@ -183,6 +183,14 @@ int QSoftKeySettingWidget::ParseSoftLogic(const char *psSoftLogic)
     int nE = strSoftLogic.indexOf( '=' );
     if( nE < 0 ) return 0;
 
+    for( int i=0 ;i<ui->TableSoftkeyMap->rowCount(); i++ )
+    {
+        QSoftkeyActionCellWidget* pCEWidget = ui->TableSoftkeyMap->cellWidget( i, 1 )->inherits( "QSoftkeyActionCellWidget" ) ?
+                                      (QSoftkeyActionCellWidget*)ui->TableSoftkeyMap->cellWidget( i, 1 ) : NULL;
+        if( pCEWidget )
+            pCEWidget->SetWidgetMode( 0 );
+    }
+
     strSoftLogic.remove( 0, nE+1 );
 
     if( !strSoftLogic.size() ) return 0;

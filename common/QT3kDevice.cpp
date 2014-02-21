@@ -117,9 +117,9 @@ void T3K_CALLBACK QT3kDevice::_OnT3kDisconnectHandler( T3K_HANDLE /*hDevice*/, v
 
 int  T3K_CALLBACK QT3kDevice::_OnT3kReceiveRawDataHandler( T3K_HANDLE /*hDevice*/, unsigned char* pBuffer, unsigned short nBytes, void * pContext )
 {
+#ifdef T3KDEVICE_CUSTOM
     QT3kDevice* pThis = (QT3kDevice*)pContext;
 
-#ifdef T3KDEVICE_CUSTOM
     int nRet = pThis->onReceiveRawData( pBuffer, nBytes );
 
     return nRet;

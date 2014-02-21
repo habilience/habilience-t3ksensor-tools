@@ -3,7 +3,7 @@
 
 #include "T3kSoftlogicDlg.h"
 #include "T3kConstStr.h"
-#include "T3k_ver.h"
+#include "../T3k_ver.h"
 
 #include <QDesktopWidget>
 #include <QSettings>

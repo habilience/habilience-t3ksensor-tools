@@ -1,7 +1,7 @@
 #include "dialog.h"
 #include "qsingleapplication/qtsingleapplication.h"
 
-#include "../common/T3k_ver.h"
+#include "../T3k_ver.h"
 
 #ifdef Q_OS_WIN
 #include <windows.h>

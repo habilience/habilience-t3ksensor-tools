@@ -18,7 +18,7 @@
 #include "QWidgetCloseEventManager.h"
 
 #include "Common/nv.h"
-#include "T3k_ver.h"
+#include "../T3k_ver.h"
 #include "QUtils.h"
 #include "QGUIUtils.h"
 

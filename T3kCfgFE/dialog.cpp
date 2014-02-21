@@ -11,7 +11,7 @@
 #include "QGUIUtils.h"
 #include "QInitDataIni.h"
 
-#include "T3k_ver.h"
+#include "../T3k_ver.h"
 #include "AppData.h"
 #include <QSettings>
 #include <QDesktopWidget>
