@@ -130,12 +130,12 @@ bool Dialog::loadFirmwareFile(QString strFirmwareFilePathName)
         QString strPath = QCoreApplication::applicationDirPath();
         strPath = rstrip(strPath, "/\\");
         strPath += QDir::separator();
-#ifdef Q_OS_MAC
-        strPath = strPath.replace( "/Contents/MacOS/", "" );
-        strPath = strPath.left( strPath.lastIndexOf( '/' )+1 );
-#elif defined(Q_OS_LINUX)
-        strPath = QStandardPaths::writableLocation( QStandardPaths::HomeLocation ) + "/";
-#endif
+//#ifdef Q_OS_MAC
+//        strPath = strPath.replace( "/Contents/MacOS/", "" );
+//        strPath = strPath.left( strPath.lastIndexOf( '/' )+1 );
+//#elif defined(Q_OS_LINUX)
+//        strPath = QStandardPaths::writableLocation( QStandardPaths::HomeLocation ) + "/";
+//#endif
         qDebug() << strPath;
 
         QDir currentDir(strPath);

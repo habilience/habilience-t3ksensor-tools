@@ -36,9 +36,15 @@ QBriefingDialog::QBriefingDialog(bool bPartialUpgrade, QWidget *parent) :
 
         ui->tableDetailInformation->setColumnWidth( 0, 50 );
         ui->tableDetailInformation->setColumnWidth( 1, 80 );
+#ifdef Q_OS_MAC
+        ui->tableDetailInformation->setColumnWidth( 2, 70 );
+        ui->tableDetailInformation->setColumnWidth( 3, 40 );
+        ui->tableDetailInformation->setColumnWidth( 4, 70 );
+#else
         ui->tableDetailInformation->setColumnWidth( 2, 80 );
         ui->tableDetailInformation->setColumnWidth( 3, 30 );
         ui->tableDetailInformation->setColumnWidth( 4, 80 );
+#endif
         ui->tableDetailInformation->setColumnWidth( 5, 20 );
 
         ui->pushButtonOK->setEnabled( false );
