@@ -1541,7 +1541,7 @@ void Dialog::switchMenu( SelectMenu menu )
         {
 //            pCurrentDlg->move(rcScreen.x(), rcScreen.y());
 //            pCurrentDlg->resize(rcScreen.width(), rcScreen.height());
-            pCurrentDlg->showFullScreen();
+            pCurrentDlg->show();
         }
 
         m_oldMenu = menu;

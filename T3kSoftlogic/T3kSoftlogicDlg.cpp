@@ -1086,33 +1086,42 @@ void T3kSoftlogicDlg::doExecute( QString str )
 
 void T3kSoftlogicDlg::on_TabMainMenu_currentChanged(int index)
 {
-    setUpdatesEnabled( false );
+//    setUpdatesEnabled( false );
 
     switch( index )
     {
     case 0:				// panel info
-        T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeNormal );
         m_StackedPreviewLayout.setCurrentIndex( 0 );
+        m_pTabKeyDesignWidget->closeChildWidget();
+        m_pTabLogicDesignWidget->closeChildWidget();
+        m_pTabCalibrationWidget->closeChildWidget();
+        T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeNormal );
         break;
     case 1:				// key design
-        T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeNormal );
         m_StackedPreviewLayout.setCurrentIndex( 0 );
+        m_pTabLogicDesignWidget->closeChildWidget();
+        m_pTabCalibrationWidget->closeChildWidget();
+        T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeNormal );
         break;
     case 2:				// logic design
-        T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeNormal );
         m_StackedPreviewLayout.setCurrentIndex( 1 );
+        m_pTabKeyDesignWidget->closeChildWidget();
+        m_pTabCalibrationWidget->closeChildWidget();
+        T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeNormal );
         break;
     case 3:				// calibration
         //if( m_SoftKey.IsModified() )
         {
             T3kCommonData::instance()->resetCalibrationData();
         }
-        T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeCalibration );
         m_StackedPreviewLayout.setCurrentIndex( 0 );
+        m_pTabKeyDesignWidget->closeChildWidget();
+        m_pTabLogicDesignWidget->closeChildWidget();
+        T3kCommonData::instance()->setKeyDataMode( T3kCommonData::KeyDataModeCalibration );
         break;
     }
 
-    setUpdatesEnabled( true );
+//    setUpdatesEnabled( true );
 
     onUpdatePrewview();
 }
@@ -1122,10 +1131,9 @@ void T3kSoftlogicDlg::onUpdatePrewview()
     switch( m_StackedPreviewLayout.currentIndex() )
     {
     case 0:
+    case 1:
         ui->PreviewKey->updateKeys();
         ui->PreviewKey->update();
-        break;
-    case 1:
         ui->PreviewLogic->update();
         break;
     default:

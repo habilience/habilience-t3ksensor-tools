@@ -22,10 +22,8 @@ public:
     virtual ~TabCalibrationWidget();
 
     bool isCalibrationMode() { return m_bCalibrationMode; }
-
-    void onCloseTestWnd();
-
     void setInvertDrawing(bool bInvert) { m_wndTestCanvas.setInvertDrawing( bInvert ); if( isVisible() ) update(); }
+    void closeChildWidget() { if( m_wndTestCanvas.isVisible() ) m_wndTestCanvas.close(); }
 
     virtual void keyPressEvent(QKeyEvent *);
 

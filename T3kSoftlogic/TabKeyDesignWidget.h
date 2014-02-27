@@ -23,6 +23,8 @@ public:
     void updateDesignWidget() { m_DesignCanvasWidget.updateKeys(); }
     void setInvertDrawing(bool bInvert) { m_DesignCanvasWidget.setInvertDrawing(bInvert); if( isVisible() ) update(); }
 
+    void closeChildWidget() { if( m_DesignCanvasWidget.isVisible() ) m_DesignCanvasWidget.close(); }
+
 protected:
     //
     virtual void showEvent(QShowEvent *);

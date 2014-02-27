@@ -167,6 +167,35 @@ QEditGateWidget::~QEditGateWidget()
     delete ui;
 }
 
+void QEditGateWidget::showEvent(QShowEvent *)
+{
+    CSoftkeyArray& Keys = T3kCommonData::instance()->getKeys();
+
+    int nCbIdx = -1;
+    while( (nCbIdx = ui->CBInputPort1->findText( "GPIO", Qt::MatchStartsWith )) >= 0 )
+    {
+        ui->CBInputPort1->removeItem( nCbIdx );
+    }
+    while( (nCbIdx = ui->CBInputPort2->findText( "GPIO", Qt::MatchStartsWith )) >= 0 )
+    {
+        ui->CBInputPort2->removeItem( nCbIdx );
+    }
+
+    for ( int i=0 ; i<Keys.getGPIOCount() ; i++ )
+    {
+        GPIOInfo* pInfo = Keys.getGPIOInfo(i);
+        if ( pInfo )
+        {
+            if (pInfo->bEnable)
+            {
+                QString strGPIO = QString("GPIO %1").arg(i+1);
+                ui->CBInputPort1->addItem( strGPIO, (CSoftlogic::Port)(i+(int)CSoftlogic::epGpio0) );
+                ui->CBInputPort2->addItem( strGPIO, (CSoftlogic::Port)(i+(int)CSoftlogic::epGpio0) );
+            }
+        }
+    }
+}
+
 void QEditGateWidget::closeEvent(QCloseEvent *)
 {
     hide();
@@ -355,13 +384,13 @@ void QEditGateWidget::applyHiddenLogics()
 
     bool bShowLogic;
     if( ui->CBHidden->currentIndex() == 0 )
-	{
+    {
         bShowLogic = true;
-	}
-	else
-	{
+    }
+    else
+    {
         bShowLogic = false;
-	}
+    }
 	if( m_bShowLogic != bShowLogic )
 	{
         Logics.hideSoftlogic( nIdx, !bShowLogic );
@@ -464,7 +493,7 @@ void QEditGateWidget::updateInputCombo( CSoftlogic::Port port, QComboBox& cbInpu
 {
 	if ( port >= CSoftlogic::epSoftLogic0 )
 	{
-        int nCbIdx = cbInput.findText( "Softlogic", Qt::MatchContains );
+        int nCbIdx = cbInput.findText( "Softlogic", Qt::MatchStartsWith );
 		if( nCbIdx >= 0 )
             cbInput.removeItem( nCbIdx );
         cbInput.addItem( "Softlogic...", port );
@@ -472,7 +501,7 @@ void QEditGateWidget::updateInputCombo( CSoftlogic::Port port, QComboBox& cbInpu
 	}
 	else
 	{
-        int nCbIdx = cbInput.findText( "Softlogic", Qt::MatchContains );
+        int nCbIdx = cbInput.findText( "Softlogic", Qt::MatchStartsWith );
 		if( nCbIdx >= 0 )
             cbInput.removeItem( nCbIdx );
         for( int i=0 ; i<cbInput.count() ; i++ )
@@ -486,7 +515,7 @@ void QEditGateWidget::updateInputCombo( CSoftlogic::Port port, QComboBox& cbInpu
 	}
 	if ( port >= CSoftlogic::epSoftkey0 && port < CSoftlogic::epSoftkeyAll )
 	{
-        int nCbIdx = cbInput.findText( "Softkey", Qt::MatchContains );
+        int nCbIdx = cbInput.findText( "Softkey", Qt::MatchStartsWith );
 		if( nCbIdx >= 0 )
             cbInput.removeItem( nCbIdx );
         QString strKey = QString("Softkey%1").arg((int)port-(int)(CSoftlogic::epSoftkey0)+1);
@@ -495,7 +524,7 @@ void QEditGateWidget::updateInputCombo( CSoftlogic::Port port, QComboBox& cbInpu
 	}
 	else
 	{
-        int nCbIdx = cbInput.findText( "Softkey", Qt::MatchContains );
+        int nCbIdx = cbInput.findText( "Softkey", Qt::MatchStartsWith );
 		if( nCbIdx >= 0 )
             cbInput.removeItem( nCbIdx );
         for( int i=0 ; i<cbInput.count() ; i++ )
@@ -665,7 +694,6 @@ void QEditGateWidget::updateItems()
 
 
         ui->CBHidden->setCurrentIndex( m_bShowLogic ? 0 : 1 );
-
 //        int nIdx = m_nOutputTypeIndex;
 //        m_nOutputTypeIndex = -1;
 //        ui->CBOutputType->setCurrentIndex( nIdx );

@@ -20,6 +20,7 @@ public:
     virtual ~TabLogicDesignWidget();
 
     void setInvertDrawing(bool bInvert) { m_LogicDesigner.setInvertDrawing( bInvert ); if( isVisible() ) update(); }
+    void closeChildWidget() { if( m_LogicDesigner.isVisible() ) m_LogicDesigner.close(); }
 
 protected:
     // QT3kDeviceEventHandler::IListener

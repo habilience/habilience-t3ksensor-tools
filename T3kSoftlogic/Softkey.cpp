@@ -2245,7 +2245,7 @@ int CSoftlogicArray::moveSoftlogicTo( int from, int to )
 						return ni;
 				}
 			}
-			else if ( from > to )
+            else if ( from > to )
 			{
 				for ( ni = from; ni > to; ni-- )
 				{
@@ -2287,8 +2287,8 @@ int CSoftlogicArray::hideSoftlogic( int idx, bool bHidden )
 		if ( idxHidden < 0 || idxHidden >= m_nSoftlogicHidden )
 			return -1;
 
-		if ( idxHidden != m_nSoftlogicHidden - 1 )
-            idx = moveSoftlogicTo(idx, SOFT_LOGIC_MAX - m_nSoftlogicHidden - 1);
+        if ( idxHidden != m_nSoftlogicHidden - 1 )
+            idx = moveSoftlogicTo(idx, SOFT_LOGIC_MAX - m_nSoftlogicHidden);
 
         CSoftlogic * pSoftlogic = _removeSoftlogic(idx);
         trimmingLogic(true);

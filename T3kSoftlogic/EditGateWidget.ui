@@ -70,7 +70,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>30</y>
+         <y>20</y>
          <width>110</width>
          <height>12</height>
         </rect>

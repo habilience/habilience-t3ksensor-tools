@@ -109,8 +109,8 @@ QUserDefinedKeyWidget::QUserDefinedKeyWidget(QWidget *parent) :
     m_wndComboMouse.addItem( "Middle Button", MBUTTON );
 
     connect( &m_wndEdit, &QKeyLineEditWidget::textChangedKey, this, &QUserDefinedKeyWidget::onTextChangedKey );
-    connect( &m_wndComboFuncKey, SIGNAL(currentIndexChanged(int)), this, SLOT(onCBChangedFunc(int)) );
-    connect( &m_wndComboMouse, SIGNAL(currentIndexChanged(int)), this, SLOT(onCBChangedMouse(int)) );
+    connect( &m_wndComboFuncKey, SIGNAL(activated(int)), this, SLOT(onCBChangedFunc(int)) );
+    connect( &m_wndComboMouse, SIGNAL(activated(int)), this, SLOT(onCBChangedMouse(int)) );
 }
 
 QUserDefinedKeyWidget::~QUserDefinedKeyWidget()

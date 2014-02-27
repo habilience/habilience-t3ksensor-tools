@@ -48,6 +48,7 @@ public:
 
 protected:
     //
+    virtual void showEvent(QShowEvent *);
     virtual void closeEvent(QCloseEvent *);
     virtual void paintEvent(QPaintEvent *);
 
