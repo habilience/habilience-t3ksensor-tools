@@ -12,7 +12,7 @@
 
 
 QAdvancedCalibrationWidget::QAdvancedCalibrationWidget(bool bDetection, QWidget *parent) :
-    QDialog(parent), m_DetectionRange(this), m_BentAdjustment(this, this)
+    QFullScreenDialogT(parent), m_DetectionRange(this), m_BentAdjustment(this, this)
 {
     setFont( qApp->font() );
 
@@ -98,7 +98,7 @@ void QAdvancedCalibrationWidget::keyPressEvent(QKeyEvent *evt)
         close();
     }
 
-    QDialog::keyPressEvent(evt);
+    QFullScreenDialogT::keyPressEvent(evt);
 }
 
 void QAdvancedCalibrationWidget::paintEvent(QPaintEvent *)

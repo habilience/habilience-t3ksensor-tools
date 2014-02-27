@@ -1,7 +1,7 @@
 #ifndef QSIDEVIEWDIALOG_H
 #define QSIDEVIEWDIALOG_H
 
-#include <QDialog>
+#include "../common/ui/QFullScreenDialogT.h"
 #include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "t3kcomdef.h"
@@ -13,7 +13,7 @@ class QSideviewDialog;
 
 class Dialog;
 class QBorderStyleEdit;
-class QSideviewDialog : public QDialog
+class QSideviewDialog : public QFullScreenDialogT
         , public QT3kDeviceEventHandler::IListener
         , public QLangManager::ILangChangeNotify
         , public QEventRedirection::IEventListener

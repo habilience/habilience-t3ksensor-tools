@@ -21,7 +21,7 @@
 #define MAC_SCALE 27827.0f // STD_SCALE-MAC_MARGIN*2
 
 QCalibrationWidget::QCalibrationWidget(QT3kDevice*& pHandle, QWidget *parent) :
-    QWidget(parent), m_pT3kHandle(pHandle)
+    QFullScreenDialogT(parent), m_pT3kHandle(pHandle)
 {
     m_fScreenMargin = 0.f;
     m_bDigitizerMode = false;
@@ -165,7 +165,7 @@ bool QCalibrationWidget::ShowWindow( bool bShow, int nUsbConfigMode, float fScre
     else
     {
         m_pT3kHandle->setReportMessage( false );
-        QWidget::hide();
+        QFullScreenDialogT::hide();
         QApplication::restoreOverrideCursor();
     }
 
@@ -277,7 +277,7 @@ void QCalibrationWidget::mouseMoveEvent(QMouseEvent *evt)
     m_ptCur = evt->pos();
     update();
 
-    QWidget::mouseMoveEvent(evt);
+    QFullScreenDialogT::mouseMoveEvent(evt);
 }
 
 void QCalibrationWidget::keyPressEvent(QKeyEvent *evt)
@@ -286,7 +286,7 @@ void QCalibrationWidget::keyPressEvent(QKeyEvent *evt)
     {
         if( evt->key() == Qt::Key_Escape )
         {
-            QWidget::hide();
+            QFullScreenDialogT::hide();
             EscapeCalibrationMode();
             QApplication::restoreOverrideCursor();
             return;
@@ -294,29 +294,29 @@ void QCalibrationWidget::keyPressEvent(QKeyEvent *evt)
 
         if( evt->key() == Qt::Key_Control || evt->key() == Qt::Key_Meta || evt->key() == Qt::Key_Alt )
         {
-            QWidget::hide();
+            QFullScreenDialogT::hide();
             EscapeCalibrationMode();
             QApplication::restoreOverrideCursor();
             return;
         }
     }
-    QWidget::keyPressEvent(evt);
+    QFullScreenDialogT::keyPressEvent(evt);
 }
 
 void QCalibrationWidget::showEvent(QShowEvent *evt)
 {
     setFocus();
 
-    QWidget::showEvent(evt);
+    QFullScreenDialogT::showEvent(evt);
 }
 
 void QCalibrationWidget::focusOutEvent(QFocusEvent *evt)
 {
-    QWidget::hide();
+    QFullScreenDialogT::hide();
     EscapeCalibrationMode();
     QApplication::restoreOverrideCursor();
 
-    QWidget::focusOutEvent(evt);
+    QFullScreenDialogT::focusOutEvent(evt);
 }
 
 void QCalibrationWidget::timerEvent(QTimerEvent *evt)
@@ -327,5 +327,5 @@ void QCalibrationWidget::timerEvent(QTimerEvent *evt)
         update();
     }
 
-    QWidget::timerEvent(evt);
+    QFullScreenDialogT::timerEvent(evt);
 }

@@ -1,7 +1,7 @@
 #ifndef QBENTADJUSTMENTDIALOG_H
 #define QBENTADJUSTMENTDIALOG_H
 
-#include <QDialog>
+#include "../common/ui/QFullScreenDialogT.h"
 #include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "QEventRedirection.h"
@@ -90,7 +90,7 @@ protected:
 
 class Dialog;
 class QBorderStyleEdit;
-class QBentAdjustmentDialog : public QDialog
+class QBentAdjustmentDialog : public QFullScreenDialogT
         , public QT3kDeviceEventHandler::IListener
         , public QLangManager::ILangChangeNotify
         , public QEventRedirection::IEventListener

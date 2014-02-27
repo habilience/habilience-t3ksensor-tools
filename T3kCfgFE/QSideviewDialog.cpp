@@ -26,7 +26,7 @@
 #define PREVIEW_COUNT_DOWN      (10*2)      // 10 secs by 500m timer
 
 QSideviewDialog::QSideviewDialog(Dialog *parent) :
-    QDialog(parent),
+    QFullScreenDialogT(parent),
     m_pMainDlg(parent),
     ui(new Ui::QSideviewDialog),
     m_EventRedirect(this)
@@ -577,12 +577,12 @@ void QSideviewDialog::timerEvent(QTimerEvent *evt)
         QT3kDevice::instance()->sendCommand( strPrefix + cstrDetectionLine + "?", true );
     }
 }
-
+#include <QDebug>
 void QSideviewDialog::showEvent(QShowEvent *)
 {
     QDesktopWidget DeskWidget;
     int nPrimary = DeskWidget.primaryScreen();
-    const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
+    QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
 
     setGeometry( rcPrimaryMon );
 

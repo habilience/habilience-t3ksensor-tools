@@ -1,7 +1,7 @@
 #ifndef QCALIBRATIONWIDGET_H
 #define QCALIBRATIONWIDGET_H
 
-#include <QWidget>
+#include "../common/ui/QFullScreenDialogT.h"
 #include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 
@@ -9,7 +9,7 @@
 #define UNDER_VER_CALI_PNTS         (9)
 #define SUPPORT_VER_CALI_PNTS       (4)
 
-class QCalibrationWidget : public QWidget, public QLangManager::ILangChangeNotify, public QT3kDeviceEventHandler::IListener
+class QCalibrationWidget : public QFullScreenDialogT, public QLangManager::ILangChangeNotify, public QT3kDeviceEventHandler::IListener
 {
     Q_OBJECT
 public:

@@ -108,7 +108,7 @@ const PosXY s_PosXY[3][ADJUSTMENT_STEP] = {
 #define RES_TAG "BENT ADJUSTMENT"
 
 QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog *parent) :
-    QDialog(parent),
+    QFullScreenDialogT(parent),
     m_pMainDlg(parent),
     ui(new Ui::QBentAdjustmentDialog),
     m_EventRedirect(this)

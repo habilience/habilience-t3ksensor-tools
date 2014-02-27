@@ -201,6 +201,7 @@ SOURCES += main.cpp\
     ../common/QLangManager.cpp \
     ../common/QZLangRes.cpp \
     ../common/ui/QLicenseWidget.cpp \
+    ../common/ui/QFullScreenDialogT.cpp \
     ../common/fe/QCalcCamValue.cpp \
     ../common/fe/QPointClipper.cpp \
     QStyleButton.cpp \
@@ -259,6 +260,7 @@ HEADERS  += dialog.h \
     ../common/QLangManager.h \
     ../common/QZLangRes.h \
     ../common/ui/QLicenseWidget.h \
+    ../common/ui/QFullScreenDialogT.h \
     ../common/fe/QCalcCamValue.h \
     ../common/fe/QPointClipper.h \
     QStyleButton.h \

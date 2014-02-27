@@ -22,7 +22,7 @@
 #define MAX_TICK_COUNT      (400)
 
 QDetectionDialog::QDetectionDialog(Dialog *parent) :
-    QDialog(parent), m_pMainDlg(parent),
+    QFullScreenDialogT(parent), m_pMainDlg(parent),
     ui(new Ui::QDetectionDialog),
     m_EventRedirect(this)
 {
