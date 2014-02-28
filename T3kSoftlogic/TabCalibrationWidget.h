@@ -107,6 +107,7 @@ protected:
 
     int             m_nTimerCheckPoint;
     int             m_nTimerRecheckPoint;
+    int             m_nTimerCheckAssociated;
 
     QKeyDesignWidget	m_wndTestCanvas;
 

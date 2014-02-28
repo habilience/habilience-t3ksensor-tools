@@ -178,7 +178,6 @@ TabCalibrationWidget::TabCalibrationWidget(QWidget* parent /*=NULL*/) :
         ui->BtnHSK->setIcon( icon );
     }
 #endif
-    changeFileAssociateBtnTitle();
 
     connect( &m_wndTestCanvas, &QKeyDesignWidget::closeWidget, this, &TabCalibrationWidget::onCloseTestWidget );
 }
@@ -773,6 +772,8 @@ void TabCalibrationWidget::showEvent(QShowEvent *)
 
         ui->LBState->setText( "<font color='red'>The device is not connected.</font>" );
     }
+
+    changeFileAssociateBtnTitle();
 }
 
 void TabCalibrationWidget::closeEvent(QCloseEvent *)
@@ -1358,6 +1359,13 @@ void TabCalibrationWidget::timerEvent(QTimerEvent *evt)
             }
         }
     }
+    else if( evt->timerId() == m_nTimerCheckAssociated )
+    {
+        killTimer( m_nTimerCheckAssociated );
+        m_nTimerCheckAssociated = 0;
+
+        changeFileAssociateBtnTitle();
+    }
 }
 
 void TabCalibrationWidget::changeFileAssociateBtnTitle()
@@ -1569,7 +1577,7 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
         emit enableControls( false );
 
         do
-        {
+        {            
             TCHAR szPath[_MAX_PATH];
             if (GetModuleFileName(NULL, szPath, sizeof(szPath)))
             {
@@ -1577,7 +1585,7 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
                 SHELLEXECUTEINFO sei;
                 memset( &sei, 0, sizeof(SHELLEXECUTEINFO) );
                 sei.lpVerb = L"runas";
-                sei.lpFile = szPath;
+                sei.lpFile = L"C:\\Windows\\System32\\notepad.exe";
                 sei.hwnd = (HWND)winId();
                 sei.fMask = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_FLAG_DDEWAIT;
                 sei.nShow = SW_HIDE;
@@ -1587,6 +1595,7 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
                     sei.lpParameters = L"/e /exe:remove_file_ext";
 
 
+                if (!ShellExecute((HWND)winId(), L"runas", szPath, isAssociateFileExt() ? L"/e /exe:remove_file_ext" : L"/e /exe:assoc_file_ext", 0, SW_HIDE))
                 if (!ShellExecuteEx(&sei))
                 {
                     DWORD dwError = GetLastError();
@@ -1597,23 +1606,23 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
                 }
                 else
                 {
-                    DWORD dwExitCode = 0;
-                    BOOL bDone = false;
-                    MSG msg;
-                    while ( !bDone )
-                    {
-                        ::GetExitCodeProcess( sei.hProcess, &dwExitCode );
-                        if ( dwExitCode != STILL_ACTIVE )
-                            bDone = TRUE;
-                        else
-                        {
-                            if ( ::PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
-                            {
-                                ::TranslateMessage( &msg );
-                                ::DispatchMessage( &msg );
-                            }
-                        }
-                    }
+//                    DWORD dwExitCode = 0;
+//                    BOOL bDone = false;
+//                    MSG msg;
+//                    while ( !bDone )
+//                    {
+//                        ::GetExitCodeProcess( sei.hProcess, &dwExitCode );
+//                        if ( dwExitCode != STILL_ACTIVE )
+//                            bDone = TRUE;
+//                        else
+//                        {
+//                            if ( ::PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
+//                            {
+//                                ::TranslateMessage( &msg );
+//                                ::DispatchMessage( &msg );
+//                            }
+//                        }
+//                    }
                 }
             }
         } while ( false );
@@ -1629,7 +1638,9 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
 
         emit enableControls( true );
 
-        changeFileAssociateBtnTitle();
+        if( m_nTimerCheckAssociated )
+            killTimer( m_nTimerCheckAssociated );
+        m_nTimerCheckAssociated = startTimer( 500 );
     }
 #endif
 }
