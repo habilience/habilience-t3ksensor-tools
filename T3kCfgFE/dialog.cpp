@@ -970,7 +970,7 @@ void Dialog::versionStringToSensorInfo(SensorAppInfo* info, const QString& strVe
     info->nVersionMinor = strMinor.toInt(0, 16);
     info->bIsValid = true;
     snprintf( info->szModel, 256, "%s", (const char*)strModelName.toLatin1() );
-    if ( (info->nVersionMinor & 0xf) != 0 )
+    if ( (info->nVersionMinor & 0xf0) != 0 )
         snprintf( info->szVersion, 256, "%x.%02x", info->nVersionMajor, info->nVersionMinor );
     else
         snprintf( info->szVersion, 256, "%x.%x", info->nVersionMajor, info->nVersionMinor );
