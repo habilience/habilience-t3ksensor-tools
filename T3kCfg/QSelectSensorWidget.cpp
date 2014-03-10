@@ -66,7 +66,8 @@ QSelectSensorWidget::~QSelectSensorWidget()
 
     if( m_pT3kHandle )
     {
-        delete m_pT3kHandle;
+        if( m_pT3kHandle->isOpen() )
+            m_pT3kHandle->close();
         m_pT3kHandle = NULL;
     }
 

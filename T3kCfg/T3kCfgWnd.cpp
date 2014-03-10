@@ -919,8 +919,7 @@ void T3kCfgWnd::HideContentsMenu()
 
 void T3kCfgWnd::onOpenT3kDevice(T3K_DEVICE_INFO /*info*/)
 {
-    if( !m_pT3kHandle->getReportCommand() )
-        m_pT3kHandle->setReportCommand( true );
+    m_pT3kHandle->setReportCommand( true );
 
     m_bIsConnect = true;
 
@@ -953,6 +952,9 @@ void T3kCfgWnd::TPDP_OnDisconnected(T3K_DEVICE_INFO /*devInfo*/)
 
     SetTrayIconIamge( -1 );
     EnableTrayProfile( false );
+
+    if( !m_nTimerChkHIDCom )
+        m_nTimerChkHIDCom = startTimer( 1000 );
 }
 
 void T3kCfgWnd::TPDP_OnDownloadingFirmware(T3K_DEVICE_INFO /*devInfo*/, bool bIsDownload)
