@@ -267,6 +267,23 @@ void QT3kDevice::close()
         m_hDevice = NULL;
     }
 
+#ifdef Q_OS_WIN
+    m_bIsVirtualDevice = false;
+    m_TimerCheckVirtualDevice = 0;
+#endif
+
+    m_nInstantMode = 0;
+    m_nExpireTime = 5000;
+    m_dwFgstValue = 0x00;
+
+#ifdef T3KDEVICE_CUSTOM
+    m_pRawDataBuffer = NULL;
+    m_nTotalRawBytes = 0;
+
+    m_bGetBothSensorData = false;
+    m_bRemoting = false;
+#endif
+
     // free receive packet queue
     {
         t3kpacket* packet = NULL;

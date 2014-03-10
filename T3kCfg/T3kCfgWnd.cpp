@@ -919,7 +919,8 @@ void T3kCfgWnd::HideContentsMenu()
 
 void T3kCfgWnd::onOpenT3kDevice(T3K_DEVICE_INFO /*info*/)
 {
-    m_pT3kHandle->setReportCommand( true );
+    if( !m_pT3kHandle->getReportCommand() )
+        m_pT3kHandle->setReportCommand( true );
 
     m_bIsConnect = true;
 
