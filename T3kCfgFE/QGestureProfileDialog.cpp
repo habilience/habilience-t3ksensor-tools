@@ -140,6 +140,9 @@ void QGestureProfileDialog::sensorRefresh( bool bTabOnly/*=false*/ )
 
     QString strSensorCmd;
 
+    strSensorCmd = QString(cstrMouseProfile) + "?";
+    ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+
     switch ( nActiveIndex )
     {
     case 0:
@@ -150,12 +153,6 @@ void QGestureProfileDialog::sensorRefresh( bool bTabOnly/*=false*/ )
         strSensorCmd = QString(cstrMouseProfile2) + "?";
         ui->cmdAsyncMngr->insertCommand( strSensorCmd );
         break;
-    }
-
-    if ( !bTabOnly )
-    {
-//        strSensorCmd = QString(cstrMouseProfile) + "?";
-//        ui->cmdAsyncMngr->insertCommand( strSensorCmd );
     }
 
     ui->cmdAsyncMngr->start( (unsigned int)-1 );

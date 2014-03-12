@@ -25,9 +25,9 @@ public:
 
     void SetFutureHandle( QFuture<void> ft );
 
-    bool SendCommand( char * szCmd );
+    bool SendCommand( char * szCmd, bool bAsync = false );
 
-    bool OnCommand( char* szCmd, bool* pbSysCmd = NULL );
+    bool OnCommand( char* szCmd, bool* pbSysCmd = NULL, bool bAsync = false );
 
     enum Prompt
     {
@@ -96,10 +96,10 @@ protected:
     QFuture<void>       m_ftCmdThread;
 
 signals:
-    void connectedT3kDevice();
+
 
 public slots:
-    void onConnectedT3kDevice();
+
 
 };
 

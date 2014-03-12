@@ -145,7 +145,7 @@ protected:
 public:
     
 signals:
-    void UpdateProfile(int nProfileIndex, const CellInfo& ci, ushort nProfileFlags);
+    void updateProfile(int nProfileIndex, const CellInfo& ci, ushort nProfileFlags);
     void sendCommand(QString strCmd, bool bAsync = false, unsigned short nTimeout = 1000);
     
 public slots:

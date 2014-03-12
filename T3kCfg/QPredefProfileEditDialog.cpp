@@ -26,7 +26,7 @@ QPredefProfileEditDialog::QPredefProfileEditDialog(QWidget *parent) :
     ui->LBSelectedProfile->setText( "Add" );
 
     connect( ui->BtnClose, &QPushButton::clicked, this, &QDialog::close );
-    connect( ui->GestureProfileTable, &QGestureMappingTable::UpdateProfile, this, &QPredefProfileEditDialog::onUpdateProfile, Qt::DirectConnection );
+    connect( ui->GestureProfileTable, &QGestureMappingTable::updateProfile, this, &QPredefProfileEditDialog::onUpdateProfile, Qt::DirectConnection );
 
     m_pEditActionWnd = new QEditActionWnd( QT3kUserData::GetInstance()->getTopParent() );
     m_pEditActionEWnd = new QEditActionEDWnd( QT3kUserData::GetInstance()->getTopParent() );

@@ -78,6 +78,7 @@ QGestureMappingTable::QGestureMappingTable(QWidget *parent) :
 
     m_pHoverCell = NULL;
     m_nHoverExtProperty = -1;
+    m_nMultiProfile = -1;
 
     m_fntSystem = getSystemFont(this);
 
@@ -301,6 +302,59 @@ void QGestureMappingTable::parseMouseProfile( const char* szProfile )
             m_bCheckExtProperty[EXTP_MAC_OS_MARGIN]					= MM_MOUSEPROFILE_MAC_OS_MARGIN & wFlags ? true : false;
 
             m_wProfileFlags = wFlags;
+
+            if( m_nMultiProfile == m_nProfileIndex+1 )
+            {
+                if( m_bCheckExtProperty[EXTP_PUTAND_ON_MULTITOUCHDEVICE] )
+                {
+                    for( int j=1 ; j<ROW_COUNT-2 ; j++ )
+                    {
+                        for( int i=1 ; i<COL_COUNT ; i++ )
+                        {
+                            m_aryCell[TABLE(i, j)].bNotUsed = true;
+                        }
+                    }
+
+                    for( int j=ROW_COUNT-2 ; j<ROW_COUNT ; j++ )
+                    {
+                        for( int i=1 ; i<COL_COUNT ; i++ )
+                        {
+                            m_aryCell[TABLE(i, j)].bNotUsed = false;
+                        }
+                    }
+
+                    m_aryCell[TABLE(1, 4)].bNotUsed = true;
+                }
+                else
+                {
+                    for( int j=1 ; j<ROW_COUNT ; j++ )
+                    {
+                        for( int i=1 ; i<COL_COUNT ; i++ )
+                        {
+                            m_aryCell[TABLE(i, j)].bNotUsed = true;
+                        }
+                    }
+                }
+
+                m_ciZoom.bNotUsed = true;
+                m_ciRotate.bNotUsed = true;
+            }
+            else
+            {
+                for( int j=1 ; j<ROW_COUNT ; j++ )
+                {
+                    for( int i=1 ; i<COL_COUNT ; i++ )
+                    {
+                        m_aryCell[TABLE(i, j)].bNotUsed = false;
+                    }
+                }
+
+                m_aryCell[TABLE(1, 4)].bNotUsed = true;
+
+                m_ciZoom.bNotUsed = false;
+                m_ciRotate.bNotUsed = false;
+            }
+
             update();
             qDebug( "Profile Flags: %04X", wFlags );
 
@@ -603,6 +657,13 @@ void QGestureMappingTable::popEditActionWnd( const CellInfo& ci )
 void QGestureMappingTable::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *szCmd)
 {
     bool bParseProfile = false;
+
+    if( strstr(szCmd, cstrMouseProfile) == szCmd)
+    {
+        char* pProfile = (char*)strchr( szCmd, ',' );
+        if( pProfile )
+            m_nMultiProfile = strtol( pProfile+1, NULL, 10 );
+    }
 
     switch (m_nProfileIndex)
     {

@@ -20,7 +20,6 @@ CHIDCmd::CHIDCmd(QObject* parent) :
     QObject(parent)
 {
     m_pT3kHandle = QT3kDevice::instance();
-    connect( this, &CHIDCmd::connectedT3kDevice, this, &CHIDCmd::onConnectedT3kDevice, Qt::QueuedConnection );
 
     m_bIsConnect = false;
 
@@ -92,7 +91,7 @@ bool CHIDCmd::OpenT3kHandle()
 	if( bRet )
 	{
 		m_dwTimeCheck = 0;
-        connectedT3kDevice();
+        OnDeviceConnected();
 	}
 	else
     {
@@ -102,7 +101,7 @@ bool CHIDCmd::OpenT3kHandle()
 	return bRet;
 }
 
-bool CHIDCmd::OnCommand( char * cmd, bool * pbSysCmd )
+bool CHIDCmd::OnCommand( char * cmd, bool * pbSysCmd, bool bAsync )
 {
     char * buf;
     char * file = NULL;
@@ -198,7 +197,7 @@ bool CHIDCmd::OnCommand( char * cmd, bool * pbSysCmd )
     }
     else
     {
-        if ( SendCommand(cmd) )
+        if ( SendCommand(cmd, bAsync) )
         {
             if ( pbSysCmd )
                 *pbSysCmd = false;
@@ -209,10 +208,10 @@ bool CHIDCmd::OnCommand( char * cmd, bool * pbSysCmd )
 
 void CHIDCmd::InitT3k()
 {
-    if ( !m_bIsConnect )
-    {
+    OpenT3kHandle();
+
+    if( !m_bIsConnect )
         FlushPreCommand();
-    }
 }
 
 void CHIDCmd::EndT3k()
@@ -348,7 +347,7 @@ void CHIDCmd::AddPreCommand( const char * szCmd )
 		memcpy(ppPreCommands, m_ppPreCommands, m_nPreCommands * sizeof(char *));
 		delete [] m_ppPreCommands;
 	}
-	m_ppPreCommands = ppPreCommands;
+    m_ppPreCommands = ppPreCommands;
 
 	m_ppPreCommands[m_nPreCommands] = new char[strlen(szCmd) + 1];
 	strcpy(m_ppPreCommands[m_nPreCommands], szCmd);
@@ -356,7 +355,7 @@ void CHIDCmd::AddPreCommand( const char * szCmd )
 }
 
 
-bool CHIDCmd::SendCommand( char * szCmd )
+bool CHIDCmd::SendCommand( char * szCmd, bool bAsync )
 {
 	if( !IsHIDConnect() )
 	{
@@ -417,7 +416,7 @@ bool CHIDCmd::SendCommand( char * szCmd )
     }
 
     m_tmStart = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch();
-    m_pT3kHandle->sendCommand(szCmd);
+    m_pT3kHandle->sendCommand(szCmd, bAsync);
 
     return true;
 }
@@ -514,11 +513,6 @@ void CHIDCmd::TextOutRuntime( const char * szCmd, uint time, ulong ticktime )
 
 		printf(szOut);
 	}
-}
-
-void CHIDCmd::onConnectedT3kDevice()
-{
-    OnDeviceConnected();
 }
 
 void CHIDCmd::TPDP_OnDisconnected(T3K_DEVICE_INFO devInfo)
@@ -725,8 +719,9 @@ void CHIDCmd::FlushPreCommand()
     bool bSysCmd = false;
 	while ( m_nPreCommands > 0 )
 	{
-        bool bCmd = OnCommand(m_ppPreCommands[0], &bSysCmd);
+        bool bCmd = OnCommand(m_ppPreCommands[0], &bSysCmd, true);
 
+        qDebug() << m_nPreCommands << " : " << m_ppPreCommands[0];
 		m_nPreCommands--;
 		delete [] m_ppPreCommands[0];
 		if ( m_nPreCommands == 0 )

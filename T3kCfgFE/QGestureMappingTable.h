@@ -101,6 +101,8 @@ protected:
 
     QFont   m_fntSystem;
 
+    int         m_nMultiProfile;
+
     void setCellInfo( int nCol, int nRow,
                       unsigned char cV00, unsigned char cV01,
                       unsigned char cV10, unsigned char cV11,

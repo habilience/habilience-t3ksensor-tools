@@ -36,7 +36,7 @@ QNMouseProfileWidget::QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *par
     connect( &m_cbPredefinedProfile, SIGNAL(activated(int)), this, SLOT(onCBPredefinedProfileActivated(int)) );
 
     connect( ui->TabMouseSettingTable, SIGNAL(tabSelectChanged(QColorTabWidget*,int)), SLOT(onTabSelChanged(QColorTabWidget*,int)) );
-    connect( &m_MouseProfileTableWidget, &QGestureMappingTable::UpdateProfile, this, &QNMouseProfileWidget::onUpdateProfile, Qt::DirectConnection );
+    connect( &m_MouseProfileTableWidget, &QGestureMappingTable::updateProfile, this, &QNMouseProfileWidget::onUpdateProfile, Qt::DirectConnection );
 
     connect( &m_MouseProfileTableWidget, SIGNAL(sendCommand(QString,bool,unsigned short)), this, SLOT(onSendCommand(QString,bool,unsigned short)), Qt::QueuedConnection );
     connect( this, SIGNAL(SendInputModeState()), &m_MouseProfileTableWidget, SLOT(onUpdateInputMode()), Qt::QueuedConnection );
@@ -51,7 +51,7 @@ QNMouseProfileWidget::QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *par
     connect( m_pEditAction2WDWnd, &QEditAction2WDWnd::sendCommand, this, &QNMouseProfileWidget::onSendCommand, Qt::QueuedConnection );
     connect( m_pEditAction4WDWnd, &QEditAction4WDWnd::sendCommand, this, &QNMouseProfileWidget::onSendCommand, Qt::QueuedConnection );
 
-    connect( &m_MouseProfileTableWidget, &QGestureMappingTable::UpdateProfile, this, &QNMouseProfileWidget::onUpdateProfile, Qt::QueuedConnection );
+    connect( &m_MouseProfileTableWidget, &QGestureMappingTable::updateProfile, this, &QNMouseProfileWidget::onUpdateProfile, Qt::QueuedConnection );
 
     ui->TabMouseSettingTable->selectTab( 0 );
 

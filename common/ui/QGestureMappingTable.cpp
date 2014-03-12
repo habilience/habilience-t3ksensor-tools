@@ -773,7 +773,7 @@ goto_FontRecalc:
 
 void QGestureMappingTable::popEditActionWnd( const CellInfo& ci )
 {
-    UpdateProfile( m_nProfileIndex, ci, m_wProfileFlags );
+    updateProfile( m_nProfileIndex, ci, m_wProfileFlags );
 
     resetSelect();
 }

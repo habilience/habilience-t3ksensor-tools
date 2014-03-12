@@ -204,6 +204,7 @@ SOURCES += main.cpp\
     ../common/ui/QFullScreenDialogT.cpp \
     ../common/fe/QCalcCamValue.cpp \
     ../common/fe/QPointClipper.cpp \
+    QGestureMappingTable.cpp \
     QStyleButton.cpp \
     QT3kDevice.cpp \
     QT3kDeviceEventHandler.cpp \
@@ -237,7 +238,6 @@ SOURCES += main.cpp\
     QAutoRangeCompleteDialog.cpp \
     QGestureProfileDialog.cpp \
     QColorTabWidget.cpp \
-    QGestureMappingTable.cpp \
     QEditActionEnableDialog.cpp \
     QEditActionKey4WayDialog.cpp \
     QEditActionKey2WayDialog.cpp \
@@ -259,10 +259,12 @@ HEADERS  += dialog.h \
     ../common/QLangZipFile.h \
     ../common/QLangManager.h \
     ../common/QZLangRes.h \
+    ../common/T3kSMDef.h \
     ../common/ui/QLicenseWidget.h \
     ../common/ui/QFullScreenDialogT.h \
     ../common/fe/QCalcCamValue.h \
     ../common/fe/QPointClipper.h \
+    QGestureMappingTable.h \
     QStyleButton.h \
     QT3kDevice.h \
     QT3kDeviceEventHandler.h \
@@ -297,7 +299,6 @@ HEADERS  += dialog.h \
     QAutoRangeCompleteDialog.h \
     QGestureProfileDialog.h \
     QColorTabWidget.h \
-    QGestureMappingTable.h \
     QEditActionEnableDialog.h \
     QEditActionKey4WayDialog.h \
     QEditActionKey2WayDialog.h \
@@ -306,7 +307,6 @@ HEADERS  += dialog.h \
     QKeyEdit.h \
     QRemoteTouchMarkDialog.h \
     conf.h \
-    ../common/T3kSMDef.h
 
 FORMS    += dialog.ui \
     ../common/ui/QLicenseWidget.ui \
