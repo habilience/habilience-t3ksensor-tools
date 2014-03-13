@@ -29,6 +29,9 @@ QSensorSettingWidget::QSensorSettingWidget(QT3kDevice*& pHandle, QWidget *parent
     ui->setupUi(this);
     setFont( qApp->font() );
 
+    m_pAssistanceWidget = NULL;
+    m_pDiableTouchWidget = NULL;
+
     ui->TitleTouchScreen->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_TOUCHED.png");
     ui->TitleBuzzer->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_BUZZER.png" );
     ui->TitleShortcutkey->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_SHORTCUT.png" );
@@ -182,9 +185,16 @@ void QSensorSettingWidget::hideEvent(QHideEvent *evt)
 {
     if( evt->type() == QEvent::Hide )
     {
-        QAssistanceWidget* pDlg = findChild<QAssistanceWidget*>();
-        if( pDlg && pDlg->isVisible() )
-            pDlg->ForcedClose();
+        if( m_pAssistanceWidget && m_pAssistanceWidget->isVisible() )
+        {
+            m_pAssistanceWidget->close();
+            m_pAssistanceWidget = NULL;
+        }
+        if( m_pDiableTouchWidget && m_pDiableTouchWidget->isVisible() )
+        {
+            m_pDiableTouchWidget->close();
+            m_pDiableTouchWidget = NULL;
+        }
 
         setFocusPolicy( Qt::NoFocus );
 
@@ -516,11 +526,12 @@ void QSensorSettingWidget::on_BtnChkTouch_clicked()
         m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrTouchEnable).arg(1), true );
     else
     {
-        QDiableTouchWidget* pDiableTouchWnd = new QDiableTouchWidget( m_pT3kHandle, parentWidget()->parentWidget()->parentWidget() );
-        pDiableTouchWnd->setAttribute( Qt::WA_DeleteOnClose );
-        pDiableTouchWnd->setFont( font() );
-
-        if( pDiableTouchWnd->exec() != QDialog::Accepted )
+        m_pDiableTouchWidget = new QDiableTouchWidget( m_pT3kHandle, parentWidget()->parentWidget()->parentWidget() );
+        m_pDiableTouchWidget->setAttribute( Qt::WA_DeleteOnClose );
+        m_pDiableTouchWidget->setFont( font() );
+        int nRet = m_pDiableTouchWidget->exec();
+        m_pDiableTouchWidget = NULL;
+        if( nRet != QDialog::Accepted )
         {
             ui->BtnChkTouch->setChecked( true );
             return;
@@ -532,10 +543,11 @@ void QSensorSettingWidget::on_BtnChkTouch_clicked()
 
 void QSensorSettingWidget::on_BtnDiagnostics_clicked()
 {
-    QAssistanceWidget* SensorDlg = new QAssistanceWidget( m_pT3kHandle, parentWidget()->parentWidget()->parentWidget() );
-    SensorDlg->setFont( font() );
-    SensorDlg->setAttribute( Qt::WA_DeleteOnClose );
-    SensorDlg->exec();
+    m_pAssistanceWidget = new QAssistanceWidget( m_pT3kHandle, parentWidget()->parentWidget()->parentWidget() );
+    m_pAssistanceWidget->setFont( font() );
+    m_pAssistanceWidget->setAttribute( Qt::WA_DeleteOnClose );
+    m_pAssistanceWidget->exec();
+    m_pAssistanceWidget = NULL;;
 }
 
 void QSensorSettingWidget::on_BtnSoundError_clicked()

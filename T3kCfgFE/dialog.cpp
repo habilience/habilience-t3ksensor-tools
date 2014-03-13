@@ -1753,9 +1753,10 @@ void Dialog::saveSensorDefaultSettings()
     dataProgressDlg.insertCommand( strCmd );
     strCmd = QString(cstrZoomSensitivity) + "*";
     dataProgressDlg.insertCommand( strCmd );
-    strCmd = QString(cstrInputMode) + "*";
-    dataProgressDlg.insertCommand( strCmd );
-    strCmd = QString(cstrUsbConfigMode) + "*";
+
+    strCmd = QString(cstrInputMode) + "?";
+    dataProgressDlg.insertCommand( strCmd );    
+    strCmd = QString(cstrUsbConfigMode) + "?";
     dataProgressDlg.insertCommand( strCmd );
 
     /* gesture profile section */
@@ -2170,7 +2171,7 @@ void Dialog::onRButtonClicked()
 {
 #ifdef SUPPORT_RBUTTON_SHORTCUT
     QWidget* focus = focusWidget();
-    if (isShortcutWidget(focus))
+    if (focus && isShortcutWidget(focus))
     {
         LOG_I( "From Mouse Shortcut(RBUTTON CLICK)" );
         QPushButton* btnWidget = (QPushButton*)focus;

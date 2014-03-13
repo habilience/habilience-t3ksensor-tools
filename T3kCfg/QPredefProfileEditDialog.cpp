@@ -42,7 +42,7 @@ QPredefProfileEditDialog::QPredefProfileEditDialog(QWidget *parent) :
     ui->CBProfileList->clear();
 
     QString strFilePath( QApplication::applicationDirPath() );
-    strFilePath += "/config/gestureprofiles.txt";
+    strFilePath += "/config/gestureprofiles.ini";
     if( QFile::exists( strFilePath ) )
     {
         QFile file( strFilePath );
@@ -166,7 +166,7 @@ void QPredefProfileEditDialog::on_BtnAdd_clicked()
     QString strV = ui->GestureProfileTable->mergeMouseProfile();
 
     QString strFilePath( QApplication::applicationDirPath() );
-    strFilePath += "/config/gestureprofiles.txt";
+    strFilePath += "/config/gestureprofiles.ini";
     if( !QFile::exists( strFilePath ) )
         return;
 
@@ -195,7 +195,7 @@ void QPredefProfileEditDialog::on_BtnDelete_clicked()
     ui->CBProfileList->removeItem( nIndex );
 
     QString strFilePath( QApplication::applicationDirPath() );
-    strFilePath += "/config/gestureprofiles.txt";
+    strFilePath += "/config/gestureprofiles.ini";
     if( !QFile::exists( strFilePath ) )
         return;
 

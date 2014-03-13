@@ -56,6 +56,7 @@ public:
 
     void SetProfileIndex( int nIndex );
     void ResetSelect();
+    void closeChildWidget();
 
     virtual void onChangeLanguage();
 

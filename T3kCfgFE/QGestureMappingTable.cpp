@@ -121,6 +121,7 @@ void QGestureMappingTable::initControl()
     m_aryCell[TABLE(COL_DBLTAP, ROW_SINGLE)].bDefault	= true;
 
     m_aryCell[TABLE(COL_MOVE, ROW_PUTNTAP)].bNotUsed	= true;
+    m_aryCell[TABLE(COL_MOVE, ROW_PUTNTAP)].bNotEdit	= true;
 
     m_aryCell[TABLE(COL_MOVE, ROW_SINGLE)].cKey				= MM_GESTURE_SINGLE_MOVE;
     m_aryCell[TABLE(COL_MOVE, ROW_SINGLE)].wKeyValue[0]		= MM_MOUSEPROFILE_SINGLE_MOVE;
@@ -914,7 +915,7 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
         {
             const CellInfo& ci = m_aryCell.at( TABLE(i, j) );
 
-            if ( ci.bEnable && !ci.bNotUsed )
+            if ( ci.bEnable && (!ci.bNotUsed || !ci.bNotEdit) )
             {
                 if ( ci.rectCell.contains( e->pos() ) )
                 {
@@ -927,7 +928,7 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
         }
     }
 
-    if ( m_ciZoom.rectCell.contains( e->pos() ) )
+    if ( (!m_ciZoom.bNotUsed || !m_ciZoom.bNotEdit) &&  m_ciZoom.rectCell.contains( e->pos() ) )
     {
         m_pSelectCell = &m_ciZoom;
         update();
@@ -935,7 +936,7 @@ void QGestureMappingTable::mousePressEvent(QMouseEvent *e)
         return;
     }
 #ifdef SUPPORT_ROTATE
-    if ( m_ciRotate.rectCell.contains( e->pos() ) )
+    if ( (!m_ciRotate.bNotUsed || !m_ciRotate.bNotEdit) && m_ciRotate.rectCell.contains( e->pos() ) )
     {
         m_pSelectCell = &m_ciRotate;
         update();
@@ -1021,7 +1022,7 @@ void QGestureMappingTable::mouseMoveEvent(QMouseEvent *e)
                 {
                     const CellInfo& ci = m_aryCell.at( TABLE(i, j) );
 
-                    if ( ci.bEnable && !ci.bNotUsed )
+                    if ( ci.bEnable && (!ci.bNotUsed || !ci.bNotEdit) )
                     {
                         if ( ci.rectCell.contains( e->pos() ) )
                         {
@@ -1037,13 +1038,13 @@ void QGestureMappingTable::mouseMoveEvent(QMouseEvent *e)
             if ( bIsTitleOver )
                 break;
 
-            if ( m_ciZoom.rectCell.contains( e->pos() ) )
+            if ( (!m_ciZoom.bNotUsed || !m_ciZoom.bNotEdit) && m_ciZoom.rectCell.contains( e->pos() ) )
             {
                 bIsTitleOver = true;
                 break;
             }
 #ifdef SUPPORT_ROTATE
-            if ( m_ciRotate.rectCell.contains( e->pos() ) )
+            if ( (!m_ciRotate.bNotUsed || !m_ciRotate.bNotEdit) && m_ciRotate.rectCell.contains( e->pos() ) )
             {
                 bIsTitleOver = true;
                 break;
@@ -1103,7 +1104,7 @@ void QGestureMappingTable::mouseMoveEvent(QMouseEvent *e)
         {
             const CellInfo& ci = m_aryCell.at( TABLE(i, j) );
 
-            if ( ci.bEnable && !ci.bNotUsed )
+            if ( ci.bEnable && (!ci.bNotUsed || !ci.bNotEdit) )
             {
                 if ( ci.rectCell.contains( e->pos() ) )
                 {
@@ -1113,12 +1114,12 @@ void QGestureMappingTable::mouseMoveEvent(QMouseEvent *e)
         }
     }
 
-    if ( m_ciZoom.rectCell.contains( e->pos() ) )
+    if ( (!m_ciZoom.bNotUsed || !m_ciZoom.bNotEdit) && m_ciZoom.rectCell.contains( e->pos() ) )
     {
         pHoverCell = &m_ciZoom;
     }
 #ifdef SUPPORT_ROTATE
-    if ( m_ciRotate.rectCell.contains( e->pos() ) )
+    if ( (!m_ciRotate.bNotUsed || !m_ciRotate.bNotEdit) && m_ciRotate.rectCell.contains( e->pos() ) )
     {
         pHoverCell = &m_ciRotate;
     }

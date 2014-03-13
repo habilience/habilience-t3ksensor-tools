@@ -341,7 +341,12 @@ void QBentAdjustmentDialog::onChangeLanguage()
     ui->btnLeft->setText( res.getResString(RES_TAG, "BTN_CAPTION_LEFT") );
     ui->btnRight->setText( res.getResString(RES_TAG, "BTN_CAPTION_RIGHT") );
 
-    ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") );
+    if ( QSensorInitDataCfg::instance()->isLoaded() )
+        ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") + "\r\n" +
+                               QSensorInitDataCfg::instance()->getFileName() );
+    else
+        ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") );
+
     ui->btnSave->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_SAVE") );
     ui->btnClose->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_CLOSE") );
 
@@ -380,7 +385,7 @@ bool QBentAdjustmentDialog::onKeyRelease(QKeyEvent *evt)
          (keyEvt->key() == Qt::Key_Return) )
     {
         QWidget* pWidget = focusWidget();
-        if (pWidget->objectName().indexOf("txtEdt") >= 0)
+        if (pWidget && pWidget->objectName().indexOf("txtEdt") >= 0)
         {
             pWidget->clearFocus();
             return true;
@@ -410,7 +415,7 @@ void QBentAdjustmentDialog::onRButtonClicked()
     if (!m_bEnterAdjustmentMode)
     {
         QWidget* focus = focusWidget();
-        if (isShortcutWidget(focus))
+        if (focus && isShortcutWidget(focus))
         {
             LOG_I( "From Mouse Shortcut(RBUTTON CLICK)" );
             QPushButton* btnWidget = (QPushButton*)focus;

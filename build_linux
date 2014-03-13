@@ -1,4 +1,4 @@
-export QMAKE=~/qt-everywhere-opensource-src-5.2.1/qtbase/bin
+export QMAKE=~/qt-everywhere-opensource-src-5.2.0/qtbase/bin
 
 make clean
 

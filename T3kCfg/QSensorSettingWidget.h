@@ -13,6 +13,8 @@ namespace Ui {
     class QSensorSettingWidget;
 }
 
+class QDiableTouchWidget;
+class QAssistanceWidget;
 class QSensorSettingWidget : public QWidget, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
@@ -47,6 +49,9 @@ private:
     Ui::QSensorSettingWidget *ui;
 
     QT3kDevice*&                m_pT3kHandle;
+
+    QDiableTouchWidget*         m_pDiableTouchWidget;
+    QAssistanceWidget*          m_pAssistanceWidget;
 
     QString                     m_strCaptionON;
     QString                     m_strCaptionOFF;

@@ -48,7 +48,7 @@ protected:
 
     void requestSensorData( bool bDefault );
     void sensorRefresh( bool bTabOnly/*=false*/ );
-    void loadPredefProfiles();
+    void loadPredefProfiles(int nTabIndex);
 
 protected:
     QGestureMappingTable        m_MouseProfileTableWidget;
@@ -77,6 +77,7 @@ protected slots:
     void onSendCommand(QString strCmd, bool bAsync = false, unsigned short nTimeout = 1000);
     void onUpdateProfile(int nProfileIndex, const QGestureMappingTable::CellInfo& ci, ushort nProfileFlags);
     void onCBPredefinedProfileActivated(int index);
+    void onModifiedProfile();
 };
 
 #endif // QNMOUSEPROFILEWIDGET_H

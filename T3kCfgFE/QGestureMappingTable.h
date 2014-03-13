@@ -66,6 +66,7 @@ public:
     {
         bool bEnable;
         bool bNotUsed;
+        bool bNotEdit;
         bool bDefault;
         QRectF rectCell;
         QString strText;
@@ -145,6 +146,7 @@ inline void QGestureMappingTable::initCellInfo(CellInfo &ci)
     ci.rectCell = QRectF(0,0,0,0);
     ci.bEnable = true;
     ci.bNotUsed = false;
+    ci.bNotEdit = false;
     ci.bDefault = false;
     ci.strText = "";
     ci.bBold = false;

@@ -20,6 +20,8 @@
 #include "conf.h"
 
 #define MAX_TICK_COUNT      (400)
+#define MAIN_TAG    "MAIN"
+#define RES_TAG     "DETECTION"
 
 QDetectionDialog::QDetectionDialog(Dialog *parent) :
     QFullScreenDialogT(parent), m_pMainDlg(parent),
@@ -125,8 +127,6 @@ void QDetectionDialog::setViewMode( bool bViewMode )
     m_pMainDlg->setInstantMode( nMode );
 }
 
-#define MAIN_TAG    "MAIN"
-#define RES_TAG     "DETECTION"
 void QDetectionDialog::onChangeLanguage()
 {
     QLangRes& res = QLangManager::getResource();
@@ -149,7 +149,12 @@ void QDetectionDialog::onChangeLanguage()
     ui->chkSimpleDetection->setText( res.getResString(RES_TAG, "BTN_CAPTION_SIMPLE_DETECTION") );
     ui->chkInvertDetection->setText( res.getResString(RES_TAG, "BTN_CAPTION_INVERT_DETECTION") );
 
-    ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") );
+    if ( QSensorInitDataCfg::instance()->isLoaded() )
+        ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") + "\r\n" +
+                               QSensorInitDataCfg::instance()->getFileName() );
+    else
+        ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") );
+
     ui->btnRefresh->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_REFRESH") );
     ui->btnSave->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_SAVE") );
     ui->btnClose->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_CLOSE") );
@@ -1255,7 +1260,7 @@ bool QDetectionDialog::onKeyRelease(QKeyEvent *evt)
          (keyEvt->key() == Qt::Key_Return) )
     {
         QWidget* pWidget = focusWidget();
-        if (pWidget->objectName().indexOf("txtEdt") >= 0)
+        if (pWidget && pWidget->objectName().indexOf("txtEdt") >= 0)
         {
             pWidget->clearFocus();
             return true;

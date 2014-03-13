@@ -822,6 +822,8 @@ void QGestureMappingTable::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart 
     if ( bParseProfile )
     {
         parseMouseProfile( cmd );
+
+        emit modifiedProfile();
     }
 }
 

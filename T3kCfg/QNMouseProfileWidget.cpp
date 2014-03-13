@@ -7,6 +7,10 @@
 #include "QPredefProfileEditDialog.h"
 
 #include <QKeyEvent>
+#include <QSettings>
+
+#define GROUPNAME_MOUSE         "MOUSE"
+#define GROUPNAME_MULTITOUCH    "MULTI-TOUCH"
 
 
 QNMouseProfileWidget::QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *parent) :
@@ -30,7 +34,7 @@ QNMouseProfileWidget::QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *par
     m_cbPredefinedProfile.setParent( ui->TabMouseSettingTable );
     m_cbPredefinedProfile.setFixedSize( 150, 22 );
 
-    loadPredefProfiles();
+    loadPredefProfiles( 0 );
 
     ui->TabMouseSettingTable->setExtraWidget( &m_cbPredefinedProfile );
     connect( &m_cbPredefinedProfile, SIGNAL(activated(int)), this, SLOT(onCBPredefinedProfileActivated(int)) );
@@ -39,6 +43,7 @@ QNMouseProfileWidget::QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *par
     connect( &m_MouseProfileTableWidget, &QGestureMappingTable::updateProfile, this, &QNMouseProfileWidget::onUpdateProfile, Qt::DirectConnection );
 
     connect( &m_MouseProfileTableWidget, SIGNAL(sendCommand(QString,bool,unsigned short)), this, SLOT(onSendCommand(QString,bool,unsigned short)), Qt::QueuedConnection );
+    connect( &m_MouseProfileTableWidget, &QGestureMappingTable::modifiedProfile, this, &QNMouseProfileWidget::onModifiedProfile );
     connect( this, SIGNAL(SendInputModeState()), &m_MouseProfileTableWidget, SLOT(onUpdateInputMode()), Qt::QueuedConnection );
 
     m_pEditActionWnd = new QEditActionWnd( QT3kUserData::GetInstance()->getTopParent() );
@@ -255,6 +260,15 @@ void QNMouseProfileWidget::hideEvent(QHideEvent *)
 
     m_RequestCmdManager.Stop();
     //m_nMouseProfileIndex = -1;
+
+    if( m_pEditActionWnd && m_pEditActionWnd->isVisible() )
+        m_pEditActionWnd->close();
+    if( m_pEditActionEWnd && m_pEditActionEWnd->isVisible() )
+        m_pEditActionEWnd->close();
+    if( m_pEditAction2WDWnd && m_pEditAction2WDWnd->isVisible() )
+        m_pEditAction2WDWnd->close();
+    if( m_pEditAction4WDWnd && m_pEditAction4WDWnd->isVisible() )
+        m_pEditAction4WDWnd->close();
 }
 
 void QNMouseProfileWidget::keyPressEvent(QKeyEvent *evt)
@@ -273,6 +287,8 @@ void QNMouseProfileWidget::onTabSelChanged(QColorTabWidget* /*pTabWidget*/, int 
     m_MouseProfileTableWidget.setProfileIndex(tabIndex);
     if( isVisible() )
         sensorRefresh(true);
+
+    loadPredefProfiles( tabIndex );
 }
 
 void QNMouseProfileWidget::onSendCommand(QString strCmd, bool bAsync, unsigned short nTimeout)
@@ -308,17 +324,13 @@ void QNMouseProfileWidget::onUpdateProfile(int nProfileIndex, const QGestureMapp
 void QNMouseProfileWidget::onCBPredefinedProfileActivated(int index)
 {
     if( index < 0 ) return;
+    if( index == 0 &&
+            m_cbPredefinedProfile.itemText(0) == QLangManager::instance()->getResource().
+            getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ) )
+    {
+        return;
+    }
 
-    m_cbPredefinedProfile.setCurrentIndex( -1 );
-
-//    if( index == 0 )
-//    {
-//        // show editer
-//        QPredefProfileEditDialog dlg( this );
-//        dlg.exec();
-//        loadPredefProfiles();
-//        return;
-//    }
     m_RequestCmdManager.Stop();
 
     QString strV = m_cbPredefinedProfile.itemData( index ).toString();
@@ -329,6 +341,36 @@ void QNMouseProfileWidget::onCBPredefinedProfileActivated(int index)
     m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), strV );
 
     m_RequestCmdManager.Start( m_pT3kHandle );
+
+    if( index != 0 &&
+            m_cbPredefinedProfile.itemText(0) == QLangManager::instance()->getResource().
+            getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ) )
+    {
+        m_cbPredefinedProfile.removeItem( 0 );
+        return;
+    }
+}
+
+void QNMouseProfileWidget::onModifiedProfile()
+{
+    QString strProfile = m_MouseProfileTableWidget.mergeMouseProfile();
+
+    bool bChanged = false;
+    for( int i=0; i<m_cbPredefinedProfile.count(); i++ )
+    {
+        if( strProfile.compare( m_cbPredefinedProfile.itemData(i).toString() ) == 0 )
+        {
+            m_cbPredefinedProfile.setCurrentIndex( i );
+            bChanged = true;
+            break;
+        }
+    }
+    if( !bChanged )
+    {
+        m_cbPredefinedProfile.insertItem( 0, QLangManager::instance()->getResource().
+                                          getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ) );
+        m_cbPredefinedProfile.setCurrentIndex( 0 );
+    }
 }
 
 void QNMouseProfileWidget::sensorRefresh( bool bTabOnly/*=false*/ )
@@ -355,34 +397,41 @@ void QNMouseProfileWidget::sensorRefresh( bool bTabOnly/*=false*/ )
     m_RequestCmdManager.Start( m_pT3kHandle );
 }
 
-void QNMouseProfileWidget::loadPredefProfiles()
+void QNMouseProfileWidget::loadPredefProfiles(int nTabIndex)
 {
     m_cbPredefinedProfile.clear();
 
     //m_cbPredefinedProfile.addItem( "Manage..." );
 
     QString strFilePath( QApplication::applicationDirPath() );
-    strFilePath += "/config/gestureprofiles.txt";
+    strFilePath += "/config/gestureprofiles.ini";
     if( !QFile::exists( strFilePath ) )
     {
         m_cbPredefinedProfile.setVisible( false );
         return;
     }
 
-    QFile file( strFilePath );
-    if( !file.open( QFile::ReadOnly ) )
-        return;
-
-    while( !file.atEnd() )
+    QString strGroup;
+    switch( nTabIndex )
     {
-        QByteArray bt = file.readLine();
-        QString strName( bt.left(bt.indexOf('=')).trimmed() );
-        QString strValue( bt.mid(bt.indexOf('=') + 1).trimmed() );
-
-        m_cbPredefinedProfile.addItem( strName, strValue );
+    case 0:
+        strGroup = GROUPNAME_MOUSE;
+        break;
+    case 1:
+        strGroup = GROUPNAME_MULTITOUCH;
+        break;
+    default:
+        Q_ASSERT( false );
+        return;
     }
 
-    file.close();
+    QSettings filePredefProfiles( strFilePath, QSettings::IniFormat );
+    filePredefProfiles.beginGroup( strGroup );
+
+    foreach( QString strKey, filePredefProfiles.childKeys() )
+        m_cbPredefinedProfile.addItem( strKey, filePredefProfiles.value( strKey ).toString() );
+
+    filePredefProfiles.endGroup();
 
     m_cbPredefinedProfile.setCurrentIndex( -1 );
 }

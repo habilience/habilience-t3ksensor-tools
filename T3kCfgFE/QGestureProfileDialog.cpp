@@ -76,7 +76,12 @@ void QGestureProfileDialog::onChangeLanguage()
 
     setWindowTitle( res.getResString( RES_TAG, "TITLE") );
 
-    ui->btnReset->setText( res.getResString(MAIN_TAG, "BTN_CAPTION_RESET") );
+    if ( QSensorInitDataCfg::instance()->isLoaded() )
+        ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") + "\r\n" +
+                               QSensorInitDataCfg::instance()->getFileName() );
+    else
+        ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") );
+
     ui->btnRefresh->setText( res.getResString(MAIN_TAG, "BTN_CAPTION_REFRESH") );
     ui->btnClose->setText( res.getResString(MAIN_TAG, "BTN_CAPTION_CLOSE") );
 
@@ -129,7 +134,7 @@ void QGestureProfileDialog::sensorReset()
     m_bModified = false;
 }
 
-void QGestureProfileDialog::sensorRefresh( bool bTabOnly/*=false*/ )
+void QGestureProfileDialog::sensorRefresh( bool /*bTabOnly=false*/ )
 {
     int nActiveIndex = ui->widgetProfileTab->getActiveTab();
     if ( ui->cmdAsyncMngr->isStarted() )

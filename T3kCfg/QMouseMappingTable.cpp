@@ -1015,6 +1015,18 @@ void QMouseMappingTable::ResetSelect()
     update();
 }
 
+void QMouseMappingTable::closeChildWidget()
+{
+    if( m_pEditActionWnd && m_pEditActionWnd->isVisible() )
+        m_pEditActionWnd->close();
+    if( m_pEditActionEDWnd && m_pEditActionEDWnd->isVisible() )
+        m_pEditActionEDWnd->close();
+    if( m_pEditAction2WDWnd && m_pEditAction2WDWnd->isVisible() )
+        m_pEditAction2WDWnd->close();
+    if( m_pEditAction4WDWnd && m_pEditAction4WDWnd->isVisible() )
+        m_pEditAction4WDWnd->close();
+}
+
 void QMouseMappingTable::mousePressEvent(QMouseEvent *ev)
 {
     switch( ev->button() )

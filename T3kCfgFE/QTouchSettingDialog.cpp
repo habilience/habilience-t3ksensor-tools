@@ -127,7 +127,7 @@ QTouchSettingDialog::QTouchSettingDialog(Dialog *parent) :
 
     ui->cmdAsyncMngr->setT3kDevice( pDevice );
 
-    connect( ui->cmdAsyncMngr, SIGNAL(asyncFinished(bool,int)), SLOT(onCmdAsyncMngrFinished(bool,int)));
+    connect( ui->cmdAsyncMngr, SIGNAL(asyncFinished(bool,int)), SLOT(onCmdAsyncMngrFinished(bool,int)) );
 
     setViewMode( true );
 
@@ -227,7 +227,12 @@ void QTouchSettingDialog::onChangeLanguage()
     ui->btnDigitizerOnly->setText( res.getResString(RES_TAG, "BTN_CAPTION_USB_CFG_DIGITIZER_ONLY") );
     ui->btnGestureProfile->setText( res.getResString(RES_TAG, "BTN_CAPTION_GESTURE_PROFILE") );
 
-    ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") );
+    if ( QSensorInitDataCfg::instance()->isLoaded() )
+        ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") + "\r\n" +
+                               QSensorInitDataCfg::instance()->getFileName() );
+    else
+        ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") );
+
     ui->btnRefresh->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_REFRESH") );
     ui->btnSave->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_SAVE") );
     ui->btnClose->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_CLOSE") );
@@ -569,6 +574,7 @@ bool QTouchSettingDialog::requestSensorData( RequestCmd cmd, bool bWait )
     {
         resetEditColors();
         m_bIsModified = false;
+        ui->widgetAreaSetting->setModified( false );
     }
 
     return bResult;
@@ -580,7 +586,7 @@ void QTouchSettingDialog::onCmdAsyncMngrFinished(bool, int)
     setViewMode(true);
 }
 
-void QTouchSettingDialog::onModifiedProfile()
+void QTouchSettingDialog::onEditModifiedFlag()
 {
     m_bIsModified = true;
 }
@@ -971,7 +977,7 @@ bool QTouchSettingDialog::onKeyRelease(QKeyEvent *evt)
          (keyEvt->key() == Qt::Key_Return) )
     {
         QWidget* pWidget = focusWidget();
-        if (pWidget->objectName().indexOf("txtEdt") >= 0)
+        if (pWidget && pWidget->objectName().indexOf("txtEdt") >= 0)
         {
             pWidget->clearFocus();
             return true;
@@ -1071,7 +1077,7 @@ void QTouchSettingDialog::on_btnGestureProfile_clicked()
 {
     setViewMode(false);
     QGestureProfileDialog gestureProfileDlg(this);
-    connect( &gestureProfileDlg, &QGestureProfileDialog::modifiedProfile, this, &QTouchSettingDialog::onModifiedProfile, Qt::QueuedConnection );
+    connect( &gestureProfileDlg, &QGestureProfileDialog::modifiedProfile, this, &QTouchSettingDialog::onEditModifiedFlag, Qt::QueuedConnection );
     gestureProfileDlg.exec();
     setViewMode(true);
 }

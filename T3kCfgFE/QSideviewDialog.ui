@@ -728,12 +728,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QCmdAsyncManagerCtrl</class>
-   <extends>QWidget</extends>
-   <header>QCmdAsyncManagerCtrl.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>QBorderStyleEdit</class>
    <extends>QTextEdit</extends>
    <header>QBorderStyleEdit.h</header>
@@ -742,6 +736,12 @@
    <class>QUnderlineTitle</class>
    <extends>QLabel</extends>
    <header>QUnderlineTitle.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QCmdAsyncManagerCtrl</class>
+   <extends>QWidget</extends>
+   <header>QCmdAsyncManagerCtrl.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
