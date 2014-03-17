@@ -185,6 +185,7 @@ SOURCES += main.cpp\
     ../common/QGUIUtils.cpp \
     ../common/QLangRes.cpp \
     ../common/QLangManager.cpp \
+    ../common/QIni.cpp \
     ../common/ui/UnderlineLabel.cpp \
     ../common/ui/QHoverComboBox.cpp \
     ../common/ui/SlidingStackedWidget.cpp \
@@ -281,6 +282,7 @@ HEADERS  += \
     ../common/QLangRes.h \
     ../common/QLangManager.h \
     ../common/T3kCamNameDef.h \
+    ../common/QIni.h \
     ../common/ui/UnderlineLabel.h \
     ../common/ui/QHoverComboBox.h \
     ../common/ui/SlidingStackedWidget.h \

@@ -117,14 +117,6 @@ void QCalibrationSettingWidget::RequestSensorData( bool bDefault )
     m_RequestSensorData.AddItem( cstrAreaM, str );
     m_RequestSensorData.AddItem( cstrAreaP, str );
 
-    m_RequestSensorData.AddItem( cstrDetectionThreshold, str, CM1 );
-    m_RequestSensorData.AddItem( cstrDetectionThreshold, str, CM2 );
-    if( QT3kUserData::GetInstance()->isSubCameraExist() )
-    {
-        m_RequestSensorData.AddItem( cstrDetectionThreshold, str, CM1_1 );
-        m_RequestSensorData.AddItem( cstrDetectionThreshold, str, CM2_1 );
-    }
-
     // calibration
     QString strTemp;
     m_pT3kHandle->sendCommand( strTemp.sprintf( "%s?", cstrFirmwareVersion ), true );

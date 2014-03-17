@@ -160,6 +160,7 @@ void QTouchSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart P
         if( Part != MM )
         {
             m_RequestSensorData.RemoveItem( cstrDetectionThreshold, Part );
+
             int nSensitivity = strtol(cmd + sizeof(cstrDetectionThreshold) - 1, NULL, 10);
             m_mapTouchSensitivity.insert( Part, nSensitivity );
 

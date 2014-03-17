@@ -5,6 +5,7 @@
 #include "T3kConstStr.h"
 #include "QCustomDefaultSensor.h"
 #include "QPredefProfileEditDialog.h"
+#include "../common/QIni.h"
 
 #include <QKeyEvent>
 #include <QSettings>
@@ -425,13 +426,21 @@ void QNMouseProfileWidget::loadPredefProfiles(int nTabIndex)
         return;
     }
 
-    QSettings filePredefProfiles( strFilePath, QSettings::IniFormat );
-    filePredefProfiles.beginGroup( strGroup );
+    QIni iniPredefProfiles;
+    if( !iniPredefProfiles.load( strFilePath ) )
+        return;
 
-    foreach( QString strKey, filePredefProfiles.childKeys() )
-        m_cbPredefinedProfile.addItem( strKey, filePredefProfiles.value( strKey ).toString() );
+    QIni::QSection* pSection = iniPredefProfiles.getSectionNoCase( strGroup );
+    if( pSection )
+    {
+        for( int i=0; i<pSection->getDataCount(); i++ )
+        {
+            qDebug() << pSection->getEntry(i);
 
-    filePredefProfiles.endGroup();
+            if( !pSection->getEntry(i).isEmpty() )
+                m_cbPredefinedProfile.addItem( pSection->getEntry(i), pSection->getData(i) );
+        }
+    }
 
     m_cbPredefinedProfile.setCurrentIndex( -1 );
 }

@@ -721,11 +721,21 @@ void QDetectionDialog::enterAutoRangeSetting()
     strCmd = sCam2 + cstrDetectionRange + QString::number(0) + "," + QString::number(0xffff);
     ui->cmdAsyncMngr->insertCommand( strCmd );
 
+    strCmd = sCam1 + cstrDetectionThreshold + "**";
+    ui->cmdAsyncMngr->insertCommand( strCmd );
+    strCmd = sCam2 + cstrDetectionThreshold + "**";
+    ui->cmdAsyncMngr->insertCommand( strCmd );
+
     if ( g_AppData.bIsSubCameraExist )
     {
         strCmd = sCam1_1 + cstrDetectionRange + QString::number(0) + "," + QString::number(0xffff);
         ui->cmdAsyncMngr->insertCommand( strCmd );
         strCmd = sCam2_1 + cstrDetectionRange + QString::number(0) + "," + QString::number(0xffff);
+        ui->cmdAsyncMngr->insertCommand( strCmd );
+
+        strCmd = sCam1_1 + cstrDetectionThreshold + "**";
+        ui->cmdAsyncMngr->insertCommand( strCmd );
+        strCmd = sCam2_1 + cstrDetectionThreshold + "**";
         ui->cmdAsyncMngr->insertCommand( strCmd );
     }
 

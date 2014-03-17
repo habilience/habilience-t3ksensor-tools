@@ -172,9 +172,11 @@ bool QIni::load( QFile & fileIni )
             pBufLineCur[0] = '\0';
 
             strBufLine = QString::fromUtf8( pBufLine );
-
-            onReadString(strBufLine, &Load);
-            pBufLineCur = pBufLine;
+            if( strBufLine != "\r\n" )
+            {
+                onReadString(strBufLine, &Load);
+                pBufLineCur = pBufLine;
+            }
         }
     }
     if ( pBufLineCur != pBufLine )
