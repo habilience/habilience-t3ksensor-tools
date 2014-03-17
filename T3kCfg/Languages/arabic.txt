@@ -146,6 +146,8 @@ TEXT_PALM = كف
 
 TEXT_CALIBRATION_WARNING = قد لا تعمل التصحيح. بشكل صحيح  .   "Mac OS X لم يتم تعيين من القائمة "بادرة"  "هامش الشاشة .
 TEXT_CALIBRATION_WARNING2 = هل تصفح 'Mac OS X Margin' في القائمة 'Gesture'. لأنه هذة المعايرة قد لا تعمل بشكل صحيح
+TITLE_TOUCH_SENSITIVITY = حساسية اللمس
+TEXT_SENSITIVITY = حساسية
 
 BTN_ADVANCED = متقدم ...
 

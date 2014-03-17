@@ -146,6 +146,8 @@ TEXT_PALM = Ладонь
 
 TEXT_CALIBRATION_WARNING = Не проверяйте 'Mac OS X Margin' в меню "Жесты". Так как калибровка может работать неисправно
 TEXT_CALIBRATION_WARNING2 = Проверьте 'Mac OS X Margin' в меню "Жесты". Так как калибровка может работать неисправно
+TITLE_TOUCH_SENSITIVITY = Прикоснитесь чувствительность
+TEXT_SENSITIVITY = Чувствительность
 
 BTN_ADVANCED = Передовой...
 

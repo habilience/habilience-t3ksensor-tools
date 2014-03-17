@@ -18,8 +18,6 @@
 #include "QTabRemoteAssistance.h"
 #include "QTabChat.h"
 
-#include "CfgCustomCmdDef.h"
-
 
 QAssistanceWidget::QAssistanceWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QDialog(parent),

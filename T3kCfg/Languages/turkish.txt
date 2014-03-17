@@ -146,6 +146,8 @@ TEXT_PALM = Avuç
 
 TEXT_CALIBRATION_WARNING = Mac OS X marjalrını işaret menüsünde kontrol etmediniz. Bu Sebeple kalibrasyon düzgün çalışmaya bilir.
 TEXT_CALIBRATION_WARNING2 = Mac OS X marjalrını işaret menüsünde kontrol etmediniz. Bu Sebeple kalibrasyon düzgün çalışmaya bilir.
+TITLE_TOUCH_SENSITIVITY = Dokunma hassasiyeti
+TEXT_SENSITIVITY = Duyarlılık
 
 BTN_ADVANCED = Gelişmiş...
 

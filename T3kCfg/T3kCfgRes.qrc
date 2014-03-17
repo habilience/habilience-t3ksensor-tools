@@ -96,5 +96,6 @@
         <file>resources/PNG_DETECTION_RT.png</file>
         <file>resources/PNG_SPIN_ARROW_H.png</file>
         <file>resources/PNG_SPIN_ARROW_V.png</file>
+        <file>resources/PNG_ICON_SENSITIVITY.png</file>
     </qresource>
 </RCC>

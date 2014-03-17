@@ -31,8 +31,6 @@ public:
 
     void ReplaceLabelName(QCheckableButton* pBtn);
 
-    void RemoveChildRequest( const char* sCmd, QRequestHIDManager::eRequestPart ePart = QRequestHIDManager::MM );
-
 protected:
     void RequestSensorData( bool bDefault );
 

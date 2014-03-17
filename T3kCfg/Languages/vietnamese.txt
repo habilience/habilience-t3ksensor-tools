@@ -146,6 +146,8 @@ TEXT_PALM = Bàn tay
 
 TEXT_CALIBRATION_WARNING = Không kiểm tra 'Mac OS X Margin' ở thanh công cụ 'Gesture' bởi vì hiệu chuẩn có thể hoạt động không chính xác
 TEXT_CALIBRATION_WARNING2 = Kiểm tra 'Mac OS X Margin' ở thanh công cụ 'Gesture' bởi vì hiệu chuẩn có thể hoạt động không chính xác
+TITLE_TOUCH_SENSITIVITY = Độ nhạy cảm ứng
+TEXT_SENSITIVITY = Nhạy cảm
 
 BTN_ADVANCED = Tiên tiến...
 

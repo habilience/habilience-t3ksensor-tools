@@ -102,4 +102,7 @@ static const char cstrDetectionCoef3[] = "detection_coef3=";
 
 static const char cstrAdminSettingTime[]	= "admin_setting_time=";
 
+//
+static const char cstrNoCam[] = "no cam";
+
 #endif	// __T3k_CONST_STRING_H__

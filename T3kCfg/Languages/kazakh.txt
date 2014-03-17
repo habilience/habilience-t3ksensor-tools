@@ -146,6 +146,8 @@ TEXT_PALM = Алақан
 
 TEXT_CALIBRATION_WARNING = Mac OS X Margin' "Қимылдар" мәзірінде тексермеңіз. Калибрлеу дұрыс жұмыс істемеуі мүмкін
 TEXT_CALIBRATION_WARNING2 = Mac OS X Margin' "Қимылдар" мәзірінде тексеріңіз. Калибрлеу дұрыс жұмыс істемеуі мүмкін
+TITLE_TOUCH_SENSITIVITY = 
+TEXT_SENSITIVITY = 
 
 BTN_ADVANCED = Advanced...
 

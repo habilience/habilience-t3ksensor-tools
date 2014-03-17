@@ -146,6 +146,8 @@ TEXT_PALM = Palma de la mano
 
 TEXT_CALIBRATION_WARNING = No seleccionaron ‘Mac OS X Margin’ en el menu ‘Gesture’. Porque la calibracion no funciona apropiadamente.
 TEXT_CALIBRATION_WARNING2 = No seleccionaron ‘Mac OS X Margin’ en el menu ‘Gesture’. Porque la calibracion no funciona apropiadamente.
+TITLE_TOUCH_SENSITIVITY = Tocar Sensibilidad
+TEXT_SENSITIVITY = Sensibilidad
 
 BTN_ADVANCED = Avanzado...
 

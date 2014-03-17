@@ -7,7 +7,6 @@
 #include <QtEvents>
 #include <QPainter>
 
-static const char cstrNoCam[] = "no cam";
 
 QSideviewWidget::QSideviewWidget(QWidget *parent) :
     QDialog(parent),

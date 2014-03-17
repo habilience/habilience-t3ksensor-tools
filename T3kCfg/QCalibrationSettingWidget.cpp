@@ -11,6 +11,7 @@
 #include "QConfigData.h"
 #include "QWarningWidget.h"
 #include "QAdvancedSettingWidget.h"
+#include "../common/T3kCamNameDef.h"
 
 #include <QShowEvent>
 #include <QMessageBox>
@@ -91,7 +92,7 @@ void QCalibrationSettingWidget::onChangeLanguage()
     ui->LBSingleClk->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_SINGLE_CLICK")) );
     ui->LBDoubleClk->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_DOUBLE_CLICK")) );
     ui->LBTwoTouch->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_TWO_TOUCH")) );
-    ui->LBPalm->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_PALM")) );
+    ui->LBPalm->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_PALM")) );    
 
     ui->BtnTouchSetting->setText( Res.getResString(QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("BTN_CAPTION_TOUCH_SETTING")) );
     ui->BtnAdvanced->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("BTN_ADVANCED")) );
@@ -116,6 +117,14 @@ void QCalibrationSettingWidget::RequestSensorData( bool bDefault )
     m_RequestSensorData.AddItem( cstrAreaM, str );
     m_RequestSensorData.AddItem( cstrAreaP, str );
 
+    m_RequestSensorData.AddItem( cstrDetectionThreshold, str, CM1 );
+    m_RequestSensorData.AddItem( cstrDetectionThreshold, str, CM2 );
+    if( QT3kUserData::GetInstance()->isSubCameraExist() )
+    {
+        m_RequestSensorData.AddItem( cstrDetectionThreshold, str, CM1_1 );
+        m_RequestSensorData.AddItem( cstrDetectionThreshold, str, CM2_1 );
+    }
+
     // calibration
     QString strTemp;
     m_pT3kHandle->sendCommand( strTemp.sprintf( "%s?", cstrFirmwareVersion ), true );
@@ -125,6 +134,7 @@ void QCalibrationSettingWidget::RequestSensorData( bool bDefault )
     m_pT3kHandle->sendCommand( strTemp.sprintf( "%s%c", cstrAreaD, cQ ), true );
     m_pT3kHandle->sendCommand( strTemp.sprintf( "%s%c", cstrAreaM, cQ ), true );
     m_pT3kHandle->sendCommand( strTemp.sprintf( "%s%c", cstrAreaP, cQ ), true );
+
     if( cQ == '*' )
     {
         m_RequestSensorData.AddItem( cstrCalibration, str );

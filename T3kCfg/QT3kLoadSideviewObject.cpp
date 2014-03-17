@@ -1,7 +1,7 @@
 #include "QT3kLoadSideviewObject.h"
 
 #include "QT3kUserData.h"
-#include "CfgCustomCmdDef.h"
+#include "../common/T3kConstStr.h"
 
 #include <QPainter>
 #include <QTimerEvent>
@@ -14,6 +14,7 @@
 #define LD_Cam3             2
 #define LD_Cam4             3
 #define LD_End              4
+
 
 QT3kLoadSideviewObject::QT3kLoadSideviewObject(QT3kDevice*& pHandle, QObject *parent) :
     QT3kHIDObject(pHandle, parent)

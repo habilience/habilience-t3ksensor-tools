@@ -14,12 +14,11 @@
 #include "QSoftkey.h"
 #include "QT3kUserData.h"
 
-#include "CfgCustomCmdDef.h"
-
 extern bool g_bIsScreenShotMode;
 
 #define QICON_WIDTH             40
 #define QICON_HEIGHT            40
+
 
 QMainMenuWidget::QMainMenuWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QWidget(parent),
@@ -150,17 +149,17 @@ void QMainMenuWidget::RequestInformation()
     m_RequestSensorData.Stop();
 
     m_RequestSensorData.AddItem( cstrFirmwareVersion, "?" );
-    m_RequestSensorData.AddItem( cstrFirmwareVersion, "?", QRequestHIDManager::CM1 );
-    m_RequestSensorData.AddItem( cstrAdminSettingTime, "?", QRequestHIDManager::CM1 );
-    m_RequestSensorData.AddItem( cstrFirmwareVersion, "?", QRequestHIDManager::CM2 );
-    m_RequestSensorData.AddItem( cstrAdminSettingTime, "?", QRequestHIDManager::CM2 );
+    m_RequestSensorData.AddItem( cstrFirmwareVersion, "?", CM1 );
+    m_RequestSensorData.AddItem( cstrAdminSettingTime, "?", CM1 );
+    m_RequestSensorData.AddItem( cstrFirmwareVersion, "?", CM2 );
+    m_RequestSensorData.AddItem( cstrAdminSettingTime, "?", CM2 );
 
     if( nModel != 0x0000 && nModel != 0x3000 && nModel != 0x3100 )
     {
-        m_RequestSensorData.AddItem( cstrFirmwareVersion, "?", QRequestHIDManager::CM1_1 );
-        m_RequestSensorData.AddItem( cstrAdminSettingTime, "?", QRequestHIDManager::CM1_1 );
-        m_RequestSensorData.AddItem( cstrFirmwareVersion, "?", QRequestHIDManager::CM2_1 );
-        m_RequestSensorData.AddItem( cstrAdminSettingTime, "?", QRequestHIDManager::CM2_1 );
+        m_RequestSensorData.AddItem( cstrFirmwareVersion, "?", CM1_1 );
+        m_RequestSensorData.AddItem( cstrAdminSettingTime, "?", CM1_1 );
+        m_RequestSensorData.AddItem( cstrFirmwareVersion, "?", CM2_1 );
+        m_RequestSensorData.AddItem( cstrAdminSettingTime, "?", CM2_1 );
     }
 
     m_pT3kHandle->sendCommand( QString("%1?").arg(cstrFirmwareVersion), true );
@@ -263,7 +262,7 @@ void QMainMenuWidget::UpdateInformation()
     QT3kUserData* pInst = QT3kUserData::GetInstance();
     pInst->SetFirmwareVersion( m_fMMVersion );
     pInst->SetFirmwareVersion( m_strMMVersion.left( m_strMMVersion.indexOf( ' ' ) ) );
-    pInst->setIsSubCameraExist( m_mapCMVerInfo.size() != 0 );
+    pInst->setIsSubCameraExist( m_mapCMVerInfo.size() > 2 );
     pInst->setCamCount( m_mapCMVerInfo.size() );
 }
 
@@ -329,7 +328,7 @@ void QMainMenuWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part,
         case CM2_1:
             if ( strstr(szCmd, cstrFirmwareVersion) == szCmd )
             {
-                m_RequestSensorData.RemoveItem( cstrFirmwareVersion, (QRequestHIDManager::eRequestPart)Part );
+                m_RequestSensorData.RemoveItem( cstrFirmwareVersion, Part );
 
                 char szVer[255];
                 if ( g_bIsScreenShotMode )
@@ -358,7 +357,7 @@ void QMainMenuWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part,
             }
             else if ( strstr(szCmd, cstrAdminSettingTime) == szCmd )
             {
-                m_RequestSensorData.RemoveItem( cstrAdminSettingTime, (QRequestHIDManager::eRequestPart)Part );
+                m_RequestSensorData.RemoveItem( cstrAdminSettingTime, Part );
 
                 long lDate = strtol(szCmd + sizeof(cstrAdminSettingTime) - 1, NULL, 0);
                 QDateTime dtDate;
@@ -371,7 +370,7 @@ void QMainMenuWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part,
             }
             else if ( strstr(szCmd, cstrAdminSerial) == szCmd )
             {
-                m_RequestSensorData.RemoveItem( cstrAdminSerial, (QRequestHIDManager::eRequestPart)Part );
+                m_RequestSensorData.RemoveItem( cstrAdminSerial, Part );
 
                 char szVer[255];
                 strncpy( szVer, (szCmd + sizeof(cstrAdminSerial) - 1), 255 );
@@ -467,14 +466,14 @@ void QMainMenuWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part,
     {
         if( Part == CM1 || Part == CM2 )
         {
-            m_RequestSensorData.RemoveItem( cstrFirmwareVersion, (QRequestHIDManager::eRequestPart)(Part+2));
-            m_RequestSensorData.RemoveItem( cstrAdminSettingTime, (QRequestHIDManager::eRequestPart)(Part+2));
+            m_RequestSensorData.RemoveItem( cstrFirmwareVersion, (ResponsePart)(Part+2));
+            m_RequestSensorData.RemoveItem( cstrAdminSettingTime, (ResponsePart)(Part+2));
 //            CMVerInfo info = m_mapCMVerInfo.value( Part+2 );
 //            m_mapCMVerInfo.insert( Part+2, info );
         }
 
-        m_RequestSensorData.RemoveItem( cstrFirmwareVersion, (QRequestHIDManager::eRequestPart)Part );
-        m_RequestSensorData.RemoveItem( cstrAdminSettingTime, (QRequestHIDManager::eRequestPart)Part );
+        m_RequestSensorData.RemoveItem( cstrFirmwareVersion, Part );
+        m_RequestSensorData.RemoveItem( cstrAdminSettingTime, Part );
 
 //        if( Part != CM1_1 && Part != CM2_1 )
 //        {

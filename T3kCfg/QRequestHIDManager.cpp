@@ -46,7 +46,7 @@ void QRequestHIDManager::Stop()
     m_pT3kHandle = NULL;
 }
 
-void QRequestHIDManager::AddItem( const char* szItem, QString strValue, eRequestPart ePart /*= QRequestHIDManager::MM*/ )
+void QRequestHIDManager::AddItem( const char* szItem, QString strValue, ResponsePart ePart /*= MM*/ )
 {
     NVData Data;
     Data.ePart = ePart;
@@ -59,7 +59,7 @@ void QRequestHIDManager::AddItem( const char* szItem, QString strValue, eRequest
     //qDebug( "Add Item(%d): %d %s", m_RequestItem.count(), ePart, szItem );
 }
 
-void QRequestHIDManager::RemoveItem( const char* szItem, eRequestPart ePart /*= QRequestHIDManager::MM*/ )
+void QRequestHIDManager::RemoveItem( const char* szItem, ResponsePart ePart /*= MM*/ )
 {
     QMutexLocker Lock( &m_Mutex );
     for( int i=0; i<m_RequestItem.count(); i++ )

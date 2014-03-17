@@ -2,7 +2,6 @@
 
 #include "T3kConstStr.h"
 
-#include "CfgCustomCmdDef.h"
 #include "QT3kUserData.h"
 
 static const char cstrCam1Mode[] = "cam1/mdoe=";

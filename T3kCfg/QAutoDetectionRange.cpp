@@ -6,7 +6,6 @@
 #include "QCustomDefaultSensor.h"
 #include "QT3kUserData.h"
 #include "T3kBuzzerDef.h"
-#include "CfgCustomCmdDef.h"
 
 #include <QCoreApplication>
 #include <QPainter>
@@ -219,16 +218,16 @@ void QAutoDetectionRange::enterAutoRangeSetting()
 
     m_RequestHIDManager.Stop();
 
-    m_RequestHIDManager.AddItem( "mode=", "detection", QRequestHIDManager::CM1 );
-    m_RequestHIDManager.AddItem( "mode=", "detection", QRequestHIDManager::CM2 );
+    m_RequestHIDManager.AddItem( "mode=", "detection", CM1 );
+    m_RequestHIDManager.AddItem( "mode=", "detection", CM2 );
 
-    m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(0) + "," + QString::number(0xffff), QRequestHIDManager::CM1 );
-    m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(0) + "," + QString::number(0xffff), QRequestHIDManager::CM2 );
+    m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(0) + "," + QString::number(0xffff), CM1 );
+    m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(0) + "," + QString::number(0xffff), CM2 );
 
     if ( QT3kUserData::GetInstance()->isSubCameraExist() )
     {
-        m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(0) + "," + QString::number(0xffff), QRequestHIDManager::CM1_1 );
-        m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(0) + "," + QString::number(0xffff), QRequestHIDManager::CM2_1 );
+        m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(0) + "," + QString::number(0xffff), CM1_1 );
+        m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(0) + "," + QString::number(0xffff), CM2_1 );
     }
 
     m_RequestHIDManager.Start( m_pT3kHandle );
@@ -263,13 +262,13 @@ void QAutoDetectionRange::leaveAutoRangeSetting()
 
     m_RequestHIDManager.Stop();
 
-    m_RequestHIDManager.AddItem( cstrDetectionRange, "*", QRequestHIDManager::CM1 );
-    m_RequestHIDManager.AddItem( cstrDetectionRange, "*", QRequestHIDManager::CM2 );
+    m_RequestHIDManager.AddItem( cstrDetectionRange, "*", CM1 );
+    m_RequestHIDManager.AddItem( cstrDetectionRange, "*", CM2 );
 
     if ( QT3kUserData::GetInstance()->isSubCameraExist() )
     {
-        m_RequestHIDManager.AddItem( cstrDetectionRange, "*", QRequestHIDManager::CM1_1 );
-        m_RequestHIDManager.AddItem( cstrDetectionRange, "*", QRequestHIDManager::CM2_1 );
+        m_RequestHIDManager.AddItem( cstrDetectionRange, "*", CM1_1 );
+        m_RequestHIDManager.AddItem( cstrDetectionRange, "*", CM2_1 );
     }
 
     m_RequestHIDManager.Start( m_pT3kHandle );
@@ -298,21 +297,21 @@ void QAutoDetectionRange::onFinishAutoRange()
 
         m_RequestHIDManager.Stop();
 
-        m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(m_lCam1Left) + "," + QString::number(m_lCam1Right), QRequestHIDManager::CM1 );
-        m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(m_lCam2Left) + "," + QString::number(m_lCam2Right), QRequestHIDManager::CM2 );
+        m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(m_lCam1Left) + "," + QString::number(m_lCam1Right), CM1 );
+        m_RequestHIDManager.AddItem( cstrDetectionRange, QString::number(m_lCam2Left) + "," + QString::number(m_lCam2Right), CM2 );
 
         if ( QT3kUserData::GetInstance()->isSubCameraExist() )
         {
             QString strV( QCustomDefaultSensor::Instance()->GetDefaultData( QString("cam1/sub/%1").arg(cstrDetectionRange).toUtf8().data(), "" ) );
             if( strV.isEmpty() )
-                m_RequestHIDManager.AddItem( cstrDetectionRange, "*", QRequestHIDManager::CM1_1 );
+                m_RequestHIDManager.AddItem( cstrDetectionRange, "*", CM1_1 );
             else
-                m_RequestHIDManager.AddItem( cstrDetectionRange, strV, QRequestHIDManager::CM1_1 );
+                m_RequestHIDManager.AddItem( cstrDetectionRange, strV, CM1_1 );
             strV = QCustomDefaultSensor::Instance()->GetDefaultData( QString("cam2/sub/%1").arg(cstrDetectionRange).toUtf8().data(), "" );
             if( strV.isEmpty() )
-                m_RequestHIDManager.AddItem( cstrDetectionRange, "*", QRequestHIDManager::CM2_1 );
+                m_RequestHIDManager.AddItem( cstrDetectionRange, "*", CM2_1 );
             else
-                m_RequestHIDManager.AddItem( cstrDetectionRange, strV, QRequestHIDManager::CM2_1 );
+                m_RequestHIDManager.AddItem( cstrDetectionRange, strV, CM2_1 );
         }
 
         m_bChekcFinish = true;
@@ -460,16 +459,16 @@ void QAutoDetectionRange::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart P
             m_RequestHIDManager.RemoveItem( cstrDetectionRange );
             break;
         case CM1:
-            m_RequestHIDManager.RemoveItem( cstrDetectionRange, QRequestHIDManager::CM1 );
+            m_RequestHIDManager.RemoveItem( cstrDetectionRange, CM1 );
             break;
         case CM2:
-            m_RequestHIDManager.RemoveItem( cstrDetectionRange, QRequestHIDManager::CM2 );
+            m_RequestHIDManager.RemoveItem( cstrDetectionRange, CM2 );
             break;
         case CM1_1:
-            m_RequestHIDManager.RemoveItem( cstrDetectionRange, QRequestHIDManager::CM1_1 );
+            m_RequestHIDManager.RemoveItem( cstrDetectionRange, CM1_1 );
             break;
         case CM2_1:
-            m_RequestHIDManager.RemoveItem( cstrDetectionRange, QRequestHIDManager::CM2_1 );
+            m_RequestHIDManager.RemoveItem( cstrDetectionRange, CM2_1 );
             break;
         default:
             break;
@@ -487,16 +486,16 @@ void QAutoDetectionRange::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart P
             m_RequestHIDManager.RemoveItem( cstrDetectionRange );
             break;
         case CM1:
-            m_RequestHIDManager.RemoveItem( cstrDetectionRange, QRequestHIDManager::CM1 );
+            m_RequestHIDManager.RemoveItem( cstrDetectionRange, CM1 );
             break;
         case CM2:
-            m_RequestHIDManager.RemoveItem( cstrDetectionRange, QRequestHIDManager::CM2 );
+            m_RequestHIDManager.RemoveItem( cstrDetectionRange, CM2 );
             break;
         case CM1_1:
-            m_RequestHIDManager.RemoveItem( cstrDetectionRange, QRequestHIDManager::CM1_1 );
+            m_RequestHIDManager.RemoveItem( cstrDetectionRange, CM1_1 );
             break;
         case CM2_1:
-            m_RequestHIDManager.RemoveItem( cstrDetectionRange, QRequestHIDManager::CM2_1 );
+            m_RequestHIDManager.RemoveItem( cstrDetectionRange, CM2_1 );
             break;
         default:
             break;

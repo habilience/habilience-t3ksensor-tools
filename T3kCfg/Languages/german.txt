@@ -146,6 +146,8 @@ TEXT_PALM = Handfläche
 
 TEXT_CALIBRATION_WARNING = Mac OS X Margen des Bildschirms ist im "Geste" Menü nicht eingestellt worden. Es können Fehler beim Kalibrieren auftreten.
 TEXT_CALIBRATION_WARNING2 = Im Menü "Gesten" ist die Option "Mac OS X Bildschirmränder" aktiviert worden. Es können Fehler beim Kalibrieren auftreten.
+TITLE_TOUCH_SENSITIVITY = Berührungsempfindlichkeit
+TEXT_SENSITIVITY = Empfindlichkeit
 
 BTN_ADVANCED = Fortgeschritten...
 

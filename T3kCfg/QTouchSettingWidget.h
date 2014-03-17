@@ -34,11 +34,13 @@ protected:
 
     // QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
 
 protected:
     QTimer*                     m_pTimerSendData;
 
     QRequestHIDManager          m_RequestSensorData;
+    QMap<ResponsePart, int>     m_mapTouchSensitivity;
 
 private:
     Ui::QTouchSettingWidget* ui;
@@ -51,6 +53,8 @@ private slots:
     void on_SldTap_valueChanged(int value);
     void on_BtnDefault_clicked();
     //void on_BtnRefresh_clicked();
+    void on_BtnSensitivityDec_clicked();
+    void on_BtnSensitivityInc_clicked();
     void OnTimer();
 };
 

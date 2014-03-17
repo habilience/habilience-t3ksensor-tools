@@ -157,7 +157,7 @@ typedef enum
 	SND_KEYTONE_F,
 	SND_CAL_F,
 	SND_CAM_F,
-	SND_GENERAL_F	// 일반적인 BUZZER Play 용으로 만듦
+	SND_GENERAL_F	// for general
 }snd_cmd_name_type;
 
 // general default value
@@ -287,7 +287,7 @@ typedef enum
 #define NV_DEF_FUNCTION_KEY_RANGE_END				0xfe
 
 // detection default value
-#define NV_DEF_CAM_TRIGGER_THRESHOLD     			170
+#define NV_DEF_CAM_TRIGGER_THRESHOLD     			210
 #define NV_DEF_CAM_TRIGGER_THRESHOLD_RANGE_START	0
 #define NV_DEF_CAM_TRIGGER_THRESHOLD_RANGE_END		0xff
 
@@ -545,11 +545,11 @@ typedef union
 #define INPUTMODE_MULTI_TOUCH                0x02
 #define INPUTMODE_UNDEFINED                  0xFF
 
-// 화면 회전
-#define SCREENDIRECTION_UP          0x00		 // 가로방향 / Landscape
-#define SCREENDIRECTION_RIGHT       0x01		 // 세로방향 / Portrait
-#define SCREENDIRECTION_DOWN        0x02		 // 가로방향(대칭 이동) / Landscape(flipped)
-#define SCREENDIRECTION_LEFT        0x03		 // 세로방향(대칭 이동) / Protrait(flipped)
+// Dispaly Orientation
+#define SCREENDIRECTION_UP          0x00		 // Landscape
+#define SCREENDIRECTION_RIGHT       0x01		 // Portrait
+#define SCREENDIRECTION_DOWN        0x02		 // Landscape(flipped)
+#define SCREENDIRECTION_LEFT        0x03		 // Protrait(flipped)
 #define SCREENDIRECTION_BACK_UP     0x04
 #define SCREENDIRECTION_BACK_RIGHT  0x05
 #define SCREENDIRECTION_BACK_DOWN   0x06

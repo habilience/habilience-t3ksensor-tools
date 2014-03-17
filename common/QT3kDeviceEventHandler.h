@@ -14,7 +14,7 @@
 #include <QTcpSocket>
 #endif
 
-enum ResponsePart { MM, CM1, CM2, CM1_1, CM2_1 };
+enum ResponsePart { MM = 0, CM1, CM2, CM1_1, CM2_1 };
 
 
 inline int getIndexFromPart(ResponsePart Part)

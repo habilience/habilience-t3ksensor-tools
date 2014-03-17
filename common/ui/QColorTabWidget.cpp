@@ -90,6 +90,31 @@ void QColorTabWidget::setTabDirection( TabDirection dir, int nBarSize, int nBarO
         m_btnRightTab.setEnabled( false );
         break;
     }
+
+    if( m_pExtraWidget )
+    {
+        QRect rc(0, 0, width()-1, height()-1);
+        rc.adjust( 1, 1, -1, -1 );
+
+        switch( m_eTabDirection )
+        {
+        case TabDirectionHorzLeftTop:
+            m_pExtraWidget->move( rc.right() - m_nBarOffset - m_pExtraWidget->width(), rc.top() + (m_sizeTabHeader.height() - m_pExtraWidget->height())/2 );
+            break;
+        case TabDirectionHorzRightTop:
+            m_pExtraWidget->move( rc.left() + m_nBarOffset, rc.top() + (m_sizeTabHeader.height() - m_pExtraWidget->height())/2 );
+            break;
+        case TabDirectionVertLeftTop:
+            m_pExtraWidget->move( rc.left() + (m_sizeTabHeader.width() - m_pExtraWidget->width())/2, rc.top() + m_nBarOffset );
+            break;
+        case TabDirectionVertLeftBottom:
+            m_pExtraWidget->move( rc.left() + (m_sizeTabHeader.width() - m_pExtraWidget->width())/2, rc.bottom() + m_pExtraWidget->height() + m_nBarOffset );
+            break;
+        default:
+            Q_ASSERT( false );
+            break;
+        }
+    }
 }
 
 void QColorTabWidget::paintEvent(QPaintEvent *)

@@ -146,6 +146,8 @@ TEXT_PALM = 手掌
 
 TEXT_CALIBRATION_WARNING = “Mac OS X的边缘 ”在“手势”菜单里没有设置成功。 校正无法正常工作。
 TEXT_CALIBRATION_WARNING2 = “Mac OS X的边缘 ”在“手势”菜单里设置成功。 校正无法正常工作。
+TITLE_TOUCH_SENSITIVITY = 觸摸靈敏度
+TEXT_SENSITIVITY = 感性
 
 BTN_ADVANCED = 先進...
 

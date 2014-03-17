@@ -586,7 +586,7 @@
      </widget>
     </item>
     <item>
-     <spacer name="HSpacer5">
+     <spacer name="HSpacer6">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -610,12 +610,6 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="AreaSettingLayout">
-    <property name="horizontalSpacing">
-     <number>2</number>
-    </property>
-    <property name="verticalSpacing">
-     <number>0</number>
-    </property>
     <item row="0" column="0">
      <widget class="QLabel" name="LBSingleClk">
       <property name="sizePolicy">
@@ -1148,12 +1142,6 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="CalibrationLayout">
-    <property name="horizontalSpacing">
-     <number>2</number>
-    </property>
-    <property name="verticalSpacing">
-     <number>0</number>
-    </property>
     <item row="0" column="0">
      <widget class="QLabel" name="LBScreenMargin">
       <property name="sizePolicy">
@@ -1311,7 +1299,7 @@
      </spacer>
     </item>
     <item row="0" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="ModifyMarginLayout">
       <property name="spacing">
        <number>6</number>
       </property>

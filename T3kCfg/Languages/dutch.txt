@@ -146,6 +146,8 @@ TEXT_PALM = Palm
 
 TEXT_CALIBRATION_WARNING = ''Mac OS X Marge' niet aangevinkt in menu 'Gebaren'. Kalibratie werkt mogelijk niet naar behoren.
 TEXT_CALIBRATION_WARNING2 = Mac OS X Marge' aangevinkt in menu 'Gebaren'. Kalibratie werkt mogelijk niet naar behoren..
+TITLE_TOUCH_SENSITIVITY = Gevoeligheid voor aanraking
+TEXT_SENSITIVITY = Gevoeligheid
 
 BTN_ADVANCED = Vergevorderd...
 

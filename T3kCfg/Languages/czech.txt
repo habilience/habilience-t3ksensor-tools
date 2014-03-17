@@ -146,6 +146,8 @@ TEXT_PALM = Dlaň
 
 TEXT_CALIBRATION_WARNING = Nazaškrtávejte 'Mac OS X Margin' v menu 'Gesta'. Kalibrace nemusí fungovat správně.
 TEXT_CALIBRATION_WARNING2 = Zaškrtněte 'Mac OS X Margin' v menu 'Gesta'. Kalibrace nemusí fungovat správně.
+TITLE_TOUCH_SENSITIVITY = Dotknout citlivost
+TEXT_SENSITIVITY = Citlivost
 
 BTN_ADVANCED = Pokročilý...
 

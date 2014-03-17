@@ -2,8 +2,8 @@
 #include "ui_QTouchSettingWidget.h"
 
 #include "stdInclude.h"
-
 #include "Common/nv.h"
+#include "QT3kUserData.h"
 
 #include <QShowEvent>
 #include <QTimer>
@@ -87,6 +87,9 @@ void QTouchSettingWidget::onChangeLanguage()
     ui->LBWheel->setText( Res.getResString(QString::fromUtf8("TOUCH SETTING"), QString::fromUtf8("TEXT_WHEEL")) );
     ui->LBZoom->setText( Res.getResString(QString::fromUtf8("TOUCH SETTING"), QString::fromUtf8("TEXT_ZOOM")) );
 
+    ui->TitleTouchSensitivity->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TITLE_TOUCH_SENSITIVITY")) );
+    ui->LBSensitivity->setText( Res.getResString(QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_SENSITIVITY")) );
+
     Qt::AlignmentFlag eFlag = Res.isR2L() ? Qt::AlignLeft : Qt::AlignRight;
     ui->EditTap->setAlignment( eFlag );
     ui->EditLongTap->setAlignment( eFlag );
@@ -94,7 +97,7 @@ void QTouchSettingWidget::onChangeLanguage()
     ui->EditZoom->setAlignment( eFlag );
 }
 
-void QTouchSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
+void QTouchSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
     if( !isVisible() ) return;
 
@@ -152,6 +155,32 @@ void QTouchSettingWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /
         ui->EditZoom->setText( strV );
         ui->SldZoom->setValue( nSens );
     }
+    else if( strstr(cmd, cstrDetectionThreshold) == cmd )
+    {
+        if( Part != MM )
+        {
+            m_RequestSensorData.RemoveItem( cstrDetectionThreshold, Part );
+            int nSensitivity = strtol(cmd + sizeof(cstrDetectionThreshold) - 1, NULL, 10);
+            m_mapTouchSensitivity.insert( Part, nSensitivity );
+
+            nSensitivity = NV_DEF_CAM_TRIGGER_THRESHOLD_RANGE_END;
+            foreach( int nV, m_mapTouchSensitivity.values() )
+            {
+                if( nSensitivity > nV )
+                    nSensitivity = nV;
+            }
+
+            ui->EditSensitivity->setText( QString::number(nSensitivity) );
+        }
+    }
+}
+
+void QTouchSettingWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
+{
+    if( strstr(cmd, cstrNoCam) == cmd )
+    {
+        m_mapTouchSensitivity.remove( Part );
+    }
 }
 
 void QTouchSettingWidget::RequestSensorData( bool bDefault )
@@ -173,6 +202,16 @@ void QTouchSettingWidget::RequestSensorData( bool bDefault )
 
     m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrWheelSensitivity).arg(cQ), true );
     m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrZoomSensitivity).arg(cQ), true );
+
+    // threshold
+    m_pT3kHandle->sendCommand( QString("%1%2%3").arg(sCam1).arg(cstrDetectionThreshold).arg(cQ), true );
+    m_pT3kHandle->sendCommand( QString("%1%2%3").arg(sCam2).arg(cstrDetectionThreshold).arg(cQ), true );
+
+    if( QT3kUserData::GetInstance()->isSubCameraExist() )
+    {
+        m_pT3kHandle->sendCommand( QString("%1%2%3").arg(sCam1_1).arg(cstrDetectionThreshold).arg(cQ), true );
+        m_pT3kHandle->sendCommand( QString("%1%2%3").arg(sCam2_1).arg(cstrDetectionThreshold).arg(cQ), true );
+    }
 
     m_RequestSensorData.Start( m_pT3kHandle );
 }
@@ -333,6 +372,48 @@ void QTouchSettingWidget::on_SldZoom_valueChanged(int /*value*/)
     ui->EditZoom->setText( strV );
 
     m_pTimerSendData->start( 500 );
+}
+
+void QTouchSettingWidget::on_BtnSensitivityDec_clicked()
+{
+    if( !m_pT3kHandle ) return;
+
+    QString strV( ui->EditSensitivity->text() );
+    int nV = (float)strtod( strV.toUtf8().data(), NULL );
+    nV -= 5;
+
+    if( nV < NV_DEF_CAM_TRIGGER_THRESHOLD_RANGE_START || nV > NV_DEF_CAM_TRIGGER_THRESHOLD_RANGE_END )
+        nV = NV_DEF_CAM_TRIGGER_THRESHOLD_RANGE_START;
+
+    m_pT3kHandle->sendCommand( strV.sprintf( "%s%s%d", sCam1.toUtf8().data(), cstrDetectionThreshold, nV ), true );
+    m_pT3kHandle->sendCommand( strV.sprintf( "%s%s%d", sCam2.toUtf8().data(), cstrDetectionThreshold, nV ), true );
+
+    if( QT3kUserData::GetInstance()->isSubCameraExist() )
+    {
+        m_pT3kHandle->sendCommand( strV.sprintf( "%s%s%d", sCam1_1.toUtf8().data(), cstrDetectionThreshold, nV ), true );
+        m_pT3kHandle->sendCommand( strV.sprintf( "%s%s%d", sCam2_1.toUtf8().data(), cstrDetectionThreshold, nV ), true );
+    }
+}
+
+void QTouchSettingWidget::on_BtnSensitivityInc_clicked()
+{
+    if( !m_pT3kHandle ) return;
+
+    QString strV( ui->EditSensitivity->text() );
+    int nV = (float)strtod( strV.toUtf8().data(), NULL );
+    nV += 5;
+
+    if( nV < NV_DEF_CAM_TRIGGER_THRESHOLD_RANGE_START || nV > NV_DEF_CAM_TRIGGER_THRESHOLD_RANGE_END )
+        nV = NV_DEF_CAM_TRIGGER_THRESHOLD_RANGE_END;
+
+    m_pT3kHandle->sendCommand( strV.sprintf( "%s%s%d", sCam1.toUtf8().data(), cstrDetectionThreshold, nV ), true );
+    m_pT3kHandle->sendCommand( strV.sprintf( "%s%s%d", sCam2.toUtf8().data(), cstrDetectionThreshold, nV ), true );
+
+    if( QT3kUserData::GetInstance()->isSubCameraExist() )
+    {
+        m_pT3kHandle->sendCommand( strV.sprintf( "%s%s%d", sCam1_1.toUtf8().data(), cstrDetectionThreshold, nV ), true );
+        m_pT3kHandle->sendCommand( strV.sprintf( "%s%s%d", sCam2_1.toUtf8().data(), cstrDetectionThreshold, nV ), true );
+    }
 }
 
 void QTouchSettingWidget::OnTimer()
