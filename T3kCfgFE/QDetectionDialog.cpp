@@ -748,8 +748,6 @@ void QDetectionDialog::enterAutoRangeSetting()
     ui->chkAutoDetectionLine->setEnabled(false);
     ui->chkInvertDetection->setEnabled(false);
     ui->chkSimpleDetection->setEnabled(false);
-    ui->btnMain->setEnabled(false);
-    ui->btnSub->setEnabled(false);
 
     m_lCam1Left = 0xFFFF;
     m_lCam1Right = 0x0000;
@@ -782,8 +780,6 @@ void QDetectionDialog::leaveAutoRangeSetting()
     ui->chkAutoDetectionLine->setEnabled(true);
     ui->chkInvertDetection->setEnabled(true);
     ui->chkSimpleDetection->setEnabled(true);
-    ui->btnMain->setEnabled(true);
-    ui->btnSub->setEnabled(true);
 
     QLangRes& res = QLangManager::getResource();
     ui->btnAutoRangeSetting->setText( res.getResString(RES_TAG, "BTN_CAPTION_AUTO_RANGE_SETTING") );
