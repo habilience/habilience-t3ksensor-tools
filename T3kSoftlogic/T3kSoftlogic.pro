@@ -55,6 +55,7 @@ linux-g++ {
     contains(QMAKE_TARGET.arch, x86_64):{
         message( "g++ building for 64bit" );
         CONFIG(debug, debug|release) {
+            QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
             OBJECTS_DIR = $$PWD/.objs_x64/debug/
             MOC_DIR = $$PWD/.objs_x64/debug/
             DESTDIR = $$PWD/debug_x64
@@ -72,6 +73,7 @@ linux-g++ {
     !contains(QMAKE_TARGET.arch, x86_64):{
         message( "g++ building for 32bit" );
         CONFIG(debug, debug|release) {
+            QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
             OBJECTS_DIR = $$PWD/.objs/debug/
             MOC_DIR = $$PWD/.objs/debug/
             DESTDIR = $$PWD/debug
@@ -93,6 +95,7 @@ linux-g++ {
 linux-g++-32 {
     message( "building for 32bit" );
     CONFIG(debug, debug|release) {
+        QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
         OBJECTS_DIR = $$PWD/.objs/debug/
         MOC_DIR = $$PWD/.objs/debug/
         DESTDIR = $$PWD/debug
@@ -113,6 +116,7 @@ linux-g++-32 {
 linux-g++-64 {
     message( "building for 64bit" );
     CONFIG(debug, debug|release) {
+        QMAKE_RPATHDIR += $$PWD/../external/T3kHIDLibrary/linux/64bit
         OBJECTS_DIR = $$PWD/.objs_x64/debug/
         MOC_DIR = $$PWD/.objs_x64/debug/
         DESTDIR = $$PWD/debug_x64

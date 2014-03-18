@@ -107,16 +107,16 @@ const PosXY s_PosXY[3][ADJUSTMENT_STEP] = {
 #define MAIN_TAG "MAIN"
 #define RES_TAG "BENT ADJUSTMENT"
 
-QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog *parent) :
-    QFullScreenDialogT(parent),
-    m_pMainDlg(parent),
+QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog* pParentWidget, QWidget *parent) :
+    QWidget(parent),
+    m_pMainDlg(pParentWidget),
     ui(new Ui::QBentAdjustmentDialog),
     m_EventRedirect(this)
 {
     ui->setupUi(this);
     QT3kDevice* pDevice = QT3kDevice::instance();
 
-    Qt::WindowFlags flags = Qt::Tool;
+    Qt::WindowFlags flags = Qt::Widget;
 
     if (!pDevice->isVirtualDevice())
     {
@@ -863,26 +863,6 @@ void QBentAdjustmentDialog::enableAllControls(bool bEnable)
 void QBentAdjustmentDialog::on_btnClose_clicked()
 {
     close();
-}
-
-void QBentAdjustmentDialog::showEvent(QShowEvent *)
-{
-    QDesktopWidget DeskWidget;
-    int nPrimary = DeskWidget.primaryScreen();
-    const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
-
-    setGeometry( rcPrimaryMon );
-
-#ifdef Q_OS_WIN
-    SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
-    SetForegroundWindow( (HWND)winId() );
-#else
-    raise();
-    activateWindow();
-#endif
-#ifdef Q_OS_MAC
-    cursor().setPos( rcPrimaryMon.center() );
-#endif
 }
 
 void QBentAdjustmentDialog::timerEvent(QTimerEvent *evt)

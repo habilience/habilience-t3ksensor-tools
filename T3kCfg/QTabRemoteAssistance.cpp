@@ -15,14 +15,15 @@
 #include "QOrderTouchWidget.h"
 #include "QT3kLoadEnvironmentObject.h"
 
-#ifdef Q_OS_WIN
-#include <winsock2.h>
-#elif defined(Q_OS_MAC)
-#include <unistd.h>
-#else
-#include <netdb.h>
-#include <sys/socket.h>
-#endif
+//#ifdef Q_OS_WIN
+//#include <winsock2.h>
+//#elif defined(Q_OS_MAC)
+//#include <unistd.h>
+//#else
+//#include <netdb.h>
+//#include <sys/socket.h>
+//#endif
+#include <QHostInfo>
 
 #define SVC_TABLETINPUT         "TabletInputService"
 
@@ -500,14 +501,6 @@ void QTabRemoteAssistance::ProcessRemoteRawDataPacket(RRawDataPkt *packet)
                 break;
             case ReqConnectionInfo:
                 {
-                    // send user name (hostname:inputname, user or controller)
-                    char szHostName[128] = "";
-
-                    if( ::gethostname( szHostName, sizeof(szHostName) ) != 0 )
-                       sprintf( szHostName, "unknown" );
-
-                    //qDebug( "Host Info : %s", szHostName );
-
                     RAdditionalPkt info;
                     info.Header.nType = Client | ResConnectionInfo;
                     info.Header.nPktSize = sizeof(RAdditionalPkt);
@@ -515,7 +508,8 @@ void QTabRemoteAssistance::ProcessRemoteRawDataPacket(RRawDataPkt *packet)
                     info.uoData.RClientConnectInfo.nModel = QT3kUserData::GetInstance()->GetModel();
                     QString strUserName = ui->EditUserName->text().isEmpty() ? "unknown" : ui->EditUserName->text();
                     strUserName += ':';
-                    strUserName += szHostName;
+                    strUserName += QHostInfo::localHostName()
+;
                     QByteArray baUserName( strUserName.toUtf8() );
                     int nMaxByteLen = baUserName.size() > MAX_NAME ? MAX_NAME : baUserName.size();
                     ::memcpy( info.uoData.RClientConnectInfo.szUserName, baUserName.data(), nMaxByteLen );

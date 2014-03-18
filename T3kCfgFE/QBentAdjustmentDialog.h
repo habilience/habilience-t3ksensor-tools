@@ -90,7 +90,7 @@ protected:
 
 class Dialog;
 class QBorderStyleEdit;
-class QBentAdjustmentDialog : public QFullScreenDialogT
+class QBentAdjustmentDialog : public QWidget
         , public QT3kDeviceEventHandler::IListener
         , public QLangManager::ILangChangeNotify
         , public QEventRedirection::IEventListener
@@ -149,7 +149,6 @@ protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void closeEvent(QCloseEvent *);
     virtual void timerEvent(QTimerEvent *);
-    virtual void showEvent(QShowEvent *);
 
     // override QLangManager::ILangChangeNotify
     virtual void onChangeLanguage();
@@ -210,7 +209,7 @@ protected:
 
     void setViewMode( bool bViewMode ); // instant_mode 'O'
 public:
-    explicit QBentAdjustmentDialog(Dialog *parent = 0);
+    explicit QBentAdjustmentDialog(Dialog* pPanretWidget, QWidget *parent = 0);
     ~QBentAdjustmentDialog();
 
     bool canClose();
