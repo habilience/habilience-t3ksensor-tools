@@ -49,6 +49,8 @@ protected:
     QRect           m_rcScrollThumb;
     bool            m_bControlScrollBar;
 
+    bool            m_bShowCrack;
+
     virtual void paintEvent(QPaintEvent *);
     virtual void mouseMoveEvent(QMouseEvent *evt);
     virtual void mousePressEvent(QMouseEvent *evt);
@@ -91,6 +93,7 @@ public:
 signals:
     
 public slots:
+    void onShowCrack(bool bShow);
     
 };
 

@@ -1596,7 +1596,7 @@ void TabCalibrationWidget::on_BtnHSK_clicked()
 
 
                 if (!ShellExecute((HWND)winId(), L"runas", szPath, isAssociateFileExt() ? L"/e /exe:remove_file_ext" : L"/e /exe:assoc_file_ext", 0, SW_HIDE))
-                if (!ShellExecuteEx(&sei))
+                //if (!ShellExecuteEx(&sei))
                 {
                     DWORD dwError = GetLastError();
                     if (dwError == ERROR_CANCELLED)

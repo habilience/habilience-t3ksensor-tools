@@ -80,6 +80,8 @@ QDetectionGraphForm::QDetectionGraphForm(QWidget *parent) :
     ui->txtEdtRightRange->setAlignment(Qt::AlignRight);
     ui->txtEdtThreshold->setAlignment(Qt::AlignRight);
 
+    connect( this, &QDetectionGraphForm::showCrack, ui->widgetDetectionGraph, &QDetectionGraphWidget::onShowCrack );
+
     resetEditColors();
 
     onChangeLanguage();

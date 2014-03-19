@@ -108,6 +108,9 @@ public:
 
     bool canClose();
     void onClose();
+
+signals:
+    void showCrack(bool bShow);
     
 private slots:
     virtual void reject();

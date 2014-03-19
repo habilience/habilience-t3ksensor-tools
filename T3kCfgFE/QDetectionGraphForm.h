@@ -73,6 +73,9 @@ protected:
 public:
     explicit QDetectionGraphForm(QWidget *parent = 0);
     ~QDetectionGraphForm();
+
+signals:
+    void showCrack(bool bShow);
     
 private slots:
     void onEditModified(QBorderStyleEdit* pEdit, int nValue, double dValue);

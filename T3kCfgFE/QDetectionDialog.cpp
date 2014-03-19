@@ -71,6 +71,8 @@ QDetectionDialog::QDetectionDialog(Dialog *parent) :
     ui->cmdAsyncMngr->setT3kDevice(QT3kDevice::instance());
 
     connect( ui->cmdAsyncMngr, SIGNAL(asyncFinished(bool,int)), SLOT(onCmdAsyncMngrFinished(bool,int)));
+    connect( this, &QDetectionDialog::showCrack, ui->widgetDetection1, &QDetectionGraphForm::showCrack );
+    connect( this, &QDetectionDialog::showCrack, ui->widgetDetection2, &QDetectionGraphForm::showCrack );
 
     setViewMode( true );
 
@@ -1256,6 +1258,10 @@ bool QDetectionDialog::onKeyPress(QKeyEvent *evt)
             return true;
         }
     }
+    else if( (evt->modifiers() & Qt::ControlModifier) && (evt->modifiers() & Qt::AltModifier) )
+    {
+        emit showCrack( true );
+    }
     return false;
 }
 
@@ -1271,6 +1277,10 @@ bool QDetectionDialog::onKeyRelease(QKeyEvent *evt)
             pWidget->clearFocus();
             return true;
         }
+    }
+    else if( (evt->modifiers() & Qt::ControlModifier) || (evt->modifiers() & Qt::AltModifier) )
+    {
+        emit showCrack( false );
     }
     return false;
 }

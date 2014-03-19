@@ -36,6 +36,8 @@ QDetectionGraphWidget::QDetectionGraphWidget(QWidget *parent) :
     m_bShowScrollBar = false;
     m_TimerAutoHideScrollBar = 0;
 
+    m_bShowCrack = false;
+
     memset( &m_CrackInfo, 0, sizeof(CrackInfo) );
     m_CrackInfo.nSharpWidth = QInitDataIni::instance()->getDTCGraphSharpWidth();
     m_CrackInfo.fCrackThresholdError = QInitDataIni::instance()->getDTCGraphCrackThresholdError();
@@ -341,8 +343,7 @@ void QDetectionGraphWidget::drawIRD( QPainter& p, QRect rcBody )
     p.setPen( QColor(100, 100, 100) );
     p.drawPath( pointPath );
 
-    if ( m_CrackInfo.bDisplay &&
-         ( (QApplication::keyboardModifiers() & (Qt::AltModifier|Qt::ControlModifier)) == (Qt::AltModifier|Qt::ControlModifier) ) )
+    if ( m_CrackInfo.bDisplay && m_bShowCrack )
     {
         p.setPen( QColor(200, 0, 0) );
         p.setBrush(Qt::NoBrush);
@@ -499,7 +500,7 @@ void QDetectionGraphWidget::drawGrid( QPainter& p, QRect rcBody )
         fGridY = fScaleY * i + rcBody.top();
         p.drawLine( rcBody.left(), fGridY, rcBody.right(), fGridY );
     }
-    if (m_CrackInfo.bDisplay && (QApplication::keyboardModifiers() & (Qt::AltModifier|Qt::ControlModifier)) == (Qt::AltModifier|Qt::ControlModifier) )
+    if (m_CrackInfo.bDisplay && m_bShowCrack )
     {
         QPen penRThErr( QBrush(QColor(255, 0, 0)), 3.f );
         float fV = rcBody.bottom() - (m_CrackInfo.fCrackThresholdError * rcBody.height());
@@ -845,4 +846,9 @@ void QDetectionGraphWidget::zoomTo( int nScreenX, float fZoom )
     }
 
     update();
+}
+
+void QDetectionGraphWidget::onShowCrack(bool bShow)
+{
+    m_bShowCrack = bShow;
 }
