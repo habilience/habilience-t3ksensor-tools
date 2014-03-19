@@ -508,8 +508,7 @@ void QTabRemoteAssistance::ProcessRemoteRawDataPacket(RRawDataPkt *packet)
                     info.uoData.RClientConnectInfo.nModel = QT3kUserData::GetInstance()->GetModel();
                     QString strUserName = ui->EditUserName->text().isEmpty() ? "unknown" : ui->EditUserName->text();
                     strUserName += ':';
-                    strUserName += QHostInfo::localHostName()
-;
+                    strUserName += QHostInfo::localHostName();
                     QByteArray baUserName( strUserName.toUtf8() );
                     int nMaxByteLen = baUserName.size() > MAX_NAME ? MAX_NAME : baUserName.size();
                     ::memcpy( info.uoData.RClientConnectInfo.szUserName, baUserName.data(), nMaxByteLen );

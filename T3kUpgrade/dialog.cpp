@@ -548,10 +548,7 @@ void Dialog::timerEvent(QTimerEvent *evt)
                 return;
             }
 
-            if( QFileInfo(strFileName).suffix() == "bin" )
-                loadFirmwarePartFile( strFileName );
-            else
-                loadFirmwareFile( strFileName );
+            loadFirmwareFile( strFileName );
             updateFirmwareInformation();
         }
     }
@@ -1544,16 +1541,26 @@ void Dialog::dropEvent(QDropEvent *evt)
                 m_FirmwareInfo.clear();
                 updateFirmwareInformation();
 
-                if( (ulong)evt->keyboardModifiers() == (ulong)(Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier) )
+                if( strSuffix == "fwb" )
                 {
-                    m_strDropFileName = str;
-                    if( m_TimerCheckAdmin )
+                    if( (ulong)evt->keyboardModifiers() == (ulong)(Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier) )
                     {
-                        killTimer( m_TimerCheckAdmin );
-                        m_TimerCheckAdmin = 0;
-                    }
+                        m_strDropFileName = str;
+                        if( m_TimerCheckAdmin )
+                        {
+                            killTimer( m_TimerCheckAdmin );
+                            m_TimerCheckAdmin = 0;
+                        }
 
-                    m_TimerCheckAdmin = startTimer( 500 );
+                        m_TimerCheckAdmin = startTimer( 500 );
+                        return;
+                    }
+                }
+                else if( strSuffix == "bin" )
+                {
+                    m_bAdministrator = true;
+                    loadFirmwarePartFile( str );
+                    updateFirmwareInformation();
                     return;
                 }
                 strFileName = str;
