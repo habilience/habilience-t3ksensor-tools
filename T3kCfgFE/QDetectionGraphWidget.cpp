@@ -26,7 +26,7 @@ QDetectionGraphWidget::QDetectionGraphWidget(QWidget *parent) :
     m_fZoomRatioX = 1.0f;
     m_nScrollRange = 0;
 
-    m_bUpdateIRDF = false;
+    m_nUpdateIRDF = 0;
     m_bUpdateGraph = false;
 
     m_nNumberOfDTC = 0;
@@ -691,15 +691,16 @@ void QDetectionGraphWidget::setGraphData( int nIRD, unsigned char* pIRD, unsigne
 
         if (m_pIRDF && m_nNumberOfDTC <= 0)
         {
-            if (m_bUpdateIRDF)
+            if ( m_nUpdateIRDF < 0 )
             {
+                m_nUpdateIRDF = 0;
 goto_InitIRDF:
                 for (int i=0 ; i<m_nIRD ; i++)
                 {
                     m_pIRDF[i] = (float)m_pIRD[i];
                 }
             }
-            else
+            else if ( m_nUpdateIRDF > 10 )
             {
                 int nDCnt = 0;
                 for (int i=0 ; i<m_nIRD ; i++)
@@ -713,7 +714,11 @@ goto_InitIRDF:
                 if (nDCnt > m_nIRD / 8)
                     goto goto_InitIRDF;
             }
+            else
+                m_nUpdateIRDF++;
         }
+        else
+            m_nUpdateIRDF = 0;
     }
     if (pITD)
         memcpy( m_pITD, pITD, sizeof(unsigned char) * m_nIRD );
@@ -729,12 +734,12 @@ void QDetectionGraphWidget::setDetectionRange( int nLeft, int nRight )
     if (m_nRangeLeft != nLeft)
     {
         m_nRangeLeft = nLeft;
-        m_bUpdateIRDF = true;
+        m_nUpdateIRDF = -1;
     }
     if (m_nRangeRight != nRight)
     {
         m_nRangeRight = nRight;
-        m_bUpdateIRDF = true;
+        m_nUpdateIRDF = -1;
     }
 }
 

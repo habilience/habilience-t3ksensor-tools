@@ -24,7 +24,7 @@ protected:
     unsigned char*  m_pITD;
     unsigned char*  m_pIRD;
     float*          m_pIRDF;
-    bool            m_bUpdateIRDF;
+    int             m_nUpdateIRDF;
     int             m_nIRD;
 
     RangeI*         m_pDTC;
