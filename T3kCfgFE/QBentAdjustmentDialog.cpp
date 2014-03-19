@@ -1543,6 +1543,15 @@ void QBentAdjustmentDialog::drawWaitTime( QPainter& p, QRect rcWait )
     p.drawText( rectWait, flags, str );
 }
 
+void QBentAdjustmentDialog::showEvent(QShowEvent *)
+{
+    QDesktopWidget DeskWidget;
+    int nPrimary = DeskWidget.primaryScreen();
+    const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
+
+    move( rcPrimaryMon.left(), rcPrimaryMon.top() );
+}
+
 void QBentAdjustmentDialog::closeEvent(QCloseEvent *evt)
 {
     if (!canClose())
