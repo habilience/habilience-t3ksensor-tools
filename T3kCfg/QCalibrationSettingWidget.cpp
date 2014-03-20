@@ -185,6 +185,8 @@ void QCalibrationSettingWidget::hideEvent(QHideEvent *evt)
     if( m_pAdvancedWidget && m_pAdvancedWidget->isVisible() )
         m_pAdvancedWidget->close();
 
+    ui->BtnCalibration->setEnabled( true );
+
     m_RequestSensorData.Stop();
 
     QWidget::hideEvent(evt);

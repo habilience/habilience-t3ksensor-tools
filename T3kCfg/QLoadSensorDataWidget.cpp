@@ -261,7 +261,7 @@ void QLoadSensorDataWidget::timerEvent(QTimerEvent *evt)
 
 void QLoadSensorDataWidget::showEvent(QShowEvent *)
 {
-    MoveWidgetToCenter();
+    //MoveWidgetToCenter();
 
     Start();
 }
