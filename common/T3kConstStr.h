@@ -83,6 +83,9 @@ static const char cstrGetNV[] = "get_nv=";
 static const char cstrInstantMode[] = "instant_mode="; // hid_flags, expiration_msec_time
 static const char cstrEnvironment[] = "environment";
 //static const char cstrStateReport[] = "state_report";
+// system command
+static const char cstrSysCmd[] = "s00=";
+
 static const char cstrCalibrationMode[] = "calibration_mode=";
 static const char cstrBuzzerPlay[] = "buzzer_play=";
 static const char cstrKeyboard[] = "keyboard=";

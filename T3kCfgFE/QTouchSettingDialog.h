@@ -22,6 +22,9 @@ class QTouchSettingDialog : public QFullScreenDialogT
 private:
     bool    m_bIsModified;
 
+    uint     m_nUsbConfigMode;
+    bool    m_bChangedUsbMode;
+
 protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void showEvent(QShowEvent *);

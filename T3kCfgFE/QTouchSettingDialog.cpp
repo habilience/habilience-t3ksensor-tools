@@ -65,6 +65,9 @@ QTouchSettingDialog::QTouchSettingDialog(Dialog *parent) :
 
     m_bIsModified = false;
 
+    m_nUsbConfigMode = 0;
+    m_bChangedUsbMode = false;
+
     ui->horzSliderTap->setRange( NV_DEF_TIME_A_RANGE_START/100, NV_DEF_TIME_A_RANGE_END/100 );
     ui->horzSliderTap->setTickInterval(1);
     ui->horzSliderTap->setValue( NV_DEF_TIME_A/100 );
@@ -453,6 +456,22 @@ void QTouchSettingDialog::closeEvent(QCloseEvent *evt)
     else
     {
         onClose();
+    }
+
+    if( m_bChangedUsbMode )
+    {
+        if (ui->cmdAsyncMngr->isStarted())
+        {
+            ui->cmdAsyncMngr->stop();
+            ui->cmdAsyncMngr->resetCommands();
+        }
+
+        ui->cmdAsyncMngr->insertCommand( QString("%1systemreset").arg(cstrSysCmd) );
+
+        QEventLoop loop;
+        loop.connect( ui->cmdAsyncMngr, SIGNAL(asyncFinished(bool,int)), SLOT(quit()));
+        ui->cmdAsyncMngr->start( 6000 );
+        loop.exec();
     }
 }
 
@@ -956,6 +975,8 @@ void QTouchSettingDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /
             ui->widgetAreaSetting->enableControlsWithoutSingleClick(true);
             break;
         }
+
+        m_nUsbConfigMode = nUsbCfgMode;
     }
 }
 
@@ -1216,6 +1237,8 @@ void QTouchSettingDialog::on_btnFull_clicked()
 {
     LOG_B( "USB Config Mode: Full" );
     unsigned int nUsbCfgMode = 0x07;
+    if( m_nUsbConfigMode != nUsbCfgMode )
+        m_bChangedUsbMode = true;
     char szCmd[50];
     snprintf( szCmd, 50, "%s0x%02x", cstrUsbConfigMode, nUsbCfgMode );
     QT3kDevice::instance()->sendCommand( szCmd, true );
@@ -1228,6 +1251,8 @@ void QTouchSettingDialog::on_btnDigitizerOnly_clicked()
 {
     LOG_B( "USB Config Mode: Digitizer only" );
     unsigned int nUsbCfgMode = 0x04;
+    if( m_nUsbConfigMode != nUsbCfgMode )
+        m_bChangedUsbMode = true;
     char szCmd[50];
     snprintf( szCmd, 50, "%s0x%02x", cstrUsbConfigMode, nUsbCfgMode );
     QT3kDevice::instance()->sendCommand( szCmd, true );
