@@ -369,7 +369,7 @@ void QNMouseProfileWidget::onModifiedProfile()
     if( !bChanged )
     {
         m_cbPredefinedProfile.insertItem( 0, QLangManager::instance()->getResource().
-                                          getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ) );
+                                          getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ), strProfile );
         m_cbPredefinedProfile.setCurrentIndex( 0 );
     }
 }
