@@ -5,10 +5,8 @@
 #include "QBentAdjustment.h"
 #include "QLangManager.h"
 
-#include "../common/ui/QFullScreenDialogT.h"
 
-
-class QAdvancedCalibrationWidget : public QFullScreenDialogT, public QLangManager::ILangChangeNotify
+class QAdvancedCalibrationWidget : public QWidget, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 

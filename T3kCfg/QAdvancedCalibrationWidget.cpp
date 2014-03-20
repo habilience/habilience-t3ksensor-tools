@@ -12,11 +12,11 @@
 
 
 QAdvancedCalibrationWidget::QAdvancedCalibrationWidget(bool bDetection, QWidget *parent) :
-    QFullScreenDialogT(parent), m_DetectionRange(this), m_BentAdjustment(this, this)
+    QWidget(parent), m_DetectionRange(this), m_BentAdjustment(this, this)
 {
     setFont( qApp->font() );
 
-    Qt::WindowFlags flags = Qt::Tool;
+    Qt::WindowFlags flags = Qt::Widget;
 
 #if defined(Q_OS_WIN)
     flags |= Qt::MSWindowsFixedSizeDialogHint;
@@ -51,16 +51,27 @@ void QAdvancedCalibrationWidget::showEvent(QShowEvent *)
     int nPrimary = DeskWidget.primaryScreen();
     const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
 
+#ifndef Q_OS_MAC
+    move( rcPrimaryMon.left(), rcPrimaryMon.top() );
+#else
     setGeometry( rcPrimaryMon );
 
-#ifdef Q_OS_WIN
-    SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
-    SetForegroundWindow( (HWND)winId() );
-#else
+    int nShiftY = rcPrimaryMon.height();
+    for( int i=0; i<DeskWidget.screenCount(); i++ )
+    {
+        if( nPrimary == i ) continue;
+        if( nShiftY < DeskWidget.screenGeometry(i).height() )
+            nShiftY = DeskWidget.screenGeometry(i).height();
+    }
+    nShiftY -= rcPrimaryMon.height();
+    if( nShiftY < 0 )
+        nShiftY = 0;
+
+    move( rcPrimaryMon.x(), nShiftY );
+
     raise();
     activateWindow();
-#endif
-#ifdef Q_OS_MAC
+
     cursor().setPos( rcPrimaryMon.center() );
 #endif
 
@@ -98,7 +109,7 @@ void QAdvancedCalibrationWidget::keyPressEvent(QKeyEvent *evt)
         close();
     }
 
-    QFullScreenDialogT::keyPressEvent(evt);
+    QWidget::keyPressEvent(evt);
 }
 
 void QAdvancedCalibrationWidget::paintEvent(QPaintEvent *)
