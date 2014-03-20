@@ -45,6 +45,7 @@ QAssistanceWidget::QAssistanceWidget(QT3kDevice*& pHandle, QWidget *parent) :
 
     m_pTabStatus = new QTabSensorStatus( m_pT3kHandle, this );
     m_pTabStatus->setFont( font() );
+    connect( m_pTabStatus, &QTabSensorStatus::showLoadSensorDataWidget, this, &QAssistanceWidget::onShowLoadSensorStatusWidget, Qt::QueuedConnection );
     m_pTabRemote = NULL;
     m_pTabChat = NULL;
 
@@ -281,4 +282,10 @@ void QAssistanceWidget::onBlinkChat(QString)
         ui->TabCamWidget->blinkTab( 2 );
         activateWindow();
     }
+}
+
+void QAssistanceWidget::onShowLoadSensorStatusWidget()
+{
+    emit showLoadStatusWidget();
+    close();
 }

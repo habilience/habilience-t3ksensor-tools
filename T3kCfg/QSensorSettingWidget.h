@@ -84,6 +84,7 @@ private slots:
     void on_BtnSoundCalibration_clicked();
     void on_BtnSoundUSB_clicked();
     void on_BtnSoundSingle_clicked();
+    void onShowLoadStatusWidget();
 };
 
 #endif // QSENSORSETTINGWIDGET_H

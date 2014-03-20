@@ -1,9 +1,7 @@
 #include "QTabSensorStatus.h"
 #include "ui_QTabSensorStatus.h"
 
-//#include "QSaveLogWidget.h"
 #include "QT3kUserData.h"
-#include "QLoadSensorDataWidget.h"
 
 #include <QCloseEvent>
 
@@ -49,9 +47,5 @@ void QTabSensorStatus::keyPressEvent(QKeyEvent *evt)
 
 void QTabSensorStatus::on_BtnInfoSave_clicked()
 {
-    QLoadSensorDataWidget Widget( m_pT3kHandle, QT3kUserData::GetInstance()->getTopParent() );
-    Widget.exec();
-
-    //QSaveLogWidget widget( m_pT3kHandle );
-    //widget.exec();
+    emit showLoadSensorDataWidget();
 }

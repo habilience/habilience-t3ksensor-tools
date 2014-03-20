@@ -8,6 +8,7 @@
 #include "Common/nv.h"
 
 #include "QAssistanceWidget.h"
+#include "QLoadSensorDataWidget.h"
 #include "QDetectionGraphView.h"
 #include "T3kCfgWnd.h"
 
@@ -546,6 +547,7 @@ void QSensorSettingWidget::on_BtnDiagnostics_clicked()
     m_pAssistanceWidget = new QAssistanceWidget( m_pT3kHandle, parentWidget()->parentWidget()->parentWidget() );
     m_pAssistanceWidget->setFont( font() );
     m_pAssistanceWidget->setAttribute( Qt::WA_DeleteOnClose );
+    connect( m_pAssistanceWidget, &QAssistanceWidget::showLoadStatusWidget, this, &QSensorSettingWidget::onShowLoadStatusWidget, Qt::QueuedConnection );
     m_pAssistanceWidget->exec();
     m_pAssistanceWidget = NULL;;
 }
@@ -618,4 +620,10 @@ void QSensorSettingWidget::on_BtnChkUSBAttach_clicked()
 void QSensorSettingWidget::on_BtnChkPenPairing_clicked()
 {
     OnBnClickedCheckBuzzer( ui->BtnChkPenPairing, 6 );
+}
+
+void QSensorSettingWidget::onShowLoadStatusWidget()
+{
+    QLoadSensorDataWidget dlg( m_pT3kHandle, parentWidget()->parentWidget()->parentWidget() );
+    dlg.exec();
 }

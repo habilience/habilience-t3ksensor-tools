@@ -28,6 +28,9 @@ private:
 
     QT3kDevice*&            m_pT3kHandle;
 
+signals:
+    void showLoadSensorDataWidget();
+
 private slots:
     void on_BtnInfoSave_clicked();
 };

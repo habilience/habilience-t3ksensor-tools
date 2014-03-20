@@ -49,11 +49,15 @@ private:
     int                         m_nCurrentTab;
     bool                        m_bForcedClose;
 
+signals:
+    void showLoadStatusWidget();
+
 private slots:
     void on_TabCamWidget_currentChanged(int index);
     void onStartRemoteMode();
     void onEndRemoteMode();
     void onBlinkChat(QString);
+    void onShowLoadSensorStatusWidget();
 };
 
 #endif // QASSISTANCEWIDGET_H
