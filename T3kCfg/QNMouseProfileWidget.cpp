@@ -23,6 +23,7 @@ QNMouseProfileWidget::QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *par
 
     m_nInputMode = -1;
     m_nChkUsbCfgMode = -1;
+    m_bDefault = false;
 
     ui->TitleMouseMapping->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_MOUSE_MAP.png" );
 
@@ -109,6 +110,8 @@ void QNMouseProfileWidget::refresh()
 void QNMouseProfileWidget::requestSensorData( bool bDefault )
 {
     m_RequestCmdManager.Stop();
+
+    m_bDefault = bDefault;
 
     char cQ = bDefault ? '*' : '?';
 
@@ -219,6 +222,12 @@ void QNMouseProfileWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart 
             }
 
             ui->TabMouseSettingTable->selectTab( nProfile-1 );
+            if( m_bDefault )
+            {
+                loadPredefProfiles( nProfile-1 );
+                onModifiedProfile();
+                m_bDefault = false;
+            }
         }
     }
 
@@ -355,21 +364,25 @@ void QNMouseProfileWidget::onCBPredefinedProfileActivated(int index)
 void QNMouseProfileWidget::onModifiedProfile()
 {
     QString strProfile = m_MouseProfileTableWidget.mergeMouseProfile();
+    QString strUserDefText = QLangManager::instance()->getResource().getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") );
 
-    bool bChanged = false;
+    bool bExist = false;
     for( int i=0; i<m_cbPredefinedProfile.count(); i++ )
     {
         if( strProfile.compare( m_cbPredefinedProfile.itemData(i).toString() ) == 0 )
         {
             m_cbPredefinedProfile.setCurrentIndex( i );
-            bChanged = true;
+            bExist = true;
+            if( m_cbPredefinedProfile.itemText(i).compare(strUserDefText) != 0 &&
+                    m_cbPredefinedProfile.itemText(0).compare(strUserDefText) == 0 )
+                m_cbPredefinedProfile.removeItem(0);
             break;
         }
     }
-    if( !bChanged )
+    if( !bExist )
     {
-        m_cbPredefinedProfile.insertItem( 0, QLangManager::instance()->getResource().
-                                          getResString( QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED") ), strProfile );
+        if( m_cbPredefinedProfile.itemText(0).compare(strUserDefText) != 0 )
+            m_cbPredefinedProfile.insertItem( 0, strUserDefText, strProfile );
         m_cbPredefinedProfile.setCurrentIndex( 0 );
     }
 }
@@ -435,8 +448,6 @@ void QNMouseProfileWidget::loadPredefProfiles(int nTabIndex)
     {
         for( int i=0; i<pSection->getDataCount(); i++ )
         {
-            qDebug() << pSection->getEntry(i);
-
             if( !pSection->getEntry(i).isEmpty() )
                 m_cbPredefinedProfile.addItem( pSection->getEntry(i), pSection->getData(i) );
         }

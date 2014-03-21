@@ -63,6 +63,7 @@ protected:
     int                         m_nChkUsbCfgMode;
 
     QComboBox                   m_cbPredefinedProfile;
+    bool                        m_bDefault;
 
 private:
     Ui::QNMouseProfileWidget *ui;

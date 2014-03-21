@@ -457,7 +457,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>200</y>
+     <y>190</y>
      <width>360</width>
      <height>20</height>
     </rect>
@@ -539,7 +539,7 @@
    <property name="geometry">
     <rect>
      <x>19</x>
-     <y>235</y>
+     <y>220</y>
      <width>364</width>
      <height>80</height>
     </rect>
@@ -750,7 +750,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>55</y>
+     <y>50</y>
      <width>361</width>
      <height>132</height>
     </rect>
@@ -1167,9 +1167,9 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>350</y>
+     <y>340</y>
      <width>361</width>
-     <height>31</height>
+     <height>32</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="SensitivityLayout">
@@ -1335,7 +1335,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>320</y>
+     <y>310</y>
      <width>360</width>
      <height>20</height>
     </rect>

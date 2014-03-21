@@ -64,7 +64,6 @@ QGeneralSettingWidget::QGeneralSettingWidget(QT3kDevice*& pHandle, QWidget *pare
 //    RBtnPortraitF->setVisible( false );
 
     onChangeLanguage();
-    GBInputMode->setTitle( "                                        " );
 
     QRect rcL( CBLLanguage->x(), CBLLanguage->y(), CBLLanguage->width()-1, CBLLanguage->height() );
     rcL.setTopLeft( mapFromParent( rcL.topLeft() ) );
@@ -152,6 +151,14 @@ void QGeneralSettingWidget::onChangeLanguage()
     RBtnLandscapeF->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_MAC_ORIENTATION_3") ) );
     RBtnPortraitF->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_DISPLAY_MAC_ORIENTATION_4") ) );
 #endif
+
+    QFontMetrics ft( ChkInputModeAutoSelect->font() );
+    int nBlankW = ft.width( " " );
+    int nLen = (ft.width( ChkInputModeAutoSelect->text() ) + 50) / nBlankW;
+    QString str;
+    for( int i=0; i<nLen; i++ )
+        str += " ";
+    GBInputMode->setTitle( str );
 }
 
 void QGeneralSettingWidget::SetDefault()
