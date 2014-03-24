@@ -1,7 +1,7 @@
 #ifndef QTOUCHSETTINGDIALOG_H
 #define QTOUCHSETTINGDIALOG_H
 
-#include "../common/ui/QFullScreenDialogT.h"
+#include <QDialog>
 #include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "t3kcomdef.h"
@@ -13,7 +13,7 @@ class QTouchSettingDialog;
 
 class Dialog;
 class QBorderStyleEdit;
-class QTouchSettingDialog : public QFullScreenDialogT
+class QTouchSettingDialog : public QDialog
         , public QT3kDeviceEventHandler::IListener
         , public QLangManager::ILangChangeNotify
         , public QEventRedirection::IEventListener

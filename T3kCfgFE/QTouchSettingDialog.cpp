@@ -32,7 +32,7 @@
 #define NV_DEF_ZOOM_SENSITIVITY_RANGE_END			(0xff)
 
 QTouchSettingDialog::QTouchSettingDialog(Dialog *parent) :
-    QFullScreenDialogT(parent), m_pMainDlg(parent),
+    QDialog(parent), m_pMainDlg(parent),
     ui(new Ui::QTouchSettingDialog),
     m_EventRedirect(this)
 {

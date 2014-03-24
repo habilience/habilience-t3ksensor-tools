@@ -1548,30 +1548,12 @@ void QBentAdjustmentDialog::showEvent(QShowEvent *)
     QDesktopWidget DeskWidget;
     int nPrimary = DeskWidget.primaryScreen();
     const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
-    
-#ifndef Q_OS_MAC
-    move( rcPrimaryMon.left(), rcPrimaryMon.top() );
-#else
-    setGeometry( rcPrimaryMon );
-    
-    int nShiftY = rcPrimaryMon.height();
-    for( int i=0; i<DeskWidget.screenCount(); i++ )
-    {
-        if( nPrimary == i ) continue;
-        if( nShiftY < DeskWidget.screenGeometry(i).height() )
-            nShiftY = DeskWidget.screenGeometry(i).height();
-    }
-    nShiftY -= rcPrimaryMon.height();
-    if( nShiftY < 0 )
-        nShiftY = 0;
-    
-    move( rcPrimaryMon.x(), nShiftY );
-    
-    raise();
-    activateWindow();
 
+#ifdef Q_OS_MAC
     cursor().setPos( rcPrimaryMon.center() );
 #endif
+
+    move( rcPrimaryMon.left(), rcPrimaryMon.top() );
 }
 
 void QBentAdjustmentDialog::closeEvent(QCloseEvent *evt)

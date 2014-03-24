@@ -26,7 +26,7 @@
 #define PREVIEW_COUNT_DOWN      (10*2)      // 10 secs by 500m timer
 
 QSideviewDialog::QSideviewDialog(Dialog *parent) :
-    QFullScreenDialogT(parent),
+    QDialog(parent),
     m_pMainDlg(parent),
     ui(new Ui::QSideviewDialog),
     m_EventRedirect(this)

@@ -21,7 +21,7 @@
 #define MAC_SCALE 27827.0f // STD_SCALE-MAC_MARGIN*2
 
 QCalibrationWidget::QCalibrationWidget(QT3kDevice*& pHandle, QWidget *parent) :
-    QFullScreenDialogT(parent), m_pT3kHandle(pHandle)
+    QDialog(parent), m_pT3kHandle(pHandle)
 {
     m_fScreenMargin = 0.f;
     m_bDigitizerMode = false;
@@ -78,7 +78,6 @@ void QCalibrationWidget::TPDP_OnMSG(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Pa
             if( !m_nTimerUpdate )
                 m_nTimerUpdate = startTimer( 500 );
             update();
-
         }
         if( strTxt.contains("CAL_AXIS_OK") )
         {
@@ -165,7 +164,7 @@ bool QCalibrationWidget::ShowWindow( bool bShow, int nUsbConfigMode, float fScre
     else
     {
         m_pT3kHandle->setReportMessage( false );
-        QFullScreenDialogT::hide();
+        QDialog::hide();
         QApplication::restoreOverrideCursor();
     }
 
@@ -277,7 +276,7 @@ void QCalibrationWidget::mouseMoveEvent(QMouseEvent *evt)
     m_ptCur = evt->pos();
     update();
 
-    QFullScreenDialogT::mouseMoveEvent(evt);
+    QDialog::mouseMoveEvent(evt);
 }
 
 void QCalibrationWidget::keyPressEvent(QKeyEvent *evt)
@@ -286,7 +285,7 @@ void QCalibrationWidget::keyPressEvent(QKeyEvent *evt)
     {
         if( evt->key() == Qt::Key_Escape )
         {
-            QFullScreenDialogT::hide();
+            QDialog::hide();
             EscapeCalibrationMode();
             QApplication::restoreOverrideCursor();
             return;
@@ -294,29 +293,29 @@ void QCalibrationWidget::keyPressEvent(QKeyEvent *evt)
 
         if( evt->key() == Qt::Key_Control || evt->key() == Qt::Key_Meta || evt->key() == Qt::Key_Alt )
         {
-            QFullScreenDialogT::hide();
+            QDialog::hide();
             EscapeCalibrationMode();
             QApplication::restoreOverrideCursor();
             return;
         }
     }
-    QFullScreenDialogT::keyPressEvent(evt);
+    QDialog::keyPressEvent(evt);
 }
 
 void QCalibrationWidget::showEvent(QShowEvent *evt)
 {
     setFocus();
 
-    QFullScreenDialogT::showEvent(evt);
+    QDialog::showEvent(evt);
 }
 
 void QCalibrationWidget::focusOutEvent(QFocusEvent *evt)
 {
-    QFullScreenDialogT::hide();
+    QDialog::hide();
     EscapeCalibrationMode();
     QApplication::restoreOverrideCursor();
 
-    QFullScreenDialogT::focusOutEvent(evt);
+    QDialog::focusOutEvent(evt);
 }
 
 void QCalibrationWidget::timerEvent(QTimerEvent *evt)
@@ -327,5 +326,5 @@ void QCalibrationWidget::timerEvent(QTimerEvent *evt)
         update();
     }
 
-    QFullScreenDialogT::timerEvent(evt);
+    QDialog::timerEvent(evt);
 }

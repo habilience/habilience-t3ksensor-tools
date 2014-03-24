@@ -201,7 +201,6 @@ SOURCES += main.cpp\
     ../common/QLangManager.cpp \
     ../common/QZLangRes.cpp \
     ../common/ui/QLicenseWidget.cpp \
-    ../common/ui/QFullScreenDialogT.cpp \
     ../common/fe/QCalcCamValue.cpp \
     ../common/fe/QPointClipper.cpp \
     QGestureMappingTable.cpp \
@@ -261,7 +260,6 @@ HEADERS  += dialog.h \
     ../common/QZLangRes.h \
     ../common/T3kSMDef.h \
     ../common/ui/QLicenseWidget.h \
-    ../common/ui/QFullScreenDialogT.h \
     ../common/fe/QCalcCamValue.h \
     ../common/fe/QPointClipper.h \
     QGestureMappingTable.h \

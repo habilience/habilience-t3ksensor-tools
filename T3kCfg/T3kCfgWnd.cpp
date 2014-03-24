@@ -519,7 +519,21 @@ bool T3kCfgWnd::CreateTrayIcon()
     {
         CreateAction();
         m_pTrayMenu = new QMenu( this );
-        if( QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a" )
+
+        bool bSimpleMouseProfile = false;
+        QString strVer = QT3kUserData::GetInstance()->getFirmwareVersionStr();
+        int nExtraVer = strVer.mid( strVer.indexOf( '.' )+2, 1 ).toInt(0, 16);
+        if( (nExtraVer >= 0x0A && nExtraVer <= 0x0F) )
+        {
+            if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE2 )
+                bSimpleMouseProfile = true;
+        }
+        else
+        {
+            if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE1 )
+                bSimpleMouseProfile = true;
+        }
+        if( bSimpleMouseProfile )
         {
             m_pTrayMenu->addActions( m_listProfilesQAction );
             m_pTrayMenu->addSeparator();
@@ -639,7 +653,20 @@ void T3kCfgWnd::ShowTrayMenu()
 void T3kCfgWnd::CreateAction()
 {
     QProfileLabel ProfileLabels;
-    bool bCheck = QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a";
+
+    bool bCheck = false;
+    QString strVer = QT3kUserData::GetInstance()->getFirmwareVersionStr();
+    int nExtraVer = strVer.mid( strVer.indexOf( '.' )+2, 1 ).toInt(0, 16);
+    if( (nExtraVer >= 0x0A && nExtraVer <= 0x0F) )
+    {
+        if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE2 )
+            bCheck = true;
+    }
+    else
+    {
+        if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE1 )
+            bCheck = true;
+    }
     int nCnt = bCheck ? 5 : 2;
     for( int i=0; i<nCnt; i++ )
     {

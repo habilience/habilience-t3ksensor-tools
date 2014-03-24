@@ -1678,7 +1678,7 @@ bool Dialog::checkFWVersion(QString& strMsg)
     {
         if( nSensorMiner == nBinMiner )
         {
-            if( (nSensorExtraVer >= 0x0A && nSensorExtraVer <= 0x0F) ||
+            if( (nSensorExtraVer >= 0x0A && nSensorExtraVer <= 0x0F) &&
                     (nBinExtraVer >= 0x0A && nBinExtraVer <= 0x0F) )
             {
                 if( nSensorExtraVer <= nBinExtraVer )

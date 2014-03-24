@@ -198,7 +198,6 @@ SOURCES += main.cpp\
     ../common/ui/QEditAction2WDWnd.cpp \
     ../common/ui/QEditAction4WDWnd.cpp \
     ../common/ui/QEditActionEDWnd.cpp \
-    ../common/ui/QFullScreenDialogT.cpp \
     ../common/fe/QCalcCamValue.cpp \
     ../common/fe/QPointClipper.cpp \
     QMouseSettingWidget.cpp \
@@ -295,7 +294,6 @@ HEADERS  += \
     ../common/ui/QEditAction2WDWnd.h \
     ../common/ui/QEditAction4WDWnd.h \
     ../common/ui/QEditActionEDWnd.h \
-    ../common/ui/QFullScreenDialogT.h \
     ../common/fe/QCalcCamValue.h \
     ../common/fe/QPointClipper.h \
     ../common/T3kCommonColor.h \

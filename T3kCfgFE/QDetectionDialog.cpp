@@ -24,7 +24,7 @@
 #define RES_TAG     "DETECTION"
 
 QDetectionDialog::QDetectionDialog(Dialog *parent) :
-    QFullScreenDialogT(parent), m_pMainDlg(parent),
+    QDialog(parent), m_pMainDlg(parent),
     ui(new Ui::QDetectionDialog),
     m_EventRedirect(this)
 {

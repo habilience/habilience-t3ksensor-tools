@@ -1,7 +1,7 @@
 #ifndef QDETECTIONDIALOG_H
 #define QDETECTIONDIALOG_H
 
-#include "../common/ui/QFullScreenDialogT.h"
+#include <QDialog>
 #include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "t3kcomdef.h"
@@ -13,7 +13,7 @@ class QDetectionDialog;
 
 class Dialog;
 class QBorderStyleEdit;
-class QDetectionDialog : public QFullScreenDialogT
+class QDetectionDialog : public QDialog
         , public QT3kDeviceEventHandler::IListener
         , public QLangManager::ILangChangeNotify
         , public QEventRedirection::IEventListener

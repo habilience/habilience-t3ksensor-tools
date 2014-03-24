@@ -2,6 +2,7 @@
 
 #include <QApplication>
 
+#include "stdInclude.h"
 #include "QT3kUserData.h"
 
 
@@ -26,18 +27,42 @@ QMouseSettingWidget::~QMouseSettingWidget()
 
 void QMouseSettingWidget::SetDefault()
 {
-    if( QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a" )
-        m_pOldMouseProfile->SetDefault();
+    QString strVer = QT3kUserData::GetInstance()->getFirmwareVersionStr();
+    int nExtraVer = strVer.mid( strVer.indexOf( '.' )+2, 1 ).toInt(0, 16);
+    if( (nExtraVer >= 0x0A && nExtraVer <= 0x0F) )
+    {
+        if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE2 )
+            m_pOldMouseProfile->SetDefault();
+        else
+            m_pNewMouseProfile->setDefault();
+    }
     else
-        m_pNewMouseProfile->setDefault();
+    {
+        if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE1 )
+            m_pOldMouseProfile->SetDefault();
+        else
+            m_pNewMouseProfile->setDefault();
+    }
 }
 
 void QMouseSettingWidget::Refresh()
 {
-    if( QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a" )
-        m_pOldMouseProfile->Refresh();
+    QString strVer = QT3kUserData::GetInstance()->getFirmwareVersionStr();
+    int nExtraVer = strVer.mid( strVer.indexOf( '.' )+2, 1 ).toInt(0, 16);
+    if( (nExtraVer >= 0x0A && nExtraVer <= 0x0F) )
+    {
+        if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE2 )
+            m_pOldMouseProfile->Refresh();
+        else
+            m_pNewMouseProfile->refresh();
+    }
     else
-        m_pNewMouseProfile->refresh();
+    {
+        if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE1 )
+            m_pOldMouseProfile->Refresh();
+        else
+            m_pNewMouseProfile->refresh();
+    }
 }
 
 void QMouseSettingWidget::ReplaceLabelName(QCheckableButton *pBtn)
@@ -47,15 +72,33 @@ void QMouseSettingWidget::ReplaceLabelName(QCheckableButton *pBtn)
 
 void QMouseSettingWidget::showEvent(QShowEvent *evt)
 {
-    if( QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a" )
+    QString strVer = QT3kUserData::GetInstance()->getFirmwareVersionStr();
+    int nExtraVer = strVer.mid( strVer.indexOf( '.' )+2, 1 ).toInt(0, 16);
+    if( (nExtraVer >= 0x0A && nExtraVer <= 0x0F) )
     {
-        m_pOldMouseProfile->show();
-        m_pNewMouseProfile->hide();
+        if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE2 )
+        {
+            m_pOldMouseProfile->show();
+            m_pNewMouseProfile->hide();
+        }
+        else
+        {
+            m_pOldMouseProfile->hide();
+            m_pNewMouseProfile->show();
+        }
     }
     else
     {
-        m_pOldMouseProfile->hide();
-        m_pNewMouseProfile->show();
+        if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE1 )
+        {
+            m_pOldMouseProfile->show();
+            m_pNewMouseProfile->hide();
+        }
+        else
+        {
+            m_pOldMouseProfile->hide();
+            m_pNewMouseProfile->show();
+        }
     }
 
     setFocusPolicy( Qt::StrongFocus );

@@ -1,7 +1,7 @@
 #ifndef QBENTADJUSTMENTDIALOG_H
 #define QBENTADJUSTMENTDIALOG_H
 
-#include "../common/ui/QFullScreenDialogT.h"
+#include <QDialog>
 #include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
 #include "QEventRedirection.h"

@@ -450,7 +450,20 @@ void QGeneralSettingWidget::on_RBMouse_clicked()
 
     m_pT3kHandle->sendCommand( QString("%10x00").arg(cstrInputMode), true );
 
-    if( (QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a") && chkTrayIcon->isChecked() )
+    bool bSimpleMouseProfile = false;
+    QString strVer = QT3kUserData::GetInstance()->getFirmwareVersionStr();
+    int nExtraVer = strVer.mid( strVer.indexOf( '.' )+2, 1 ).toInt(0, 16);
+    if( (nExtraVer >= 0x0A && nExtraVer <= 0x0F) )
+    {
+        if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE2 )
+            bSimpleMouseProfile = true;
+    }
+    else
+    {
+        if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE1 )
+            bSimpleMouseProfile = true;
+    }
+    if( bSimpleMouseProfile && chkTrayIcon->isChecked() )
     {
         m_pT3kHandle->sendCommand( QString("%1?").arg(cstrMouseProfile), true );
     }
@@ -518,7 +531,20 @@ void QGeneralSettingWidget::on_RBMultiTouchWin7_clicked()
     QString str;
     m_pT3kHandle->sendCommand( str.sprintf( "%s0x%02x", cstrInputMode, 0x02 ), true );
 
-    if( (QT3kUserData::GetInstance()->getFirmwareVersionStr() <= "2.8a") && chkTrayIcon->isChecked() )
+    bool bSimpleMouseProfile = false;
+    QString strVer = QT3kUserData::GetInstance()->getFirmwareVersionStr();
+    int nExtraVer = strVer.mid( strVer.indexOf( '.' )+2, 1 ).toInt(0, 16);
+    if( (nExtraVer >= 0x0A && nExtraVer <= 0x0F) )
+    {
+        if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE2 )
+            bSimpleMouseProfile = true;
+    }
+    else
+    {
+        if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE1 )
+            bSimpleMouseProfile = true;
+    }
+    if( bSimpleMouseProfile && chkTrayIcon->isChecked() )
     {
         m_pT3kHandle->sendCommand( QString("%1?").arg(cstrMouseProfile), true );
     }

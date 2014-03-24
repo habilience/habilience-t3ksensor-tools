@@ -27,7 +27,9 @@ enum FlatMenuStatus { MenuHome = 0, MenuMouseSetting, MenuCalibrationSetting, Me
 #define MM_MIN_SUPPORT_MACMARGIN_N_INVERTWHEEL_VERSION  2.3
 #define MM_MIN_SUPPORT_STT_VERSION                      2.52//2.6
 #define MM_MIN_SUPPORT_DISPLAYORICMD_VERSION            2.52
-#define MM_MIN_SUPPORT_USER_BENT_STR                    "2.8a"
+#define MM_MIN_EXIST_EXTRA_VERSION                      2.8
+#define MM_MIN_SIMPLE_MOUSE_PROFILE1                    "2.84"
+#define MM_MIN_SIMPLE_MOUSE_PROFILE2                    "2.8b"
 
 #define QProfileName1                                   "General"
 #define QProfileName2                                   "Windows 7"
