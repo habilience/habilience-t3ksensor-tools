@@ -51,11 +51,13 @@ void QAdvancedCalibrationWidget::showEvent(QShowEvent *)
     int nPrimary = DeskWidget.primaryScreen();
     const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
 
+    move( rcPrimaryMon.left(), rcPrimaryMon.top() );
+
 #ifdef Q_OS_MAC
     cursor().setPos( rcPrimaryMon.center() );
-#endif
 
-    move( rcPrimaryMon.left(), rcPrimaryMon.top() );
+    setGeometry( rcPrimaryMon );
+#endif
 
     enterSettings();
 
