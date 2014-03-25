@@ -886,10 +886,10 @@ void T3kCfgWnd::keyPressEvent(QKeyEvent *evt)
 
 void T3kCfgWnd::FlatMenuToLeft()
 {
+    if( ui->SWMenu->currentIndex() == 0 ) return;
+
     ShowMainMenu( false );
     m_pMenuWidget->hide();
-
-    if( ui->SWMenu->currentIndex() == 0 ) return;
 
     if( ui->SWMenu->currentIndex() == 5 )
         ui->SWMenu->slideInIdx( m_bSoftkey ? 4 : 3 );
@@ -899,6 +899,8 @@ void T3kCfgWnd::FlatMenuToLeft()
 
 void T3kCfgWnd::FlatMenuToRight()
 {
+    if( ui->SWMenu->currentIndex() == ui->SWMenu->count()-1 ) return;
+
     ShowMainMenu( false );
     m_pMenuWidget->hide();
 
