@@ -54,7 +54,6 @@ QSoftKeyDesignToolWidget::QSoftKeyDesignToolWidget(QVector<CSoftkey*>* pSelected
     connect( m_pLayoutToolWidget, &QLayoutToolWidget::distribSelectKeys, this, &QSoftKeyDesignToolWidget::distribSelectKeys );
     connect( m_pLayoutToolWidget, &QLayoutToolWidget::reorderKeys, this, &QSoftKeyDesignToolWidget::reorderKeys );
 
-    connect( m_pLayoutToolWidget, &QLayoutToolWidget::enableDesignTool, this, &QSoftKeyDesignToolWidget::onEnableDesignTool );
     connect( m_pLayoutToolWidget, &QLayoutToolWidget::updateLayoutButton, this, &QSoftKeyDesignToolWidget::onUpdateLayoutButton );
     connect( this, &QSoftKeyDesignToolWidget::closeWidget, m_pLayoutToolWidget, &QLayoutToolWidget::close );
 
@@ -604,9 +603,4 @@ void QSoftKeyDesignToolWidget::onSelectedKeys(bool bGroup, int nSelectedCount)
 void QSoftKeyDesignToolWidget::onUpdateLayoutButton(bool bVisible)
 {
     updateLayoutButton(bVisible);
-}
-
-void QSoftKeyDesignToolWidget::onEnableDesignTool(bool bEnable)
-{
-    setVisible( bEnable );
 }

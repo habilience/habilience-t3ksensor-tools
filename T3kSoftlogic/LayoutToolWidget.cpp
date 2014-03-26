@@ -192,15 +192,7 @@ void QLayoutToolWidget::on_BtnAraange_clicked()
     connect( &widget, &QArrangeHelperWidget::generateKeys, this, &QLayoutToolWidget::generateKeys );
     widget.setUnit( m_eUnit, m_dD2PScaleWidth, m_dD2PScaleHeight );
 
-    emit enableDesignTool( false );
-
-    setVisible( false );
-
     widget.exec();
-
-    setVisible( true );
-
-    emit enableDesignTool( true );
 }
 
 void QLayoutToolWidget::on_BtnReorder_clicked()

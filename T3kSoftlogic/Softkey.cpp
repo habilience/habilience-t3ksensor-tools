@@ -531,7 +531,7 @@ QString CSoftkeyArray::save( QString & strExtra, QIniFormat * ini, bool bCheck/*
 		if ( ini != NULL && pSoftkey != NULL )
 		{
             strKeyEntry = QString("key%1").arg(ni);
-            strKeyData = QString("%1,%1").arg(pSoftkey->m_ptPosition.x(), 8, 'f', -1, '0').arg(pSoftkey->m_ptPosition.y(), 8, 'f', -1, '0');
+            strKeyData = QString("%1,%2").arg(pSoftkey->m_ptPosition.x(), 8, 'f', -1, '0').arg(pSoftkey->m_ptPosition.y(), 8, 'f', -1, '0');
             ini->setValue( strKeyEntry, strKeyData );
 		}
 	}

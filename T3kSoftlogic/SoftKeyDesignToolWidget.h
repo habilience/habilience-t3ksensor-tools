@@ -106,7 +106,6 @@ public slots:
 
     // LayoutToolWidget
     void onUpdateLayoutButton(bool bVisible);
-    void onEnableDesignTool(bool bEnable);
 };
 
 #endif // QSOFTKEYDESIGNTOOLWIDGET_H

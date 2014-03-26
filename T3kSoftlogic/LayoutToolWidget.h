@@ -51,7 +51,6 @@ signals:
     void reorderKeys();
 
     void updateLayoutButton(bool bVisible);
-    void enableDesignTool(bool bEnable);
 
 private slots:
     void on_BtnLeft_clicked();
