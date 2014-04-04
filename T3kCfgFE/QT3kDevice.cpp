@@ -23,6 +23,7 @@ QT3kDevice::QT3kDevice(QObject *parent) :
     connect( this, SIGNAL(disconnected()), this, SLOT(onDisconnected()), Qt::QueuedConnection );
     connect( this, SIGNAL(downloadingFirmware(bool)), this, SLOT(onDownloadingFirmware(bool)), Qt::QueuedConnection );
     connect( this, SIGNAL(packetReceived()), this, SLOT(onPacketReceived()), Qt::QueuedConnection );
+    connect( this, SIGNAL(packetReceivedSync()), this, SLOT(onPacketReceived()), Qt::BlockingQueuedConnection );
 }
 
 QT3kDevice::~QT3kDevice()
@@ -124,7 +125,7 @@ void QT3kDevice::releasePacket( t3kpacket* packet )
     }
 }
 
-void T3K_CALLBACK QT3kDevice::_OnT3kPacketHandler( T3K_HANDLE /*hDevice*/, t3kpacket* packet, int /*bSync*/, void * pContext )
+void T3K_CALLBACK QT3kDevice::_OnT3kPacketHandler( T3K_HANDLE /*hDevice*/, t3kpacket* packet, int bSync, void * pContext )
 {
     QT3kDevice* pThis = (QT3kDevice*)pContext;
 
@@ -140,7 +141,10 @@ void T3K_CALLBACK QT3kDevice::_OnT3kPacketHandler( T3K_HANDLE /*hDevice*/, t3kpa
         pThis->m_ReceivePacketQueue.push_back( packetNew );
     }
 
-    emit pThis->packetReceived();
+    if( bSync )
+        pThis->packetReceivedSync();
+    else
+        emit pThis->packetReceived();
 }
 
 bool QT3kDevice::open( unsigned short nVID, unsigned short nPID, unsigned short nMI, int nDevIndex )

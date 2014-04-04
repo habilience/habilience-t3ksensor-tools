@@ -128,6 +128,7 @@ signals:
     void disconnected();
     void downloadingFirmware( bool bIsDownload );
     void packetReceived();
+    void packetReceivedSync();
     
 protected slots:
     void onDisconnected();
