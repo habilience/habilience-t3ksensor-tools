@@ -70,6 +70,8 @@ QSideviewDialog::QSideviewDialog(Dialog *parent) :
 
     m_rcUpdateImage = QRect(0,0,0,0);
 
+    m_bSyncMode = false;
+
     LOG_I( "Enter [Sideview]" );
 
     onChangeLanguage();
@@ -894,7 +896,13 @@ bool QSideviewDialog::requestSensorData( RequestCmd cmd, bool bWait )
         sensorRefresh();
         break;
     case cmdWriteToFactoryDefault:
-        sensorWriteToFactoryDefault();
+        m_bSyncMode = true;
+        if( !sensorWriteToFactoryDefault() )
+        {
+            m_bSyncMode = false;
+            return false;
+        }
+        m_bSyncMode = false;
         break;
     default:
         setViewMode( true );
@@ -1006,30 +1014,90 @@ void QSideviewDialog::sensorRefresh()
     ui->cmdAsyncMngr->insertCommand(strSensorCmd);
 }
 
-void QSideviewDialog::sensorWriteToFactoryDefault()
+bool QSideviewDialog::sensorWriteToFactoryDefault()
 {
     QString strSensorCmd;
 
+    m_strSyncCmdValue.clear();
+    strSensorCmd = sCam1 + cstrDetectionLine + "?";
+    int nTry = 3;
+    while( nTry-- > 0 && QT3kDevice::instance()->sendCommand( strSensorCmd, false, 1000 ) == 0 )
+        continue;
+
+    if( nTry < 0 || m_strSyncCmdValue.isEmpty() )
+        return false;
+
+    strSensorCmd = sCam1 + cstrDetectionLine + "**";
+    ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+    strSensorCmd = sCam1 + cstrDetectionLine + m_strSyncCmdValue;
+    ui->cmdAsyncMngr->insertCommand(strSensorCmd);
     strSensorCmd = sCam1 + cstrDetectionLine + "!";
     ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+
     strSensorCmd = sCam1 + cstrAmbientLight + "!";
+    ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+
+    m_strSyncCmdValue.clear();
+    strSensorCmd = sCam2 + cstrDetectionLine + "?";
+    nTry = 3;
+    while( nTry-- > 0 && QT3kDevice::instance()->sendCommand( strSensorCmd, false, 1000 ) == 0 )
+        continue;
+
+    if( nTry < 0 || m_strSyncCmdValue.isEmpty() )
+        return false;
+
+    strSensorCmd = sCam2 + cstrDetectionLine + "**";
+    ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+    strSensorCmd = sCam2 + cstrDetectionLine + m_strSyncCmdValue;
     ui->cmdAsyncMngr->insertCommand(strSensorCmd);
     strSensorCmd = sCam2 + cstrDetectionLine + "!";
     ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+
     strSensorCmd = sCam2 + cstrAmbientLight + "!";
     ui->cmdAsyncMngr->insertCommand(strSensorCmd);
 
     if( g_AppData.bIsSubCameraExist )
     {
+        m_strSyncCmdValue.clear();
+        strSensorCmd = sCam1_1 + cstrDetectionLine + "?";
+        nTry = 3;
+        while( nTry-- > 0 && QT3kDevice::instance()->sendCommand( strSensorCmd, false, 1000 ) == 0 )
+            continue;
+
+        if( nTry < 0 || m_strSyncCmdValue.isEmpty() )
+            return false;
+
+        strSensorCmd = sCam1_1 + cstrDetectionLine + "**";
+        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+        strSensorCmd = sCam1_1 + cstrDetectionLine + m_strSyncCmdValue;
+        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
         strSensorCmd = sCam1_1 + cstrDetectionLine + "!";
         ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+
         strSensorCmd = sCam1_1 + cstrAmbientLight + "!";
+        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+
+        m_strSyncCmdValue.clear();
+        strSensorCmd = sCam2_1 + cstrDetectionLine + "?";
+        nTry = 3;
+        while( nTry-- > 0 && QT3kDevice::instance()->sendCommand( strSensorCmd, false, 1000 ) == 0 )
+            continue;
+
+        if( nTry < 0 || m_strSyncCmdValue.isEmpty() )
+            return false;
+
+        strSensorCmd = sCam2_1 + cstrDetectionLine + "**";
+        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+        strSensorCmd = sCam2_1 + cstrDetectionLine + m_strSyncCmdValue;
         ui->cmdAsyncMngr->insertCommand(strSensorCmd);
         strSensorCmd = sCam2_1 + cstrDetectionLine + "!";
         ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+
         strSensorCmd = sCam2_1 + cstrAmbientLight + "!";
         ui->cmdAsyncMngr->insertCommand(strSensorCmd);
     }
+
+    return true;
 }
 
 void QSideviewDialog::resetDataWithInitData( const QString& strCmd, bool bWithFactoryDefault/*=true*/)
@@ -1228,7 +1296,7 @@ void QSideviewDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part,
         }
     }
 
-    if ( nCameraIndex == m_nCurrentCameraIndex )
+    if ( nCameraIndex == m_nCurrentCameraIndex || m_bSyncMode )
     {
         if ( strstr(cmd, cstrDetectionLine) == cmd )
         {
@@ -1246,6 +1314,7 @@ void QSideviewDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part,
                 if (!ui->txtEdtDetectLine->isEditing())
                     ui->txtEdtDetectLine->setText( QString::number(m_nDetectionLine) );
             }
+            m_strSyncCmdValue = QString::number(m_nDetectionLine);
         }
         else if ( strstr(cmd, cstrAmbientLight) == cmd )
         {

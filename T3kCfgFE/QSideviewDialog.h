@@ -42,6 +42,11 @@ private:
     uchar*  m_pImgTempBuffer;
 
     QRect   m_rcUpdateImage;
+
+    // only 2.8d.1
+    QString m_strSyncCmdValue;
+    bool    m_bSyncMode;
+
 protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void timerEvent(QTimerEvent *evt);
@@ -64,7 +69,7 @@ protected:
     void sensorReset();
     void sensorLoadFactoryDefault();
     void sensorRefresh();
-    void sensorWriteToFactoryDefault();
+    bool sensorWriteToFactoryDefault();
 
     void resetDataWithInitData( const QString& strCmd, bool bWithFactoryDefault=true);
 
