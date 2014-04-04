@@ -45,7 +45,6 @@ inline int getIndexFromPart(ResponsePart Part)
 #define UNUSE_ARG(xxx) xxx=xxx
 #endif
 
-
 class QT3kDeviceEventHandler : public QObject, public QSingleton<QT3kDeviceEventHandler>
 {
     Q_OBJECT
@@ -94,9 +93,11 @@ public:
         virtual void TPDP_OnRSP( T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime,
                                  const char* partid, int id, bool bFinal, const char * cmd )
             { UNUSE_ARG(devInfo); UNUSE_ARG(Part); UNUSE_ARG(ticktime); UNUSE_ARG(partid); UNUSE_ARG(id); UNUSE_ARG(bFinal); UNUSE_ARG(cmd); }
+#ifdef T3KDEVICE_CUSTOM
         virtual void TPDP_OnRSE( T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime,
                                  const char* partid, int id, bool bFinal, const char * cmd )
             { UNUSE_ARG(devInfo); UNUSE_ARG(Part); UNUSE_ARG(ticktime); UNUSE_ARG(partid); UNUSE_ARG(id); UNUSE_ARG(bFinal); UNUSE_ARG(cmd); }
+#endif
         virtual void TPDP_OnSTT( T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime,
                                  const char* partid, const char * status )
             { UNUSE_ARG(devInfo); UNUSE_ARG(Part); UNUSE_ARG(ticktime); UNUSE_ARG(partid); UNUSE_ARG(status); }
@@ -164,8 +165,10 @@ protected:
                          const char* partid, int id, const char * cmd );
     virtual void _onRSP( T3K_DEVICE_INFO devInfo, unsigned short ticktime,
                          const char* partid, int id, bool bFinal, const char * cmd );
+#ifdef T3KDEVICE_CUSTOM
     virtual void _onRSE( T3K_DEVICE_INFO devInfo, unsigned short ticktime,
                          const char* partid, int id, bool bFinal, const char * cmd );
+#endif
     virtual void _onSTT( T3K_DEVICE_INFO devInfo, unsigned short ticktime,
                          const char* partid, const char * status );
     virtual void _onDVC( T3K_DEVICE_INFO devInfo, unsigned short ticktime,

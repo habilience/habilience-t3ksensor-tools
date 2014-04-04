@@ -13,6 +13,8 @@ QLicenseWidget::QLicenseWidget(QString strHtml, QWidget *parent) :
     setWindowModality( Qt::WindowModal );
     setModal( true );
 
+    setFixedSize( width(), height() );
+
     ui->TBLicenceHTML->setAcceptRichText( true );
 
     QFile fLicenseHtml( strHtml );

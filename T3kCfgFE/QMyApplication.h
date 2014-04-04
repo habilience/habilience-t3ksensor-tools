@@ -5,6 +5,7 @@
 
 #include "qsingleapplication/qtsingleapplication.h"
 
+
 class QMyApplication : public QtSingleApplication
 {
     Q_OBJECT

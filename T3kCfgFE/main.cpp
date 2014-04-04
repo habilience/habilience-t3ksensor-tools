@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    QMyApplication a( "Habilience T3000 Factory-Edition Dialog", argc, argv);
+    QMyApplication a( "Habilience T3000 Factory-Edition Dialog", argc, argv );
     g_pApp = &a;
     Dialog w;
 

@@ -115,18 +115,17 @@ void T3K_CALLBACK QT3kDevice::_OnT3kDisconnectHandler( T3K_HANDLE /*hDevice*/, v
     emit pThis->disconnected();
 }
 
+#ifdef T3KDEVICE_CUSTOM
 int  T3K_CALLBACK QT3kDevice::_OnT3kReceiveRawDataHandler( T3K_HANDLE /*hDevice*/, unsigned char* pBuffer, unsigned short nBytes, void * pContext )
 {
-#ifdef T3KDEVICE_CUSTOM
+
     QT3kDevice* pThis = (QT3kDevice*)pContext;
 
     int nRet = pThis->onReceiveRawData( pBuffer, nBytes );
 
     return nRet;
-#else
-    return 0;
-#endif
 }
+#endif
 
 void T3K_CALLBACK QT3kDevice::_OnT3kDownloadingFirmwareHandler( T3K_HANDLE /*hDevice*/, int bDownload, void * pContext )
 {
@@ -346,85 +345,88 @@ void QT3kDevice::onPacketReceived()
     }
 
     T3K_DEVICE_INFO devInfo = ::T3kGetDeviceInfoFromHandle( m_hDevice );
-    Q_ASSERT( QT3kDeviceEventHandler::instance() );
+    QT3kDeviceEventHandler* pEventHandler = QT3kDeviceEventHandler::instance();
+    Q_ASSERT( pEventHandler );
     switch ( packet->type )
     {
     case t3ktype_msg:
-            QT3kDeviceEventHandler::instance()->_onMSG( devInfo, packet->ticktime, packet->partid,
+            pEventHandler->_onMSG( devInfo, packet->ticktime, packet->partid,
                         packet->body.msg.message );
         break;
     case t3ktype_obj:
-            QT3kDeviceEventHandler::instance()->_onOBJ( devInfo, packet->ticktime, packet->partid, 0,
+            pEventHandler->_onOBJ( devInfo, packet->ticktime, packet->partid, 0,
                         packet->body.obj.start_pos,
                         packet->body.obj.end_pos,
                         packet->body.obj.count );
         break;
     case t3ktype_obc:
-            QT3kDeviceEventHandler::instance()->_onOBC( devInfo, packet->ticktime, packet->partid, 0,
+            pEventHandler->_onOBC( devInfo, packet->ticktime, packet->partid, 0,
                         &packet->body.obc.start_pos,
                         &packet->body.obc.end_pos,
                         packet->body.obc.count );
         break;
     case t3ktype_dtc:
-            QT3kDeviceEventHandler::instance()->_onDTC( devInfo, packet->ticktime, packet->partid, 0,
+            pEventHandler->_onDTC( devInfo, packet->ticktime, packet->partid, 0,
                         packet->body.dtc.start_pos,
                         packet->body.dtc.end_pos,
                         packet->body.dtc.count );
         break;
     case t3ktype_ird:
-            QT3kDeviceEventHandler::instance()->_onIRD( devInfo, packet->ticktime, packet->partid,
+            pEventHandler->_onIRD( devInfo, packet->ticktime, packet->partid,
                         packet->body.ixd.total,
                         packet->body.ixd.offset,
                         packet->body.ixd.data,
                         packet->body.ixd.count );
         break;
     case t3ktype_itd:
-            QT3kDeviceEventHandler::instance()->_onITD( devInfo, packet->ticktime, packet->partid,
+            pEventHandler->_onITD( devInfo, packet->ticktime, packet->partid,
                         packet->body.ixd.total,
                         packet->body.ixd.offset,
                         packet->body.ixd.data,
                         packet->body.ixd.count );
         break;
     case t3ktype_prv:
-            QT3kDeviceEventHandler::instance()->_onPRV( devInfo, packet->ticktime, packet->partid,
+            pEventHandler->_onPRV( devInfo, packet->ticktime, packet->partid,
                         packet->body.prv.height,
                         packet->body.prv.offset_y,
                         packet->body.prv.image,
                         packet->body.prv.width );
         break;
     case t3ktype_cmd:
-            QT3kDeviceEventHandler::instance()->_onCMD( devInfo, packet->ticktime, packet->partid,
+            pEventHandler->_onCMD( devInfo, packet->ticktime, packet->partid,
                         packet->body.cmd.id,
                         packet->body.cmd.command );
         break;
-    case t3ktype_rsp:
-            QT3kDeviceEventHandler::instance()->_onRSP( devInfo, packet->ticktime, packet->partid,
+    case t3ktype_rse:
+#ifdef T3KDEVICE_CUSTOM
+            pEventHandler->_onRSE( devInfo, packet->ticktime, packet->partid,
                         packet->body.rsp.id,
                         packet->body.rsp.is_final,
                         packet->body.rsp.command );
         break;
-    case t3ktype_rse:
-            QT3kDeviceEventHandler::instance()->_onRSE( devInfo, packet->ticktime, packet->partid,
+#endif
+    case t3ktype_rsp:
+            pEventHandler->_onRSP( devInfo, packet->ticktime, packet->partid,
                         packet->body.rsp.id,
                         packet->body.rsp.is_final,
                         packet->body.rsp.command );
         break;
     case t3ktype_stt:
-            QT3kDeviceEventHandler::instance()->_onSTT( devInfo, packet->ticktime, packet->partid,
+            pEventHandler->_onSTT( devInfo, packet->ticktime, packet->partid,
                         packet->body.stt.status );
         break;
     case t3ktype_dvc:
-            QT3kDeviceEventHandler::instance()->_onDVC( devInfo, packet->ticktime, packet->partid,
+            pEventHandler->_onDVC( devInfo, packet->ticktime, packet->partid,
                         &packet->body.dvc );
         break;
     case t3ktype_tpt:
-            QT3kDeviceEventHandler::instance()->_onTPT( devInfo, packet->ticktime, packet->partid,
+            pEventHandler->_onTPT( devInfo, packet->ticktime, packet->partid,
                         packet->body.tpt.touch_count,
                         packet->body.tpt.actual_touch,
                         packet->body.tpt.points );
         break;
     case t3ktype_gst:
-            QT3kDeviceEventHandler::instance()->_onGST( devInfo, packet->ticktime, packet->partid,
+            pEventHandler->_onGST( devInfo, packet->ticktime, packet->partid,
                         packet->body.gst.action_group,
                         packet->body.gst.action,
                         packet->body.gst.feasibleness,
@@ -436,7 +438,7 @@ void QT3kDevice::onPacketReceived()
                         packet->body.gst.message );
         break;
     case t3ktype_ver:
-            QT3kDeviceEventHandler::instance()->_onVER( devInfo, packet->ticktime, packet->partid,
+            pEventHandler->_onVER( devInfo, packet->ticktime, packet->partid,
                         &packet->body.ver );
         break;
     }

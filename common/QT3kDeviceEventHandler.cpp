@@ -265,6 +265,7 @@ void QT3kDeviceEventHandler::_onRSP( T3K_DEVICE_INFO devInfo, unsigned short tic
     }
 }
 
+#ifdef T3KDEVICE_CUSTOM
 void QT3kDeviceEventHandler::_onRSE( T3K_DEVICE_INFO devInfo, unsigned short ticktime,
              const char* partid, int id, bool bFinal, const char * cmd )
 {
@@ -275,6 +276,7 @@ void QT3kDeviceEventHandler::_onRSE( T3K_DEVICE_INFO devInfo, unsigned short tic
         m_EventListener.at(i)->TPDP_OnRSE(devInfo, Part, ticktime, partid, id, bFinal, cmd);
     }
 }
+#endif
 
 void QT3kDeviceEventHandler::_onSTT( T3K_DEVICE_INFO devInfo, unsigned short ticktime,
              const char* partid, const char * status )

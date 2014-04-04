@@ -24,13 +24,11 @@
 #define PACKET_DEF_SIZE     (1024)
 #define PACKET_POOL_SIZE    (2000)
 
-class QT3kDeviceEventHandler;
 class QT3kDevice : public QObject, public QSingleton<QT3kDevice>
 {
     Q_OBJECT
-protected:
-    T3K_HANDLE              m_hDevice;
 private:
+    T3K_HANDLE              m_hDevice;
     T3K_EVENT_NOTIFY        m_Notify;
 
 #ifdef Q_OS_WIN
@@ -139,7 +137,9 @@ public:
 protected:
     static void T3K_CALLBACK _OnT3kHandleEventsHandler( T3K_HANDLE hDevice, void * pContext );
     static void T3K_CALLBACK _OnT3kDisconnectHandler( T3K_HANDLE hDevice, void * pContext );
+#ifdef T3KDEVICE_CUSTOM	
     static int  T3K_CALLBACK _OnT3kReceiveRawDataHandler( T3K_HANDLE hDevice, unsigned char* pBuffer, unsigned short nBytes, void * pContext );
+#endif	
     static void T3K_CALLBACK _OnT3kDownloadingFirmwareHandler( T3K_HANDLE hDevice, int bDownload, void * pContext );
     static void T3K_CALLBACK _OnT3kPacketHandler( T3K_HANDLE hDevice, t3kpacket* packet, int bSync, void * pContext );
 
@@ -153,12 +153,14 @@ signals:
     void packetReceived();
     void packetReceivedSync();
 
+#ifdef T3KDEVICE_CUSTOM
     int receiveRawData( void* pContext );
     void receiveRawDataFlag( bool bReceive );
+#endif
     
 protected slots:
-    virtual void onDisconnected();
-    virtual void onDownloadingFirmware( bool bIsDownload );
+    void onDisconnected();
+    void onDownloadingFirmware( bool bIsDownload );
 #ifdef T3KDEVICE_CUSTOM
 public slots:
     virtual int onReceiveRawData(unsigned char* /*pBuffer*/, unsigned short /*nBytes*/);

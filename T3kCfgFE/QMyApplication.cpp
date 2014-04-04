@@ -3,6 +3,7 @@
 #include <QTimerEvent>
 #include <QKeyEvent>
 #include <QFont>
+
 #include "QUtils.h"
 #include "QGUIUtils.h"
 
