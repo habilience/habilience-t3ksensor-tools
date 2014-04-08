@@ -141,6 +141,8 @@ private:
     QVector<BentItem> m_BentItemArray;
     QPointClipper     m_PointClipper;
 
+    int     m_nAutoOffset;
+
 public:
     static QPoint PosToDCC( float x, float y, const QRect rcClient );
     static QPointF PosToTPos( float x, float y, float o = 1.f );
@@ -206,7 +208,7 @@ protected:
     void sensorReset();
     void sensorLoadFactoryDefault();
     void sensorRefresh();
-    void sensorWriteToFactoryDefault();
+    bool sensorWriteToFactoryDefault();
 
     void setViewMode( bool bViewMode ); // instant_mode 'O'
 public:

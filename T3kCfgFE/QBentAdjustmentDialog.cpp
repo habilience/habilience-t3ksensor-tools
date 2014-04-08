@@ -2705,6 +2705,11 @@ void QBentAdjustmentDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
             m_lClickArea = 300;
         }
     }
+    else if ( strstr(szCmd, cstrAutoTuning) == szCmd )
+    {
+        pCur = szCmd + sizeof(cstrAutoTuning) - 1;
+        m_nAutoOffset = atoi(pCur);
+    }
 }
 
 bool QBentAdjustmentDialog::requestSensorData( RequestCmd cmd, bool bWait )
@@ -2728,7 +2733,8 @@ bool QBentAdjustmentDialog::requestSensorData( RequestCmd cmd, bool bWait )
         sensorRefresh();
         break;
     case cmdWriteToFactoryDefault:
-        sensorWriteToFactoryDefault();
+        if( !sensorWriteToFactoryDefault() )
+            return false;
         break;
     default:
         setViewMode( true );
@@ -2821,7 +2827,7 @@ void QBentAdjustmentDialog::sensorRefresh()
     }
 }
 
-void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
+bool QBentAdjustmentDialog::sensorWriteToFactoryDefault()
 {
     QBentCfgParam* param = QBentCfgParam::instance();
     const int nPosXYSel = param->algorithm();
@@ -2989,6 +2995,29 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
         strCmd = QString(cstrSoftlogic) + "*";
         ui->cmdAsyncMngr->insertCommand( strCmd );
     }
+
+    QT3kDevice* pDevice = QT3kDevice::instance();
+
+    m_nAutoOffset = -1;
+    int nTry = 3;
+    while( nTry-- > 0 && pDevice->sendCommand( cstrAutoTuning + QString("?"), false, 1000 ) == 0 )
+        continue;
+
+    if( nTry >= 0 && m_nAutoOffset < 0 )
+        return false;
+
+    if( m_nAutoOffset )
+    {
+        ui->cmdAsyncMngr->insertCommand( "cam1/mode=tuning" );
+        ui->cmdAsyncMngr->insertCommand( "cam2/mode=tuning" );
+        if (g_AppData.bIsSubCameraExist)
+        {
+            ui->cmdAsyncMngr->insertCommand( "cam1/sub/mode=tuning" );
+            ui->cmdAsyncMngr->insertCommand( "cam2/sub/mode=tuning" );
+        }
+    }
+
+    return true;
 }
 
 void QBentAdjustmentDialog::onEditModified(QBorderStyleEdit* /*pEdit*/, int /*nValue*/, double /*dValue*/)
