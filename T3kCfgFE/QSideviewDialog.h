@@ -46,6 +46,7 @@ private:
     // only 2.8d.1
     QString m_strSyncCmdValue;
     bool    m_bSyncMode;
+    bool    m_bAutoOffset;
 
 protected:
     virtual void paintEvent(QPaintEvent *);
