@@ -208,7 +208,7 @@ protected:
     void sensorReset();
     void sensorLoadFactoryDefault();
     void sensorRefresh();
-    bool sensorWriteToFactoryDefault();
+    void sensorWriteToFactoryDefault();
 
     void setViewMode( bool bViewMode ); // instant_mode 'O'
 public:
