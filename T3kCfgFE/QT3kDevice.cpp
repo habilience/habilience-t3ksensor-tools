@@ -98,14 +98,6 @@ void T3K_CALLBACK QT3kDevice::_OnT3kDownloadingFirmwareHandler( T3K_HANDLE /*hDe
 
 t3kpacket* QT3kDevice::getPacket()
 {
-    QMutexLocker Lock(&m_PktPoolLock);
-    if (m_PacketPool.size() > 0)
-    {
-        t3kpacket* packet = m_PacketPool.back();
-        packet->length = PACKET_DEF_SIZE;
-        m_PacketPool.pop_back();
-        return packet;
-    }
     t3kpacket* packet = (t3kpacket*)malloc(PACKET_DEF_SIZE);
     packet->length = PACKET_DEF_SIZE;
     return packet;
@@ -113,16 +105,7 @@ t3kpacket* QT3kDevice::getPacket()
 
 void QT3kDevice::releasePacket( t3kpacket* packet )
 {
-    QMutexLocker Lock(&m_PktPoolLock);
-    if (m_PacketPool.size() >= PACKET_POOL_SIZE)
-    {
-        qDebug( "overflow packet pool" );
-        free( packet );
-    }
-    else
-    {
-        m_PacketPool.push_back(packet);
-    }
+    free( packet );
 }
 
 void T3K_CALLBACK QT3kDevice::_OnT3kPacketHandler( T3K_HANDLE /*hDevice*/, t3kpacket* packet, int bSync, void * pContext )
@@ -240,17 +223,6 @@ void QT3kDevice::close()
             releasePacket(packet);
         }
         m_ReceivePacketQueue.clear();
-    }
-    // free packet pool
-    {
-        t3kpacket* packet = NULL;
-        QMutexLocker Lock(&m_PktPoolLock);
-        for (int i=0 ; i<m_PacketPool.size() ; i++)
-        {
-            packet = m_PacketPool.at(i);
-            free( packet );
-        }
-        m_PacketPool.clear();
     }
 
     qDebug( "QT3kDevice::close()" );

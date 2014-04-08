@@ -44,9 +44,6 @@ private:
     QQueue<t3kpacket*>  m_ReceivePacketQueue;
     QMutex              m_RecvPktQueLock;
 
-    QVector<t3kpacket*> m_PacketPool;
-    QMutex              m_PktPoolLock;
-
 public:
     bool open( unsigned short nVID, unsigned short nPID, unsigned short nMI, int nDevIndex );
     void close();
