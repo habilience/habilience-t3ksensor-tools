@@ -599,23 +599,23 @@ void QDetectionGraphForm::updateSensitivity()
         int nCount = 0;
         for (int i=0 ; i<m_nIRD ; i++)
         {
-            if (m_pITD[i] == 0) continue;
-            if (m_pITD[i] < nMin)
+            if (m_pIRD[i] == 0) continue;
+            if (m_pIRD[i] < nMin)
             {
-                nMin =  m_pITD[i];
+                nMin =  m_pIRD[i];
             }
-            if (m_pITD[i] > nMax)
+            if (m_pIRD[i] > nMax)
             {
-                nMax = m_pITD[i];
+                nMax = m_pIRD[i];
             }
-            fSum += (float)m_pITD[i];
+            fSum += (float)m_pIRD[i];
             nCount++;
         }
         fAve = fSum / nCount;
         for (int i=0 ; i<m_nIRD ; i++)
         {
-            if (m_pITD[i] == 0) continue;
-            fStdDev += (float)(m_pITD[i] - fAve) * (m_pITD[i] - fAve);
+            if (m_pIRD[i] == 0) continue;
+            fStdDev += (float)(m_pIRD[i] - fAve) * (m_pIRD[i] - fAve);
         }
         fStdDev /= nCount;
         fStdDev = sqrt( fStdDev );

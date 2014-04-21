@@ -436,9 +436,9 @@ void QSideviewDialog::drawGraph(QPainter& p, const QRect& rcGraphDst)
     bool bSoso = true;
 
     int nCenterY = (m_pImgSideview->height()/2);
-    int nOffsetY1 = nCenterY * m_pImgSideview->width();
-    int nOffsetY2 = (nCenterY+1) * m_pImgSideview->width();
-    int nOffsetY3 = (nCenterY+2) * m_pImgSideview->width();
+    int nOffsetY1 = (nCenterY-1) * m_pImgSideview->width();
+    int nOffsetY2 = nCenterY * m_pImgSideview->width();
+    int nOffsetY3 = (nCenterY+1) * m_pImgSideview->width();
 
     uchar* pScanLine1 = m_pImgTempBuffer+nOffsetY1;
     uchar* pScanLine2 = m_pImgTempBuffer+nOffsetY2;
@@ -448,7 +448,7 @@ void QSideviewDialog::drawGraph(QPainter& p, const QRect& rcGraphDst)
     {
         pScanLine3 = pScanLine2;
     }
-    if (m_bSimpleDetection )
+    if ( m_bSimpleDetection )
         pScanLine1 = pScanLine2;
 
     static QPoint* lines = NULL;
@@ -459,6 +459,7 @@ void QSideviewDialog::drawGraph(QPainter& p, const QRect& rcGraphDst)
         lines = new QPoint[m_pImgSideview->width()];
         lineCnt = m_pImgSideview->width();
     }
+
     QPoint pt;
     uchar px;
     double scaleX = (double)rcGraphDst.width() / m_pImgSideview->width();
@@ -488,8 +489,6 @@ void QSideviewDialog::drawGraph(QPainter& p, const QRect& rcGraphDst)
     else
         p.setPen(QColor(100,100,100));
     p.drawRect( rcGraphDst );
-
-
 }
 
 void QSideviewDialog::paintEvent(QPaintEvent *)
@@ -539,7 +538,7 @@ void QSideviewDialog::paintEvent(QPaintEvent *)
 
             m_rcUpdateImage = rcImageDst;
             m_rcUpdateImage = m_rcUpdateImage.united( rcGraphDst );
-            m_rcUpdateImage.adjust(-3, -3, 3, 3);
+            m_rcUpdateImage.adjust(-3, -3, 3, 3+70);
         }
     }
 

@@ -42,6 +42,7 @@ private:
     uchar*  m_pImgTempBuffer;
 
     QRect   m_rcUpdateImage;
+    QImage  m_img;
 
     // only 2.8d.1
     QString m_strSyncCmdValue;
