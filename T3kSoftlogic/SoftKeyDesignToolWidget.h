@@ -41,7 +41,7 @@ protected:
     ScreenUnit              m_eUnit;
     QLayoutToolWidget*      m_pLayoutToolWidget;
 
-    QRect                   m_rcOld;
+    QRectF                  m_rcOld;
 
     QVector<CSoftkey*>*     m_pvSelectedKeys;
 
@@ -65,7 +65,7 @@ signals:
     void groupSelectedKeys();
     void ungroupSelectedKeys(bool bPushHistory);
     void invalidateKey(CSoftkey* key);
-    void recalcSelectionKeys(QRect rcOld, QRect rcNew );
+    void recalcSelectionKeys(QRectF rcOld, QRectF rcNew );
     void updateScreen();
     void resetKeys();
 

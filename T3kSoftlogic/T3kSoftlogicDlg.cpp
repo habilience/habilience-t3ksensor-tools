@@ -497,8 +497,8 @@ bool T3kSoftlogicDlg::loadModel( QString lpszPathName )
     nSP = strData.indexOf( ',' );
     if( nSP >= 0 )
     {
-        x = strData.left(nSP).toInt();
-        y = strData.right(strData.length() - nSP - 1).toInt();
+        x = strData.left(nSP).toDouble();
+        y = strData.right(strData.length() - nSP - 1).toDouble();
         T3kCommonData::instance()->getKeys().setPanelDimension( x, y );
     }
 
@@ -506,8 +506,8 @@ bool T3kSoftlogicDlg::loadModel( QString lpszPathName )
     nSP = strData.indexOf( ',' );
     if( nSP >= 0 )
     {
-        x = strData.left(nSP).toInt();
-        y = strData.right(strData.length() - nSP - 1).toInt();
+        x = strData.left(nSP).toDouble();
+        y = strData.right(strData.length() - nSP - 1).toDouble();
         T3kCommonData::instance()->getKeys().setScreenDimension( x, y );
     }
 
@@ -515,8 +515,8 @@ bool T3kSoftlogicDlg::loadModel( QString lpszPathName )
     nSP = strData.indexOf( ',' );
     if( nSP >= 0 )
     {
-        x = strData.left(nSP).toInt();
-        y = strData.right(strData.length() - nSP - 1).toInt();
+        x = strData.left(nSP).toDouble();
+        y = strData.right(strData.length() - nSP - 1).toDouble();
         T3kCommonData::instance()->getKeys().setScreenOffset( x, y );
     }
 

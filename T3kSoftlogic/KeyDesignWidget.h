@@ -161,7 +161,7 @@ protected:
     bool                    m_bCtrlDown;
 
     QRect                   m_rcOldTracker;
-    QRect                   m_rcOld;
+    QRectF                  m_rcOld;
 
     bool                    m_bCapture;
 
@@ -212,7 +212,7 @@ public slots:
     void onGroupSelectKeys();
     void onUngroupSelectKeys( bool bPushHistory );
     void onInvalidateKey( CSoftkey* key );
-    void onRecalcSelectionKeys( QRect rcOld, QRect rcNew );
+    void onRecalcSelectionKeys( QRectF rcOld, QRectF rcNew );
     void onUpdateScreen();
     void onScreenSize( int eScreen );
 

@@ -1004,10 +1004,6 @@ void QKeyDesignWidget::drawKeys( QPainter* painter )
 
     QRect rcClient( 0, 0, width(), height() );
     QRect rcClip( 0, 0, rcClient.width(), rcClient.height() );
-    QRect rcInter;
-
-    QString strCaption;
-
     QRect rcKey;
 
     bool bShowNumber = false;
@@ -1090,8 +1086,7 @@ void QKeyDesignWidget::drawKeys( QPainter* painter )
         }
 
         painter->setBrush( brushKey );
-
-        painter->drawRect( rcKey );
+        painter->drawRect( rcKey.adjusted(1,1,-1,-1) );
 
         painter->setBackgroundMode( Qt::TransparentMode );
 
@@ -1730,6 +1725,8 @@ void QKeyDesignWidget::showEvent(QShowEvent *)
         m_pSoftKeyDesignTool->show();
 
     resizeScreen();
+
+    onUpdateScreen();
 }
 
 void QKeyDesignWidget::closeEvent(QCloseEvent *)
@@ -2378,7 +2375,7 @@ void QKeyDesignWidget::onInvalidateKey( CSoftkey* key )
     update( rcKey );
 }
 
-void QKeyDesignWidget::onRecalcSelectionKeys( QRect rcOld, QRect rcNew )
+void QKeyDesignWidget::onRecalcSelectionKeys( QRectF rcOld, QRectF rcNew )
 {
     if ( rcOld == rcNew )
         return;
@@ -2388,7 +2385,7 @@ void QKeyDesignWidget::onRecalcSelectionKeys( QRect rcOld, QRect rcNew )
     double dX = (double)rcOld.width() / rcNew.width();
     double dY = (double)rcOld.height() / rcNew.height();
 
-    QPoint ptT = rcNew.topLeft();
+    QPointF ptT = rcNew.topLeft();
     ptT -= rcOld.topLeft();
 
     QRect rcMerge;
@@ -2462,6 +2459,8 @@ void QKeyDesignWidget::onUpdateScreen()
     m_rcDevTracker.setRect( 0,0,0,0 );
 
     resizeScreen();
+
+    update();
 }
 
 void QKeyDesignWidget::onScreenSize(int eScreen)

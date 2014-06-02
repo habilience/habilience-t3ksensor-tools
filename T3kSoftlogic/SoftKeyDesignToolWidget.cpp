@@ -176,6 +176,8 @@ void QSoftKeyDesignToolWidget::setScaleFactor(double dScaleWidth, double dScaleH
     m_pLayoutToolWidget->setUnit( m_eUnit, m_dD2PScaleWidth, m_dD2PScaleHeight );
 
     updateUnit();
+
+    emit updateScreen();
 }
 
 static bool s_bEnableRemove = true;
@@ -250,7 +252,7 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
             ui->EditWidth->setText( QString("%1").arg(dW, 0, 'f', 1) );
             ui->EditHeight->setText( QString("%1").arg(dH, 0, 'f', 1) );
 
-            m_rcOld.setRect( dPX+.5, dPY+.5, dW+.5, dH+.5 );
+            m_rcOld.setRect( dPX / m_dD2PScaleWidth, dPY / m_dD2PScaleWidth, dW / m_dD2PScaleWidth, dH / m_dD2PScaleWidth );
         }
         else
         {
@@ -261,8 +263,8 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
             ui->EditWidth->setText( QString::number( rc.width() ) );
             ui->EditHeight->setText( QString::number( rc.height() ) );
 
-            m_rcOld.setRect( ui->EditPosX->text().toDouble()+.5, ui->EditPosY->text().toDouble()+.5,
-                             ui->EditWidth->text().toDouble()+.5, ui->EditHeight->text().toDouble()+.5 );
+            m_rcOld.setRect( ui->EditPosX->text().toDouble(), ui->EditPosY->text().toDouble(),
+                             ui->EditWidth->text().toDouble(), ui->EditHeight->text().toDouble() );
         }
 
         ui->CBVisible->setEnabled( true );
@@ -303,7 +305,7 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
             ui->EditWidth->setText( QString("%1").arg(dW, 0, 'f', 1) );
             ui->EditHeight->setText( QString("%1").arg(dH, 0, 'f', 1) );
 
-            m_rcOld.setRect( dPX+.5, dPY+.5, dW+.5, dH+.5 );
+            m_rcOld.setRect( dPX / m_dD2PScaleWidth, dPY / m_dD2PScaleWidth, dW / m_dD2PScaleWidth, dH / m_dD2PScaleWidth );
         }
         else
         {
@@ -312,8 +314,8 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
             ui->EditWidth->setText( QString::number( rcMerge.width() ) );
             ui->EditHeight->setText( QString::number( rcMerge.height() ) );
 
-            m_rcOld.setRect( ui->EditPosX->text().toDouble()+.5, ui->EditPosY->text().toDouble()+.5,
-                             ui->EditWidth->text().toDouble()+.5, ui->EditHeight->text().toDouble()+.5 );
+            m_rcOld.setRect( ui->EditPosX->text().toDouble(), ui->EditPosY->text().toDouble(),
+                             ui->EditWidth->text().toDouble(), ui->EditHeight->text().toDouble() );
         }
 
         switch ( nVisible )
@@ -350,21 +352,21 @@ void QSoftKeyDesignToolWidget::updateLayoutButton(bool bVisible)
 
 void QSoftKeyDesignToolWidget::EditModified()
 {
-    QRect rcNew;
+    QRectF rcNew;
 
     if( m_eUnit == UnitMM )
     {
-        rcNew.setLeft( (int)(ui->EditPosX->text().toDouble() / m_dD2PScaleWidth + .5) );
-        rcNew.setTop( (int)(ui->EditPosY->text().toDouble() / m_dD2PScaleWidth + .5) );
-        rcNew.setWidth( (int)(ui->EditWidth->text().toDouble() / m_dD2PScaleWidth + .5) );
-        rcNew.setHeight( (int)(ui->EditHeight->text().toDouble() / m_dD2PScaleWidth + .5) );
+        rcNew.setLeft( ui->EditPosX->text().toDouble() / m_dD2PScaleWidth + .5 );
+        rcNew.setTop( ui->EditPosY->text().toDouble() / m_dD2PScaleWidth + .5 );
+        rcNew.setWidth( ui->EditWidth->text().toDouble() / m_dD2PScaleWidth + .5 );
+        rcNew.setHeight( ui->EditHeight->text().toDouble() / m_dD2PScaleWidth + .5 );
     }
     else
     {
-        rcNew.setLeft( (int)(ui->EditPosX->text().toDouble()+.5) );
-        rcNew.setTop( (int)(ui->EditPosY->text().toDouble()+.5) );
-        rcNew.setWidth( (int)(ui->EditWidth->text().toDouble()+.5) );
-        rcNew.setHeight( (int)(ui->EditHeight->text().toDouble()+.5) );
+        rcNew.setLeft( ui->EditPosX->text().toDouble()+.5 );
+        rcNew.setTop( ui->EditPosY->text().toDouble()+.5 );
+        rcNew.setWidth( ui->EditWidth->text().toDouble()+.5 );
+        rcNew.setHeight( ui->EditHeight->text().toDouble()+.5 );
     }
 
     emit recalcSelectionKeys( m_rcOld, rcNew );
