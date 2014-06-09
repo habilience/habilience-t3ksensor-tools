@@ -13,11 +13,11 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 
-
+#if QT_VERSION < QT_VERSION_CHECK(5,3,0)
 typedef struct _TOKEN_ELEVATION {
   DWORD TokenIsElevated;
 } TOKEN_ELEVATION, *PTOKEN_ELEVATION;
-
+#endif
 #endif
 
 #define LBUTTON		(0x01)

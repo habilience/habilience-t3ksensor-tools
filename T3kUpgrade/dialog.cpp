@@ -287,7 +287,7 @@ void Dialog::loadFirmwarePartFile(QString strPath)
     file.close();
 }
 
-FirmwareInfo* Dialog::findFirmware( FIRMWARE_TYPE type, unsigned short nModelNumber )
+FirmwareInfo* Dialog::findFirmware( eFIRMWARE_TYPE type, unsigned short nModelNumber )
 {
     if( type == TYPE_CM && nModelNumber == 0x3400 )
         nModelNumber = 0x3500;

@@ -24,7 +24,7 @@ struct SensorInfo {
     bool            bUpgradeTarget;
 };
 
-enum FIRMWARE_TYPE { TYPE_MM=0, TYPE_CM=1 };
+enum eFIRMWARE_TYPE { TYPE_MM=0, TYPE_CM=1 };
 struct FirmwareInfo {
     char*           pFirmwareBinary;
     unsigned long   dwFirmwareSize;
@@ -32,7 +32,7 @@ struct FirmwareInfo {
     unsigned short  nModelNumber;
     char            szVersion[256];
     char            szModel[256];
-    FIRMWARE_TYPE   type;
+    eFIRMWARE_TYPE   type;
 };
 
 class Dialog : public QDialog
@@ -162,7 +162,7 @@ protected:
     bool verifyFirmware(QString& strMsg);
     bool checkFWVersion(QString& strMsg);
 
-    FirmwareInfo* findFirmware( FIRMWARE_TYPE type, unsigned short nModelNumber );
+    FirmwareInfo* findFirmware( eFIRMWARE_TYPE type, unsigned short nModelNumber );
 
     enum TextMode{ TM_NORMAL, TM_NG, TM_OK };
     void addProgressText(QString& strMessage, TextMode tm);
