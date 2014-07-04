@@ -243,7 +243,12 @@ SOURCES += main.cpp\
     QEditActionKey1Dialog.cpp \
     QUserDefinedKeyCtrl.cpp \
     QKeyEdit.cpp \
-    QRemoteTouchMarkDialog.cpp
+    QRemoteTouchMarkDialog.cpp \
+    QBriefingDialog.cpp \
+    QFirmwareUpgradeDialog.cpp \
+    QFWDPacket.cpp \
+    QPartCheckBox.cpp \
+    QSlidingStackedWidget.cpp
 
 HEADERS  += dialog.h \
     ../common/qsingleapplication/qtsinglecoreapplication.h \
@@ -305,6 +310,11 @@ HEADERS  += dialog.h \
     QKeyEdit.h \
     QRemoteTouchMarkDialog.h \
     conf.h \
+    QBriefingDialog.h \
+    QFirmwareUpgradeDialog.h \
+    QFWDPacket.h \
+    QPartCheckBox.h \
+    QSlidingStackedWidget.h
 
 FORMS    += dialog.ui \
     ../common/ui/QLicenseWidget.ui \
@@ -325,7 +335,9 @@ FORMS    += dialog.ui \
     QEditActionKey4WayDialog.ui \
     QEditActionKey2WayDialog.ui \
     QEditActionKey1Dialog.ui \
-    QRemoteTouchMarkDialog.ui
+    QRemoteTouchMarkDialog.ui \
+    briefing_dialog.ui \
+    QFirmwareUpgradeDialog.ui
 
 RESOURCES += \
     T3kCfgFE.qrc

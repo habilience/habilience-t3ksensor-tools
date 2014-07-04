@@ -9,7 +9,7 @@ QLicenseWidget::QLicenseWidget(QString strHtml, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint );
+    setWindowFlags( Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::MSWindowsFixedSizeDialogHint);
     setWindowModality( Qt::WindowModal );
     setModal( true );
 

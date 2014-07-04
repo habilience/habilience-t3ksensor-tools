@@ -35,6 +35,7 @@
 #include "QBentAdjustmentDialog.h"
 #include "QTouchSettingDialog.h"
 #include "QRemoteTouchMarkDialog.h"
+#include "QFirmwareUpgradeDialog.h"
 
 #include "ui/QLicenseWidget.h"
 
@@ -1216,6 +1217,23 @@ void Dialog::updateVersionInformation()
     strVersionInfoHTML += strTail;
 
     ui->txtEdtDisplayFirmware->setHtml(strVersionInfoHTML);
+    if(m_bInvalidFirmwareVersion)
+    {
+        //버전 다르니까 펌업?MSGBOX
+        int nRet = showMessageBox( this,
+                                   "Do you want to firmware upgrade?",
+                                   "Firmware Upgrade",
+                                   QMessageBox::Question, QMessageBox::Yes|QMessageBox::No, QMessageBox::Cancel);
+        if(nRet == QMessageBox::Yes)
+        {
+            m_pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);
+            m_pDlgFirmwareUpgrade->show();
+        }
+        else if(nRet == QMessageBox::No)
+        {
+            memset( m_SensorAppInfo, 0, sizeof(SensorAppInfo) * IDX_MAX );
+        }
+    }
 }
 
 void Dialog::TPDP_OnRSP( T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/,

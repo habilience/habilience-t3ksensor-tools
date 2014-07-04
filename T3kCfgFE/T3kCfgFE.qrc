@@ -22,5 +22,6 @@
         <file>resources/License.html</file>
         <file>resources/PNG_QUESTION_MARK.png</file>
         <file>resources/51-t3ksensors.rules</file>
+        <file>resources/2.8d.fwb</file>
     </qresource>
 </RCC>
