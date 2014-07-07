@@ -1396,7 +1396,7 @@ void QFirmwareUpgradeDialog::getFirmwareFile()
 {
     setFocus();
     QString	strFileName;
-    QString str( ":/T3kCfgFERes/resources/2.8d.fwb" );
+    QString str( ":/T3kCfgFERes/resources/firmupBinary.fwb" );
     QString strSuffix = QFileInfo( str ).suffix();
 
     if( strSuffix == "fwb" || strSuffix == "bin" )

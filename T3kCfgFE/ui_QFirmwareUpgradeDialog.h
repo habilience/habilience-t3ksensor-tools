@@ -49,15 +49,22 @@ public:
         QFirmwareUpgradeDialog->setSizePolicy(sizePolicy);
         QFirmwareUpgradeDialog->setMinimumSize(QSize(400, 110));
         QFirmwareUpgradeDialog->setMaximumSize(QSize(400, 110));
+        QFirmwareUpgradeDialog->setAutoFillBackground(false);
+        QFirmwareUpgradeDialog->setStyleSheet(QLatin1String("background-color: rgb(100, 100, 100);\n"
+"border-color: rgb(100, 100, 100);\n"
+"selection-background-color: rgba(100, 100, 100, 100);"));
         QFirmwareUpgradeDialog->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
         QFirmwareUpgradeDialog->setSizeGripEnabled(false);
         layoutBody = new QVBoxLayout(QFirmwareUpgradeDialog);
         layoutBody->setSpacing(6);
         layoutBody->setContentsMargins(11, 11, 11, 11);
         layoutBody->setObjectName(QStringLiteral("layoutBody"));
-        layoutBody->setContentsMargins(-1, 0, -1, -1);
+        layoutBody->setSizeConstraint(QLayout::SetNoConstraint);
+        layoutBody->setContentsMargins(0, 0, 0, 0);
         stackedWidget = new QSlidingStackedWidget(QFirmwareUpgradeDialog);
         stackedWidget->setObjectName(QStringLiteral("stackedWidget"));
+        stackedWidget->setMaximumSize(QSize(400, 110));
+        stackedWidget->setStyleSheet(QStringLiteral("background-color: rgb(240, 240, 240);"));
         stackedWidget->setFrameShape(QFrame::NoFrame);
         stackedWidget->setFrameShadow(QFrame::Plain);
         pageProgress = new QWidget();

@@ -1219,11 +1219,11 @@ void Dialog::updateVersionInformation()
     ui->txtEdtDisplayFirmware->setHtml(strVersionInfoHTML);
     if(m_bInvalidFirmwareVersion)
     {
-        //버전 다르니까 펌업?MSGBOX
         int nRet = showMessageBox( this,
                                    "Do you want to firmware upgrade?",
                                    "Firmware Upgrade",
                                    QMessageBox::Question, QMessageBox::Yes|QMessageBox::No, QMessageBox::Cancel);
+
         if(nRet == QMessageBox::Yes)
         {
             m_pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);

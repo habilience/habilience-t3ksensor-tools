@@ -31,6 +31,14 @@
   <property name="windowTitle">
    <string>T3k Firmware Upgrader</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(100, 100, 100);
+border-color: rgb(100, 100, 100);
+selection-background-color: rgba(100, 100, 100, 100);</string>
+  </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
@@ -38,11 +46,32 @@
    <bool>false</bool>
   </property>
   <layout class="QVBoxLayout" name="layoutBody">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetNoConstraint</enum>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
    <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
     <widget class="QSlidingStackedWidget" name="stackedWidget">
+     <property name="maximumSize">
+      <size>
+       <width>400</width>
+       <height>110</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(240, 240, 240);</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
