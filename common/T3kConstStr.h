@@ -77,6 +77,7 @@ static const char cstrCamPosUserTrc[] = "c32=";
 static const char cstrAdminDetectionLine[] = "admin_detection_line=";
 static const char cstrAdminDetectionCenter[] = "admin_detection_center=";
 static const char cstrAdminDetectionBarrel[] = "admin_detection_barrel=";
+static const char cstrAdminCamCalibration2[] = "admin_cam_calibration2=";
 
 // instant or command
 static const char cstrGetNV[] = "get_nv=";
