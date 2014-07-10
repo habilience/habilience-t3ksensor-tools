@@ -181,7 +181,11 @@ void QKeyTracker::draw(QPainter* painter)
 
     if( !m_bMove && !m_bRubberBand )
     {
-        if( m_rect.isEmpty() ) return;
+        if( m_rect.isEmpty() )
+        {
+            painter->restore();
+            return;
+        }
 
         // get normalized rectangle
         QRect rect( m_rect.normalized() );
