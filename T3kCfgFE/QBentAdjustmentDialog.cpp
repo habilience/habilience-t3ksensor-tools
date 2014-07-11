@@ -1552,13 +1552,12 @@ void QBentAdjustmentDialog::showEvent(QShowEvent *evt)
     int nPrimary = DeskWidget.primaryScreen();
     const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
 
-    move( rcPrimaryMon.left(), rcPrimaryMon.top() );
-
 #ifdef Q_OS_MAC
     cursor().setPos( rcPrimaryMon.center() );
-
-    setGeometry( rcPrimaryMon );
 #endif
+    setGeometry( rcPrimaryMon );
+
+    move( rcPrimaryMon.left(), rcPrimaryMon.top() );
 }
 
 void QBentAdjustmentDialog::closeEvent(QCloseEvent *evt)
