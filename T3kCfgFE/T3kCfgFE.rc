@@ -4,8 +4,8 @@ IDI_ICON1	ICON	DISCARDABLE	"./resources/T3kCfgFE.ico"
 #include <windows.h>
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION T3000_FILEVERSION
- PRODUCTVERSION T3000_FILEVERSION
+ FILEVERSION T3K_FILEVERSION
+ PRODUCTVERSION T3K_FILEVERSION
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
@@ -13,12 +13,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Habilience"
             VALUE "FileDescription", "T3k Series Configurator (Factory Edition)"
-            VALUE "FileVersion", T3000_VERSION
+            VALUE "FileVersion", T3K_VERSION
             VALUE "InternalName", "T3kCfgFE.exe"
             VALUE "LegalCopyright", "(c) Habilience.  All rights reserved."
             VALUE "OriginalFilename", "T3kCfgFE.exe"
             VALUE "ProductName", "T3k Configurator FE"
-            VALUE "ProductVersion", T3000_VERSION
+            VALUE "ProductVersion", T3K_VERSION
         END
     END
     BLOCK "VarFileInfo"

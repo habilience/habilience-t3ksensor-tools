@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     QtSingleApplication a("Habilience T3k Downloader Dialog", argc, argv);
     QApplication::setQuitOnLastWindowClosed( true );
 
-    QString strAppVer( T3000_VERSION );
+    QString strAppVer( T3K_VERSION );
     int nRPos = -1;
     for( int i=strAppVer.length()-1 ; i>=3 ; i-=2 )
     {

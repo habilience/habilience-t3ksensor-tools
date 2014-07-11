@@ -4,8 +4,8 @@ IDI_ICON1	ICON	DISCARDABLE	"./resources/T3kUpgrade.ico"
 #include <windows.h>
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION T3000_FILEVERSION
- PRODUCTVERSION T3000_FILEVERSION
+ FILEVERSION T3K_FILEVERSION
+ PRODUCTVERSION T3K_FILEVERSION
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
@@ -13,12 +13,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Habilience"
             VALUE "FileDescription", "T3k Firmware Upgrader"
-            VALUE "FileVersion", T3000_VERSION
+            VALUE "FileVersion", T3K_VERSION
             VALUE "InternalName", "T3kUpgrade.exe"
             VALUE "LegalCopyright", "(c) Habilience.  All rights reserved."
             VALUE "OriginalFilename", "T3kUpgrade.exe"
             VALUE "ProductName", "T3k Upgrader"
-            VALUE "ProductVersion", T3000_VERSION
+            VALUE "ProductVersion", T3K_VERSION
         END
     END
     BLOCK "VarFileInfo"

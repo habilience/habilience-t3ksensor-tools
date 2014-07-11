@@ -307,7 +307,7 @@ void T3kSoftlogicDlg::init()
     if ( g_bScreenShotMode )
     {
         QString strTitle( windowTitle() + " " );
-        strTitle += T3000_VERSION;
+        strTitle += T3K_VERSION;
         setWindowTitle( strTitle );
     }
 

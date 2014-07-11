@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     {
         if ( strcmp(argv[ni], cstrHelp0) == 0 )
         {
-            printf(QString(cstrTitleOut).arg(T3000_VERSION).toUtf8().data());
+            printf(QString(cstrTitleOut).arg(T3K_VERSION).toUtf8().data());
             printf(cstrT3000Help);
             return 0;
         }
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 
 static void OnStart()
 {
-    g_HIDCmd.TextOutRuntime(QString(cstrTitleOut).arg(T3000_VERSION).toUtf8().data(), 0);
+    g_HIDCmd.TextOutRuntime(QString(cstrTitleOut).arg(T3K_VERSION).toUtf8().data(), 0);
 }
 
 int T3kLoop(void* pContext)

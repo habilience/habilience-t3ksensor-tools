@@ -309,7 +309,7 @@ void Dialog::onChangeLanguage()
     QString strTitle = res.getResString(MAIN_TAG, "TITLE");
     if (!g_AppData.bScreenShotMode)
     {
-        QString strVer = T3000_VERSION;
+        QString strVer = T3K_VERSION;
         setWindowTitle(strTitle + " ver " + strVer);
     }
     else
@@ -560,17 +560,15 @@ void Dialog::paintEvent(QPaintEvent */*evt*/)
 
                 QString strFormat = res.getResString( MAIN_TAG, "TEXT_ERROR_SUPPORT_FIRMWARE_VERSION2" );
                 strFormat.replace( "%s", "%1" ).replace( "%1.2f", "%2" );
-                if ( (MM_NEXT_FIRMWARE_VERSION-0.1f)-MM_MIN_FIRMWARE_VERSION > 0.0f )
+                int a=0;
+                if ( (a=QString::compare( MM_MIN_FIRMWARE_VERSION_STR, MM_NEXT_FIRMWARE_VERSION_STR, Qt::CaseInsensitive )) < -1 )
                 {
-                    char szSupportVer[64];
-                    snprintf( szSupportVer, 64, "%1.1fx ~ %1.1fx", MM_MIN_FIRMWARE_VERSION, MM_NEXT_FIRMWARE_VERSION-0.1f );
-                    strWarningDetail = strFormat.arg(m_strFirmwareVersion).arg(szSupportVer);
+                    strWarningDetail = strFormat.arg(m_strFirmwareVersion)
+                            .arg(QString(MM_MIN_FIRMWARE_VERSION_STR) + " ~ " + MM_NEXT_FIRMWARE_VERSION_STR);
                 }
                 else
                 {
-                    char szSupportVer[64];
-                    snprintf( szSupportVer, 64, "%1.2f", MM_MIN_FIRMWARE_VERSION );
-                    strWarningDetail = strFormat.arg(m_strFirmwareVersion).arg(szSupportVer);
+                    strWarningDetail = strFormat.arg(m_strFirmwareVersion).arg(MM_MIN_FIRMWARE_VERSION_STR);
                 }
             }
         }
@@ -1004,14 +1002,14 @@ void Dialog::updateVersionInformation()
     g_AppData.strFirmwareVersion = m_SensorAppInfo[IDX_MM].szVersion;
     g_AppData.strModelName = m_SensorAppInfo[IDX_MM].szModel;
 
-    float fFirmwareVersion = atof((const char*)m_strFirmwareVersion.toLatin1());
-    qDebug( "updateVersionInformation: %f", fFirmwareVersion );
+    qDebug( "updateVersionInformation: %f", atof((const char*)m_strFirmwareVersion.toLatin1()) );
 
-    float fMinDesireFW = (float)MM_MIN_FIRMWARE_VERSION;
-    float fMaxDesireFW = (float)MM_NEXT_FIRMWARE_VERSION;
+    QString strMinDesireFW( MM_MIN_FIRMWARE_VERSION_STR );
+    QString strNextDesireFW( MM_NEXT_FIRMWARE_VERSION_STR );
 
-    bool bInvalidFirmwareVersion = false;
-    if ( (fFirmwareVersion < fMinDesireFW) || (fFirmwareVersion >= fMaxDesireFW) )
+    bool bInvalidFirmwareVersion = false;int a=0;
+    if ( (a=m_strFirmwareVersion.compare( strMinDesireFW, Qt::CaseInsensitive )) < 0 ||
+         (a=m_strFirmwareVersion.compare( strNextDesireFW, Qt::CaseInsensitive )) >= 0 )
     {
         bInvalidFirmwareVersion = true;
     }
@@ -1217,6 +1215,8 @@ void Dialog::updateVersionInformation()
     strVersionInfoHTML += strTail;
 
     ui->txtEdtDisplayFirmware->setHtml(strVersionInfoHTML);
+
+#ifdef SUPPORT_UPGRADE_FOR_INVALIDFIRMWARE
     if(m_bInvalidFirmwareVersion)
     {
         int nRet = showMessageBox( this,
@@ -1234,6 +1234,7 @@ void Dialog::updateVersionInformation()
             memset( m_SensorAppInfo, 0, sizeof(SensorAppInfo) * IDX_MAX );
         }
     }
+#endif
 }
 
 void Dialog::TPDP_OnRSP( T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/,
