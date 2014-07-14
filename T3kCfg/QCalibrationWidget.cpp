@@ -129,13 +129,15 @@ bool QCalibrationWidget::ShowWindow( bool bShow, int nUsbConfigMode, float fScre
             break;
         }
 
-        show();
-
         QDesktopWidget DeskWidget;
         int nPrimary = DeskWidget.primaryScreen();
         const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
 
         setGeometry( rcPrimaryMon );
+
+	move( rcPrimaryMon.left(), rcPrimaryMon.top() );
+
+        show();
 
 #ifdef Q_OS_WIN
         SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
