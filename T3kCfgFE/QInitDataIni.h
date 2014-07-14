@@ -16,6 +16,7 @@ protected:
 
     bool    m_bBentWithDummyLoad;
     bool    m_bBentWithDummy;
+    bool    m_bCalibrationCamera;
 
     int		m_nDetectionGraphSharpWidth;
     float	m_fDetectionGraphCrackThresholdError;
@@ -34,6 +35,7 @@ public:
     int getActiveLanguageIndex() const;
 
     bool getBentWithDummy() const;
+    bool getCalibrationWarning() const;
 
     int getDTCGraphSharpWidth() const;
     float getDTCGraphCrackThresholdError() const;

@@ -167,6 +167,8 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog* pParentWidget, QWidget *par
     m_TimerHideButtons = 0;
     m_TimerDrawWaitTimeout = 0;
 
+    m_errorCalibrationCamera = "Check out the Calibration! : ";
+
     LOG_I( "Enter [Bent Adjustment]" );
 
     onChangeLanguage();
@@ -267,6 +269,14 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog* pParentWidget, QWidget *par
     setViewMode( true );
 
     requestSensorData( cmdLoadFactoryDefault, false );
+    m_bCalibrationWarning = iniData->getCalibrationWarning();
+    if(m_bCalibrationWarning)
+    {
+        pDevice->sendCommand( "cam1/admin_cam_calibration2=?", true );
+        pDevice->sendCommand( "cam2/admin_cam_calibration2=?", true );
+        pDevice->sendCommand( "cam1/sub/admin_cam_calibration2=?", true );
+        pDevice->sendCommand( "cam2/sub/admin_cam_calibration2=?", true );
+    }
 
     m_TimerBlinkCursor = startTimer(500);
 
@@ -945,6 +955,22 @@ void QBentAdjustmentDialog::paintEvent(QPaintEvent *)
     if ( !m_bIsTouchLift )
     {
         drawTouchLines( p, rcBody );
+    }
+
+    if(m_bCalibrationWarning)
+    {
+        p.restore();
+        int nt = rcBody.width() / 42;
+        int nth = rcBody.height() / 24;
+        int ntx = nt > nth ? nth : nt;
+        QFont fnt = font();
+        fnt.setPixelSize(ntx);
+        fnt.setWeight(QFont::DemiBold);
+        p.setFont(fnt);
+        p.setPen(Qt::red);
+
+        QRect rcCamError((width()/4),((height()*4)/5),(width()/2),(height()/8));
+        p.drawText(rcCamError, Qt::AlignCenter , m_errorCalibrationCamera);
     }
 
 #ifdef DEVELOP_CROSSTRACE
@@ -2709,6 +2735,31 @@ void QBentAdjustmentDialog::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
     {
         pCur = szCmd + sizeof(cstrAutoTuning) - 1;
         m_nAutoOffset = atoi(pCur);
+    }
+
+    if( strstr(szCmd, cstrAdminCamCalibration2) == szCmd)
+    {
+        QString tempszCmd = szCmd;
+        if( tempszCmd.right(3) == "err")
+        {
+            switch ( Part )
+            {
+            default:
+                break;
+            case CM1:
+                m_errorCalibrationCamera.append("CM1 ");
+                break;
+            case CM2:
+                m_errorCalibrationCamera.append("CM2 ");
+                break;
+            case CM1_1:
+                m_errorCalibrationCamera.append("CM1-1 ");
+                break;
+            case CM2_1:
+                m_errorCalibrationCamera.append("CM2-2 ");
+                break;
+            }
+        }
     }
 }
 

@@ -29,6 +29,7 @@ QInitDataIni::QInitDataIni()
 
     m_bBentWithDummyLoad = false;
     m_bBentWithDummy = BENT_WITH_DUMMY;
+    m_bCalibrationCamera = false;
 
     m_nActiveLanguageIndex = 0;
 
@@ -85,6 +86,11 @@ int QInitDataIni::getActiveLanguageIndex() const
 bool QInitDataIni::getBentWithDummy() const
 {
     return m_bBentWithDummy;
+}
+
+bool QInitDataIni::getCalibrationWarning() const
+{
+    return m_bCalibrationCamera;
 }
 
 int QInitDataIni::getDTCGraphSharpWidth() const
@@ -229,6 +235,16 @@ bool QInitDataIni::load()
         strData = pBentAdjustmentSection->getData(idx);
         if ( !strData.isEmpty() )
             m_bBentWithDummy = (strData.toInt( 0, 10 ) != 0) ? true : false;
+    }
+    idx = pBentAdjustmentSection->getDataIndex("CalibrationCamera");
+    if ( idx >= 0 )
+    {
+        strData = pBentAdjustmentSection->getData(idx);
+
+        if ( strData.toInt(0,10) == 1)
+        {
+            m_bCalibrationCamera = true;
+        }
     }
 
     QIni::QSection * pDTCGraphSection = ini.getSectionNoCase("DETECTION GRAPH");

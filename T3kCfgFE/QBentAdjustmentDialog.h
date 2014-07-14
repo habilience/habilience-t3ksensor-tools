@@ -108,6 +108,7 @@ private:
     int     m_nValidTouchCount;
     bool    m_bBentAdjustmentPerformed;
     int     m_nBentProgress;
+    bool    m_bCalibrationWarning;
 
     bool    m_bCheckCamTouch[2];        // cam1, cam2
     int     m_nTouchCount;
@@ -142,6 +143,8 @@ private:
     QPointClipper     m_PointClipper;
 
     int     m_nAutoOffset;
+
+    QString m_errorCalibrationCamera;
 
 public:
     static QPoint PosToDCC( float x, float y, const QRect rcClient );
