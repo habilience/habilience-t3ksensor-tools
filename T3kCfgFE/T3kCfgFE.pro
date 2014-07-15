@@ -233,7 +233,6 @@ SOURCES += main.cpp\
     QEventRedirection.cpp \
     QBentCfgParam.cpp \
     QArrowButton.cpp \
-    t3kcomdef.cpp \
     QBentProgressDialog.cpp \
     QAutoRangeCompleteDialog.cpp \
     QGestureProfileDialog.cpp \
@@ -267,6 +266,7 @@ HEADERS  += dialog.h \
     ../common/QZLangRes.h \
     ../common/T3kSMDef.h \
     ../common/T3kBuzzerDef.h \
+    ../common/t3kcomdef.h \
     ../common/ui/QLicenseWidget.h \
     ../common/fe/QCalcCamValue.h \
     ../common/fe/QPointClipper.h \
@@ -284,7 +284,6 @@ HEADERS  += dialog.h \
     QEnterFileNameDialog.h \
     QFileNameEdit.h \
     QSelectDeviceDialog.h \
-    t3kcomdef.h \
     QDataProgressDialog.h \
     QSideviewDialog.h \
     QDetectionDialog.h \
