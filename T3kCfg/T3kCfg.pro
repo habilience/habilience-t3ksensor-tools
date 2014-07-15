@@ -186,6 +186,7 @@ SOURCES += main.cpp\
     ../common/QLangRes.cpp \
     ../common/QLangManager.cpp \
     ../common/QIni.cpp \
+    ../common/T3kBuzzerDef.cpp \
     ../common/ui/UnderlineLabel.cpp \
     ../common/ui/QHoverComboBox.cpp \
     ../common/ui/SlidingStackedWidget.cpp \
@@ -266,7 +267,6 @@ SOURCES += main.cpp\
     QBentAdjustment.cpp \
     QBentCfgParam.cpp \
     QBentProgressDialog.cpp \
-    T3kBuzzerDef.cpp \
     QNMouseProfileWidget.cpp \
     QOMouseProfileWidget.cpp \
     QPredefProfileEditDialog.cpp
@@ -282,6 +282,7 @@ HEADERS  += \
     ../common/QLangManager.h \
     ../common/T3kCamNameDef.h \
     ../common/QIni.h \
+    ../common/T3kBuzzerDef.h \
     ../common/ui/UnderlineLabel.h \
     ../common/ui/QHoverComboBox.h \
     ../common/ui/SlidingStackedWidget.h \
@@ -369,7 +370,6 @@ HEADERS  += \
     QBentAdjustment.h \
     QBentCfgParam.h \
     QBentProgressDialog.h \
-    T3kBuzzerDef.h \
     QNMouseProfileWidget.h \
     QOMouseProfileWidget.h \
     QPredefProfileEditDialog.h

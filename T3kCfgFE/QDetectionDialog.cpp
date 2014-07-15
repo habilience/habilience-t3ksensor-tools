@@ -11,6 +11,7 @@
 
 #include "QUtils.h"
 #include "T3kConstStr.h"
+#include "../common/T3kBuzzerDef.h"
 
 #include "QSensorInitDataCfg.h"
 
@@ -775,7 +776,7 @@ void QDetectionDialog::enterAutoRangeSetting()
     m_nAutoRangeStep = 0;
     showArrow();
 
-    playBuzzer( BuzzerEnterCalibration );
+    playBuzzer( QT3kDevice::instance(), BuzzerEnterCalibration );
 
     ui->widgetDetection1->setDisplayCrackInfo(false);
     ui->widgetDetection2->setDisplayCrackInfo(false);
@@ -826,7 +827,7 @@ void QDetectionDialog::leaveAutoRangeSetting()
         pDevice->setFeature( &feature, sizeof(FeatureCursorPos) );
     }
 
-    playBuzzer( BuzzerCancelCalibration );
+    playBuzzer( QT3kDevice::instance(), BuzzerCancelCalibration );
 
     setViewMode( false );
     if (ui->cmdAsyncMngr->isStarted())
@@ -982,7 +983,7 @@ void QDetectionDialog::onFinishAutoRange()
 
     if (m_lCam1Left < m_lCam1Right && m_lCam2Left < m_lCam2Right)       // success
     {
-        playBuzzer( BuzzerCalibrationSucces );
+        playBuzzer( QT3kDevice::instance(), BuzzerCalibrationSucces );
 
         m_pMainDlg->setInstantMode(T3K_HID_MODE_COMMAND);
 
@@ -1023,7 +1024,7 @@ void QDetectionDialog::onFinishAutoRange()
     }
     else    // fail
     {
-        playBuzzer( BuzzerCancelCalibration );
+        playBuzzer( QT3kDevice::instance(), BuzzerCancelCalibration );
     }
 
     ui->widgetDetection1->setDisplayCrackInfo(true);
@@ -1131,7 +1132,7 @@ void QDetectionDialog::TPDP_OnDTC(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part
                     m_bTouchOK = true;
                     m_nAutoRangeStep ++;
                     update();
-                    playBuzzer( BuzzerNextPoint );
+                    playBuzzer( QT3kDevice::instance(), BuzzerNextPoint );
                 }
                 else
                 {

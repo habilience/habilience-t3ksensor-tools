@@ -4,7 +4,7 @@
 #include <QDialog>
 #include "QT3kDeviceEventHandler.h"
 #include "QLangManager.h"
-#include "t3kcomdef.h"
+#include "../common/t3kcomdef.h"
 #include "QEventRedirection.h"
 
 namespace Ui {

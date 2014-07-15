@@ -135,7 +135,7 @@ bool QCalibrationWidget::ShowWindow( bool bShow, int nUsbConfigMode, float fScre
 
         setGeometry( rcPrimaryMon );
 
-	move( rcPrimaryMon.left(), rcPrimaryMon.top() );
+        move( rcPrimaryMon.left(), rcPrimaryMon.top() );
 
         show();
 

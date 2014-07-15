@@ -1,9 +1,11 @@
-#include "T3kBuzzerDef.h"
+#include "./T3kBuzzerDef.h"
 
-#include "T3kConstStr.h"
+#include "./T3kConstStr.h"
 
 void playBuzzer( QT3kDevice* pHandle, BuzzerType type )
 {
+    if( !pHandle ) return;
+
     int nCat = 0, nType = 0;
 
     switch( type )

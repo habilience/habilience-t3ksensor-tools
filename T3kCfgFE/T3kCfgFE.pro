@@ -193,6 +193,7 @@ SOURCES += main.cpp\
     ../common/qsingleapplication/qtlockedfile_unix.cpp \
     ../common/qsingleapplication/qtlockedfile.cpp \
     ../common/qsingleapplication/qtlocalpeer.cpp \
+    ../common/QT3kDevice.cpp \
     ../common/QUtils.cpp \
     ../common/QGUIUtils.cpp \
     ../common/QKeyMapStr.cpp \
@@ -200,12 +201,12 @@ SOURCES += main.cpp\
     ../common/QLangZipFile.cpp \
     ../common/QLangManager.cpp \
     ../common/QZLangRes.cpp \
+    ../common/T3kBuzzerDef.cpp \
     ../common/ui/QLicenseWidget.cpp \
     ../common/fe/QCalcCamValue.cpp \
     ../common/fe/QPointClipper.cpp \
     QGestureMappingTable.cpp \
     QStyleButton.cpp \
-    QT3kDevice.cpp \
     QT3kDeviceEventHandler.cpp \
     QCmdAsyncManagerCtrl.cpp \
     QLogSystem.cpp \
@@ -255,6 +256,7 @@ HEADERS  += dialog.h \
     ../common/qsingleapplication/qtsingleapplication.h \
     ../common/qsingleapplication/qtlockedfile.h \
     ../common/qsingleapplication/qtlocalpeer.h \
+    ../common/QT3kDevice.h \
     ../common/QUtils.h \
     ../common/QGUIUtils.h \
     ../common/QKeyMapStr.h \
@@ -264,12 +266,12 @@ HEADERS  += dialog.h \
     ../common/QLangManager.h \
     ../common/QZLangRes.h \
     ../common/T3kSMDef.h \
+    ../common/T3kBuzzerDef.h \
     ../common/ui/QLicenseWidget.h \
     ../common/fe/QCalcCamValue.h \
     ../common/fe/QPointClipper.h \
     QGestureMappingTable.h \
     QStyleButton.h \
-    QT3kDevice.h \
     QT3kDeviceEventHandler.h \
     AppData.h \
     QCmdAsyncManagerCtrl.h \

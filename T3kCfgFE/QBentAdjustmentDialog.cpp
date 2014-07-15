@@ -20,9 +20,11 @@
 #include <QFont>
 #include "AppData.h"
 #include <QtNumeric>
-#include "t3kcomdef.h"
 #include "T3kConstStr.h"
 #include "QSensorInitDataCfg.h"
+
+#include "../common/T3kBuzzerDef.h"
+#include "../common/t3kcomdef.h"
 
 #include "QBentProgressDialog.h"
 #include <QEvent>
@@ -714,7 +716,7 @@ void QBentAdjustmentDialog::enterAdjustmentMode()
     m_cError = m_cNG = 0;
     m_nAdjustmentStep = 0;
 
-    playBuzzer( BuzzerEnterCalibration );
+    playBuzzer( QT3kDevice::instance(), BuzzerEnterCalibration );
 
     update();
 
@@ -839,7 +841,7 @@ void QBentAdjustmentDialog::leaveAdjustmentMode( bool bSuccess )
     m_bShowCursor = false;
     update( m_rcCursor );
 
-    playBuzzer( bSuccess ? BuzzerCalibrationSucces : BuzzerCancelCalibration );
+    playBuzzer( QT3kDevice::instance(), bSuccess ? BuzzerCalibrationSucces : BuzzerCancelCalibration );
 
     if (bSuccess)
     {
@@ -2081,7 +2083,7 @@ void QBentAdjustmentDialog::checkTouchPoints( bool bTouch )
             qDebug( "TOUCH OK" );
 
             m_TimerReCheckPoint = startTimer(1500);
-            playBuzzer( BuzzerClick );
+            playBuzzer( QT3kDevice::instance(), BuzzerClick );
 
             m_bIsValidTouch = true;
             m_nValidTouchCount ++;
@@ -2149,7 +2151,7 @@ void QBentAdjustmentDialog::checkTouchPoints( bool bTouch )
             }
             else
             {
-                playBuzzer( BuzzerNextPoint );
+                playBuzzer( QT3kDevice::instance(), BuzzerNextPoint );
                 m_bIsValidTouch = false;
                 m_nValidTouchCount = 0;
                 update();
