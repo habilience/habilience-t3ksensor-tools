@@ -13,9 +13,11 @@ protected:
     int		m_nBentDirection;
     int		m_nBentAlgorithm2;		// 2-camera algorithm (0: old 13 points, 1: new 13 points, 2: new 9 points)
     int		m_nBentAlgorithm4;		// 4-camera algorithm (0: old 13 points, 1: new 13 points, 2: new 9 points)
+    int     m_nCalibrationCamera;
 
     bool    m_bBentWithDummyLoad;
     bool    m_bBentWithDummy;
+    bool    m_bCalibrationCameraLoad;
     bool    m_bCalibrationCamera;
 
     int		m_nDetectionGraphSharpWidth;

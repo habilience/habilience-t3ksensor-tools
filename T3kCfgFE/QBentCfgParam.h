@@ -10,8 +10,10 @@
 #define BENT_MARGIN_INIT_DIR			(0)
 #define BENT_INIT_ALGORITHM2			(2)
 #define BENT_INIT_ALGORITHM4			(1)
+#define BENT_INIT_CALIBRATION           (0)
 
 #define BENT_WITH_DUMMY                 (false)
+#define BENT_WITH_CALIBRATION           (false)
 
 #define BENT_DIR_UP     (0)
 #define BENT_DIR_DOWN   (1)

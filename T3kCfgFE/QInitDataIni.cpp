@@ -26,10 +26,12 @@ QInitDataIni::QInitDataIni()
 
     m_nBentAlgorithm2 = BENT_INIT_ALGORITHM2;
     m_nBentAlgorithm4 = BENT_INIT_ALGORITHM4;
+    m_nCalibrationCamera = BENT_INIT_CALIBRATION;
 
     m_bBentWithDummyLoad = false;
     m_bBentWithDummy = BENT_WITH_DUMMY;
-    m_bCalibrationCamera = false;
+    m_bCalibrationCameraLoad = false;
+    m_bCalibrationCamera = BENT_WITH_CALIBRATION;
 
     m_nActiveLanguageIndex = 0;
 
@@ -236,14 +238,18 @@ bool QInitDataIni::load()
         if ( !strData.isEmpty() )
             m_bBentWithDummy = (strData.toInt( 0, 10 ) != 0) ? true : false;
     }
+
+    m_bCalibrationCamera = BENT_WITH_CALIBRATION;
     idx = pBentAdjustmentSection->getDataIndex("CalibrationCamera");
     if ( idx >= 0 )
     {
+        m_bCalibrationCameraLoad = true;
         strData = pBentAdjustmentSection->getData(idx);
-
-        if ( strData.toInt(0,10) == 1)
+        if ( !strData.isEmpty() )
         {
-            m_bCalibrationCamera = true;
+            m_bCalibrationCamera = (strData.toInt( 0, 10 ) != 0) ? true : false;
+            if(m_bCalibrationCamera)
+                m_nCalibrationCamera = 1;
         }
     }
 
@@ -351,6 +357,12 @@ bool QInitDataIni::save()
     {
         strData = QString("%1").arg(m_bBentWithDummy);
         pBentAdjustmentSection->addData("BentWithDummy", strData, "bent-adjustment by 17 points that be included dummy points");
+    }
+
+    if ( m_bCalibrationCameraLoad )
+    {
+        strData = QString("%1").arg(m_nCalibrationCamera);
+        pBentAdjustmentSection->addData("CalibrationCamera", strData);
     }
 
     QIni::QSection * pDTCGraphSection = ini.addSection("DETECTION GRAPH");
