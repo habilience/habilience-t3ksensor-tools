@@ -83,8 +83,6 @@ QGestureMappingTable::QGestureMappingTable(QWidget *parent) :
     m_nMarginLeft = m_nMarginRight = 10;
     m_nMarginTop = m_nMarginBottom = 16;
 
-    m_bEnableOSXGesture = false;
-
     m_fntSystem = getSystemFont(this);
 
     //setMinimumSize( 400, 300 );
@@ -348,8 +346,7 @@ void QGestureMappingTable::parseMouseProfile( const char* szProfile )
                     }
                 }
 
-                if( !m_bEnableOSXGesture )
-                    m_ciZoom.bNotUsed = true;
+                m_ciZoom.bNotUsed = true;
                 m_ciRotate.bNotUsed = true;
             }
             else
@@ -364,8 +361,7 @@ void QGestureMappingTable::parseMouseProfile( const char* szProfile )
 
                 m_aryCell[TABLE(1, 4)].bNotUsed = true;
 
-                if( !m_bEnableOSXGesture )
-                    m_ciZoom.bNotUsed = false;
+                m_ciZoom.bNotUsed = false;
                 m_ciRotate.bNotUsed = false;
             }
 
@@ -781,20 +777,18 @@ void QGestureMappingTable::popEditActionWnd( const CellInfo& ci )
     resetSelect();
 }
 
-QString QGestureMappingTable::enableMacOSXZoom(bool bEnable, bool bMultiTouchMode)
+QString QGestureMappingTable::enableMacOSXZoom(bool bEnable)
 {
     QString str;
     if( bEnable )
     {
-        str = QString("%1%2").arg(m_ciZoom.wKeyValue[0], 0, 16).arg(m_ciZoom.wKeyValue[1], 0, 16);
+        str = QString("%1").arg(m_ciZoom.wKeyValue[0] << 16 & m_ciZoom.wKeyValue[1], 0, 16 );
         m_ciZoom.bNotUsed = true;
     }
     else
     {
-        m_ciZoom.bNotUsed = bMultiTouchMode ? true : false;
+        m_ciZoom.bNotUsed = false;
     }
-
-    m_bEnableOSXGesture = bEnable;
 
     return str;
 }
@@ -1389,8 +1383,7 @@ void QGestureMappingTable::onUpdateInputMode()
             }
         }
 
-        if( !m_bEnableOSXGesture )
-            m_ciZoom.bNotUsed = true;
+        m_ciZoom.bNotUsed = true;
         m_ciRotate.bNotUsed = true;
         break;
     default:
