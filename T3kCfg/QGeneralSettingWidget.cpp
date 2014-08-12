@@ -110,7 +110,7 @@ QGeneralSettingWidget::QGeneralSettingWidget(QT3kDevice*& pHandle, QWidget *pare
 #ifdef Q_OS_MAC
     chkOSXGesture->setVisible( true );
 #else
-    //chkOSXGesture->setVisible( false );
+    chkOSXGesture->setVisible( false );
 #endif
 }
 
@@ -522,8 +522,8 @@ void QGeneralSettingWidget::on_chkOSXGesture_toggled(bool checked)
     RegisterValue.endGroup();
 
     int nMode = m_pT3kHandle->getInstantMode();
-    ulong dwFgstValue = checked ? 0x0000FFFF : 0x00000000;
-    checked ? nMode |= T3K_HID_MODE_GESTURE : nMode |= !T3K_HID_MODE_GESTURE;
+    ulong dwFgstValue = checked ? t3kfgsteAll & !t3kfgsteHybridMultitouchDevice : 0x0000;
+    checked ? nMode |= T3K_HID_MODE_GESTURE : nMode &= !T3K_HID_MODE_GESTURE;
 
     m_pT3kHandle->setInstantMode( nMode, m_pT3kHandle->getExpireTime(), dwFgstValue );
 }

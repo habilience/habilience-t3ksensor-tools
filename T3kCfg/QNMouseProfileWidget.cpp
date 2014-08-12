@@ -233,10 +233,16 @@ void QNMouseProfileWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart 
     }
 
     if ( strstr(cmd, cstrMouseProfile1) == cmd )
+    {
         m_RequestCmdManager.RemoveItem( cstrMouseProfile1 );
+        m_bCheckMacOSXZoom = false;
+    }
 
     if ( strstr(cmd, cstrMouseProfile2) == cmd )
+    {
         m_RequestCmdManager.RemoveItem( cstrMouseProfile2 );
+        m_bCheckMacOSXZoom = false;
+    }
 }
 
 void QNMouseProfileWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int id, bool /*bFinal*/, const char */*cmd*/)
@@ -444,15 +450,29 @@ void QNMouseProfileWidget::onEnableMacOSXGesture(bool bEnable)
     {
         m_strPrevZommValue = m_MouseProfileTableWidget.enableMacOSXZoom( bEnable, bMultiTouchMode );
         qDebug() << m_strPrevZommValue;
-        m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), "8000000000" );
+        strCmd += "8000000000";
+        //m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), "8000000000" );
     }
     else
     {
         m_MouseProfileTableWidget.enableMacOSXZoom( bEnable, bMultiTouchMode );
-        m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), "80" + m_strPrevZommValue );
+        //m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), "80" + m_strPrevZommValue );
+        strCmd += m_strPrevZommValue;
     }
 
-    m_RequestCmdManager.Start( m_pT3kHandle );
+    nCount = 3;
+    while( nCount > 0 )
+    {
+        if( m_pT3kHandle->sendCommand( strCmd ) )
+        {
+            break;
+        }
+        nCount--;
+    }
+
+    if( nCount <= 0 ) Q_ASSERT( false );
+
+    m_bCheckMacOSXZoom = false;
 }
 
 void QNMouseProfileWidget::sensorRefresh( bool bTabOnly/*=false*/ )
