@@ -1,4 +1,3 @@
-#define SUPPORT_UPGRADE_FOR_INVALIDFIRMWARE
 #include "dialog.h"
 #include "ui_dialog.h"
 

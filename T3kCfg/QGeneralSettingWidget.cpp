@@ -14,7 +14,10 @@
 
 #ifdef Q_OS_WIN
 #include <windows.h>
+#elif defined(Q_OS_MAC)
+#include <CoreGraphics/CGEvent.h>
 #endif
+
 
 QGeneralSettingWidget::QGeneralSettingWidget(QT3kDevice*& pHandle, QWidget *parent) :
     QWidget(parent),
@@ -103,6 +106,12 @@ QGeneralSettingWidget::QGeneralSettingWidget(QT3kDevice*& pHandle, QWidget *pare
         CBLLanguage->show();
         LBLanguageMsg->hide();
     }
+
+#ifdef Q_OS_MAC
+    chkOSXGesture->setVisible( true );
+#else
+    //chkOSXGesture->setVisible( false );
+#endif
 }
 
 QGeneralSettingWidget::~QGeneralSettingWidget()
@@ -358,7 +367,8 @@ void QGeneralSettingWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
         m_nChkUsbCfgMode = -1;
     }
 }
-#include <CoreGraphics/CGEvent.h>
+
+#ifdef Q_OS_MAC
 static double g_fZoom = 0.0f;
 void QGeneralSettingWidget::TPDP_OnGST(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/,
                                        unsigned char /*cActionGroup*/, unsigned char cAction, unsigned short /*wFeasibleness*/,
@@ -422,7 +432,7 @@ void QGeneralSettingWidget::TPDP_OnGST(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
 //    qDebug() << QString("Gesture : AG(%1), A(%2), F(%3), X(%4), Y(%5), W(%6), H(%7), ZOOM(%8), MSG(%9)").arg(cActionGroup).arg(cAction).arg(wFeasibleness)
 //            .arg(x).arg(y).arg(w).arg(h).arg(fZoom).arg(msg);
 }
-
+#endif
 void QGeneralSettingWidget::showEvent(QShowEvent *evt)
 {
     if( evt->type() == QEvent::Show )
