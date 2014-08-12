@@ -67,7 +67,7 @@ public:
 
     void setMargin( int nL = -1, int nT = -1, int nR = -1, int nB = -1 ); // -1 : default
 
-    QString enableMacOSXZoom(bool bEnable);
+    QString enableMacOSXZoom(bool bEnable, bool bMultiTouchMode);
 
     enum CellKeyType { KeyTypeNone, KeyTypeEnable, KeyType1Key, KeyType2Way, KeyType4Way };
     struct CellInfo
@@ -115,6 +115,8 @@ protected:
     int         m_nMarginTop;
     int         m_nMarginRight;
     int         m_nMarginBottom;
+
+    bool        m_bEnableOSXGesture;
 
     void setCellInfo( int nCol, int nRow,
                       unsigned char cV00, unsigned char cV01,

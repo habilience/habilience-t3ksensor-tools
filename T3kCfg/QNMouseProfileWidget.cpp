@@ -413,6 +413,7 @@ void QNMouseProfileWidget::onEnableMacOSXGesture(bool bEnable)
         nCount--;
     }
 
+    bool bMultiTouchMode = false;
     switch( m_nInputMode )
     {
     case 0x00:
@@ -422,6 +423,7 @@ void QNMouseProfileWidget::onEnableMacOSXGesture(bool bEnable)
     case 0x02:
         ui->TabMouseSettingTable->selectTab( 1 );
         strCmd = cstrMouseProfile2;
+        bMultiTouchMode = true;
         break;
     default:
         Q_ASSERT( false );
@@ -438,16 +440,16 @@ void QNMouseProfileWidget::onEnableMacOSXGesture(bool bEnable)
         nCount--;
     }
 
-    m_strPrevZommValue = m_MouseProfileTableWidget.enableMacOSXZoom( bEnable );
-    qDebug() << m_strPrevZommValue;
-
     if( bEnable )
     {
+        m_strPrevZommValue = m_MouseProfileTableWidget.enableMacOSXZoom( bEnable, bMultiTouchMode );
+        qDebug() << m_strPrevZommValue;
         m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), "8000000000" );
     }
     else
     {
-        m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), m_strPrevZommValue );
+        m_MouseProfileTableWidget.enableMacOSXZoom( bEnable, bMultiTouchMode );
+        m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), "80" + m_strPrevZommValue );
     }
 
     m_RequestCmdManager.Start( m_pT3kHandle );
