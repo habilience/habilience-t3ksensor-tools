@@ -174,6 +174,7 @@ macx: {
     LIBS += -framework CoreFoundation \
             -framework IOKit \
             -framework CoreServices \
+            -framework COreGraphics \
 }
 
 #Socoures

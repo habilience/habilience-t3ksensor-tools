@@ -628,7 +628,7 @@
      <x>11</x>
      <y>30</y>
      <width>271</width>
-     <height>42</height>
+     <height>46</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="LanguageLayout">
@@ -953,7 +953,7 @@
          <x>20</x>
          <y>0</y>
          <width>321</width>
-         <height>22</height>
+         <height>27</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="AutoSelectLayout">
@@ -1017,16 +1017,16 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_5">
+  <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
      <x>350</x>
-     <y>40</y>
+     <y>30</y>
      <width>231</width>
-     <height>22</height>
+     <height>45</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="TrayIconLayout">
+   <layout class="QVBoxLayout" name="TrayIconLayout">
     <item>
      <widget class="QCheckBox" name="chkTrayIcon">
       <property name="font">
@@ -1039,6 +1039,13 @@
       </property>
       <property name="text">
        <string>Use Tray Icon</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="chkOSXGesture">
+      <property name="text">
+       <string>MacOSX Gesture</string>
       </property>
      </widget>
     </item>
@@ -1055,7 +1062,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>CBLLanguage</tabstop>
-  <tabstop>chkTrayIcon</tabstop>
   <tabstop>RBMouse</tabstop>
   <tabstop>RBMultiTouchWin7</tabstop>
   <tabstop>RBtnLandscape</tabstop>

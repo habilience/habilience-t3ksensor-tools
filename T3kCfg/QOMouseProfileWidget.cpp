@@ -471,6 +471,11 @@ void QOMouseProfileWidget::on_Profile5_clicked()
     ChangeProfile( ui->Profile5, 4 );
 }
 
+void QOMouseProfileWidget::onEnableMacOSXGesture(bool bEnable)
+{
+
+}
+
 void QOMouseProfileWidget::ChangeProfile(QCheckableButton *pBtn, int nIndex)
 {
     if( pBtn->IsCheckBox() && m_nSelectedProfileIndex != nIndex )

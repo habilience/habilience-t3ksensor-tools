@@ -64,6 +64,8 @@ protected:
 
     QComboBox                   m_cbPredefinedProfile;
     bool                        m_bDefault;
+    QString                     m_strPrevZommValue;
+    bool                        m_bCheckMacOSXZoom;
 
 private:
     Ui::QNMouseProfileWidget *ui;
@@ -79,6 +81,9 @@ protected slots:
     void onUpdateProfile(int nProfileIndex, const QGestureMappingTable::CellInfo& ci, ushort nProfileFlags);
     void onCBPredefinedProfileActivated(int index);
     void onModifiedProfile();
+
+public slots:
+    void onEnableMacOSXGesture(bool bEnable);
 };
 
 #endif // QNMOUSEPROFILEWIDGET_H

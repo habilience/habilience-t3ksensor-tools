@@ -191,6 +191,8 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     m_pSoftkeySettingWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pSoftkeySettingWidget, SIGNAL(ByPassKeyPressEvent(QKeyEvent*)), this ,SLOT(onByPassKeyPressEvent(QKeyEvent*)), Qt::DirectConnection );
 
+    connect( m_pGeneralSettingWidget, SIGNAL(enableMacOSXGesture(bool)), m_pMouseSettingWidget, SIGNAL(enableMacOSXGesture(bool)) );
+
     m_pMenuWidget = new QMenuStripWidget( m_pT3kHandle, this );
     m_pMenuWidget->setGeometry( 0, 0, 620, 50 );
     m_pMenuWidget->hide();

@@ -17,6 +17,9 @@ QMouseSettingWidget::QMouseSettingWidget(QT3kDevice*& pHandle, QWidget *parent) 
     connect( m_pOldMouseProfile, &QOMouseProfileWidget::ByPassKeyPressEvent, this, &QMouseSettingWidget::ByPassKeyPressEvent, Qt::DirectConnection );
     connect( m_pNewMouseProfile, &QNMouseProfileWidget::ByPassKeyPressEvent, this, &QMouseSettingWidget::ByPassKeyPressEvent, Qt::DirectConnection );
 
+    connect( this, &QMouseSettingWidget::enableMacOSXGesture, m_pOldMouseProfile, &QOMouseProfileWidget::onEnableMacOSXGesture );
+    connect( this, &QMouseSettingWidget::enableMacOSXGesture, m_pNewMouseProfile, &QNMouseProfileWidget::onEnableMacOSXGesture );
+
     m_pOldMouseProfile->hide();
     m_pNewMouseProfile->hide();
 }

@@ -31,6 +31,8 @@ QGeneralSettingWidget::QGeneralSettingWidget(QT3kDevice*& pHandle, QWidget *pare
 
     m_nDisplayOrientation = -1;
 
+    m_bOSXGesture = false;
+
     ChkInputModeAutoSelect->setChecked( false );
 
     TitleLanguage->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_LANGUAGE.png");
@@ -85,10 +87,8 @@ QGeneralSettingWidget::QGeneralSettingWidget(QT3kDevice*& pHandle, QWidget *pare
         RegOption.setValue( "Exec Path", strPath );
     }
 
-    if( RegOption.value( "TrayIcon", false ).toBool() )
-        chkTrayIcon->setChecked( true );
-    else
-        chkTrayIcon->setChecked( false );
+    chkTrayIcon->setChecked( RegOption.value( "TrayIcon", false ).toBool() );
+    chkOSXGesture->setChecked( RegOption.value( "MacOSX_Gesture", false ).toBool() );
     RegOption.endGroup();
 
     if( QLangManager::instance()->getAvailableLanguageCount() <= 1 )
@@ -358,6 +358,70 @@ void QGeneralSettingWidget::TPDP_OnRSE(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
         m_nChkUsbCfgMode = -1;
     }
 }
+#include <CoreGraphics/CGEvent.h>
+static double g_fZoom = 0.0f;
+void QGeneralSettingWidget::TPDP_OnGST(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/,
+                                       unsigned char /*cActionGroup*/, unsigned char cAction, unsigned short /*wFeasibleness*/,
+                                       unsigned short /*x*/, unsigned short /*y*/, unsigned short /*w*/, unsigned short /*h*/, float fZoom, const char */*msg*/)
+{
+    if( cAction == t3kgstNoAction || (fZoom == 0.0f || fZoom == 1.0f) /*|| cAction != t3kgstFingersMove*/ )
+    {
+        if( g_fZoom != 0.0f && g_fZoom != 1.0f )
+        {
+            // end gesture
+            CGEventRef e = CGEventCreate(NULL);
+            CGEventSetType(e, 0x1D);
+            CGEventSetFlags(e, 0x100);
+
+            CGEventSetTimestamp(e, 0);
+            CGEventSetIntegerValueField(e, 0x6E, 0x3E);
+            CGEventSetIntegerValueField(e, 0x75, 0x00);
+            CGEventPost(kCGHIDEventTap, e);
+
+            CFRelease(e);
+
+            g_fZoom = 0.0f;
+
+            qDebug() << "end gesture";
+        }
+    }
+    else if( fZoom != 0.0f && fZoom != 1.0f )
+    {
+        CGEventRef e = CGEventCreate(NULL);
+        CGEventSetType(e, 0x1D);
+        CGEventSetFlags(e, 0x100);
+
+        if( g_fZoom == 0.0f || g_fZoom == 1.0f )
+        {
+            g_fZoom = fZoom;
+            qDebug() << "begin gesture : " << g_fZoom;
+            CGEventSetTimestamp(e, 0);
+            CGEventSetIntegerValueField(e, 0x6E, 0x3D);
+            CGEventSetIntegerValueField(e, 0x75, 0x08);
+            CGEventPost(kCGHIDEventTap, e);
+        }
+        else
+        {
+            float dZoom = g_fZoom - fZoom;
+            qDebug() << "=== " << g_fZoom << " " << fZoom << " changed Zoom : " << dZoom;
+            if( qAbs(dZoom) >= 0.02 && qAbs(dZoom) <= 0.05 )
+            {
+                CGEventSetTimestamp(e, 0);
+                CGEventSetIntegerValueField(e, 0x6E, 0x08);
+                CGEventSetDoubleValueField(e, 0x71, -dZoom);
+                CGEventPost(kCGHIDEventTap, e);
+            }
+
+            g_fZoom = fZoom;
+        }
+
+        CFRelease(e);
+    }
+
+    qDebug() << "Zoom : " << fZoom << " " << cAction;
+//    qDebug() << QString("Gesture : AG(%1), A(%2), F(%3), X(%4), Y(%5), W(%6), H(%7), ZOOM(%8), MSG(%9)").arg(cActionGroup).arg(cAction).arg(wFeasibleness)
+//            .arg(x).arg(y).arg(w).arg(h).arg(fZoom).arg(msg);
+}
 
 void QGeneralSettingWidget::showEvent(QShowEvent *evt)
 {
@@ -435,9 +499,27 @@ void QGeneralSettingWidget::on_chkTrayIcon_toggled(bool checked)
     RegisterValue.endGroup();
 }
 
+void QGeneralSettingWidget::on_chkOSXGesture_toggled(bool checked)
+{
+//    if( !chkTrayIcon->isChecked() )
+//        chkTrayIcon->setChecked( true );
+
+    emit enableMacOSXGesture( checked );
+
+    QSettings RegisterValue( tr("Habilience"), tr("T3kCfg") );
+    RegisterValue.beginGroup( tr("Options") );
+    RegisterValue.setValue( tr("MacOSX_Gesture"), checked );
+    RegisterValue.endGroup();
+
+    int nMode = m_pT3kHandle->getInstantMode();
+    ulong dwFgstValue = checked ? 0x0000FFFF : 0x00000000;
+    checked ? nMode | T3K_HID_MODE_GESTURE : nMode | !T3K_HID_MODE_GESTURE;
+
+    m_pT3kHandle->setInstantMode( nMode, m_pT3kHandle->getExpireTime(), dwFgstValue );
+}
+
 void QGeneralSettingWidget::on_ChkInputModeAutoSelect_clicked(bool /*clicked*/)
 {
-    if( m_nTimerAutoInputMode )
         killTimer( m_nTimerAutoInputMode );
 
     m_nTimerAutoInputMode = startTimer( 500 );
@@ -461,7 +543,7 @@ void QGeneralSettingWidget::on_RBMouse_clicked()
     else
     {
         if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE1 )
-            bSimpleMouseProfile = true;
+    bSimpleMouseProfile = true;
     }
     if( bSimpleMouseProfile && chkTrayIcon->isChecked() )
     {

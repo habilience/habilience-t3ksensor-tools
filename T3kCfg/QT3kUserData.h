@@ -80,6 +80,7 @@ protected:
     int                     m_nCamCount;
 
 signals:
+    void enableMacOSXGesture(bool bEnable);
 
 public slots:
 

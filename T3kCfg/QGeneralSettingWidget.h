@@ -32,6 +32,7 @@ protected:
 
     virtual void TPDP_OnRSP(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
     virtual void TPDP_OnRSE(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int id, bool bFinal, const char *cmd);
+    virtual void TPDP_OnGST(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, unsigned char cActionGroup, unsigned char cAction, unsigned short wFeasibleness, unsigned short x, unsigned short y, unsigned short w, unsigned short h, float fZoom, const char *msg);
 
 protected:
     int                         m_nInputModeV;
@@ -44,12 +45,15 @@ protected:
 
     int                         m_nDisplayOrientation;
 
+    bool                        m_bOSXGesture;
+
 private:
     QT3kDevice*&                m_pT3kHandle;
 
 signals:
     void ByPassKeyPressEvent(QKeyEvent *evt);
     void RegisterTrayIcon( bool bRegister );
+    void enableMacOSXGesture(bool bEnable);
 
 private slots:
     void on_RBtnLandscape_clicked();
@@ -62,6 +66,7 @@ private slots:
     void on_ChkInputModeAutoSelect_clicked(bool clicked);
     void on_CBLLanguage_activated(int index);
     void on_chkTrayIcon_toggled(bool checked);
+    void on_chkOSXGesture_toggled(bool checked);
 };
 
 #endif // QGENERALSETTINGWIDGET_H

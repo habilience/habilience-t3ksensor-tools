@@ -83,7 +83,6 @@ QGestureMappingTable::QGestureMappingTable(QWidget *parent) :
     m_nMarginLeft = m_nMarginRight = 10;
     m_nMarginTop = m_nMarginBottom = 16;
 
-
     m_fntSystem = getSystemFont(this);
 
     //setMinimumSize( 400, 300 );
@@ -778,9 +777,25 @@ void QGestureMappingTable::popEditActionWnd( const CellInfo& ci )
     resetSelect();
 }
 
+QString QGestureMappingTable::enableMacOSXZoom(bool bEnable)
+{
+    QString str;
+    if( bEnable )
+    {
+        str = QString("%1").arg(m_ciZoom.wKeyValue[0] << 16 & m_ciZoom.wKeyValue[1], 0, 16 );
+        m_ciZoom.bNotUsed = true;
+    }
+    else
+    {
+        m_ciZoom.bNotUsed = false;
+    }
+
+    return str;
+}
+
 void QGestureMappingTable::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
-    if( m_bOnlyDisplay ) return;
+    //if( m_bOnlyDisplay ) return;
 
     bool bParseProfile = false;
 

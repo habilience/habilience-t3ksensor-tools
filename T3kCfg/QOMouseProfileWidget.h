@@ -73,6 +73,9 @@ private slots:
     void on_Profile3_clicked();
     void on_Profile2_clicked();
     void on_Profile1_clicked();
+
+public slots:
+    void onEnableMacOSXGesture(bool bEnable);
 };
 
 #endif // QOMOUSEPROFILEWIDGET_H

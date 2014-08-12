@@ -24,6 +24,7 @@ QNMouseProfileWidget::QNMouseProfileWidget(QT3kDevice*& pT3kHandle, QWidget *par
     m_nInputMode = -1;
     m_nChkUsbCfgMode = -1;
     m_bDefault = false;
+    m_bCheckMacOSXZoom = false;
 
     ui->TitleMouseMapping->SetIconImage( ":/T3kCfgRes/resources/PNG_ICON_MOUSE_MAP.png" );
 
@@ -153,7 +154,7 @@ void QNMouseProfileWidget::requestSensorData( bool bDefault )
 
 void QNMouseProfileWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, unsigned short /*ticktime*/, const char */*partid*/, int /*id*/, bool /*bFinal*/, const char *cmd)
 {
-    if( !isVisible() ) return;
+    if( !m_bCheckMacOSXZoom && !isVisible() ) return;
 
     if( strstr(cmd, cstrUsbConfigMode) == cmd )
     {
@@ -256,6 +257,9 @@ void QNMouseProfileWidget::onChangeLanguage()
     ui->TitleMouseMapping->setText( Res.getResString(QString::fromUtf8("MOUSE SETTING"), QString::fromUtf8("TITLE_CAPTION_MOUSE_BUTTON_MAPPING")) );
 
     ui->TabMouseSettingTable->setTabDirection( Res.isR2L() ? QColorTabWidget::TabDirectionHorzRightTop : QColorTabWidget::TabDirectionHorzLeftTop, 28, 20 );
+
+    if( m_cbPredefinedProfile.isVisible() && m_cbPredefinedProfile.itemText(0).at(0) == '(' )
+        m_cbPredefinedProfile.setItemText( 0, Res.getResString(QString::fromUtf8("EDIT PROFILE ITEM"), QString::fromUtf8("TEXT_PROFILE_ITEM_USER_DEFINED")) );
 }
 
 void QNMouseProfileWidget::showEvent(QShowEvent *)
@@ -385,6 +389,68 @@ void QNMouseProfileWidget::onModifiedProfile()
             m_cbPredefinedProfile.insertItem( 0, strUserDefText, strProfile );
         m_cbPredefinedProfile.setCurrentIndex( 0 );
     }
+}
+
+void QNMouseProfileWidget::onEnableMacOSXGesture(bool bEnable)
+{
+    m_RequestCmdManager.Stop();
+
+    m_bCheckMacOSXZoom = true;
+    QString strCmd;
+    strCmd = cstrInputMode;
+    strCmd += "?";
+
+    m_nInputMode = -1;
+
+    int nCount = 3;
+    while( nCount > 0 )
+    {
+        if( m_pT3kHandle->sendCommand( strCmd ) )
+        {
+            if( m_nInputMode >= 0 )
+                break;
+        }
+        nCount--;
+    }
+
+    switch( m_nInputMode )
+    {
+    case 0x00:
+        ui->TabMouseSettingTable->selectTab( 0 );
+        strCmd = cstrMouseProfile1;
+        break;
+    case 0x02:
+        ui->TabMouseSettingTable->selectTab( 1 );
+        strCmd = cstrMouseProfile2;
+        break;
+    default:
+        Q_ASSERT( false );
+        break;
+    }
+
+    nCount = 3;
+    while( nCount > 0 )
+    {
+        if( m_pT3kHandle->sendCommand( strCmd + "?" ) )
+        {
+            break;
+        }
+        nCount--;
+    }
+
+    m_strPrevZommValue = m_MouseProfileTableWidget.enableMacOSXZoom( bEnable );
+    qDebug() << m_strPrevZommValue;
+
+    if( bEnable )
+    {
+        m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), "8000000000" );
+    }
+    else
+    {
+        m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), m_strPrevZommValue );
+    }
+
+    m_RequestCmdManager.Start( m_pT3kHandle );
 }
 
 void QNMouseProfileWidget::sensorRefresh( bool bTabOnly/*=false*/ )

@@ -35,6 +35,7 @@ protected:
 signals:
     void ByPassKeyPressEvent(QKeyEvent *evt);
     void SendInputModeState(int nCurInputMode);
+    void enableMacOSXGesture(bool bEnable);
 
 private:
     QT3kDevice*&            m_pT3kHandle;
