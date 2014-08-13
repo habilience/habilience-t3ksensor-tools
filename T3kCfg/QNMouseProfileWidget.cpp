@@ -457,7 +457,7 @@ void QNMouseProfileWidget::onEnableMacOSXGesture(bool bEnable)
     {
         m_MouseProfileTableWidget.enableMacOSXZoom( bEnable, bMultiTouchMode );
         //m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), "80" + m_strPrevZommValue );
-        strCmd += m_strPrevZommValue;
+        strCmd += "80" + m_strPrevZommValue;
     }
 
     nCount = 3;

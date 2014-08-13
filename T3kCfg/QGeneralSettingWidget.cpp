@@ -91,7 +91,6 @@ QGeneralSettingWidget::QGeneralSettingWidget(QT3kDevice*& pHandle, QWidget *pare
     }
 
     chkTrayIcon->setChecked( RegOption.value( "TrayIcon", false ).toBool() );
-    chkOSXGesture->setChecked( RegOption.value( "MacOSX_Gesture", false ).toBool() );
     RegOption.endGroup();
 
     if( QLangManager::instance()->getAvailableLanguageCount() <= 1 )
@@ -107,11 +106,7 @@ QGeneralSettingWidget::QGeneralSettingWidget(QT3kDevice*& pHandle, QWidget *pare
         LBLanguageMsg->hide();
     }
 
-#ifdef Q_OS_MAC
-    chkOSXGesture->setVisible( true );
-#else
     chkOSXGesture->setVisible( false );
-#endif
 }
 
 QGeneralSettingWidget::~QGeneralSettingWidget()
@@ -511,9 +506,6 @@ void QGeneralSettingWidget::on_chkTrayIcon_toggled(bool checked)
 
 void QGeneralSettingWidget::on_chkOSXGesture_toggled(bool checked)
 {
-//    if( !chkTrayIcon->isChecked() )
-//        chkTrayIcon->setChecked( true );
-
     emit enableMacOSXGesture( checked );
 
     QSettings RegisterValue( tr("Habilience"), tr("T3kCfg") );
@@ -522,14 +514,31 @@ void QGeneralSettingWidget::on_chkOSXGesture_toggled(bool checked)
     RegisterValue.endGroup();
 
     int nMode = m_pT3kHandle->getInstantMode();
-    ulong dwFgstValue = checked ? t3kfgsteAll & !t3kfgsteHybridMultitouchDevice : 0x0000;
-    checked ? nMode |= T3K_HID_MODE_GESTURE : nMode &= !T3K_HID_MODE_GESTURE;
+    if( !m_pT3kHandle->getReportCommand() )
+        nMode |= T3K_HID_MODE_COMMAND;
 
-    m_pT3kHandle->setInstantMode( nMode, m_pT3kHandle->getExpireTime(), dwFgstValue );
+    ulong dwFgstValue = checked ? t3kfgsteAll & ~t3kfgsteHybridMultitouchDevice : 0x0000;
+    checked ? nMode |= T3K_HID_MODE_GESTURE : nMode &= ~T3K_HID_MODE_GESTURE;
+
+    int nRet = m_pT3kHandle->setInstantMode( nMode, m_pT3kHandle->getExpireTime(), dwFgstValue );
+    qDebug() << "InstantMode : " << nRet;
+}
+
+void QGeneralSettingWidget::onConnectedDevice()
+{
+#ifdef Q_OS_MAC
+    chkOSXGesture->setVisible( true );
+
+    QSettings RegOption( "Habilience", "T3kCfg" );
+    RegOption.beginGroup( "Options" );
+    chkOSXGesture->setChecked( RegOption.value( "MacOSX_Gesture", false ).toBool() );
+    RegOption.endGroup();
+#endif
 }
 
 void QGeneralSettingWidget::on_ChkInputModeAutoSelect_clicked(bool /*clicked*/)
 {
+    if( m_nTimerAutoInputMode )
         killTimer( m_nTimerAutoInputMode );
 
     m_nTimerAutoInputMode = startTimer( 500 );

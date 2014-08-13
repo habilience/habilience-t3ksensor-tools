@@ -69,6 +69,9 @@ private slots:
     void on_CBLLanguage_activated(int index);
     void on_chkTrayIcon_toggled(bool checked);
     void on_chkOSXGesture_toggled(bool checked);
+
+public slots:
+    void onConnectedDevice();
 };
 
 #endif // QGENERALSETTINGWIDGET_H

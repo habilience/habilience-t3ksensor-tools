@@ -215,6 +215,7 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     connect( ui->SWMenu, &QSlidingStackedWidget::animationFinished, this, &T3kCfgWnd::OnFinishAnimationMenu );
 
     connect( this, &T3kCfgWnd::connectedDevice, this, &T3kCfgWnd::onOpenT3kDevice );
+    connect( this, &T3kCfgWnd::connectedDevice, m_pGeneralSettingWidget, &QGeneralSettingWidget::onConnectedDevice, Qt::QueuedConnection );
 }
 
 T3kCfgWnd::~T3kCfgWnd()
