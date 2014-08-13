@@ -659,6 +659,8 @@ void T3kCfgWnd::CreateAction()
 
     bool bCheck = false;
     QString strVer = QT3kUserData::GetInstance()->getFirmwareVersionStr();
+    if( strVer.isEmpty() ) strVer = qApp->applicationVersion();
+    qDebug() << "===================" << strVer;
     int nExtraVer = strVer.mid( strVer.indexOf( '.' )+2, 1 ).toInt(0, 16);
     if( (nExtraVer >= 0x0A && nExtraVer <= 0x0F) )
     {
@@ -773,7 +775,6 @@ void T3kCfgWnd::showEvent(QShowEvent *)
 
     if( RegOption.value( "TrayIcon", false ).toBool() )
         onRegisterTrayIcon( true );
-
     RegOption.endGroup();
 }
 

@@ -517,7 +517,7 @@ void QGeneralSettingWidget::on_chkOSXGesture_toggled(bool checked)
     if( !m_pT3kHandle->getReportCommand() )
         nMode |= T3K_HID_MODE_COMMAND;
 
-    ulong dwFgstValue = checked ? t3kfgsteAll & ~t3kfgsteHybridMultitouchDevice : 0x0000;
+    ulong dwFgstValue = checked ? 0xFFFF : 0x0000;
     checked ? nMode |= T3K_HID_MODE_GESTURE : nMode &= ~T3K_HID_MODE_GESTURE;
 
     int nRet = m_pT3kHandle->setInstantMode( nMode, m_pT3kHandle->getExpireTime(), dwFgstValue );

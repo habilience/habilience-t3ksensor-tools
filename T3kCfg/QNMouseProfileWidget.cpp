@@ -446,18 +446,33 @@ void QNMouseProfileWidget::onEnableMacOSXGesture(bool bEnable)
         nCount--;
     }
 
+    if( nCount < 0 ) Q_ASSERT( false );
+
+    QSettings settings( "Habilience", "T3kCfg" );
+    settings.beginGroup( "Options" );
+    QString strValue = settings.value( "MacOSX_Gesture_Value", "" ).toString();
+    settings.endGroup();
+    qDebug() << "prev value : " << strValue;
+
     if( bEnable )
     {
         m_strPrevZommValue = m_MouseProfileTableWidget.enableMacOSXZoom( bEnable, bMultiTouchMode );
+        if( !strValue.isEmpty() )
+            m_strPrevZommValue = strValue;
         qDebug() << m_strPrevZommValue;
         strCmd += "8000000000";
         //m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), "8000000000" );
     }
     else
     {
+
+        if( m_strPrevZommValue.isEmpty() && !strValue.isEmpty() )
+            m_strPrevZommValue = strValue;
         m_MouseProfileTableWidget.enableMacOSXZoom( bEnable, bMultiTouchMode );
         //m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), "80" + m_strPrevZommValue );
         strCmd += "80" + m_strPrevZommValue;
+        m_strPrevZommValue.clear();
+        qDebug() << "command : " << strCmd;
     }
 
     nCount = 3;
@@ -473,6 +488,10 @@ void QNMouseProfileWidget::onEnableMacOSXGesture(bool bEnable)
     if( nCount <= 0 ) Q_ASSERT( false );
 
     m_bCheckMacOSXZoom = false;
+
+    settings.beginGroup( "Options" );
+    settings.setValue( "MacOSX_Gesture_Value", m_strPrevZommValue );
+    settings.endGroup();
 }
 
 void QNMouseProfileWidget::sensorRefresh( bool bTabOnly/*=false*/ )
