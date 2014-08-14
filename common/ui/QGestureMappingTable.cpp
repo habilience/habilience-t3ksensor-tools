@@ -786,7 +786,7 @@ QString QGestureMappingTable::enableMacOSXZoom(bool bEnable, bool bMultiTouchMod
     QString str;
     if( bEnable )
     {
-        str = QString("%1%2").arg(m_ciZoom.wKeyValue[0], 0, 16).arg(m_ciZoom.wKeyValue[1], 0, 16);
+        str = QString("%1%2").arg(m_ciZoom.wKeyValue[0], 4, 16, QChar('0')).arg(m_ciZoom.wKeyValue[1], 4, 16, QChar('0'));
         m_ciZoom.bNotUsed = true;
     }
     else

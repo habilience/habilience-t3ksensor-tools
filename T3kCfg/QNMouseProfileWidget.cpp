@@ -355,7 +355,8 @@ void QNMouseProfileWidget::onCBPredefinedProfileActivated(int index)
 
     QString strV = m_cbPredefinedProfile.itemData( index ).toString();
     int nProfileIdx = ui->TabMouseSettingTable->getActiveTab();
-
+    if( !m_strPrevZommValue.isEmpty() )
+        strV = strV.replace( strV.indexOf(" 80"), 11, " 8000000000" );
     QString strCmd(cstrMouseProfile1);
     strCmd.replace( '1', QString::number(nProfileIdx+1) );
     m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), strV );
