@@ -356,7 +356,15 @@ void QNMouseProfileWidget::onCBPredefinedProfileActivated(int index)
     QString strV = m_cbPredefinedProfile.itemData( index ).toString();
     int nProfileIdx = ui->TabMouseSettingTable->getActiveTab();
     if( !m_strPrevZommValue.isEmpty() )
-        strV = strV.replace( strV.indexOf(" 80"), 11, " 8000000000" );
+    {
+        int nP = strV.indexOf(" 80");
+        m_strPrevZommValue = strV.mid( nP+3, 10 );
+        QSettings settings( "Habilience", "T3kCfg" );
+        settings.beginGroup( "Options" );
+        settings.setValue( "MacOSX_Gesture_Value", m_strPrevZommValue );
+        settings.endGroup();
+        strV = strV.replace( nP, 11, " 8000000000" );
+    }
     QString strCmd(cstrMouseProfile1);
     strCmd.replace( '1', QString::number(nProfileIdx+1) );
     m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), strV );
