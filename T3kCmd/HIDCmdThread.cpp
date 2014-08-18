@@ -365,54 +365,42 @@ bool CHIDCmd::SendCommand( char * szCmd, bool bAsync )
 
     Q_ASSERT( m_pT3kHandle != NULL );
 
-    static const char cstrHidModeChar[] = { 'M', 'C', 'V', '\0', 'O', 'T', 'G', 'D', 'S', 'X' };
-
 	if ( strstr(szCmd, cszInstantMode) == szCmd )
 	{
-        int nInstantMode = T3K_HID_MODE_COMMAND;
-        ushort nTimeout = 5000;
-        ulong dwFGstValue = 0xFFFFFFFF;
-
-        QString strCmd( szCmd );
-        strCmd = strCmd.trimmed();
-        strCmd = strCmd.remove( 0, strCmd.indexOf( '=' ) + 1 );
-        int nP = strCmd.indexOf( ',' );
-        QString strMode = strCmd.left( nP ).toUpper();
+        char szBuffer[1024] = { 0 };
+        szCmd += sizeof(cszInstantMode) - 1;
+        int len = (int)strlen(szCmd);
+        for ( int ni = 0; ni < len; ni++ )
+        {
+            if ( isspace(*szCmd) )
+                szCmd++;
+            else
+                break;
+        }
+        char * pD = strchr(szCmd, ',');
+        if ( pD == NULL )
+            pD = szCmd + strlen(szCmd);
+        strcpy(szBuffer, cszInstantMode);
+        bool bCmd = false;
+        bool bQuery = false;
+        while ( szCmd < pD )
+        {
+            if ( *szCmd == 'c' || *szCmd == 'C' )
+                bCmd = true;
+            if ( *szCmd == '*' || *szCmd == '!' || *szCmd == '?' )
+            {
+                bQuery = true;
+            }
+            szBuffer[strlen(szBuffer)] = *szCmd++;
+        }
+        if ( !bQuery && !bCmd )
+        {
+            szBuffer[strlen(szBuffer)] = 'C';
+        }
+        strcat(szBuffer, pD);
+        szCmd = szBuffer;
 
         m_bInstantMode = true;
-
-        if( strMode.length() > 1 &&
-            (strMode.at(0) == '*' || strMode.at(0) == '!' || strMode.at(0) == '?') )
-        {
-
-        }
-        else
-        {
-            for( int i=0; i<strMode.length(); i++ )
-            {
-                for( uint j=0; j<sizeof(cstrHidModeChar); j++ )
-                {
-                    if( strMode.at(i) == cstrHidModeChar[j] )
-                    {
-                        nInstantMode |= (0x01 <<j);
-                        break;
-                    }
-                }
-            }
-
-            strCmd = strCmd.remove( 0, nP + 1 );
-            nP = strCmd.indexOf( ',' );
-            if( nP >= 0 )
-            {
-                nTimeout = strCmd.left( nP ).toUShort();
-                dwFGstValue = strCmd.remove( 0, nP + 1 ).toULong();
-            }
-
-            m_tmStart = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch();
-            m_pT3kHandle->setInstantMode( nInstantMode, nTimeout, dwFGstValue );
-
-            return true;
-        }
     }
 
     m_tmStart = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch();
