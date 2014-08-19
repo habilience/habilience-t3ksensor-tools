@@ -48,7 +48,7 @@ QLangRes::~QLangRes()
 
 bool QLangRes::setRootPath( QString lpszPath )
 {
-    Q_ASSERT( !m_strRootPath.size() );
+    //Q_ASSERT( !m_strRootPath.size() );
 
     m_strRootPath = lpszPath;
 

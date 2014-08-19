@@ -187,6 +187,9 @@ TEXT_OFF = Desligado
 
 TITLE_TRAY_ICON = Ícone de bandeja
 TEXT_CHECK_TRAYICON = Usar Ícone de bandeja
+TEXT_CHECK_OSXGESTURE = 
+TITLE_OSXGESTURE_MSG = 
+TEXT_OSXGESTURE_MSG = 
 
 TITLE_CAPTION_TOUCH_INPUT_MODE = Modo de entrada por toque
 TEXT_INPUT_MODE = Modo de entrada

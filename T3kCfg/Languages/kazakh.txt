@@ -187,6 +187,9 @@ TEXT_OFF = Сөндіру
 
 TITLE_TRAY_ICON = Планшет белгішесі
 TEXT_CHECK_TRAYICON = Пайдаланушы планшетінің белгішесі
+TEXT_CHECK_OSXGESTURE = 
+TITLE_OSXGESTURE_MSG = 
+TEXT_OSXGESTURE_MSG = 
 
 TITLE_CAPTION_TOUCH_INPUT_MODE = Сенсорлы енгізу амалы
 TEXT_INPUT_MODE = Енгізу амалы

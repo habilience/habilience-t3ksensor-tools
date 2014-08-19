@@ -3,6 +3,7 @@
 #include <QShowEvent>
 #include <QSettings>
 #include <QMessageBox>
+#include <QProcess>
 
 #include "stdInclude.h"
 #include "T3kCfgWnd.h"
@@ -134,6 +135,7 @@ void QGeneralSettingWidget::onChangeLanguage()
 
     TitleTrayIcon->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_TRAY_ICON") ) );
     chkTrayIcon->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_CHECK_TRAYICON") ) );
+    chkOSXGesture->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_CHECK_OSXGESTURE") ) );
 
     TitleDisplayOrientation->setText( Res.getResString( QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_DISPLAY_ORIENTATION") ) );
 #ifdef Q_OS_WIN
@@ -522,6 +524,50 @@ void QGeneralSettingWidget::on_chkOSXGesture_toggled(bool checked)
 
     int nRet = m_pT3kHandle->setInstantMode( nMode, m_pT3kHandle->getExpireTime(), dwFgstValue );
     qDebug() << "InstantMode : " << nRet;
+
+    QString strPlistPath = qApp->applicationDirPath() + "/../Info.plist";
+    QSettings settings( strPlistPath, QSettings::NativeFormat );
+    bool bRet = settings.value( "LSUIElement", false ).toBool();
+    bool bRelunch = false;
+    if( checked )
+    {
+        if( !bRet )
+        {
+            settings.setValue( "LSUIElement", true );
+            bRelunch = true;
+        }
+    }
+    else
+    {
+        if( bRet )
+        {
+            settings.setValue( "LSUIElement", false );
+            bRelunch = true;
+        }
+    }
+
+    if( bRelunch )
+    {
+        QLangRes& Res = QLangManager::instance()->getResource();
+        QMessageBox::information( QT3kUserData::GetInstance()->getTopParent(),
+                                  Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_OSXGESTURE_MSG")),
+                                  Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_OSXGESTURE_MSG")),
+                                  QMessageBox::Ok );
+        //qApp->exit( EXIT_CODE_RESTART );
+        QString strExec( qApp->applicationDirPath() );
+        strExec.replace( "/Contents/MacOS", "" );
+        qDebug() << strExec;
+        QStringList args;
+        args << "-e";
+        args << "tell application \"" + strExec + "\"";
+        args << "-e";
+        args << "activate";
+        args << "-e";
+        args << "end tell";
+        QProcess::startDetached( "osascript", args );
+        qApp->exit();
+        return;
+    }
 }
 
 void QGeneralSettingWidget::onConnectedDevice()

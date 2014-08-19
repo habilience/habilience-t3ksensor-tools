@@ -751,6 +751,18 @@ void T3kCfgWnd::OnTrayOpenT3kCfg()
     SetForegroundWindow( (HWND)winId() );
     SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
     SetWindowPos( (HWND)winId(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
+#elif defined(Q_OS_MAC)
+    QString strExec( qApp->applicationDirPath() );
+    strExec.replace( "/Contents/MacOS", "" );
+    qDebug() << strExec;
+    QStringList args;
+    args << "-e";
+    args << "tell application \"" + strExec + "\"";
+    args << "-e";
+    args << "activate";
+    args << "-e";
+    args << "end tell";
+    QProcess::startDetached( "osascript", args );
 #else
     raise();
     activateWindow();

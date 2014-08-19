@@ -187,6 +187,9 @@ TEXT_OFF = OFF
 
 TITLE_TRAY_ICON = Tray Icon
 TEXT_CHECK_TRAYICON = Use Tray Icon
+TEXT_CHECK_OSXGESTURE = Use Mac OS X Gesture
+TITLE_OSXGESTURE_MSG = Restart
+TEXT_OSXGESTURE_MSG = Restart for correct operation.
 
 TITLE_CAPTION_TOUCH_INPUT_MODE = Touch Input Mode
 TEXT_INPUT_MODE = Input Mode

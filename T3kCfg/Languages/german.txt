@@ -187,6 +187,9 @@ TEXT_OFF = Aus
 
 TITLE_TRAY_ICON = Taskleistensymbol
 TEXT_CHECK_TRAYICON = Verwendung des Taskleistensymbols
+TEXT_CHECK_OSXGESTURE = 
+TITLE_OSXGESTURE_MSG = 
+TEXT_OSXGESTURE_MSG = 
 
 TITLE_CAPTION_TOUCH_INPUT_MODE = Berührungseingabemodus
 TEXT_INPUT_MODE = Eingabemodus

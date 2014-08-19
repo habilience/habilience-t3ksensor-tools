@@ -37,6 +37,8 @@ enum FlatMenuStatus { MenuHome = 0, MenuMouseSetting, MenuCalibrationSetting, Me
 #define QProfileName4                                   "Linux (GNOME)"
 #define QProfileName5                                   "User Defined"
 
+#define EXIT_CODE_RESTART                               -123456789
+
 typedef struct _ST_SHAREDMEMORY
 {
     char szDuplicateRuns;

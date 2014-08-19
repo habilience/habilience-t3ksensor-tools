@@ -187,6 +187,9 @@ TEXT_OFF = Выкл
 
 TITLE_TRAY_ICON = Иконка планшета
 TEXT_CHECK_TRAYICON = Иконка планшета пользователя
+TEXT_CHECK_OSXGESTURE = 
+TITLE_OSXGESTURE_MSG = 
+TEXT_OSXGESTURE_MSG = 
 
 TITLE_CAPTION_TOUCH_INPUT_MODE = Режим сенсорного ввода
 TEXT_INPUT_MODE = Режим ввода

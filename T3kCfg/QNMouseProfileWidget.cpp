@@ -455,7 +455,7 @@ void QNMouseProfileWidget::onEnableMacOSXGesture(bool bEnable)
         nCount--;
     }
 
-    if( nCount < 0 ) Q_ASSERT( false );
+    Q_ASSERT( nCount > 0 );
 
     QSettings settings( "Habilience", "T3kCfg" );
     settings.beginGroup( "Options" );

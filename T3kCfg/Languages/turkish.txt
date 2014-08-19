@@ -1,4 +1,4 @@
-﻿
+
 [COMMON]
 TEXT_CLOSE = Kapat
 
@@ -187,6 +187,9 @@ TEXT_OFF = Kapalı
 
 TITLE_TRAY_ICON = Tray ikonu
 TEXT_CHECK_TRAYICON = Tray ikonunu kullan
+TEXT_CHECK_OSXGESTURE = Mac OS X jest kullan
+TITLE_OSXGESTURE_MSG = Tekrar başlat
+TEXT_OSXGESTURE_MSG = Doğru çalışması için yeniden başlatın.
 
 TITLE_CAPTION_TOUCH_INPUT_MODE = Dokumatik giriş modu
 TEXT_INPUT_MODE = Giriş Modu
