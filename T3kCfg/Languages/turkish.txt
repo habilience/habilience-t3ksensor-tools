@@ -1,4 +1,4 @@
-
+﻿
 [COMMON]
 TEXT_CLOSE = Kapat
 
