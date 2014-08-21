@@ -247,6 +247,7 @@ void QSoftKeyDesignToolWidget::updateUIButtonState( int nSelectKeyCount, GroupSt
             double dW = rc.width() * m_dD2PScaleWidth;
             double dH = rc.height() * m_dD2PScaleHeight;
 
+            qDebug() << "MM : " << dH << "," << rc.height();
             ui->EditPosX->setText( QString("%1").arg(dPX, 0, 'f', 1) );
             ui->EditPosY->setText( QString("%1").arg(dPY, 0, 'f', 1) );
             ui->EditWidth->setText( QString("%1").arg(dW, 0, 'f', 1) );
@@ -363,10 +364,10 @@ void QSoftKeyDesignToolWidget::EditModified()
     }
     else
     {
-        rcNew.setLeft( ui->EditPosX->text().toDouble()+.5 );
-        rcNew.setTop( ui->EditPosY->text().toDouble()+.5 );
-        rcNew.setWidth( ui->EditWidth->text().toDouble()+.5 );
-        rcNew.setHeight( ui->EditHeight->text().toDouble()+.5 );
+        rcNew.setLeft( ui->EditPosX->text().toDouble() );
+        rcNew.setTop( ui->EditPosY->text().toDouble() );
+        rcNew.setWidth( ui->EditWidth->text().toDouble() );
+        rcNew.setHeight( ui->EditHeight->text().toDouble() );
     }
 
     emit recalcSelectionKeys( m_rcOld, rcNew );
@@ -407,6 +408,16 @@ void QSoftKeyDesignToolWidget::closeEvent(QCloseEvent *)
 
     emit closeWidget();
 }
+
+void QSoftKeyDesignToolWidget::keyPressEvent(QKeyEvent *evt)
+{
+    if( evt->key() == Qt::Key_Escape )
+        evt->ignore();
+        return;
+
+    QDialog::keyPressEvent(evt);
+}
+
 void QSoftKeyDesignToolWidget::on_BtnFitScreen_clicked()
 {
     emit screenSize( QKeyDesignWidget::ScreenSizeFit );
@@ -506,14 +517,14 @@ void QSoftKeyDesignToolWidget::on_EditPosX_editingFinished()
 
 void QSoftKeyDesignToolWidget::on_EditPosY_textEdited(const QString &/*arg1*/)
 {
-    QPalette plt( ui->EditPosX->palette() );
+    QPalette plt( ui->EditPosY->palette() );
     plt.setColor( QPalette::Text, Qt::red );
     ui->EditPosX->setPalette( plt );
 }
 
 void QSoftKeyDesignToolWidget::on_EditPosY_editingFinished()
 {
-    QPalette plt( ui->EditPosX->palette() );
+    QPalette plt( ui->EditPosY->palette() );
     plt.setColor( QPalette::Text, Qt::black );
     ui->EditPosX->setPalette( plt );
 
@@ -522,14 +533,14 @@ void QSoftKeyDesignToolWidget::on_EditPosY_editingFinished()
 
 void QSoftKeyDesignToolWidget::on_EditWidth_textEdited(const QString &/*arg1*/)
 {
-    QPalette plt( ui->EditPosX->palette() );
+    QPalette plt( ui->EditWidth->palette() );
     plt.setColor( QPalette::Text, Qt::red );
     ui->EditPosX->setPalette( plt );
 }
 
 void QSoftKeyDesignToolWidget::on_EditWidth_editingFinished()
 {
-    QPalette plt( ui->EditPosX->palette() );
+    QPalette plt( ui->EditWidth->palette() );
     plt.setColor( QPalette::Text, Qt::black );
     ui->EditPosX->setPalette( plt );
 
@@ -538,14 +549,14 @@ void QSoftKeyDesignToolWidget::on_EditWidth_editingFinished()
 
 void QSoftKeyDesignToolWidget::on_EditHeight_textEdited(const QString &/*arg1*/)
 {
-    QPalette plt( ui->EditPosX->palette() );
+    QPalette plt( ui->EditHeight->palette() );
     plt.setColor( QPalette::Text, Qt::red );
     ui->EditPosX->setPalette( plt );
 }
 
 void QSoftKeyDesignToolWidget::on_EditHeight_editingFinished()
 {
-    QPalette plt( ui->EditPosX->palette() );
+    QPalette plt( ui->EditHeight->palette() );
     plt.setColor( QPalette::Text, Qt::black );
     ui->EditPosX->setPalette( plt );
 
