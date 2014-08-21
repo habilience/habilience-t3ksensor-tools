@@ -573,12 +573,29 @@ void QGeneralSettingWidget::on_chkOSXGesture_toggled(bool checked)
 void QGeneralSettingWidget::onConnectedDevice()
 {
 #ifdef Q_OS_MAC
-    chkOSXGesture->setVisible( true );
+    bool bEnable = false;
+    QString strVer = QT3kUserData::GetInstance()->getFirmwareVersionStr();
+    int nExtraVer = strVer.mid( strVer.indexOf( '.' )+2, 1 ).toInt(0, 16);
+    if( (nExtraVer >= 0x0A && nExtraVer <= 0x0F) )
+    {
+        if( strVer >= MM_MIN_SIMPLE_MOUSE_PROFILE2 )
+            bEnable = true;
+    }
+    else
+    {
+        if( strVer >= MM_MIN_SIMPLE_MOUSE_PROFILE1 )
+            bEnable = true;
+    }
 
-    QSettings RegOption( "Habilience", "T3kCfg" );
-    RegOption.beginGroup( "Options" );
-    chkOSXGesture->setChecked( RegOption.value( "MacOSX_Gesture", false ).toBool() );
-    RegOption.endGroup();
+    if( bEnable )
+    {
+        chkOSXGesture->setVisible( true );
+
+        QSettings RegOption( "Habilience", "T3kCfg" );
+        RegOption.beginGroup( "Options" );
+        chkOSXGesture->setChecked( RegOption.value( "MacOSX_Gesture", false ).toBool() );
+        RegOption.endGroup();
+    }
 #endif
 }
 

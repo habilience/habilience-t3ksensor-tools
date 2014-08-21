@@ -470,7 +470,6 @@ void QNMouseProfileWidget::onEnableMacOSXGesture(bool bEnable)
             m_strPrevZommValue = strValue;
         qDebug() << m_strPrevZommValue;
         strCmd += "8000000000";
-        //m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), "8000000000" );
     }
     else
     {
@@ -478,7 +477,6 @@ void QNMouseProfileWidget::onEnableMacOSXGesture(bool bEnable)
         if( m_strPrevZommValue.isEmpty() && !strValue.isEmpty() )
             m_strPrevZommValue = strValue;
         m_MouseProfileTableWidget.enableMacOSXZoom( bEnable, bMultiTouchMode );
-        //m_RequestCmdManager.AddItem( strCmd.toUtf8().data(), "80" + m_strPrevZommValue );
         strCmd += "80" + m_strPrevZommValue;
         m_strPrevZommValue.clear();
         qDebug() << "command : " << strCmd;

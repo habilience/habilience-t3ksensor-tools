@@ -1360,6 +1360,35 @@ void T3kCfgWnd::timerEvent(QTimerEvent *evt)
                 stSM->szNotifyCFG = 0;
                 CheckDuplicateRuns.unlock();
             }
+
+#ifdef Q_OS_WIN
+            if( FindWindow( T3KFE_DIALOG_CLASSNAME, NULL ) )
+            {
+                if( !m_bRunOtherTool )
+                {
+                    if( isVisible() )
+                    {
+                        hide();
+                        onShowMenuEvent( QMENU_HOME );
+                        m_bPrevShowed = true;
+                    }
+                    m_bRunOtherTool = true;
+                }
+            }
+            else
+            {
+                if( m_bPrevShowed )
+                {
+                    show();
+                    SetForegroundWindow( (HWND)winId() );
+                    SetWindowPos( (HWND)winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
+                    SetWindowPos( (HWND)winId(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
+
+                    m_bPrevShowed = false;
+                }
+                m_bRunOtherTool = false;
+            }
+#endif
         }
 
         if( evt->timerId() == m_nTimerChkTrayDoubleClk )
