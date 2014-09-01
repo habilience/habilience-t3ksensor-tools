@@ -625,7 +625,7 @@ void QGeneralSettingWidget::on_RBMouse_clicked()
     else
     {
         if( strVer < MM_MIN_SIMPLE_MOUSE_PROFILE1 )
-    bSimpleMouseProfile = true;
+            bSimpleMouseProfile = true;
     }
     if( bSimpleMouseProfile && chkTrayIcon->isChecked() )
     {
