@@ -44,6 +44,9 @@ private:
     QQueue<t3kpacket*>  m_ReceivePacketQueue;
     QMutex              m_RecvPktQueLock;
 
+    QVector<t3kpacket*> m_PacketPool;
+    QMutex              m_PktPoolLock;
+
 #ifdef T3KDEVICE_CUSTOM
     // Only RawData
     char*                                   m_pRawDataBuffer;
