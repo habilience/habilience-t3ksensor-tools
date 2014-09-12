@@ -67,6 +67,7 @@ Dialog::Dialog(QWidget *parent) :
     m_pDlgBentAdjustment = NULL;
     m_pDlgTouchSetting = NULL;
     m_pDlgRemoteTouchMark = NULL;
+    m_pDlgFirmwareUpgrade = NULL;
 
     m_oldMenu = MenuNone;
 
@@ -1216,7 +1217,7 @@ void Dialog::updateVersionInformation()
 
 #ifdef SUPPORT_UPGRADE_FOR_INVALIDFIRMWARE
     if(m_bInvalidFirmwareVersion)
-    {
+    {  
         int nRet = showMessageBox( this,
                                    "Do you want to firmware upgrade?",
                                    "Firmware Upgrade",
@@ -1224,11 +1225,10 @@ void Dialog::updateVersionInformation()
 
         if(nRet == QMessageBox::Yes)
         {
-            if( m_pDlgFirmwareUpgrade == NULL || !m_pDlgFirmwareUpgrade->isVisible() )
-            {
+            if( m_pDlgFirmwareUpgrade == NULL )
                 m_pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);
+            if( !m_pDlgFirmwareUpgrade->isVisible() )
                 m_pDlgFirmwareUpgrade->show();
-            }
         }
         else if(nRet == QMessageBox::No)
         {
