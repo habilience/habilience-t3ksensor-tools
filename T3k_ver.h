@@ -13,9 +13,12 @@
 
 #define MM_MIN_FIRMWARE_VERSION			2.8		// 최소 펌웨어 버전
 #define MM_NEXT_FIRMWARE_VERSION		2.9		// 다음 펌웨어 버전
-#define MM_MIN_FIRMWARE_VERSION_STR     "2.8d"  // 최소 펌웨어 버전
-#define MM_NEXT_FIRMWARE_VERSION_STR    "2.8e"  // 다음 펌웨어 버전
-												// 지원 펌웨어 버전: (MM_MIN_FIRMWARE_VERSION <= f/w < MM_NEXT_FIRMWARE_VERSION)
+#define MM_MIN_FIRMWARE_VERSION_STR     "2.86"  // 최소 펌웨어 버전 == resource binary file version
+#define MM_NEXT_FIRMWARE_VERSION_STR    "2.86"  // 다음 펌웨어 버전
+
+// 2.8d < 2.86
+
+// 지원 펌웨어 버전: (MM_MIN_FIRMWARE_VERSION <= f/w < MM_NEXT_FIRMWARE_VERSION)
 
 //#define FEATURE_CUSTOMER // customer 용 definition
 

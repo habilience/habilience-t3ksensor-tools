@@ -1005,11 +1005,9 @@ void Dialog::updateVersionInformation()
     qDebug( "updateVersionInformation: %f", atof((const char*)m_strFirmwareVersion.toLatin1()) );
 
     QString strMinDesireFW( MM_MIN_FIRMWARE_VERSION_STR );
-    QString strNextDesireFW( MM_NEXT_FIRMWARE_VERSION_STR );
 
-    bool bInvalidFirmwareVersion = false;int a=0;
-    if ( (a=m_strFirmwareVersion.compare( strMinDesireFW, Qt::CaseInsensitive )) < 0 ||
-         (a=m_strFirmwareVersion.compare( strNextDesireFW, Qt::CaseInsensitive )) >= 0 )
+    bool bInvalidFirmwareVersion = false;
+    if( m_strFirmwareVersion.compare( strMinDesireFW, Qt::CaseInsensitive ) != 0 )
     {
         bInvalidFirmwareVersion = true;
     }
@@ -1226,8 +1224,11 @@ void Dialog::updateVersionInformation()
 
         if(nRet == QMessageBox::Yes)
         {
-            m_pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);
-            m_pDlgFirmwareUpgrade->show();
+            if( m_pDlgFirmwareUpgrade == NULL || !m_pDlgFirmwareUpgrade->isVisible() )
+            {
+                m_pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);
+                m_pDlgFirmwareUpgrade->show();
+            }
         }
         else if(nRet == QMessageBox::No)
         {

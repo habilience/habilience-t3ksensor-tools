@@ -413,7 +413,6 @@ void QFirmwareUpgradeDialog::timerEvent(QTimerEvent *evt)
             {
                 qDebug( "write timeout!!!!" );
                 QString strMessage = QString("[%1] Write Error").arg(PartName[getIndex(m_CurrentJob.which)]);
-                addProgressText(strMessage, TM_NG);
                 onFirmwareUpdateFailed();
             }
             else
@@ -436,7 +435,6 @@ void QFirmwareUpgradeDialog::timerEvent(QTimerEvent *evt)
                 killWaitModeChangeTimer();
                 qDebug( "Wait IAP/APP timeout!!!" );
                 QString strMessage = QString("[%1] Wait timeout!").arg(PartName[getIndex(m_CurrentJob.which)]);
-                addProgressText(strMessage, TM_NG);
                 onFirmwareUpdateFailed();
             }
             else
@@ -839,22 +837,18 @@ void QFirmwareUpgradeDialog::onResponseFromSensor(unsigned short nPacketId)
         break;
     case JOBF_MARK_IAP:
         strMessage = QString("[%1] Mark IAP OK").arg(PartName[getIndex(m_CurrentJob.which)]);
-        addProgressText(strMessage, TM_OK);
         qDebug( "mark iap: %x ok", m_CurrentJob.which );
         break;
     case JOBF_MARK_APP:
         strMessage = QString("[%1] Mark APP OK").arg(PartName[getIndex(m_CurrentJob.which)]);
-        addProgressText(strMessage, TM_OK);
         qDebug( "mark app: %x ok", m_CurrentJob.which );
         break;
     case JOBF_RESET:
         strMessage = QString("[%1] Reset OK").arg(PartName[getIndex(m_CurrentJob.which)]);
-        addProgressText(strMessage, TM_OK);
         qDebug( "reset: %x ok", m_CurrentJob.which );
         break;
     case JOBF_ERASE:
         strMessage = QString("[%1] Erase OK").arg(PartName[getIndex(m_CurrentJob.which)]);
-        addProgressText(strMessage, TM_OK);
         qDebug( "erase: %x ok", m_CurrentJob.which );
         break;
     case JOBF_WRITE:
@@ -864,7 +858,6 @@ void QFirmwareUpgradeDialog::onResponseFromSensor(unsigned short nPacketId)
             qDebug( "write: %x finish", m_CurrentJob.which );
             m_CurrentJob.subStep = SUB_QUERY_FINISH;
             strMessage = QString("[%1] Write Firmware... Finish").arg(PartName[getIndex(m_CurrentJob.which)]);
-            addProgressText(strMessage, TM_OK);
             ui->progressBar->setValue(100);
         }
         else
@@ -963,25 +956,21 @@ void QFirmwareUpgradeDialog::executeNextJob( bool bRetry/*=false*/ )
                 break;
             case JOBF_MARK_IAP:
                 strMessage = QString("[%1] Mark IAP...").arg(PartName[getIndex(m_CurrentJob.which)]);
-                addProgressText(strMessage, TM_NORMAL);
                 m_nPacketId = m_Packet.markIap(m_CurrentJob.which);
                 qDebug( "mark Iap[%x]: %x", m_nPacketId, m_CurrentJob.which );
                 break;
             case JOBF_MARK_APP:
                 strMessage = QString("[%1] Mark APP...").arg(PartName[getIndex(m_CurrentJob.which)]);
-                addProgressText(strMessage, TM_NORMAL);
                 m_nPacketId = m_Packet.markApp(m_CurrentJob.which);
                 qDebug( "mark App[%x]: %x", m_nPacketId, m_CurrentJob.which );
                 break;
             case JOBF_RESET:
                 strMessage = QString("[%1] Reset...").arg(PartName[getIndex(m_CurrentJob.which)]);
-                addProgressText(strMessage, TM_NORMAL);
                 m_nPacketId = m_Packet.reset(m_CurrentJob.which);
                 qDebug( "reset[%x]: %x", m_nPacketId, m_CurrentJob.which );
                 break;
             case JOBF_WAIT_IAP_ALL:
                 strMessage = QString("Wait IAP Mode...");
-                addProgressText(strMessage, TM_NORMAL);
                 m_bWaitIAP = true;
                 m_bWaitIAPCheckOK = false;
                 m_nStableCheck = 0;
@@ -989,7 +978,6 @@ void QFirmwareUpgradeDialog::executeNextJob( bool bRetry/*=false*/ )
                 break;
             case JOBF_WAIT_APP_ALL:
                 strMessage = QString("Wait APP Mode...");
-                addProgressText(strMessage, TM_NORMAL);
                 m_bWaitAPP = true;
                 m_bWaitAPPCheckOK = false;
                 m_nStableCheck = 0;
@@ -997,7 +985,6 @@ void QFirmwareUpgradeDialog::executeNextJob( bool bRetry/*=false*/ )
                 break;
             case JOBF_ERASE:
                 strMessage = QString("[%1] Erase...").arg(PartName[getIndex(m_CurrentJob.which)]);
-                addProgressText(strMessage, TM_NORMAL);
                 m_nPacketId = m_Packet.erase(m_CurrentJob.which);
                 qDebug( "erase[%x]: %x", m_nPacketId, m_CurrentJob.which );
                 break;
@@ -1005,7 +992,6 @@ void QFirmwareUpgradeDialog::executeNextJob( bool bRetry/*=false*/ )
                 if (m_CurrentJob.firmwareBinaryPos == 0)
                 {
                     strMessage = QString("[%1] Write Firmware...").arg(PartName[getIndex(m_CurrentJob.which)]);
-                    addProgressText(strMessage, TM_NORMAL);
                     ui->labelPart->setText(PartName[getIndex(m_CurrentJob.which)]);
                     ui->progressBar->setValue(0);
                 }
@@ -1035,7 +1021,6 @@ void QFirmwareUpgradeDialog::executeNextJob( bool bRetry/*=false*/ )
                 {
                     qDebug( "job failed" );
                     strMessage = QString("[%1] Failed...").arg(PartName[getIndex(m_CurrentJob.which)]);
-                    addProgressText(strMessage, TM_NG);
                     onFirmwareUpdateFailed();
                 }
                 else
@@ -1082,7 +1067,6 @@ void QFirmwareUpgradeDialog::executeNextJob( bool bRetry/*=false*/ )
                                 stopQueryInformation();
                                 qDebug( "check IAP OK" );
                                 strMessage = QString("IAP Mode OK");
-                                addProgressText(strMessage, TM_OK);
                                 executeNextJob();
                             }
                         }
@@ -1114,7 +1098,6 @@ void QFirmwareUpgradeDialog::executeNextJob( bool bRetry/*=false*/ )
                                 stopQueryInformation();
                                 qDebug( "check APP OK" );
                                 strMessage = QString("APP Mode OK");
-                                addProgressText(strMessage, TM_OK);
                                 executeNextJob();
                             }
                         }
@@ -1158,7 +1141,6 @@ void QFirmwareUpgradeDialog::onFinishAllFirmwareDownloadJobs()
     qDebug( "firmware download job finish!" );
 
     QString strMessage = QString("Firmware Download OK!");
-    addProgressText(strMessage, TM_OK);
 
     ui->labelMessage->setText("The firmware has been updated successfully.");
     ui->labelMessage->setStyleSheet("color: rgb(31, 160, 70); font-weight: bold;");
@@ -1574,27 +1556,6 @@ void QFirmwareUpgradeDialog::on_pushButtonCancel_clicked()
 
     stopFirmwareDownload();
     startQueryInformation(true);
-}
-
-void QFirmwareUpgradeDialog::addProgressText(QString& strMessage, TextMode tm)
-{
-//    ui->listWidget->addItem(strMessage);
-//    int idx = ui->listWidget->count()-1;
-
-    switch (tm)
-    {
-    case TM_NORMAL:
-//        ui->listWidget->item(idx)->setForeground(QColor(100, 100, 100));
-        break;
-    case TM_NG:
-//        ui->listWidget->item(idx)->setForeground(QColor(170, 0, 26));
-        break;
-    case TM_OK:
-//        ui->listWidget->item(idx)->setForeground(QColor(26, 136, 58));
-        break;
-    }
-
-//    ui->listWidget->scrollToBottom();
 }
 
 void QFirmwareUpgradeDialog::onHandleMessage(const QString &/*msg*/)

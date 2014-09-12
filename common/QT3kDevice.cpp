@@ -301,7 +301,7 @@ void QT3kDevice::close()
         for (int i=0 ; i<m_PacketPool.size() ; i++)
         {
             packet = m_PacketPool.at(i);
-            //free( packet );
+            free( packet );
         }
         m_PacketPool.clear();
     }

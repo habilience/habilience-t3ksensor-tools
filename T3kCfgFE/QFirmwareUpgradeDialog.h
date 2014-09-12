@@ -167,7 +167,6 @@ protected:
     FirmwareInfo* findFirmware( FIRMWARE_TYPE_TEST type, unsigned short nModelNumber );
 
     enum TextMode{ TM_NORMAL, TM_NG, TM_OK };
-    void addProgressText(QString& strMessage, TextMode tm);
     
     void getFirmwareFile();
     void on_pushButtonUpgrade_clicked();
