@@ -66,7 +66,6 @@ linux-g++-64:QMAKE_TARGET.arch = x86_64
 linux-g++ { # depend on Qt Creator's setting
     CONFIG += static staticlib
     DEFINES += OS_LINUX
-    QMAKE_RPATHDIR += ./
     contains(QMAKE_TARGET.arch, x86_64):{
         message( "building for 64bit" );
         CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs_x64/debug/
@@ -80,6 +79,7 @@ linux-g++ { # depend on Qt Creator's setting
 
         CONFIG(release, debug|release) {
             LIBS += -L$$PWD/../external/quazip/ -lquazip_x64
+            QMAKE_RPATHDIR += '-Wl,-rpath,\'\$$ORIGIN/\''
         }
         CONFIG(debug, debug|release) {
             LIBS += -L$$PWD/../external/quazip/ -lquazipd_x64
@@ -99,6 +99,7 @@ linux-g++ { # depend on Qt Creator's setting
 
         CONFIG(release, debug|release) {
             LIBS += -L$$PWD/../external/quazip/ -lquazip
+            QMAKE_RPATHDIR += '-Wl,-rpath,\'\$$ORIGIN/\''
         }
         CONFIG(debug, debug|release) {
             LIBS += -L$$PWD/../external/quazip/ -lquazipd
@@ -110,7 +111,6 @@ linux-g++ { # depend on Qt Creator's setting
 linux-g++-32 { # generic g++ 32bit compiler
     CONFIG += static staticlib
     DEFINES += OS_LINUX
-    QMAKE_RPATHDIR += ./
     message( "building for 32bit" );
     CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs/debug/
     CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs/debug/
@@ -123,6 +123,7 @@ linux-g++-32 { # generic g++ 32bit compiler
 
     CONFIG(release, debug|release) {
         LIBS += -L$$PWD/../external/quazip/ -lquazip
+        QMAKE_RPATHDIR += '-Wl,-rpath,\'\$$ORIGIN/\''
     }
     CONFIG(debug, debug|release) {
         LIBS += -L$$PWD/../external/quazip/ -lquazipd
@@ -132,7 +133,6 @@ linux-g++-32 { # generic g++ 32bit compiler
 linux-g++-64 { # generic g++ 64bit compiler
     CONFIG += static staticlib
     DEFINES += OS_LINUX
-    QMAKE_RPATHDIR += ./
     message( "building for 64bit" );
     CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs_x64/debug/
     CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs_x64/debug/
@@ -145,6 +145,7 @@ linux-g++-64 { # generic g++ 64bit compiler
 
     CONFIG(release, debug|release) {
         LIBS += -L$$PWD/../external/quazip/ -lquazip_x64
+        QMAKE_RPATHDIR += '-Wl,-rpath,\'\$$ORIGIN/\''
     }
     CONFIG(debug, debug|release) {
         LIBS += -L$$PWD/../external/quazip/ -lquazipd_x64
