@@ -31,8 +31,8 @@ TEXT_WARNING_SENSOR_DATA_IS_CHANGED = Sensör verisi değişti.\n Kaydetmek isti
 TEXT_ERROR_WRITE_FACTORY_DEFAULT_FAILURE = [Hata] Fabrika Varsayılan Ayarına Yazın \n Yeniden Deneyin
 TEXT_WARNING_RESET_ALL_VALUES = Uyarı! Tüm değerleri sıfırlayın…
 TEXT_ERROR_RESET_ALL_VALUES = [Hata] Sıfırlama Hatası \n Yeniden deneyin!
-TEXT_WARNING_UPGRAGE_TITLE = Bellenim yükseltme
-TEXT_WARNING_UPGRAGE_MSG = Bellenim yükseltme istiyor musunuz?
+TEXT_WARNING_UPGRADE_TITLE = Bellenim yükseltme
+TEXT_WARNING_UPGRADE_MSG = Bellenim yükseltme istiyor musunuz?
 
 BTN_CAPTION_SAVE = Kaydet
 BTN_CAPTION_LOAD = Yükle

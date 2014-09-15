@@ -31,8 +31,8 @@ TEXT_WARNING_SENSOR_DATA_IS_CHANGED = Sensor data is changed.\nDo you want to sa
 TEXT_ERROR_WRITE_FACTORY_DEFAULT_FAILURE = [Error] Write to Factory-Default\n Try again!
 TEXT_WARNING_RESET_ALL_VALUES = Warning! Reset all values...
 TEXT_ERROR_RESET_ALL_VALUES = [Error] Reset Failure\n Try again!
-TEXT_WARNING_UPGRAGE_TITLE = Firmware Upgrade
-TEXT_WARNING_UPGRAGE_MSG = Do you want to firmware upgrade? Not restore if continued.
+TEXT_WARNING_UPGRADE_TITLE = Firmware Upgrade
+TEXT_WARNING_UPGRADE_MSG = Do you want to firmware upgrade? Not restore if continued.
 
 BTN_CAPTION_SAVE = Save
 BTN_CAPTION_LOAD = Load
