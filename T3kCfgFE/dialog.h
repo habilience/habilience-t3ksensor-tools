@@ -16,7 +16,6 @@ class QBentAdjustmentDialog;
 class QTouchSettingDialog;
 class QSelectDeviceDialog;
 class QRemoteTouchMarkDialog;
-class QFirmwareUpgradeDialog;
 class Dialog : public QDialog, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
         , public QEventRedirection::IEventListener
 {
@@ -50,7 +49,6 @@ private:
     QBentAdjustmentDialog*  m_pDlgBentAdjustment;
     QTouchSettingDialog*    m_pDlgTouchSetting;
     QRemoteTouchMarkDialog* m_pDlgRemoteTouchMark;
-    QFirmwareUpgradeDialog* m_pDlgFirmwareUpgrade;
 
     enum SelectMenu
     {

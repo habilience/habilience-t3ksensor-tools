@@ -82,6 +82,7 @@ linux-g++ { # depend on Qt Creator's setting
 
         CONFIG(release, debug|release) {
             LIBS += -L$$PWD/../external/quazip/ -lquazip_x64
+            QMAKE_RPATHDIR += '-Wl,-rpath,\'\$$ORIGIN/\''
         }
         CONFIG(debug, debug|release) {
             LIBS += -L$$PWD/../external/quazip/ -lquazipd_x64
@@ -100,6 +101,7 @@ linux-g++ { # depend on Qt Creator's setting
 
         CONFIG(release, debug|release) {
             LIBS += -L$$PWD/../external/quazip/ -lquazip
+            QMAKE_RPATHDIR += '-Wl,-rpath,\'\$$ORIGIN/\''
         }
         CONFIG(debug, debug|release) {
             LIBS += -L$$PWD/../external/quazip/ -lquazipd
@@ -120,6 +122,7 @@ linux-g++-32 { # generic g++ 32bit compiler
 
     CONFIG(release, debug|release) {
         LIBS += -L$$PWD/../external/quazip/ -lquazip
+        QMAKE_RPATHDIR += '-Wl,-rpath,\'\$$ORIGIN/\''
     }
     CONFIG(debug, debug|release) {
         LIBS += -L$$PWD/../external/quazip/ -lquazipd
@@ -138,6 +141,7 @@ linux-g++-64 { # generic g++ 64bit compiler
 
     CONFIG(release, debug|release) {
         LIBS += -L$$PWD/../external/quazip/ -lquazip_x64
+        QMAKE_RPATHDIR += '-Wl,-rpath,\'\$$ORIGIN/\''
     }
     CONFIG(debug, debug|release) {
         LIBS += -L$$PWD/../external/quazip/ -lquazipd_x64

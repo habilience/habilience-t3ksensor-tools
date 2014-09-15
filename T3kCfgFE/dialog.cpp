@@ -40,6 +40,7 @@
 #include "ui/QLicenseWidget.h"
 
 #include <QDir>
+#include <QProcess>
 
 #include "conf.h"
 
@@ -48,6 +49,18 @@ Dialog::Dialog(QWidget *parent) :
     m_EventRedirect(this),
     ui(new Ui::Dialog)
 {
+    if( g_AppData.bUpgradeFW )
+    {
+        QFirmwareUpgradeDialog* pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);
+        pDlgFirmwareUpgrade->exec();
+
+        QStringList args;
+        args << "/delayStart";
+        QProcess::startDetached( QApplication::applicationFilePath(), args );
+
+        qApp->exit();
+        return;
+    }
     m_bFirmwareDownload = false;
     m_bIsConnected = false;
     m_bInvalidFirmwareVersion = false;
@@ -67,7 +80,6 @@ Dialog::Dialog(QWidget *parent) :
     m_pDlgBentAdjustment = NULL;
     m_pDlgTouchSetting = NULL;
     m_pDlgRemoteTouchMark = NULL;
-    m_pDlgFirmwareUpgrade = NULL;
 
     m_oldMenu = MenuNone;
 
@@ -1225,10 +1237,11 @@ void Dialog::updateVersionInformation()
 
         if(nRet == QMessageBox::Yes)
         {
-            if( m_pDlgFirmwareUpgrade == NULL )
-                m_pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);
-            if( !m_pDlgFirmwareUpgrade->isVisible() )
-                m_pDlgFirmwareUpgrade->show();
+            QStringList args;
+            args << "/upgradeFW";
+            QProcess::startDetached( QApplication::applicationFilePath(), args );
+
+            qApp->exit();
         }
         else if(nRet == QMessageBox::No)
         {

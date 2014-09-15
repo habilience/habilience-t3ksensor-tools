@@ -65,6 +65,7 @@ linux-g++ {
             OBJECTS_DIR = $$PWD/.objs_x64/release/
             MOC_DIR = $$PWD/.objs_x64/release/
             DESTDIR = $$PWD/release_x64
+            QMAKE_RPATHDIR += '-Wl,-rpath,\'\$$ORIGIN/\''
         }
 
         LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
@@ -83,13 +84,12 @@ linux-g++ {
             OBJECTS_DIR = $$PWD/.objs/release/
             MOC_DIR = $$PWD/.objs/release/
             DESTDIR = $$PWD/release
+            QMAKE_RPATHDIR += '-Wl,-rpath,\'\$$ORIGIN/\''
         }
 
         LIBS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
         PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
     }
-
-    LIBS +=
 }
 
 linux-g++-32 {
@@ -105,12 +105,11 @@ linux-g++-32 {
         OBJECTS_DIR = $$PWD/.objs/release/
         MOC_DIR = $$PWD/.objs/release/
         DESTDIR = $$PWD/release
+        QMAKE_RPATHDIR += '-Wl,-rpath,\'\$$ORIGIN/\''
     }
 
     LIBS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
     PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
-
-    LIBS +=
 }
 
 linux-g++-64 {
@@ -126,12 +125,11 @@ linux-g++-64 {
         OBJECTS_DIR = $$PWD/.objs_x64/release/
         MOC_DIR = $$PWD/.objs_x64/release/
         DESTDIR = $$PWD/release_x64
+        QMAKE_RPATHDIR += '-Wl,-rpath,\'\$$ORIGIN/\''
     }
 
     LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
     PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
-
-    LIBS +=
 }
 
 macx: {

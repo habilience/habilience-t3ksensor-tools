@@ -17,6 +17,7 @@ QMyApplication* g_pApp = NULL;
 #ifdef Q_OS_LINUX
 #include <QFile>
 #include <QProcess>
+#include <sys/unistd.h>
 #endif
 
 int main(int argc, char *argv[])
@@ -56,6 +57,7 @@ int main(int argc, char *argv[])
     g_AppData.bMaximizeToVirtualScreen = false;
     g_AppData.bScreenShotMode = false;
 
+    bool bDelay = false;
     if (argc > 1)
     {
         QString strArg;
@@ -75,8 +77,15 @@ int main(int argc, char *argv[])
                 g_AppData.bMaximizeToVirtualScreen = true;
             if (strArg.compare("--virtualscreen", Qt::CaseInsensitive) == 0)
                 g_AppData.bMaximizeToVirtualScreen = true;
+            if (strArg.compare("/upgradeFW", Qt::CaseInsensitive) == 0)
+                g_AppData.bUpgradeFW = true;
+            if (strArg.compare("/delayStart", Qt::CaseInsensitive) == 0)
+                bDelay = true;
         }
     }
+
+    if( bDelay )
+        sleep( 1 );
 
     QMyApplication a( "Habilience T3000 Factory-Edition Dialog", argc, argv );
     g_pApp = &a;

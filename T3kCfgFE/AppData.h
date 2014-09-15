@@ -48,6 +48,7 @@ struct AppData
     bool    bIsSubCameraExist;
     QString strModelName;
     QString strFirmwareVersion;
+    bool    bUpgradeFW;
 };
 
 extern AppData g_AppData;
