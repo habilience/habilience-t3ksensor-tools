@@ -338,7 +338,6 @@ FORMS    += dialog.ui \
     QEditActionKey2WayDialog.ui \
     QEditActionKey1Dialog.ui \
     QRemoteTouchMarkDialog.ui \
-    briefing_dialog.ui \
     QFirmwareUpgradeDialog.ui
 
 RESOURCES += \
