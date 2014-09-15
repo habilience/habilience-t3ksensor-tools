@@ -1247,7 +1247,7 @@ void Dialog::updateVersionInformation()
 #else
             QFirmwareUpgradeDialog* pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);
             pDlgFirmwareUpgrade->setAttribute( Qt::WA_DeleteOnClose );
-            pDlgFirmwareUpgrade->show();
+            pDlgFirmwareUpgrade->exec();
 #endif
         }
         else if(nRet == QMessageBox::No)

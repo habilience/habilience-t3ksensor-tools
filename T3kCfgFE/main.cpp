@@ -57,8 +57,8 @@ int main(int argc, char *argv[])
     g_AppData.bMaximizeToVirtualScreen = false;
     g_AppData.bScreenShotMode = false;
     g_AppData.bUpgradeFW = false;
+    g_AppData.bDelayStart = false;
 
-    bool bDelay = false;
     if (argc > 1)
     {
         QString strArg;
@@ -81,12 +81,14 @@ int main(int argc, char *argv[])
             if (strArg.compare("/upgradeFW", Qt::CaseInsensitive) == 0)
                 g_AppData.bUpgradeFW = true;
             if (strArg.compare("/delayStart", Qt::CaseInsensitive) == 0)
-                bDelay = true;
+                g_AppData.bDelayStart = true;
         }
     }
 
-    if( bDelay )
+#ifdef Q_OS_LINUX
+    if( g_AppData.bDelayStart )
         sleep( 1 );
+#endif
 
     QMyApplication a( "Habilience T3000 Factory-Edition Dialog", argc, argv );
     g_pApp = &a;
