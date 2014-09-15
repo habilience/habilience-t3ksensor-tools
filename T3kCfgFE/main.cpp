@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
 #endif
     g_AppData.bMaximizeToVirtualScreen = false;
     g_AppData.bScreenShotMode = false;
+    g_AppData.bUpgradeFW = false;
 
     bool bDelay = false;
     if (argc > 1)

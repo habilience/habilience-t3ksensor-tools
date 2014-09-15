@@ -49,6 +49,7 @@ Dialog::Dialog(QWidget *parent) :
     m_EventRedirect(this),
     ui(new Ui::Dialog)
 {
+#ifdef Q_OS_LINUX
     if( g_AppData.bUpgradeFW )
     {
         QFirmwareUpgradeDialog* pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);
@@ -61,6 +62,7 @@ Dialog::Dialog(QWidget *parent) :
         qApp->exit();
         return;
     }
+#endif
     m_bFirmwareDownload = false;
     m_bIsConnected = false;
     m_bInvalidFirmwareVersion = false;
@@ -1227,7 +1229,6 @@ void Dialog::updateVersionInformation()
 
     ui->txtEdtDisplayFirmware->setHtml(strVersionInfoHTML);
 
-#ifdef SUPPORT_UPGRADE_FOR_INVALIDFIRMWARE
     if(m_bInvalidFirmwareVersion)
     {  
         int nRet = showMessageBox( this,
@@ -1237,18 +1238,23 @@ void Dialog::updateVersionInformation()
 
         if(nRet == QMessageBox::Yes)
         {
+#ifdef Q_OS_LINUX
             QStringList args;
             args << "/upgradeFW";
             QProcess::startDetached( QApplication::applicationFilePath(), args );
 
             qApp->exit();
+#else
+            QFirmwareUpgradeDialog* pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);
+            pDlgFirmwareUpgrade->setAttribute( Qt::WA_DeleteOnClose );
+            pDlgFirmwareUpgrade->show();
+#endif
         }
         else if(nRet == QMessageBox::No)
         {
             memset( m_SensorAppInfo, 0, sizeof(SensorAppInfo) * IDX_MAX );
         }
     }
-#endif
 }
 
 void Dialog::TPDP_OnRSP( T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part, unsigned short /*ticktime*/,
