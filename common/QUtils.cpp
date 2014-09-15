@@ -63,7 +63,7 @@ void makeDirectory( const QString& strDir )
 {
 #ifdef Q_OS_LINUX
     QStringList arg;
-    arg << "-m" << "0777" << strDir;
+    arg << "-p" << "-m" << "0777" << strDir;
     QProcess::startDetached( "mkdir", arg );
 
     QDir dd(strDir);
