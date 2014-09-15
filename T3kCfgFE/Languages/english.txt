@@ -31,6 +31,8 @@ TEXT_WARNING_SENSOR_DATA_IS_CHANGED = Sensor data is changed.\nDo you want to sa
 TEXT_ERROR_WRITE_FACTORY_DEFAULT_FAILURE = [Error] Write to Factory-Default\n Try again!
 TEXT_WARNING_RESET_ALL_VALUES = Warning! Reset all values...
 TEXT_ERROR_RESET_ALL_VALUES = [Error] Reset Failure\n Try again!
+TEXT_WARNING_UPGRAGE_TITLE = Firmware Upgrade
+TEXT_WARNING_UPGRAGE_MSG = Do you want to firmware upgrade? Not restore if continued.
 
 BTN_CAPTION_SAVE = Save
 BTN_CAPTION_LOAD = Load
@@ -48,8 +50,8 @@ TITLE_CAPTION_LICENSE = License
 [MESSAGEBOX]
 BTN_CAPTION_OK = OK
 BTN_CAPTION_CANCEL = Cancel
-BTN_CAPTION_YES = Yes(Y)
-BTN_CAPTION_NO = No(N)
+BTN_CAPTION_YES = Yes
+BTN_CAPTION_NO = No
 
 [SELECT SENSOR DATA DIALOG]
 
@@ -161,8 +163,8 @@ TEXT_AREA = Area
 
 TITLE = Gesture Profile
 
-TEXT_ITEM_GENERAL = Mouse
-TEXT_ITEM_WINDOWS7 = Multi-touch
+TEXT_ITEM_GENERAL = General
+TEXT_ITEM_WINDOWS7 = Windows 7
 TEXT_ITEM_MAC_OS_X = Mac OS X
 TEXT_ITEM_LINUX = Linux(GNOME)
 TEXT_ITEM_USER_DEFINED = User Defined
