@@ -508,6 +508,7 @@ void QGeneralSettingWidget::on_chkTrayIcon_toggled(bool checked)
 
 void QGeneralSettingWidget::on_chkOSXGesture_toggled(bool checked)
 {
+    chkTrayIcon->setChecked( checked );
     emit enableMacOSXGesture( checked );
 
     QSettings RegisterValue( tr("Habilience"), tr("T3kCfg") );
@@ -553,7 +554,7 @@ void QGeneralSettingWidget::on_chkOSXGesture_toggled(bool checked)
                                   Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TITLE_OSXGESTURE_MSG")),
                                   Res.getResString(QString::fromUtf8("SETTING"), QString::fromUtf8("TEXT_OSXGESTURE_MSG")),
                                   QMessageBox::Ok );
-        //qApp->exit( EXIT_CODE_RESTART );
+
         QString strExec( qApp->applicationDirPath() );
         strExec.replace( "/Contents/MacOS", "" );
         qDebug() << strExec;
