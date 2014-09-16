@@ -237,7 +237,7 @@ FORMS    += \
     LayoutToolWidget.ui \
     ArrangeHelperWidget.ui \
     EditGateWidget.ui \
-    LogicGalleryWidget.ui
+    LogicGalleryWidget.ui \
 
 win32:RC_FILE = ./resources/T3kSoftlogic.rc
 

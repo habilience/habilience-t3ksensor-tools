@@ -52,7 +52,7 @@ extern bool g_bIsScreenShotMode;
 #define CUSTOM_CONFIG_FILENAME  "config.ini"
 
 T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
-    QMainWindow(parent),
+    QDialog(parent),
     ui(new Ui::T3kCfgWnd)
 {
     ui->setupUi(this);
@@ -107,9 +107,6 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 
     m_bRunOtherTool = false;
     m_bPrevShowed = false;
-
-    setAnimated( true );
-    setDockOptions( AnimatedDocks );
 
     m_pT3kHandle = QT3kDevice::instance();
 
@@ -897,7 +894,7 @@ void T3kCfgWnd::keyPressEvent(QKeyEvent *evt)
         }
     }
 
-    QMainWindow::keyPressEvent(evt);
+    QDialog::keyPressEvent(evt);
 }
 
 void T3kCfgWnd::FlatMenuToLeft()
@@ -1432,7 +1429,7 @@ void T3kCfgWnd::timerEvent(QTimerEvent *evt)
         }
     }
 
-    QMainWindow::timerEvent(evt);
+    QDialog::timerEvent(evt);
 }
 
 void T3kCfgWnd::on_BtnLogo_clicked()

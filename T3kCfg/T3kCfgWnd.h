@@ -1,7 +1,7 @@
 #ifndef T3KCFGWND_H
 #define T3KCFGWND_H
 
-#include <QMainWindow>
+#include <QDialog>
 
 class QMainMenuWidget;
 class QMouseSettingWidget;
@@ -28,7 +28,7 @@ namespace Ui {
     class T3kCfgWnd;
 }
 
-class T3kCfgWnd : public QMainWindow, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
+class T3kCfgWnd : public QDialog, public QT3kDeviceEventHandler::IListener, public QLangManager::ILangChangeNotify
 {
     Q_OBJECT
 

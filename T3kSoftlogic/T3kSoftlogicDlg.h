@@ -12,14 +12,14 @@
 
 #include "KeyDesignWidget.h"
 
-#include <QMainWindow>
+#include <QDialog>
 #include <QStackedLayout>
 
 namespace Ui {
 class T3kSoftlogicDlg;
 }
 
-class T3kSoftlogicDlg : public QMainWindow, public QT3kDeviceEventHandler::IListener
+class T3kSoftlogicDlg : public QDialog, public QT3kDeviceEventHandler::IListener
 {
     Q_OBJECT
     

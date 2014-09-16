@@ -36,12 +36,19 @@
 extern bool g_bScreenShotMode;
 
 T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
-    QMainWindow(parent), m_strDataFileFromCmdLine(strModel),
+    QDialog(parent), m_strDataFileFromCmdLine(strModel),
     ui(new Ui::T3kSoftlogicDlg)
 {
     ui->setupUi(this);
 
-    ui->centralwidget->setLayout( ui->MainLayout );
+    Qt::WindowFlags flags = windowFlags();
+    Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
+    flags &= ~helpFlag;
+#if defined(Q_OS_WIN)
+    flags |= Qt::MSWindowsFixedSizeDialogHint;
+#endif
+    flags |= Qt::WindowMinMaxButtonsHint;
+    setWindowFlags(flags);
 
     setWindowTitle( windowTitle() + " Ver " + QCoreApplication::applicationVersion() );
 

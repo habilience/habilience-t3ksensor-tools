@@ -382,7 +382,6 @@ FORMS    += \
     ../common/ui/QEditAction2WDWnd.ui \
     ../common/ui/QEditAction4WDWnd.ui \
     ../common/ui/QEditActionEDWnd.ui \
-    T3kCfgWnd.ui \
     QCalibrationSettingWidget.ui \
     QGeneralSettingWidget.ui \
     QMainMenuWidget.ui \
@@ -404,7 +403,8 @@ FORMS    += \
     QBentProgressDialog.ui \
     QNMouseProfileWidget.ui \
     QOMouseProfileWidget.ui \
-    QPredefProfileEditDialog.ui
+    QPredefProfileEditDialog.ui \
+    T3kCfgWnd.ui
 
 
 RESOURCES += \
