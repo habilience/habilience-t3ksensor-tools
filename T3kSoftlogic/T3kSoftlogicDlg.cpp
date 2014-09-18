@@ -92,8 +92,6 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
         settings.endGroup();
         if( !strRecentModelName.isEmpty() )
         {
-            //CString strModelPathName;
-            //strModelPathName.Format( _T("%s\\SoftlogicData\\%s.hsk"), GetExecuteDirectory(), strRecentModelName );
             if( !loadModel( strRecentModelName ) )
             {
                 bLoadOK = false;
@@ -168,20 +166,6 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
         m_pTabPanelWidget->updateUIFromData();
         onUpdatePrewview();
     }
-
-//    DEV_BROADCAST_DEVICEINTERFACE NotificationFilter;
-//    GUID HIDGuid = { 0x4D1E55B2, 0xF16F, 0x11CF, { 0x88, 0xCB, 0x00, 0x11, 0x11, 0x00, 0x00, 0x30 } };
-
-//    ZeroMemory( &NotificationFilter, sizeof(NotificationFilter) );
-//    NotificationFilter.dbcc_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
-//    NotificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
-//    NotificationFilter.dbcc_classguid = HIDGuid;
-
-//    m_hDeviceNotify = RegisterDeviceNotification(
-//        GetSafeHwnd(),              // events recipient
-//        &NotificationFilter,        // type of device
-//        DEVICE_NOTIFY_WINDOW_HANDLE // type of recipient handle
-//        );
 
     init();
 
@@ -324,22 +308,6 @@ void T3kSoftlogicDlg::init()
 
     ui->TabMainMenu->setCurrentIndex( m_nFirstActiveTab );
 }
-
-//BOOL T3kSoftlogicDlg::OnDeviceChange( UINT nEventType, DWORD_PTR dwData )
-//{
-//    DEV_BROADCAST_HDR* pDevHdr = (DEV_BROADCAST_HDR*)dwData;
-
-//    if( nEventType == DBT_DEVICEARRIVAL ||
-//        nEventType == DBT_DEVICEREMOVECOMPLETE )
-//    {
-//        if( pDevHdr && (pDevHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE) )
-//        {
-//            SetTimer( ID_TIMER_CHECK_DEVICE, 2000, NULL );
-//        }
-//    }
-
-//    return CDialog::OnDeviceChange( nEventType, dwData );
-//}
 
 void T3kSoftlogicDlg::checkT3kDeviceStatus()
 {
@@ -663,14 +631,6 @@ bool T3kSoftlogicDlg::checkModified()
     return true;
 }
 
-//void T3kSoftlogicDlg::copyDataFile( QString lpszDataPath, QString lpszFileName )
-//{
-//    QString strFileName = lpszFileName;
-//    int nP = strFileName.lastIndexOf( '\\' );
-//    QString strF = strFileName.right( strFileName.length() - nP - 1 );
-//    QString strDst = QString("%1\\%2").arg(lpszDataPath).arg(strF);
-//}
-
 void T3kSoftlogicDlg::on_BtnNew_clicked()
 {
     if( isModified() )
@@ -852,11 +812,6 @@ void T3kSoftlogicDlg::timerEvent(QTimerEvent *evt)
         }
     }
 #endif
-//    else if ( evt->timerId() == ID_TIMER_CHECK_DEVICE )
-//    {
-//        killTimer( ID_TIMER_CHECK_DEVICE );
-//        checkT3kDeviceStatus();
-//    }
 }
 
 void T3kSoftlogicDlg::keyPressEvent(QKeyEvent *evt)

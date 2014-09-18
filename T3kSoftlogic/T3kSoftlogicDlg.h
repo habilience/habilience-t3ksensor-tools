@@ -92,10 +92,6 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent *);
     //virtual bool installEventFilter(QObject *);
 
-//    afx_msg LRESULT OnDisplayChange( WPARAM wParam, LPARAM lParam );
-
-//    afx_msg BOOL OnDeviceChange( UINT nEventType, DWORD_PTR dwData );
-
 private:
     Ui::T3kSoftlogicDlg *ui;
 

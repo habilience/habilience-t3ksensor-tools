@@ -59,9 +59,13 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 
     QT3kUserData::GetInstance()->setTopParent( this );
 
-#ifdef Q_OS_WIN
-    setWindowFlags(Qt::MSWindowsFixedSizeDialogHint);
+    Qt::WindowFlags flags = windowFlags();
+    Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
+    flags &= ~helpFlag;
+#if defined(Q_OS_WIN)
+    flags |= Qt::MSWindowsFixedSizeDialogHint;
 #endif
+    setWindowFlags(flags);
 
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     genAdjustButtonWidgetForWinAndX11( this );
