@@ -4,7 +4,6 @@
 #include <QPropertyAnimation>
 #include <QMessageBox>
 #include <quazipfile.h>
-#include <QBriefingDialog.h>
 #include "QUtils.h"
 #include <QPainter>
 #include <QDir>

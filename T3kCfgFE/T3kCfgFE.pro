@@ -245,7 +245,6 @@ SOURCES += main.cpp\
     QUserDefinedKeyCtrl.cpp \
     QKeyEdit.cpp \
     QRemoteTouchMarkDialog.cpp \
-    QBriefingDialog.cpp \
     QFirmwareUpgradeDialog.cpp \
     QFWDPacket.cpp \
     QPartCheckBox.cpp \
@@ -312,7 +311,6 @@ HEADERS  += dialog.h \
     QKeyEdit.h \
     QRemoteTouchMarkDialog.h \
     conf.h \
-    QBriefingDialog.h \
     QFirmwareUpgradeDialog.h \
     QFWDPacket.h \
     QPartCheckBox.h \
@@ -338,7 +336,6 @@ FORMS    += dialog.ui \
     QEditActionKey2WayDialog.ui \
     QEditActionKey1Dialog.ui \
     QRemoteTouchMarkDialog.ui \
-    briefing_dialog.ui \
     QFirmwareUpgradeDialog.ui
 
 RESOURCES += \
