@@ -213,11 +213,7 @@ void QSideviewDialog::onChangeLanguage()
     ui->lblAmbientLights->setText( res.getResString( RES_TAG, "TEXT_IR_BAR") );
     ui->btnRemoteSideview->setText( res.getResString( RES_TAG, "BTN_CAPTION_REMOTE_SHARE_SIDEVIEW") );
 
-    if ( QSensorInitDataCfg::instance()->isLoaded() )
-        ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") + "\r\n" +
-                               QSensorInitDataCfg::instance()->getFileName() );
-    else
-        ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") );
+    ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") );
 
     ui->btnRefresh->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_REFRESH") );
     ui->btnSave->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_SAVE") );

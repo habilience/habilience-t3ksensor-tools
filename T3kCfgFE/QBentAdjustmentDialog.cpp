@@ -354,11 +354,7 @@ void QBentAdjustmentDialog::onChangeLanguage()
     ui->btnLeft->setText( res.getResString(RES_TAG, "BTN_CAPTION_LEFT") );
     ui->btnRight->setText( res.getResString(RES_TAG, "BTN_CAPTION_RIGHT") );
 
-    if ( QSensorInitDataCfg::instance()->isLoaded() )
-        ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") + "\r\n" +
-                               QSensorInitDataCfg::instance()->getFileName() );
-    else
-        ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") );
+    ui->btnReset->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_RESET") );
 
     ui->btnSave->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_SAVE") );
     ui->btnClose->setText( res.getResString( MAIN_TAG, "BTN_CAPTION_CLOSE") );

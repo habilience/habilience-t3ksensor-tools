@@ -955,7 +955,7 @@ void T3kCfgWnd::ShowContentsMenu()
 
 void T3kCfgWnd::HideContentsMenu()
 {
-    ShowMainMenu( false );
+    ShowMainMenu( true );
     m_pMenuWidget->hide();
     ui->SWMenu->setCurrentIndex( 0 );
     m_pMenuWidget->SetMenuButton( 0 );

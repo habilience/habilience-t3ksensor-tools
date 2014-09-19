@@ -44,9 +44,6 @@ T3kSoftlogicDlg::T3kSoftlogicDlg(QWidget *parent, QString strModel) :
     Qt::WindowFlags flags = windowFlags();
     Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
     flags &= ~helpFlag;
-#if defined(Q_OS_WIN)
-    flags |= Qt::MSWindowsFixedSizeDialogHint;
-#endif
     flags |= Qt::WindowMinMaxButtonsHint;
     setWindowFlags(flags);
 

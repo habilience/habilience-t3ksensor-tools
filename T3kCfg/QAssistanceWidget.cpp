@@ -33,7 +33,7 @@ QAssistanceWidget::QAssistanceWidget(QT3kDevice*& pHandle, QWidget *parent) :
     genAdjustButtonWidgetForWinAndX11( this );
 #endif
 
-    setFont( parent->font() );
+    setFont( parent == NULL ? qApp->font() : parent->font() );
     setFixedSize( width(), height() );
 
     m_nCurrentTab = 0;

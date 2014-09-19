@@ -11,6 +11,7 @@
 #include "QLoadSensorDataWidget.h"
 #include "QDetectionGraphView.h"
 #include "T3kCfgWnd.h"
+#include "QT3kUserData.h"
 
 typedef enum
 {
@@ -527,7 +528,7 @@ void QSensorSettingWidget::on_BtnChkTouch_clicked()
         m_pT3kHandle->sendCommand( QString("%1%2").arg(cstrTouchEnable).arg(1), true );
     else
     {
-        m_pDiableTouchWidget = new QDiableTouchWidget( m_pT3kHandle, parentWidget()->parentWidget()->parentWidget() );
+        m_pDiableTouchWidget = new QDiableTouchWidget( m_pT3kHandle, QT3kUserData::GetInstance()->getTopParent() );
         m_pDiableTouchWidget->setAttribute( Qt::WA_DeleteOnClose );
         m_pDiableTouchWidget->setFont( font() );
         int nRet = m_pDiableTouchWidget->exec();
@@ -544,7 +545,7 @@ void QSensorSettingWidget::on_BtnChkTouch_clicked()
 
 void QSensorSettingWidget::on_BtnDiagnostics_clicked()
 {
-    m_pAssistanceWidget = new QAssistanceWidget( m_pT3kHandle, parentWidget()->parentWidget()->parentWidget() );
+    m_pAssistanceWidget = new QAssistanceWidget( m_pT3kHandle, QT3kUserData::GetInstance()->getTopParent() );
     m_pAssistanceWidget->setFont( font() );
     m_pAssistanceWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pAssistanceWidget, &QAssistanceWidget::showLoadStatusWidget, this, &QSensorSettingWidget::onShowLoadStatusWidget, Qt::QueuedConnection );
@@ -624,6 +625,6 @@ void QSensorSettingWidget::on_BtnChkPenPairing_clicked()
 
 void QSensorSettingWidget::onShowLoadStatusWidget()
 {
-    QLoadSensorDataWidget dlg( m_pT3kHandle, parentWidget()->parentWidget()->parentWidget() );
+    QLoadSensorDataWidget dlg( m_pT3kHandle, QT3kUserData::GetInstance()->getTopParent() );
     dlg.exec();
 }

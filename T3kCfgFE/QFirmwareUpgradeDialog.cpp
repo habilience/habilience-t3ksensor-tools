@@ -61,8 +61,6 @@ QFirmwareUpgradeDialog::QFirmwareUpgradeDialog(QWidget *parent) :
 
     setAcceptDrops( true );
 
-    setWindowTitle( windowTitle() + " Ver " + QCoreApplication::applicationVersion() );
-
     Qt::WindowFlags flags = windowFlags();
     Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
     flags &= ~helpFlag;
