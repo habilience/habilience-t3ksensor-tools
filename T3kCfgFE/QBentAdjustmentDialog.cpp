@@ -959,8 +959,11 @@ void QBentAdjustmentDialog::paintEvent(QPaintEvent *)
     {
         p.save();
 
+        int nt = rcBody.width() / 42;
+        int nth = rcBody.height() / 24;
+        int ntx = nt > nth ? nth : nt;
         QFont fnt = font();
-        fnt.setPixelSize(ui->btnClose->height());
+        fnt.setPixelSize(ntx);
         fnt.setWeight(QFont::DemiBold);
         p.setFont(fnt);
         p.setPen(Qt::red);
@@ -969,6 +972,7 @@ void QBentAdjustmentDialog::paintEvent(QPaintEvent *)
         QRect rcCamError( rcBody.left(), ui->btnDown->geometry().bottom() + 5,
                           rcBody.width(),
                           ui->layoutVMidBox->geometry().height() - (ui->btnDown->geometry().bottom() - ui->layoutVMidBox->geometry().top()) );
+
         p.drawText(rcCamError, Qt::AlignCenter , m_errorCalibrationCamera);
 
         p.restore();
