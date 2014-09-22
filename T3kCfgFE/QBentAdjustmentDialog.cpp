@@ -957,18 +957,21 @@ void QBentAdjustmentDialog::paintEvent(QPaintEvent *)
 
     if(m_bCalibrationWarning)
     {
-        p.restore();
-        int nt = rcBody.width() / 42;
-        int nth = rcBody.height() / 24;
-        int ntx = nt > nth ? nth : nt;
+        p.save();
+
         QFont fnt = font();
-        fnt.setPixelSize(ntx);
+        fnt.setPixelSize(ui->btnClose->height());
         fnt.setWeight(QFont::DemiBold);
         p.setFont(fnt);
         p.setPen(Qt::red);
+        p.setBrush(Qt::NoBrush);
 
-        QRect rcCamError((width()/4),((height()*4)/5),(width()/2),(height()/8));
+        QRect rcCamError( rcBody.left(), ui->btnDown->geometry().bottom() + 5,
+                          rcBody.width(),
+                          ui->layoutVMidBox->geometry().height() - (ui->btnDown->geometry().bottom() - ui->layoutVMidBox->geometry().top()) );
         p.drawText(rcCamError, Qt::AlignCenter , m_errorCalibrationCamera);
+
+        p.restore();
     }
 
 #ifdef DEVELOP_CROSSTRACE
@@ -1315,6 +1318,8 @@ inline QString getCameraPrefix( int nIndex )
 
 void QBentAdjustmentDialog::drawCameraLocations( QPainter& p, QRect rcBody )
 {
+    p.save();
+
     p.setRenderHint(QPainter::Antialiasing);
 
     int nt = rcBody.width() / 42;
@@ -1410,6 +1415,8 @@ void QBentAdjustmentDialog::drawCameraLocations( QPainter& p, QRect rcBody )
         p.setBackgroundMode(Qt::OpaqueMode);
         p.drawText(rcText, flags, strCM);
     }
+
+    p.restore();
 }
 
 void QBentAdjustmentDialog::drawCursor( QPainter& p, int nx, int ny, int nc )
