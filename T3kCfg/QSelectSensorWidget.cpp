@@ -208,8 +208,8 @@ void QSelectSensorWidget::timerEvent(QTimerEvent *evt)
     if( evt->timerId() == m_nTimerCheckDevice )
     {
         int nTotalDetectCnt = 0;
-        for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
-            nTotalDetectCnt += QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+        for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST) ; d++)
+            nTotalDetectCnt += QT3kDevice::getDeviceCount( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI );
 
         if( m_nDeviceCount != nTotalDetectCnt )
         {
@@ -273,16 +273,16 @@ void QSelectSensorWidget::UpdateDeviceList()
     }
     m_mapDevModelID.clear();
 
-    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
+    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST) ; d++)
     {
         ModelID stID;
-        stID.VID = DEVICE_LIST[d].nVID; stID.PID = DEVICE_LIST[d].nPID;
-        int nCnt = QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+        stID.VID = APP_DEVICE_LIST[d].nVID; stID.PID = APP_DEVICE_LIST[d].nPID;
+        int nCnt = QT3kDevice::getDeviceCount( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI );
         for( int i=0; i<nCnt; i++ )
         {
             stID.Idx = i;
             m_mapDevModelID.insert( m_mapDevModelID.count(), stID );
-            AddSensorItem( DEVICE_LIST[d].szModelName, m_pT3kHandle->getDevicePath( stID.VID, stID.PID, DEVICE_LIST[d].nMI, stID.Idx ) );
+            AddSensorItem( APP_DEVICE_LIST[d].szModelName, m_pT3kHandle->getDevicePath( stID.VID, stID.PID, APP_DEVICE_LIST[d].nMI, stID.Idx ) );
         }
     }
 }

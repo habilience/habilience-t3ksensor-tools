@@ -338,10 +338,10 @@ bool T3kCfgWnd::OpenT30xHandle()
 
     int nIdx = 0;
     int nTotalSensorCount = 0;
-    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
+    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST) ; d++)
     {
-        int nCnt = QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
-        if( nCnt > 0 && (d != COUNT_OF_DEVICE_LIST-1 || nTotalSensorCount == 0) )
+        int nCnt = QT3kDevice::getDeviceCount( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI );
+        if( nCnt > 0 && (d != COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST)-1 || nTotalSensorCount == 0) )
             nIdx = d;
         nTotalSensorCount += nCnt;
     }
@@ -373,12 +373,12 @@ bool T3kCfgWnd::OpenT30xHandle()
         return bRet;
     }
 
-    bRet = QT3kDevice::instance()->open( DEVICE_LIST[nIdx].nVID, DEVICE_LIST[nIdx].nPID, DEVICE_LIST[nIdx].nMI, 0 );
+    bRet = QT3kDevice::instance()->open( APP_DEVICE_LIST[nIdx].nVID, APP_DEVICE_LIST[nIdx].nPID, APP_DEVICE_LIST[nIdx].nMI, 0 );
 
     if( bRet )
     {
         emit connectedDevice( m_pT3kHandle->getDeviceInfo() );
-        QT3kUserData::GetInstance()->SetModel( DEVICE_LIST[nIdx].nPID );
+        QT3kUserData::GetInstance()->SetModel( APP_DEVICE_LIST[nIdx].nPID );
     }
 
     return bRet;

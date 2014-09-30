@@ -79,12 +79,12 @@ bool CHIDCmd::OpenT3kHandle()
     // setnotify
 //    TPDPEventMultiCaster::instance()->SetSingleListener( this );
 
-    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
+    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST) ; d++)
     {
-        int nCnt = QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+        int nCnt = QT3kDevice::getDeviceCount( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI );
         if( nCnt > 0 )
         {
-            bRet = QT3kDevice::instance()->open( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI, 0 );
+            bRet = QT3kDevice::instance()->open( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI, 0 );
         }
     }
 

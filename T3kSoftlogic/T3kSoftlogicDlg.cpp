@@ -309,8 +309,8 @@ void T3kSoftlogicDlg::init()
 void T3kSoftlogicDlg::checkT3kDeviceStatus()
 {
     int nDevCnt = 0;
-    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
-        nDevCnt += QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST) ; d++)
+        nDevCnt += QT3kDevice::getDeviceCount( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI );
 
     if( m_nT3kDeviceCount != 0 && m_nT3kDeviceCount != nDevCnt )
         m_pT3kHandle->close();
@@ -345,12 +345,12 @@ bool T3kSoftlogicDlg::openT3kHandle()
     }
     else
     {
-        for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
+        for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST) ; d++)
         {
-            int nCnt = QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+            int nCnt = QT3kDevice::getDeviceCount( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI );
             if( nCnt > 0 )
             {
-                bRet = m_pT3kHandle->open( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI, 0 );
+                bRet = m_pT3kHandle->open( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI, 0 );
             }
         }
     }

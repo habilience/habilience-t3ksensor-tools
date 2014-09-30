@@ -1,6 +1,8 @@
 #include "QFWDPacket.h"
 #include <stddef.h>
 
+#include "../common/t3kcomdef.h"
+
 static int T3K_CALLBACK _onReceiveHIDData( T3K_HANDLE /*hDevice*/, unsigned char* pBuffer, unsigned short nBytes, void * pContext )
 {
     QFWDPacket* pThis = (QFWDPacket*)pContext;
@@ -33,34 +35,9 @@ bool QFWDPacket::open()
         return false;
     }
 
-    struct DEVICE_INFO {
-        unsigned short VID;
-        unsigned short PID;
-        unsigned short MI;
-    };
-
-    DEVICE_INFO T3kDeviceInfos[] = {
-        {0xffff, 0x3000, 1},        // old T3000 app
-        {0x2200, 0x3000, 1},        // new T3000 app
-        {0x2200, 0x3100, 1},        // T3100 app
-        {0x2200, 0x3200, 1},        // T3200 app
-        {0x2200, 0x3500, 1},        // T3500 app
-        {0x2200, 0x3900, 1},        // T3500 app
-        {0x2200, 0x0001, 0},        // T3100 iap
-        {0x2200, 0x0002, 0},        // T3100 iap upg
-        {0x2200, 0x0003, 0},        // T3000 iap
-        {0x2200, 0x0004, 0},        // T3000 iap upg
-        {0x2200, 0x3201, 0},        // T3200 iap
-        {0x2200, 0x3202, 0},        // T3200 iap upg
-        {0x2200, 0x3501, 0},        // T3500 iap
-        {0x2200, 0x3502, 0},        // T3500 iap upg
-        {0x2200, 0x3901, 0},        // T3900 iap
-        {0x2200, 0x3902, 0}         // T3900 iap upg
-    };
-
-    for ( unsigned int i=0 ; i<sizeof(T3kDeviceInfos)/sizeof(DEVICE_INFO) ; i++ )
+    for ( unsigned int i=0 ; i<COUNT_OF_DEVICE_LIST(UPGRADE_DEVICE_LIST) ; i++ )
     {
-        m_hDevice = ::T3kOpenDevice(T3kDeviceInfos[i].VID, T3kDeviceInfos[i].PID, T3kDeviceInfos[i].MI, 0);
+        m_hDevice = ::T3kOpenDevice(UPGRADE_DEVICE_LIST[i].nVID, UPGRADE_DEVICE_LIST[i].nPID, UPGRADE_DEVICE_LIST[i].nMI, 0);
         if (m_hDevice)
         {
             ::T3kSetEventNotify(m_hDevice, &m_Notify);

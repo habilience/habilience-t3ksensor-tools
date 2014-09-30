@@ -269,7 +269,7 @@ void QT3kLoadSideviewObject::FillEmptySideview(QImage *pImg, int nWidth, int nHe
 
     dc.fillRect( rcClient, Qt::black );
     dc.setPen( Qt::white );
-    QString str( QLangManager::instance()->getResource().getResString(QString::fromUtf8("SENSOR DIAGNOSIS SIDEVIEW"), QString::fromUtf8("TEXT_NO_IMAGE")) );
+    QString str( "No Image" );
     dc.drawText( rcClient, str, QTextOption( Qt::AlignVCenter | Qt::AlignHCenter ) );
 
     dc.end();

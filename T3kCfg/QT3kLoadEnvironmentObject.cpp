@@ -14,6 +14,8 @@
 #include "WindowInfoUserDef.h"
 #include "HIDStateUserDef.h"
 #include <setupapi.h>
+
+#include "../common/t3kcomdef.h"
 #endif
 
 #ifndef Q_OS_WIN
@@ -510,12 +512,18 @@ QVector<PairRSP> QT3kLoadEnvironmentObject::GetHIDState()
                         {
                             if( HidP_GetCaps( Ppd, &Caps ) )
                             {
-                                if( ((Attributes.ProductID == 0x0000) && (Attributes.VendorID == 0xFFFF)) ||
-                                    ((Attributes.ProductID == 0x3000) && (Attributes.VendorID == 0x2200)) ||
-                                    ((Attributes.ProductID == 0x3100) && (Attributes.VendorID == 0x2200)) ||
-                                    ((Attributes.ProductID == 0x3200) && (Attributes.VendorID == 0x2200)) ||
-                                    ((Attributes.ProductID == 0x3500) && (Attributes.VendorID == 0x2200)) ||
-                                    ((Attributes.ProductID == 0x3900) && (Attributes.VendorID == 0x2200)) )
+                                bool bChecked = false;
+                                for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST(BASE_DEVICE_LIST) ; d++)
+                                {
+                                    if( (Attributes.ProductID == BASE_DEVICE_LIST[d].nPID) &&
+                                            (Attributes.VendorID == BASE_DEVICE_LIST[d].nVID) )
+                                    {
+                                        bChecked = true;
+                                        break;
+                                    }
+                                }
+
+                                if( bChecked )
                                 {
                                     bool bFind = false;
                                     DWORD dwDeviceUsage = ((DWORD)Caps.UsagePage<<16) + Caps.Usage;

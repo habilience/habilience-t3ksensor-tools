@@ -260,12 +260,12 @@ bool Dialog::openDevice()
     }
     else
     {
-        for (int d=0 ; d<COUNT_OF_DEVICE_LIST ; d++)
+        for (int d=0 ; d<COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST) ; d++)
         {
-            int nDevCnt = QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+            int nDevCnt = QT3kDevice::getDeviceCount( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI );
             if (nDevCnt > 0)
             {
-                bRet = QT3kDevice::instance()->open( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI, 0 );
+                bRet = QT3kDevice::instance()->open( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI, 0 );
                 break;
             }
         }
@@ -292,9 +292,9 @@ bool Dialog::openDevice()
 void Dialog::checkDeviceStatus()
 {
     int nDeviceCount = 0;
-    for (int d=0 ; d<COUNT_OF_DEVICE_LIST ; d++)
+    for (int d=0 ; d<COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST) ; d++)
     {
-        int nCnt = QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+        int nCnt = QT3kDevice::getDeviceCount( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI );
         nDeviceCount += nCnt;
     }
 
@@ -1231,9 +1231,10 @@ void Dialog::updateVersionInformation()
 
     if(m_bInvalidFirmwareVersion)
     {  
+        QLangRes& res = QLangManager::instance()->getResource();
         int nRet = showMessageBox( this,
-                                   "Do you want to firmware upgrade?",
-                                   "Firmware Upgrade",
+                                   res.getResString( MAIN_TAG, "TEXT_WARNING_UPGRADE_MSG" ),
+                                   res.getResString( MAIN_TAG, "TEXT_WARNING_UPGRADE_TITLE" ),
                                    QMessageBox::Question, QMessageBox::Yes|QMessageBox::No, QMessageBox::Cancel);
 
         if(nRet == QMessageBox::Yes)

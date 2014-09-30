@@ -32,7 +32,7 @@ TEXT_ERROR_WRITE_FACTORY_DEFAULT_FAILURE = [Hata] Fabrika Varsayılan Ayarına Y
 TEXT_WARNING_RESET_ALL_VALUES = Uyarı! Tüm değerleri sıfırlayın…
 TEXT_ERROR_RESET_ALL_VALUES = [Hata] Sıfırlama Hatası \n Yeniden deneyin!
 TEXT_WARNING_UPGRADE_TITLE = Bellenim yükseltme
-TEXT_WARNING_UPGRADE_MSG = Bellenim yükseltme istiyor musunuz?
+TEXT_WARNING_UPGRADE_MSG = Bellenim yükseltme istiyor musunuz?\nİşlemeniz devam ederse, eski haline geri getirilmez.
 
 BTN_CAPTION_SAVE = Kaydet
 BTN_CAPTION_LOAD = Yükle

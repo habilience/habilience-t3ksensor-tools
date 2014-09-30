@@ -50,12 +50,12 @@ void QSelectDeviceWidget::refreshDeviceList()
     ui->TableDeviceList->clear();
 
     int nDevCnt = 0;
-    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST ; d++)
+    for ( int d = 0 ; d<COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST) ; d++)
     {
-        int nCnt = QT3kDevice::getDeviceCount( DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI );
+        int nCnt = QT3kDevice::getDeviceCount( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI );
         for( int i=0; i<nCnt; i++ )
         {
-            insertListItem( DEVICE_LIST[d].szModelName, nDevCnt, DEVICE_LIST[d].nVID, DEVICE_LIST[d].nPID, DEVICE_LIST[d].nMI, i);
+            insertListItem( APP_DEVICE_LIST[d].szModelName, nDevCnt, APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI, i);
 
             nDevCnt++;
         }
