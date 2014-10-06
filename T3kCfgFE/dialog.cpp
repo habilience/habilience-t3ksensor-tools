@@ -1032,7 +1032,7 @@ void Dialog::updateVersionInformation()
         m_bInvalidFirmwareVersion = bInvalidFirmwareVersion;
         update();
 
-        if (m_bInvalidFirmwareVersion)
+        if (!g_AppData.bDevelop && m_bInvalidFirmwareVersion)
         {
             ui->btnSideview->setVisible(false);
             ui->btnDetection->setVisible(false);
@@ -1229,7 +1229,7 @@ void Dialog::updateVersionInformation()
 
     ui->txtEdtDisplayFirmware->setHtml(strVersionInfoHTML);
 
-    if(m_bInvalidFirmwareVersion)
+    if(!g_AppData.bDevelop && m_bInvalidFirmwareVersion)
     {  
         QLangRes& res = QLangManager::instance()->getResource();
         int nRet = showMessageBox( this,

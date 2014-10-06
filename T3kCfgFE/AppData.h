@@ -50,6 +50,7 @@ struct AppData
     QString strFirmwareVersion;
     bool    bUpgradeFW;
     bool    bDelayStart;
+    bool    bDevelop;
 };
 
 extern AppData g_AppData;

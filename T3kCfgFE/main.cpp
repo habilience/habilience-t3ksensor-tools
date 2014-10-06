@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
     g_AppData.bScreenShotMode = false;
     g_AppData.bUpgradeFW = false;
     g_AppData.bDelayStart = false;
+    g_AppData.bDevelop = false;
 
     if (argc > 1)
     {
@@ -82,6 +83,9 @@ int main(int argc, char *argv[])
                 g_AppData.bUpgradeFW = true;
             if (strArg.compare("/delayStart", Qt::CaseInsensitive) == 0)
                 g_AppData.bDelayStart = true;
+
+            if (strArg.compare("/develop", Qt::CaseInsensitive) == 0)
+                g_AppData.bDevelop = true;
         }
     }
 
