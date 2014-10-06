@@ -567,7 +567,7 @@ void Dialog::paintEvent(QPaintEvent */*evt*/)
         }
         else
         {
-            if (m_bInvalidFirmwareVersion)
+            if (!g_AppData.bDevelop && m_bInvalidFirmwareVersion)
             {
                 strWarningTitle = res.getResString( MAIN_TAG, "TEXT_ERROR_INVALID_FIRMWARE" );
                 strWarningTitle.replace( "%s", "%1" );
