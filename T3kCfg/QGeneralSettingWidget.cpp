@@ -575,6 +575,16 @@ void QGeneralSettingWidget::on_chkOSXGesture_toggled(bool checked)
 void QGeneralSettingWidget::onConnectedDevice()
 {
 #ifdef Q_OS_MAC
+    SInt32 versionMajor = 0;
+    SInt32 versionMinor = 0;
+    SInt32 versionBugFix = 0;
+    ::Gestalt( gestaltSystemVersionMajor, &versionMajor );
+    ::Gestalt( gestaltSystemVersionMinor, &versionMinor );
+    ::Gestalt( gestaltSystemVersionBugFix, &versionBugFix );
+
+    if( versionMajor >= 10 && versionMinor >= 10 )
+        return;
+
     bool bEnable = false;
     QString strVer = QT3kUserData::GetInstance()->getFirmwareVersionStr();
     int nExtraVer = strVer.mid( strVer.indexOf( '.' )+2, 1 ).toInt(0, 16);
@@ -595,20 +605,7 @@ void QGeneralSettingWidget::onConnectedDevice()
 
         QSettings RegOption( "Habilience", "T3kCfg" );
         RegOption.beginGroup( "Options" );
-        bEnable = RegOption.value( "MacOSX_Gesture", false ).toBool();
-        if( bEnable )
-        {
-            SInt32 versionMajor = 0;
-            SInt32 versionMinor = 0;
-            SInt32 versionBugFix = 0;
-            ::Gestalt( gestaltSystemVersionMajor, &versionMajor );
-            ::Gestalt( gestaltSystemVersionMinor, &versionMinor );
-            ::Gestalt( gestaltSystemVersionBugFix, &versionBugFix );
-
-            if( versionMajor <= 10 && versionMinor < 10 )
-                bEnable = false;
-        }
-        chkOSXGesture->setChecked( bEnable );
+        chkOSXGesture->setChecked( RegOption.value( "MacOSX_Gesture", false ).toBool() );
         RegOption.endGroup();
     }
 #endif
