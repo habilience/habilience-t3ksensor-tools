@@ -16,6 +16,7 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #elif defined(Q_OS_MAC)
+#include <CoreServices/CoreServices.h>
 #include <CoreGraphics/CGEvent.h>
 #endif
 
@@ -594,7 +595,20 @@ void QGeneralSettingWidget::onConnectedDevice()
 
         QSettings RegOption( "Habilience", "T3kCfg" );
         RegOption.beginGroup( "Options" );
-        chkOSXGesture->setChecked( RegOption.value( "MacOSX_Gesture", false ).toBool() );
+        bEnable = RegOption.value( "MacOSX_Gesture", false ).toBool();
+        if( bEnable )
+        {
+            SInt32 versionMajor = 0;
+            SInt32 versionMinor = 0;
+            SInt32 versionBugFix = 0;
+            ::Gestalt( gestaltSystemVersionMajor, &versionMajor );
+            ::Gestalt( gestaltSystemVersionMinor, &versionMinor );
+            ::Gestalt( gestaltSystemVersionBugFix, &versionBugFix );
+
+            if( versionMajor <= 10 && versionMinor < 10 )
+                bEnable = false;
+        }
+        chkOSXGesture->setChecked( bEnable );
         RegOption.endGroup();
     }
 #endif

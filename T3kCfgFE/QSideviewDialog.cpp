@@ -582,6 +582,8 @@ void QSideviewDialog::timerEvent(QTimerEvent *evt)
 #include <QDebug>
 void QSideviewDialog::showEvent(QShowEvent *)
 {
+    if( g_AppData.bScreenShotMode ) return;
+
     QDesktopWidget DeskWidget;
     int nPrimary = DeskWidget.primaryScreen();
     QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );

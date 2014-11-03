@@ -353,6 +353,8 @@ void QDetectionDialog::drawArrow(QPainter& p)
 
 void QDetectionDialog::showEvent(QShowEvent *)
 {
+    if( g_AppData.bScreenShotMode ) return;
+
     QDesktopWidget DeskWidget;
     int nPrimary = DeskWidget.primaryScreen();
     const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );

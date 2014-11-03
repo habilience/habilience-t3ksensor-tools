@@ -1581,6 +1581,8 @@ void QBentAdjustmentDialog::drawWaitTime( QPainter& p, QRect rcWait )
 
 void QBentAdjustmentDialog::showEvent(QShowEvent *evt)
 {
+    if( g_AppData.bScreenShotMode ) return;
+
     QWidget::showEvent(evt);
 
     QDesktopWidget DeskWidget;

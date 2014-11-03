@@ -429,6 +429,8 @@ void QTouchSettingDialog::drawVertArrow( QPainter& p, QPoint pt1, QPoint pt2, QP
 
 void QTouchSettingDialog::showEvent(QShowEvent *)
 {
+    if( g_AppData.bScreenShotMode ) return;
+
     QDesktopWidget DeskWidget;
     int nPrimary = DeskWidget.primaryScreen();
     const QRect rcPrimaryMon = DeskWidget.screenGeometry( nPrimary );
