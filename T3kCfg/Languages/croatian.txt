@@ -1,0 +1,351 @@
+﻿
+[COMMON]
+TEXT_CLOSE = Zatvori
+
+[MAIN]
+APP_ERROR_MSG1 = Ne mogu izvršiti na uklonivim uređajima!
+TITLE_GENERAL_ERROR = Greška
+
+BTN_CAPTION_EXIT = Izlaz
+BTN_CAPTION_DEFAULT = Osnovno
+BTN_CAPTION_REFRESH = Osvježi
+MENU_TOOLTIP_START_PAGE = Početna stranica
+MENU_TOOLTIP_MOUSE = Geste
+MENU_TOOLTIP_CALIBRATION = Kalibracija
+MENU_TOOLTIP_SENSOR_SETTING = Postavke senzora
+MENU_TOOLTIP_GENERAL_SETTING = Opće postavke
+MENU_TOOLTIP_SOFTKEY_SETTING = Postavke soft tipki
+MSGBOX_TITLE_DEFAULT = Promijeni na zadane vrijednosti
+MSGBOX_TEXT_DEFAULT = Vrati sve na originalne postavke?
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = Ovaj program ne podržava v%1 firmware.\nTrenutni: %1\nPodržava %2 ~ %3
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = [Greška] Neispravan firmware
+TITLE_CAPTION_INFORMATION = Informacije o programu
+TITLE_CAPTION_FIRMWARE = Informacije o firmware-u
+TEXT_DEVICE_NOT_CONNECTED = Uređaj nije spojen.
+TEXT_FIRMWARE_DOWNLOAD = Firmware se učitava.
+
+TITLE_CAPTION_LICENSE = Licenca
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Odaberi uređaj
+TITLE_CAPTION_DEVICE_LIST = Popis uređaja
+TEXT_DEV_PATH = Put uređaja
+TEXT_MODEL = Model
+TEXT_NUMBER = Broj
+BTN_CAPTION_PLAY_BUZZER = Reproduciraj zvučni signal
+BTN_CAPTION_SELECT = Označi
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = OK
+BTN_CAPTION_CANCEL = Odustani
+BTN_CAPTION_YES = Da
+BTN_CAPTION_NO = Ne
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Geste
+BTN_CAPTION_MOUSE_SUB1 = Postavke gesti dodira
+BTN_CAPTION_MOUSE_SUB2 = Profili gesti
+BTN_CAPTION_CALIBRATION = Kalibracija
+BTN_CAPTION_CALIBRATION_SUB1 = Kalibracija ekrana osjetljivog na dodir
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Postavke senzora
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Omogući/Onemogući dodir
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Zvučni signal, tipka prečaca
+BTN_CAPTION_GENERAL_SETTING = Opće postavke
+BTN_CAPTION_GENERAL_SETTING_SUB1 = Jezik, način unosa
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Orijentacija zaslona
+BTN_CAPTION_REMOTE_ASSISTANCE = Udaljena podrška
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Soft tipka
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Geste dodira
+BTN_CAPTION_TOUCH_SETTING = Postavke dodira…
+
+;TEXT_SINGLE = Jedan prst
+;TEXT_FINGERS = Prsti
+;TEXT_PALM = Dlan
+;TEXT_PUTNTAP = Put & Tap
+;TEXT_DRAG = Povuci
+;TEXT_TAP = Dodir
+;TEXT_DOUBLE_TAP = Dvostruki dodir
+;TEXT_LONG_TAP = Dugi dodir
+;TEXT_ROTATE = Rotiranje
+;TEXT_ZOOM = Povećanje
+TEXT_MOVE_WITH_ZOOM = Premjesti s povećanjem
+TEXT_INERTIAL_WHEEL = Inercijski kotač
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Pojedinačni Put & Tap, Put & Double Tap
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Hibridni Multi-Touch
+TEXT_MAC_OS_MARGIN = Mac OS X margina
+TEXT_INVERT_WHEEL = Obrnuti kotač
+
+TEXT_LEFT = Lijeva
+TEXT_RIGHT = Desna
+TEXT_MIDDLE = Srednja
+TEXT_DOUBLE_CLICK = Dvoklik
+TEXT_CLICK = Klik
+
+TEXT_PROFILE_LEGEND_MODE1 = Miš
+TEXT_PROFILE_LEGEND_MODE2 = Multi-Touch
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Uredi akciju
+TEXT_PROFILE_ITEM = Profil
+TEXT_ACTION = Akcija
+TEXT_USER_DEFINE_KEY = Korisnički definirana tipka
+TEXT_KEY = Tipka
+TEXT_FUNCTION_KEY = Funkcijska tipka
+TEXT_NONE = Ništa
+TEXT_NOT_DEFINED = Nije definirano
+BTN_CAPTION_APPLY = Primjeni
+BTN_CAPTION_CANCEL = Odustani
+
+TEXT_PROFILE_ITEM_DISABLED = (Onemogućeno)
+TEXT_PROFILE_ITEM_USER_DEFINED = (Korisnički definirano)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Funkcijska tipka)
+TEXT_PROFILE_ITEM_MOUSE = (Miš)
+TEXT_PROFILE_ITEM_ESCAPE = Escape (Esc)
+TEXT_PROFILE_ITEM_FORWARD = Naprijed
+TEXT_PROFILE_ITEM_BACK = Natrag
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Prebacivanje zadataka
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Prebacivanje zadataka (Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Upravljanje zadacima
+TEXT_PROFILE_ITEM_EXPLORER = Explorer
+TEXT_PROFILE_ITEM_DESKTOP = Radna površina
+TEXT_PROFILE_ITEM_VKBOARD = Virtualna tipkovnica
+TEXT_PROFILE_ITEM_T3KCFG = Konfiguracijski program za T3k seriju
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Lijevi klik
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Desni klik
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Srednji klik
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Lijeva tipka
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Desna tipka
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Srednja tipka
+
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = Upravljanje profilom
+TEXT_ADD = Dodaj
+TEXT_EDIT = Uredi
+TEXT_DELETE = Izbriši
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Kalibracija
+TEXT_SCREEN_MARGIN = Margine ekrana
+TEXT_SCREEN_PERCENT_OF_SCREEN = % ekrana
+TEXT_CALIBRATE = Kalibriraj
+BTN_CAPTION_CALIBRATE = Kalibracija…
+
+TITLE_AREA_SETTING = Postavke površine (% ekrana)
+TEXT_SINGLE_CLICK = Jedan Klik
+TEXT_DOUBLE_CLICK = Dvoklik
+;TEXT_TWO_TOUCH = Put & Tap
+TEXT_PALM = Dlan
+
+TEXT_CALIBRATION_WARNING = Nije provjerena 'Mac OS X margina' u izborniku 'Geste'. Moguće je da kalibracija neće ispravno raditi.
+TEXT_CALIBRATION_WARNING2 = Provjerena 'Mac OS X margina' u izborniku 'Geste'. Moguće je da kalibracija neće ispravno raditi.
+TITLE_TOUCH_SENSITIVITY = Osjetljivost dodira
+TEXT_SENSITIVITY = Osjetljivost
+
+BTN_ADVANCED = Napredno…
+
+[ADVANCED]
+WINDOW_CAPTION = Napredno
+TITLE_CAPTION_ADJUSTMENT = Namještanje
+TEXT_CHECKBOX_BENT = Savijen
+TEXT_CHECKBOX_DETECTION = Raspon detekcije
+TEXT_ID = ID
+BTN_START = Start
+MSG_INCORRECT_ID = ID je neipravan.
+MSG_ESCAPE = Stisni ESC za izlaz.
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Upali/ugasi zaslon osjetljiv na dodir
+TEXT_TOUCH_ENABLE = Zaslon osjetljiv na dodir
+TEXT_RADIO_TOUCH_ENABLE = Omogući
+TEXT_RADIO_TOUCH_DISABLE = Onemogući
+
+TITLE_CAPTION_BUZZER = Zvučni signal
+TEXT_CLICK = Klik
+TEXT_CALIBRATION = Kalibracija
+TEXT_ERROR = Greška
+TEXT_KEYTONE = Zvuk tipki
+TEXT_SENSOR_ATTACH = Senzor spojen
+TEXT_PEN_PAIRING = Uparivanje olovke
+TEXT_USB_ATTACH = USB spojen
+
+TITLE_SHORTCUT_KEY = Tipka prečaca
+TEXT_CALIBRATION_KEY = Tipka za kalibraciju
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Broj pritiska tipke
+TEXT_TOUCH_ENABLE_KEY = Tipka osjetljiva na dodir
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Broj pritiska tipke
+TEXT_NOT_USED = Ne koristi se
+TEXT_ON = Upaljeno
+TEXT_OFF = Ugašeno
+
+TITLE_TRAY_ICON = Ikona u sistemskoj traci
+TEXT_CHECK_TRAYICON = Koristi ikonu u sistemskoj traci
+TEXT_CHECK_OSXGESTURE = 
+TITLE_OSXGESTURE_MSG = 
+TEXT_OSXGESTURE_MSG = 
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Način unosa na dodir
+TEXT_INPUT_MODE = Način unosa
+TEXT_INPUT_MODE_MOUSE = Miš
+TEXT_INPUT_MODE_SINGLE_TOUCH = Jednostruki dodir (Olovka tableta)
+TEXT_INPUT_MODE_MULTI_TOUCH = Multi-Touch
+TEXT_INPUT_MODE_AUTO_SELECT = Automatsko obilježavanje
+TEXT_INPUT_MODE_WARNING_MSG = Dodir možda neće ispravno raditi pod drugim OS-om. Nastavi?
+
+TITLE_MULTI_MONITOR = Postavke prikaza s više monitora
+TEXT_MULTI_MONITOR = Postavke monitora
+TEXT_MULTI_MONITOR_SETTING = Odaberi monitor za prikaz
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Primjeni
+TEXT_BTN_MULTI_MONITOR_CANCEL = Odustani
+TEXT_PRIMARY_MONITOR = Primarni monitor : %d
+TEXT_NON_MULTI_MONITOR = Nije podržano više monitora
+
+BTN_TOOLTIP_PLAY = Reproduciraj
+
+BTN_CAMERA_DIAGNOSTICS = Dijagnostika senzora
+
+TITLE_LANGUAGE = Jezik
+TEXT_LANGUAGE = Odabir jezika
+TEXT_LANGUAGE_NOT_FOUND = Nedostaje datoteka s jezikom.
+
+TITLE_DISPLAY_ORIENTATION = Orijentacija prikaza
+TEXT_DISPLAY_ORIENTATION = Orijentacija
+TEXT_DISPLAY_ORIENTATION_1 = 0' - Vodoravna
+TEXT_DISPLAY_ORIENTATION_2 = 90' - Portret
+TEXT_DISPLAY_ORIENTATION_3 = 180' - Vodoravna (zrcalna)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - Portret (zrcalna)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - Normalna
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Lijeva
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Desna
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Naopaka
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
+
+TITLE_DISPLAY_WARNING = Upozorenje
+TEXT_DISPLAY_WARNING = Trenutna orijentacija prikaza i kalibracijska vrijednost ne odgovaraju.
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Postavke dodira
+TITLE_TIME_SETTING = Postavka vremena (ms)
+TEXT_TAP = Dodir
+TEXT_LONG_TAP = Dugi dodir
+TEXT_SLOW = Sporo
+TEXT_FAST = Brzo
+TITLE_WHEEL_SENSITIVITY_SETTING = Kotač/Postavke osjetljivosti povećanja
+TEXT_WHEEL = Kotač
+TEXT_ZOOM = Povećanje
+
+BTN_CAPTION_DEFAULT = Osnovno
+BTN_CAPTION_REFRESH = Osvježi
+MSGBOX_TEXT_DEFAULT = Povrati na originalne postavke?
+MSGBOX_TITLE_DEFAULT = Osnovno
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Odaberi "Gašenje Dodira"
+TEXT_MESSAGE = Molim kliknite na tipku mjerača vremena za isključivanje senzora.
+BTN_TIMER_TEXT = %1 sekundi
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Upozorenje
+TEXT_MESSAGE = Upozorenje! Sljedeći ekran sadrži postavke koje su ključne za rad senzora dodira.\n\nPromjenom ovih postavki možete učinit rad senzora nestabilnim.
+BTN_CAPTION_CONTINUE = Nastavi
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = Ugovor
+TEXT_MESSAGE = Na sljedećem ekranu će biti skupni podaci o senzoru i korisničkom okruženju (verzija OS-a, tablet servisa na MS Windows, rezolucija ekrana).
+BTN_CAPTION_CONTINUE = Slažem se
+BTN_CAPTION_CLOSE = Odbijam
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Dijagnostika senzora
+BTN_CAPTION_DEFAULT = Osnovno
+BTN_CAPTION_REFRESH = Osvježi
+BTN_CAPTION_SAVELOG = Spremi stanje senzora
+BTN_CAPTION_MAIN = Glavni
+BTN_CAPTION_SUB = 
+TAB_CAPTION_SIDEVIEW = Pogled sa strane
+TAB_CAPTION_DETECTION = Graf detekcije
+
+LOG_CAPTION_ERROR = Greška! Stanje nije spremljeno.
+LOG_SIDEVIEW = Pogled sa strane
+LOG_DETECTION = Detekcija
+LOG_DATA = Postavljam podatke
+LOG_SAVING = Spremam
+LOG_LOADING = Učitavam
+LOG_COMPLETE = Završeno
+LOG_OK = OK
+LOG_FAIL = NEUSPJEŠNO
+LOG_PROGRESS = NAPREDAK
+LOG_START = Start
+LOG_CAMERA = Kamera
+
+TITLE_SENSOR1 = Senzor 1
+TITLE_SENSOR2 = Senzor 2
+TITLE_SENSOR1_1 = Senzor 1-1
+TITLE_SENSOR2_1 = Senzor 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Povećaj
+BTN_TOOLTIP_ZOOM_OUT = Smanji
+BTN_TOOLTIP_RESET_ZOOM = Podesi prema ekranu
+TEXT_SENSOR1_GRAPH_LEFT = Donji lijevi
+TEXT_SENSOR1_GRAPH_RIGHT = Gornji desni
+TEXT_SENSOR2_GRAPH_LEFT = Gornji lijevi
+TEXT_SENSOR2_GRAPH_RIGHT = Donji desni
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = Nema slike
+BTN_CAPTION_SNAPSHOT = Snimak
+
+[SOFTKEY SETTING]
+TEXT_TITLE = Postavke soft tipke
+TEXT_HEADER_NUMBER = Broj
+TEXT_HEADER_TYPE = Tip
+TEXT_HEADER_ACTION = Akcija
+TEXT_ITEM_KEY = Tipka
+TEXT_ITEM_STATE = Stanje
+TEXT_ITEM_NOT_USED = (Ne koristi se)
+TEXT_ITEM_CALIBRATION = Ulazim/Izlazim iz kalibracije senzora
+TEXT_ITEM_TOUCH = Omogući/Onemogući ekran osjetljiv na dodir
+
+[TRAYICON]
+TEXT_MENU_OPEN = Otvori…
+TEXT_MENU_EXIT = Izlaz
+TEXT_BALLOONTIP_TITLE = T3k konfiguracija
+TEXT_BALLOONTIP_MSG = T3k tvornička konfiguracija ("T3kCfgFE.exe") se izvršava.
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = Status senzora
+TITLE_REMOTE = Udaljena kontrola
+TEXT_SELECT_SERVER = Odaberi server
+TEXT_PORT = Port
+TEXT_USERNAME = Korisničko ime
+BTN_REQUEST = Zahtjev
+TEXT_RECONNECTING = Pokušaj spajanja na server… %1
+BTN_CANCEL = Odustani
+TEXT_CONNECTING = Spajam…
+TEXT_REMOTE_CONTROL = Udaljena kontrola…
+BTN_DISCONNECT = Prekinuta veza
+TEXT_WAIT_MSG = Čekam na spajanje admina.
+TEXT_REPAIRCONNECTION = Udaljena kontrola je odspojila sesiju.\r\nČekam na spajanje admina.
+TEXT_ID = ID: %1
+TEXT_SERV_NOT_RES = Server ne odgovara.
+TITLE_CHAT = Chat
+BTN_SEND = Pošalji
+MSG_CHAT_DISCONNECTED = Odspojen.
+TITLE_REMOTE_MSG = Zatvori udaljenu sesiju.
+MSG_REMOTE_DISCONNECT = Da li ste sigurni da se želite odspojiti?
+TEXT_HELP_MSG = Molim vas da dodirnete cenar križića.
+TEXT_HELP_ARROW = Molim vas da dodirnete strelicu.

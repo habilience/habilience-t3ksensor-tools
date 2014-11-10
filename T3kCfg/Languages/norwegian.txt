@@ -1,0 +1,351 @@
+﻿
+[COMMON]
+TEXT_CLOSE = Lukk
+
+[MAIN]
+APP_ERROR_MSG1 = Kan ikke kjøre med flyttbare enheter
+TITLE_GENERAL_ERROR = Feil
+
+BTN_CAPTION_EXIT = Forlat
+BTN_CAPTION_DEFAULT = Standard
+BTN_CAPTION_REFRESH = Forny
+MENU_TOOLTIP_START_PAGE = Start side
+MENU_TOOLTIP_MOUSE = Bevegelse
+MENU_TOOLTIP_CALIBRATION = Kalibrering
+MENU_TOOLTIP_SENSOR_SETTING = Sensor innstillinger
+MENU_TOOLTIP_GENERAL_SETTING = Vanlige innstillinger
+MENU_TOOLTIP_SOFTKEY_SETTING = Softkey innstillinger
+MSGBOX_TITLE_DEFAULT = Bytt til standard
+MSGBOX_TEXT_DEFAULT = Gjenopprett til orginale innstillinger
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = Dette programmet støtter ikke v%1 firmware.\nCurrent: %1\nSupports %2 ~ %3
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = [Error] Feil programvare
+TITLE_CAPTION_INFORMATION = Program informasjon
+TITLE_CAPTION_FIRMWARE = Programvare informasjon
+TEXT_DEVICE_NOT_CONNECTED = Enheten er ikke koblet til
+TEXT_FIRMWARE_DOWNLOAD = Programvare blir lastet ned
+
+TITLE_CAPTION_LICENSE = Lisens
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Velg enhet
+TITLE_CAPTION_DEVICE_LIST = Enhets liste
+TEXT_DEV_PATH = Enhets vei
+TEXT_MODEL = Model
+TEXT_NUMBER = Nei.
+BTN_CAPTION_PLAY_BUZZER = Spill av buzzer
+BTN_CAPTION_SELECT = Velg
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = OK
+BTN_CAPTION_CANCEL = Avbryt
+BTN_CAPTION_YES = Ja
+BTN_CAPTION_NO = Nei
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Bevegelse
+BTN_CAPTION_MOUSE_SUB1 = Innstillinger For Touch Bevegelse
+BTN_CAPTION_MOUSE_SUB2 = Bevegelses Profil
+BTN_CAPTION_CALIBRATION = Kalibrering
+BTN_CAPTION_CALIBRATION_SUB1 = Kalibrering Av Berøringsskjerm
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Sensor innstillinger
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Skru på/ Skru av Touch
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Buzzer, Snarveis knapp
+BTN_CAPTION_GENERAL_SETTING = Generelle innstillinger
+BTN_CAPTION_GENERAL_SETTING_SUB1 = Språk, Input modus
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Skjerm orientering
+BTN_CAPTION_REMOTE_ASSISTANCE = Ekstern assistanse
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Softkey
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Handlinger for Touch
+BTN_CAPTION_TOUCH_SETTING = Innstillinger for Touch
+
+;TEXT_SINGLE = Enkel
+;TEXT_FINGERS = Fingre
+;TEXT_PALM = Håndplate
+;TEXT_PUTNTAP = Putt & Trykk
+;TEXT_DRAG = Drag
+;TEXT_TAP = Trykk
+;TEXT_DOUBLE_TAP = Dobbelttrykk
+;TEXT_LONG_TAP = Trykk lenge
+;TEXT_ROTATE = Roter
+;TEXT_ZOOM = Zoom
+TEXT_MOVE_WITH_ZOOM = Beveg med zoom
+TEXT_INERTIAL_WHEEL = Treghet på Rotasjon
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Individuelt putt & trykk, putt & dobbelttrykk
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Hybrid Multi-Touch
+TEXT_MAC_OS_MARGIN = Mac OS X Margin
+TEXT_INVERT_WHEEL = Roter Speilvendt
+
+TEXT_LEFT = Venstre
+TEXT_RIGHT = Høyre
+TEXT_MIDDLE = Midten
+TEXT_DOUBLE_CLICK = Dobbelttrykk
+TEXT_CLICK = Trykk
+
+TEXT_PROFILE_LEGEND_MODE1 = Mus
+TEXT_PROFILE_LEGEND_MODE2 = Multi-touch
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Rediger Handling
+TEXT_PROFILE_ITEM = Profilere Sak
+TEXT_ACTION = Kjør
+TEXT_USER_DEFINE_KEY = Brukdefinert Tast
+TEXT_KEY = Tast
+TEXT_FUNCTION_KEY = Funksjonstast
+TEXT_NONE = Ingen
+TEXT_NOT_DEFINED = Ikke Definert
+BTN_CAPTION_APPLY = Bruk
+BTN_CAPTION_CANCEL = Avbryt
+
+TEXT_PROFILE_ITEM_DISABLED = (Deaktivert)
+TEXT_PROFILE_ITEM_USER_DEFINED = (Brukerdefinert)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Funksjonstast)
+TEXT_PROFILE_ITEM_MOUSE = (Mus)
+TEXT_PROFILE_ITEM_ESCAPE = Forlat (Esc)
+TEXT_PROFILE_ITEM_FORWARD = Fremover
+TEXT_PROFILE_ITEM_BACK = Tilbake
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Bytt Oppgave
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Bytt Oppgave (Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Oppgavebehandler
+TEXT_PROFILE_ITEM_EXPLORER = Utforsker
+TEXT_PROFILE_ITEM_DESKTOP = Skrivebord
+TEXT_PROFILE_ITEM_VKBOARD = Virtuelt tastatur
+TEXT_PROFILE_ITEM_T3KCFG = T3k Series Configure Program
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Venstre Klikk
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Høyre Klikk
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Midten
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Venstre Knapp
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Høyre Knapp
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Midten
+
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = Rediger Profil
+TEXT_ADD = Legg til
+TEXT_EDIT = Endre
+TEXT_DELETE = Fjern
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Kalibrere
+TEXT_SCREEN_MARGIN = Skjerm Margin
+TEXT_SCREEN_PERCENT_OF_SCREEN = % av Skjerm
+TEXT_CALIBRATE = Kalibrer
+BTN_CAPTION_CALIBRATE = Kaliberer…
+
+TITLE_AREA_SETTING = Område Innstillinger (% av Skjermen)
+TEXT_SINGLE_CLICK = Enkeltrykk
+TEXT_DOUBLE_CLICK = Dobbelttrykk
+;TEXT_TWO_TOUCH = Putt & Trykk
+TEXT_PALM = Håndflate
+
+TEXT_CALIBRATION_WARNING = Sjekket ikke 'Mac OS X Margin' i 'Handlings' menu. Kalibreringen fungerte ikke på riktig måte.
+TEXT_CALIBRATION_WARNING2 = Sjekket 'Mac OS X Margin' in 'Handslings' menu. Kalibreringen fungerte ikke på riktig måte.
+TITLE_TOUCH_SENSITIVITY = Touch Sensitivitet
+TEXT_SENSITIVITY = Sensitivitet
+
+BTN_ADVANCED = Avansert
+
+[ADVANCED]
+WINDOW_CAPTION = Avansert
+TITLE_CAPTION_ADJUSTMENT = Juster
+TEXT_CHECKBOX_BENT = Bøyd
+TEXT_CHECKBOX_DETECTION = Oppdagelses rekkevidde
+TEXT_ID = ID
+BTN_START = Start
+MSG_INCORRECT_ID = ID er feil
+MSG_ESCAPE = Trykk ESC for å forlate
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Skru på/av Touch Skjerm
+TEXT_TOUCH_ENABLE = Touch Skjerm
+TEXT_RADIO_TOUCH_ENABLE = Skru på
+TEXT_RADIO_TOUCH_DISABLE = Skru av
+
+TITLE_CAPTION_BUZZER = Buzzer
+TEXT_CLICK = Klikk
+TEXT_CALIBRATION = Kalibrere
+TEXT_ERROR = Feil
+TEXT_KEYTONE = Keytone
+TEXT_SENSOR_ATTACH = Sensor kobling
+TEXT_PEN_PAIRING = Sammenkobling av penn
+TEXT_USB_ATTACH = USB kobling
+
+TITLE_SHORTCUT_KEY = Hurtigtast
+TEXT_CALIBRATION_KEY = Kalibreringstast
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Antall taster som presses
+TEXT_TOUCH_ENABLE_KEY = Touch aktiverings tast
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Antall taster som presses
+TEXT_NOT_USED = Ikke i bruk
+TEXT_ON = PÅ
+TEXT_OFF = AV
+
+TITLE_TRAY_ICON = Brett Icon
+TEXT_CHECK_TRAYICON = Bruk Brett Icon
+TEXT_CHECK_OSXGESTURE = 
+TITLE_OSXGESTURE_MSG = 
+TEXT_OSXGESTURE_MSG = 
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Touch Tilførsels Modus
+TEXT_INPUT_MODE = Tilførsels Modus
+TEXT_INPUT_MODE_MOUSE = Mus
+TEXT_INPUT_MODE_SINGLE_TOUCH = Enkelttrykk (Nettbrett Penn)
+TEXT_INPUT_MODE_MULTI_TOUCH = Multi-Touch
+TEXT_INPUT_MODE_AUTO_SELECT = Velg Automatisk
+TEXT_INPUT_MODE_WARNING_MSG = Touch fungerer nok ikke skikkelig med en annen OS. Fortsett?
+
+TITLE_MULTI_MONITOR = Multi-skjerm innstillinger
+TEXT_MULTI_MONITOR = Skjerm innstilling
+TEXT_MULTI_MONITOR_SETTING = Velg skjerm innstilling
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Velg
+TEXT_BTN_MULTI_MONITOR_CANCEL = Avbryt
+TEXT_PRIMARY_MONITOR = Nåværende Skjerm : %d
+TEXT_NON_MULTI_MONITOR = Kan ikke bruke Mulit-Skjerm
+
+BTN_TOOLTIP_PLAY = Spill
+
+BTN_CAMERA_DIAGNOSTICS = Sensor Diagnotisk
+
+TITLE_LANGUAGE = Språk
+TEXT_LANGUAGE = Velg Språk
+TEXT_LANGUAGE_NOT_FOUND = Språk finnes ikke
+
+TITLE_DISPLAY_ORIENTATION = Display orientering
+TEXT_DISPLAY_ORIENTATION = Orientering
+TEXT_DISPLAY_ORIENTATION_1 = 0' - Landskap
+TEXT_DISPLAY_ORIENTATION_2 = 90' - Portrett
+TEXT_DISPLAY_ORIENTATION_3 = 180' - Landskap (snudd)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - Portrett (snudd)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - Normal
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Venstre
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Høyre
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Oppned
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
+
+TITLE_DISPLAY_WARNING = Advarsel
+TEXT_DISPLAY_WARNING = Nåværende skjerm orientering og kalibrering fungerer ikke.
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Touch innstillinger
+TITLE_TIME_SETTING = Tidsinnstillinger
+TEXT_TAP = Trykk
+TEXT_LONG_TAP = Trykk lenge
+TEXT_SLOW = Sakte
+TEXT_FAST = Kjapt
+TITLE_WHEEL_SENSITIVITY_SETTING = Rull/Zoom sensitivitet innstillinger
+TEXT_WHEEL = Rull
+TEXT_ZOOM = Zoom
+
+BTN_CAPTION_DEFAULT = Standard
+BTN_CAPTION_REFRESH = Forny
+MSGBOX_TEXT_DEFAULT = Gjenopprett til de orginale innstillingene?
+MSGBOX_TITLE_DEFAULT = Standard
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Velg "Skru av Touch"
+TEXT_MESSAGE = Vær vennlig å trykk på tidsknappen\nfor å skru av sensoren.
+BTN_TIMER_TEXT = %1 sekunder
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Advarsel
+TEXT_MESSAGE = Advarsel! Den følgende siden inneholder datainnstillinger som er viktige for at touch sensoren skal fungere.\n\nOm du forandrer disse innstillingene så kan berøringsskjermen bli ustabil.
+BTN_CAPTION_CONTINUE = Fortsett
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = Enighet
+TEXT_MESSAGE = Det vil være en samlet informasjon om sensor og bruksmiljø(OS Version, Tablet Input Service on MS Windows, Screen Resolution) på den neste siden.
+BTN_CAPTION_CONTINUE = Enig
+BTN_CAPTION_CLOSE = Avvis
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Sensor Diagnotisk
+BTN_CAPTION_DEFAULT = Standard
+BTN_CAPTION_REFRESH = Forny
+BTN_CAPTION_SAVELOG = Lagre sensor tilstand
+BTN_CAPTION_MAIN = Hoved
+BTN_CAPTION_SUB = Sub
+TAB_CAPTION_SIDEVIEW = Fra siden
+TAB_CAPTION_DETECTION = Påvisnings Graf
+
+LOG_CAPTION_ERROR = Feil! Klarte ikke lagre tilstand
+LOG_SIDEVIEW = Fra siden
+LOG_DETECTION = Påvisning
+LOG_DATA = Data innstillinger
+LOG_SAVING = Lagrer
+LOG_LOADING = Laster inn
+LOG_COMPLETE = Fullført
+LOG_OK = OK
+LOG_FAIL = FEIL
+LOG_PROGRESS = PRG
+LOG_START = Start
+LOG_CAMERA = Kamera
+
+TITLE_SENSOR1 = Sensor 1
+TITLE_SENSOR2 = Sensor 2
+TITLE_SENSOR1_1 = Sensor 1-1
+TITLE_SENSOR2_1 = Sensor 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Zoom Inn
+BTN_TOOLTIP_ZOOM_OUT = Zoom Ut
+BTN_TOOLTIP_RESET_ZOOM = Tilpass Skjerm
+TEXT_SENSOR1_GRAPH_LEFT = Nede Til Venstre
+TEXT_SENSOR1_GRAPH_RIGHT = Oppe Til Høyre
+TEXT_SENSOR2_GRAPH_LEFT = Oppe Til Venstre
+TEXT_SENSOR2_GRAPH_RIGHT = Nede Til Høyre
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = Intet Bilde
+BTN_CAPTION_SNAPSHOT = Snapshot
+
+[SOFTKEY SETTING]
+TEXT_TITLE = Softkey Innstillinger
+TEXT_HEADER_NUMBER = Nei.
+TEXT_HEADER_TYPE = Type
+TEXT_HEADER_ACTION = Handling
+TEXT_ITEM_KEY = Knapp
+TEXT_ITEM_STATE = Tilstand
+TEXT_ITEM_NOT_USED = (Ikke Brukt)
+TEXT_ITEM_CALIBRATION = Laster Inn/Logger Ut Av Sensor Innstillinger
+TEXT_ITEM_TOUCH = Skru På/Skru Av Touch Skjerm
+
+[TRAYICON]
+TEXT_MENU_OPEN = Åpne…
+TEXT_MENU_EXIT = Forlat
+TEXT_BALLOONTIP_TITLE = T3k Konfigurasjon
+TEXT_BALLOONTIP_MSG = T3k Konfigurasjon Versjon  ("T3kCfgFE.exe") laster inn.
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = Sensor Status
+TITLE_REMOTE = Fjernkontroll
+TEXT_SELECT_SERVER = Velg Server
+TEXT_PORT = Port
+TEXT_USERNAME = Brukernavn
+BTN_REQUEST = Forespørsel
+TEXT_RECONNECTING = Sjekk forbindelsen til server igjen… %1
+BTN_CANCEL = Avbryt
+TEXT_CONNECTING = Tilkobling
+TEXT_REMOTE_CONTROL = Fjernkontroll…
+BTN_DISCONNECT = Koble fra
+TEXT_WAIT_MSG = Venter på forbindelse fra admin
+TEXT_REPAIRCONNECTION = Fjernkontroll koblet fra session.\r\nVenter på forbindelse fra admin
+TEXT_ID = ID: %1
+TEXT_SERV_NOT_RES = Server svarer ikke
+TITLE_CHAT = Chat
+BTN_SEND = Send
+MSG_CHAT_DISCONNECTED = Frakoblet.
+TITLE_REMOTE_MSG = Lukk Eksterne Sessions
+MSG_REMOTE_DISCONNECT = Er du sikker på at du vil koble fra?
+TEXT_HELP_MSG = Vennligst å trykk på midten av merket.
+TEXT_HELP_ARROW = Vennligst ta på pilmerket.
