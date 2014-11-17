@@ -9,4 +9,5 @@ QBentCfgParam::QBentCfgParam()
     m_nBentDirection = BENT_MARGIN_INIT_DIR;
     m_nAlgorithm = 2;
     m_bBentWithDummy = false;
+    m_bIgnoreCameraPair = false;
 }

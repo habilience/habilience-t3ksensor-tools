@@ -77,7 +77,7 @@ QDetectionDialog::QDetectionDialog(Dialog *parent) :
 
     setViewMode( true );
 
-    if (g_AppData.bIsSubCameraExist)
+    if (g_AppData.nSubCameraCount > 0)
     {
         ui->btnMain->setVisible(true);
         ui->btnSub->setVisible(true);
@@ -408,7 +408,7 @@ void QDetectionDialog::onClose()
     {
         pDevice->sendCommand( "cam1/mode=tuning", true );
         pDevice->sendCommand( "cam2/mode=tuning", true );
-        if (g_AppData.bIsSubCameraExist)
+        if (g_AppData.nSubCameraCount > 0)
         {
             pDevice->sendCommand( "cam1/sub/mode=tuning", true );
             pDevice->sendCommand( "cam2/sub/mode=tuning", true );
@@ -418,7 +418,7 @@ void QDetectionDialog::onClose()
     {
         pDevice->sendCommand( "cam1/mode=detection", true );
         pDevice->sendCommand( "cam2/mode=detection", true );
-        if (g_AppData.bIsSubCameraExist)
+        if (g_AppData.nSubCameraCount > 0)
         {
             pDevice->sendCommand( "cam1/sub/mode=detection", true );
             pDevice->sendCommand( "cam2/sub/mode=detection", true );
@@ -519,7 +519,7 @@ void QDetectionDialog::sensorReset()
     strSensorCmd = sCam2 + cstrSensorGain;
     resetDataWithInitData( strSensorCmd );
 
-    if ( g_AppData.bIsSubCameraExist )
+    if ( g_AppData.nSubCameraCount > 0 )
     {
         strSensorCmd = sCam1_1 + cstrDetectionThreshold;
         resetDataWithInitData( strSensorCmd );
@@ -564,7 +564,7 @@ void QDetectionDialog::sensorLoadFactoryDefault()
     strSensorCmd = sCam2 + cstrSensorGain + "*";
     ui->cmdAsyncMngr->insertCommand( strSensorCmd );
 
-    if ( g_AppData.bIsSubCameraExist )
+    if ( g_AppData.nSubCameraCount > 0 )
     {
         strSensorCmd = sCam1_1 + cstrDetectionThreshold + "*";
         ui->cmdAsyncMngr->insertCommand( strSensorCmd );
@@ -651,7 +651,7 @@ void QDetectionDialog::sensorWriteToFactoryDefault()
     strSensorCmd = sCam2 + cstrSensorGain + "!";
     ui->cmdAsyncMngr->insertCommand( strSensorCmd );
 
-    if ( g_AppData.bIsSubCameraExist )
+    if ( g_AppData.nSubCameraCount > 0 )
     {
         strSensorCmd = sCam1_1 + cstrDetectionThreshold + "!";
         ui->cmdAsyncMngr->insertCommand( strSensorCmd );
@@ -744,7 +744,7 @@ void QDetectionDialog::enterAutoRangeSetting()
     strCmd = sCam2 + cstrDetectionThreshold + "**";
     ui->cmdAsyncMngr->insertCommand( strCmd );
 
-    if ( g_AppData.bIsSubCameraExist )
+    if ( g_AppData.nSubCameraCount > 0 )
     {
         strCmd = sCam1_1 + cstrDetectionRange + QString::number(0) + "," + QString::number(0xffff);
         ui->cmdAsyncMngr->insertCommand( strCmd );
@@ -844,7 +844,7 @@ void QDetectionDialog::leaveAutoRangeSetting()
     strCmd = sCam2 + cstrDetectionRange + "*";
     ui->cmdAsyncMngr->insertCommand(strCmd);
 
-    if ( g_AppData.bIsSubCameraExist )
+    if ( g_AppData.nSubCameraCount > 0 )
     {
         strCmd = sCam1_1 + cstrDetectionRange;
         resetDataWithInitData( strCmd );
@@ -1011,7 +1011,7 @@ void QDetectionDialog::onFinishAutoRange()
         strCmd = sCam2 + cstrDetectionRange + QString::number(m_lCam2Left) + "," + QString::number(m_lCam2Right);
         ui->cmdAsyncMngr->insertCommand(strCmd);
 
-        if ( g_AppData.bIsSubCameraExist )
+        if ( g_AppData.nSubCameraCount > 0 )
         {
             strCmd = sCam1_1 + cstrDetectionRange;
             resetDataWithInitData( strCmd );

@@ -1000,11 +1000,11 @@ void Dialog::updateVersionInformation()
     m_strModelName = m_SensorAppInfo[IDX_MM].szModel;
     m_strFirmwareVersion = m_SensorAppInfo[IDX_MM].szVersion;
 
-    g_AppData.bIsSubCameraExist = false;
-    if (m_SensorAppInfo[IDX_CM1_1].bIsValid || m_SensorAppInfo[IDX_CM2_1].bIsValid)
-    {
-        g_AppData.bIsSubCameraExist = true;
-    }
+    g_AppData.nSubCameraCount = 0;
+    if (m_SensorAppInfo[IDX_CM1_1].bIsValid)
+        g_AppData.nSubCameraCount++;
+    if (m_SensorAppInfo[IDX_CM2_1].bIsValid)
+        g_AppData.nSubCameraCount++;
     g_AppData.nCameraCount = 0;
     if (m_SensorAppInfo[IDX_CM1].bIsValid) g_AppData.nCameraCount++;
     if (m_SensorAppInfo[IDX_CM2].bIsValid) g_AppData.nCameraCount++;
@@ -1080,7 +1080,7 @@ void Dialog::updateVersionInformation()
                             "<td width=\"35%\">"+strModel+"</td>"
                           "</tr>";
 
-    if (!g_AppData.bIsSubCameraExist)
+    if (!g_AppData.nSubCameraCount > 0)
     {
         if (m_SensorAppInfo[IDX_CM1].bIsValid)
         {
@@ -1714,7 +1714,7 @@ void Dialog::saveSensorDefaultSettings()
     strCmd = sCam2 + cstrAmbientLight + "*";
     dataProgressDlg.insertCommand( strCmd );
 
-    if (g_AppData.bIsSubCameraExist)
+    if (g_AppData.nSubCameraCount > 0)
     {
         strCmd = sCam1_1 + cstrAmbientLight + "*";
         dataProgressDlg.insertCommand( strCmd );
@@ -1742,7 +1742,7 @@ void Dialog::saveSensorDefaultSettings()
     strCmd = sCam2 + cstrSensorGain + "*";
     dataProgressDlg.insertCommand( strCmd );
 
-    if ( g_AppData.bIsSubCameraExist )
+    if ( g_AppData.nSubCameraCount > 0 )
     {
         strCmd = sCam1_1 + cstrDetectionThreshold + "*";
         dataProgressDlg.insertCommand( strCmd );

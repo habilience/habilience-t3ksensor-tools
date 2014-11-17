@@ -32,6 +32,8 @@ QInitDataIni::QInitDataIni()
     m_bBentWithDummy = BENT_WITH_DUMMY;
     m_bCalibrationCameraLoad = false;
     m_bCalibrationCamera = BENT_WITH_CALIBRATION;
+    m_bIgnoreCameraPairForBentLoad = false;
+    m_bIgnoreCameraPairForBent = BENT_IGNORE_CAMERAPAIR;
 
     m_nActiveLanguageIndex = 0;
 
@@ -93,6 +95,11 @@ bool QInitDataIni::getBentWithDummy() const
 bool QInitDataIni::getCalibrationWarning() const
 {
     return m_bCalibrationCamera;
+}
+
+bool QInitDataIni::getIgnoreCameraPair() const
+{
+    return m_bIgnoreCameraPairForBent;
 }
 
 int QInitDataIni::getDTCGraphSharpWidth() const
@@ -253,6 +260,16 @@ bool QInitDataIni::load()
         }
     }
 
+    m_bIgnoreCameraPairForBent = BENT_IGNORE_CAMERAPAIR;
+    idx = pBentAdjustmentSection->getDataIndex("IgnoreCameraPair");
+    if ( idx >= 0 )
+    {
+        m_bIgnoreCameraPairForBentLoad = true;
+        strData = pBentAdjustmentSection->getData(idx);
+        if ( !strData.isEmpty() )
+            m_bIgnoreCameraPairForBent = (strData.toInt( 0, 10 ) != 0) ? true : false;
+    }
+
     QIni::QSection * pDTCGraphSection = ini.getSectionNoCase("DETECTION GRAPH");
     if ( !pDTCGraphSection )
         return false;
@@ -363,6 +380,12 @@ bool QInitDataIni::save()
     {
         strData = QString("%1").arg(m_nCalibrationCamera);
         pBentAdjustmentSection->addData("CalibrationCamera", strData);
+    }
+
+    if ( m_bIgnoreCameraPairForBentLoad )
+    {
+        strData = QString("%1").arg(m_bIgnoreCameraPairForBent);
+        pBentAdjustmentSection->addData("IgnoreCameraPair", strData, "Only one camera can be even bent-adjustment");
     }
 
     QIni::QSection * pDTCGraphSection = ini.addSection("DETECTION GRAPH");

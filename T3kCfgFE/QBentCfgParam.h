@@ -14,6 +14,7 @@
 
 #define BENT_WITH_DUMMY                 (false)
 #define BENT_WITH_CALIBRATION           (false)
+#define BENT_IGNORE_CAMERAPAIR          (false)
 
 #define BENT_DIR_UP     (0)
 #define BENT_DIR_DOWN   (1)
@@ -26,6 +27,7 @@ private:
     int		m_nBentDirection;
     int     m_nAlgorithm;
     bool    m_bBentWithDummy;
+    bool    m_bIgnoreCameraPair;
 public:
     QBentCfgParam();
 
@@ -38,6 +40,7 @@ public:
     int algorithm() const { return m_nAlgorithm; }      // algorithm 0: old 13 points, 1: new 13 points, 2: new 9 points
 
     bool isBentWithDummy() { return m_bBentWithDummy; }
+    bool isIgnoreCameraPair() { return m_bIgnoreCameraPair; }
 
     void setMarginLeft( float fLeft ) { m_fBentMargin[0] = fLeft; }
     void setMarginTop( float fTop ) { m_fBentMargin[1] = fTop; }
@@ -63,6 +66,7 @@ public:
     void setDirection( int direction ) { m_nBentDirection = direction; }
     void setAlgorithm( int algorithm ) { m_nAlgorithm = algorithm; }
     void setBentWithDummy( bool bWithDummy ) { m_bBentWithDummy = bWithDummy; }
+    void setIgnoreCameraPair( bool bIgnore ) { m_bIgnoreCameraPair = bIgnore; }
 };
 
 #endif // QBENTCFGPARAM_H

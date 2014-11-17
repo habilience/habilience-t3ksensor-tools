@@ -127,8 +127,8 @@ QSideviewDialog::QSideviewDialog(Dialog *parent) :
 
     resetEditColors();
 
-    ui->btnCam1_1->setVisible( g_AppData.bIsSubCameraExist ? true : false );
-    ui->btnCam2_1->setVisible( g_AppData.bIsSubCameraExist ? true : false );
+    ui->btnCam1_1->setVisible( g_AppData.nSubCameraCount > 0 ? true : false );
+    ui->btnCam2_1->setVisible( g_AppData.nSubCameraCount > 0 ? true : false );
 
     installEventFilter(this);
 
@@ -635,7 +635,7 @@ void QSideviewDialog::onClose()
     QT3kDevice* pDevice = QT3kDevice::instance();
     pDevice->sendCommand( "cam1/mode=detection", true );
     pDevice->sendCommand( "cam2/mode=detection", true );
-    if (g_AppData.bIsSubCameraExist)
+    if (g_AppData.nSubCameraCount > 0)
     {
         pDevice->sendCommand( "cam1/sub/mode=detection", true );
         pDevice->sendCommand( "cam2/sub/mode=detection", true );
@@ -697,7 +697,7 @@ bool QSideviewDialog::onKeyRelease(QKeyEvent *evt)
         };
 
         int nIdx = m_nCurrentCameraIndex; // - 1 + 1
-        if( nIdx < g_AppData.bIsSubCameraExist ? 4 : 2 )
+        if( nIdx < (g_AppData.nSubCameraCount > 0) ? 4 : 2 )
             pBtns[nIdx]->click();
     }
     else if (evt->key() == Qt::Key_Up)
@@ -949,7 +949,7 @@ void QSideviewDialog::sensorReset()
     strSensorCmd = sCam2 + cstrAmbientLight;
     resetDataWithInitData( strSensorCmd );
 
-    if (g_AppData.bIsSubCameraExist)
+    if (g_AppData.nSubCameraCount > 0)
     {
         strSensorCmd = sCam1_1 + cstrDetectionLine;
         resetDataWithInitData( strSensorCmd );
@@ -977,7 +977,7 @@ void QSideviewDialog::sensorLoadFactoryDefault()
     strSensorCmd = sCam2 + cstrAmbientLight + "*";
     ui->cmdAsyncMngr->insertCommand(strSensorCmd);
 
-    if( g_AppData.bIsSubCameraExist )
+    if( g_AppData.nSubCameraCount > 0 )
     {
         strSensorCmd = sCam1_1 + cstrDetectionLine + "*";
         ui->cmdAsyncMngr->insertCommand(strSensorCmd);
@@ -1053,7 +1053,7 @@ bool QSideviewDialog::sensorWriteToFactoryDefault()
     strSensorCmd = sCam2 + cstrAmbientLight + "!";
     ui->cmdAsyncMngr->insertCommand(strSensorCmd);
 
-    if( g_AppData.bIsSubCameraExist )
+    if( g_AppData.nSubCameraCount > 0 )
     {
         m_strSyncCmdValue.clear();
         strSensorCmd = sCam1_1 + cstrDetectionLine + "?";
@@ -1555,7 +1555,7 @@ void QSideviewDialog::adjustAmbientLight(int nLight1, int nLight2, int nLight3)
     pDevice->sendCommand( strCmd );
     strCmd = sCam2 + cstrAmbientLight + QString::number(nLight1) + "," + QString::number(nLight2) + "," + QString::number(nLight3);
     pDevice->sendCommand( strCmd );
-    if (g_AppData.bIsSubCameraExist)
+    if (g_AppData.nSubCameraCount > 0)
     {
         strCmd = sCam1_1 + cstrAmbientLight + QString::number(nLight1) + "," + QString::number(nLight2) + "," + QString::number(nLight3);
         pDevice->sendCommand( strCmd );

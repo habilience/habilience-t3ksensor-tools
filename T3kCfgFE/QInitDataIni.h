@@ -19,6 +19,8 @@ protected:
     bool    m_bBentWithDummy;
     bool    m_bCalibrationCameraLoad;
     bool    m_bCalibrationCamera;
+    bool    m_bIgnoreCameraPairForBentLoad;
+    bool    m_bIgnoreCameraPairForBent;
 
     int		m_nDetectionGraphSharpWidth;
     float	m_fDetectionGraphCrackThresholdError;
@@ -38,6 +40,7 @@ public:
 
     bool getBentWithDummy() const;
     bool getCalibrationWarning() const;
+    bool getIgnoreCameraPair() const;
 
     int getDTCGraphSharpWidth() const;
     float getDTCGraphCrackThresholdError() const;

@@ -177,7 +177,7 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog* pParentWidget, QWidget *par
 
     QBentCfgParam* bentParam = QBentCfgParam::instance();
     QInitDataIni* iniData = QInitDataIni::instance();
-    if (g_AppData.nCameraCount == 2)
+    if (g_AppData.nCameraCount <= 2)
     {
         if (g_AppData.strFirmwareVersion.compare( "2.8" ) <= 0)
         {
@@ -194,6 +194,7 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog* pParentWidget, QWidget *par
     }
 
     bentParam->setBentWithDummy( iniData->getBentWithDummy() );
+    bentParam->setIgnoreCameraPair( iniData->getIgnoreCameraPair() );
 
     int nLeft, nTop, nRight, nBottom, nDir;
     iniData->getBentMargin( nLeft, nTop, nRight, nBottom, nDir );
@@ -2237,11 +2238,12 @@ bool QBentAdjustmentDialog::checkValidTouch()
             break;
         }
     }
+    bool bIgnoreCameraPair = QBentCfgParam::instance()->isIgnoreCameraPair() && g_AppData.nCameraCount == 1 && nCamCheck > 0;
     if (nCamCheck != 2)
         qDebug( "Invalid Main Camera Data" );
     if (bInvalidTouch)
         qDebug( "Invalid Touch Position" );
-    if ((nCamCheck != 2) || bInvalidTouch)
+    if ((!bIgnoreCameraPair && nCamCheck != 2) || bInvalidTouch)
         return false;
     return true;
 }
@@ -2492,14 +2494,15 @@ void QBentAdjustmentDialog::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart
             }
         }
 
+        bool bIgnoreCameraPair = QBentCfgParam::instance()->isIgnoreCameraPair() && g_AppData.nCameraCount == 1 && cnt > 1;
         if ( nCam == 0 || nCam == 1 )
-            m_bCheckCamTouch[nCam] = ((cnt == 2) ? true : false);
+            m_bCheckCamTouch[nCam] = (( bIgnoreCameraPair || cnt == 2) ? true : false);
 
         if ( m_bIsTouchOK )
             checkTouchPoints( !bLift );
         else
         {
-            checkTouchPoints( m_bCheckCamTouch[0] && m_bCheckCamTouch[1] );
+            checkTouchPoints( bIgnoreCameraPair ? m_bCheckCamTouch[0] || m_bCheckCamTouch[1] : m_bCheckCamTouch[0] && m_bCheckCamTouch[1] );
         }
     }
     else
@@ -2835,7 +2838,7 @@ bool QBentAdjustmentDialog::requestSensorData( RequestCmd cmd, bool bWait )
             {
                 ui->cmdAsyncMngr->insertCommand( "cam1/mode=tuning" );
                 ui->cmdAsyncMngr->insertCommand( "cam2/mode=tuning" );
-                if (g_AppData.bIsSubCameraExist)
+                if (g_AppData.nSubCameraCount > 0)
                 {
                     ui->cmdAsyncMngr->insertCommand( "cam1/sub/mode=tuning" );
                     ui->cmdAsyncMngr->insertCommand( "cam2/sub/mode=tuning" );
@@ -2873,7 +2876,7 @@ void QBentAdjustmentDialog::sensorReset()
     strCmd = sCam2 + cstrFactorialCamPos + "**";
     ui->cmdAsyncMngr->insertCommand( strCmd );
 
-    if (g_AppData.bIsSubCameraExist)
+    if (g_AppData.nSubCameraCount > 0)
     {
         strCmd = sCam1_1 + cstrFactorialCamPos + "**";
         ui->cmdAsyncMngr->insertCommand( strCmd );
@@ -2894,7 +2897,7 @@ void QBentAdjustmentDialog::sensorLoadFactoryDefault()
     ui->cmdAsyncMngr->insertCommand(strCmd);
     strCmd = sCam2 + cstrFactorialCamPos + "?";
     ui->cmdAsyncMngr->insertCommand(strCmd);
-    if ( g_AppData.bIsSubCameraExist )
+    if ( g_AppData.nSubCameraCount > 0 )
     {
         strCmd = sCam1_1 + cstrFactorialCamPos + "?";
         ui->cmdAsyncMngr->insertCommand(strCmd);
@@ -2913,7 +2916,7 @@ void QBentAdjustmentDialog::sensorRefresh()
     strCmd = sCam2 + cstrFactorialCamPos + "?";
     ui->cmdAsyncMngr->insertCommand(strCmd);
 
-    if (g_AppData.bIsSubCameraExist)
+    if (g_AppData.nSubCameraCount > 0)
     {
         strCmd = sCam1_1 + cstrFactorialCamPos + "?";
         ui->cmdAsyncMngr->insertCommand(strCmd);
@@ -2935,7 +2938,7 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
     ui->cmdAsyncMngr->insertCommand( strCmd );
     strCmd = sCam2 + cstrFactorialCamPos + "**";
     ui->cmdAsyncMngr->insertCommand( strCmd );
-    if (g_AppData.bIsSubCameraExist)
+    if (g_AppData.nSubCameraCount > 0)
     {
         strCmd = sCam1_1 + cstrFactorialCamPos + "**";
         ui->cmdAsyncMngr->insertCommand( strCmd );

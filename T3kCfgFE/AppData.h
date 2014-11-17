@@ -44,8 +44,8 @@ struct AppData
     bool    cameraConnectionInfo[IDX_MAX];
 
     bool    bIsSafeMode;
-    int     nCameraCount;
-    bool    bIsSubCameraExist;
+    int     nCameraCount;               // total count
+    int     nSubCameraCount;            // sub count
     QString strModelName;
     QString strFirmwareVersion;
     bool    bUpgradeFW;
