@@ -1,0 +1,351 @@
+﻿
+[COMMON]
+TEXT_CLOSE = Bezárás
+
+[MAIN]
+APP_ERROR_MSG1 = Eltávolítható eszközökön nem hajtható végre.
+TITLE_GENERAL_ERROR = Hiba
+
+BTN_CAPTION_EXIT = Kilépés
+BTN_CAPTION_DEFAULT = Alapértelmezett
+BTN_CAPTION_REFRESH = Frissités
+MENU_TOOLTIP_START_PAGE = Kezdőlap
+MENU_TOOLTIP_MOUSE = Gesztus
+MENU_TOOLTIP_CALIBRATION = Kalibráció
+MENU_TOOLTIP_SENSOR_SETTING = Szenzor beállításai
+MENU_TOOLTIP_GENERAL_SETTING = Általános beállítások
+MENU_TOOLTIP_SOFTKEY_SETTING = Funkciógomb beállításai
+MSGBOX_TITLE_DEFAULT = Visszaállítás alapértelmezettre
+MSGBOX_TEXT_DEFAULT = Visszaállít mindent alapértelmezettre?
+MSGBOX_TEXT_INVALID_FIRMWARE_VERSION = Ez a program nem támogatja a v%1 szoftvert.\nJelenlegi: %1\nTámogatott %2 ~ %3
+MSGBOX_TITLE_INVALID_FIRMWARE_VERSION = [Hiba] Érvénytelen szoftver
+TITLE_CAPTION_INFORMATION = Program információ
+TITLE_CAPTION_FIRMWARE = Szoftver információ
+TEXT_DEVICE_NOT_CONNECTED = Az eszköz nincs csatlakoztatva
+TEXT_FIRMWARE_DOWNLOAD = A szoftver letöltés alatt
+
+TITLE_CAPTION_LICENSE = Licensz
+
+[SELECT DEVICE]
+WINDOW_CAPTION = Eszköz kiválasztása
+TITLE_CAPTION_DEVICE_LIST = Eszközlista
+TEXT_DEV_PATH = Eszköz elérési útvonal
+TEXT_MODEL = Model
+TEXT_NUMBER = Szám.
+BTN_CAPTION_PLAY_BUZZER = Csengő jelzés lejátszása
+BTN_CAPTION_SELECT = Kiválasztás
+
+[MESSAGEBOX]
+BTN_CAPTION_OK = OK
+BTN_CAPTION_CANCEL = Visszavonás
+BTN_CAPTION_YES = Igen
+BTN_CAPTION_NO = Nem
+
+[START PAGE]
+BTN_CAPTION_MOUSE = Gesztus
+BTN_CAPTION_MOUSE_SUB1 = Érintési gesztusok beállításai
+BTN_CAPTION_MOUSE_SUB2 = Gesztus profilok
+BTN_CAPTION_CALIBRATION = Kalibráció
+BTN_CAPTION_CALIBRATION_SUB1 = Érintő kijelző kalibráció
+BTN_CAPTION_CALIBRATION_SUB2 = 
+BTN_CAPTION_SENSOR_SETTING = Szenzor beállítások
+BTN_CAPTION_SENSOR_SETTING_SUB1 = Érintés engedélyezése/letiltása
+BTN_CAPTION_SENSOR_SETTING_SUB2 = Hangjelző, Gyorsgomb
+BTN_CAPTION_GENERAL_SETTING = Általános Beállítások
+BTN_CAPTION_GENERAL_SETTING_SUB1 = Nyelv, Beviteli mód
+BTN_CAPTION_GENERAL_SETTING_SUB2 = Kijelző Tájolás
+BTN_CAPTION_REMOTE_ASSISTANCE = Távasszisztens
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB1 = 
+BTN_CAPTION_REMOTE_ASSISTANCE_SUB2 = 
+BTN_CAPTION_SOFTKEY_SETTING = Softkey
+BTN_CAPTION_SOFTKEY_SETTING_SUB1 = 
+BTN_CAPTION_SOFTKEY_SETTING_SUB2 = 
+
+[MOUSE SETTING]
+TITLE_CAPTION_MOUSE_BUTTON_MAPPING = Érintési Gesztus
+BTN_CAPTION_TOUCH_SETTING = Érintési Beállítások…
+
+;TEXT_SINGLE = Egyszeri
+;TEXT_FINGERS = Ujjak
+;TEXT_PALM = Tenyér
+;TEXT_PUTNTAP = Put & Tap
+;TEXT_DRAG = Húzás
+;TEXT_TAP = Érint
+;TEXT_DOUBLE_TAP = Dupla Érintés
+;TEXT_LONG_TAP = Hosszú Érintés
+;TEXT_ROTATE = Forgatás
+;TEXT_ZOOM = Nagyítás
+TEXT_MOVE_WITH_ZOOM = Mozgatás a Nagyítással
+TEXT_INERTIAL_WHEEL = Inerciális Görgő
+TEXT_INDIVIDUAL_PUTNTAP_DOUBLE_TAP = Külön Put & Tap, Put & Double Tap
+TEXT_PUTAND_ON_MULTITOUCHDEVICE = Hibrid Multi-Touch
+TEXT_MAC_OS_MARGIN = Mac OS X margó
+TEXT_INVERT_WHEEL = Fordított görgő
+
+TEXT_LEFT = Bal
+TEXT_RIGHT = Jobb
+TEXT_MIDDLE = Közép
+TEXT_DOUBLE_CLICK = Dupla Kattintás
+TEXT_CLICK = Kattintás
+
+TEXT_PROFILE_LEGEND_MODE1 = Egér
+TEXT_PROFILE_LEGEND_MODE2 = Multi-touch
+
+[EDIT PROFILE ITEM]
+TITLE_CAPTION_EDIT_PROFILE_ITEM = Művelet szerkesztése
+TEXT_PROFILE_ITEM = Profil Elem
+TEXT_ACTION = Művelet
+TEXT_USER_DEFINE_KEY = Felhasználó által beállított gomb
+TEXT_KEY = Gomb
+TEXT_FUNCTION_KEY = Funkció gomb
+TEXT_NONE = Egyik sem
+TEXT_NOT_DEFINED = Nem meghatározott
+BTN_CAPTION_APPLY = Alkalmaz
+BTN_CAPTION_CANCEL = Visszavon
+
+TEXT_PROFILE_ITEM_DISABLED = (Letiltva)
+TEXT_PROFILE_ITEM_USER_DEFINED = (Felhasználó által meghatározott)
+TEXT_PROFILE_ITEM_FUNCTION_KEY = (Funkció Gomb)
+TEXT_PROFILE_ITEM_MOUSE = (Egér)
+TEXT_PROFILE_ITEM_ESCAPE = Kilépés (Esc)
+TEXT_PROFILE_ITEM_FORWARD = Előre
+TEXT_PROFILE_ITEM_BACK = Vissza
+TEXT_PROFILE_ITEM_TASK_SWITCH1 = Feladat váltó
+TEXT_PROFILE_ITEM_TASK_SWITCH2 = Feladat váltó (Aero)
+TEXT_PROFILE_ITEM_TASK_MANAGER = Feladatkezelő
+TEXT_PROFILE_ITEM_EXPLORER = Böngésző
+TEXT_PROFILE_ITEM_DESKTOP = Asztal
+TEXT_PROFILE_ITEM_VKBOARD = Virtuális billentyűzet
+TEXT_PROFILE_ITEM_T3KCFG = T3k Széria Konfigurátor Program
+
+TEXT_PROFILE_ITEM_MLEFT_CLICK = Bal Klikk
+TEXT_PROFILE_ITEM_MRIGHT_CLICK = Jobb Klikk
+TEXT_PROFILE_ITEM_MMIDDLE_CLICK = Középső Klikk
+TEXT_PROFILE_ITEM_MLEFT_DOWN = Bal Gomb
+TEXT_PROFILE_ITEM_MRIGHT_DOWN = Jobb Gomb
+TEXT_PROFILE_ITEM_MMIDDLE_DOWN = Középső Gomb
+
+[PREDEFINED PROFILE]
+TITLE_CAPTION_MANAGE = Profil Kezelése
+TEXT_ADD = Hozzáadás
+TEXT_EDIT = Szerkesztés
+TEXT_DELETE = Törlés
+
+[CALIBRATION SETTING]
+TITLE_CAPTION_CALIBRATION = Kalibráció
+TEXT_SCREEN_MARGIN = Képernyő Margók
+TEXT_SCREEN_PERCENT_OF_SCREEN = Kijelző % -a
+TEXT_CALIBRATE = Kalibrál
+BTN_CAPTION_CALIBRATE = Kalibráció…
+
+TITLE_AREA_SETTING = Terület Beállításai (A kijelző % -a)
+TEXT_SINGLE_CLICK = Egyszeri Klikk
+TEXT_DOUBLE_CLICK = Dupla Klikk
+;TEXT_TWO_TOUCH = Put & Tap
+TEXT_PALM = Tenyér
+
+TEXT_CALIBRATION_WARNING = Nem jelölte be a 'Mac OS X margót' a 'Gesztus' menüben.Lehet hogy a kalibráció nem fog megfelelően működni.
+TEXT_CALIBRATION_WARNING2 = Bejelölte a 'Mac OS X margót' a Gesztus menüben.Lehet hogy a kalibráció nem fog megfelelően működni.
+TITLE_TOUCH_SENSITIVITY = Érintési Érzékenység
+TEXT_SENSITIVITY = Érzékenység
+
+BTN_ADVANCED = Haladó…
+
+[ADVANCED]
+WINDOW_CAPTION = Haladó
+TITLE_CAPTION_ADJUSTMENT = Beállítás
+TEXT_CHECKBOX_BENT = Hajlított
+TEXT_CHECKBOX_DETECTION = Érzékelési Határ
+TEXT_ID = ID
+BTN_START = Start
+MSG_INCORRECT_ID = Az ID érvénytelen.
+MSG_ESCAPE = Nyomja meg az ESC-et a kilépéshez.
+
+[SETTING]
+TITLE_CAPTION_TOUCH_ENABLE = Érintő kijelző Ki/Be Kapcsolása
+TEXT_TOUCH_ENABLE = Érintő kijelző
+TEXT_RADIO_TOUCH_ENABLE = Engedélyezés
+TEXT_RADIO_TOUCH_DISABLE = Letiltás
+
+TITLE_CAPTION_BUZZER = Jelző
+TEXT_CLICK = Klikk
+TEXT_CALIBRATION = Kalibráció
+TEXT_ERROR = Hiba
+TEXT_KEYTONE = Billentyűzet hang
+TEXT_SENSOR_ATTACH = Szenzor csatolás
+TEXT_PEN_PAIRING = Toll társítás
+TEXT_USB_ATTACH = USB hozzárendelés
+
+TITLE_SHORTCUT_KEY = Gyorsgomb
+TEXT_CALIBRATION_KEY = Kalibrációs Gomb
+TEXT_CALIBRATION_NUMBER_OF_PRESS = Gombnyomások száma
+TEXT_TOUCH_ENABLE_KEY = Érintés engedélyezés gomb
+TEXT_TOUCH_ENABLE_NUMBER_OF_PRESS = Gombnyomások száma
+TEXT_NOT_USED = Nem használt
+TEXT_ON = BE
+TEXT_OFF = KI
+
+TITLE_TRAY_ICON = Tálca Ikon
+TEXT_CHECK_TRAYICON = Felhasználói Tálca Ikon
+TEXT_CHECK_OSXGESTURE = 
+TITLE_OSXGESTURE_MSG = 
+TEXT_OSXGESTURE_MSG = 
+
+TITLE_CAPTION_TOUCH_INPUT_MODE = Érintés Beviteli Mód
+TEXT_INPUT_MODE = Beviteli Mód
+TEXT_INPUT_MODE_MOUSE = Egér
+TEXT_INPUT_MODE_SINGLE_TOUCH = Szimpla Klikk (Tablet Toll)
+TEXT_INPUT_MODE_MULTI_TOUCH = Multi-touch
+TEXT_INPUT_MODE_AUTO_SELECT = Auto Kiválasztás
+TEXT_INPUT_MODE_WARNING_MSG = Az érintés lehet hogy nem fog megfelelően működni másik OS alatt.Folytatja?
+
+TITLE_MULTI_MONITOR = Multi-monitor Kijelzés Beállítás
+TEXT_MULTI_MONITOR = Monitor Beállítás
+TEXT_MULTI_MONITOR_SETTING = Kijelző Monitor Kiválasztás…
+
+TEXT_BTN_MULTI_MONITOR_APPLY = Alkalmaz
+TEXT_BTN_MULTI_MONITOR_CANCEL = Visszavon
+TEXT_PRIMARY_MONITOR = Elsődleges Monitor : %d
+TEXT_NON_MULTI_MONITOR = Nem támogatja a Multi-Monitor használatot
+
+BTN_TOOLTIP_PLAY = Lejátszás
+
+BTN_CAMERA_DIAGNOSTICS = Szenzor Diagnosztika...
+
+TITLE_LANGUAGE = Nyelv
+TEXT_LANGUAGE = Nyelv kiválasztás
+TEXT_LANGUAGE_NOT_FOUND = A nyelv fájl nem található.
+
+TITLE_DISPLAY_ORIENTATION = Kijelző Tájolás
+TEXT_DISPLAY_ORIENTATION = Tájolás
+TEXT_DISPLAY_ORIENTATION_1 = 0' - Fekvő
+TEXT_DISPLAY_ORIENTATION_2 = 90' - Álló
+TEXT_DISPLAY_ORIENTATION_3 = 180' - Fekvő (fordítva)
+TEXT_DISPLAY_ORIENTATION_4 = 270' - álló (fordítva)
+
+TEXT_DISPLAY_X11_ORIENTATION_1 = 0' - Normál
+TEXT_DISPLAY_X11_ORIENTATION_2 = 90' - Bal
+TEXT_DISPLAY_X11_ORIENTATION_3 = 180' - Jobb
+TEXT_DISPLAY_X11_ORIENTATION_4 = 270' - Fejjel Lefele
+
+TEXT_DISPLAY_MAC_ORIENTATION_1 = 0'
+TEXT_DISPLAY_MAC_ORIENTATION_2 = 90'
+TEXT_DISPLAY_MAC_ORIENTATION_3 = 180'
+TEXT_DISPLAY_MAC_ORIENTATION_4 = 270'
+
+TITLE_DISPLAY_WARNING = Figyelmeztetés
+TEXT_DISPLAY_WARNING = A jelenlegi kijelző tájolás és kalibrációs érték nem megfelelő.
+
+[TOUCH SETTING]
+WINDOW_CAPTION = Érintési Beállítások
+TITLE_TIME_SETTING = Idő Beállítás (ms)
+TEXT_TAP = Érint
+TEXT_LONG_TAP = Hosszú-Érintés
+TEXT_SLOW = Lassú
+TEXT_FAST = Gyors
+TITLE_WHEEL_SENSITIVITY_SETTING = Görgő/Nagyítás Érzékenységi Beállítások
+TEXT_WHEEL = Görgő
+TEXT_ZOOM = Nagyítás
+
+BTN_CAPTION_DEFAULT = Eredeti
+BTN_CAPTION_REFRESH = Frissítés
+MSGBOX_TEXT_DEFAULT = Visszaállítja az eredeti beállításokat?
+MSGBOX_TITLE_DEFAULT = Eredeti
+
+[CHECK TOUCH DISABLE]
+TITLE_CAPTION = Válassza az "Érintés Kikapcsolás-t"
+TEXT_MESSAGE = Kérem klikkeljen az időzítő gombra \nhogy kikapcsolja a szenzort.
+BTN_TIMER_TEXT = %1 másodperc
+
+[WARNING SENSOR DIAGNOSIS]
+TITLE_CAPTION = Figyelmeztetés
+TEXT_MESSAGE = Figyelmeztetés! A következő képernyő az érintő szenzorok működéséhez elengedhetetlen adatokat tartalmaz.\n\nEzen beállítások megváltoztatása azzal járhat hogy instabillá válik az érintő kijelző.
+BTN_CAPTION_CONTINUE = Folytatás
+
+[INFORMATION GATHERING]
+TITLE_CAPTION = Megegyezés
+TEXT_MESSAGE = A következő képernyőn össze lesz gyűjtve a szenzor információ és a felhasználói környezet (OS verzió,MS Windows tábla beviteli eszköz szoftver, Képernyő felbontás).
+BTN_CAPTION_CONTINUE = Egyetért
+BTN_CAPTION_CLOSE = Elutasít
+
+[SENSOR DIAGNOSIS]
+TITLE_CAPTION = Szenzor Diagnosztika
+BTN_CAPTION_DEFAULT = Alapértelmezett
+BTN_CAPTION_REFRESH = Frissítés
+BTN_CAPTION_SAVELOG = Szenzor Állás Mentés
+BTN_CAPTION_MAIN = Fő
+BTN_CAPTION_SUB = Al
+TAB_CAPTION_SIDEVIEW = Oldalnézet
+TAB_CAPTION_DETECTION = Érzékelési Grafikon
+
+LOG_CAPTION_ERROR = Hiba! Nem tudta elmenteni az állapotot.
+LOG_SIDEVIEW = Oldalnézet
+LOG_DETECTION = Érzékelés
+LOG_DATA = Beállítás adat
+LOG_SAVING = Mentés
+LOG_LOADING = Betöltés
+LOG_COMPLETE = Kész
+LOG_OK = OK
+LOG_FAIL = SIKERTELEN
+LOG_PROGRESS = PRG
+LOG_START = Start
+LOG_CAMERA = Kamera
+
+TITLE_SENSOR1 = Szenzor 1
+TITLE_SENSOR2 = Szenzor 2
+TITLE_SENSOR1_1 = Szenzor 1-1
+TITLE_SENSOR2_1 = Szenzor 2-1
+
+[SENSOR DIAGNOSIS DETECTION]
+BTN_TOOLTIP_ZOOM_IN = Nagyítás
+BTN_TOOLTIP_ZOOM_OUT = Kicsinyítés
+BTN_TOOLTIP_RESET_ZOOM = Képernyőhöz Igazítás
+TEXT_SENSOR1_GRAPH_LEFT = Bal alsó
+TEXT_SENSOR1_GRAPH_RIGHT = Jobb felső
+TEXT_SENSOR2_GRAPH_LEFT = Bal felső
+TEXT_SENSOR2_GRAPH_RIGHT = Jobb alsó
+
+[SENSOR DIAGNOSIS SIDEVIEW]
+TEXT_NO_IMAGE = Nincs Kép
+BTN_CAPTION_SNAPSHOT = Pillanatfelvétel
+
+[SOFTKEY SETTING]
+TEXT_TITLE = Softkey' Beállítások
+TEXT_HEADER_NUMBER = Szám.
+TEXT_HEADER_TYPE = Típus
+TEXT_HEADER_ACTION = Tevékenység
+TEXT_ITEM_KEY = Gomb
+TEXT_ITEM_STATE = Helyzet
+TEXT_ITEM_NOT_USED = (Nincs Használatban)
+TEXT_ITEM_CALIBRATION = Szenzor kalibráció Be/Kilépés
+TEXT_ITEM_TOUCH = Érintő kijelző Engedélyezés/Letiltás
+
+[TRAYICON]
+TEXT_MENU_OPEN = Megnyit…
+TEXT_MENU_EXIT = Kilép
+TEXT_BALLOONTIP_TITLE = T3k Konfiguráció
+TEXT_BALLOONTIP_MSG = T3k Gyári Konfiguráció ("T3kCfgFE.exe") fut.
+
+[ASSISTANCE]
+TITLE_SENSOR_STATUS = Szenzor státusz.
+TITLE_REMOTE = Távirányítás
+TEXT_SELECT_SERVER = Szerver kiválasztása
+TEXT_PORT = Port
+TEXT_USERNAME = Felhasználó név
+BTN_REQUEST = Kérés
+TEXT_RECONNECTING = Megkísérel a szerverhez újracsatlakozni… %1
+BTN_CANCEL = Visszavon
+TEXT_CONNECTING = Csatlakozás…
+TEXT_REMOTE_CONTROL = Távirányítás…
+BTN_DISCONNECT = Szétkapcsol
+TEXT_WAIT_MSG = Várakozás az Admin csatlakozására.
+TEXT_REPAIRCONNECTION = A távirányítás szétkapcsolta a munkamenetet. \r\nVárakozás az Admin csatlakozására.
+TEXT_ID = ID: %1
+TEXT_SERV_NOT_RES = A szerver nem válaszol.
+TITLE_CHAT = Chat
+BTN_SEND = Küld
+MSG_CHAT_DISCONNECTED = Kilépett.
+TITLE_REMOTE_MSG = Távoli Munkamenet Bezárása.
+MSG_REMOTE_DISCONNECT = Biztosan ki akar lépni?
+TEXT_HELP_MSG = Kérem érintse meg a kereszt közepét.
+TEXT_HELP_ARROW = Kérem érintse meg a nyilat.
