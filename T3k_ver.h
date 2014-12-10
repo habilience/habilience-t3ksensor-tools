@@ -16,7 +16,7 @@
 #define MM_MIN_FIRMWARE_VERSION_STR     "2.8f"  // 최소 펌웨어 버전 == resource binary file version
 #define MM_NEXT_FIRMWARE_VERSION_STR    "2.8f"  // 다음 펌웨어 버전
 
-// 2.8d < 2.86 < 2.8e < 2.8e.1 < 2.8f
+// 2.8d < 2.86 < 2.8e < 2.8f
 
 // 지원 펌웨어 버전: (MM_MIN_FIRMWARE_VERSION <= f/w < MM_NEXT_FIRMWARE_VERSION)
 

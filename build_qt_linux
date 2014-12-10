@@ -1,17 +1,23 @@
+# must exec sudo
 #if 11.10
-sudo apt-get build-dep libqt4-dev
+apt-get build-dep libqt4-dev
 
-sudo apt-get install g++
+apt-get install g++
+
+export QTSRC_PATH=$PWD/qt-everywhere-opensource-src-5.4.0-rc
+export OUT_BUILD_PATH=/opt/Qt5.4-rcStatic
+
+rm -rf $OUT_BUILD_PATH 
+mkdir $OUT_BUILD_PATH
+cd $OUT_BUILD_PATH
 
 if [ "$(uname -m)" = "x86_64" ]
 then
-./configure -prefix $PWD/qtbase -static -opensource -confirm-license -debug-and-release -platform linux-g++-64 -nomake tests -nomake examples -opengl desktop -nomake tools -no-openssl -qpa xcb -qt-xcb -qt-libjpeg -qt-libpng
-./qtbase/bin/qmake qt.pro
-make -j8
+$QTSRC_PATH/configure -prefix $OUT_BUILD_PATH/qtbase -static -opensource -confirm-license -debug-and-release -platform linux-g++-64 -nomake tests -nomake examples -opengl desktop -nomake tools -no-openssl -qpa xcb -qt-xcb -qt-libjpeg -qt-libpng -dbus
 else
-./configure -prefix $PWD/qtbase -static -opensource -confirm-license -debug-and-release -platform linux-g++-32 -nomake tests -nomake examples -opengl desktop -nomake tools -no-openssl -qpa xcb -qt-xcb -qt-libjpeg -qt-libpng
-./qtbase/bin/qmake qt.pro
-make -j8
+$QTSRC_PATH/configure -prefix $OUT_BUILD_PATH/qtbase -static -opensource -confirm-license -debug-and-release -platform linux-g++-32 -nomake tests -nomake examples -opengl desktop -nomake tools -no-openssl -qpa xcb -qt-xcb -qt-libjpeg -qt-libpng -dbus
 fi
 
-
+./qtbase/bin/qmake $QTSRC_PATH/qt.pro
+make -j8
+make install
