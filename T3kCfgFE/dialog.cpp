@@ -1229,7 +1229,7 @@ void Dialog::updateVersionInformation()
 
     ui->txtEdtDisplayFirmware->setHtml(strVersionInfoHTML);
 
-    if(!g_AppData.bDevelop && m_bInvalidFirmwareVersion)
+    if(!g_AppData.bDevelop && m_bInvalidFirmwareVersion && m_strFirmwareVersion.compare( strMinDesireFW, Qt::CaseInsensitive ) < 0)
     {  
         QLangRes& res = QLangManager::instance()->getResource();
         int nRet = showMessageBox( this,
