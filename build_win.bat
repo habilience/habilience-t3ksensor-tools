@@ -1,3 +1,4 @@
+@echo off
 rem 환경에 맞추어 설정
 set PATH=%PATH%;C:\Qt\Qt5.2.0\Tools\mingw48_32\bin
 set QMAKE=C:\Qt\qt-everywhere-opensource-src-5.2.0\qtbase\bin

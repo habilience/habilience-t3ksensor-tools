@@ -155,12 +155,12 @@ bool QCalibrationWidget::ShowWindow( bool bShow, int nUsbConfigMode, float fScre
         if( fMMVersion >= MM_MIN_SUPPORT_FIRMWARE_VERSION && fMMVersion <= MM_LAST_SUPPORT_FRIMWARE_VERSION )
         {
             m_bUnderVersion = true;
-            QApplication::setOverrideCursor( QCursor(QPixmap(":/T3kCfgRes/resources/CURSOR_BIG_CROSS.png")) );
+            QApplication::setOverrideCursor( Qt::CrossCursor );//QCursor(QPixmap(":/T3kCfgRes/resources/CURSOR_BIG_CROSS.png")) );
         }
         else
         {
             m_bUnderVersion = false;
-            QApplication::setOverrideCursor(QCursor(QPixmap(":/T3kCfgRes/resources/PNG_NULL_CURSOR.png")));
+            QApplication::setOverrideCursor( Qt::BlankCursor );//QCursor(QPixmap(":/T3kCfgRes/resources/PNG_NULL_CURSOR.png")));
         }
     }
     else
