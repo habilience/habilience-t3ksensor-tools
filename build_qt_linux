@@ -4,8 +4,8 @@ apt-get build-dep libqt4-dev
 
 apt-get install g++
 
-export QTSRC_PATH=$PWD/qt-everywhere-opensource-src-5.4.0
-export OUT_BUILD_PATH=/opt/Qt5.4S
+export QTSRC_PATH=$PWD
+export OUT_BUILD_PATH=/opt/Qt5.2S
 
 rm -rf $OUT_BUILD_PATH 
 mkdir $OUT_BUILD_PATH
@@ -17,8 +17,6 @@ $QTSRC_PATH/configure -prefix $OUT_BUILD_PATH/qtbase -static -opensource -confir
 else
 $QTSRC_PATH/configure -prefix $OUT_BUILD_PATH/qtbase -static -opensource -confirm-license -debug-and-release -platform linux-g++-32 -nomake tests -nomake examples -nomake tools -opengl desktop -qpa xcb -qt-xcb -qt-libjpeg -qt-libpng -dbus
 fi
-# -no-c++11
-./qtbase/bin/qmake $QTSRC_PATH/qt.pro
+
 make -j8
-sleep 1000
-make install
+
