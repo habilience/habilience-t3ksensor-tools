@@ -57,3 +57,86 @@ QFont getSystemFont(QWidget* widget)
 #endif
     return fontSystem;
 }
+
+#ifdef Q_OS_WIN
+typedef struct _CustomdevicemodeW {
+    WCHAR  dmDeviceName[CCHDEVICENAME];
+    WORD dmSpecVersion;
+    WORD dmDriverVersion;
+    WORD dmSize;
+    WORD dmDriverExtra;
+    DWORD dmFields;
+    union {
+      /* printer only fields */
+      struct {
+        short dmOrientation;
+        short dmPaperSize;
+        short dmPaperLength;
+        short dmPaperWidth;
+        short dmScale;
+        short dmCopies;
+        short dmDefaultSource;
+        short dmPrintQuality;
+      };
+      /* display only fields */
+      struct {
+        POINTL dmPosition;
+        DWORD  dmDisplayOrientation;
+        DWORD  dmDisplayFixedOutput;
+      };
+    };
+    short dmColor;
+    short dmDuplex;
+    short dmYResolution;
+    short dmTTOption;
+    short dmCollate;
+    WCHAR  dmFormName[CCHFORMNAME];
+    WORD   dmLogPixels;
+    DWORD  dmBitsPerPel;
+    DWORD  dmPelsWidth;
+    DWORD  dmPelsHeight;
+    union {
+        DWORD  dmDisplayFlags;
+        DWORD  dmNup;
+    };
+    DWORD  dmDisplayFrequency;
+#if(WINVER >= 0x0400)
+    DWORD  dmICMMethod;
+    DWORD  dmICMIntent;
+    DWORD  dmMediaType;
+    DWORD  dmDitherType;
+    DWORD  dmReserved1;
+    DWORD  dmReserved2;
+#if (WINVER >= 0x0500) || (_WIN32_WINNT >= _WIN32_WINNT_NT4)
+    DWORD  dmPanningWidth;
+    DWORD  dmPanningHeight;
+#endif
+#endif /* WINVER >= 0x0400 */
+} CT_DEVMODEW;
+
+int getOrientation()
+{
+    CT_DEVMODEW dm;
+    ZeroMemory(&dm, sizeof(dm));
+    dm.dmSize = sizeof(dm);
+
+    if( 0 != ::EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, (PDEVMODEW)&dm) )
+    {
+        return (unsigned long)dm.dmDisplayOrientation;
+    }
+
+    return 0xFFFFFFFF;
+}
+#elif defined(Q_OS_LINUX)
+int getOrientation()
+{
+
+    return 0xFFFFFFFF;
+}
+#elif defined(Q_OS_MAC)
+int getOrientation()
+{
+
+    return 0xFFFFFFFF;
+}
+#endif

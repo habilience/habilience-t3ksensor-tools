@@ -35,6 +35,8 @@
 
 #include "conf.h"
 
+#include "../common/QGUIUtils.h"
+
 #define NaN ((float)qQNaN())
 #define WAIT_ANIMATION_FRAME	(10)
 #define WAIT_TOUCH_TIME			(30*WAIT_ANIMATION_FRAME)
@@ -213,24 +215,25 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog* pParentWidget, QWidget *par
                 QString("%1x%2\n")
                         .arg(screen->size().width())
                         .arg(screen->size().height());
-        Qt::ScreenOrientation orientation = screen->orientation();
+        //Qt::ScreenOrientation orientation = screen->orientation();
+        int orientation = getOrientation();
         m_nMonitorOrientation = 0;
         switch (orientation)
         {
         default:
-        case Qt::LandscapeOrientation:
+        case 0://Qt::LandscapeOrientation:
             m_nMonitorOrientation = 0;
             strScreenInformation += "Landscape";
             break;
-        case Qt::PortraitOrientation:
+        case 1://Qt::PortraitOrientation:
             m_nMonitorOrientation = 1;
             strScreenInformation += "Portrait";
             break;
-        case Qt::InvertedLandscapeOrientation:
+        case 2://Qt::InvertedLandscapeOrientation:
             m_nMonitorOrientation = 2;
             strScreenInformation += "Inverted Landscape";
             break;
-        case Qt::InvertedPortraitOrientation:
+        case 3://Qt::InvertedPortraitOrientation:
             m_nMonitorOrientation = 3;
             strScreenInformation += "Inverted Portrait";
             break;
@@ -2932,7 +2935,7 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
     QString strCmd;
     char szTemp[256];
 
-    snprintf( szTemp, 256, "%s0x%02x", cstrDisplayOrientation, m_nMonitorOrientation );
+    snprintf( szTemp, 256, "%s0x%02x", cstrDisplayOrientation, 3 );
     ui->cmdAsyncMngr->insertCommand( szTemp );
     strCmd = sCam1 + cstrFactorialCamPos + "**";
     ui->cmdAsyncMngr->insertCommand( strCmd );
