@@ -346,7 +346,7 @@ void QT3kLoadSensorDataObject::TPDP_OnVER(T3K_DEVICE_INFO /*devInfo*/, ResponseP
             m_pStorageHandle->MM.VerInfo.strNV = QString("%1").arg(ver->nv);
             m_pStorageHandle->MM.VerInfo.strVer = QString("%1.%2").arg(ver->major, 0, 16).arg(ver->minor, 0, 16);
             m_pStorageHandle->MM.VerInfo.strModel = QString("%1").arg(ver->model, 0, 16);
-            m_pStorageHandle->MM.VerInfo.strDateTime = QString("%1 %2").arg(QString((const char*)ver->date)).arg(QString((const char*)ver->time));
+            m_pStorageHandle->MM.VerInfo.strDateTime = QString("%1 %2").arg(QString::fromUtf8((const char*)ver->date, sizeof(ver->date))).arg(QString::fromUtf8((const char*)ver->time, sizeof(ver->time)));
         }
         break;
     default:
@@ -356,7 +356,7 @@ void QT3kLoadSensorDataObject::TPDP_OnVER(T3K_DEVICE_INFO /*devInfo*/, ResponseP
             m_pStorageHandle->CM.value( Part )->VerInfo.strNV = QString("%1").arg(ver->nv);
             m_pStorageHandle->CM.value( Part )->VerInfo.strVer = QString("%1.%2").arg(ver->major, 0, 16).arg(ver->minor, 0, 16);
             m_pStorageHandle->CM.value( Part )->VerInfo.strModel = QString("%1").arg(ver->model, 0, 16);
-            m_pStorageHandle->CM.value( Part )->VerInfo.strDateTime = QString("%1 %2").arg(QString((const char*)ver->date)).arg(QString((const char*)ver->time));
+            m_pStorageHandle->CM.value( Part )->VerInfo.strDateTime = QString("%1 %2").arg(QString::fromUtf8((const char*)ver->date, sizeof(ver->date))).arg(QString::fromUtf8((const char*)ver->time, sizeof(ver->time)));
         }
         break;
     }
