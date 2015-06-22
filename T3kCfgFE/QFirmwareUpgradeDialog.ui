@@ -137,6 +137,25 @@ selection-background-color: rgba(100, 100, 100, 100);</string>
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QStyleButton" name="btnRetry">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Retry</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
@@ -166,6 +185,11 @@ selection-background-color: rgba(100, 100, 100, 100);</string>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>QStyleButton</class>
+   <extends>QPushButton</extends>
+   <header>QStyleButton.h</header>
+  </customwidget>
   <customwidget>
    <class>QSlidingStackedWidget</class>
    <extends>QStackedWidget</extends>

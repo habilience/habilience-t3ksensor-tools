@@ -105,6 +105,7 @@ private:
     SensorInfo      m_SensorInfo[IDX_MAX];
     SensorInfo      m_TempSensorInfo[IDX_MAX];
     QList<FirmwareInfo*> m_FirmwareInfo;
+    bool            m_bCompleteUpgrade[IDX_MAX];
 
 public:
     explicit QFirmwareUpgradeDialog(QWidget *parent = 0);
@@ -139,6 +140,9 @@ protected:
     void startFirmwareDownload();
     void stopFirmwareDownload();
 
+    void startJobTimeoutTimer();
+    void stopJobTimeoutTimer();
+
     void queryInformation();
     void firmwareDownload();
 //    void firmwareDownload(ushort nIDX);
@@ -169,16 +173,17 @@ protected:
     enum TextMode{ TM_NORMAL, TM_NG, TM_OK };
     
     void getFirmwareFile();
-    void on_pushButtonUpgrade_clicked();
+    void startUpgrade();
+
+    void cancelUpgrade();
 
 private slots:
-//    void on_pushButtonUpgrade_clicked();
-    void on_pushButtonCancel_clicked();
-
     void onDisconnected();
     void onResponseFromSensor(unsigned short nPacketId);
 
     void onToggledPart(QString strPart, bool bChecked);
+
+    void on_btnRetry_clicked();
 
 public slots:
 //    void on_pushButtonUpgrade_clicked();

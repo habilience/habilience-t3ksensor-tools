@@ -1324,8 +1324,7 @@ void TabCalibrationWidget::timerEvent(QTimerEvent *evt)
 
                 emit displayPreviewTouchCount( 0 );
 
-                //forceMouseEvent( 0, 0, m_ptTouch.x(), m_ptTouch.y() );
-
+                forceMouseEvent( 0, 0, m_ptTouch.x(), m_ptTouch.y() );
                 if( m_bPointOK )
                 {
                     if( m_nTimerRecheckPoint )
@@ -1350,8 +1349,7 @@ void TabCalibrationWidget::timerEvent(QTimerEvent *evt)
 
                 emit displayPreviewTouchCount( 0 );
 
-                //forceMouseEvent( 0, 0, m_ptTouch.x(), m_ptTouch.y() );
-
+                forceMouseEvent( 0, 0, m_ptTouch.x(), m_ptTouch.y() );
                 if( m_wndTestCanvas.isVisible() )
                 {
                     m_wndTestCanvas.viewTouchPoint( m_ptTouch.x(), m_ptTouch.y(),false );

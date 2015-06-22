@@ -61,6 +61,9 @@ QFirmwareUpgradeDialog::QFirmwareUpgradeDialog(QWidget *parent) :
 
     setAcceptDrops( true );
 
+    ui->btnRetry->setAlignment(QStyleButton::AlignCenter);
+    ui->btnRetry->setCaptionFontHeight(12);
+
     Qt::WindowFlags flags = windowFlags();
     Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
     flags &= ~helpFlag;
@@ -323,6 +326,8 @@ void QFirmwareUpgradeDialog::onDisconnected()
 {
     qDebug( "disconnected" );
 
+    ui->btnRetry->setEnabled(false);
+
     m_strSensorInformation = "";
     m_bIsInformationUpdated = false;
 
@@ -431,7 +436,6 @@ void QFirmwareUpgradeDialog::timerEvent(QTimerEvent *evt)
             {
                 killWaitModeChangeTimer();
                 qDebug( "Wait IAP/APP timeout!!!" );
-                QString strMessage = QString("[%1] Wait timeout!").arg(PartName[getIndex(m_CurrentJob.which)]);
                 onFirmwareUpdateFailed();
             }
             else
@@ -565,6 +569,12 @@ void QFirmwareUpgradeDialog::firmwareDownload()
 {
     stopAllFirmwareDownloadJobs();
 
+    memset( m_bCompleteUpgrade, 0, sizeof(bool)*IDX_MAX );
+    for ( int i=IDX_MAX-1 ; i>=0 ; i-- )
+    {
+        if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
+            m_bCompleteUpgrade[i] = true;
+    }
     JobItem job;
 
     bool bIAPModeOK = true;
@@ -704,6 +714,8 @@ void QFirmwareUpgradeDialog::stopAllFirmwareDownloadJobs()
 
 void QFirmwareUpgradeDialog::queryInformation()
 {
+    ui->btnRetry->setEnabled(false);
+
     stopAllQueryInformationJobs();
 
     memset( &m_TempSensorInfo, 0, sizeof(m_TempSensorInfo) );
@@ -856,6 +868,7 @@ void QFirmwareUpgradeDialog::onResponseFromSensor(unsigned short nPacketId)
             m_CurrentJob.subStep = SUB_QUERY_FINISH;
             strMessage = QString("[%1] Write Firmware... Finish").arg(PartName[getIndex(m_CurrentJob.which)]);
             ui->progressBar->setValue(100);
+            m_bCompleteUpgrade[getIndex(m_CurrentJob.which)] = true;
         }
         else
         {
@@ -1125,27 +1138,48 @@ void QFirmwareUpgradeDialog::onFinishAllRequestInformationJobs()
         if (!m_bIsFirmwareUpdate)
         {
             m_bIsFirmwareUpdate = true;
-            on_pushButtonUpgrade_clicked();
+            startUpgrade();
         }
 
         m_TimerRequestInformation = startTimer(2000);
+
+        ui->btnRetry->setEnabled(true);
     }
 }
 
 void QFirmwareUpgradeDialog::onFinishAllFirmwareDownloadJobs()
 {
     m_bIsStartFirmwareDownload = false;
-    qDebug( "firmware download job finish!" );
 
-    QString strMessage = QString("Firmware Download OK!");
+    bool bFailed = false;
+    for( int i=0; i<IDX_MAX; i++ )
+    {
+        if( !m_bCompleteUpgrade[i] )
+        {
+            bFailed = true;
+            break;
+        }
+    }
 
-    ui->labelMessage->setText("The firmware has been updated successfully.");
-    ui->labelMessage->setStyleSheet("color: rgb(31, 160, 70); font-weight: bold;");
+    if( bFailed )
+    {
+        qDebug( "firmware download job failed!" );
 
-//    ui->pushButtonCancel->setText("OK");
-//    ui->pushButtonCancel->setEnabled(true);
+        ui->labelMessage->setText("Failed to update firmware");
+        ui->labelMessage->setStyleSheet("color: rgb(203, 45, 5); font-weight: bold;");
 
-    close();
+        ui->progressBar->setVisible(false);
+        ui->btnRetry->setVisible(true);
+    }
+    else
+    {
+        qDebug( "firmware download job finish!" );
+
+        ui->labelMessage->setText("The firmware has been updated successfully.");
+        ui->labelMessage->setStyleSheet("color: rgb(31, 160, 70); font-weight: bold;");
+
+        close();
+    }
 }
 
 void QFirmwareUpgradeDialog::onFirmwareUpdateFailed()
@@ -1153,8 +1187,9 @@ void QFirmwareUpgradeDialog::onFirmwareUpdateFailed()
     ui->labelMessage->setText("Failed to update firmware");
     ui->labelMessage->setStyleSheet("color: rgb(203, 45, 5); font-weight: bold;");
     stopFirmwareDownload();
-//    ui->pushButtonCancel->setText("Cancel");
-//    ui->pushButtonCancel->setEnabled(true);
+
+    ui->progressBar->setVisible(false);
+    ui->btnRetry->setVisible(true);
 }
 
 void QFirmwareUpgradeDialog::updateSensorInformation()
@@ -1315,6 +1350,7 @@ void QFirmwareUpgradeDialog::connectDevice()
     {
         qDebug( "connection ok" );
         m_strSensorInformation = "";
+
         startQueryInformation(true);
     }
     else
@@ -1323,6 +1359,8 @@ void QFirmwareUpgradeDialog::connectDevice()
         if (m_TimerConnectDevice)
             killTimer(m_TimerConnectDevice);
         m_TimerConnectDevice = startTimer(RETRY_CONNECTION_INTERVAL);
+
+        ui->btnRetry->setEnabled(false);
     }
 }
 
@@ -1330,6 +1368,9 @@ void QFirmwareUpgradeDialog::showEvent(QShowEvent *evt)
 {
     if ( evt->type() == QEvent::Show )
     {
+        ui->progressBar->setVisible(true);
+        ui->btnRetry->setVisible(false);
+
         if (!m_Packet.isOpen())
             connectDevice();
     }
@@ -1515,9 +1556,11 @@ bool QFirmwareUpgradeDialog::checkFWVersion(QString& strMsg)
     return false;
 }
 
-void QFirmwareUpgradeDialog::on_pushButtonUpgrade_clicked()
+void QFirmwareUpgradeDialog::startUpgrade()
 {
-//    ui->pushButtonCancel->setEnabled(false);
+    ui->progressBar->setVisible(true);
+    ui->btnRetry->setVisible(false);
+
     stopQueryInformation();
 
     qDebug( "Stop Query Information" );
@@ -1544,7 +1587,7 @@ void QFirmwareUpgradeDialog::on_pushButtonUpgrade_clicked()
     startFirmwareDownload();
 }
 
-void QFirmwareUpgradeDialog::on_pushButtonCancel_clicked()
+void QFirmwareUpgradeDialog::cancelUpgrade()
 {
     if (m_bIsStartFirmwareDownload)
     {
@@ -1566,4 +1609,9 @@ void QFirmwareUpgradeDialog::onToggledPart(QString strPart, bool bChecked)
     int nIdx = partNameToIdx(strPart);
     if( nIdx >= 0 )
         m_SensorInfo[nIdx].bUpgradeTarget = bChecked;
+}
+
+void QFirmwareUpgradeDialog::on_btnRetry_clicked()
+{
+    startUpgrade();
 }
