@@ -13,6 +13,7 @@
 
 #include "QUtils.h"
 #include "T3kConstStr.h"
+#include "QInitDataIni.h"
 
 #include "QSensorInitDataCfg.h"
 
@@ -69,6 +70,11 @@ QSideviewDialog::QSideviewDialog(Dialog *parent) :
     m_bSimpleDetection = false;
 
     m_rcUpdateImage = QRect(0,0,0,0);
+    m_rcUpdateMiniImage1 = QRect(0,0,0,0);
+    m_rcUpdateMiniImage2 = QRect(0,0,0,0);
+
+    m_nMiniSideView = 0;
+    m_bMirrorSideView = false;
 
     m_bSyncMode = false;
 
@@ -346,16 +352,24 @@ void QSideviewDialog::setSideview( int nCameraIndex, bool setMode )
     update();
 }
 
-void QSideviewDialog::drawSideviewImage( QPainter& p, const QRect& rcImageDst, int nScaleY )
+void QSideviewDialog::drawSideviewImage( QPainter& p, const QRect& rcImageDst, int nScaleY, bool bScaleLine )
 {
-    p.drawImage( rcImageDst, *m_pImgSideview, m_pImgSideview->rect() );
+    if( m_bMirrorSideView )
+    {
+        QImage img = m_pImgSideview->mirrored(true, false);
+        p.drawImage( rcImageDst, img, m_pImgSideview->rect() );
+    } else
+        p.drawImage( rcImageDst, *m_pImgSideview, m_pImgSideview->rect() );
 
     p.setPen( Qt::black );
     p.drawRect( rcImageDst );
 
-    for (int y=rcImageDst.top() ; y<rcImageDst.bottom() ; y+=nScaleY)
+    if( bScaleLine )
     {
-        p.drawLine( rcImageDst.left(), y, rcImageDst.right(), y );
+        for (int y=rcImageDst.top() ; y<rcImageDst.bottom() ; y+=nScaleY)
+        {
+            p.drawLine( rcImageDst.left(), y, rcImageDst.right(), y );
+        }
     }
 
     if (m_strCMModelName.indexOf("3000") >= 0)  // C3000
@@ -416,6 +430,55 @@ void QSideviewDialog::drawSideviewImage( QPainter& p, const QRect& rcImageDst, i
         p.setPen( QColor(255,50,50) );
         p.drawRect( rc );
     }
+}
+
+void QSideviewDialog::drawMiniSideviewImage(QPainter &p)
+{
+    QRect rcSrc = m_pImgSideview->rect();
+    QRect rcMiniImage;
+    if( m_nMiniSideView == 0 ) return;
+
+    QWidget * pMini1 = NULL;
+    QWidget * pMini2 = NULL;
+
+    switch( m_nMiniSideView )
+    {
+    default:
+    case 0:
+        break;
+    case 1: // top
+        pMini1 = ui->miniRightLT;
+        pMini2 = ui->miniRightRT;
+        break;
+    case 2: // left
+        pMini1 = ui->miniRightLT;
+        pMini2 = ui->miniRightLB;
+        break;
+    case 3: // right
+        pMini1 = ui->miniRightRT;
+        pMini2 = ui->miniRightRB;
+        break;
+    case 4: // bottom
+        pMini1 = ui->miniRightLB;
+        pMini2 = ui->miniRightRB;
+        break;
+    }
+
+    rcMiniImage = pMini1->geometry();
+    const int nSpaceY = 5;
+    int nScaleY = getImageScale( nSpaceY, rcMiniImage.height(), rcSrc.height() );
+    rcMiniImage.setHeight( rcSrc.height() * nScaleY );
+    drawSideviewImage(p, rcMiniImage, nScaleY, false);
+
+    m_rcUpdateMiniImage1 = rcMiniImage;
+    m_rcUpdateMiniImage1.adjust(-3, -3, 3, 3+70);
+
+    rcMiniImage = pMini2->geometry();
+    rcMiniImage.setHeight( rcSrc.height() * nScaleY );
+    drawSideviewImage(p, rcMiniImage, nScaleY, false);
+
+    m_rcUpdateMiniImage2 = rcMiniImage;
+    m_rcUpdateMiniImage2.adjust(-3, -3, 3, 3+70);
 }
 
 #define GRAPH_DTC_RANGE_LEFT (12000)
@@ -487,6 +550,15 @@ void QSideviewDialog::drawGraph(QPainter& p, const QRect& rcGraphDst)
     p.drawRect( rcGraphDst );
 }
 
+int QSideviewDialog::getImageScale(int space, int dstSize, int srcSize)
+{
+    int scale = ((dstSize-space) / 2) / srcSize;
+    if (scale > 5) scale = 5;
+    if (scale < 1) scale = 1;
+
+    return scale;
+}
+
 void QSideviewDialog::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
@@ -520,15 +592,14 @@ void QSideviewDialog::paintEvent(QPaintEvent *)
 
             QRect rcImageDst = rcRightPanel;
             const int nSpaceY = 5;
-            int nScaleY = ((rcImageDst.height()-nSpaceY) / 2) / rcSrc.height();
-            if (nScaleY > 5) nScaleY = 5;
-            if (nScaleY < 1) nScaleY = 1;
+            int nScaleY = getImageScale( nSpaceY, rcImageDst.height(), rcSrc.height() );
             rcImageDst.setHeight( rcSrc.height() * nScaleY );
 
             QRect rcGraphDst = rcImageDst;
             rcGraphDst.adjust( 0, rcImageDst.height()+nSpaceY, 0, rcImageDst.height()+nSpaceY );
 
             drawSideviewImage( p, rcImageDst, nScaleY );
+            drawMiniSideviewImage( p );
 
             drawGraph( p, rcGraphDst );
 
@@ -600,6 +671,42 @@ void QSideviewDialog::showEvent(QShowEvent *)
 #ifdef Q_OS_MAC
     cursor().setPos( rcPrimaryMon.center() );
 #endif
+
+    m_nMiniSideView = QInitDataIni::instance()->getMiniSideView();
+
+    QWidget * pMini1 = NULL;
+    QWidget * pMini2 = NULL;
+
+    switch( m_nMiniSideView )
+    {
+    default:
+    case 0:
+        break;
+    case 1: // top
+        pMini1 = ui->miniRightLT;
+        pMini2 = ui->miniRightRT;
+        break;
+    case 2: // left
+        pMini1 = ui->miniRightLT;
+        pMini2 = ui->miniRightLB;
+        break;
+    case 3: // right
+        pMini1 = ui->miniRightRT;
+        pMini2 = ui->miniRightRB;
+        break;
+    case 4: // bottom
+        pMini1 = ui->miniRightLB;
+        pMini2 = ui->miniRightRB;
+        break;
+    }
+
+    if( pMini1 != NULL && pMini2 != NULL )
+    {
+        pMini1->setMinimumWidth(100);
+        pMini2->setMinimumWidth(100);
+    }
+
+    m_bMirrorSideView = QInitDataIni::instance()->getMirrorSideView();
 }
 
 void QSideviewDialog::closeEvent(QCloseEvent *evt)
@@ -1061,18 +1168,18 @@ bool QSideviewDialog::sensorWriteToFactoryDefault()
         while( nTry-- > 0 && QT3kDevice::instance()->sendCommand( strSensorCmd, false, 1000 ) == 0 )
             continue;
 
-        if( nTry < 0 || m_strSyncCmdValue.isEmpty() )
-            return false;
+        if( nTry >= 0 && !m_strSyncCmdValue.isEmpty() )
+        {
+            strSensorCmd = sCam1_1 + cstrDetectionLine + "**";
+            ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+            strSensorCmd = sCam1_1 + cstrDetectionLine + m_strSyncCmdValue;
+            ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+            strSensorCmd = sCam1_1 + cstrDetectionLine + "!";
+            ui->cmdAsyncMngr->insertCommand(strSensorCmd);
 
-        strSensorCmd = sCam1_1 + cstrDetectionLine + "**";
-        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
-        strSensorCmd = sCam1_1 + cstrDetectionLine + m_strSyncCmdValue;
-        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
-        strSensorCmd = sCam1_1 + cstrDetectionLine + "!";
-        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
-
-        strSensorCmd = sCam1_1 + cstrAmbientLight + "!";
-        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+            strSensorCmd = sCam1_1 + cstrAmbientLight + "!";
+            ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+        }
 
         m_strSyncCmdValue.clear();
         strSensorCmd = sCam2_1 + cstrDetectionLine + "?";
@@ -1080,18 +1187,18 @@ bool QSideviewDialog::sensorWriteToFactoryDefault()
         while( nTry-- > 0 && QT3kDevice::instance()->sendCommand( strSensorCmd, false, 1000 ) == 0 )
             continue;
 
-        if( nTry < 0 || m_strSyncCmdValue.isEmpty() )
-            return false;
+        if( nTry >= 0 && !m_strSyncCmdValue.isEmpty() )
+        {
+            strSensorCmd = sCam2_1 + cstrDetectionLine + "**";
+            ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+            strSensorCmd = sCam2_1 + cstrDetectionLine + m_strSyncCmdValue;
+            ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+            strSensorCmd = sCam2_1 + cstrDetectionLine + "!";
+            ui->cmdAsyncMngr->insertCommand(strSensorCmd);
 
-        strSensorCmd = sCam2_1 + cstrDetectionLine + "**";
-        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
-        strSensorCmd = sCam2_1 + cstrDetectionLine + m_strSyncCmdValue;
-        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
-        strSensorCmd = sCam2_1 + cstrDetectionLine + "!";
-        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
-
-        strSensorCmd = sCam2_1 + cstrAmbientLight + "!";
-        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+            strSensorCmd = sCam2_1 + cstrAmbientLight + "!";
+            ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+        }
     }
 
     return true;
@@ -1260,6 +1367,11 @@ void QSideviewDialog::TPDP_OnPRV(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part,
             update();
         else
             update(m_rcUpdateImage);
+
+        if (!m_rcUpdateMiniImage1.isEmpty())
+            update(m_rcUpdateMiniImage1);
+        if (!m_rcUpdateMiniImage2.isEmpty())
+            update(m_rcUpdateMiniImage2);
     }
 }
 
