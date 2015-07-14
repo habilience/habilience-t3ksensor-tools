@@ -44,6 +44,11 @@ private:
     QRect   m_rcUpdateImage;
     QImage  m_img;
 
+    int     m_nMiniSideView;
+    QRect   m_rcUpdateMiniImage1;
+    QRect   m_rcUpdateMiniImage2;
+    bool    m_bMirrorSideView;
+
     // only 2.8d.1
     QString m_strSyncCmdValue;
     bool    m_bSyncMode;
@@ -76,21 +81,24 @@ protected:
     void resetDataWithInitData( const QString& strCmd, bool bWithFactoryDefault=true);
 
     void resetEditColors();
-    void setModifyEditColor(QBorderStyleEdit* pEdit);
+    void setModifyEditColor( QBorderStyleEdit* pEdit );
     void setModifyAllEditColors();
 
     void enableAllControls( bool bEnable );
 
-    void setSideview(int nCameraIndex, bool setMode);
+    void setSideview( int nCameraIndex, bool setMode );
     QString getCameraPrefix( int nCameraIndex );
 
     void initImageBuffer( int width, int height );
 
-    void drawSideviewImage(QPainter &p, const QRect& rcImageDst, int nScaleY );
-    void drawGraph(QPainter& p, const QRect& rcGraphDst);
+    void drawSideviewImage( QPainter &p, const QRect& rcImageDst, int nScaleY, bool bScaleLine = true );
+    void drawMiniSideviewImage( QPainter &p);
+    void drawGraph( QPainter& p, const QRect& rcGraphDst );
 
-    void adjustAmbientLight(int nLight1, int nLight2, int nLight3);
+    void adjustAmbientLight( int nLight1, int nLight2, int nLight3 );
     void stopPreviewCountDown();
+
+    int getImageScale(int space, int dstSize, int srcSize);
 
     // override QT3kDeviceEventHandler::IListener
     virtual void TPDP_OnPRV(T3K_DEVICE_INFO devInfo, ResponsePart Part, unsigned short ticktime, const char *partid, int total, int offset, const unsigned char *data, int cnt);

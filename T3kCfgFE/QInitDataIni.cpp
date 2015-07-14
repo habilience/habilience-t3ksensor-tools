@@ -34,6 +34,8 @@ QInitDataIni::QInitDataIni()
     m_bCalibrationCamera = BENT_WITH_CALIBRATION;
     m_bIgnoreCameraPairForBentLoad = false;
     m_bIgnoreCameraPairForBent = BENT_IGNORE_CAMERAPAIR;
+    m_nMiniSideView = 0;
+    m_bMirrorSideView = false;
 
     m_nActiveLanguageIndex = 0;
 
@@ -100,6 +102,16 @@ bool QInitDataIni::getCalibrationWarning() const
 bool QInitDataIni::getIgnoreCameraPair() const
 {
     return m_bIgnoreCameraPairForBent;
+}
+
+int QInitDataIni::getMiniSideView() const
+{
+    return m_nMiniSideView;
+}
+
+bool QInitDataIni::getMirrorSideView() const
+{
+    return m_bMirrorSideView;
 }
 
 int QInitDataIni::getDTCGraphSharpWidth() const
@@ -178,6 +190,29 @@ bool QInitDataIni::load()
             strData = trim(strData);
             if ( !strData.isEmpty() )
                 m_nActiveLanguageIndex = strData.toInt(0, 10);
+        }
+    }
+
+    QIni::QSection * pSideViewSection = ini.getSectionNoCase("SIDEVIEW");
+    if ( pSideViewSection )
+    {
+        m_nMiniSideView = 0;
+        idx = pSideViewSection->getDataIndex("MiniSideView");
+        if ( idx >= 0 )
+        {
+            strData = pSideViewSection->getData(idx);
+            strData = trim(strData);
+            if ( !strData.isEmpty() )
+                m_nMiniSideView = strData.toInt(0, 10);
+        }
+
+        m_bMirrorSideView = false;
+        idx = pSideViewSection->getDataIndex("MirrorSideView");
+        if ( idx >= 0 )
+        {
+            strData = trim(pSideViewSection->getData(idx));
+            if ( !strData.isEmpty() )
+                m_bMirrorSideView = strData.toInt(0, 10);
         }
     }
 
@@ -358,6 +393,13 @@ bool QInitDataIni::save()
     QIni::QSection * pLanguageSection = ini.addSection("LANGUAGE");
     strData = QString("%1").arg(m_nActiveLanguageIndex);
     pLanguageSection->addData( "ActiveIndex", strData, "Language Index: English(0)" );
+
+    QIni::QSection * pSideViewSection = ini.addSection("SIDEVIEW");
+    strData = QString("%1").arg(m_nMiniSideView);
+    pSideViewSection->addData( "MiniSideView", strData, "disable : 0, top : 1, left : 2, right : 3, bottom : 4" );
+
+    strData = QString("%1").arg(m_bMirrorSideView);
+    pSideViewSection->addData( "MirrorSideView", strData, "disable : 0, enable : 1" );
 
     QIni::QSection * pBentAdjustmentSection = ini.addSection("BENT ADJUSTMENT");
 
