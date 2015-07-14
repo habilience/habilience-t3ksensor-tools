@@ -31,6 +31,16 @@
       <number>10</number>
      </property>
      <item>
+      <widget class="QWidget" name="miniRightLT" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>60</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="btnCam1">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -154,6 +164,16 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QWidget" name="miniRightRT" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>60</height>
+        </size>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -581,6 +601,16 @@
       <number>10</number>
      </property>
      <item>
+      <widget class="QWidget" name="miniRightLB" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>60</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="btnReset">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -722,11 +752,27 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QWidget" name="miniRightRB" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>60</height>
+        </size>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QCmdAsyncManagerCtrl</class>
+   <extends>QWidget</extends>
+   <header>QCmdAsyncManagerCtrl.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>QBorderStyleEdit</class>
    <extends>QTextEdit</extends>
@@ -736,12 +782,6 @@
    <class>QUnderlineTitle</class>
    <extends>QLabel</extends>
    <header>QUnderlineTitle.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QCmdAsyncManagerCtrl</class>
-   <extends>QWidget</extends>
-   <header>QCmdAsyncManagerCtrl.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

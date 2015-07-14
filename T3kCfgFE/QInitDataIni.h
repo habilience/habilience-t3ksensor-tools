@@ -22,6 +22,9 @@ protected:
     bool    m_bIgnoreCameraPairForBentLoad;
     bool    m_bIgnoreCameraPairForBent;
 
+    int     m_nMiniSideView;
+    bool    m_bMirrorSideView;
+
     int		m_nDetectionGraphSharpWidth;
     float	m_fDetectionGraphCrackThresholdError;
     float	m_fDetectionGraphCrackThresholdWarning;
@@ -41,6 +44,9 @@ public:
     bool getBentWithDummy() const;
     bool getCalibrationWarning() const;
     bool getIgnoreCameraPair() const;
+
+    int getMiniSideView() const;
+    bool getMirrorSideView() const;
 
     int getDTCGraphSharpWidth() const;
     float getDTCGraphCrackThresholdError() const;
