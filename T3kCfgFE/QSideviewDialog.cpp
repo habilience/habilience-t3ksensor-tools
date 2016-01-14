@@ -1128,18 +1128,18 @@ bool QSideviewDialog::sensorWriteToFactoryDefault()
     while( nTry-- > 0 && QT3kDevice::instance()->sendCommand( strSensorCmd, false, 1000 ) == 0 )
         continue;
 
-    if( nTry < 0 || m_strSyncCmdValue.isEmpty() )
-        return false;
+    if( nTry >= 0 && !m_strSyncCmdValue.isEmpty() )
+    {
+        strSensorCmd = sCam1 + cstrDetectionLine + "**";
+        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+        strSensorCmd = sCam1 + cstrDetectionLine + m_strSyncCmdValue;
+        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+        strSensorCmd = sCam1 + cstrDetectionLine + "!";
+        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
 
-    strSensorCmd = sCam1 + cstrDetectionLine + "**";
-    ui->cmdAsyncMngr->insertCommand(strSensorCmd);
-    strSensorCmd = sCam1 + cstrDetectionLine + m_strSyncCmdValue;
-    ui->cmdAsyncMngr->insertCommand(strSensorCmd);
-    strSensorCmd = sCam1 + cstrDetectionLine + "!";
-    ui->cmdAsyncMngr->insertCommand(strSensorCmd);
-
-    strSensorCmd = sCam1 + cstrAmbientLight + "!";
-    ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+        strSensorCmd = sCam1 + cstrAmbientLight + "!";
+        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+    }
 
     m_strSyncCmdValue.clear();
     strSensorCmd = sCam2 + cstrDetectionLine + "?";
@@ -1147,18 +1147,18 @@ bool QSideviewDialog::sensorWriteToFactoryDefault()
     while( nTry-- > 0 && QT3kDevice::instance()->sendCommand( strSensorCmd, false, 1000 ) == 0 )
         continue;
 
-    if( nTry < 0 || m_strSyncCmdValue.isEmpty() )
-        return false;
+    if( nTry >= 0 && !m_strSyncCmdValue.isEmpty() )
+    {
+        strSensorCmd = sCam2 + cstrDetectionLine + "**";
+        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+        strSensorCmd = sCam2 + cstrDetectionLine + m_strSyncCmdValue;
+        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+        strSensorCmd = sCam2 + cstrDetectionLine + "!";
+        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
 
-    strSensorCmd = sCam2 + cstrDetectionLine + "**";
-    ui->cmdAsyncMngr->insertCommand(strSensorCmd);
-    strSensorCmd = sCam2 + cstrDetectionLine + m_strSyncCmdValue;
-    ui->cmdAsyncMngr->insertCommand(strSensorCmd);
-    strSensorCmd = sCam2 + cstrDetectionLine + "!";
-    ui->cmdAsyncMngr->insertCommand(strSensorCmd);
-
-    strSensorCmd = sCam2 + cstrAmbientLight + "!";
-    ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+        strSensorCmd = sCam2 + cstrAmbientLight + "!";
+        ui->cmdAsyncMngr->insertCommand(strSensorCmd);
+    }
 
     if( g_AppData.nSubCameraCount > 0 )
     {
