@@ -38,6 +38,7 @@
 #include <QParallelAnimationGroup>
 #include <QGraphicsOpacityEffect>
 #include <QDir>
+#include <QProcess>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -112,6 +113,10 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     m_bRunOtherTool = false;
     m_bPrevShowed = false;
 
+    m_nCurrentIdx = -1;
+    m_nNextIdx = -1;
+    m_bActive = false;
+
     m_pT3kHandle = QT3kDevice::instance();
 
     QT3kUserData::GetInstance()->setT3kHandle( m_pT3kHandle );
@@ -152,42 +157,42 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
 
     LoadCompany();
 
-    m_pMainWidget = new QMainMenuWidget( m_pT3kHandle );
-    m_pMouseSettingWidget = new QMouseSettingWidget( m_pT3kHandle );
-    m_pCaliSettingWidget = new QCalibrationSettingWidget( m_pT3kHandle );
-    m_pSensorSettingWidget = new QSensorSettingWidget( m_pT3kHandle );
-    m_pGeneralSettingWidget = new QGeneralSettingWidget( m_pT3kHandle );
-    m_pSoftkeySettingWidget = new QSoftKeySettingWidget( m_pT3kHandle );
+    m_pMainWidget = new QMainMenuWidget( m_pT3kHandle, this );
+    m_pMouseSettingWidget = new QMouseSettingWidget( m_pT3kHandle, this );
+    m_pCaliSettingWidget = new QCalibrationSettingWidget( m_pT3kHandle, this );
+    m_pSensorSettingWidget = new QSensorSettingWidget( m_pT3kHandle, this );
+    m_pGeneralSettingWidget = new QGeneralSettingWidget( m_pT3kHandle, this );
+    m_pSoftkeySettingWidget = new QSoftKeySettingWidget( m_pT3kHandle, this );
     m_pMenuWidget = NULL;
 
-    //m_pMainWidget->setGeometry( 0, 50, 620, 330 );
+    m_pMainWidget->setGeometry( 0, 50, 620, 330 );
     m_pMainWidget->hide();
     m_pMainWidget->setAttribute( Qt::WA_DeleteOnClose );
     m_pMainWidget->setFont( font() );
     connect( m_pMainWidget, SIGNAL(ShowMenuEvent(int)), this, SLOT(onShowMenuEvent(int)) );
 
-    //m_pMouseSettingWidget->setGeometry( 0, 50, 620, 340 );
+    m_pMouseSettingWidget->setGeometry( 0, 50, 620, 340 );
     m_pMouseSettingWidget->hide();
     m_pMouseSettingWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pMouseSettingWidget, SIGNAL(ByPassKeyPressEvent(QKeyEvent*)), this ,SLOT(onByPassKeyPressEvent(QKeyEvent*)), Qt::DirectConnection );
 
-    //m_pCaliSettingWidget->setGeometry( 0, 50, 620, 340 );
+    m_pCaliSettingWidget->setGeometry( 0, 50, 620, 340 );
     m_pCaliSettingWidget->hide();
     m_pCaliSettingWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pCaliSettingWidget, SIGNAL(ByPassKeyPressEvent(QKeyEvent*)), this ,SLOT(onByPassKeyPressEvent(QKeyEvent*)), Qt::DirectConnection );
 
-    //m_pSensorSettingWidget->setGeometry( 0, 50, 620, 340 );
+    m_pSensorSettingWidget->setGeometry( 0, 50, 620, 340 );
     m_pSensorSettingWidget->hide();
     m_pSensorSettingWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pSensorSettingWidget, SIGNAL(ByPassKeyPressEvent(QKeyEvent*)), this ,SLOT(onByPassKeyPressEvent(QKeyEvent*)), Qt::DirectConnection );
 
-    //m_pGeneralSettingWidget->setGeometry( 0, 50, 620, 340 );
+    m_pGeneralSettingWidget->setGeometry( 0, 50, 620, 340 );
     m_pGeneralSettingWidget->hide();
     m_pGeneralSettingWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pGeneralSettingWidget, SIGNAL(ByPassKeyPressEvent(QKeyEvent*)), this ,SLOT(onByPassKeyPressEvent(QKeyEvent*)), Qt::DirectConnection );
     connect( m_pGeneralSettingWidget, SIGNAL(RegisterTrayIcon(bool)), this, SLOT(onRegisterTrayIcon(bool)) );
 
-    //m_pSoftkeySettingWidget->setGeometry( 0, 50, 620, 340 );
+    m_pSoftkeySettingWidget->setGeometry( 0, 50, 620, 340 );
     m_pSoftkeySettingWidget->hide();
     m_pSoftkeySettingWidget->setAttribute( Qt::WA_DeleteOnClose );
     connect( m_pSoftkeySettingWidget, SIGNAL(ByPassKeyPressEvent(QKeyEvent*)), this ,SLOT(onByPassKeyPressEvent(QKeyEvent*)), Qt::DirectConnection );
@@ -203,17 +208,6 @@ T3kCfgWnd::T3kCfgWnd(QWidget *parent) :
     QTcpSocket* pSocket = QT3kUserData::GetInstance()->GetRemoteSocket();
     connect( pSocket, SIGNAL(connected()), this, SLOT(onConnectedRemote()) );
     connect( pSocket, SIGNAL(disconnected()), this, SLOT(onDisconnectedRemote()) );
-
-    ui->SWMenu->insertWidget( 0, m_pMainWidget );
-    ui->SWMenu->insertWidget( 1, m_pMouseSettingWidget );
-    ui->SWMenu->insertWidget( 2, m_pCaliSettingWidget );
-    ui->SWMenu->insertWidget( 3, m_pSensorSettingWidget );
-    ui->SWMenu->insertWidget( 4, m_pSoftkeySettingWidget );
-    ui->SWMenu->insertWidget( 5, m_pGeneralSettingWidget );
-
-    ui->SWMenu->setCurrentIndex( -1 );
-
-    connect( ui->SWMenu, &QSlidingStackedWidget::animationFinished, this, &T3kCfgWnd::OnFinishAnimationMenu );
 
     connect( this, &T3kCfgWnd::connectedDevice, this, &T3kCfgWnd::onOpenT3kDevice );
     connect( this, &T3kCfgWnd::connectedDevice, m_pGeneralSettingWidget, &QGeneralSettingWidget::onConnectedDevice, Qt::QueuedConnection );
@@ -903,28 +897,28 @@ void T3kCfgWnd::keyPressEvent(QKeyEvent *evt)
 
 void T3kCfgWnd::FlatMenuToLeft()
 {
-    if( ui->SWMenu->currentIndex() == 0 ) return;
+    if( m_nCurrentIdx == 0 ) return;
 
     ShowMainMenu( false );
     m_pMenuWidget->hide();
 
-    if( ui->SWMenu->currentIndex() == 5 )
-        ui->SWMenu->slideInIdx( m_bSoftkey ? 4 : 3 );
+    if( m_nCurrentIdx == 5 )
+        slideTo( m_bSoftkey ? 4 : 3 );
     else
-        ui->SWMenu->slideInPrev();
+        slideTo(m_nCurrentIdx-1);
 }
 
 void T3kCfgWnd::FlatMenuToRight()
 {
-    if( ui->SWMenu->currentIndex() == ui->SWMenu->count()-1 ) return;
+    if( m_nCurrentIdx == 5 ) return;
 
     ShowMainMenu( false );
     m_pMenuWidget->hide();
 
-    if( ui->SWMenu->currentIndex() == 3 )
-        ui->SWMenu->slideInIdx( m_bSoftkey ? 4 : 5 );
+    if( m_nCurrentIdx == 3 )
+        slideTo( m_bSoftkey ? 4 : 5 );
     else
-        ui->SWMenu->slideInNext();
+        slideTo(m_nCurrentIdx+1);
 }
 
 void T3kCfgWnd::onShowMenuEvent( int nMenu )
@@ -932,14 +926,14 @@ void T3kCfgWnd::onShowMenuEvent( int nMenu )
     ShowMainMenu( false );
     m_pMenuWidget->hide();
 
-    ui->SWMenu->slideInIdx( nMenu );
+    slideTo( nMenu );
 
     m_pMenuWidget->SetMenuButton( nMenu );
 }
 
 void T3kCfgWnd::OnFinishAnimationMenu()
 {
-    if( ui->SWMenu->currentIndex() == 0 )
+    if( m_nCurrentIdx == 0 )
     {
         ShowMainMenu( true );
     }
@@ -951,16 +945,19 @@ void T3kCfgWnd::ShowContentsMenu()
 {
     m_pMainWidget->show();
     m_pMainWidget->RequestInformation();
+    m_nCurrentIdx = 0;
 }
 
 void T3kCfgWnd::HideContentsMenu()
 {
     ShowMainMenu( true );
     m_pMenuWidget->hide();
-    ui->SWMenu->setCurrentIndex( 0 );
+    slideTo(0);
     m_pMenuWidget->SetMenuButton( 0 );
 
     m_pMainWidget->hide();
+
+    m_nCurrentIdx = -1;
 }
 
 void T3kCfgWnd::onOpenT3kDevice(T3K_DEVICE_INFO /*info*/)
@@ -1104,8 +1101,8 @@ void T3kCfgWnd::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart /*Part*/, u
     if( !winId() ) return;
     if( m_nSendCmdID >= 0 && m_nSendCmdID != id ) return;
     m_nSendCmdID = -1;
-    if( (ui->SWMenu->currentIndex() == 0 ||
-            ui->SWMenu->currentIndex() == 5) && strstr(cmd, cstrInputMode) == cmd )
+    if( (m_nCurrentIdx == 0 ||
+            m_nCurrentIdx == 5) && strstr(cmd, cstrInputMode) == cmd )
     {
         char* pInputMode = NULL;
         pInputMode = (char*)strchr( cmd, ',' );
@@ -1488,4 +1485,105 @@ void T3kCfgWnd::onDisconnectedRemote()
 {
    // windnsoul
     m_pT3kHandle->onReceiveRawDataFlag( false );
+}
+
+QWidget* T3kCfgWnd::getMenu(int nMenu)
+{
+    switch(nMenu)
+    {
+    case 0:
+        return m_pMainWidget;
+    case 1:
+        return m_pMouseSettingWidget;
+    case 2:
+        return m_pCaliSettingWidget;
+    case 3:
+        return m_pSensorSettingWidget;
+    case 4:
+        return m_pSoftkeySettingWidget;
+    case 5:
+        return m_pGeneralSettingWidget;
+    default:
+        break;
+    }
+
+    return NULL;
+}
+#include <QDebug>
+void T3kCfgWnd::slideTo(int nMenu)
+{
+    if (m_bActive) return;
+    else m_bActive = true;
+
+    int offsetx = m_pMainWidget->width();
+    int offsety = m_pMainWidget->height();
+
+    QWidget* pNow = getMenu(m_nCurrentIdx);
+    QWidget* pNext = getMenu(nMenu);
+
+    pNext->setGeometry ( 0, pNow->y(), offsetx, offsety );
+
+    int dir = 0;
+    if (m_nCurrentIdx == nMenu) {
+        m_bActive = false;
+        return;
+    }
+    else if (m_nCurrentIdx < nMenu){
+        dir = 1;
+    }
+
+    switch (dir)
+    {
+    case 0:
+        offsety=0;
+        break;
+    case 1:
+        offsetx=-offsetx;
+        offsety=0;
+        break;
+    }
+
+    QPoint pnext= pNext->pos();
+    QPoint pnow= pNow->pos();
+
+    pNext->move(pnext.x()-offsetx,pnext.y()-offsety);
+    pNext->show();
+    pNext->raise();
+
+    QPropertyAnimation *animnow = new QPropertyAnimation(pNow, "pos");
+
+    animnow->setDuration(500);
+    animnow->setEasingCurve(QEasingCurve::OutBack);
+    animnow->setStartValue(QPoint(pnow.x(), pnow.y()));
+    animnow->setEndValue(QPoint(offsetx+pnow.x(), offsety+pnow.y()));
+    QPropertyAnimation *animnext = new QPropertyAnimation(pNext, "pos");
+    animnext->setDuration(500);
+    animnext->setEasingCurve(QEasingCurve::OutBack);
+    animnext->setStartValue(QPoint(-offsetx+pnext.x(), offsety+pnext.y()));
+    animnext->setEndValue(QPoint(pnext.x(), pnext.y()));
+
+    qDebug() << animnow->startValue() << "===" << animnow->endValue();
+    qDebug() << animnext->startValue() << "===" << animnext->endValue();
+
+    QParallelAnimationGroup *animgroup = new QParallelAnimationGroup;
+
+    animgroup->addAnimation(animnow);
+    animgroup->addAnimation(animnext);
+
+    QObject::connect(animgroup, SIGNAL(finished()), this, SLOT(animationDoneSlot()));
+    m_nNextIdx = nMenu;
+    m_bActive = true;
+    animgroup->start();
+}
+
+void T3kCfgWnd::animationDoneSlot()
+{
+    //setCurrentIndex(m_nNextIdx);
+    QWidget* pPrev = getMenu(m_nCurrentIdx);
+    pPrev->hide();
+    pPrev->move(0, 0);
+    m_bActive = false;
+    m_nCurrentIdx = m_nNextIdx;
+
+    OnFinishAnimationMenu();
 }

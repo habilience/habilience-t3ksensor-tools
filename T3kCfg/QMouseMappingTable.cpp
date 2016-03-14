@@ -53,6 +53,11 @@ QMouseMappingTable::QMouseMappingTable(QWidget *parent) :
     m_bIsTitleOver = false;
     m_bIsHovered = false;
 
+    m_pEditActionWnd = NULL;
+    m_pEditAction2WDWnd = NULL;
+    m_pEditAction4WDWnd = NULL;
+    m_pEditActionEDWnd = NULL;
+
     m_nProfileIndex = 1;
     m_wProfileFlags = 0x00;
 
@@ -76,28 +81,28 @@ QMouseMappingTable::~QMouseMappingTable()
     }
     m_vCell.remove( 0, m_vCell.count() );
 
-    if( m_pEditActionWnd )
-    {
-        delete m_pEditActionWnd;
-        m_pEditActionWnd = NULL;
-    }
-    if( m_pEditAction2WDWnd )
-    {
-        delete m_pEditAction2WDWnd;
-        m_pEditAction2WDWnd = NULL;
-    }
+//    if( m_pEditActionWnd )
+//    {
+//        delete m_pEditActionWnd;
+//        m_pEditActionWnd = NULL;
+//    }
+//    if( m_pEditAction2WDWnd )
+//    {
+//        delete m_pEditAction2WDWnd;
+//        m_pEditAction2WDWnd = NULL;
+//    }
 
-    if( m_pEditAction4WDWnd )
-    {
-        delete m_pEditAction4WDWnd;
-        m_pEditAction4WDWnd = NULL;
-    }
+//    if( m_pEditAction4WDWnd )
+//    {
+//        delete m_pEditAction4WDWnd;
+//        m_pEditAction4WDWnd = NULL;
+//    }
 
-    if( m_pEditActionEDWnd )
-    {
-        delete m_pEditActionEDWnd;
-        m_pEditActionEDWnd = NULL;
-    }
+//    if( m_pEditActionEDWnd )
+//    {
+//        delete m_pEditActionEDWnd;
+//        m_pEditActionEDWnd = NULL;
+//    }
 }
 
 void QMouseMappingTable::SetProfileIndex(int nIndex)

@@ -13,6 +13,11 @@
 #include "QAdvancedSettingWidget.h"
 #include "../common/T3kCamNameDef.h"
 
+#if defined(Q_OS_MAC)
+#include <CoreServices/CoreServices.h>
+#include <CoreGraphics/CGEvent.h>
+#endif
+
 #include <QShowEvent>
 #include <QMessageBox>
 
@@ -467,6 +472,16 @@ void QCalibrationSettingWidget::on_BtnCalibration_clicked()
         bool bShow = false;
 #ifdef Q_OS_MAC
         bShow = !pUD->IsMacMargin();
+
+        SInt32 versionMajor = 0;
+        SInt32 versionMinor = 0;
+        SInt32 versionBugFix = 0;
+        ::Gestalt( gestaltSystemVersionMajor, &versionMajor );
+        ::Gestalt( gestaltSystemVersionMinor, &versionMinor );
+        ::Gestalt( gestaltSystemVersionBugFix, &versionBugFix );
+
+        if( versionMajor >= 10 && versionMinor >= 10 )
+            bShow = !bShow;
 #else
         bShow = pUD->IsMacMargin();
 #endif
@@ -474,7 +489,7 @@ void QCalibrationSettingWidget::on_BtnCalibration_clicked()
         {
             QLangRes& Res = QLangManager::instance()->getResource();
 #ifdef Q_OS_MAC
-            QString strMessage = Res.getResString( QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_CALIBRATION_WARNING") );
+            QString strMessage = Res.getResString( QString::fromUtf8("CALIBRATION SETTING"), (versionMajor >= 10 && versionMinor >= 10) ? QString::fromUtf8("TEXT_CALIBRATION_WARNING2") : QString::fromUtf8("TEXT_CALIBRATION_WARNING") );
             QString strMsgTitle = Res.getResString( QString::fromUtf8("WARNING SENSOR DIAGNOSIS"), QString::fromUtf8("TITLE_CAPTION") );
 #else
             QString strMessage = Res.getResString( QString::fromUtf8("CALIBRATION SETTING"), QString::fromUtf8("TEXT_CALIBRATION_WARNING2") );

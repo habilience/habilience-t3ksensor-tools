@@ -25,6 +25,16 @@ QMouseSettingWidget::QMouseSettingWidget(QT3kDevice*& pHandle, QWidget *parent) 
 
 QMouseSettingWidget::~QMouseSettingWidget()
 {
+    if (m_pOldMouseProfile)
+    {
+        delete m_pOldMouseProfile;
+        m_pOldMouseProfile = NULL;
+    }
+    if (m_pNewMouseProfile)
+    {
+        delete m_pNewMouseProfile;
+        m_pNewMouseProfile = NULL;
+    }
 }
 
 void QMouseSettingWidget::SetDefault()
