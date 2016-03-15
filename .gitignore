@@ -3,6 +3,10 @@
 
 .qmake.stash
 
+external/quazip/debug
+
+external/quazip/release
+
 external/quazip/.moc/debug/moc_quazipfile.cpp
 
 external/quazip/libquazip.a
@@ -17,21 +21,13 @@ release
 
 *.user
 
+T3kCfg/debug
+
+T3kCfg/release
+
 T3kCfg/moc_*.cpp
 
 T3kCfg/ui_*.h
-
-T3kCfg/T3kCfg.app
-
-T3kCfg/T3kCfgd.app
-
-T3kCfgFE/moc_*.cpp
-
-T3kCfgFE/ui_*.h
-
-T3kCfgFE/T3kCfgFE.app
-
-T3kCfgFE/T3kCfgFEd.app
 
 T3kCfg/qrc_T3kCfgRes.cpp
 
@@ -41,11 +37,31 @@ T3kCfg/T3kCfg.pro.user.3.2-pre1
 
 T3kCfg/t3kcfgd_plugin_import.cpp
 
+T3kCfg/T3kCfg.app
+
+T3kCfg/T3kCfgd.app
+
+T3kCfgFE/debug
+
+T3kCfgFE/release
+
+T3kCfgFE/moc_*.cpp
+
+T3kCfgFE/ui_*.h
+
+T3kCfgFE/T3kCfgFE.app
+
+T3kCfgFE/T3kCfgFEd.app
+
 T3kCfgFE/qrc_T3kCfgFE.cpp
 
 T3kCfgFE/t3kcfgfe_plugin_import.cpp
 
 T3kCfgFE/t3kcfgfed_plugin_import.cpp
+
+T3kCmd/debug
+
+T3kCmd/release
 
 T3kCmd/moc_*.cpp
 
@@ -55,13 +71,27 @@ T3kCmd/T3kCmd
 
 T3kCmd/T3kCmdd
 
+T3kSoftlogic/debug
+
+T3kSoftlogic/release
+
 T3kSoftlogic/moc_*.cpp
 
 T3kSoftlogic/ui_*.h
 
+T3kSoftlogic/qrc_T3kSoftlogic.cpp
+
+T3kSoftlogic/t3ksoftlogic_plugin_import.cpp
+
+T3kSoftlogic/t3ksoftlogicd_plugin_import.cpp
+
 T3kSoftlogic/T3kSoftlogic.app
 
 T3kSoftlogic/T3kSoftlogicd.app
+
+T3kUpgrade/debug
+
+T3kUpgrade/release
 
 T3kUpgrade/moc_*.cpp
 
@@ -70,11 +100,6 @@ T3kUpgrade/ui_*.h
 T3kUpgrade/T3kUpgrade.app
 
 T3kUpgrade/T3kUpgraded.app
-T3kSoftlogic/qrc_T3kSoftlogic.cpp
-
-T3kSoftlogic/t3ksoftlogic_plugin_import.cpp
-
-T3kSoftlogic/t3ksoftlogicd_plugin_import.cpp
 
 T3kUpgrade/qrc_T3kUpgrade.cpp
 
@@ -83,3 +108,5 @@ T3kUpgrade/t3kupgrade_plugin_import.cpp
 T3kUpgrade/t3kupgraded_plugin_import.cpp
 
 T3k.pro.user.3.2-pre1
+*.Debug
+*.Release
