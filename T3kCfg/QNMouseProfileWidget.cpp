@@ -72,30 +72,30 @@ QNMouseProfileWidget::~QNMouseProfileWidget()
 
     m_RequestCmdManager.Stop();
 
-    if( m_pEditActionWnd )
-    {
-        m_pEditActionWnd->close();
-        delete m_pEditActionWnd;
-        m_pEditActionWnd = NULL;
-    }
-    if( m_pEditActionEWnd )
-    {
-        m_pEditActionEWnd->close();
-        delete m_pEditActionEWnd;
-        m_pEditActionEWnd = NULL;
-    }
-    if( m_pEditAction2WDWnd )
-    {
-        m_pEditAction2WDWnd->close();
-        delete m_pEditAction2WDWnd;
-        m_pEditAction2WDWnd = NULL;
-    }
-    if( m_pEditAction4WDWnd )
-    {
-        m_pEditAction4WDWnd->close();
-        delete m_pEditAction4WDWnd;
-        m_pEditAction4WDWnd = NULL;
-    }
+//    if( m_pEditActionWnd )
+//    {
+//        m_pEditActionWnd->close();
+//        delete m_pEditActionWnd;
+//        m_pEditActionWnd = NULL;
+//    }
+//    if( m_pEditActionEWnd )
+//    {
+//        m_pEditActionEWnd->close();
+//        delete m_pEditActionEWnd;
+//        m_pEditActionEWnd = NULL;
+//    }
+//    if( m_pEditAction2WDWnd )
+//    {
+//        m_pEditAction2WDWnd->close();
+//        delete m_pEditAction2WDWnd;
+//        m_pEditAction2WDWnd = NULL;
+//    }
+//    if( m_pEditAction4WDWnd )
+//    {
+//        m_pEditAction4WDWnd->close();
+//        delete m_pEditAction4WDWnd;
+//        m_pEditAction4WDWnd = NULL;
+//    }
 }
 
 void QNMouseProfileWidget::setDefault()

@@ -78,6 +78,12 @@ private:
     void Init();
     void ShowMainMenu( bool bShow );
 
+    QWidget* getMenu(int nMenu);
+    void slideTo(int nMenu);
+    int m_nCurrentIdx;
+    int m_nNextIdx;
+    bool m_bActive;
+
 private:
     Ui::T3kCfgWnd *ui;
 
@@ -157,6 +163,8 @@ protected slots:
     void CoercionExit();
 
     void onOpenT3kDevice(T3K_DEVICE_INFO info);
+
+    void animationDoneSlot(void);
 
     // UI
 private slots:
