@@ -952,7 +952,7 @@ void T3kCfgWnd::HideContentsMenu()
 {
     ShowMainMenu( true );
     m_pMenuWidget->hide();
-    slideTo(0);
+    //slideTo(0);
     m_pMenuWidget->SetMenuButton( 0 );
 
     m_pMainWidget->hide();
@@ -1535,11 +1535,11 @@ void T3kCfgWnd::slideTo(int nMenu)
     switch (dir)
     {
     case 0:
-        offsety=0;
+        offsety = 0;
         break;
     case 1:
-        offsetx=-offsetx;
-        offsety=0;
+        offsetx = -offsetx;
+        offsety = 0;
         break;
     }
 
@@ -1581,7 +1581,7 @@ void T3kCfgWnd::animationDoneSlot()
     //setCurrentIndex(m_nNextIdx);
     QWidget* pPrev = getMenu(m_nCurrentIdx);
     pPrev->hide();
-    pPrev->move(0, 0);
+    pPrev->move(0, pPrev->y());
     m_bActive = false;
     m_nCurrentIdx = m_nNextIdx;
 
