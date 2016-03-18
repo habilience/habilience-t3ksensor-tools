@@ -2935,7 +2935,7 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
     QString strCmd;
     char szTemp[256];
 
-    snprintf( szTemp, 256, "%s0x%02x", cstrDisplayOrientation, 3 );
+    snprintf( szTemp, 256, "%s0x%02x", cstrDisplayOrientation, m_nMonitorOrientation );
     ui->cmdAsyncMngr->insertCommand( szTemp );
     strCmd = sCam1 + cstrFactorialCamPos + "**";
     ui->cmdAsyncMngr->insertCommand( strCmd );
