@@ -20,8 +20,8 @@
 
 const QString CAUTION = "CAUTION: Do not unplug the device until the process is completed.";
 
-QFirmwareUpgradeDialog::QFirmwareUpgradeDialog(QWidget *parent) :
-    QDialog(parent),
+QFirmwareUpgradeDialog::QFirmwareUpgradeDialog(QWidget *parent, int upgradeDeviceListIdx) :
+    QDialog(parent), m_nUpgradeDeviceListIdx(upgradeDeviceListIdx),
     ui(new Ui::QFirmwareUpgradeDialog)
 {
     m_TimerConnectDevice = 0;
@@ -1346,7 +1346,7 @@ void QFirmwareUpgradeDialog::updateFirmwareInformation()
 void QFirmwareUpgradeDialog::connectDevice()
 {
     qDebug( "try connect..." );
-    if (m_Packet.open())
+    if (m_Packet.open(m_nUpgradeDeviceListIdx))
     {
         qDebug( "connection ok" );
         m_strSensorInformation = "";

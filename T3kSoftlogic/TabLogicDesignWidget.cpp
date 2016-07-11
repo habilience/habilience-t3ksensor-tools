@@ -91,9 +91,9 @@ void TabLogicDesignWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart 
 		case MM:
 			{
                 float fFirmwareVersion = (float)atof(cmd + sizeof(cstrFirmwareVersion) - 1);
-				float fMinDesireFW = (float)MM_MIN_FIRMWARE_VERSION;
-				float fMaxDesireFW = (float)MM_NEXT_FIRMWARE_VERSION;
-				if( (fFirmwareVersion < fMinDesireFW) || (fFirmwareVersion >= fMaxDesireFW) )
+                float fMinDesireFW = (float)MM_MIN_TOOLS_FIRMWARE_VERSION;//MM_MIN_FIRMWARE_VERSION;
+                //float fMaxDesireFW = (float)MM_NEXT_FIRMWARE_VERSION;
+                if( (fFirmwareVersion < fMinDesireFW) /*|| (fFirmwareVersion >= fMaxDesireFW)*/ )
                     ui->BtnApply->setEnabled( false );
 			}
 			break;

@@ -11,6 +11,7 @@
 #define MODEL_T3200                     0x36
 #define MODEL_UNKNOWN                   0xFF
 
+#define MM_MIN_TOOLS_FIRMWARE_VERSION   2.8
 #define MM_MIN_FIRMWARE_VERSION			2.8		// 최소 펌웨어 버전
 #define MM_NEXT_FIRMWARE_VERSION		2.9		// 다음 펌웨어 버전
 #define MM_MIN_FIRMWARE_VERSION_STR     "2.8f"  // 최소 펌웨어 버전 == resource binary file version

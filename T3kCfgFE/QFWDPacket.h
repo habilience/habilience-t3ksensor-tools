@@ -232,7 +232,7 @@ protected:
 public:
     QFWDPacket();
 
-    bool open();
+    bool open(int idx);
     void close();
     bool isOpen();
 

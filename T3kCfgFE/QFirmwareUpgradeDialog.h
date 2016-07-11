@@ -2,8 +2,9 @@
 #define QFIRMWAREUPGRADEDIALOG_H
 
 #include <QDialog>
-#include <QFWDPacket.h>
 #include <QList>
+
+#include "QFWDPacket.h"
 
 #include "../common/T3kCamNameDef.h"
 
@@ -107,8 +108,10 @@ private:
     QList<FirmwareInfo*> m_FirmwareInfo;
     bool            m_bCompleteUpgrade[IDX_MAX];
 
+    int             m_nUpgradeDeviceListIdx;
+
 public:
-    explicit QFirmwareUpgradeDialog(QWidget *parent = 0);
+    explicit QFirmwareUpgradeDialog(QWidget *parent = 0, int upgradeDeviceListIdx = -1);
     ~QFirmwareUpgradeDialog();
 
 private:

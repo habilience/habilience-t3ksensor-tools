@@ -409,9 +409,9 @@ void T3kSoftlogicDlg::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part,
         case MM:
             {
                 float fFirmwareVersion = (float)atof(cmd + sizeof(cstrFirmwareVersion) - 1);
-                float fMinDesireFW = (float)MM_MIN_FIRMWARE_VERSION;
-                float fMaxDesireFW = (float)MM_NEXT_FIRMWARE_VERSION;
-                if( (fFirmwareVersion < fMinDesireFW) || (fFirmwareVersion >= fMaxDesireFW) )
+                float fMinDesireFW = (float)MM_MIN_TOOLS_FIRMWARE_VERSION;//MM_MIN_FIRMWARE_VERSION;
+                //float fMaxDesireFW = (float)MM_NEXT_FIRMWARE_VERSION;
+                if( (fFirmwareVersion < fMinDesireFW) /*|| (fFirmwareVersion >= fMaxDesireFW)*/ )
                     m_bIsInvalidFirmware = true;
                 else
                     m_bIsInvalidFirmware = false;

@@ -419,9 +419,9 @@ void TabCalibrationWidget::TPDP_OnRSP(T3K_DEVICE_INFO /*devInfo*/, ResponsePart 
                 }
 
                 float fFirmwareVersion = (float)atof(cmd + sizeof(cstrFirmwareVersion) - 1);
-				float fMinDesireFW = (float)MM_MIN_FIRMWARE_VERSION;
-				float fMaxDesireFW = (float)MM_NEXT_FIRMWARE_VERSION;
-				if( (fFirmwareVersion < fMinDesireFW) || (fFirmwareVersion >= fMaxDesireFW) )
+                float fMinDesireFW = (float)MM_MIN_TOOLS_FIRMWARE_VERSION;//MM_MIN_FIRMWARE_VERSION;
+                //float fMaxDesireFW = (float)MM_NEXT_FIRMWARE_VERSION;
+                if( (fFirmwareVersion < fMinDesireFW) /*|| (fFirmwareVersion >= fMaxDesireFW)*/ )
 				{
                     ui->LBState->setText( QString("This program does not support v%1.2f firmware.").arg(fFirmwareVersion, 0, 'f', 2 ) );
 

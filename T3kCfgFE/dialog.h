@@ -31,6 +31,7 @@ private:
     bool    m_bInvalidFirmwareVersion;
 
     int     m_nDeviceCount;
+    int     m_nIAPDeviceCount;
 
     int     m_TimerReconnect;
     int     m_TimerRefreshInfo;
@@ -61,6 +62,7 @@ private:
 
     SelectMenu      m_oldMenu;
 
+    bool                    m_bCompletedInit;
     QSelectDeviceDialog*    m_pDlgSelectDevice;
 
     struct SensorAppInfo {
@@ -71,11 +73,12 @@ private:
         char            szModel[256];
     };
 
-    SensorAppInfo      m_SensorAppInfo[IDX_MAX];
-    SensorAppInfo      m_TempSensorAppInfo[IDX_MAX];
+    SensorAppInfo           m_SensorAppInfo[IDX_MAX];
+    SensorAppInfo           m_TempSensorAppInfo[IDX_MAX];
 
     void versionStringToSensorInfo(SensorAppInfo *info, const QString& strVer);
     void updateVersionInformation();
+    void showUpgradeDialog(int nUpgradeDeviceListIdx = -1);
 
 protected:
     void onCreate();
