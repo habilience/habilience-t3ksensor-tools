@@ -260,6 +260,9 @@ bool QInitDataIni::load()
         strData = pBentAdjustmentSection->getData(idx);
         if ( !strData.isEmpty() )
             m_nBentAlgorithm2 = trim(strData).toInt(0, 10);
+
+        if (m_nBentAlgorithm2 == 0)
+            m_nBentAlgorithm2 = BENT_INIT_ALGORITHM2;
     }
 
     m_nBentAlgorithm4 = BENT_INIT_ALGORITHM4;
@@ -269,6 +272,9 @@ bool QInitDataIni::load()
         strData = pBentAdjustmentSection->getData(idx);
         if ( !strData.isEmpty() )
             m_nBentAlgorithm4 = trim(strData).toInt(0, 10);
+
+        if (m_nBentAlgorithm4 == 0)
+            m_nBentAlgorithm4 = BENT_INIT_ALGORITHM4;
     }
 
     m_bBentWithDummy = BENT_WITH_DUMMY;
