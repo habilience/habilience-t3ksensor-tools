@@ -731,6 +731,7 @@ void QFirmwareUpgradeDialog::stopAllFirmwareDownloadJobs()
 void QFirmwareUpgradeDialog::queryInformation()
 {
     ui->btnRetry->setEnabled(false);
+    ui->btnClose->setVisible(false);
 
     stopAllQueryInformationJobs();
 
