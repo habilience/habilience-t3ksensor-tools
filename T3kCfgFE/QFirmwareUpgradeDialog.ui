@@ -159,23 +159,52 @@ selection-background-color: rgba(100, 100, 100, 100);</string>
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="labelMessage">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>31</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">color: rgb(203, 45, 5); font-weight: bold;</string>
-         </property>
-         <property name="text">
-          <string>CAUTION: Do not unplug the device until the process is completed.</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="labelMessage">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>31</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(203, 45, 5); font-weight: bold;</string>
+           </property>
+           <property name="text">
+            <string>CAUTION: Do not unplug the device until the process is completed.</string>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QStyleButton" name="btnClose">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Close</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

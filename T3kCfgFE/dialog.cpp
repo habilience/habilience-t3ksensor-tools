@@ -87,6 +87,8 @@ Dialog::Dialog(QWidget *parent) :
 
     m_oldMenu = MenuNone;
 
+    m_pDlgFirmwareUpgrade = NULL;
+
     memset( m_SensorAppInfo, 0, sizeof(SensorAppInfo) * IDX_MAX );
     memset( m_TempSensorAppInfo, 0, sizeof(SensorAppInfo) * IDX_MAX );
 
@@ -1271,6 +1273,8 @@ void Dialog::updateVersionInformation()
 
 void Dialog::showUpgradeDialog(int nUpgradeDeviceListIdx)
 {
+    if (m_pDlgFirmwareUpgrade != NULL) return;
+
     QLangRes& res = QLangManager::instance()->getResource();
     int nRet = showMessageBox( this,
                                res.getResString( MAIN_TAG, "TEXT_WARNING_UPGRADE_MSG" ),
@@ -1286,9 +1290,10 @@ void Dialog::showUpgradeDialog(int nUpgradeDeviceListIdx)
 
         qApp->exit();
 #else
-        QFirmwareUpgradeDialog* pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this, nUpgradeDeviceListIdx);
-        pDlgFirmwareUpgrade->setAttribute( Qt::WA_DeleteOnClose );
-        pDlgFirmwareUpgrade->exec();
+        m_pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this, nUpgradeDeviceListIdx);
+        m_pDlgFirmwareUpgrade->setAttribute( Qt::WA_DeleteOnClose );
+        m_pDlgFirmwareUpgrade->exec();
+        m_pDlgFirmwareUpgrade = NULL;
 #endif
     }
     else if(nRet == QMessageBox::No)

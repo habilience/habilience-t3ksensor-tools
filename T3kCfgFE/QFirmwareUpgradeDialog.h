@@ -92,8 +92,8 @@ private:
     JobItem         m_CurrentJob;
     unsigned short  m_nPacketId;
 
-    bool            m_bIsInformationUpdated;
     bool            m_bIsFirmwareUpdate;
+    int             m_TimerStartUpgrade;
 
     bool            m_bWaitIAP;
     bool            m_bWaitIAPCheckOK;
@@ -118,7 +118,6 @@ private:
     Dialog*     m_pMainDlg;
     Ui::QFirmwareUpgradeDialog *ui;
 
-    QString m_strSensorInformation;
     QString m_strDownloadProgress;
 
     bool    m_bAdministrator;
@@ -187,6 +186,7 @@ private slots:
     void onToggledPart(QString strPart, bool bChecked);
 
     void on_btnRetry_clicked();
+    void on_btnClose_clicked();
 
 public slots:
 //    void on_pushButtonUpgrade_clicked();
