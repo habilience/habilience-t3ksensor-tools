@@ -42,70 +42,96 @@
 #define WAIT_TOUCH_TIME			(30*WAIT_ANIMATION_FRAME)
 #define WAIT_TOUCH_DRAW_TIME	(16*WAIT_ANIMATION_FRAME)
 
+/*
+10   2     3     11       2    4     8    10
+
+5 7     0     8  6	 <=>  1 3     6     9 11
+
+9    1     4     12       0    5     7    12
+*/
 struct PosXY {
     float x;
     float y;
-    short use;
+    short idxF42;
     short idx;
 };
 
 const PosXY s_PosXY[3][ADJUSTMENT_STEP] = {
     { // old 13 points
-        { -2.0f, -1.0f, 1, 9  },
+        { -2.0f, -1.0f, 0, 9  },
         { -2.0f,  0.0f, 1, 5  },
-        { -2.0f, +1.0f, 1, 10 },
-        { -1.5f,  0.0f, 1, 7  },
-        { -1.0f, +1.0f, 1, 2  },
-        { -1.0f, -1.0f, 1, 1  },
-        {  0.0f,  0.0f, 1, 0  },
-        { +1.0f, -1.0f, 1, 4  },
-        { +1.0f, +1.0f, 1, 3  },
-        { +1.5f,  0.0f, 1, 8  },
-        { +2.0f, +1.0f, 1, 11 },
-        { +2.0f,  0.0f, 1, 6  },
-        { +2.0f, -1.0f, 1, 12 },
-        {   NaN,   NaN, 0, -1 },
-        {   NaN,   NaN, 0, -1 },
-        {   NaN,   NaN, 0, -1 },
-        {   NaN,   NaN, 0, -1 }
+        { -2.0f, +1.0f, 2, 10 },
+        { -1.5f,  0.0f, 3, 7  },
+        { -1.0f, +1.0f, 4, 2  },
+        { -1.0f, -1.0f, 5, 1  },
+        {  0.0f,  0.0f, 6, 0  },
+        { +1.0f, -1.0f, 7, 4  },
+        { +1.0f, +1.0f, 8, 3  },
+        { +1.5f,  0.0f, 9, 8  },
+        { +2.0f, +1.0f, 10, 11 },
+        { +2.0f,  0.0f, 11, 6  },
+        { +2.0f, -1.0f, 12, 12 },
+        {   NaN,   NaN, -1, -1 },
+        {   NaN,   NaN, -1, -1 },
+        {   NaN,   NaN, -1, -1 },
+        {   NaN,   NaN, -1, -1 }
     },
-    { // new 13 points
-        { -2.0f, -1.0f, 1, 9  },
+/*    { // new 13 points v1
+        { -2.0f, -1.0f, 0, 9  },
         { -2.0f,  0.0f, 1, 5  },
-        { -2.0f, +1.0f, 1, 10 },
-        { -1.5f,  0.0f, 0, -1 },
-        { -1.0f, +1.0f, 1, 2  },
-        { -1.0f,  0.0f, 1, 7  },
-        { -1.0f, -1.0f, 1, 1  },
-        { -0.5f, -1.0f, 0, -1 },
-        {  0.0f,  0.0f, 1, 0  },
-        { +0.5f, -1.0f, 0, -1 },
-        { +1.0f, -1.0f, 1, 4  },
-        { +1.0f,  0.0f, 1, 8  },
-        { +1.0f, +1.0f, 1, 3  },
-        { +1.5f,  0.0f, 0, -1 },
-        { +2.0f, +1.0f, 1, 11 },
-        { +2.0f,  0.0f, 1, 6  },
-        { +2.0f, -1.0f, 1, 12 }
-    },
+        { -2.0f, +1.0f, 2, 10 },
+        { -1.5f,  0.0f, -1, -1 },
+        { -1.0f, +1.0f, 3, 2  },
+        { -1.0f,  0.0f, 4, 7  },
+        { -1.0f, -1.0f, 5, 1  },
+        { -0.5f, -1.0f, -1, -1 },
+        {  0.0f,  0.0f, 6, 0  },
+        { +0.5f, -1.0f, -1, -1 },
+        { +1.0f, -1.0f, 7, 4  },
+        { +1.0f,  0.0f, 8, 8  },
+        { +1.0f, +1.0f, 9, 3  },
+        { +1.5f,  0.0f, -1, -1 },
+        { +2.0f, +1.0f, 10, 11 },
+        { +2.0f,  0.0f, 11, 6  },
+        { +2.0f, -1.0f, 12, 12 }
+    },*/
+	{ // new new 13 points v2
+		{ -2.0f, -1.0f,  0, 9  }, 
+		{ -2.0f,  0.0f,  1, 5  },
+		{ -2.0f, +1.0f,  2, 10 },
+		{ -1.0f, +1.0f,  5, 2  },
+		{ -1.0f,  0.0f,  4, 7  },
+		{ -1.0f, -1.0f,  3, 1  },
+		{  0.0f, -1.0f,  6, -1 },
+		{  0.0f,  0.0f,  7, 0  },
+		{  0.0f,  1.0f,  8, -1 }, 
+		{ +1.0f, -1.0f,  9, 4  },
+		{ +1.0f,  0.0f, 10, 8  },
+		{ +1.0f, +1.0f, 11, 3  },
+		{ +2.0f, +1.0f, 14, 11 },
+		{ +2.0f,  0.0f, 13, 6  },
+		{ +2.0f, -1.0f, 12, 12 },
+		{ +0.5f, -1.0f, -1, -1 },
+		{ +1.5f,  0.0f, -1, -1 }
+	},
     { // new 9 points
-        { -2.0f, -1.0f, 1, 9  },
+        { -2.0f, -1.0f, 0, 9  },
         { -2.0f,  0.0f, 1, -1 },
-        { -2.0f, +1.0f, 1, 10 },
-        { -1.5f,  0.0f, 0, -1 },
-        { -1.0f, +1.0f, 1, 2  },
-        { -1.0f,  0.0f, 1, -1 },
-        { -1.0f, -1.0f, 1, 1  },
-        { -0.5f, -1.0f, 0, -1 },
-        {  0.0f,  0.0f, 1, 0  },
-        { +0.5f, -1.0f, 0, -1 },
-        { +1.0f, -1.0f, 1, 4  },
-        { +1.0f,  0.0f, 1, -1 },
-        { +1.0f, +1.0f, 1, 3  },
-        { +1.5f,  0.0f, 0, -1 },
-        { +2.0f, +1.0f, 1, 11 },
-        { +2.0f,  0.0f, 1, -1 },
-        { +2.0f, -1.0f, 1, 12 }
+        { -2.0f, +1.0f, 2, 10 },
+        { -1.5f,  0.0f, -1, -1 },
+        { -1.0f, +1.0f, 3, 2  },
+        { -1.0f,  0.0f, 4, -1 },
+        { -1.0f, -1.0f, 5, 1  },
+        { -0.5f, -1.0f, -1, -1 },
+        {  0.0f,  0.0f, 6, 0  },
+        { +0.5f, -1.0f, -1, -1 },
+        { +1.0f, -1.0f, 7, 4  },
+        { +1.0f,  0.0f, 8, -1 },
+        { +1.0f, +1.0f, 9, 3  },
+        { +1.5f,  0.0f, -1, -1 },
+        { +2.0f, +1.0f, 10, 11 },
+        { +2.0f,  0.0f, 11, -1 },
+        { +2.0f, -1.0f, 12, 12 }
     }
 };
 
@@ -2987,7 +3013,7 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
         strCamPos += QString("%1").arg(ch, 2, 16, QChar('0')); // direction:2 error:2 type:4 (bit)
         for ( int ni = 0; ni < ADJUSTMENT_STEP; ni++ ) // bent_adjustment trc
         {
-            if ( !s_PosXY[nPosXYSel][ni].use )
+            if ( !s_PosXY[nPosXYSel][ni].idxF42 )
                 continue;
             ulong dwOs = *(uint*)(&item.fObcS[s_PosXY[nPosXYSel][ni].idx]);
             ulong dwOe = *(uint*)(&item.fObcE[s_PosXY[nPosXYSel][ni].idx]);
@@ -3035,11 +3061,15 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
         const BentItem& item2 = m_BentItemArray.at(nCam2Idx);
         for ( int i=0 ; i<ADJUSTMENT_STEP ; i++ )
         {
-            if ( !s_PosXY[nPosXYSel][i].use )
+            int idx = ADJUSTMENT_STEP - 1;
+            for ( ; idx >= 0; idx-- )
+                if ( !s_PosXY[nPosXYSel][idx].idxF42 == i )
+                    break;
+            if (idx < 0)
                 continue;
-            float fV = item1.fObcCenter[i];
+            float fV = item1.fObcCenter[idx];
             if ( (nPosXYSel == 1 || nPosXYSel == 2) &&
-                 (s_PosXY[2][i].idx < 0) )
+                 (s_PosXY[nPosXYSel][idx].idx < 0) )
             {
                 fV = NaN;
             }
@@ -3050,11 +3080,15 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
 
         for ( int i=0 ; i<ADJUSTMENT_STEP ; i++ )
         {
-            if ( !s_PosXY[nPosXYSel][i].use )
+            int idx = ADJUSTMENT_STEP - 1;
+            for ( ; idx >= 0; idx-- )
+                if ( !s_PosXY[nPosXYSel][idx].idxF42 == i )
+                    break;
+            if (idx < 0)
                 continue;
-            float fV = item2.fObcCenter[i];
+            float fV = item2.fObcCenter[idx];
             if ( (nPosXYSel == 1 || nPosXYSel == 2) &&
-                 (s_PosXY[2][i].idx < 0) )
+                 (s_PosXY[nPosXYSel][idx].idx < 0) )
             {
                 fV = NaN;
             }
