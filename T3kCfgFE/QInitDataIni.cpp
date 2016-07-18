@@ -413,10 +413,10 @@ bool QInitDataIni::save()
     pBentAdjustmentSection->addData("BentMargin", strData, "Left,Top,Right,Bottom,Direction");
 
     strData = QString("%1").arg(m_nBentAlgorithm2);
-    pBentAdjustmentSection->addData("BentAlgorithm2", strData, "2-camera algorithm (0: old 13 points, 1: new 13 points, 2: new 9 points)");
+    pBentAdjustmentSection->addData("BentAlgorithm2", strData, "2-camera algorithm (0: not used[old 13 points], 1: new 13 points v2, 2: new 9 points)");
 
     strData = QString("%1").arg(m_nBentAlgorithm4);
-    pBentAdjustmentSection->addData("BentAlgorithm4", strData, "3,4-camera algorithm (0: old 13 points, 1: new 13 points, 2: new 9 points)");
+    pBentAdjustmentSection->addData("BentAlgorithm4", strData, "3,4-camera algorithm (0: not used[old 13 points], 1: new 13 points v2, 2: new 9 points)");
 
     if ( m_bBentWithDummyLoad )
     {

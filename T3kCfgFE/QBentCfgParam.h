@@ -8,7 +8,7 @@
 #define BENT_MARGIN_INIT_RIGHT			(2)
 #define BENT_MARGIN_INIT_BOTTOM			(2)
 #define BENT_MARGIN_INIT_DIR			(0)
-#define BENT_INIT_ALGORITHM2			(2)
+#define BENT_INIT_ALGORITHM2			(1)
 #define BENT_INIT_ALGORITHM4			(1)
 #define BENT_INIT_CALIBRATION           (0)
 
