@@ -25,6 +25,8 @@ QAdvancedCalibrationWidget::QAdvancedCalibrationWidget(bool bDetection, QWidget 
 
     setWindowFlags(flags);
 
+    //setFixedSize( 600, 400 );
+
     m_eCurrentPart = bDetection ? spDetectionRange : spBent;
 
     m_pPixmap = NULL;

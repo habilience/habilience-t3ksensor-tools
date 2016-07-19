@@ -3013,7 +3013,7 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
         strCamPos += QString("%1").arg(ch, 2, 16, QChar('0')); // direction:2 error:2 type:4 (bit)
         for ( int ni = 0; ni < ADJUSTMENT_STEP; ni++ ) // bent_adjustment trc
         {
-            if ( !s_PosXY[nPosXYSel][ni].idxF42 )
+            if ( s_PosXY[nPosXYSel][ni].idxF42 < 0 )
                 continue;
             ulong dwOs = *(uint*)(&item.fObcS[s_PosXY[nPosXYSel][ni].idx]);
             ulong dwOe = *(uint*)(&item.fObcE[s_PosXY[nPosXYSel][ni].idx]);
@@ -3063,7 +3063,7 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
         {
             int idx = ADJUSTMENT_STEP - 1;
             for ( ; idx >= 0; idx-- )
-                if ( !s_PosXY[nPosXYSel][idx].idxF42 == i )
+                if ( s_PosXY[nPosXYSel][idx].idxF42 == i )
                     break;
             if (idx < 0)
                 continue;
@@ -3082,7 +3082,7 @@ void QBentAdjustmentDialog::sensorWriteToFactoryDefault()
         {
             int idx = ADJUSTMENT_STEP - 1;
             for ( ; idx >= 0; idx-- )
-                if ( !s_PosXY[nPosXYSel][idx].idxF42 == i )
+                if ( s_PosXY[nPosXYSel][idx].idxF42 == i )
                     break;
             if (idx < 0)
                 continue;

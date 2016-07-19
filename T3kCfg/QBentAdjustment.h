@@ -10,7 +10,7 @@
 #include <QThread>
 #include <QVector>
 
-#define ADJUSTMENT_STEP	(7+6)
+#define ADJUSTMENT_STEP	(7+6+4)
 
 class QBentProgressDialog;
 class QCalcCamPosThread;
@@ -26,10 +26,10 @@ struct BentItem
     float	fTouchPosE[T3K_MAX_DTC_COUNT];
     int		nTouchCnt;
 
-    float	fObcS[ADJUSTMENT_STEP];
-    float	fObcE[ADJUSTMENT_STEP];
-    float	fObcCenter[ADJUSTMENT_STEP];
-    float	fDistortion[ADJUSTMENT_STEP];
+    float	*fObcS;
+    float	*fObcE;
+    float	*fObcCenter;
+    float	*fDistortion;
 
     float	fCamA;
     float	fCamB;
@@ -150,6 +150,8 @@ private:
     QVector<int>        m_vSendCmdID;
 
     QMutex              m_Mutex;
+
+    int                 m_nPosXYVersion;
 
 public:
     static QPoint PosToDCC( float x, float y, const QRect rcClient );
