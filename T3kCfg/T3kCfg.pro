@@ -66,6 +66,7 @@ linux-g++-64:QMAKE_TARGET.arch = x86_64
 linux-g++{
     DEFINES += OS_LINUX
     QMAKE_RPATHDIR += /usr/share/T3kShare/t3kcfg/lib
+    LIBS += -lXrandr
     contains(QMAKE_TARGET.arch, x86_64):{
         message( "building for 64bit" );
         CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs_x64/debug/
@@ -109,6 +110,7 @@ linux-g++{
 linux-g++-32{
     DEFINES += OS_LINUX
     QMAKE_RPATHDIR += /usr/share/T3kShare/t3kcfg/lib
+    LIBS += -lXrandr
     message( "building for 32bit" );
     CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs/debug/
     CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs/debug/
@@ -130,6 +132,7 @@ linux-g++-32{
 linux-g++-64{
     DEFINES += OS_LINUX
     QMAKE_RPATHDIR += /usr/share/T3kShare/t3kcfg/lib
+    LIBS += -lXrandr
     message( "building for 64bit" );
     CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs_x64/debug/
     CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs_x64/debug/

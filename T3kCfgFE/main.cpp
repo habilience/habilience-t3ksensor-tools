@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     g_AppData.bMaximizeToVirtualScreen = false;
     g_AppData.bScreenShotMode = false;
     g_AppData.bUpgradeFW = false;
+    g_AppData.nUpgradeDeviceListIdx = -1;
     g_AppData.bDelayStart = false;
     g_AppData.bDevelop = false;
 
@@ -79,8 +80,13 @@ int main(int argc, char *argv[])
                 g_AppData.bMaximizeToVirtualScreen = true;
             if (strArg.compare("--virtualscreen", Qt::CaseInsensitive) == 0)
                 g_AppData.bMaximizeToVirtualScreen = true;
-            if (strArg.compare("/upgradeFW", Qt::CaseInsensitive) == 0)
+            if (strArg.compare("/upgradeFW", Qt::CaseInsensitive) >= 0)
+            {
                 g_AppData.bUpgradeFW = true;
+                QString str = strArg.mid(strArg.indexOf(':') + 1);
+                if ( !str.isEmpty() )
+                    g_AppData.nUpgradeDeviceListIdx = str.toInt();
+            }
             if (strArg.compare("/delayStart", Qt::CaseInsensitive) == 0)
                 g_AppData.bDelayStart = true;
 

@@ -52,7 +52,7 @@ Dialog::Dialog(QWidget *parent) :
 #ifdef Q_OS_LINUX
     if( g_AppData.bUpgradeFW )
     {
-        QFirmwareUpgradeDialog* pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);
+        QFirmwareUpgradeDialog* pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this, g_AppData.nUpgradeDeviceListIdx);
         pDlgFirmwareUpgrade->exec();
 
         QStringList args;
@@ -1285,7 +1285,7 @@ void Dialog::showUpgradeDialog(int nUpgradeDeviceListIdx)
     {
 #ifdef Q_OS_LINUX
         QStringList args;
-        args << "/upgradeFW";
+        args << QString("/upgradeFW:%1").arg(nUpgradeDeviceListIdx);
         QProcess::startDetached( QApplication::applicationFilePath(), args );
 
         qApp->exit();

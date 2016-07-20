@@ -49,6 +49,7 @@ struct AppData
     QString strModelName;
     QString strFirmwareVersion;
     bool    bUpgradeFW;
+    int     nUpgradeDeviceListIdx;
     bool    bDelayStart;
     bool    bDevelop;
 };
