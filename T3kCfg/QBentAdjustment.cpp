@@ -32,54 +32,147 @@
 struct PosXY {
     float x;
     float y;
-    int idx;
+    short idxF42;
+    short idx;
 };
 
-const PosXY s_PosXY[3][ADJUSTMENT_STEP] = {
-    { // old 13 points
-        { -2.0f, -1.0f, 9  },
-        { -2.0f,  0.0f, 5  },
-        { -2.0f, +1.0f, 10 },
-        { -1.5f,  0.0f, 7  },
-        { -1.0f, +1.0f, 2  },
-        { -1.0f, -1.0f, 1  },
-        {  0.0f,  0.0f, 0  },
-        { +1.0f, -1.0f, 4  },
-        { +1.0f, +1.0f, 3  },
-        { +1.5f,  0.0f, 8  },
-        { +2.0f, +1.0f, 11 },
-        { +2.0f,  0.0f, 6  },
-        { +2.0f, -1.0f, 12 }
+const PosXY s_PosXY[2][3][ADJUSTMENT_STEP] = {
+    {
+        { // old 13 points
+            { -2.0f, -1.0f, 0, 9  },
+            { -2.0f,  0.0f, 0, 5  },
+            { -2.0f, +1.0f, 0, 10 },
+            { -1.5f,  0.0f, 0, 7  },
+            { -1.0f, +1.0f, 0, 2  },
+            { -1.0f, -1.0f, 0, 1  },
+            {  0.0f,  0.0f, 0, 0  },
+            { +1.0f, -1.0f, 0, 4  },
+            { +1.0f, +1.0f, 0, 3  },
+            { +1.5f,  0.0f, 0, 8  },
+            { +2.0f, +1.0f, 0, 11 },
+            { +2.0f,  0.0f, 0, 6  },
+            { +2.0f, -1.0f, 0, 12 },
+            {   NaN,   NaN, 0, -1 },
+            {   NaN,   NaN, 0, -1 },
+            {   NaN,   NaN, 0, -1 },
+            {   NaN,   NaN, 0, -1 }
+        },
+        { // new 13 points
+            { -2.0f, -1.0f, 0, 9  },
+            { -2.0f,  0.0f, 0, 5  },
+            { -2.0f, +1.0f, 0, 10 },
+            { -1.0f, +1.0f, 0, 2  },
+            { -1.0f,  0.0f, 0, 7  },
+            { -1.0f, -1.0f, 0, 1  },
+            {  0.0f,  0.0f, 0, 0  },
+            { +1.0f, -1.0f, 0, 4  },
+            { +1.0f,  0.0f, 0, 8  },
+            { +1.0f, +1.0f, 0, 3  },
+            { +2.0f, +1.0f, 0, 11 },
+            { +2.0f,  0.0f, 0, 6  },
+            { +2.0f, -1.0f, 0, 12 },
+            {   NaN,   NaN, 0, -1 },
+            {   NaN,   NaN, 0, -1 },
+            {   NaN,   NaN, 0, -1 },
+            {   NaN,   NaN, 0, -1 }
+        },
+        { // new 9 points
+            { -2.0f, -1.0f, 0, 9  },
+            {   NaN,   NaN, 0, 5  },
+            { -2.0f, +1.0f, 0, 10 },
+            { -1.0f, +1.0f, 0, 2  },
+            {   NaN,   NaN, 0, 7  },
+            { -1.0f, -1.0f, 0, 1  },
+            {  0.0f,  0.0f, 0, 0  },
+            { +1.0f, -1.0f, 0, 4  },
+            {   NaN,   NaN, 0, 8  },
+            { +1.0f, +1.0f, 0, 3  },
+            { +2.0f, +1.0f, 0, 11 },
+            {   NaN,   NaN, 0, 6  },
+            { +2.0f, -1.0f, 0, 12 },
+            {   NaN,   NaN, 0, -1 },
+            {   NaN,   NaN, 0, -1 },
+            {   NaN,   NaN, 0, -1 },
+            {   NaN,   NaN, 0, -1 }
+        }
     },
-    { // new 13 points
-        { -2.0f, -1.0f, 9  },
-        { -2.0f,  0.0f, 5  },
-        { -2.0f, +1.0f, 10 },
-        { -1.0f, +1.0f, 2  },
-        { -1.0f,  0.0f, 7  },
-        { -1.0f, -1.0f, 1  },
-        {  0.0f,  0.0f, 0  },
-        { +1.0f, -1.0f, 4  },
-        { +1.0f,  0.0f, 8  },
-        { +1.0f, +1.0f, 3  },
-        { +2.0f, +1.0f, 11 },
-        { +2.0f,  0.0f, 6  },
-        { +2.0f, -1.0f, 12 }
-    },
-    { // new 9 points
-        { -2.0f, -1.0f, 9  },
-        {   NaN,   NaN, 5  },
-        { -2.0f, +1.0f, 10 },
-        { -1.0f, +1.0f, 2  },
-        {   NaN,   NaN, 7  },
-        { -1.0f, -1.0f, 1  },
-        {  0.0f,  0.0f, 0  },
-        { +1.0f, -1.0f, 4  },
-        {   NaN,   NaN, 8  },
-        { +1.0f, +1.0f, 3  },
-        { +2.0f, +1.0f, 11 },
-        {   NaN,   NaN, 6  },
-        { +2.0f, -1.0f, 12 }
+    {
+        { // old 13 points
+            { -2.0f, -1.0f, 0, 9  },
+            { -2.0f,  0.0f, 1, 5  },
+            { -2.0f, +1.0f, 2, 10 },
+            { -1.5f,  0.0f, 3, 7  },
+            { -1.0f, +1.0f, 4, 2  },
+            { -1.0f, -1.0f, 5, 1  },
+            {  0.0f,  0.0f, 6, 0  },
+            { +1.0f, -1.0f, 7, 4  },
+            { +1.0f, +1.0f, 8, 3  },
+            { +1.5f,  0.0f, 9, 8  },
+            { +2.0f, +1.0f, 10, 11 },
+            { +2.0f,  0.0f, 11, 6  },
+            { +2.0f, -1.0f, 12, 12 },
+            {   NaN,   NaN, -1, -1 },
+            {   NaN,   NaN, -1, -1 },
+            {   NaN,   NaN, -1, -1 },
+            {   NaN,   NaN, -1, -1 }
+        },
+    /*    { // new 13 points v1
+            { -2.0f, -1.0f, 0, 9  },
+            { -2.0f,  0.0f, 1, 5  },
+            { -2.0f, +1.0f, 2, 10 },
+            { -1.5f,  0.0f, -1, -1 },
+            { -1.0f, +1.0f, 3, 2  },
+            { -1.0f,  0.0f, 4, 7  },
+            { -1.0f, -1.0f, 5, 1  },
+            { -0.5f, -1.0f, -1, -1 },
+            {  0.0f,  0.0f, 6, 0  },
+            { +0.5f, -1.0f, -1, -1 },
+            { +1.0f, -1.0f, 7, 4  },
+            { +1.0f,  0.0f, 8, 8  },
+            { +1.0f, +1.0f, 9, 3  },
+            { +1.5f,  0.0f, -1, -1 },
+            { +2.0f, +1.0f, 10, 11 },
+            { +2.0f,  0.0f, 11, 6  },
+            { +2.0f, -1.0f, 12, 12 }
+        },*/
+        { // new new 13 points v2
+            { -2.0f, -1.0f,  0, 9  },
+            { -2.0f,  0.0f,  1, 5  },
+            { -2.0f, +1.0f,  2, 10 },
+            { -1.0f, +1.0f,  5, 2  },
+            { -1.0f,  0.0f,  4, 7  },
+            { -1.0f, -1.0f,  3, 1  },
+            {  0.0f, -1.0f,  6, -1 },
+            {  0.0f,  0.0f,  7, 0  },
+            {  0.0f,  1.0f,  8, -1 },
+            { +1.0f, -1.0f,  9, 4  },
+            { +1.0f,  0.0f, 10, 8  },
+            { +1.0f, +1.0f, 11, 3  },
+            { +2.0f, +1.0f, 14, 11 },
+            { +2.0f,  0.0f, 13, 6  },
+            { +2.0f, -1.0f, 12, 12 },
+            { +0.5f, -1.0f, -1, -1 },
+            { +1.5f,  0.0f, -1, -1 }
+        },
+        { // new 9 points
+            { -2.0f, -1.0f, 0, 9  },
+            { -2.0f,  0.0f, 1, -1 },
+            { -2.0f, +1.0f, 2, 10 },
+            { -1.5f,  0.0f, -1, -1 },
+            { -1.0f, +1.0f, 3, 2  },
+            { -1.0f,  0.0f, 4, -1 },
+            { -1.0f, -1.0f, 5, 1  },
+            { -0.5f, -1.0f, -1, -1 },
+            {  0.0f,  0.0f, 6, 0  },
+            { +0.5f, -1.0f, -1, -1 },
+            { +1.0f, -1.0f, 7, 4  },
+            { +1.0f,  0.0f, 8, -1 },
+            { +1.0f, +1.0f, 9, 3  },
+            { +1.5f,  0.0f, -1, -1 },
+            { +2.0f, +1.0f, 10, 11 },
+            { +2.0f,  0.0f, 11, -1 },
+            { +2.0f, -1.0f, 12, 12 }
+        }
     }
 };
 
@@ -132,16 +225,26 @@ QBentAdjustment::QBentAdjustment(QWidget* targetWidget, QObject *parent) :
 
     onChangeLanguage();
 
+    m_nPosXYVersion = 0;
+
     QBentCfgParam* bentParam = QBentCfgParam::instance();
     int nAlgorithm = 0;
-    if( QT3kUserData::GetInstance()->isSubCameraExist() )
-        nAlgorithm = 1; // get
+    if ( QT3kUserData::GetInstance()->getFirmwareVersionStr().compare( "2.9" ) >= 0 )
+    {
+        nAlgorithm = 1;
+        m_nPosXYVersion = 1;
+    }
     else
     {
-        if( QT3kUserData::GetInstance()->getFirmwareVersionStr().compare( "2.8" ) <= 0 )
+        if( QT3kUserData::GetInstance()->isSubCameraExist() )
             nAlgorithm = 1; // get
         else
-            nAlgorithm = 2; // get
+        {
+            if( QT3kUserData::GetInstance()->getFirmwareVersionStr().compare( "2.8" ) <= 0 )
+                nAlgorithm = 1; // get
+            else
+                nAlgorithm = 2; // get
+        }
     }
     bentParam->setAlgorithm( nAlgorithm );
 
@@ -224,6 +327,14 @@ void QBentAdjustment::enterAdjustmentMode()
 
     m_nBentProgress = 0;
 
+    for (int i=0; i<m_BentItemArray.size(); i++)
+    {
+        const BentItem& item = m_BentItemArray.at(i);
+        if (item.fObcS != NULL) delete[] item.fObcS;
+        if (item.fObcE != NULL) delete[] item.fObcE;
+        if (item.fObcCenter != NULL) delete[] item.fObcCenter;
+        if (item.fDistortion != NULL) delete[] item.fDistortion;
+    }
     m_BentItemArray.clear();
     m_bEnterAdjustmentMode = true;
     m_bIsValidTouch = false;
@@ -270,6 +381,14 @@ void QBentAdjustment::leaveAdjustmentMode( bool bSuccess )
     }
     else
     {
+        for (int i=0; i<m_BentItemArray.size(); i++)
+        {
+            const BentItem& item = m_BentItemArray.at(i);
+            if (item.fObcS != NULL) delete[] item.fObcS;
+            if (item.fObcE != NULL) delete[] item.fObcE;
+            if (item.fObcCenter != NULL) delete[] item.fObcCenter;
+            if (item.fDistortion != NULL) delete[] item.fDistortion;
+        }
         m_BentItemArray.clear();
     }
 
@@ -353,11 +472,6 @@ void QBentAdjustment::draw(QPainter &p, QRect rcBody)
     p.fillRect( rcBody, Qt::white );
 
     QPoint ptCursor;
-
-//    if (ui->widgetBentDirMargin->isVisible())
-//    {
-//        drawCameraLocations( p, rcBody );
-//    }
 
     drawAdjustmentGrid( p, rcBody, &ptCursor );
 
@@ -495,10 +609,10 @@ void QBentAdjustment::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint* pPtC
     QPolygon gridPolyline2;
     for ( int i=0; i<ADJUSTMENT_STEP; i++ )
     {
-        if ( qIsNaN(s_PosXY[nPosXYSel][i].x) )
+        if ( s_PosXY[m_nPosXYVersion][nPosXYSel][i].idx < 0 )
             continue;
 
-        pt = PosToDCC( s_PosXY[nPosXYSel][i].x, s_PosXY[nPosXYSel][i].y, rcBody );
+        pt = PosToDCC( s_PosXY[m_nPosXYVersion][nPosXYSel][i].x, s_PosXY[m_nPosXYVersion][nPosXYSel][i].y, rcBody );
         if ( m_bEnterAdjustmentMode )
         {
             if ( i <= m_nAdjustmentStep )
@@ -524,10 +638,10 @@ void QBentAdjustment::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint* pPtC
 
     for ( int i=0; i<ADJUSTMENT_STEP; i++ )
     {
-        if ( qIsNaN(s_PosXY[nPosXYSel][i].x) )
+        if ( s_PosXY[m_nPosXYVersion][nPosXYSel][i].idx < 0 )
             continue;
 
-        pt = PosToDCC( s_PosXY[nPosXYSel][i].x, s_PosXY[nPosXYSel][i].y, rcBody );
+        pt = PosToDCC( s_PosXY[m_nPosXYVersion][nPosXYSel][i].x, s_PosXY[m_nPosXYVersion][nPosXYSel][i].y, rcBody );
 
         p.drawEllipse( QRect(pt.x()-nCW, pt.y()-nCW, nCW*2+1, nCW*2+1) );
     }
@@ -540,7 +654,7 @@ void QBentAdjustment::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint* pPtC
     QPen penB3(QColor(255,0,0), 5);
     for ( int i=0; i<ADJUSTMENT_STEP; i++ )
     {
-        pt = PosToDCC( s_PosXY[nPosXYSel][i].x, s_PosXY[nPosXYSel][i].y, rcBody );
+        pt = PosToDCC( s_PosXY[m_nPosXYVersion][nPosXYSel][i].x, s_PosXY[m_nPosXYVersion][nPosXYSel][i].y, rcBody );
 
         float fPos[4] = { NaN, NaN, NaN, NaN };
         float fDist[4] = { NaN, NaN, NaN, NaN };
@@ -548,7 +662,7 @@ void QBentAdjustment::drawAdjustmentGrid(QPainter &p, QRect rcBody, QPoint* pPtC
         {
             const BentItem& item = m_BentItemArray.at(j);
             fPos[camIdxToIdx(item.nCameraIndex)] = item.fObcCenter[i];
-            fDist[camIdxToIdx(item.nCameraIndex)] = item.fDistortion[s_PosXY[nPosXYSel][i].idx];
+            fDist[camIdxToIdx(item.nCameraIndex)] = item.fDistortion[s_PosXY[m_nPosXYVersion][nPosXYSel][i].idx];
         }
 
         if ( qIsNaN(fPos[0]) && qIsNaN(fPos[1]) && qIsNaN(fPos[2]) && qIsNaN(fPos[3]) )
@@ -668,6 +782,8 @@ void QBentAdjustment::drawTouchLines( QPainter& p, QRect rcBody )
 
 void QBentAdjustment::drawCameraLocations( QPainter& p, QRect rcBody )
 {
+    p.save();
+
     p.setRenderHint(QPainter::Antialiasing);
 
     int nt = rcBody.width() / 42;
@@ -763,6 +879,8 @@ void QBentAdjustment::drawCameraLocations( QPainter& p, QRect rcBody )
         p.setBackgroundMode(Qt::OpaqueMode);
         p.drawText(rcText, flags, strCM);
     }
+
+    p.restore();
 }
 
 void QBentAdjustment::drawCursor( QPainter& p, int nx, int ny, int nc )
@@ -830,6 +948,8 @@ void QBentAdjustment::drawErrorText( QPainter& p, int nx, int ny, int nc )
     if ( m_cError == 0 && m_cNG == 0 )
         return;
 
+    p.save();
+
     p.setRenderHint(QPainter::Antialiasing);
 
     QFont fntError = qApp->font();
@@ -875,6 +995,8 @@ void QBentAdjustment::drawErrorText( QPainter& p, int nx, int ny, int nc )
         str = "NG:" + str;
         p.drawText(nx, ny, str);
     }
+
+    p.restore();
 }
 
 void QBentAdjustment::drawWaitTime( QPainter& p, QRect rcWait )
@@ -1101,7 +1223,7 @@ void QBentAdjustment::onAdjustmentFinish()
 
             item.nCalcPosDataCnt++;
         }
-        memset(item.fDistortion, 0, sizeof(item.fDistortion));
+        memset(item.fDistortion, 0, sizeof(float)*ADJUSTMENT_STEP);
         item.fDistortionMax = 0.f;
         item.nCalcPosProg = 0;
         item.pCalcPosWnd = new QBentProgressDialog(item, m_pTargetWidget);
@@ -1227,7 +1349,6 @@ void QBentAdjustment::onAdjustmentFinish()
             bufC += sprintf(bufC, "%f|", item.fCamR);
 
         //bufC += sprintf(bufC, "%f,%f,%f,%f|", item.fCamX, item.fCamY, item.fCamS, item.fCamR);
-//        LOG_I(buf);
 
         QDateTime curDate = QDateTime::currentDateTime();
         if ( !strBaLog.isEmpty() )
@@ -1236,11 +1357,6 @@ void QBentAdjustment::onAdjustmentFinish()
     }
 
 //#ifndef CREATE_FILE_TO_DOCUMENTS_LOCATION
-//    QString strPath = QCoreApplication::applicationDirPath();
-//    strPath = rstrip(strPath, "/\\");
-//    strPath += QDir::separator();
-//    strPath += "bent_adjustment.txt";
-//#else
 //    QString strDocuments = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 //    strDocuments = rstrip( strDocuments, "/\\" );
 //    QString strPath = strDocuments + QDir::separator() + "T3kCfgFE" + QDir::separator();
@@ -1314,8 +1430,19 @@ void QBentAdjustment::onAdjustmentFinish()
             strCamPos += QString("%1").arg(ch, 2, 16, QChar('0')); // direction:2 error:2 type:4
             for ( int ni = 0; ni < ADJUSTMENT_STEP; ni++ ) // bent_adjustment trc
             {
-                ulong dwOs = *(uint*)(&item.fObcS[s_PosXY[nPosXYSel][ni].idx]);
-                ulong dwOe = *(uint*)(&item.fObcE[s_PosXY[nPosXYSel][ni].idx]);
+                if ( m_nPosXYVersion > 0 )
+                {
+                    if ( s_PosXY[m_nPosXYVersion][nPosXYSel][ni].idxF42 < 0 )
+                        continue;
+                }
+                else
+                {
+                    if ( s_PosXY[m_nPosXYVersion][nPosXYSel][ni].idx < 0 )
+                        continue;
+                }
+
+                ulong dwOs = *(uint*)(&item.fObcS[s_PosXY[m_nPosXYVersion][nPosXYSel][ni].idx]);
+                ulong dwOe = *(uint*)(&item.fObcE[s_PosXY[m_nPosXYVersion][nPosXYSel][ni].idx]);
                 strCamPos += QString("%1%2").arg(dwOs, 8, 16, QChar('0')).arg(dwOe, 8, 16, QChar('0'));
             }
             m_vSendCmd.push_back( getCameraPrefix(item.nCameraIndex) + cstrCamPosUserTrc +
@@ -1358,12 +1485,34 @@ void QBentAdjustment::onAdjustmentFinish()
             const BentItem& item2 = m_BentItemArray.at(nCam2Idx);
             for ( int i=0 ; i<ADJUSTMENT_STEP ; i++ )
             {
-                float fV = item1.fObcCenter[i];
-                if ( (nPosXYSel == 1 || nPosXYSel == 2) &&
-                     (i == 1 || i == 4 || i == 8 || i == 11) )
+                float fV = NaN;
+                if ( m_nPosXYVersion > 0 )
                 {
-                    fV = NaN;
+                    int idx = ADJUSTMENT_STEP - 1;
+                    for ( ; idx >= 0; idx-- )
+                        if ( s_PosXY[m_nPosXYVersion][nPosXYSel][idx].idxF42 == i )
+                            break;
+                    if (idx < 0)
+                        continue;
+                    fV = item1.fObcCenter[idx];
+                    if ( (nPosXYSel == 1 || nPosXYSel == 2) &&
+                         (s_PosXY[m_nPosXYVersion][nPosXYSel][idx].idx < 0) )
+                    {
+                        fV = NaN;
+                    }
                 }
+                else
+                {
+                    if (s_PosXY[m_nPosXYVersion][nPosXYSel][i].idx < 0)
+                        continue;
+                    fV = item1.fObcCenter[i];
+                    if ( (nPosXYSel == 1 || nPosXYSel == 2) &&
+                         (i == 1 || i == 4 || i == 8 || i == 11) )
+                    {
+                        fV = NaN;
+                    }
+                }
+
                 int *x = (int*)&fV;
                 snprintf( szTemp, 256, "%08x", (unsigned int)*x );
                 strCalPos += szTemp;
@@ -1371,12 +1520,34 @@ void QBentAdjustment::onAdjustmentFinish()
 
             for ( int i=0 ; i<ADJUSTMENT_STEP ; i++ )
             {
-                float fV = item2.fObcCenter[i];
-                if ( (nPosXYSel == 1 || nPosXYSel == 2) &&
-                     (i == 1 || i == 4 || i == 8 || i == 11) )
+                float fV = NaN;
+                if ( m_nPosXYVersion > 0 )
                 {
-                    fV = NaN;
+                    int idx = ADJUSTMENT_STEP - 1;
+                    for ( ; idx >= 0; idx-- )
+                        if ( s_PosXY[m_nPosXYVersion][nPosXYSel][idx].idxF42 == i )
+                            break;
+                    if (idx < 0)
+                        continue;
+                    fV = item2.fObcCenter[idx];
+                    if ( (nPosXYSel == 1 || nPosXYSel == 2) &&
+                         (s_PosXY[m_nPosXYVersion][nPosXYSel][idx].idx < 0) )
+                    {
+                        fV = NaN;
+                    }
                 }
+                else
+                {
+                    if (s_PosXY[m_nPosXYVersion][nPosXYSel][i].idx < 0)
+                        continue;
+                    fV = item2.fObcCenter[i];
+                    if ( (nPosXYSel == 1 || nPosXYSel == 2) &&
+                         (i == 1 || i == 4 || i == 8 || i == 11) )
+                    {
+                        fV = NaN;
+                    }
+                }
+
                 int *x = (int*)&fV;
                 snprintf( szTemp, 256, "%08x", (unsigned int)*x );
                 strCalPos += szTemp;
@@ -1463,11 +1634,13 @@ void QBentAdjustment::checkTouchPoints( bool bTouch )
                 if (item.bDataValid)
                 {
                     item.fObcCenter[m_nAdjustmentStep] = (item.fLastTouchPosS+item.fLastTouchPosE) / 2.f;
-                    item.fObcS[s_PosXY[nPosXYSel][m_nAdjustmentStep].idx] = item.fLastTouchPosS;
-                    item.fObcE[s_PosXY[nPosXYSel][m_nAdjustmentStep].idx] = item.fLastTouchPosE;
+                    if ( s_PosXY[m_nPosXYVersion][nPosXYSel][m_nAdjustmentStep].idx >= 0 )
+                    {
+                    	item.fObcS[s_PosXY[m_nPosXYVersion][nPosXYSel][m_nAdjustmentStep].idx] = item.fLastTouchPosS;
+                    	item.fObcE[s_PosXY[m_nPosXYVersion][nPosXYSel][m_nAdjustmentStep].idx] = item.fLastTouchPosE;
 
                     qDebug( "[%d] %.2f, %.2f", i, item.fLastTouchPosS, item.fLastTouchPosE );
-//                    LOG_I( "[%d] %.2f, %.2f", i, item.fLastTouchPosS, item.fLastTouchPosE );
+                    }
                 }
 
                 item.nAveCount = 0;
@@ -1494,9 +1667,12 @@ void QBentAdjustment::checkTouchPoints( bool bTouch )
             do
             {
                 m_nAdjustmentStep ++;
-                if (!qIsNaN(s_PosXY[nPosXYSel][m_nAdjustmentStep].x) &&
-                    !qIsNaN(s_PosXY[nPosXYSel][m_nAdjustmentStep].y) )
-                    break;
+                if (!qIsNaN(s_PosXY[m_nPosXYVersion][nPosXYSel][m_nAdjustmentStep].x) &&
+                    !qIsNaN(s_PosXY[m_nPosXYVersion][nPosXYSel][m_nAdjustmentStep].y) )
+                {
+                    if ( s_PosXY[m_nPosXYVersion][nPosXYSel][m_nAdjustmentStep].idx >= 0 )
+                        break;
+                }
             } while (m_nAdjustmentStep < ADJUSTMENT_STEP);
 
             m_bIsValidTouch = true;
@@ -1770,6 +1946,16 @@ void QBentAdjustment::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part,
             {
                 BentItem item;
                 memset( &item, 0, sizeof(BentItem) );
+
+                item.fObcS = new float[ADJUSTMENT_STEP];
+                item.fObcE = new float[ADJUSTMENT_STEP];
+                item.fObcCenter = new float[ADJUSTMENT_STEP];
+                item.fDistortion = new float[ADJUSTMENT_STEP];
+                memset( item.fObcS, 0, sizeof(float)*ADJUSTMENT_STEP );
+                memset( item.fObcE, 0, sizeof(float)*ADJUSTMENT_STEP );
+                memset( item.fObcCenter, 0, sizeof(float)*ADJUSTMENT_STEP );
+                memset( item.fDistortion, 0, sizeof(float)*ADJUSTMENT_STEP );
+
                 item.nCameraIndex = nCamIndex;
                 item.bDataValid = false;
                 item.nTouchCnt = cnt;
@@ -1858,6 +2044,14 @@ void QBentAdjustment::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part,
             {
                 BentItem item;
                 memset( &item, 0, sizeof(BentItem) );
+                item.fObcS = new float[ADJUSTMENT_STEP];
+                item.fObcE = new float[ADJUSTMENT_STEP];
+                item.fObcCenter = new float[ADJUSTMENT_STEP];
+                item.fDistortion = new float[ADJUSTMENT_STEP];
+                memset( item.fObcS, 0, sizeof(float)*ADJUSTMENT_STEP );
+                memset( item.fObcE, 0, sizeof(float)*ADJUSTMENT_STEP );
+                memset( item.fObcCenter, 0, sizeof(float)*ADJUSTMENT_STEP );
+                memset( item.fDistortion, 0, sizeof(float)*ADJUSTMENT_STEP );
                 item.nCameraIndex = nCamIndex;
 
                 for ( int j=0 ; j<cnt ; j++ )
@@ -1908,6 +2102,30 @@ void QBentAdjustment::TPDP_OnOBJ(T3K_DEVICE_INFO /*devInfo*/, ResponsePart Part,
                 }
             }
         }
+    }
+}
+
+static unsigned long mm_hex2u32( const char * pstr )
+{
+    const char * str = pstr;
+    unsigned long u32Ret = 0;
+
+    if ( str == NULL )
+        return 0;
+
+    while ( str[0] == ' ' || str[0] == '\t' )
+        str++;
+
+    while ( 1 )
+    {
+        if ( str[0] >= '0' && str[0] <= '9' )
+            u32Ret = u32Ret * 16 + (*str++ - '0');
+        else if ( str[0] >= 'A' && str[0] <= 'F' )
+            u32Ret = u32Ret * 16 + (*str++ - 'A' + 10);
+        else if ( str[0] >= 'a' && str[0] <= 'f' )
+            u32Ret = u32Ret * 16 + (*str++ - 'a' + 10);
+        else
+            return u32Ret;
     }
 }
 

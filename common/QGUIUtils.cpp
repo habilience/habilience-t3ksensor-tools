@@ -122,21 +122,71 @@ int getOrientation()
 
     if( 0 != ::EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, (PDEVMODEW)&dm) )
     {
-        return (unsigned long)dm.dmDisplayOrientation;
+        if ( dm.dmFields & DM_DISPLAYORIENTATION )
+            return (unsigned long)dm.dmDisplayOrientation;
     }
 
     return 0xFFFFFFFF;
 }
 #elif defined(Q_OS_LINUX)
+#include <X11/Xlib.h>
+#include <X11/extensions/Xrandr.h>
 int getOrientation()
 {
+    Display *dpy;
+    dpy = XOpenDisplay (NULL);
+    if (!dpy) return 0xFFFFFFFF;
 
-    return 0xFFFFFFFF;
+    int screen = DefaultScreen(dpy);
+
+    Rotation rotation, current_rotation;
+
+    rotation = XRRRotations(dpy, screen, &current_rotation);
+
+    int orientation = 0xFFFFFFFF;
+    switch (current_rotation)
+    {
+        case RR_Rotate_0:
+            orientation = 0;
+            break;
+        case RR_Rotate_90:
+            orientation = 1;
+            break;
+        case RR_Rotate_180:
+            orientation = 2;
+            break;
+        case RR_Rotate_270:
+            orientation = 3;
+            break;
+        default:
+            break;
+    }
+
+    return orientation;
 }
 #elif defined(Q_OS_MAC)
+#include <ApplicationServices/ApplicationServices.h>
 int getOrientation()
 {
+    const int MAX_DISPLAYS = 16;
+    CGDisplayErr dErr;
+    CGDisplayCount displayCount;
+    CGDisplayCount maxDisplay = MAX_DISPLAYS;
+    CGDirectDisplayID onlineDisplays[MAX_DISPLAYS];
+    CGDirectDisplayID mainDisplay = CGMainDisplayID();
+    dErr = CGGetOnlineDisplayList(maxDisplay, onlineDisplays, &displayCount);
+    if (dErr != kCGErrorSuccess)
+        return 0xFFFFFFFF;
 
+    for (CGDisplayCount i=0; i<displayCount; i++)
+    {
+        CGDirectDisplayID dID = onlineDisplays[i];
+        if (mainDisplay == dID)
+        {
+            int fRotation = CGDisplayRotation(dID);
+            return fRotation / 90;
+        }
+    }
     return 0xFFFFFFFF;
 }
 #endif

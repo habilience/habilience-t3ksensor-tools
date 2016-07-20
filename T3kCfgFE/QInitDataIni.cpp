@@ -260,6 +260,9 @@ bool QInitDataIni::load()
         strData = pBentAdjustmentSection->getData(idx);
         if ( !strData.isEmpty() )
             m_nBentAlgorithm2 = trim(strData).toInt(0, 10);
+
+        if (m_nBentAlgorithm2 == 0)
+            m_nBentAlgorithm2 = BENT_INIT_ALGORITHM2;
     }
 
     m_nBentAlgorithm4 = BENT_INIT_ALGORITHM4;
@@ -269,6 +272,9 @@ bool QInitDataIni::load()
         strData = pBentAdjustmentSection->getData(idx);
         if ( !strData.isEmpty() )
             m_nBentAlgorithm4 = trim(strData).toInt(0, 10);
+
+        if (m_nBentAlgorithm4 == 0)
+            m_nBentAlgorithm4 = BENT_INIT_ALGORITHM4;
     }
 
     m_bBentWithDummy = BENT_WITH_DUMMY;
@@ -407,10 +413,10 @@ bool QInitDataIni::save()
     pBentAdjustmentSection->addData("BentMargin", strData, "Left,Top,Right,Bottom,Direction");
 
     strData = QString("%1").arg(m_nBentAlgorithm2);
-    pBentAdjustmentSection->addData("BentAlgorithm2", strData, "2-camera algorithm (0: old 13 points, 1: new 13 points, 2: new 9 points)");
+    pBentAdjustmentSection->addData("BentAlgorithm2", strData, "2-camera algorithm (0: not used[old 13 points], 1: new 13 points v2, 2: new 9 points)");
 
     strData = QString("%1").arg(m_nBentAlgorithm4);
-    pBentAdjustmentSection->addData("BentAlgorithm4", strData, "3,4-camera algorithm (0: old 13 points, 1: new 13 points, 2: new 9 points)");
+    pBentAdjustmentSection->addData("BentAlgorithm4", strData, "3,4-camera algorithm (0: not used[old 13 points], 1: new 13 points v2, 2: new 9 points)");
 
     if ( m_bBentWithDummyLoad )
     {

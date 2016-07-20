@@ -52,7 +52,7 @@ Dialog::Dialog(QWidget *parent) :
 #ifdef Q_OS_LINUX
     if( g_AppData.bUpgradeFW )
     {
-        QFirmwareUpgradeDialog* pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);
+        QFirmwareUpgradeDialog* pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this, g_AppData.nUpgradeDeviceListIdx);
         pDlgFirmwareUpgrade->exec();
 
         QStringList args;
@@ -68,6 +68,7 @@ Dialog::Dialog(QWidget *parent) :
     m_bInvalidFirmwareVersion = false;
     m_bEnterTurnOffCheck = false;
     m_nDeviceCount = 0;
+    m_nIAPDeviceCount = 0;
     m_TimerReconnect = 0;
     m_TimerRefreshInfo = 0;
     m_TimerCheckDevice = 0;
@@ -75,6 +76,7 @@ Dialog::Dialog(QWidget *parent) :
     m_TimerCheckRunning = 0;
 #endif
 
+    m_bCompletedInit = false;
     m_pDlgSelectDevice = NULL;
 
     m_pDlgSideview = NULL;
@@ -84,6 +86,8 @@ Dialog::Dialog(QWidget *parent) :
     m_pDlgRemoteTouchMark = NULL;
 
     m_oldMenu = MenuNone;
+
+    m_pDlgFirmwareUpgrade = NULL;
 
     memset( m_SensorAppInfo, 0, sizeof(SensorAppInfo) * IDX_MAX );
     memset( m_TempSensorAppInfo, 0, sizeof(SensorAppInfo) * IDX_MAX );
@@ -242,7 +246,7 @@ bool Dialog::openDevice()
     checkDeviceStatus();
 
     bool bRet = false;
-    if (m_nDeviceCount > 1)
+    if (m_nDeviceCount + m_nIAPDeviceCount > 1)
     {
         Q_ASSERT( m_pDlgSelectDevice );
         if (m_pDlgSelectDevice->isVisible())
@@ -254,19 +258,46 @@ bool Dialog::openDevice()
             if (m_pDlgSelectDevice->exec() == QDialog::Accepted)
             {
                 QSelectDeviceDialog::DEVICE_ID deviceId = m_pDlgSelectDevice->getDeviceId();
-                bRet = QT3kDevice::instance()->open( deviceId.nVID, deviceId.nPID, deviceId.nMI, deviceId.nDeviceIndex );
+                if (deviceId.nMI == 0)
+                {
+                    int idx = -1;
+                    for (int d=0 ; d<COUNT_OF_DEVICE_LIST(UPGRADE_DEVICE_LIST) ; d++)
+                    {
+                        if (UPGRADE_DEVICE_LIST[d].nVID == deviceId.nVID &&
+                                UPGRADE_DEVICE_LIST[d].nPID == deviceId.nPID &&
+                                UPGRADE_DEVICE_LIST[d].nMI == deviceId.nMI)
+                        {
+                            idx = d;
+                            break;
+                        }
+                    }
+
+                    showUpgradeDialog(idx);
+                }
+                else
+                {
+                    bRet = QT3kDevice::instance()->open( deviceId.nVID, deviceId.nPID, deviceId.nMI, deviceId.nDeviceIndex );
+                }
             }
         }
     }
     else
     {
-        for (int d=0 ; d<COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST) ; d++)
+        if (m_nIAPDeviceCount > 0)
         {
-            int nDevCnt = QT3kDevice::getDeviceCount( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI );
-            if (nDevCnt > 0)
+            if (m_bCompletedInit)
+                showUpgradeDialog();
+        }
+        else if (m_nDeviceCount > 0)
+        {
+            for (int d=0 ; d<COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST) ; d++)
             {
-                bRet = QT3kDevice::instance()->open( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI, 0 );
-                break;
+                int nDevCnt = QT3kDevice::getDeviceCount( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI );
+                if (nDevCnt > 0)
+                {
+                    bRet = QT3kDevice::instance()->open( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI, 0 );
+                    break;
+                }
             }
         }
     }
@@ -292,18 +323,24 @@ bool Dialog::openDevice()
 void Dialog::checkDeviceStatus()
 {
     int nDeviceCount = 0;
-    for (int d=0 ; d<COUNT_OF_DEVICE_LIST(APP_DEVICE_LIST) ; d++)
+    int nIAPDeviceCount = 0;
+    for (int d=0 ; d<COUNT_OF_DEVICE_LIST(UPGRADE_DEVICE_LIST) ; d++)
     {
-        int nCnt = QT3kDevice::getDeviceCount( APP_DEVICE_LIST[d].nVID, APP_DEVICE_LIST[d].nPID, APP_DEVICE_LIST[d].nMI );
-        nDeviceCount += nCnt;
+        int nCnt = QT3kDevice::getDeviceCount( UPGRADE_DEVICE_LIST[d].nVID, UPGRADE_DEVICE_LIST[d].nPID, UPGRADE_DEVICE_LIST[d].nMI );
+        if (UPGRADE_DEVICE_LIST[d].nMI == 0)
+            nIAPDeviceCount += nCnt;
+        else
+            nDeviceCount += nCnt;
     }
 
-    if (m_nDeviceCount != 0 && m_nDeviceCount != nDeviceCount)
+    if ((m_nDeviceCount != 0 && m_nDeviceCount != nDeviceCount) ||
+            (m_nIAPDeviceCount != 0 && m_nIAPDeviceCount != nIAPDeviceCount))
     {
-        qDebug( "device status changed - %d/%d", nDeviceCount, m_nDeviceCount );
+        qDebug( "device status changed - %d/%d(IAP - %d/%d)", nDeviceCount, m_nDeviceCount, nIAPDeviceCount, m_nIAPDeviceCount );
         onDeviceDisconnected();
     }
     m_nDeviceCount = nDeviceCount;
+    m_nIAPDeviceCount = nIAPDeviceCount;
 }
 
 void Dialog::onChangeLanguage()
@@ -544,6 +581,7 @@ void Dialog::showEvent(QShowEvent *evt)
     if (evt->type() == QEvent::Show)
     {
         onInitDialog();
+        m_bCompletedInit = true;
     }
 }
 
@@ -1230,31 +1268,37 @@ void Dialog::updateVersionInformation()
     ui->txtEdtDisplayFirmware->setHtml(strVersionInfoHTML);
 
     if(!g_AppData.bDevelop && m_bInvalidFirmwareVersion && m_strFirmwareVersion.compare( strMinDesireFW, Qt::CaseInsensitive ) < 0)
-    {  
-        QLangRes& res = QLangManager::instance()->getResource();
-        int nRet = showMessageBox( this,
-                                   res.getResString( MAIN_TAG, "TEXT_WARNING_UPGRADE_MSG" ),
-                                   res.getResString( MAIN_TAG, "TEXT_WARNING_UPGRADE_TITLE" ),
-                                   QMessageBox::Question, QMessageBox::Yes|QMessageBox::No, QMessageBox::Cancel);
+        showUpgradeDialog();
+}
 
-        if(nRet == QMessageBox::Yes)
-        {
+void Dialog::showUpgradeDialog(int nUpgradeDeviceListIdx)
+{
+    if (m_pDlgFirmwareUpgrade != NULL) return;
+
+    QLangRes& res = QLangManager::instance()->getResource();
+    int nRet = showMessageBox( this,
+                               res.getResString( MAIN_TAG, "TEXT_WARNING_UPGRADE_MSG" ),
+                               res.getResString( MAIN_TAG, "TEXT_WARNING_UPGRADE_TITLE" ),
+                               QMessageBox::Question, QMessageBox::Yes|QMessageBox::No, QMessageBox::Cancel);
+
+    if(nRet == QMessageBox::Yes)
+    {
 #ifdef Q_OS_LINUX
-            QStringList args;
-            args << "/upgradeFW";
-            QProcess::startDetached( QApplication::applicationFilePath(), args );
+        QStringList args;
+        args << QString("/upgradeFW:%1").arg(nUpgradeDeviceListIdx);
+        QProcess::startDetached( QApplication::applicationFilePath(), args );
 
-            qApp->exit();
+        qApp->exit();
 #else
-            QFirmwareUpgradeDialog* pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this);
-            pDlgFirmwareUpgrade->setAttribute( Qt::WA_DeleteOnClose );
-            pDlgFirmwareUpgrade->exec();
+        m_pDlgFirmwareUpgrade = new QFirmwareUpgradeDialog(this, nUpgradeDeviceListIdx);
+        m_pDlgFirmwareUpgrade->setAttribute( Qt::WA_DeleteOnClose );
+        m_pDlgFirmwareUpgrade->exec();
+        m_pDlgFirmwareUpgrade = NULL;
 #endif
-        }
-        else if(nRet == QMessageBox::No)
-        {
-            memset( m_SensorAppInfo, 0, sizeof(SensorAppInfo) * IDX_MAX );
-        }
+    }
+    else if(nRet == QMessageBox::No)
+    {
+        memset( m_SensorAppInfo, 0, sizeof(SensorAppInfo) * IDX_MAX );
     }
 }
 

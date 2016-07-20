@@ -2,8 +2,9 @@
 #define QFIRMWAREUPGRADEDIALOG_H
 
 #include <QDialog>
-#include <QFWDPacket.h>
 #include <QList>
+
+#include "QFWDPacket.h"
 
 #include "../common/T3kCamNameDef.h"
 
@@ -91,8 +92,8 @@ private:
     JobItem         m_CurrentJob;
     unsigned short  m_nPacketId;
 
-    bool            m_bIsInformationUpdated;
     bool            m_bIsFirmwareUpdate;
+    int             m_TimerStartUpgrade;
 
     bool            m_bWaitIAP;
     bool            m_bWaitIAPCheckOK;
@@ -107,15 +108,16 @@ private:
     QList<FirmwareInfo*> m_FirmwareInfo;
     bool            m_bCompleteUpgrade[IDX_MAX];
 
+    int             m_nUpgradeDeviceListIdx;
+
 public:
-    explicit QFirmwareUpgradeDialog(QWidget *parent = 0);
+    explicit QFirmwareUpgradeDialog(QWidget *parent = 0, int upgradeDeviceListIdx = -1);
     ~QFirmwareUpgradeDialog();
 
 private:
     Dialog*     m_pMainDlg;
     Ui::QFirmwareUpgradeDialog *ui;
 
-    QString m_strSensorInformation;
     QString m_strDownloadProgress;
 
     bool    m_bAdministrator;
@@ -184,6 +186,7 @@ private slots:
     void onToggledPart(QString strPart, bool bChecked);
 
     void on_btnRetry_clicked();
+    void on_btnClose_clicked();
 
 public slots:
 //    void on_pushButtonUpgrade_clicked();

@@ -2,10 +2,10 @@ export QMAKE=~/qt-everywhere-opensource-src-5.2.0/qtbase/bin
 
 make clean -w
 rm -rf ./T3kCfg/T3kCfg.app
-rm -rf ./T3kCfg/T3kCfgFE.app
-rm -rf ./T3kCfg/T3kCmd.app
-rm -rf ./T3kCfg/T3kSoftlogic.app
-rm -rf ./T3kCfg/T3kUpgrade.app
+rm -rf ./T3kCfgFE/T3kCfgFE.app
+rm -rf ./T3kCmd/T3kCmd.app
+rm -rf ./T3kSoftlogic/T3kSoftlogic.app
+rm -rf ./T3kUpgrade/T3kUpgrade.app
 
 $QMAKE/qmake ./T3k.pro -r -spec macx-clang CONFIG+=release
 make -j8

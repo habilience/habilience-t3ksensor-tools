@@ -20,8 +20,8 @@
 
 const QString CAUTION = "CAUTION: Do not unplug the device until the process is completed.";
 
-QFirmwareUpgradeDialog::QFirmwareUpgradeDialog(QWidget *parent) :
-    QDialog(parent),
+QFirmwareUpgradeDialog::QFirmwareUpgradeDialog(QWidget *parent, int upgradeDeviceListIdx) :
+    QDialog(parent), m_nUpgradeDeviceListIdx(upgradeDeviceListIdx),
     ui(new Ui::QFirmwareUpgradeDialog)
 {
     m_TimerConnectDevice = 0;
@@ -45,9 +45,9 @@ QFirmwareUpgradeDialog::QFirmwareUpgradeDialog(QWidget *parent) :
 
     m_bIsStartRequestInformation = false;
     m_bIsStartFirmwareDownload = false;
-    m_bIsInformationUpdated = false;
 
     m_bIsFirmwareUpdate = false;
+    m_TimerStartUpgrade = 0;
 
     m_strDownloadProgress.clear();
 
@@ -64,12 +64,16 @@ QFirmwareUpgradeDialog::QFirmwareUpgradeDialog(QWidget *parent) :
     ui->btnRetry->setAlignment(QStyleButton::AlignCenter);
     ui->btnRetry->setCaptionFontHeight(12);
 
+    ui->btnClose->setAlignment(QStyleButton::AlignCenter);
+    ui->btnClose->setCaptionFontHeight(12);
+
     Qt::WindowFlags flags = windowFlags();
     Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
     flags &= ~helpFlag;
 #if defined(Q_OS_WIN)
     flags |= Qt::MSWindowsFixedSizeDialogHint;
 #endif
+    setWindowModality(Qt::WindowModal);
     setWindowFlags(flags);
     setFixedSize(this->size());
 
@@ -77,8 +81,6 @@ QFirmwareUpgradeDialog::QFirmwareUpgradeDialog(QWidget *parent) :
     ui->progressBar->setValue(0);
     connect( &m_Packet, SIGNAL(disconnected()), this, SLOT(onDisconnected()), Qt::QueuedConnection );
     connect( &m_Packet, SIGNAL(responseFromSensor(unsigned short)), this, SLOT(onResponseFromSensor(unsigned short)), Qt::QueuedConnection );
-
-    m_strSensorInformation = "";
 
     stopAllFirmwareDownloadJobs();
 
@@ -120,6 +122,11 @@ QFirmwareUpgradeDialog::~QFirmwareUpgradeDialog()
     {
         killTimer( m_TimerCheckAdmin );
         m_TimerCheckAdmin = 0;
+    }
+    if( m_TimerStartUpgrade )
+    {
+        killTimer( m_TimerStartUpgrade );
+        m_TimerStartUpgrade = 0;
     }
     delete ui;
 }
@@ -326,16 +333,15 @@ void QFirmwareUpgradeDialog::onDisconnected()
 {
     qDebug( "disconnected" );
 
-    ui->btnRetry->setEnabled(false);
+    ui->labelMessage->setText("disconnected...");
 
-    m_strSensorInformation = "";
-    m_bIsInformationUpdated = false;
+    ui->btnRetry->setEnabled(false);
+    ui->btnClose->setVisible(true);
 
     stopAllQueryInformationJobs();
     if (!m_bWaitIAP && !m_bWaitAPP)
     {
         stopAllFirmwareDownloadJobs();
-        ui->stackedWidget->setCurrentIndex(0);
     }
 
     if (m_Packet.isOpen())
@@ -487,6 +493,13 @@ void QFirmwareUpgradeDialog::timerEvent(QTimerEvent *evt)
             }
 
             loadFirmwareFile( strFileName );
+        }
+        else if (evt->timerId() == m_TimerStartUpgrade)
+        {
+            killTimer(m_TimerStartUpgrade);
+            m_TimerStartUpgrade = 0;
+
+            startUpgrade();
         }
     }
 }
@@ -660,7 +673,10 @@ void QFirmwareUpgradeDialog::firmwareDownload()
 void QFirmwareUpgradeDialog::startRequestTimeoutTimer( int nTimeout )
 {
     if (m_TimerRequestTimeout != 0)
+    {
         killTimer(m_TimerRequestTimeout);
+        m_TimerRequestTimeout = 0;
+    }
 
     m_TimerRequestTimeout = startTimer(nTimeout);
 }
@@ -715,6 +731,7 @@ void QFirmwareUpgradeDialog::stopAllFirmwareDownloadJobs()
 void QFirmwareUpgradeDialog::queryInformation()
 {
     ui->btnRetry->setEnabled(false);
+    ui->btnClose->setVisible(false);
 
     stopAllQueryInformationJobs();
 
@@ -981,6 +998,7 @@ void QFirmwareUpgradeDialog::executeNextJob( bool bRetry/*=false*/ )
                 break;
             case JOBF_WAIT_IAP_ALL:
                 strMessage = QString("Wait IAP Mode...");
+                qDebug("Wait IAP Mode...");
                 m_bWaitIAP = true;
                 m_bWaitIAPCheckOK = false;
                 m_nStableCheck = 0;
@@ -988,6 +1006,7 @@ void QFirmwareUpgradeDialog::executeNextJob( bool bRetry/*=false*/ )
                 break;
             case JOBF_WAIT_APP_ALL:
                 strMessage = QString("Wait APP Mode...");
+                qDebug( "Wait App Mode...");
                 m_bWaitAPP = true;
                 m_bWaitAPPCheckOK = false;
                 m_nStableCheck = 0;
@@ -1035,7 +1054,6 @@ void QFirmwareUpgradeDialog::executeNextJob( bool bRetry/*=false*/ )
                 }
                 else
                 {
-                    //qDebug("execute job");
                     if ( m_CurrentJob.type == JOBF_ERASE )
                         startRequestTimeoutTimer( 10000 );
                     else
@@ -1138,12 +1156,20 @@ void QFirmwareUpgradeDialog::onFinishAllRequestInformationJobs()
         if (!m_bIsFirmwareUpdate)
         {
             m_bIsFirmwareUpdate = true;
-            startUpgrade();
+            if (m_TimerStartUpgrade)
+            {
+                killTimer(m_TimerStartUpgrade);
+                m_TimerStartUpgrade = 0;
+            }
+            m_TimerStartUpgrade = startTimer(1000);
         }
+        else
+        {
+            m_TimerRequestInformation = startTimer(2000);
 
-        m_TimerRequestInformation = startTimer(2000);
-
-        ui->btnRetry->setEnabled(true);
+            ui->btnRetry->setEnabled(true);
+            ui->btnClose->setVisible(true);
+        }
     }
 }
 
@@ -1170,6 +1196,7 @@ void QFirmwareUpgradeDialog::onFinishAllFirmwareDownloadJobs()
 
         ui->progressBar->setVisible(false);
         ui->btnRetry->setVisible(true);
+        ui->btnClose->setVisible(true);
     }
     else
     {
@@ -1190,100 +1217,12 @@ void QFirmwareUpgradeDialog::onFirmwareUpdateFailed()
 
     ui->progressBar->setVisible(false);
     ui->btnRetry->setVisible(true);
+    ui->btnClose->setVisible(true);
 }
 
 void QFirmwareUpgradeDialog::updateSensorInformation()
 {
     memcpy( &m_SensorInfo, &m_TempSensorInfo, sizeof(m_TempSensorInfo) );
-
-    QString strInformationHTML;
-    QString strTableHeader =
-        "<table width=\"100%\" cellspacing=\"0\" style=\"border-collapse:collapse;\"><tr>"
-        "<td width=\"20%\" style=\"border-width:1px; border-color:black; border-style:solid;\" bgcolor=\"#d5dffb\">"
-            "<p><font size=\"3\" color=#3f3f3f><b>Part</b></font></p>"
-        "</td>"
-        "<td width=\"40%\" style=\"border-width:1px; border-color:black; border-style:solid;\" bgcolor=\"#d5dffb\">"
-            "<p><font size=\"3\" color=#3f3f3f><b>Version</b></font></p>"
-        "</td>"
-        "<td width=\"40%\" style=\"border-width:1px; border-color:black; border-style:solid;\" bgcolor=\"#d5dffb\">"
-            "<p><font size=\"3\" color=#3f3f3f><b>Build</b></font></p>"
-        "</td></tr>";
-    QString strTableTail = "</table>";
-    QString strRowStart = "<tr>";
-    QString strRowEnd = "</tr>";
-    QString strColumn1Start = "<td width=\"20%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#000000>";
-    QString strColumn2Start = "<td width=\"40%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#000000>";
-    QString strColumn2RedStart = "<td width=\"40%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#880015>";
-    QString strColumn3Start = "<td width=\"40%\" style=\"border-width:1px; border-color:black; border-style:solid;\"><p><font size=\"3\" color=#000000>";
-    QString strColumnEnd = "</font></p></td>";
-
-    strInformationHTML = "<html>\n";
-    strInformationHTML += "<body>\n";
-    strInformationHTML += strTableHeader;
-
-    int nMaxPart = 3;
-    if ( m_SensorInfo[IDX_CM1_1].nMode != MODE_UNKNOWN ||
-         m_SensorInfo[IDX_CM2_1].nMode != MODE_UNKNOWN ) {
-        nMaxPart = 5;
-    }
-    for (int i=0 ; i<nMaxPart ; i++)
-    {
-        strInformationHTML += strRowStart;
-        if ( m_SensorInfo[i].nMode == MODE_UNKNOWN )
-            strInformationHTML += strColumn2RedStart;
-        else
-            strInformationHTML += strColumn1Start;
-        strInformationHTML += PartName[i];
-        strInformationHTML += strColumnEnd;
-        if ( m_SensorInfo[i].nMode == MODE_UNKNOWN )
-        {
-            strInformationHTML += strColumn2RedStart;
-            strInformationHTML += "Disconnected";
-            strInformationHTML += strColumnEnd;
-
-            strInformationHTML += strColumn2RedStart;
-            strInformationHTML += "-";
-            strInformationHTML += strColumnEnd;
-        }
-        else
-        {
-            strInformationHTML += strColumn2Start;
-            strInformationHTML += QString(m_SensorInfo[i].szVersion) + " " + QString(m_SensorInfo[i].szModel);
-            strInformationHTML += strColumnEnd;
-
-            strInformationHTML += strColumn3Start;
-            strInformationHTML += QString(m_SensorInfo[i].szDateTime);
-            strInformationHTML += strColumnEnd;
-        }
-        strInformationHTML += strRowEnd;
-    }
-
-    strInformationHTML += strTableTail;
-    strInformationHTML += "</body>\n</html>";
-
-    QString strInformation = "";
-    for (int i=0 ; i<nMaxPart ; i++)
-    {
-        strInformation += PartName[i];
-        if (m_SensorInfo[i].nMode == MODE_UNKNOWN)
-        {
-            strInformation += "Disconnected";
-        }
-        else
-        {
-            strInformation += QString(m_SensorInfo[i].szVersion) + QString(m_SensorInfo[i].szModel) + QString(m_SensorInfo[i].szDateTime);
-        }
-    }
-
-    if (m_strSensorInformation != strInformation)
-    {
-        m_strSensorInformation = strInformation;
-    }
-
-    if ( !m_bIsInformationUpdated )
-    {
-        m_bIsInformationUpdated = true;
-    }
 }
 
 void QFirmwareUpgradeDialog::updateFirmwareInformation()
@@ -1346,12 +1285,11 @@ void QFirmwareUpgradeDialog::updateFirmwareInformation()
 void QFirmwareUpgradeDialog::connectDevice()
 {
     qDebug( "try connect..." );
-    if (m_Packet.open())
+    if (m_Packet.open(m_nUpgradeDeviceListIdx))
     {
         qDebug( "connection ok" );
-        m_strSensorInformation = "";
 
-        startQueryInformation(true);
+        startQueryInformation(false);
     }
     else
     {
@@ -1361,6 +1299,7 @@ void QFirmwareUpgradeDialog::connectDevice()
         m_TimerConnectDevice = startTimer(RETRY_CONNECTION_INTERVAL);
 
         ui->btnRetry->setEnabled(false);
+        ui->btnClose->setVisible(true);
     }
 }
 
@@ -1370,6 +1309,7 @@ void QFirmwareUpgradeDialog::showEvent(QShowEvent *evt)
     {
         ui->progressBar->setVisible(true);
         ui->btnRetry->setVisible(false);
+        ui->btnClose->setVisible(false);
 
         if (!m_Packet.isOpen())
             connectDevice();
@@ -1560,6 +1500,7 @@ void QFirmwareUpgradeDialog::startUpgrade()
 {
     ui->progressBar->setVisible(true);
     ui->btnRetry->setVisible(false);
+    ui->btnClose->setVisible(false);
 
     stopQueryInformation();
 
@@ -1614,4 +1555,9 @@ void QFirmwareUpgradeDialog::onToggledPart(QString strPart, bool bChecked)
 void QFirmwareUpgradeDialog::on_btnRetry_clicked()
 {
     startUpgrade();
+}
+
+void QFirmwareUpgradeDialog::on_btnClose_clicked()
+{
+    close();
 }

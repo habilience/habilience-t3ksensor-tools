@@ -37,7 +37,7 @@ QAdvancedSettingWidget::QAdvancedSettingWidget(QWidget *parent) :
         }
     } while (--nRetry > 0);
 
-    ui->BtnDefault->setVisible( bOK && !m_bRSE && !m_strCam1PosTrc.isEmpty() );
+    ui->BtnDefault->setVisible( false );//bOK && !m_bRSE && !m_strCam1PosTrc.isEmpty() );
 
     if( QConfigData::instance()->getData("ADVANCED", "ID", "").toString().isEmpty() )
     {
@@ -252,21 +252,30 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
         //	| / |   6   | \ |
         //	|/  | /   \ |  \|
         //	0   5       7   12
-        const char orderDatas[2][13] = {
-            { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 },
-            { 0, -1, 2, 3, -1, 5, 6, 7, -1, 9, 10, -1, 12 }
+        const char orderDatas[2][2][17] = {
+            {
+                { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, -1, -1, -1, -1 },
+                { 0, -1, 2, 3, -1, 5, 6, 7, -1, 9, 10, -1, 12, -1, -1, -1, -1 }
+            },
+            {
+                { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, -1, -1, -1, -1 },
+                { 0, 1, 2, 5, 4, 3, 6, 7, 8, 9, 10, 11, 14, 13, 12, -1, -1 }
+            }
         };
+        bool bNewBentV2 = (QT3kUserData::GetInstance()->getFirmwareVersionStr().compare( "2.9" ) >= 0);
+        int nBentVersion = bNewBentV2 ? 1 : 0;
         const char * orderData;
         int orderIdx;
-        int nSize = (int)sizeof(orderDatas[0]);
+        int nSize = bNewBentV2 ? 17 : 13;//(int)sizeof(orderDatas[0]);
         orderIdx = strtoul(m_strCam1PosTrc.mid(2, 2).toUtf8().data(), NULL, 16) & 0x0f;
         if ( orderIdx > 1 ) orderIdx = 1;
-        orderData = orderDatas[orderIdx];
+        orderData = orderDatas[nBentVersion][orderIdx];
         for ( int ni = 0; ni < nSize; ni++ )
         {
             if ( orderData[ni] < 0 )
             {
-                strDefaultf42 += "ffc00000";
+                if (!bNewBentV2)
+                    strDefaultf42 += "ffc00000";
                 continue;
             }
             unsigned long dwS = strtoul( m_strCam1PosTrc.mid(4 + 8 * orderData[ni] * 2, 8).toUtf8().data(), NULL, 16 );
@@ -277,12 +286,13 @@ void QAdvancedSettingWidget::on_BtnDefault_clicked()
         }
         orderIdx = strtoul(m_strCam2PosTrc.mid(2, 2).toUtf8().data(), NULL, 16) & 0x0f;
         if ( orderIdx > 1 ) orderIdx = 1;
-        orderData = orderDatas[orderIdx];
+        orderData = orderDatas[nBentVersion][orderIdx];
         for ( int ni = 0; ni < nSize; ni++ )
         {
             if ( orderData[ni] < 0 )
             {
-                strDefaultf42 += "ffc00000";
+                if (!bNewBentV2)
+                    strDefaultf42 += "ffc00000";
                 continue;
             }
             unsigned long dwS = strtoul( m_strCam2PosTrc.mid(4 + 8 * orderData[ni] * 2, 8).toUtf8().data(), NULL, 16 );

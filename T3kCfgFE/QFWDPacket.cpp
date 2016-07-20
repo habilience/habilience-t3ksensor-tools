@@ -27,7 +27,7 @@ QFWDPacket::QFWDPacket()
     m_Notify.fnOnDisconnect = _onDisconnect;
 }
 
-bool QFWDPacket::open()
+bool QFWDPacket::open(int idx)
 {
     if (m_hDevice != NULL)
     {
@@ -35,14 +35,26 @@ bool QFWDPacket::open()
         return false;
     }
 
-    for ( unsigned int i=0 ; i<COUNT_OF_DEVICE_LIST(UPGRADE_DEVICE_LIST) ; i++ )
+    if (idx >= 0 && idx < COUNT_OF_DEVICE_LIST(UPGRADE_DEVICE_LIST))
     {
-        m_hDevice = ::T3kOpenDevice(UPGRADE_DEVICE_LIST[i].nVID, UPGRADE_DEVICE_LIST[i].nPID, UPGRADE_DEVICE_LIST[i].nMI, 0);
+        m_hDevice = ::T3kOpenDevice(UPGRADE_DEVICE_LIST[idx].nVID, UPGRADE_DEVICE_LIST[idx].nPID, UPGRADE_DEVICE_LIST[idx].nMI, 0);
         if (m_hDevice)
         {
             ::T3kSetEventNotify(m_hDevice, &m_Notify);
             ::T3kLockFirmwareDownload(m_hDevice);
-            break;
+        }
+    }
+    else
+    {
+        for ( unsigned int i=0 ; i<COUNT_OF_DEVICE_LIST(UPGRADE_DEVICE_LIST) ; i++ )
+        {
+            m_hDevice = ::T3kOpenDevice(UPGRADE_DEVICE_LIST[i].nVID, UPGRADE_DEVICE_LIST[i].nPID, UPGRADE_DEVICE_LIST[i].nMI, 0);
+            if (m_hDevice)
+            {
+                ::T3kSetEventNotify(m_hDevice, &m_Notify);
+                ::T3kLockFirmwareDownload(m_hDevice);
+                break;
+            }
         }
     }
 
