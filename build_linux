@@ -1,4 +1,4 @@
-export QMAKE=/opt/Qt5.4S/qtbase/bin
+export QMAKE=/opt/Qt5.2S/qtbase/bin
 
 make clean
 
