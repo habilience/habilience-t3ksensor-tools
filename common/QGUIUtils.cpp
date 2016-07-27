@@ -129,40 +129,41 @@ int getOrientation()
     return 0xFFFFFFFF;
 }
 #elif defined(Q_OS_LINUX)
-#include <X11/Xlib.h>
-#include <X11/extensions/Xrandr.h>
+//#include <X11/Xlib.h>
+//#include <X11/extensions/Xrandr.h>
 int getOrientation()
 {
-    Display *dpy;
-    dpy = XOpenDisplay (NULL);
-    if (!dpy) return 0xFFFFFFFF;
+    return 0xFFFFFFFF;
+//    Display *dpy;
+//    dpy = XOpenDisplay (NULL);
+//    if (!dpy) return 0xFFFFFFFF;
 
-    int screen = DefaultScreen(dpy);
+//    int screen = DefaultScreen(dpy);
 
-    Rotation rotation, current_rotation;
+//    Rotation rotation, current_rotation;
 
-    rotation = XRRRotations(dpy, screen, &current_rotation);
+//    rotation = XRRRotations(dpy, screen, &current_rotation);
 
-    int orientation = 0xFFFFFFFF;
-    switch (current_rotation)
-    {
-        case RR_Rotate_0:
-            orientation = 0;
-            break;
-        case RR_Rotate_90:
-            orientation = 1;
-            break;
-        case RR_Rotate_180:
-            orientation = 2;
-            break;
-        case RR_Rotate_270:
-            orientation = 3;
-            break;
-        default:
-            break;
-    }
+//    int orientation = 0xFFFFFFFF;
+//    switch (current_rotation)
+//    {
+//        case RR_Rotate_0:
+//            orientation = 0;
+//            break;
+//        case RR_Rotate_90:
+//            orientation = 1;
+//            break;
+//        case RR_Rotate_180:
+//            orientation = 2;
+//            break;
+//        case RR_Rotate_270:
+//            orientation = 3;
+//            break;
+//        default:
+//            break;
+//    }
 
-    return orientation;
+//    return orientation;
 }
 #elif defined(Q_OS_MAC)
 #include <ApplicationServices/ApplicationServices.h>
