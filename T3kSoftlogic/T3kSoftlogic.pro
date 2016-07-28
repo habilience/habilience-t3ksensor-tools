@@ -91,7 +91,7 @@ linux-g++ {
         PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
     }
 
-    #LIBS += -lXrandr
+    LIBS += -lXrandr
 }
 
 linux-g++-32 {
@@ -113,7 +113,7 @@ linux-g++-32 {
     LIBS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
     PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/32bit/T3kHIDLib-1.0.so.0.0.0
 
-    #LIBS += -lXrandr
+    LIBS += -lXrandr
 }
 
 linux-g++-64 {
@@ -135,7 +135,7 @@ linux-g++-64 {
     LIBS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
     PRE_TARGETDEPS += $$PWD/../external/T3kHIDLibrary/linux/64bit/T3kHIDLib-1.0.so.0.0.0
 
-    #LIBS += -lXrandr
+    LIBS += -lXrandr
 }
 
 macx: {

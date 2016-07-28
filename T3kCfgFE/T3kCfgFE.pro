@@ -66,7 +66,7 @@ linux-g++-64:QMAKE_TARGET.arch = x86_64
 linux-g++ { # depend on Qt Creator's setting
     CONFIG += static staticlib
     DEFINES += OS_LINUX
-    #LIBS += -lXrandr
+    LIBS += -lXrandr
     contains(QMAKE_TARGET.arch, x86_64):{
         message( "building for 64bit" );
         CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs_x64/debug/
@@ -112,7 +112,7 @@ linux-g++ { # depend on Qt Creator's setting
 linux-g++-32 { # generic g++ 32bit compiler
     CONFIG += static staticlib
     DEFINES += OS_LINUX
-    #LIBS += -lXrandr
+    LIBS += -lXrandr
     message( "building for 32bit" );
     CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs/debug/
     CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs/debug/
@@ -135,7 +135,7 @@ linux-g++-32 { # generic g++ 32bit compiler
 linux-g++-64 { # generic g++ 64bit compiler
     CONFIG += static staticlib
     DEFINES += OS_LINUX
-    #LIBS += -lXrandr
+    LIBS += -lXrandr
     message( "building for 64bit" );
     CONFIG(debug, debug|release): OBJECTS_DIR = $$PWD/.objs_x64/debug/
     CONFIG(debug, debug|release): MOC_DIR = $$PWD/.objs_x64/debug/
