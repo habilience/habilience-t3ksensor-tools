@@ -37,7 +37,9 @@
 #include "conf.h"
 
 #include "../common/QGUIUtils.h"
+#if defined(Q_OS_MAC)
 #include "../common/MacOSX/NSFunctions.h"
+#endif
 
 #define NaN ((float)qQNaN())
 #define WAIT_ANIMATION_FRAME	(10)
