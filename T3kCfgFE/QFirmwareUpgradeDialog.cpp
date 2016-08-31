@@ -319,6 +319,11 @@ bool QFirmwareUpgradeDialog::analysisFirmwareBinary( const char* ver_info, Firmw
             snprintf(pFI->szModel, 256, "C3400/C3500");
             pFI->nModelNumber = 0x3500;
         }
+        else if (strVersionInfo.compare("T3440") == 0)
+        {
+            snprintf(pFI->szModel, 256, "C3440");
+            pFI->nModelNumber = 0x3440;
+        }
         else
         {
             qDebug( "unknown model cm" );

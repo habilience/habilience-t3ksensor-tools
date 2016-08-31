@@ -4,8 +4,7 @@ TEMPLATE = lib
 CONFIG += qt warn_on
 QT -= gui
 DEPENDPATH += .
-INCLUDEPATH += . \
-            ./zlib/
+INCLUDEPATH += .
 
 DEFINES += QUAZIP_BUILD
 CONFIG += static staticlib
@@ -56,19 +55,7 @@ HEADERS += \
     unzip.h\
     zip.h\
 
-SOURCES += *.c *.cpp \
-    zlib/zutil.c \
-    zlib/uncompr.c \
-    zlib/trees.c \
-    zlib/inftrees.c \
-    zlib/inflate.c \
-    zlib/inffast.c \
-    zlib/infback.c \
-    zlib/gzio.c \
-    zlib/deflate.c \
-    zlib/crc32.c \
-    zlib/compress.c \
-    zlib/adler32.c
+SOURCES += *.c *.cpp
 
 unix:!symbian {
     headers.path=$$PREFIX/include/quazip
@@ -99,7 +86,7 @@ win32 {
     target.path=$$PREFIX/lib
     INSTALLS += headers target
 
-#    *-g++*: LIBS += -lz.dll
+    #*-g++*: LIBS += -lz.dll
     *-msvc*: LIBS += -lzlibwapi
     *-msvc*: QMAKE_LFLAGS += /IMPLIB:$$DESTDIR\\quazip.lib
 }

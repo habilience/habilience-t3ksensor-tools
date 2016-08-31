@@ -31,6 +31,8 @@ protected:
     int		m_nDetectionGraphLightThresholdError;
     int		m_nDetectionGraphLightThresholdWarning;
 
+    int     m_nDetectionGainDefault;
+
     int		m_nActiveLanguageIndex;
 public:
     void setBentMargin( int nLeft, int nTop, int nRight, int nBottom, int nDir );
@@ -53,6 +55,8 @@ public:
     float getDTCGraphCrackThresholdWarning() const;
     int getDTCGraphLightThresholdError() const;
     int getDTCGraphLightThresholdWarning() const;
+
+    int getDTGraphDefaultGain() const;
 
     bool load();
     bool save();

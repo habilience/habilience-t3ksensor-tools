@@ -37,6 +37,8 @@
 
 #include "../common/QGUIUtils.h"
 
+#define BENT_SOUND_FILE "bentsound.wav"
+
 #define NaN ((float)qQNaN())
 #define WAIT_ANIMATION_FRAME	(10)
 #define WAIT_TOUCH_TIME			(30*WAIT_ANIMATION_FRAME)
@@ -308,6 +310,12 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog* pParentWidget, QWidget *par
         pDevice->sendCommand( "cam2/admin_cam_calibration2=?", true );
         pDevice->sendCommand( "cam1/sub/admin_cam_calibration2=?", true );
         pDevice->sendCommand( "cam2/sub/admin_cam_calibration2=?", true );
+    }
+
+    if (QFile::exists(BENT_SOUND_FILE))
+    {
+        m_BentStepEffect.setSource(QUrl::fromLocalFile(BENT_SOUND_FILE));
+        m_BentStepEffect.setVolume(1.f);
     }
 
     m_TimerBlinkCursor = startTimer(500);
@@ -2123,6 +2131,14 @@ void QBentAdjustmentDialog::checkTouchPoints( bool bTouch )
 
             m_TimerReCheckPoint = startTimer(1500);
             playBuzzer( QT3kDevice::instance(), BuzzerClick );
+            if (m_BentStepEffect.isLoaded())
+                m_BentStepEffect.play();
+            else
+            {
+#ifdef Q_OS_WIN
+            ::MessageBeep( MB_ICONINFORMATION );
+#endif
+            }
 
             m_bIsValidTouch = true;
             m_nValidTouchCount ++;

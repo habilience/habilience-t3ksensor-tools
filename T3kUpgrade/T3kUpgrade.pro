@@ -28,11 +28,9 @@ CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 INCLUDEPATH +=  ../common/ \
                 $$PWD/../external/quazip \
                 $$PWD/../external/T3kHIDLibrary/include \
-                $$PWD/../external/quazip/zlib/ \
 
 DEPENDPATH +=   $$PWD/../external/quazip \
                 $$PWD/../external/T3kHIDLibrary/include \
-                $$PWD/../external/quazip/zlib/ \
 
 #################################################################################################
 ## win32

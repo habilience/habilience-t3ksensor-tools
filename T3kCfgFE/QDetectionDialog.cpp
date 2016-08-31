@@ -14,6 +14,7 @@
 #include "../common/T3kBuzzerDef.h"
 
 #include "QSensorInitDataCfg.h"
+#include "QInitDataIni.h"
 
 #include "QMyApplication.h"
 #include "QAutoRangeCompleteDialog.h"
@@ -510,14 +511,26 @@ void QDetectionDialog::sensorReset()
     strSensorCmd = sCam1 + cstrDetectionRange + "**";
     ui->cmdAsyncMngr->insertCommand( strSensorCmd );
     strSensorCmd = sCam1 + cstrSensorGain;
-    resetDataWithInitData( strSensorCmd );
+    if (QInitDataIni::instance()->getDTGraphDefaultGain() >= 0)
+    {
+        strSensorCmd += QString("%1").arg(QInitDataIni::instance()->getDTGraphDefaultGain());
+        ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+    }
+    else
+        resetDataWithInitData( strSensorCmd );
 
     strSensorCmd = sCam2 + cstrDetectionThreshold;
     resetDataWithInitData( strSensorCmd );
     strSensorCmd = sCam2 + cstrDetectionRange + "**";
     ui->cmdAsyncMngr->insertCommand( strSensorCmd );
     strSensorCmd = sCam2 + cstrSensorGain;
-    resetDataWithInitData( strSensorCmd );
+    if (QInitDataIni::instance()->getDTGraphDefaultGain() >= 0)
+    {
+        strSensorCmd += QString("%1").arg(QInitDataIni::instance()->getDTGraphDefaultGain());
+        ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+    }
+    else
+        resetDataWithInitData( strSensorCmd );
 
     if ( g_AppData.nSubCameraCount > 0 )
     {
@@ -526,14 +539,26 @@ void QDetectionDialog::sensorReset()
         strSensorCmd = sCam1_1 + cstrDetectionRange;
         resetDataWithInitData( strSensorCmd );
         strSensorCmd = sCam1_1 + cstrSensorGain;
-        resetDataWithInitData( strSensorCmd );
+        if (QInitDataIni::instance()->getDTGraphDefaultGain() >= 0)
+        {
+            strSensorCmd += QString("%1").arg(QInitDataIni::instance()->getDTGraphDefaultGain());
+            ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+        }
+        else
+            resetDataWithInitData( strSensorCmd );
 
         strSensorCmd = sCam2_1 + cstrDetectionThreshold;
         resetDataWithInitData( strSensorCmd );
         strSensorCmd = sCam2_1 + cstrDetectionRange;
         resetDataWithInitData( strSensorCmd );
         strSensorCmd = sCam2_1 + cstrSensorGain;
-        resetDataWithInitData( strSensorCmd );
+        if (QInitDataIni::instance()->getDTGraphDefaultGain() >= 0)
+        {
+            strSensorCmd += QString("%1").arg(QInitDataIni::instance()->getDTGraphDefaultGain());
+            ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+        }
+        else
+            resetDataWithInitData( strSensorCmd );
     }
 }
 
@@ -554,15 +579,31 @@ void QDetectionDialog::sensorLoadFactoryDefault()
     ui->cmdAsyncMngr->insertCommand( strSensorCmd );
     strSensorCmd = sCam1 + cstrDetectionRange + "*";
     ui->cmdAsyncMngr->insertCommand( strSensorCmd );
-    strSensorCmd = sCam1 + cstrSensorGain + "*";
-    ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+    if (QInitDataIni::instance()->getDTGraphDefaultGain() >= 0)
+    {
+        strSensorCmd = sCam1 + cstrSensorGain + QString("%1").arg(QInitDataIni::instance()->getDTGraphDefaultGain());
+        ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+    }
+    else
+    {
+        strSensorCmd = sCam1 + cstrSensorGain + "*";
+        ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+    }
 
     strSensorCmd = sCam2 + cstrDetectionThreshold + "*";
     ui->cmdAsyncMngr->insertCommand( strSensorCmd );
     strSensorCmd = sCam2 + cstrDetectionRange + "*";
     ui->cmdAsyncMngr->insertCommand( strSensorCmd );
-    strSensorCmd = sCam2 + cstrSensorGain + "*";
-    ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+    if (QInitDataIni::instance()->getDTGraphDefaultGain() >= 0)
+    {
+        strSensorCmd = sCam2 + cstrSensorGain + QString("%1").arg(QInitDataIni::instance()->getDTGraphDefaultGain());
+        ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+    }
+    else
+    {
+        strSensorCmd = sCam2 + cstrSensorGain + "*";
+        ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+    }
 
     if ( g_AppData.nSubCameraCount > 0 )
     {
@@ -570,15 +611,31 @@ void QDetectionDialog::sensorLoadFactoryDefault()
         ui->cmdAsyncMngr->insertCommand( strSensorCmd );
         strSensorCmd = sCam1_1 + cstrDetectionRange + "*";
         ui->cmdAsyncMngr->insertCommand( strSensorCmd );
-        strSensorCmd = sCam1_1 + cstrSensorGain + "*";
-        ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+        if (QInitDataIni::instance()->getDTGraphDefaultGain() >= 0)
+        {
+            strSensorCmd = sCam1_1 + cstrSensorGain + QString("%1").arg(QInitDataIni::instance()->getDTGraphDefaultGain());
+            ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+        }
+        else
+        {
+            strSensorCmd = sCam1_1 + cstrSensorGain + "*";
+            ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+        }
 
         strSensorCmd = sCam2_1 + cstrDetectionThreshold + "*";
         ui->cmdAsyncMngr->insertCommand( strSensorCmd );
         strSensorCmd = sCam2_1 + cstrDetectionRange + "*";
         ui->cmdAsyncMngr->insertCommand( strSensorCmd );
-        strSensorCmd = sCam2_1 + cstrSensorGain + "*";
-        ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+        if (QInitDataIni::instance()->getDTGraphDefaultGain() >= 0)
+        {
+            strSensorCmd = sCam2_1 + cstrSensorGain + QString("%1").arg(QInitDataIni::instance()->getDTGraphDefaultGain());
+            ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+        }
+        else
+        {
+            strSensorCmd = sCam2_1 + cstrSensorGain + "*";
+            ui->cmdAsyncMngr->insertCommand( strSensorCmd );
+        }
     }
 }
 

@@ -8,6 +8,7 @@
 #include <QVector>
 #include "QPointClipper.h"
 #include <QThread>
+#include <QSoundEffect>
 
 namespace Ui {
 class QBentAdjustmentDialog;
@@ -145,6 +146,9 @@ private:
     int     m_nAutoOffset;
 
     QString m_errorCalibrationCamera;
+
+    // bent sound
+    QSoundEffect m_BentStepEffect;
 
 public:
     static QPoint PosToDCC( float x, float y, const QRect rcClient );
