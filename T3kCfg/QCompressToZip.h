@@ -2,7 +2,7 @@
 #define QCOMPRESSTOZIP_H
 
 #include <QString>
-#include <QtZlib/zlib.h>
+#include <zlib.h>
 
 #include <quazip.h>
 #include <quazipfile.h>
