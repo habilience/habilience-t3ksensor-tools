@@ -2146,7 +2146,7 @@ void QBentAdjustmentDialog::checkTouchPoints( bool bTouch )
             {
 #ifdef Q_OS_WIN
                 ::MessageBeep( MB_ICONINFORMATION );
-#else if Q_OS_MAC
+#elif defined(Q_OS_MAC)
                 NSFunctions::NSFBeep();
 #endif
             }
