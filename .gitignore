@@ -110,3 +110,9 @@ T3kUpgrade/t3kupgraded_plugin_import.cpp
 T3k.pro.user.3.2-pre1
 *.Debug
 *.Release
+
+common/.DS_Store
+
+common/MacOSX/.DS_Store
+
+T3kCfgFE/.DS_Store

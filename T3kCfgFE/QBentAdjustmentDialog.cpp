@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QCloseEvent>
 #include <QDesktopWidget>
+#include <QDebug>
 
 #include "QUtils.h"
 #include "QT3kDevice.h"
@@ -36,8 +37,7 @@
 #include "conf.h"
 
 #include "../common/QGUIUtils.h"
-
-#define BENT_SOUND_FILE "bentsound.wav"
+#include "../common/MacOSX/NSFunctions.h"
 
 #define NaN ((float)qQNaN())
 #define WAIT_ANIMATION_FRAME	(10)
@@ -312,9 +312,16 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog* pParentWidget, QWidget *par
         pDevice->sendCommand( "cam2/sub/admin_cam_calibration2=?", true );
     }
 
-    if (QFile::exists(BENT_SOUND_FILE))
+    QString strPath = QCoreApplication::applicationDirPath();
+#if defined(Q_OS_MAC)
+    strPath += "/../../../";
+#endif
+    QDir dir(strPath);
+    QStringList files = dir.entryList(QStringList("*.wav"), QDir::Files | QDir::NoSymLinks);
+    if (files.count() > 0)
     {
-        m_BentStepEffect.setSource(QUrl::fromLocalFile(BENT_SOUND_FILE));
+        QString str = files.at(0);
+        m_BentStepEffect.setSource(QUrl::fromLocalFile(str));
         m_BentStepEffect.setVolume(1.f);
     }
 
@@ -2136,7 +2143,9 @@ void QBentAdjustmentDialog::checkTouchPoints( bool bTouch )
             else
             {
 #ifdef Q_OS_WIN
-            ::MessageBeep( MB_ICONINFORMATION );
+                ::MessageBeep( MB_ICONINFORMATION );
+#else if Q_OS_MAC
+                NSFunctions::NSFBeep();
 #endif
             }
 

@@ -315,7 +315,7 @@ HEADERS  += dialog.h \
     QFirmwareUpgradeDialog.h \
     QFWDPacket.h \
     QPartCheckBox.h \
-    QSlidingStackedWidget.h
+    QSlidingStackedWidget.h \
 
 FORMS    += dialog.ui \
     ../common/ui/QLicenseWidget.ui \
@@ -348,3 +348,9 @@ macx:ICON =
 
 OTHER_FILES += \
     T3kCfgFE.rc
+
+macx:HEADERS += \
+    ../common/MacOSX/NSFunctions.h
+
+macx:OBJECTIVE_SOURCES += \
+    ../common/MacOSX/NSFunctions.mm
