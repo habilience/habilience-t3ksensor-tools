@@ -44,8 +44,6 @@ QInitDataIni::QInitDataIni()
     m_fDetectionGraphCrackThresholdWarning	= DTC_GRAPH_INIT_CRACK_THRESHOLD_WARNING;
     m_nDetectionGraphLightThresholdError	= DTC_GRAPH_INIT_LIGHT_THRESHOLD_ERROR;
     m_nDetectionGraphLightThresholdWarning	= DTC_GRAPH_INIT_LIGHT_THRESHOLD_WARNING;
-
-    m_nDetectionGainDefault = -1;
 }
 
 void QInitDataIni::setBentMargin( int nLeft, int nTop, int nRight, int nBottom, int nDir )
@@ -139,11 +137,6 @@ int QInitDataIni::getDTCGraphLightThresholdError() const
 int QInitDataIni::getDTCGraphLightThresholdWarning() const
 {
     return m_nDetectionGraphLightThresholdWarning;
-}
-
-int QInitDataIni::getDTGraphDefaultGain() const
-{
-    return m_nDetectionGainDefault;
 }
 
 bool QInitDataIni::load()
@@ -367,15 +360,6 @@ bool QInitDataIni::load()
             m_nDetectionGraphLightThresholdWarning = trim(strData).toInt(0, 10);
     }
 
-    m_nDetectionGainDefault = -1;
-    idx = pDTCGraphSection->getDataIndex("DefaultGain");
-    if ( idx >= 0 )
-    {
-        strData = pDTCGraphSection->getData(idx);
-        if ( !strData.isEmpty() )
-            m_nDetectionGainDefault = trim(strData).toInt(0, 10);
-    }
-
     return true;
 }
 
@@ -468,9 +452,6 @@ bool QInitDataIni::save()
 
     strData = QString("%1").arg(m_nDetectionGraphLightThresholdWarning);
     pDTCGraphSection->addData( "LightThresholdWarning", strData );
-
-    strData = QString("%1").arg(m_nDetectionGainDefault);
-    pDTCGraphSection->addData( "DefaultGain", strData );
 
     return ini.save(strFile);
 }
