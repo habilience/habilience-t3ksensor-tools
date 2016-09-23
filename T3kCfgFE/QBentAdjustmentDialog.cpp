@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QCloseEvent>
 #include <QDesktopWidget>
+#include <QDebug>
 
 #include "QUtils.h"
 #include "QT3kDevice.h"
@@ -36,6 +37,9 @@
 #include "conf.h"
 
 #include "../common/QGUIUtils.h"
+#if defined(Q_OS_MAC)
+#include "../common/MacOSX/NSFunctions.h"
+#endif
 
 #define NaN ((float)qQNaN())
 #define WAIT_ANIMATION_FRAME	(10)
@@ -308,6 +312,19 @@ QBentAdjustmentDialog::QBentAdjustmentDialog(Dialog* pParentWidget, QWidget *par
         pDevice->sendCommand( "cam2/admin_cam_calibration2=?", true );
         pDevice->sendCommand( "cam1/sub/admin_cam_calibration2=?", true );
         pDevice->sendCommand( "cam2/sub/admin_cam_calibration2=?", true );
+    }
+
+    QString strPath = QCoreApplication::applicationDirPath();
+#if defined(Q_OS_MAC)
+    strPath += "/../../../";
+#endif
+    QDir dir(strPath);
+    QStringList files = dir.entryList(QStringList("*.wav"), QDir::Files | QDir::NoSymLinks);
+    if (files.count() > 0)
+    {
+        QString str = files.at(0);
+        m_BentStepEffect.setSource(QUrl::fromLocalFile(str));
+        m_BentStepEffect.setVolume(1.f);
     }
 
     m_TimerBlinkCursor = startTimer(500);
@@ -2123,6 +2140,16 @@ void QBentAdjustmentDialog::checkTouchPoints( bool bTouch )
 
             m_TimerReCheckPoint = startTimer(1500);
             playBuzzer( QT3kDevice::instance(), BuzzerClick );
+            if (m_BentStepEffect.isLoaded())
+                m_BentStepEffect.play();
+            else
+            {
+#ifdef Q_OS_WIN
+                ::MessageBeep( MB_ICONINFORMATION );
+#elif defined(Q_OS_MAC)
+                NSFunctions::NSFBeep();
+#endif
+            }
 
             m_bIsValidTouch = true;
             m_nValidTouchCount ++;

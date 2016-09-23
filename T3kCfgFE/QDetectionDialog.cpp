@@ -14,6 +14,7 @@
 #include "../common/T3kBuzzerDef.h"
 
 #include "QSensorInitDataCfg.h"
+#include "QInitDataIni.h"
 
 #include "QMyApplication.h"
 #include "QAutoRangeCompleteDialog.h"
@@ -523,15 +524,15 @@ void QDetectionDialog::sensorReset()
     {
         strSensorCmd = sCam1_1 + cstrDetectionThreshold;
         resetDataWithInitData( strSensorCmd );
-        strSensorCmd = sCam1_1 + cstrDetectionRange;
-        resetDataWithInitData( strSensorCmd );
+        strSensorCmd = sCam1_1 + cstrDetectionRange + "**";
+        ui->cmdAsyncMngr->insertCommand( strSensorCmd );
         strSensorCmd = sCam1_1 + cstrSensorGain;
         resetDataWithInitData( strSensorCmd );
 
         strSensorCmd = sCam2_1 + cstrDetectionThreshold;
         resetDataWithInitData( strSensorCmd );
-        strSensorCmd = sCam2_1 + cstrDetectionRange;
-        resetDataWithInitData( strSensorCmd );
+        strSensorCmd = sCam2_1 + cstrDetectionRange + "**";
+        ui->cmdAsyncMngr->insertCommand( strSensorCmd );
         strSensorCmd = sCam2_1 + cstrSensorGain;
         resetDataWithInitData( strSensorCmd );
     }
@@ -739,10 +740,14 @@ void QDetectionDialog::enterAutoRangeSetting()
     strCmd = sCam2 + cstrDetectionRange + QString::number(0) + "," + QString::number(0xffff);
     ui->cmdAsyncMngr->insertCommand( strCmd );
 
-    strCmd = sCam1 + cstrDetectionThreshold + "**";
-    ui->cmdAsyncMngr->insertCommand( strCmd );
-    strCmd = sCam2 + cstrDetectionThreshold + "**";
-    ui->cmdAsyncMngr->insertCommand( strCmd );
+    strCmd = sCam1 + cstrDetectionThreshold;
+    resetDataWithInitData( strCmd );
+    strCmd = sCam1 + cstrSensorGain;
+    resetDataWithInitData( strCmd );
+    strCmd = sCam2 + cstrDetectionThreshold;
+    resetDataWithInitData( strCmd );
+    strCmd = sCam2 + cstrSensorGain;
+    resetDataWithInitData( strCmd );
 
     if ( g_AppData.nSubCameraCount > 0 )
     {
@@ -751,10 +756,14 @@ void QDetectionDialog::enterAutoRangeSetting()
         strCmd = sCam2_1 + cstrDetectionRange + QString::number(0) + "," + QString::number(0xffff);
         ui->cmdAsyncMngr->insertCommand( strCmd );
 
-        strCmd = sCam1_1 + cstrDetectionThreshold + "**";
-        ui->cmdAsyncMngr->insertCommand( strCmd );
-        strCmd = sCam2_1 + cstrDetectionThreshold + "**";
-        ui->cmdAsyncMngr->insertCommand( strCmd );
+        strCmd = sCam1_1 + cstrDetectionThreshold;
+        resetDataWithInitData( strCmd );
+        strCmd = sCam1_1 + cstrSensorGain;
+        resetDataWithInitData( strCmd );
+        strCmd = sCam2_1 + cstrDetectionThreshold;
+        resetDataWithInitData( strCmd );
+        strCmd = sCam2_1 + cstrSensorGain;
+        resetDataWithInitData( strCmd );
     }
 
     ui->cmdAsyncMngr->start( (unsigned int)-1 );

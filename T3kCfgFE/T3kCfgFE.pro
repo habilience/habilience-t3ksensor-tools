@@ -6,7 +6,7 @@
 
 QT       += core gui network
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia
 
 TARGET = T3kCfgFE
 CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
@@ -22,11 +22,9 @@ CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 INCLUDEPATH +=  ../common/ \
                 $$PWD/../external/quazip \
                 $$PWD/../external/T3kHIDLibrary/include \
-                $$PWD/../external/quazip/zlib/ \
 
 DEPENDPATH +=   $$PWD/../external/quazip \
                 $$PWD/../external/T3kHIDLibrary/lib \
-                $$PWD/../external/quazip/zlib/ \
 
 
 #################################################################################################
@@ -317,7 +315,7 @@ HEADERS  += dialog.h \
     QFirmwareUpgradeDialog.h \
     QFWDPacket.h \
     QPartCheckBox.h \
-    QSlidingStackedWidget.h
+    QSlidingStackedWidget.h \
 
 FORMS    += dialog.ui \
     ../common/ui/QLicenseWidget.ui \
@@ -350,3 +348,9 @@ macx:ICON =
 
 OTHER_FILES += \
     T3kCfgFE.rc
+
+macx:HEADERS += \
+    ../common/MacOSX/NSFunctions.h
+
+macx:OBJECTIVE_SOURCES += \
+    ../common/MacOSX/NSFunctions.mm

@@ -109,31 +109,54 @@ QString QT3kLoadEnvironmentObject::GetOSDisplayString()
    {
       strOS = "Microsoft ";
 
-      if ( osvi.dwMajorVersion == 6 )
-      {
-         if( osvi.dwMinorVersion == 0 )
-         {
-            if( osvi.wProductType == VER_NT_WORKSTATION )
-                strOS += "Windows Vista ";
-            else
-                strOS += "Windows Server 2008 ";
-         }
-
-         if ( osvi.dwMinorVersion == 1 )
-         {
-            if( osvi.wProductType == VER_NT_WORKSTATION )
-                strOS += "Windows 7 ";
-            else
-                strOS += "Windows Server 2008 R2 ";
-         }
-
-         if( osvi.dwMinorVersion == 2 )
-         {
-             if( osvi.wProductType == VER_NT_WORKSTATION )
-                 strOS += "Winwos 8 ";
-             else
-                 strOS += "Windows 8 Server ";
-         }
+        if ( osvi.dwMajorVersion >= 6 )
+        {
+            if ( osvi.dwMajorVersion > 6 )
+            {
+              switch( osvi.dwMinorVersion )
+              {
+              case 0:
+                  if( osvi.wProductType == VER_NT_WORKSTATION )
+                      strOS += "Window 10 ";
+                  else
+                      strOS += "Window 10 Server 2016 ";
+                  break;
+              default:
+                  break;
+              }
+            }
+            else if ( osvi.dwMajorVersion == 6 )
+            {
+                switch( osvi.dwMinorVersion )
+                {
+                case 0:
+                    if( osvi.wProductType == VER_NT_WORKSTATION )
+                        strOS += "Windows Vista ";
+                    else
+                        strOS += "Windows Server 2008 ";
+                    break;
+                case 1:
+                    if( osvi.wProductType == VER_NT_WORKSTATION )
+                        strOS += "Windows 7 ";
+                    else
+                        strOS += "Windows Server 2008 R2 ";
+                    break;
+                case 2:
+                    if( osvi.wProductType == VER_NT_WORKSTATION )
+                        strOS += "Windows 8 ";
+                    else
+                        strOS += "Windows Server 2012 ";
+                    break;
+                case 3:
+                    if( osvi.wProductType == VER_NT_WORKSTATION )
+                        strOS += "Windows 8.1 ";
+                    else
+                        strOS += "windows Server 2012 R2 ";
+                    break;
+                default:
+                    break;
+                }
+            }
          // build number
          // 8102 - windows 8 developer preview
          // 8250 = windows 8 consumer preview
@@ -207,7 +230,7 @@ QString QT3kLoadEnvironmentObject::GetOSDisplayString()
          }
       }
 
-      if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2 )
+      else if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2 )
       {
          if( GetSystemMetrics(SM_SERVERR2) )
             strOS +=  "Windows Server 2003 R2, ";

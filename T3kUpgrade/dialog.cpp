@@ -368,6 +368,11 @@ bool Dialog::analysisFirmwareBinary( const char* ver_info, FirmwareInfo* pFI )
             snprintf(pFI->szModel, 256, "C3400/C3500");
             pFI->nModelNumber = 0x3500;
         }
+        else if (strVersionInfo.compare("T3440") == 0)
+        {
+            snprintf(pFI->szModel, 256, "C3440");
+            pFI->nModelNumber = 0x3440;
+        }
         else
         {
             qDebug( "unknown model cm" );
@@ -870,6 +875,8 @@ void Dialog::onResponseFromSensor(unsigned short nPacketId)
             m_TempSensorInfo[nIndex].nVersionMajor = m_Packet.getVersionMajor();
             m_TempSensorInfo[nIndex].nVersionMinor = m_Packet.getVersionMinor();
             m_TempSensorInfo[nIndex].nWhich = m_CurrentJob.which;
+
+            qDebug( "Query Version : %x, %x", m_TempSensorInfo[nIndex].nModelNumber, m_TempSensorInfo[nIndex].nWhich);
 
             if ((m_TempSensorInfo[nIndex].nModelNumber == 0x3500) && (m_CurrentJob.which == PKT_ADDR_MM) )
             {
