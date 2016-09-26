@@ -740,14 +740,14 @@ void QDetectionDialog::enterAutoRangeSetting()
     strCmd = sCam2 + cstrDetectionRange + QString::number(0) + "," + QString::number(0xffff);
     ui->cmdAsyncMngr->insertCommand( strCmd );
 
-    strCmd = sCam1 + cstrDetectionThreshold;
+    /*strCmd = sCam1 + cstrDetectionThreshold;
     resetDataWithInitData( strCmd );
     strCmd = sCam1 + cstrSensorGain;
     resetDataWithInitData( strCmd );
     strCmd = sCam2 + cstrDetectionThreshold;
     resetDataWithInitData( strCmd );
     strCmd = sCam2 + cstrSensorGain;
-    resetDataWithInitData( strCmd );
+    resetDataWithInitData( strCmd );*/
 
     if ( g_AppData.nSubCameraCount > 0 )
     {
@@ -756,14 +756,14 @@ void QDetectionDialog::enterAutoRangeSetting()
         strCmd = sCam2_1 + cstrDetectionRange + QString::number(0) + "," + QString::number(0xffff);
         ui->cmdAsyncMngr->insertCommand( strCmd );
 
-        strCmd = sCam1_1 + cstrDetectionThreshold;
+        /*strCmd = sCam1_1 + cstrDetectionThreshold;
         resetDataWithInitData( strCmd );
         strCmd = sCam1_1 + cstrSensorGain;
         resetDataWithInitData( strCmd );
         strCmd = sCam2_1 + cstrDetectionThreshold;
         resetDataWithInitData( strCmd );
         strCmd = sCam2_1 + cstrSensorGain;
-        resetDataWithInitData( strCmd );
+        resetDataWithInitData( strCmd );*/
     }
 
     ui->cmdAsyncMngr->start( (unsigned int)-1 );
