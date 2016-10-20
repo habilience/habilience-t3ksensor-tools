@@ -1,8 +1,8 @@
 ﻿#ifndef T3KS_VERSION
 #define T3KS_VERSION
 
-#define T3K_FILEVERSION                 2,9,2,0
-#define T3K_VERSION                     "2.9.2"
+#define T3K_FILEVERSION                 2,9,3,0
+#define T3K_VERSION                     "2.9.3"
 
 
 #define MODEL_T3000                     0x01
