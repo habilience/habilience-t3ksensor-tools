@@ -31,6 +31,8 @@
 #define NV_DEF_ZOOM_SENSITIVITY_RANGE_START			(-0xff)
 #define NV_DEF_ZOOM_SENSITIVITY_RANGE_END			(0xff)
 
+#define FACTORIAL_SCREEN_MARGIN_MIN_MAX             20.f // max size : 2 byte, 0xff / 2
+
 QTouchSettingDialog::QTouchSettingDialog(Dialog *parent) :
     QDialog(parent), m_pMainDlg(parent),
     ui(new Ui::QTouchSettingDialog),
@@ -1126,13 +1128,13 @@ void QTouchSettingDialog::sendEditValue( QBorderStyleEdit* txtEdit, float step, 
          || (txtEdit == ui->txtEdtTMRight)
          || (txtEdit == ui->txtEdtTMBottom) )
     {
-        float l1, t1, r1, b1;
+        volatile float l1, t1, r1, b1;
         l1 = ui->txtEdtTMLeft->toPlainText().toFloat() * 10;
         t1 = ui->txtEdtTMTop->toPlainText().toFloat() * 10;
         r1 = ui->txtEdtTMRight->toPlainText().toFloat() * 10;
         b1 = ui->txtEdtTMBottom->toPlainText().toFloat() * 10;
 
-        unsigned char l, t, r, b;
+        volatile unsigned char l, t, r, b;
         l = (unsigned char)(l1);
         t = (unsigned char)(t1);
         r = (unsigned char)(r1);
@@ -1152,49 +1154,49 @@ void QTouchSettingDialog::sendEditValue( QBorderStyleEdit* txtEdit, float step, 
 void QTouchSettingDialog::on_btnTMLeftDec_clicked()
 {
     LOG_B( "Touch Margin Left \"-\"" );
-    sendEditValue( ui->txtEdtTMLeft, -0.1f, -10.f, +10.f, cstrFactorialScreenMargin );
+    sendEditValue( ui->txtEdtTMLeft, -0.1f, -FACTORIAL_SCREEN_MARGIN_MIN_MAX, +FACTORIAL_SCREEN_MARGIN_MIN_MAX, cstrFactorialScreenMargin );
 }
 
 void QTouchSettingDialog::on_btnTMLeftInc_clicked()
 {
     LOG_B( "Touch Margin Left \"+\"" );
-    sendEditValue( ui->txtEdtTMLeft, 0.1f, -10.f, +10.f, cstrFactorialScreenMargin );
+    sendEditValue( ui->txtEdtTMLeft, 0.1f, -FACTORIAL_SCREEN_MARGIN_MIN_MAX, +FACTORIAL_SCREEN_MARGIN_MIN_MAX, cstrFactorialScreenMargin );
 }
 
 void QTouchSettingDialog::on_btnTMTopDec_clicked()
 {
     LOG_B( "Touch Margin Top \"-\"" );
-    sendEditValue( ui->txtEdtTMTop, -0.1f, -10.f, +10.f, cstrFactorialScreenMargin );
+    sendEditValue( ui->txtEdtTMTop, -0.1f, -FACTORIAL_SCREEN_MARGIN_MIN_MAX, +FACTORIAL_SCREEN_MARGIN_MIN_MAX, cstrFactorialScreenMargin );
 }
 
 void QTouchSettingDialog::on_btnTMTopInc_clicked()
 {
     LOG_B( "Touch Margin Top \"+\"" );
-    sendEditValue( ui->txtEdtTMTop, 0.1f, -10.f, +10.f, cstrFactorialScreenMargin );
+    sendEditValue( ui->txtEdtTMTop, 0.1f, -FACTORIAL_SCREEN_MARGIN_MIN_MAX, +FACTORIAL_SCREEN_MARGIN_MIN_MAX, cstrFactorialScreenMargin );
 }
 
 void QTouchSettingDialog::on_btnTMRightDec_clicked()
 {
     LOG_B( "Touch Margin Right \"-\"" );
-    sendEditValue( ui->txtEdtTMRight, -0.1f, -10.f, +10.f, cstrFactorialScreenMargin );
+    sendEditValue( ui->txtEdtTMRight, -0.1f, -FACTORIAL_SCREEN_MARGIN_MIN_MAX, +FACTORIAL_SCREEN_MARGIN_MIN_MAX, cstrFactorialScreenMargin );
 }
 
 void QTouchSettingDialog::on_btnTMRightInc_clicked()
 {
     LOG_B( "Touch Margin Right \"+\"" );
-    sendEditValue( ui->txtEdtTMRight, 0.1f, -10.f, +10.f, cstrFactorialScreenMargin );
+    sendEditValue( ui->txtEdtTMRight, 0.1f, -FACTORIAL_SCREEN_MARGIN_MIN_MAX, +FACTORIAL_SCREEN_MARGIN_MIN_MAX, cstrFactorialScreenMargin );
 }
 
 void QTouchSettingDialog::on_btnTMBottomDec_clicked()
 {
     LOG_B( "Touch Margin Bottom \"-\"" );
-    sendEditValue( ui->txtEdtTMBottom, -0.1f, -10.f, +10.f, cstrFactorialScreenMargin );
+    sendEditValue( ui->txtEdtTMBottom, -0.1f, -FACTORIAL_SCREEN_MARGIN_MIN_MAX, +FACTORIAL_SCREEN_MARGIN_MIN_MAX, cstrFactorialScreenMargin );
 }
 
 void QTouchSettingDialog::on_btnTMBottomInc_clicked()
 {
     LOG_B( "Touch Margin Bottom \"+\"" );
-    sendEditValue( ui->txtEdtTMBottom, 0.1f, -10.f, +10.f, cstrFactorialScreenMargin );
+    sendEditValue( ui->txtEdtTMBottom, 0.1f, -FACTORIAL_SCREEN_MARGIN_MIN_MAX, +FACTORIAL_SCREEN_MARGIN_MIN_MAX, cstrFactorialScreenMargin );
 }
 
 void QTouchSettingDialog::on_gbAutoSelect_clicked()
